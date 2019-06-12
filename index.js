@@ -19,6 +19,7 @@ dotenv.config();
 
 const { NODE_ENV, TWITTER_CONSUMER_SECRET, PORT } = process.env;
 const app = express();
+console.log(Routes)
 
 /**
  * Normalize a port into a number, string, or false.
