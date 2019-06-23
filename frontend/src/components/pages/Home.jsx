@@ -1,26 +1,10 @@
 import React from 'react';
-import { Row, Col } from 'reactstrap';
+import { Row, Col, Card, CardImg, CardImgOverlay, CardTitle } from 'reactstrap';
 import Header from 'components/common/Header';
 import BorderedListItem from '../custom/BorderedListItem';
 import Text from '../common/Text';
-
-const noGoSpoilYourPartyList = [
-  {
-    title: 'Register Your Account',
-    description:
-      'Creating an account is easy, consectetur adipiscing elit. Etiam varius leo felis, a tincidunt ex molestie quis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-  },
-  {
-    title: 'Enter Your Event Details',
-    description:
-      'Enter your events details, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam varius leo felis, a tincidunt ex molestie quis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-  },
-  {
-    title: 'Choose Your Entertainer',
-    description:
-      'Either by getting bids from our trusted entertainers or by recommendation, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam varius leo felis, a tincidunt ex molestie quis.'
-  }
-];
+import entertainerLists from 'data/entertainers.js';
+import noGoSpoilYourPartyList from 'data/duvSteps.js';
 
 const Home = () => {
   return (
@@ -28,6 +12,7 @@ const Home = () => {
       <Landing />
       <Intro />
       <LiveYourLife />
+      <Entertainers />
     </div>
   );
 };
@@ -112,4 +97,34 @@ const LiveYourLife = () => (
     </Row>
   </section>
 );
+
+const Entertainers = () => (
+  <section className="entertainers spacer">
+    <div className="container-fluid">
+      <h2 className="header title-border">
+        OUR <span>ENTERTAINERS</span>
+      </h2>
+      <Row className="pt-5">
+        <Entertainer.List lists={entertainerLists} />
+      </Row>
+    </div>
+  </section>
+);
+
+const Entertainer = ({ name, image, type }) => (
+  <Col sm={4}>
+    <Card className="entertainer-card">
+      <CardImg alt={name} className="img-fluid" src={image} top />
+      <CardImgOverlay>
+        <CardTitle>{name}</CardTitle>
+        <div className="entertainer_type">{type}</div>
+      </CardImgOverlay>
+    </Card>
+  </Col>
+);
+
+Entertainer.List = ({ lists }) =>
+  lists.map(({ name, image, type }) => (
+    <Entertainer image={image} key="name" name={name} type={type} />
+  ));
 export default Home;

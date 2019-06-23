@@ -20,7 +20,6 @@ $section-height: 50rem;
 }
 
 .intro {
-  padding-top: 200px;
   background: $black;
   background: url('../img/bg/felebration.jpg') center center no-repeat;
   -webkit-background-size: cover;
@@ -60,6 +59,7 @@ $section-height: 50rem;
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
+    padding-left: 5.5rem;
 
     h2 {
       font-size: 3rem;
