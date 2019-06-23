@@ -1,5 +1,6 @@
 @import 'duv_live/header';
 @import 'duv_live/home';
+@import 'lib/hover';
 html {
   font-size: 0.8rem;
 
@@ -32,4 +33,31 @@ body {
 
 button:focus {
   outline: none;
+}
+
+.btn-danger.hvr-sweep-to-left,
+.btn-danger.hvr-sweep-to-right {
+  &:before {
+    background: $gray-300;
+  }
+
+  &:hover,
+  &:focus,
+  &:active {
+    color: $black;
+    border-color: $white;
+  }
+}
+.btn-light.hvr-sweep-to-left,
+.btn-light.hvr-sweep-to-right {
+  &:before {
+    background: $blue;
+  }
+
+  &:hover,
+  &:focus,
+  &:active {
+    color: $white;
+    border-color: $blue;
+  }
 }

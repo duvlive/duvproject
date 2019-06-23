@@ -68,9 +68,11 @@ $theme-colors: map-merge(
 // Body
 //
 // Settings for the `<body>` element.
+$text-color: #86939e;
 
 $body-bg: $black;
-$body-color: $gray-200;
+$body-color: $text-color;
+$headings-color: $gray-200;
 
 $red-100: #ffa4a4;
 $red-200: #ff7070;

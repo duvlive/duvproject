@@ -14,26 +14,31 @@ const Home = () => {
             </h2>
             <p className="card-text">
               {' '}
-              <button className="btn btn-danger btn-lg" href="/">
+              <button
+                className="btn btn-danger btn-lg hvr-sweep-to-right"
+                href="/"
+              >
                 Hire Entertainers
               </button>{' '}
               &nbsp; &nbsp;
-              <button className="btn btn-light btn-lg" href="/">
+              <button
+                className="btn btn-light btn-lg hvr-sweep-to-right"
+                href="/"
+              >
                 Become an Entertainer
               </button>
             </p>
           </div>
         </div>
       </section>
-      <section className="intro text-center section-padding" id="intro">
-        <div
-          className="container wow animated fadeInLeft animated"
-          data-wow-delay="0.5s"
-          data-wow-duration="1s"
-        >
+      <section className="intro spacer">
+        <div className="container-fluid">
           <div className="row">
             <div className="col-lg-8 align-center about">
-              <h1 className="arrow">NO GO SPOIL YOUR PARTY</h1>
+              <h2 className="header">
+                NO GO SPOIL{' '}
+                <span className="d-sm-inline d-block">YOUR PARTY O!!!</span>
+              </h2>
               <p>
                 Lorem ipsum dolor sit amet, ad eos iriure corpora prodesset.
                 Partem timeam at vim, mel veritus accusata ea. Ius ei dicam
