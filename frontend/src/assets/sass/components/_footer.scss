@@ -1,0 +1,140 @@
+.footer {
+  margin-top: 7.5rem;
+  background-color: black;
+  background: rgba(white, 0.03);
+
+  &__content {
+    padding: 6.3rem 0 0;
+  }
+
+  &__links {
+    li {
+      color: $white;
+      font-size: 0.8rem;
+      font-weight: bold;
+      padding-bottom: 20px;
+
+      &.footer__header {
+        color: $gray-600;
+        font-family: $headings-font-family;
+        text-transform: uppercase;
+        font-size: 0.95rem;
+        padding-bottom: 2rem;
+      }
+    }
+  }
+
+  &__icons {
+    margin-bottom: 3rem;
+    text-align: center;
+    @include media-breakpoint-up(sm) {
+      text-align: right;
+    }
+
+    li {
+      display: inline-block;
+      padding: 0;
+      margin: 0 2px 0 0;
+      background: none;
+    }
+    a {
+      display: block;
+      padding: 0;
+      margin: 0;
+      width: auto !important;
+      height: auto !important;
+      background: none;
+      border: 0 !important;
+      border-radius: 0;
+      margin-left: 1.3rem;
+      text-align: center;
+
+      i {
+        color: rgba($white, 0.6);
+        display: block;
+        width: 2.2rem;
+        height: 2.2rem;
+        line-height: 2rem;
+        font-size: 0.9rem;
+        position: relative;
+        transition: all 0.4s ease-out;
+
+        &:after {
+          content: '';
+          position: absolute;
+          border: 1px solid rgba($white, 0.3);
+          border-radius: 2px;
+          width: 100%;
+          height: 100%;
+          left: 0;
+          z-index: -1;
+          transform: rotate(45deg);
+          transition: all 0.4s ease-out;
+        }
+      }
+
+      &:hover {
+        i {
+          font-size: 1rem;
+
+          &.icon-facebook {
+            color: #3b5998;
+          }
+          &.icon-twitter {
+            color: #1da1f2;
+          }
+          &.icon-youtube {
+            color: #b00;
+          }
+          &.icon-linkedin {
+            color: #0085b4;
+          }
+          &.icon-instagram {
+            color: #0085b4;
+          }
+
+          &:after {
+            background: rgba($white, 0.9);
+            transform: rotate(135deg);
+          }
+        }
+      }
+    }
+  }
+
+  &__bottom {
+    font-size: 0.8rem;
+    font-family: $headings-font-family;
+    color: $white;
+    border-top: 1px solid rgba($white, 0.1);
+    padding: 2.5rem 0 1rem;
+
+    li {
+      padding-left: 2rem;
+      padding-right: 2rem;
+      border-left: 1px solid rgba($white, 0.5);
+    }
+
+    li:first-child {
+      padding-left: 0;
+      border-left-color: transparent;
+    }
+
+    a {
+      color: $white;
+
+      &:hover {
+        color: rgba($red, 1);
+        text-decoration: none;
+      }
+    }
+
+    &--copyright {
+      text-transform: uppercase;
+      text-align: center;
+      @include media-breakpoint-up(sm) {
+        text-align: right;
+      }
+    }
+  }
+}

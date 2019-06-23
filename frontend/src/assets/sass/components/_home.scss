@@ -1,0 +1,118 @@
+$section-height: 50rem;
+
+.landing {
+  .card {
+    height: $section-height;
+    background: url('../img/bg/top-video.jpg') center center no-repeat;
+    background-size: cover;
+    z-index: 1;
+  }
+  .card-img-overlay {
+    text-align: center;
+    background: rgba($black, 0.5);
+    z-index: -1;
+
+    &:before {
+      content: '';
+      position: absolute;
+      top: 10rem;
+      left: 0;
+      right: 0;
+      margin-left: auto;
+      margin-right: auto;
+      width: 100%;
+      max-width: 25rem;
+      text-align: center;
+      height: 26rem;
+      transform: rotateX(-50%);
+      z-index: 0;
+      border: 1.4rem solid rgba($gray-400, 0.2);
+      box-sizing: border-box;
+      box-shadow: 0 60px 40px -40px rgba(0, 0, 0, 0.3);
+    }
+
+    &__content {
+      z-index: 10;
+    }
+  }
+  .card-title {
+    font-size: 3.5rem;
+    padding-top: 16rem;
+    margin-bottom: 2rem;
+  }
+}
+
+.intro {
+  background: $black;
+  background: url('../img/bg/felebration.jpg') center center no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  min-height: $section-height;
+  width: 100%;
+}
+
+.live-your-life {
+  display: flex;
+  flex-wrap: wrap;
+
+  &__box {
+    height: 31rem;
+    padding-left: 5.5rem;
+    padding-right: 5.5rem;
+    @include media-breakpoint-up(sm) {
+      padding-left: 3.5rem;
+      padding-right: 3.5rem;
+    }
+
+    h3 {
+      font-size: 1.7rem;
+      color: $black;
+
+      span {
+        color: $red;
+      }
+    }
+
+    p {
+      color: $text-color-secondary;
+    }
+  }
+  &__content--1 {
+    background: url('../img/bg/live-your-life.jpg') center center no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    padding-left: 5.5rem;
+
+    h2 {
+      font-size: 3rem;
+    }
+
+    p {
+      color: $white;
+      font-size: 1.2rem;
+    }
+  }
+
+  &__content--2 {
+    background: white;
+  }
+
+  &__content--3 {
+    background: $secondary;
+    h3 {
+      color: $white;
+
+      span {
+        color: $red;
+      }
+    }
+
+    p {
+      color: $white;
+    }
+  }
+}

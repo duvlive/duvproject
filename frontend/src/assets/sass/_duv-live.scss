@@ -1,0 +1,69 @@
+@import 'components/header';
+@import 'components/home';
+@import 'components/bordered-list-item';
+@import 'components/entertainer';
+@import 'components/event';
+@import 'components/footer';
+@import 'lib/hover';
+@import 'lib/utilities';
+@import 'icon-fonts';
+
+html {
+  font-size: 0.8rem;
+
+  @include media-breakpoint-up(sm) {
+    font-size: 0.8rem;
+  }
+
+  @include media-breakpoint-up(md) {
+    font-size: 0.9rem;
+  }
+
+  @include media-breakpoint-up(lg) {
+    font-size: 1rem;
+  }
+}
+
+body {
+  position: relative;
+}
+
+.container-fluid {
+  padding-left: 20px;
+  padding-right: 20px;
+
+  @include media-breakpoint-up(sm) {
+    padding-left: 60px;
+    padding-right: 60px;
+  }
+}
+
+button:focus {
+  outline: none;
+}
+
+.btn-danger.hvr-sweep-to-left,
+.btn-danger.hvr-sweep-to-right {
+  &:before {
+    background: $green-400;
+  }
+
+  &:hover,
+  &:focus,
+  &:active {
+    border-color: $green-400;
+  }
+}
+.btn-light.hvr-sweep-to-left,
+.btn-light.hvr-sweep-to-right {
+  &:before {
+    background: $blue;
+  }
+
+  &:hover,
+  &:focus,
+  &:active {
+    color: $white;
+    border-color: $blue;
+  }
+}

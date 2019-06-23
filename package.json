@@ -7,6 +7,7 @@
     "postinstall": "npm run db:prepare && npm run build",
     "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore ./node_modules,./test,./coverage,./docs",
     "start:dev": "babel-watch index.js",
+    "start:dev:frontend": "cd frontend && npm start",
     "start": "node ./dist/index.js",
     "test": "istanbul cover _mocha -- test/tests.spec.js --compilers js:babel-register --timeout 30000",
     "test:watch": "npm test --watch",
