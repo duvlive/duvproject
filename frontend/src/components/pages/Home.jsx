@@ -1,25 +1,27 @@
 import React from 'react';
-import { Row, Col, Card, CardImg, CardImgOverlay, CardTitle } from 'reactstrap';
+import { Row, Col } from 'reactstrap';
 import Header from 'components/common/Header';
 import BorderedListItem from '../custom/BorderedListItem';
 import Text from '../common/Text';
 import noGoSpoilYourPartyList from 'data/duvSteps.js';
+import Events from 'components/common/Events';
+import Entertainers from 'components/common/Entertainers';
 import entertainerLists from 'data/entertainers.js';
 import eventLists from 'data/events.js';
 
 const Home = () => {
   return (
     <div className="home">
-      <Landing />
-      <Intro />
-      <LiveYourLife />
-      <Entertainers />
-      <Events />
+      <LandingSection />
+      <IntroSection />
+      <LiveYourLifeSection />
+      <EntertainerSection />
+      <EventSection />
     </div>
   );
 };
 
-const Landing = () => (
+const LandingSection = () => (
   <section className="landing">
     <div className="card bg-dark text-white">
       <Header />
@@ -43,7 +45,7 @@ const Landing = () => (
   </section>
 );
 
-const Intro = () => (
+const IntroSection = () => (
   <section className="intro spacer">
     <div className="container-fluid">
       <h2 className="header">
@@ -56,7 +58,7 @@ const Intro = () => (
   </section>
 );
 
-const LiveYourLife = () => (
+const LiveYourLifeSection = () => (
   <section className="live-your-life">
     <Row>
       <Col className="live-your-life__content--1 live-your-life__box" sm="4">
@@ -100,73 +102,30 @@ const LiveYourLife = () => (
   </section>
 );
 
-const Entertainers = () => (
+const EntertainerSection = () => (
   <section className="entertainers spacer">
     <div className="container-fluid">
       <h2 className="header title-border">
         OUR <span>ENTERTAINERS</span>
       </h2>
       <Row className="pt-5">
-        <Entertainer.List lists={entertainerLists} />
+        <Entertainers.List lists={entertainerLists} />
       </Row>
     </div>
   </section>
 );
 
-const Entertainer = ({ name, image, type }) => (
-  <Col sm={4}>
-    <Card className="entertainer-card">
-      <CardImg alt={name} className="img-fluid" src={image} top />
-      <CardImgOverlay>
-        <CardTitle>{name}</CardTitle>
-        <div className="entertainer_type">{type}</div>
-      </CardImgOverlay>
-    </Card>
-  </Col>
-);
-
-Entertainer.List = ({ lists }) =>
-  lists.map(({ name, image, type }) => (
-    <Entertainer image={image} key={name} name={name} type={type} />
-  ));
-
-const Events = () => (
+const EventSection = () => (
   <section className="events spacer">
     <div className="container-fluid">
       <h2 className="header title-border">
         UPCOMING <span>EVENTS</span>
       </h2>
       <Row className="pt-5">
-        <Event.List lists={eventLists} />
+        <Events.List lists={eventLists} />
       </Row>
     </div>
   </section>
 );
-
-const Event = ({ title, address, ticket, weekday, date, time, image }) => (
-  <Col sm={4}>
-    <Card className="event-card">
-      <div className="event-card__image-container">
-        <CardImg alt={title} className="img-fluid" src={image} top />
-        <CardImgOverlay />
-      </div>
-      <div className="event-card__body">
-        <div className="event-card__datetime">
-          <span className="event-card__weekday">{weekday},</span>
-          <span className="event-card__date"> {date},</span>
-          <span className="event-card__time">{time}</span>
-        </div>
-        <div className="event-card__info">
-          <h6 className="event-card__title">{title}</h6>
-          <p className="event-card__address">{address}</p>
-          <div className="event-card__ticket">Ticket: {ticket}</div>
-        </div>
-      </div>
-    </Card>
-  </Col>
-);
-
-Event.List = ({ lists }) =>
-  lists.map(props => <Event key={lists.title} {...props} />);
 
 export default Home;
