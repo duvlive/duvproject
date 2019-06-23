@@ -1,0 +1,29 @@
+.landing {
+  .card {
+    height: 800px;
+    background: url('../../assets/img/bg/top-video.jpg') center center no-repeat;
+    background-size: cover;
+    z-index: -2;
+  }
+  .card-img-overlay {
+    text-align: center;
+    z-index: -1;
+  }
+  .card-title {
+    font-size: 3rem;
+    padding-top: 250px;
+    margin-bottom: 30px;
+  }
+}
+
+.intro {
+  padding-top: 200px;
+  background: $black;
+  background: url('../../assets/img/bg/felebration.jpg') center center no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  height: 800px;
+  width: 100%;
+}

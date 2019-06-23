@@ -42,12 +42,28 @@ $colors: map-merge(
 
 $primary: $red;
 $secondary: $indigo;
-$success: $green !default;
+$success: $green;
 $info: $cyan !default;
-$warning: $yellow !default;
-$danger: $red !default;
-$light: $gray-100 !default;
-$dark: $gray-800 !default;
+$warning: $yellow;
+$danger: $red;
+$light: $white;
+$dark: $black;
+
+$theme-colors: ();
+// stylelint-disable-next-line scss/dollar-variable-default
+$theme-colors: map-merge(
+  (
+    'primary': $primary,
+    'secondary': $secondary,
+    'success': $success,
+    'info': $info,
+    'warning': $warning,
+    'danger': $danger,
+    'light': $light,
+    'dark': $dark
+  ),
+  $theme-colors
+);
 
 // Body
 //
@@ -75,3 +91,86 @@ $green-100: #a4ffa4;
 $green-200: #70ff70;
 $green-300: #00ad00;
 $green-400: #008500;
+
+// Components
+//
+// Define common padding and border radius sizes and more.
+
+$line-height-lg: 2;
+$line-height-sm: 1.8;
+
+$border-radius: 0;
+$border-radius-lg: 0;
+$border-radius-sm: 0;
+
+$transition-base: all 0.4s ease-in-out;
+
+// Typography
+//
+// Font, line-height, and color for body text, headings, and more.
+
+// stylelint-disable value-keyword-case
+$font-family-sans-serif: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+  'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji',
+  'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji' !default;
+$font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas,
+  'Liberation Mono', 'Courier New', monospace !default;
+$font-family-base: $font-family-sans-serif !default;
+// stylelint-enable value-keyword-case
+
+$font-size-base: 0.85rem; // Assumes the browser default, typically `16px`
+$line-height-base: 1.8;
+
+// Buttons + Forms
+//
+// Shared variables that are reassigned to `$input-` and `$btn-` specific variables.
+
+$input-btn-padding-y: 0.75rem;
+$input-btn-padding-x: 1.2rem;
+$input-btn-font-size: 0.8rem;
+$input-btn-line-height: 1.8;
+
+$input-btn-padding-y-sm: 0.5rem;
+$input-btn-padding-x-sm: 0.9rem;
+$input-btn-font-size-sm: 0.7rem;
+$input-btn-line-height-sm: 1.5;
+
+$input-btn-padding-y-lg: 1rem;
+$input-btn-padding-x-lg: 1.8rem;
+$input-btn-font-size-lg: 0.9rem;
+$input-btn-line-height-lg: 1.8;
+
+// Buttons
+//
+// For each of Bootstrap's buttons, define text, background, and border color.
+
+$btn-padding-y: $input-btn-padding-y;
+$btn-padding-x: $input-btn-padding-x;
+$btn-font-family: $input-btn-font-family !default;
+$btn-font-size: $input-btn-font-size;
+$btn-line-height: $input-btn-line-height;
+
+$btn-padding-y-sm: $input-btn-padding-y-sm;
+$btn-padding-x-sm: $input-btn-padding-x-sm;
+$btn-font-size-sm: $input-btn-font-size-sm;
+$btn-line-height-sm: $input-btn-line-height-sm;
+
+$btn-padding-y-lg: $input-btn-padding-y-lg;
+$btn-padding-x-lg: $input-btn-padding-x-lg;
+$btn-font-size-lg: $input-btn-font-size-lg;
+$btn-line-height-lg: $input-btn-line-height-lg;
+
+$btn-box-shadow: none;
+$btn-focus-width: $input-btn-focus-width !default;
+$btn-focus-box-shadow: none;
+$btn-disabled-opacity: 0.65 !default;
+$btn-active-box-shadow: none;
+
+$btn-link-disabled-color: $gray-600 !default;
+
+$btn-block-spacing-y: 0.5rem !default;
+
+// Allows for customizing button radius independently from global border radius
+$btn-border-radius: 0;
+$btn-border-radius-lg: 0;
+$btn-border-radius-sm: 0;

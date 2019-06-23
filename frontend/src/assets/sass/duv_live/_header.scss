@@ -11,17 +11,26 @@ $top-header-list-spacing: 0.8rem;
   }
 
   li:first-child {
-    border-right: 1px solid $white;
+    border-right: 1px solid rgba($white, 0.5);
     padding-right: $top-header-list-spacing;
     margin-right: $top-header-list-spacing;
   }
 
   a {
-    color: $white;
+    color: rgba($white, 0.7);
+
+    &:hover {
+      color: rgba($red, 1);
+      text-decoration: none;
+    }
+  }
+
+  &__icon {
+    opacity: 0.6;
   }
 }
 
-navbar {
+.navbar {
   padding: 0.5rem 0 0;
 
   .nav-item {

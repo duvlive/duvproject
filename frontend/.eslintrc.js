@@ -5,7 +5,6 @@ module.exports = {
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
     'react/prop-types': [1],
     'react/sort-prop-types': 1,
-    'react/jsx-sort-props': 1,
-    'comma-dangle': ['error', 'always'],
-  },
+    'react/jsx-sort-props': 1
+  }
 };
