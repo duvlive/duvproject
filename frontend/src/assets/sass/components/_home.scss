@@ -5,12 +5,35 @@ $section-height: 50rem;
     height: $section-height;
     background: url('../img/bg/top-video.jpg') center center no-repeat;
     background-size: cover;
-    z-index: 0;
+    z-index: 1;
   }
   .card-img-overlay {
     text-align: center;
     background: rgba($black, 0.5);
     z-index: -1;
+
+    &:before {
+      content: '';
+      position: absolute;
+      top: 10rem;
+      left: 0;
+      right: 0;
+      margin-left: auto;
+      margin-right: auto;
+      width: 100%;
+      max-width: 25rem;
+      text-align: center;
+      height: 26rem;
+      transform: rotateX(-50%);
+      z-index: 0;
+      border: 1.4rem solid rgba($gray-400, 0.2);
+      box-sizing: border-box;
+      box-shadow: 0 60px 40px -40px rgba(0, 0, 0, 0.3);
+    }
+
+    &__content {
+      z-index: 10;
+    }
   }
   .card-title {
     font-size: 3.5rem;
@@ -31,6 +54,9 @@ $section-height: 50rem;
 }
 
 .live-your-life {
+  display: flex;
+  flex-wrap: wrap;
+
   &__box {
     height: 31rem;
     padding-left: 5.5rem;
