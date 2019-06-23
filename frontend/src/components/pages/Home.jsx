@@ -1,5 +1,24 @@
 import React from 'react';
 import Header from 'components/common/Header';
+import BorderedListItem from '../custom/BorderedListItem';
+
+const noGoSpoilYourPartyList = [
+  {
+    title: 'Register Your Account',
+    description:
+      'Creating an account is easy, consectetur adipiscing elit. Etiam varius leo felis, a tincidunt ex molestie quis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
+  },
+  {
+    title: 'Enter Your Event Details',
+    description:
+      'Enter your events details, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam varius leo felis, a tincidunt ex molestie quis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
+  },
+  {
+    title: 'Choose Your Entertainer',
+    description:
+      'Either by getting bids from our trusted entertainers or by recommendation, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam varius leo felis, a tincidunt ex molestie quis.'
+  }
+];
 
 const Home = () => {
   return (
@@ -33,20 +52,12 @@ const Home = () => {
       </section>
       <section className="intro spacer">
         <div className="container-fluid">
-          <div className="row">
-            <div className="col-lg-8 align-center about">
-              <h2 className="header">
-                NO GO SPOIL{' '}
-                <span className="d-sm-inline d-block">YOUR PARTY O!!!</span>
-              </h2>
-              <p>
-                Lorem ipsum dolor sit amet, ad eos iriure corpora prodesset.
-                Partem timeam at vim, mel veritus accusata ea. Ius ei dicam
-                inciderint, eleifend deseruisse ei mea. Alia dicam eam te, summo
-                exerci ei mei.Ei sea debet choro omittantur. Ea nam quis
-                aeterno, et usu semper senserit.
-              </p>
-            </div>
+          <h2 className="header">
+            NO GO SPOIL{' '}
+            <span className="d-sm-inline d-block">YOUR PARTY O!!!</span>
+          </h2>
+          <div className="row pt-5">
+            <BorderedListItem.List items={noGoSpoilYourPartyList} />{' '}
           </div>
         </div>
       </section>

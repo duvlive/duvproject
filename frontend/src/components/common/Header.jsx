@@ -10,7 +10,7 @@ import {
 } from 'reactstrap';
 import { Link } from '@reach/router';
 import IconPhone from 'assets/icons/phone.svg';
-import WhiteLogo from 'assets/logo/white-white.svg';
+import WhiteLogo from 'assets/img/logo/white-white.svg';
 import classNames from 'classnames';
 
 const menus = [

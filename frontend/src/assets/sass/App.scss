@@ -1,8 +1,8 @@
-@import url('https://fonts.googleapis.com/css?family=Montserrat:400,700|Roboto:400,900');
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,700|Lato:400,900');
 
 @import '~bootstrap/scss/functions';
 @import '~bootstrap/scss/variables';
-@import 'duv_live/variables.scss';
+@import 'variables.scss';
 
 @import '~bootstrap/scss/mixins';
 @import '~bootstrap/scss/root';
@@ -39,4 +39,4 @@
 @import '~bootstrap/scss/spinners';
 @import '~bootstrap/scss/utilities';
 @import '~bootstrap/scss/print';
-@import 'main';
+@import 'duv-live';

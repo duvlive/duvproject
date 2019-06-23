@@ -3,7 +3,7 @@ $section-height: 50rem;
 .landing {
   .card {
     height: $section-height;
-    background: url('../../assets/img/bg/top-video.jpg') center center no-repeat;
+    background: url('../img/bg/top-video.jpg') center center no-repeat;
     background-size: cover;
     z-index: 0;
   }
@@ -22,7 +22,7 @@ $section-height: 50rem;
 .intro {
   padding-top: 200px;
   background: $black;
-  background: url('../../assets/img/bg/felebration.jpg') center center no-repeat;
+  background: url('../img/bg/felebration.jpg') center center no-repeat;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;

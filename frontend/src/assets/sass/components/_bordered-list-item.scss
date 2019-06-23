@@ -1,0 +1,52 @@
+.bordered-list-item {
+  padding: 0 3rem;
+  @include media-breakpoint-up(sm) {
+    &:first-child {
+      padding-left: 15px;
+      padding-right: 6rem;
+    }
+
+    &:last-child {
+      padding-right: 15px;
+      padding-left: 6rem;
+    }
+  }
+  &__container {
+    background: transparent;
+    position: relative;
+    padding: 2rem 2rem 2rem 5rem;
+    z-index: 2;
+
+    &:before {
+      border: 1.4rem solid rgba($secondary, 0.4);
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: auto;
+      height: 7rem;
+      z-index: 0;
+    }
+  }
+
+  &__number {
+    color: $red-400;
+    font-size: 3rem;
+    font-weight: 900;
+    position: absolute;
+    top: 1rem;
+    left: 0.3rem;
+  }
+
+  &__title {
+    margin: 0.3rem 0 0.9rem;
+    text-transform: uppercase;
+  }
+
+  &__description {
+    padding-top: 1rem;
+    color: $blue-100;
+  }
+}

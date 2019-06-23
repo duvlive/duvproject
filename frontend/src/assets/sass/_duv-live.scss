@@ -1,5 +1,6 @@
-@import 'duv_live/header';
-@import 'duv_live/home';
+@import 'components/header';
+@import 'components/home';
+@import 'components/bordered-list-item';
 @import 'lib/hover';
 html {
   font-size: 0.8rem;
@@ -38,14 +39,13 @@ button:focus {
 .btn-danger.hvr-sweep-to-left,
 .btn-danger.hvr-sweep-to-right {
   &:before {
-    background: $gray-300;
+    background: $green-400;
   }
 
   &:hover,
   &:focus,
   &:active {
-    color: $black;
-    border-color: $white;
+    border-color: $green-400;
   }
 }
 .btn-light.hvr-sweep-to-left,
