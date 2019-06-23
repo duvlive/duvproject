@@ -1,12 +1,11 @@
 import React from 'react';
 import 'assets/sass/App.scss';
+import Header from 'components/common/Header';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>Welcome to Duv Live</h1>
-      </header>
+      <Header />
     </div>
   );
 }

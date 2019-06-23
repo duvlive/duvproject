@@ -1,0 +1,22 @@
+$top-header-list-spacing: 0.8rem;
+
+.top-header {
+  font-size: 0.7rem;
+  font-weight: 300;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(196, 196, 196, 0.5);
+
+  ul {
+    margin-bottom: 0;
+  }
+
+  li:first-child {
+    border-right: 1px solid $white;
+    padding-right: $top-header-list-spacing;
+    margin-right: $top-header-list-spacing;
+  }
+
+  a {
+    color: $white;
+  }
+}
