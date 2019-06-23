@@ -1,0 +1,77 @@
+.event-card {
+  margin-bottom: 30px;
+  height: 365px;
+  max-height: 365px;
+  overflow: hidden;
+
+  &__image-container {
+    position: relative;
+    height: 234px;
+    overflow: hidden;
+  }
+
+  img {
+    object-fit: cover;
+    height: 100%;
+    overflow: hidden;
+    transition: all 0.3s ease-out;
+  }
+
+  .card-img-overlay {
+    background: rgba($black, 0.5);
+  }
+
+  .event-card__body {
+    background: $white;
+  }
+
+  &__datetime {
+    width: 100px;
+    height: 100%;
+    float: left;
+    background: rgba(#111111, 0.8);
+    color: white;
+    font-family: $headings-font-family;
+    font-size: 13px;
+    text-align: center;
+  }
+
+  &__weekday,
+  &__date {
+    display: block;
+  }
+
+  &__weekday {
+    margin-top: 1rem;
+  }
+
+  &__info {
+    padding-left: 120px;
+  }
+
+  &__title {
+    font-size: 14px;
+    margin-top: 20px;
+    font-family: $font-family-sans-serif;
+    color: $black;
+  }
+
+  &__address {
+    font-size: 12px;
+    margin-top: 10px;
+    font-family: $headings-font-family;
+    color: $secondary;
+    margin-bottom: 10px;
+  }
+  &__ticket {
+    font-size: 11px;
+    color: $red-300;
+    margin-bottom: 30px;
+  }
+
+  &:hover {
+    img {
+      transform: scale(1.2);
+    }
+  }
+}

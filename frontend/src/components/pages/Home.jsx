@@ -3,8 +3,9 @@ import { Row, Col, Card, CardImg, CardImgOverlay, CardTitle } from 'reactstrap';
 import Header from 'components/common/Header';
 import BorderedListItem from '../custom/BorderedListItem';
 import Text from '../common/Text';
-import entertainerLists from 'data/entertainers.js';
 import noGoSpoilYourPartyList from 'data/duvSteps.js';
+import entertainerLists from 'data/entertainers.js';
+import eventLists from 'data/events.js';
 
 const Home = () => {
   return (
@@ -13,6 +14,7 @@ const Home = () => {
       <Intro />
       <LiveYourLife />
       <Entertainers />
+      <Events />
     </div>
   );
 };
@@ -125,6 +127,46 @@ const Entertainer = ({ name, image, type }) => (
 
 Entertainer.List = ({ lists }) =>
   lists.map(({ name, image, type }) => (
-    <Entertainer image={image} key="name" name={name} type={type} />
+    <Entertainer image={image} key={name} name={name} type={type} />
   ));
+
+const Events = () => (
+  <section className="events spacer">
+    <div className="container-fluid">
+      <h2 className="header title-border">
+        UPCOMING <span>EVENTS</span>
+      </h2>
+      <Row className="pt-5">
+        <Event.List lists={eventLists} />
+      </Row>
+    </div>
+  </section>
+);
+
+const Event = ({ title, address, ticket, weekday, date, time, image }) => (
+  <Col sm={4}>
+    <Card className="event-card">
+      <div className="event-card__image-container">
+        <CardImg alt={title} className="img-fluid" src={image} top />
+        <CardImgOverlay />
+      </div>
+      <div className="event-card__body">
+        <div className="event-card__datetime">
+          <span className="event-card__weekday">{weekday},</span>
+          <span className="event-card__date"> {date},</span>
+          <span className="event-card__time">{time}</span>
+        </div>
+        <div className="event-card__info">
+          <h6 className="event-card__title">{title}</h6>
+          <p className="event-card__address">{address}</p>
+          <div className="event-card__ticket">Ticket: {ticket}</div>
+        </div>
+      </div>
+    </Card>
+  </Col>
+);
+
+Event.List = ({ lists }) =>
+  lists.map(props => <Event key={lists.title} {...props} />);
+
 export default Home;

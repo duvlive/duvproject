@@ -1,9 +1,10 @@
 @import 'components/header';
 @import 'components/home';
 @import 'components/bordered-list-item';
+@import 'components/entertainer';
+@import 'components/event';
 @import 'lib/hover';
 @import 'lib/utilities';
-@import 'components/entertainer';
 
 html {
   font-size: 0.8rem;
