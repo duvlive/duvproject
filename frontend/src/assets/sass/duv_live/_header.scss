@@ -20,3 +20,35 @@ $top-header-list-spacing: 0.8rem;
     color: $white;
   }
 }
+
+navbar {
+  padding: 0.5rem 0 0;
+
+  .nav-item {
+    font-size: 0.8rem;
+    font-weight: 300;
+    padding-right: 1rem;
+
+    a {
+      color: $white !important;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: all 0.3s ease-out;
+
+      &:hover {
+        opacity: 0.5;
+      }
+
+      &.active {
+        color: $primary !important;
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+
+    &:last-child {
+      padding-right: 0;
+    }
+  }
+}
