@@ -11,6 +11,7 @@ import {
 import { Link } from '@reach/router';
 import IconPhone from 'assets/icons/phone.svg';
 import WhiteLogo from 'assets/logo/white-white.svg';
+import classNames from 'classnames';
 
 const menus = [
   { name: 'Home', to: '/' },
@@ -30,7 +31,14 @@ const Header = () => {
           <NavbarBrand tag={Link} to="/">
             <img alt="Duv Live White Logo" height="75" src={WhiteLogo} />
           </NavbarBrand>
-          <NavbarToggler onClick={() => setOpen(!isOpen)} />
+          <NavbarToggler
+            className={classNames({ open: isOpen })}
+            onClick={() => setOpen(!isOpen)}
+          >
+            <span />
+            <span />
+            <span />
+          </NavbarToggler>
           <Collapse isOpen={isOpen} navbar>
             <Nav className="ml-auto" navbar>
               <Header.Menus menus={menus} />
@@ -47,7 +55,7 @@ Header.TopNav = () => {
     <section className="top-header">
       <div className="container-fluid">
         <div className="row">
-          <div className="top-header__left col-8 col-sm-6">
+          <div className="top-header__left col-6">
             <ul className="list-inline">
               <li className="list-inline-item">
                 <a href="/">
@@ -56,15 +64,15 @@ Header.TopNav = () => {
                     className="top-header__icon"
                     src={IconPhone}
                   />{' '}
-                  +2348 234 567 890{' '}
+                  +2348 234 567 890
                 </a>
               </li>
-              <li className="list-inline-item">
+              <li className="list-inline-item d-none d-sm-inline">
                 <a href="/">info@duvlive.com</a>
               </li>
             </ul>
           </div>
-          <div className="top-header__right text-right col-4 col-sm-6">
+          <div className="top-header__right text-right col-6">
             <ul className="list-inline">
               <li className="list-inline-item">
                 <a href="/">Login </a>

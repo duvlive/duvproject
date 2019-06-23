@@ -1,7 +1,7 @@
 @import 'duv_live/header';
 @import 'duv_live/home';
 html {
-  font-size: 0.7rem;
+  font-size: 0.8rem;
 
   @include media-breakpoint-up(sm) {
     font-size: 0.8rem;
@@ -30,32 +30,6 @@ body {
   }
 }
 
-.navbar-toggler {
-  border-color: rgb(255, 102, 203);
-}
-
-.navbar-toggler-icon {
-  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,102,203, 0.7)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
-}
-
-.btn-danger.slide {
-  background-color: transparent !important;
-  background: linear-gradient(to right, $white 50%, $red 50%) no-repeat scroll
-    right bottom / 210% 100% $red !important;
-  transition: all ease 0.3s;
-  &:hover {
-    background-position: left bottom !important;
-    color: $dark !important;
-  }
-}
-
-.btn-light.slide {
-  background-color: transparent !important;
-  background: linear-gradient(to right, $red-300 50%, $white 50%) no-repeat
-    scroll right bottom / 210% 100% $red !important;
-  transition: all ease 0.3s;
-  &:hover {
-    background-position: left bottom !important;
-    color: $white !important;
-  }
+button:focus {
+  outline: none;
 }
