@@ -1,0 +1,77 @@
+// Variables
+//
+// Variables should follow the `$component-state-property-size` formula for
+// consistent naming. Ex: $nav-link-disabled-color and $modal-content-box-shadow-xs.
+
+// Color system
+
+$white: #fff !default;
+$black: #131722;
+
+$blue: #2a8dcc;
+$indigo: #150073;
+$purple: #6f42c1 !default;
+$pink: #e83e8c !default;
+$red: #ff0000;
+$orange: #fd7e14 !default;
+$yellow: #ffce00;
+$green: #00ff00;
+$teal: #20c997 !default;
+$cyan: #17a2b8 !default;
+
+$colors: ();
+// stylelint-disable-next-line scss/dollar-variable-default
+$colors: map-merge(
+  (
+    'blue': $blue,
+    'indigo': $indigo,
+    'purple': $purple,
+    'pink': $pink,
+    'red': $red,
+    'orange': $orange,
+    'yellow': $yellow,
+    'green': $green,
+    'teal': $teal,
+    'cyan': $cyan,
+    'white': $white,
+    'gray': $gray-600,
+    'gray-dark': $gray-800
+  ),
+  $colors
+);
+
+$primary: $red;
+$secondary: $indigo;
+$success: $green !default;
+$info: $cyan !default;
+$warning: $yellow !default;
+$danger: $red !default;
+$light: $gray-100 !default;
+$dark: $gray-800 !default;
+
+// Body
+//
+// Settings for the `<body>` element.
+
+$body-bg: $black;
+$body-color: $gray-200;
+
+$red-100: #ffa4a4;
+$red-200: #ff7070;
+$red-300: #d90000;
+$red-400: #a70000;
+
+$yellow-100: #ffeda4;
+$yellow-200: #ffe370;
+$yellow-300: #d9af00;
+$yellow-400: #a78700;
+
+$blue-100: #bdafff;
+$blue-200: #9882ff;
+$blue-300: #1b0096;
+$blue-400: #150073;
+
+$green-100: #a4ffa4;
+$green-200: #70ff70;
+$green-300: #00ad00;
+$green-400: #008500;
