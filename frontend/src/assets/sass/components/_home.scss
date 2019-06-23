@@ -27,6 +27,66 @@ $section-height: 50rem;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-  height: $section-height;
+  min-height: $section-height;
   width: 100%;
+}
+
+.live-your-life {
+  &__box {
+    height: 31rem;
+    padding-left: 5.5rem;
+    padding-right: 5.5rem;
+    @include media-breakpoint-up(sm) {
+      padding-left: 3.5rem;
+      padding-right: 3.5rem;
+    }
+
+    h3 {
+      font-size: 1.7rem;
+      color: $black;
+
+      span {
+        color: $red;
+      }
+    }
+
+    p {
+      color: $text-color-secondary;
+    }
+  }
+  &__content--1 {
+    background: url('../img/bg/live-your-life.jpg') center center no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+
+    h2 {
+      font-size: 3rem;
+    }
+
+    p {
+      color: $white;
+      font-size: 1.2rem;
+    }
+  }
+
+  &__content--2 {
+    background: white;
+  }
+
+  &__content--3 {
+    background: $secondary;
+    h3 {
+      color: $white;
+
+      span {
+        color: $red;
+      }
+    }
+
+    p {
+      color: $white;
+    }
+  }
 }
