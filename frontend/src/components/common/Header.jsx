@@ -18,7 +18,7 @@ const menus = [
   { name: 'How it Works', to: '/how-it-works' },
   { name: 'Hire Entertainers', to: '/hire-entertainers' },
   { name: 'Upcoming Events', to: '/upcoming-events' },
-  { name: 'BrainBox', to: '/brain-box' }
+  { name: 'Help', to: '/help' }
 ];
 
 const Header = () => {
