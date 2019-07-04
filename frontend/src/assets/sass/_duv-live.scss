@@ -26,15 +26,16 @@ html {
 
 body {
   position: relative;
+  z-index: -1;
 }
 
 .container-fluid {
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
 
   @include media-breakpoint-up(sm) {
-    padding-left: 60px;
-    padding-right: 60px;
+    padding-left: 6rem;
+    padding-right: 6rem;
   }
 }
 
@@ -65,5 +66,93 @@ button:focus {
   &:active {
     color: $white;
     border-color: $blue;
+  }
+}
+
+.about-us {
+  @include media-breakpoint-up(sm) {
+    &__content {
+      margin-top: 10rem;
+    }
+
+    &__title,
+    &__subtitle {
+      margin-left: -8.5rem;
+    }
+  }
+
+  &__title {
+    color: $red;
+    font-size: 3rem;
+  }
+  &__subtitle {
+    font-size: 2.25rem;
+    font-weight: normal;
+  }
+
+  &__text {
+    margin-top: 2.5rem;
+  }
+}
+
+.entertainers-counter {
+  height: 54rem;
+  background: url('../img/bg/entertainers-counter.jpg') center center no-repeat;
+  background-size: cover;
+  clip-path: polygon(0 10%, 100% 0%, 100% 90%, 0% 100%);
+  z-index: -100;
+
+  .card-img-overlay {
+    background: rgba($secondary, 0.2);
+    height: 54rem;
+  }
+
+  &__content {
+    height: 54rem;
+    text-align: center;
+    color: $white;
+  }
+
+  &__icon {
+    font-size: 4.8rem;
+  }
+
+  &__number {
+    font-size: 6.4rem;
+  }
+
+  &__name {
+    font-size: 2.3rem;
+    color: $red-300;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+}
+
+.testimonials {
+  text-align: center;
+
+  &__header {
+    font-size: 3rem;
+    font-weight: normal;
+    text-transform: uppercase;
+  }
+
+  &__text {
+    margin-top: 2.5rem;
+  }
+
+  &__name {
+    margin-top: 3.8rem;
+    color: $red-200;
+
+    &::before {
+      content: '';
+      display: block;
+      border-top: 2px solid $white;
+      margin-left: calc(50% - 1.6rem);
+      margin-bottom: 1.3rem;
+      width: 3.2rem;
+    }
   }
 }

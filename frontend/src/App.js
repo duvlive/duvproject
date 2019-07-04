@@ -1,11 +1,16 @@
 import React from 'react';
-import 'assets/sass/App.scss';
+import { Router } from '@reach/router';
 import Home from 'components/pages/Home';
+import HowItWorks from 'components/pages/HowItWorks';
+import 'assets/sass/App.scss';
 
 function App() {
   return (
     <div className="App">
-      <Home />
+      <Router>
+        <Home path="/" />
+        <HowItWorks path="how-it-works" />
+      </Router>
     </div>
   );
 }
