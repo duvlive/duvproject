@@ -1,8 +1,6 @@
 export const SLIDESHOW_TYPE = {
   image: 'image',
   entertainers: 'entertainers',
-  events: 'events'
+  events: 'events',
+  testimonials: 'testimonials'
 };
-
-export const randomItem = items =>
-  items[Math.floor(Math.random() * items.length)];

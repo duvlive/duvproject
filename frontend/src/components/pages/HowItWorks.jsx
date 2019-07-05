@@ -4,8 +4,11 @@ import Header from 'components/common/Header';
 import HowItWorksImage from 'assets/img/bg/how-it-works.jpg';
 import Text from 'components/common/Text';
 import BorderedListItem from 'components/custom/BorderedListItem';
-import noGoSpoilYourPartyList from 'data/duvSteps.js';
+import Slideshow from 'components/custom/Slideshow';
+import { SLIDESHOW_TYPE } from 'utils/constants';
+import noGoSpoilYourPartyList from 'data/duvSteps';
 import Footer from 'components/common/Footer';
+import testimonialLists from 'data/testimonials';
 
 const HowItWorks = () => {
   return (
@@ -14,7 +17,7 @@ const HowItWorks = () => {
       <AboutUs />
       <WhyUseDuvLive />
       <CounterSection />
-      <Testimonials />
+      <Slideshow items={testimonialLists} type={SLIDESHOW_TYPE.testimonials} />
       <Footer />
     </div>
   );
@@ -122,27 +125,5 @@ EntertainersCounter.List = () => {
     <EntertainersCounter key={props.name} {...props} />
   ));
 };
-
-const Testimonials = () => (
-  <section className="testimonials spacer">
-    <div className="container-fluid">
-      <Row>
-        <Col sm={{ size: 8, offset: 2 }} xs={{ size: 10, offset: 1 }}>
-          <h2 className="testimonials__header">Testimonials</h2>
-          <p className="testimonials__text">
-            As the world’s leading live entertainment company, we are privileged
-            to work with artists to bring their creativity to life on stages
-            around the world. Whether it’s two hours at a packed club, or an
-            entire weekend of sets at a festival, a live show does more than
-            entertain. It can uplift, inspire and create a memory that lasts a
-            lifetime
-          </p>
-          <div className="testimonials__name">SOPHIA WEATHERWOOD</div>
-        </Col>
-      </Row>
-      <div className="spacer" />
-    </div>
-  </section>
-);
 
 export default HowItWorks;

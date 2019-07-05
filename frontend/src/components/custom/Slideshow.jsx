@@ -10,6 +10,7 @@ import {
 import Entertainers from 'components/common/Entertainers';
 import Events from 'components/common/Events';
 import { SLIDESHOW_TYPE } from 'utils/constants';
+import Testimonials from './Testimonials';
 
 class Slideshow extends Component {
   constructor(props) {
@@ -72,6 +73,9 @@ class Slideshow extends Component {
           )}
           {this.props.type === SLIDESHOW_TYPE.events && (
             <Slideshow.Events item={item} />
+          )}
+          {this.props.type === SLIDESHOW_TYPE.testimonials && (
+            <Slideshow.Testimonials item={item} />
           )}
         </CarouselItem>
       );
@@ -163,6 +167,15 @@ Slideshow.Events = ({ item }) => (
 Slideshow.Events.propTypes = {
   item: PropTypes.shape({
     list: PropTypes.arrayOf(PropTypes.object).isRequired
+  })
+};
+
+Slideshow.Testimonials = ({ item }) => <Testimonials {...item} />;
+
+Slideshow.Testimonials.propTypes = {
+  item: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    testimonial: PropTypes.string.isRequired
   })
 };
 
