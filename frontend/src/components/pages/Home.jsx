@@ -4,13 +4,60 @@ import Header from 'components/common/Header';
 import BorderedListItem from '../custom/BorderedListItem';
 import Text from '../common/Text';
 import noGoSpoilYourPartyList from 'data/duvSteps.js';
-import Events from 'components/common/Events';
-import Entertainers from 'components/common/Entertainers';
 import entertainerLists from 'data/entertainers.js';
 import eventLists from 'data/events.js';
 import Footer from 'components/common/Footer';
+import Slideshow from 'components/custom/Slideshow';
+import { SLIDESHOW_TYPE } from 'utils/constants';
+import { randomItem } from 'utils/helpers';
+
+const entertainer_list1 = [
+  randomItem(entertainerLists),
+  randomItem(entertainerLists),
+  randomItem(entertainerLists),
+  randomItem(entertainerLists),
+  randomItem(entertainerLists),
+  randomItem(entertainerLists)
+];
+
+const entertainer_list2 = [
+  randomItem(entertainerLists),
+  randomItem(entertainerLists),
+  randomItem(entertainerLists),
+  randomItem(entertainerLists),
+  randomItem(entertainerLists),
+  randomItem(entertainerLists)
+];
+
+const entertainer_list3 = [
+  randomItem(entertainerLists),
+  randomItem(entertainerLists),
+  randomItem(entertainerLists),
+  randomItem(entertainerLists),
+  randomItem(entertainerLists),
+  randomItem(entertainerLists)
+];
+
+const event_list1 = [
+  randomItem(eventLists),
+  randomItem(eventLists),
+  randomItem(eventLists)
+];
+
+const event_list2 = [
+  randomItem(eventLists),
+  randomItem(eventLists),
+  randomItem(eventLists)
+];
+
+const event_list3 = [
+  randomItem(eventLists),
+  randomItem(eventLists),
+  randomItem(eventLists)
+];
 
 const Home = () => {
+  console.log(SLIDESHOW_TYPE);
   return (
     <div className="home">
       <LandingSection />
@@ -114,7 +161,15 @@ const EntertainerSection = () => (
         OUR <span>ENTERTAINERS</span>
       </h2>
       <Row className="pt-5">
-        <Entertainers.List lists={entertainerLists} />
+        {/* <Entertainers.List lists={entertainerLists} /> */}
+        <Slideshow
+          items={[
+            { list: entertainer_list1, id: 1 },
+            { list: entertainer_list2, id: 2 },
+            { list: entertainer_list3, id: 3 }
+          ]}
+          type={SLIDESHOW_TYPE.entertainers}
+        />
       </Row>
     </div>
   </section>
@@ -127,7 +182,15 @@ const EventSection = () => (
         UPCOMING <span>EVENTS</span>
       </h2>
       <Row className="pt-5">
-        <Events.List lists={eventLists} />
+        {/* <Events.List lists={eventLists} /> */}
+        <Slideshow
+          items={[
+            { list: event_list1, id: 1 },
+            { list: event_list2, id: 2 },
+            { list: event_list3, id: 3 }
+          ]}
+          type={SLIDESHOW_TYPE.events}
+        />
       </Row>
     </div>
   </section>
