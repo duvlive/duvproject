@@ -1,8 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Header from 'components/common/Header';
 import Footer from 'components/common/Footer';
 import Text from 'components/common/Text';
 import { Col, Row } from 'reactstrap';
+import FAQs from 'data/faqs';
+import DuvLiveModal from 'components/custom/Modal';
 
 const Help = () => {
   return (
@@ -63,16 +66,7 @@ const FAQsSection = () => (
   <section className="faqs spacer">
     <div className="container-fluid">
       <Row>
-        <Col sm="4">
-          <h4>GENERAL</h4>
-          <ul>
-            <li>Aliquam tincidunt mauris eu risus.</li>
-            <li>Vestibulum auctor dapibus neque.</li>
-            <li>Nunc dignissim risus id metus.</li>
-            <li>Cras ornare tristique elit.</li>
-            <li>Vivamus vestibulum ntulla nec ante.</li>
-          </ul>
-        </Col>
+        {getFAQs(FAQs.general)}
         <Col sm="4">
           <h4>HIRING AN ENTERTAINER</h4>
           <ul>
@@ -140,7 +134,7 @@ const HelpForm = () => (
             </h2>
             <div className="form-row">
               <div className="form-group col-md-6">
-                <label for="email">Email</label>
+                <label htmlFor="email">Email</label>
                 <input
                   className="form-control"
                   id="email"
@@ -149,7 +143,7 @@ const HelpForm = () => (
                 />
               </div>
               <div className="form-group col-md-6">
-                <label for="subject">Subject</label>
+                <label htmlFor="subject">Subject</label>
                 <input
                   className="form-control"
                   id="subject"
@@ -160,7 +154,7 @@ const HelpForm = () => (
             </div>
             <div className="form-row mb-2">
               <div className="form-group col-md-12">
-                <label for="message">Message</label>
+                <label htmlFor="message">Message</label>
                 <textarea
                   className="form-control"
                   id="message"
@@ -183,4 +177,23 @@ const HelpForm = () => (
   </section>
 );
 
+const getFAQs = ({ title, faqs }) => {
+  const faqsList = faqs.map(({ question, answer }) => (
+    <DuvLiveModal body={answer} title={question}>
+      <li>{question}</li>
+    </DuvLiveModal>
+  ));
+
+  return (
+    <Col sm="4">
+      <h4 className="text-uppercase">{title}</h4>
+      <ul>{faqsList}</ul>
+    </Col>
+  );
+};
+
+getFAQs.propTypes = {
+  faqs: PropTypes.arrayOf(PropTypes.object.isRequired),
+  title: PropTypes.string.isRequired
+};
 export default Help;

@@ -316,3 +316,24 @@ $table-dark-hover-color: $table-dark-color !default;
 $table-dark-hover-bg: rgba($white, 0.075) !default;
 $table-dark-border-color: lighten($table-dark-bg, 7.5%) !default;
 $table-dark-color: $white !default;
+
+// Modals
+
+// Padding applied to the modal body
+$modal-inner-padding: 2rem;
+
+$modal-dialog-margin: 1rem;
+$modal-dialog-margin-y-sm-up: 5rem;
+
+$modal-content-color: $text-color;
+$modal-content-bg: $black;
+$modal-content-border-color: rgba($white, 0.1);
+$modal-content-border-width: 1px;
+
+$modal-backdrop-bg: $black;
+$modal-backdrop-opacity: 0.75;
+$modal-header-border-color: rgba($white, 0.1);
+$modal-footer-border-color: rgba($white, 0.1);
+
+$modal-fade-transform: translate(0, -100px);
+$modal-transition: transform 0.4s ease-out;

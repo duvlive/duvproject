@@ -5,6 +5,7 @@
 @import 'components/event';
 @import 'components/footer';
 @import 'custom/slideshow';
+@import 'custom/modal';
 @import 'lib/forms';
 @import 'lib/buttons';
 @import 'lib/hover';
@@ -207,7 +208,7 @@ button:focus {
   }
 
   &__content--2 {
-    background: $secondary;
+    background: rgba($secondary, 0.5);
     padding: 0 5.5rem;
 
     h3 {
