@@ -1,0 +1,32 @@
+$transparent-btn-colors: (
+  'primary': $primary,
+  'secondary': $secondary,
+  'success': $green-300,
+  'info': $blue,
+  'warning': $warning,
+  'danger': $red-400,
+  'light': $light,
+  'dark': $dark
+);
+
+@each $name, $code in $transparent-btn-colors {
+  .btn-#{$name}.btn-transparent {
+    background: rgba($code, 0.5);
+    border-color: rgba($code, 0.4);
+
+    &:hover {
+      background: $code;
+      border-color: $code;
+    }
+  }
+}
+
+.btn-wide {
+  padding: 10px 40px;
+}
+
+.btn-sm {
+  &.btn-transparent {
+    padding: 0.5rem 1rem;
+  }
+}

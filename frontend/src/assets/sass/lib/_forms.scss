@@ -1,0 +1,23 @@
+.form-group {
+  label {
+    font-size: $input-font-size;
+  }
+}
+
+.form-row > .col,
+.form-row > [class*='col-'] {
+  padding-left: 1rem;
+  padding-right: 1rem;
+
+  &:first-child {
+    padding-left: 5px;
+  }
+
+  &:last-child {
+    padding-right: 5px;
+  }
+}
+
+.form-group {
+  margin-bottom: 1.75rem;
+}

@@ -5,6 +5,8 @@
 @import 'components/event';
 @import 'components/footer';
 @import 'custom/slideshow';
+@import 'lib/forms';
+@import 'lib/buttons';
 @import 'lib/hover';
 @import 'lib/utilities';
 @import 'icon-fonts';
@@ -155,5 +157,93 @@ button:focus {
       margin-bottom: 1.3rem;
       width: 3.2rem;
     }
+  }
+}
+
+.help {
+  display: flex;
+  flex-wrap: wrap;
+
+  &__box {
+    height: 31rem;
+    padding-left: 5.5rem;
+    padding-right: 5.5rem;
+    @include media-breakpoint-up(sm) {
+      padding-left: 3.5rem;
+      padding-right: 3.5rem;
+    }
+
+    h3 {
+      font-size: 1.7rem;
+      color: $black;
+
+      span {
+        color: $red;
+      }
+    }
+
+    p {
+      color: $text-color-secondary;
+    }
+  }
+  &__content--1 {
+    background: url('../img/bg/help.jpg') center center no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    padding-left: 5.5rem;
+
+    h2 {
+      font-size: 2.25rem;
+      text-transform: uppercase;
+      line-height: 1.3;
+    }
+
+    p {
+      color: $white;
+      font-size: 1.2rem;
+    }
+  }
+
+  &__content--2 {
+    background: $secondary;
+    padding: 0 5.5rem;
+
+    h3 {
+      font-size: 2rem;
+      font-weight: 400;
+      color: $white;
+      line-height: 1.4;
+
+      span {
+        color: $red;
+      }
+    }
+
+    p {
+      color: $white;
+    }
+
+    &__search {
+      background: red;
+    }
+  }
+}
+
+.faqs {
+  ul {
+    margin-left: -20px;
+    margin-bottom: 5rem;
+  }
+
+  li {
+    font-size: 0.9rem;
+    line-height: 2.5;
+  }
+
+  h4 {
+    font-family: $font-family-sans-serif;
+    font-size: 20px;
   }
 }

@@ -16,25 +16,42 @@ const Footer = () => (
           <Col sm={2} xs={6}>
             <ul className="list-unstyled footer__links">
               <li className="footer__header">Company</li>
-              <li>How it works</li>
-              <li>About</li>
-              <li>BrainBox</li>
-              <li>For the Record</li>
+              <li>
+                <Link to="/how-it-works">How it works</Link>
+              </li>
+              <li>
+                <Link to="/how-it-works">About</Link>
+              </li>
+              <li>
+                <Link to="/help">BrainBox</Link>
+              </li>
             </ul>
           </Col>
           <Col sm={2} xs={6}>
             <ul className="list-unstyled footer__links">
               <li className="footer__header">Communities</li>
-              <li>DJs</li>
-              <li>MCs</li>
-              <li>Live Bands</li>
+              <li>
+                <Link to="/hire-entertainers#DJs">DJs</Link>
+              </li>
+              <li>
+                <Link to="/hire-entertainers#MCs">MCs</Link>
+              </li>
+              <li>
+                <Link to="/hire-entertainers#Live-Bands">Live Bands</Link>
+              </li>
             </ul>
           </Col>
           <Col sm={2} xs={6}>
             <ul className="list-unstyled footer__links">
               <li className="footer__header">Useful Links</li>
-              <li>FAQs</li>
-              <li>Contact Us</li>
+              <li>
+                {' '}
+                <Link to="/help">FAQs</Link>
+              </li>
+              <li>
+                {' '}
+                <Link to="/contact-us">Contact Us</Link>
+              </li>
             </ul>
           </Col>
           <Col sm={4}>
@@ -51,13 +68,13 @@ const Footer = () => (
           <Col className="d-none d-sm-block" sm={6}>
             <ul className="list-inline">
               <li className="list-inline-item">
-                <a href="/">Terms of Use</a>
+                <Link to="/terms-of-use">Terms of Use</Link>
               </li>
               <li className="list-inline-item">
-                <a href="/">Privacy Policy</a>
+                <Link to="/privacy-policy">Privacy Policy</Link>
               </li>
               <li className="list-inline-item">
-                <a href="/">FAQs</a>
+                <Link to="/help">Help</Link>
               </li>
             </ul>
           </Col>
