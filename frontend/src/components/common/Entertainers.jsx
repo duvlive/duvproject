@@ -14,8 +14,8 @@ const Entertainers = ({ name, image, type }) => (
 );
 
 Entertainers.List = ({ lists }) =>
-  lists.map(({ name, image, type }) => (
-    <Entertainers image={image} key={name} name={name} type={type} />
+  lists.map(({ name, img, type }) => (
+    <Entertainers image={img.full} key={name} name={name} type={type} />
   ));
 
 export default Entertainers;

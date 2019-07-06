@@ -1,15 +1,15 @@
-import IMAGE_19 from 'assets/img/entertainers/img/19.jpg';
+import IMAGE_19 from 'assets/img/entertainers/img/19.jpeg';
 import IMAGE_20 from 'assets/img/entertainers/img/20.jpg';
 import IMAGE_21 from 'assets/img/entertainers/img/21.jpg';
 import IMAGE_22 from 'assets/img/entertainers/img/22.jpg';
-import IMAGE_23 from 'assets/img/entertainers/img/23.jpg';
-import IMAGE_24 from 'assets/img/entertainers/img/24.jpg';
-import PROFILE_19 from 'assets/img/entertainers/profile/19.jpg';
+import IMAGE_23 from 'assets/img/entertainers/img/23.jpeg';
+import IMAGE_24 from 'assets/img/entertainers/img/24.jpeg';
+import PROFILE_19 from 'assets/img/entertainers/profile/19.jpeg';
 import PROFILE_20 from 'assets/img/entertainers/profile/20.jpg';
 import PROFILE_21 from 'assets/img/entertainers/profile/21.jpg';
 import PROFILE_22 from 'assets/img/entertainers/profile/22.jpg';
-import PROFILE_23 from 'assets/img/entertainers/profile/23.jpg';
-import PROFILE_24 from 'assets/img/entertainers/profile/24.jpg';
+import PROFILE_23 from 'assets/img/entertainers/profile/23.jpeg';
+import PROFILE_24 from 'assets/img/entertainers/profile/24.jpeg';
 
 export default [
   {

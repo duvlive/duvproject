@@ -1,23 +1,23 @@
 import IMAGE_1 from 'assets/img/entertainers/img/1.jpg';
 import IMAGE_2 from 'assets/img/entertainers/img/2.jpg';
 import IMAGE_3 from 'assets/img/entertainers/img/3.jpg';
-import IMAGE_4 from 'assets/img/entertainers/img/4.jpg';
+import IMAGE_4 from 'assets/img/entertainers/img/4.jpeg';
 import IMAGE_5 from 'assets/img/entertainers/img/5.jpg';
-import IMAGE_6 from 'assets/img/entertainers/img/6.jpg';
+import IMAGE_6 from 'assets/img/entertainers/img/6.jpeg';
 import IMAGE_7 from 'assets/img/entertainers/img/7.jpg';
-import IMAGE_8 from 'assets/img/entertainers/img/8.jpg';
-import IMAGE_9 from 'assets/img/entertainers/img/9.jpg';
-import IMAGE_10 from 'assets/img/entertainers/img/10.jpg';
+import IMAGE_8 from 'assets/img/entertainers/img/8.jpeg';
+import IMAGE_9 from 'assets/img/entertainers/img/9.jpeg';
+import IMAGE_10 from 'assets/img/entertainers/img/10.jpeg';
 import PROFILE_1 from 'assets/img/entertainers/profile/1.jpg';
 import PROFILE_2 from 'assets/img/entertainers/profile/2.jpg';
 import PROFILE_3 from 'assets/img/entertainers/profile/3.jpg';
-import PROFILE_4 from 'assets/img/entertainers/profile/4.jpg';
+import PROFILE_4 from 'assets/img/entertainers/profile/4.jpeg';
 import PROFILE_5 from 'assets/img/entertainers/profile/5.jpg';
-import PROFILE_6 from 'assets/img/entertainers/profile/6.jpg';
+import PROFILE_6 from 'assets/img/entertainers/profile/6.jpeg';
 import PROFILE_7 from 'assets/img/entertainers/profile/7.jpg';
-import PROFILE_8 from 'assets/img/entertainers/profile/8.jpg';
-import PROFILE_9 from 'assets/img/entertainers/profile/9.jpg';
-import PROFILE_10 from 'assets/img/entertainers/img/10.jpg';
+import PROFILE_8 from 'assets/img/entertainers/profile/8.jpeg';
+import PROFILE_9 from 'assets/img/entertainers/profile/9.jpeg';
+import PROFILE_10 from 'assets/img/entertainers/img/10.jpeg';
 
 export default [
   {

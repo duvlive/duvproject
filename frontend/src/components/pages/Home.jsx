@@ -11,33 +11,6 @@ import Slideshow from 'components/custom/Slideshow';
 import { SLIDESHOW_TYPE } from 'utils/constants';
 import { randomItem } from 'utils/helpers';
 
-const entertainer_list1 = [
-  randomItem(entertainerLists),
-  randomItem(entertainerLists),
-  randomItem(entertainerLists),
-  randomItem(entertainerLists),
-  randomItem(entertainerLists),
-  randomItem(entertainerLists)
-];
-
-const entertainer_list2 = [
-  randomItem(entertainerLists),
-  randomItem(entertainerLists),
-  randomItem(entertainerLists),
-  randomItem(entertainerLists),
-  randomItem(entertainerLists),
-  randomItem(entertainerLists)
-];
-
-const entertainer_list3 = [
-  randomItem(entertainerLists),
-  randomItem(entertainerLists),
-  randomItem(entertainerLists),
-  randomItem(entertainerLists),
-  randomItem(entertainerLists),
-  randomItem(entertainerLists)
-];
-
 const event_list1 = [
   randomItem(eventLists),
   randomItem(eventLists),
@@ -164,9 +137,9 @@ const EntertainerSection = () => (
         {/* <Entertainers.List lists={entertainerLists} /> */}
         <Slideshow
           items={[
-            { list: entertainer_list1, id: 1 },
-            { list: entertainer_list2, id: 2 },
-            { list: entertainer_list3, id: 3 }
+            { list: entertainerLists.slice(0, 6), id: 1 },
+            { list: entertainerLists.slice(6, 12), id: 2 },
+            { list: entertainerLists.slice(12, 18), id: 3 }
           ]}
           type={SLIDESHOW_TYPE.entertainers}
         />
