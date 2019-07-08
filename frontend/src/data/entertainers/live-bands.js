@@ -86,7 +86,7 @@ export default [
   },
   {
     id: 22,
-    name: 'Rolling Dollars',
+    name: 'Rolling Master',
     type: 'MC',
     years_of_experience: 8,
     total_shows: 16,
@@ -110,7 +110,7 @@ export default [
   },
   {
     id: 23,
-    name: 'Rolling Dollars',
+    name: 'DON Shisha',
     type: 'MC',
     years_of_experience: 4,
     total_shows: 4,

@@ -23,3 +23,5 @@ export const shuffleItems = items => {
   }
   return items;
 };
+
+export const createMarkup = text => ({ __html: text });

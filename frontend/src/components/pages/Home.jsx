@@ -9,28 +9,8 @@ import eventLists from 'data/events.js';
 import Footer from 'components/common/Footer';
 import Slideshow from 'components/custom/Slideshow';
 import { SLIDESHOW_TYPE } from 'utils/constants';
-import { randomItem } from 'utils/helpers';
-
-const event_list1 = [
-  randomItem(eventLists),
-  randomItem(eventLists),
-  randomItem(eventLists)
-];
-
-const event_list2 = [
-  randomItem(eventLists),
-  randomItem(eventLists),
-  randomItem(eventLists)
-];
-
-const event_list3 = [
-  randomItem(eventLists),
-  randomItem(eventLists),
-  randomItem(eventLists)
-];
 
 const Home = () => {
-  console.log(SLIDESHOW_TYPE);
   return (
     <div className="home">
       <LandingSection />
@@ -158,9 +138,9 @@ const EventSection = () => (
         {/* <Events.List lists={eventLists} /> */}
         <Slideshow
           items={[
-            { list: event_list1, id: 1 },
-            { list: event_list2, id: 2 },
-            { list: event_list3, id: 3 }
+            { list: eventLists.slice(0, 3), id: 1 },
+            { list: eventLists.slice(3, 6), id: 2 },
+            { list: eventLists.slice(6, 9), id: 3 }
           ]}
           type={SLIDESHOW_TYPE.events}
         />
