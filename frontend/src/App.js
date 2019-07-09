@@ -1,5 +1,6 @@
 import React from 'react';
 import { Router } from '@reach/router';
+import { Helmet } from 'react-helmet';
 import Home from 'components/pages/Home';
 import HowItWorks from 'components/pages/HowItWorks';
 import 'assets/sass/App.scss';
@@ -12,6 +13,9 @@ import PrivacyPolicy from 'components/pages/PrivacyPolicy';
 function App() {
   return (
     <div className="App">
+      <Helmet>
+        <title>D.U.V LIVE | HOME OF LIVE ENTERTAINMENT</title>
+      </Helmet>
       <Router>
         <Home path="/" />
         <HowItWorks path="how-it-works" />
