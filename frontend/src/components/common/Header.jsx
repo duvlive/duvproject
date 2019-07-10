@@ -58,14 +58,14 @@ Header.TopNav = () => {
           <div className="top-header__left col-6">
             <ul className="list-inline">
               <li className="list-inline-item">
-                <a href="/">
+                <Link to="/">
                   <img
                     alt="phone icon"
                     className="top-header__icon"
                     src={IconPhone}
                   />{' '}
                   +2348 234 567 890
-                </a>
+                </Link>
               </li>
               <li className="list-inline-item d-none d-sm-inline">
                 <a href="/">info@duvlive.com</a>
@@ -75,7 +75,7 @@ Header.TopNav = () => {
           <div className="top-header__right text-right col-6">
             <ul className="list-inline">
               <li className="list-inline-item">
-                <a href="/">Login </a>
+                <Link to="/login">Login </Link>
               </li>
               <li className="list-inline-item">
                 <a href="/">Register Now</a>

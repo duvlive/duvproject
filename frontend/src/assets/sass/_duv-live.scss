@@ -248,3 +248,30 @@ button:focus {
     font-size: 20px;
   }
 }
+
+.auth {
+  background: $black;
+  background: linear-gradient(rgba($body-bg, 0.1), rgba($body-bg, 0.5)),
+    url('../img/bg/felebration_auth.png');
+  background-position: center bottom;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  min-height: $section-height;
+  width: 100%;
+
+  a.register {
+    color: $red;
+  }
+
+  &__container {
+    margin-top: 6rem;
+    padding: 75px 60px;
+    background-color: black;
+  }
+
+  &__quotes {
+    margin-top: 10rem;
+  }
+}

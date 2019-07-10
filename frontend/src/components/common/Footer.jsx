@@ -1,10 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Row, Col } from 'reactstrap';
 import { Link } from '@reach/router';
 import RedLogo from 'assets/img/logo/red-white.svg';
 
-const Footer = () => (
-  <footer className="footer">
+const Footer = ({ className }) => (
+  <footer className={`footer ${className}`}>
     <div className="container-fluid">
       <div className="footer__content">
         <Row>
@@ -105,6 +106,13 @@ const getSocialMediaIcons = () => {
       </a>
     </li>
   ));
+};
+
+Footer.propTypes = {
+  className: PropTypes.string
+};
+Footer.defaultProps = {
+  className: ''
 };
 
 export default Footer;

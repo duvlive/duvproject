@@ -9,6 +9,7 @@ import HireEntertainers from 'components/pages/HireEntertainers';
 import Help from 'components/pages/Help';
 import TermsOfUse from 'components/pages/TermsOfUse';
 import PrivacyPolicy from 'components/pages/PrivacyPolicy';
+import Login from 'components/pages/Login';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Help path="help" />
         <TermsOfUse path="terms-of-use" />
         <PrivacyPolicy path="privacy-policy" />
+        <Login path="login" />
       </Router>
     </div>
   );
