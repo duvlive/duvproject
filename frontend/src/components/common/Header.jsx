@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import {
   Collapse,
   Navbar,
@@ -11,6 +12,7 @@ import {
 import { Link } from '@reach/router';
 import IconPhone from 'assets/icons/phone.svg';
 import WhiteLogo from 'assets/img/logo/white-white.svg';
+import RedLogo from 'assets/img/logo/red-white.svg';
 import classNames from 'classnames';
 
 const menus = [
@@ -21,15 +23,16 @@ const menus = [
   { name: 'Help', to: '/help' }
 ];
 
-const Header = () => {
+const Header = ({ showRedLogo }) => {
   const [isOpen, setOpen] = useState(false);
+  const logo = showRedLogo ? RedLogo : WhiteLogo;
   return (
     <header>
       <Header.TopNav />
       <div className="container-fluid">
         <Navbar color="transparent" expand="md">
           <NavbarBrand tag={Link} to="/">
-            <img alt="Duv Live White Logo" height="75" src={WhiteLogo} />
+            <img alt="Duv Live White Logo" height="75" src={logo} />
           </NavbarBrand>
           <NavbarToggler
             className={classNames({ open: isOpen })}
@@ -48,6 +51,14 @@ const Header = () => {
       </div>
     </header>
   );
+};
+
+Header.propTypes = {
+  showRedLogo: PropTypes.bool
+};
+
+Header.defaultProps = {
+  showRedLogo: false
 };
 
 Header.TopNav = () => {
@@ -78,7 +89,7 @@ Header.TopNav = () => {
                 <Link to="/login">Login </Link>
               </li>
               <li className="list-inline-item">
-                <a href="/">Register Now</a>
+                <Link to="/register">Register Now </Link>
               </li>
             </ul>
           </div>

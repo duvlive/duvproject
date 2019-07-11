@@ -8,7 +8,7 @@ import Text from 'components/common/Text';
 const Login = () => (
   <Fragment>
     <section className="auth">
-      <Header />
+      <Header showRedLogo />
       <Content />
     </section>
     <Footer className="mt-0" />
