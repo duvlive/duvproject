@@ -251,7 +251,7 @@ button:focus {
 
 .auth {
   background: $black;
-  background: linear-gradient(rgba($body-bg, 0.1), rgba($body-bg, 0.5)),
+  background: linear-gradient(rgba($body-bg, 0.02), rgba($body-bg, 0.2)),
     url('../img/bg/felebration_auth.png');
   background-position: center bottom;
   -webkit-background-size: cover;
@@ -261,17 +261,55 @@ button:focus {
   min-height: $section-height;
   width: 100%;
 
-  a.register {
-    color: $red;
+  &__link {
+    color: $red-100;
   }
 
   &__container {
-    margin-top: 6rem;
-    padding: 75px 60px;
     background-color: black;
+    background-color: rgba(black, 0.8);
+    margin-top: 6rem;
+    padding: 75px 40px 60px;
+    margin-left: 4.5rem;
+    margin-bottom: 5rem;
+    border-radius: 5px;
   }
 
   &__quotes {
-    margin-top: 10rem;
+    margin-left: 3rem;
+    position: relative;
+    &:before {
+      font-family: 'duvlive';
+      display: inline-block;
+      content: '\f10d';
+      position: absolute;
+      font-size: 2rem;
+      top: -1.5rem;
+      left: -2.5rem;
+    }
+    &--text {
+      font-size: 1.5rem;
+      font-weight: normal;
+      line-height: 1.6;
+    }
+  }
+
+  &__social-media {
+    &--text {
+      font-size: 12px;
+      margin: 30px 0 0;
+    }
+    &--icons {
+      font-size: 32px;
+      color: white;
+      display: inline-block;
+      margin-right: 10px;
+      margin-left: -0.6rem;
+    }
+  }
+
+  &__footer {
+    margin-top: 60px;
+    font-size: 12px;
   }
 }

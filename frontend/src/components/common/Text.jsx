@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const Text = () => {
   return <div>Testing 123</div>;
@@ -10,4 +11,7 @@ Text.VerticalAlign = ({ children }) => (
   </div>
 );
 
+Text.VerticalAlign.propTypes = {
+  children: PropTypes.node.isRequired
+};
 export default Text;
