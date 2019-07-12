@@ -1,20 +1,48 @@
 import React, { Fragment } from 'react';
+import PropTypes from 'prop-types';
 import Header from 'components/common/Header';
 import Footer from 'components/common/Footer';
+import SelectRegistration from 'components/pages/SelectRegistration';
 import { Link } from '@reach/router';
 import { Col, Row } from 'reactstrap';
 
-const Register = () => (
+const text = {
+  entertainer: {
+    subtitle: 'MC, DJ OR OWN A LIVE BAND?',
+    buttonText: 'Register as an Entertainer'
+  },
+  user: {
+    subtitle: 'NO GO SPOIL YOUR PARTY O!!!',
+    buttonText: 'Register as a User'
+  }
+};
+const allowedTypes = ['entertainer', 'user'];
+const showRegistrationPage = type => {
+  return allowedTypes.includes(type);
+};
+
+const Register = ({ type }) => (
   <Fragment>
     <section className="auth">
       <Header showRedLogo />
-      <Content />
+      {showRegistrationPage(type) ? (
+        <Content type={type} />
+      ) : (
+        <SelectRegistration />
+      )}
     </section>
     <Footer className="mt-0" />
   </Fragment>
 );
 
-const Content = () => (
+Register.propTypes = {
+  type: PropTypes.oneOf(allowedTypes)
+};
+Register.defaultProps = {
+  type: null
+};
+
+const Content = ({ type }) => (
   <section>
     <div className="container-fluid">
       <Row>
@@ -22,12 +50,10 @@ const Content = () => (
           <div className="auth__container auth__container--lg">
             <section>
               <form>
-                <h5 className="header font-weight-normal mb-1">
-                  REGISTER AS AN ENTERTAINER
+                <h5 className="header font-weight-normal text-uppercase mb-1">
+                  REGISTER AS AN {type}
                 </h5>
-                <div className="text-red-100 mb-5">
-                  MC, DJ OR OWN A LIVE BAND?
-                </div>
+                <div className="text-red-100 mb-5">{text[type].subtitle}</div>
 
                 <section className="auth__social-media text-center">
                   <p className="auth__social-media--text">Register with:</p>
@@ -115,11 +141,8 @@ const Content = () => (
                     </label>
                   </div>
 
-                  <button
-                    className="btn btn-danger btn-wide btn-transparent mt-4"
-                    href="/"
-                  >
-                    Register as an Entertainer
+                  <button className="btn btn-danger btn-wide btn-transparent mt-4">
+                    {text[type].buttonText}
                   </button>
                 </section>
               </form>
@@ -141,4 +164,12 @@ const Content = () => (
     </div>
   </section>
 );
+
+Content.propTypes = {
+  type: PropTypes.oneOf(allowedTypes)
+};
+Content.defaultProps = {
+  type: null
+};
+
 export default Register;

@@ -15,7 +15,6 @@ const Events = ({
   const weekDay = format(eventDate, 'ddd');
   const fullDate = format(eventDate, 'MMM D');
 
-  console.log('start_date', format(parse(start_date), 'MMMM'));
   return (
     <Col sm={4}>
       <Card className="event-card">

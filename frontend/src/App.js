@@ -28,6 +28,7 @@ function App() {
         <PrivacyPolicy path="privacy-policy" />
         <Login path="login" />
         <Register path="register" />
+        <Register path="register/:type" />
       </Router>
     </div>
   );
