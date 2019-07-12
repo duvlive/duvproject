@@ -1,4 +1,10 @@
 $text-colors: (
+  'red': $danger,
+  'green': $green,
+  'blue': $blue,
+  'yellow': $yellow,
+  'white': $white,
+  'gray': $text-color,
   'red-100': $red-100,
   'red-200': $red-200,
   'red-300': $red-300,
@@ -20,5 +26,32 @@ $text-colors: (
 @each $name, $code in $text-colors {
   .text-#{$name} {
     color: $code;
+  }
+}
+
+$sub-title: (
+  '1': 1.8rem,
+  '2': 1.5rem,
+  '3': 1.2rem,
+  '4': 1rem
+);
+
+@each $number, $size in $sub-title {
+  .subtitle--#{$number} {
+    font-size: $size;
+    font-weight: normal;
+  }
+}
+
+$small: (
+  '1': 0.9rem,
+  '2': 0.8rem,
+  '3': 0.7rem
+);
+
+@each $number, $size in $small {
+  .small--#{$number} {
+    font-size: $size;
+    font-weight: normal;
   }
 }
