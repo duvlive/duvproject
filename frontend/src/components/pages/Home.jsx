@@ -135,7 +135,6 @@ const EventSection = () => (
         UPCOMING <span>EVENTS</span>
       </h2>
       <Row className="pt-5">
-        {/* <Events.List lists={eventLists} /> */}
         <Slideshow
           items={[
             { list: eventLists.slice(0, 3), id: 1 },

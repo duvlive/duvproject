@@ -11,6 +11,8 @@ import TermsOfUse from 'components/pages/TermsOfUse';
 import PrivacyPolicy from 'components/pages/PrivacyPolicy';
 import Login from 'components/pages/Login';
 import Register from 'components/pages/Register';
+import SingleEntertainer from 'components/pages/SingleEntertainer';
+import { ScrollToTop } from 'components/custom/ScrollToTop';
 
 function App() {
   return (
@@ -18,17 +20,20 @@ function App() {
       <Helmet>
         <title>D.U.V LIVE | HOME OF LIVE ENTERTAINMENT</title>
       </Helmet>
-      <Router>
-        <Home path="/" />
-        <HowItWorks path="how-it-works" />
-        <UpcomingEvents path="upcoming-events" />
-        <HireEntertainers path="hire-entertainers" />
-        <Help path="help" />
-        <TermsOfUse path="terms-of-use" />
-        <PrivacyPolicy path="privacy-policy" />
-        <Login path="login" />
-        <Register path="register" />
-        <Register path="register/:type" />
+      <Router primary={false}>
+        <ScrollToTop path="/">
+          <Home path="/" />
+          <HowItWorks path="how-it-works" />
+          <UpcomingEvents path="upcoming-events" />
+          <HireEntertainers path="hire-entertainers" />
+          <Help path="help" />
+          <TermsOfUse path="terms-of-use" />
+          <PrivacyPolicy path="privacy-policy" />
+          <Login path="login" />
+          <Register path="register" />
+          <Register path="register/:type" />
+          <SingleEntertainer path="entertainer/:slug" />
+        </ScrollToTop>
       </Router>
     </div>
   );

@@ -5,7 +5,7 @@ import { CardTitle, Col, Card, CardImg, CardImgOverlay } from 'reactstrap';
 
 const Entertainers = ({ stage_name, image, type, slug }) => (
   <Col sm={4}>
-    <Link to={`entertainer/${slug}`}>
+    <Link to={`/entertainer/${slug}`}>
       <Card className="entertainer-card">
         <CardImg alt={stage_name} className="img-fluid" src={image} top />
         <CardImgOverlay>
