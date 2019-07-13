@@ -1,28 +1,11 @@
 import React from 'react';
-import Header from 'components/common/Header';
 import { Col, Row } from 'reactstrap';
-import Footer from '../common/Footer';
+import FrontEndPage from 'components/common/FrontEndPage';
 
 const TermsOfUse = () => (
-  <section className="privacy-policy">
-    <LandingSection />
+  <FrontEndPage>
     <Content />
-    <Footer />
-  </section>
-);
-
-const LandingSection = () => (
-  <section className="landing">
-    <div className="card card__menu bg-dark text-white">
-      <Header />
-      <div className="card-img-overlay">
-        <div className="card-img-overlay__content">
-          <h2 className="card-title">Terms Of Use</h2>
-          <p className="card-subtitle">DUV LIVE &nbsp;/ &nbsp;Terms Of Use</p>
-        </div>
-      </div>
-    </div>
-  </section>
+  </FrontEndPage>
 );
 
 const Content = () => (

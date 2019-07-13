@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Header from 'components/common/Header';
-import Footer from 'components/common/Footer';
+import FrontEndPage from 'components/common/FrontEndPage';
 import Text from 'components/common/Text';
 import { Col, Row } from 'reactstrap';
 import FAQs from 'data/faqs';
@@ -10,28 +9,14 @@ import DuvLiveModal from 'components/custom/Modal';
 const Help = () => {
   return (
     <div className="help-section">
-      <LandingSection />
-      <HelpSection />
-      <FAQsSection />
-      <HelpForm />
-      <Footer />
+      <FrontEndPage title="Help">
+        <HelpSection />
+        <FAQsSection />
+        <HelpForm />
+      </FrontEndPage>
     </div>
   );
 };
-
-const LandingSection = () => (
-  <section className="landing">
-    <div className="card card__menu bg-dark text-white">
-      <Header />
-      <div className="card-img-overlay">
-        <div className="card-img-overlay__content">
-          <h2 className="card-title">HELP</h2>
-          <p className="card-subtitle">DUV LIVE &nbsp;/ &nbsp;Help</p>
-        </div>
-      </div>
-    </div>
-  </section>
-);
 
 const HelpSection = () => (
   <section className="help">

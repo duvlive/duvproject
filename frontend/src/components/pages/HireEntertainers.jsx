@@ -1,35 +1,16 @@
 import React from 'react';
-import Header from 'components/common/Header';
-import Footer from 'components/common/Footer';
+import FrontEndPage from 'components/common/FrontEndPage';
 import { Row } from 'reactstrap';
 import Entertainers from 'components/common/Entertainers';
 import entertainerLists from 'data/entertainers.js';
 
 const HireEntertainers = () => {
   return (
-    <div className="how-it-works">
-      <LandingSection />
+    <FrontEndPage title="Hire Entertainers">
       <EntertainerSection />
-      <Footer />
-    </div>
+    </FrontEndPage>
   );
 };
-
-const LandingSection = () => (
-  <section className="landing">
-    <div className="card card__menu bg-dark text-white">
-      <Header />
-      <div className="card-img-overlay">
-        <div className="card-img-overlay__content">
-          <h2 className="card-title">Hire Entertainers</h2>
-          <p className="card-subtitle">
-            DUV LIVE &nbsp;/ &nbsp;Hire Entertainers
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-);
 
 const EntertainerSection = () => (
   <section className="entertainers spacer">

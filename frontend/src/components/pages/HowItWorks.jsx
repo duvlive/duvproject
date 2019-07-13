@@ -1,41 +1,25 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Row, Col, Card, CardImgOverlay } from 'reactstrap';
-import Header from 'components/common/Header';
+import FrontEndPage from 'components/common/FrontEndPage';
 import HowItWorksImage from 'assets/img/bg/how-it-works.jpg';
 import Text from 'components/common/Text';
 import BorderedListItem from 'components/custom/BorderedListItem';
 import Slideshow from 'components/custom/Slideshow';
 import { SLIDESHOW_TYPE } from 'utils/constants';
 import noGoSpoilYourPartyList from 'data/duvSteps';
-import Footer from 'components/common/Footer';
 import testimonialLists from 'data/testimonials';
 
 const HowItWorks = () => {
   return (
-    <div className="how-it-works">
-      <LandingSection />
+    <FrontEndPage title="How it Works">
       <AboutUs />
       <WhyUseDuvLive />
       <CounterSection />
       <Slideshow items={testimonialLists} type={SLIDESHOW_TYPE.testimonials} />
-      <Footer />
-    </div>
+    </FrontEndPage>
   );
 };
-
-const LandingSection = () => (
-  <section className="landing">
-    <div className="card card__menu bg-dark text-white">
-      <Header />
-      <div className="card-img-overlay">
-        <div className="card-img-overlay__content">
-          <h2 className="card-title">HOW IT WORKS</h2>
-          <p className="card-subtitle">DUV LIVE &nbsp;/ &nbsp;HOW IT WORKS</p>
-        </div>
-      </div>
-    </div>
-  </section>
-);
 
 const AboutUs = () => (
   <section className="about-us spacer">
@@ -114,6 +98,12 @@ const EntertainersCounter = ({ icon, name, number }) => (
     </Text.VerticalAlign>
   </Col>
 );
+
+EntertainersCounter.propTypes = {
+  icon: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  number: PropTypes.number.isRequired
+};
 
 EntertainersCounter.List = () => {
   const lists = [
