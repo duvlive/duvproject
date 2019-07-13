@@ -78,3 +78,30 @@
     }
   }
 }
+
+.single-event {
+  &__title {
+    font-size: 2rem;
+    font-weight: normal;
+  }
+
+  &__location,
+  &__date-time {
+    display: inline-block;
+    margin-right: 3rem;
+  }
+}
+
+.event-details {
+  margin-bottom: 1.5rem;
+  &__title {
+    font-size: 1rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__details {
+    color: $yellow-100;
+    font-size: 0.8rem;
+  }
+}

@@ -65,6 +65,10 @@ const EntertainerSection = ({ entertainer }) => (
   </section>
 );
 
+EntertainerSection.propTypes = {
+  entertainers: PropTypes.object.isRequired
+};
+
 const OtherEntertainersSection = ({ entertainers }) => (
   <section className="other-entertainers spacer">
     <div className="container-fluid">
@@ -78,8 +82,8 @@ const OtherEntertainersSection = ({ entertainers }) => (
   </section>
 );
 
-EntertainerSection.propTypes = {
-  entertainer: PropTypes.object.isRequired
+OtherEntertainersSection.propTypes = {
+  entertainers: PropTypes.array.isRequired
 };
 
 const BackToHireEntertainers = () => (

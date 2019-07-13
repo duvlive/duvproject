@@ -323,3 +323,8 @@ button:focus {
     font-size: 0.85rem;
   }
 }
+
+.img-big {
+  object-fit: cover;
+  width: 100%;
+}

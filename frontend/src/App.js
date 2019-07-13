@@ -12,6 +12,7 @@ import PrivacyPolicy from 'components/pages/PrivacyPolicy';
 import Login from 'components/pages/Login';
 import Register from 'components/pages/Register';
 import SingleEntertainer from 'components/pages/SingleEntertainer';
+import SingleEvent from 'components/pages/SingleEvent';
 import { ScrollToTop } from 'components/custom/ScrollToTop';
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
           <Register path="register" />
           <Register path="register/:type" />
           <SingleEntertainer path="entertainer/:slug" />
+          <SingleEvent path="event/:slug" />
         </ScrollToTop>
       </Router>
     </div>
