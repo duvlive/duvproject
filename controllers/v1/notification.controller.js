@@ -111,8 +111,8 @@ export async function sendNotification(req, res) {
   }
 }
 
-// export function updateNotifications(req, res) {}
+export function updateNotifications(req, res) {}
 
-// export function deleteNotifications(req, res) {}
+export function deleteNotifications(req, res) {}
 
-// export function deleteNotification (req, res) {}
+export function deleteNotification(req, res) {}

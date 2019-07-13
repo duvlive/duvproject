@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { body } from 'express-validator/check';
-import { checkRequestValidity } from '../middlewares/validators.middleware';
+import checkRequestValidity from '../middlewares/validators.middleware';
 import passport from '../config/passport';
 import { basicAuth, confirm, facebookAuth, twitterAuth } from '../controllers/v1/auth.controller';
 
@@ -11,14 +11,14 @@ authRoutes
     '/basic',
     body('phone').matches(/\d{6}/),
     body('surname').matches(/^[A-Za-z][A-Za-z]{2,39}$/),
-    () => { checkRequestValidity(); },
-    () => { basicAuth(); }
+    checkRequestValidity,
+    basicAuth
   )
   .post(
     '/confirm',
     body('phone').matches(/\d{6}/),
-    () => { checkRequestValidity(); },
-    () => { confirm(); }
+    checkRequestValidity,
+    confirm
   )
   .get('/facebook', passport.authenticate('facebook'))
   .get('/facebook/callback', facebookAuth)
