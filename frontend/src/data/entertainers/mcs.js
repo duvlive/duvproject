@@ -18,7 +18,8 @@ import PROFILE_18 from 'assets/img/entertainers/profile/18.jpeg';
 export default [
   {
     id: 11,
-    name: 'MC Woro',
+    stage_name: 'MC Woro',
+    slug: 'mc-woro', // for seo purpose
     type: 'MC',
     years_of_experience: 2,
     total_shows: 6,
@@ -48,7 +49,8 @@ export default [
   },
   {
     id: 12,
-    name: 'Ellyzhi',
+    stage_name: 'Ellyzhi',
+    slug: 'ellyzhi',
     type: 'MC',
     years_of_experience: 7,
     total_shows: 16,
@@ -72,7 +74,8 @@ export default [
   },
   {
     id: 13,
-    name: 'High Def',
+    stage_name: 'High Def',
+    slug: 'high-def',
     type: 'MC',
     years_of_experience: 2,
     total_shows: 6,
@@ -96,7 +99,8 @@ export default [
   },
   {
     id: 14,
-    name: 'Twister',
+    stage_name: 'Twister',
+    slug: 'twister',
     type: 'MC',
     years_of_experience: 8,
     total_shows: 16,
@@ -120,7 +124,8 @@ export default [
   },
   {
     id: 15,
-    name: 'D Tribe Called Best',
+    stage_name: 'D Tribe Called Best',
+    slug: 'd-tribe-called-best',
     type: 'MC',
     years_of_experience: 4,
     total_shows: 4,
@@ -144,7 +149,8 @@ export default [
   },
   {
     id: 16,
-    name: 'Burtis Flow',
+    stage_name: 'Burtis Flow',
+    slug: 'burtis-flow',
     type: 'MC',
     years_of_experience: 5,
     total_shows: 0,
@@ -168,7 +174,8 @@ export default [
   },
   {
     id: 17,
-    name: 'Anoda Day',
+    stage_name: 'Anoda Day',
+    slug: 'anoda-day',
     type: 'MC',
     years_of_experience: 2,
     total_shows: 0,
@@ -192,7 +199,8 @@ export default [
   },
   {
     id: 18,
-    name: 'World Best',
+    stage_name: 'World Best',
+    slug: 'world-best',
     type: 'MC',
     years_of_experience: 1,
     total_shows: 0,

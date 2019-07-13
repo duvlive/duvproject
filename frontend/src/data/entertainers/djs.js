@@ -22,7 +22,8 @@ import PROFILE_10 from 'assets/img/entertainers/img/10.jpeg';
 export default [
   {
     id: 1,
-    name: 'DJ Spinach',
+    stage_name: 'DJ Spinach',
+    slug: 'dj-spinach',
     type: 'DJ',
     years_of_experience: 2,
     total_shows: 6,
@@ -46,7 +47,8 @@ export default [
   },
   {
     id: 2,
-    name: 'DJ Tantelke',
+    stage_name: 'DJ Tantelke',
+    slug: 'dj-tantelke',
     type: 'DJ',
     years_of_experience: 7,
     total_shows: 16,
@@ -70,7 +72,8 @@ export default [
   },
   {
     id: 3,
-    name: 'DJ Shilabo',
+    stage_name: 'DJ Shilabo',
+    slug: 'dj-shilabo',
     type: 'DJ',
     years_of_experience: 4,
     total_shows: 2,
@@ -94,7 +97,8 @@ export default [
   },
   {
     id: 4,
-    name: 'DJ Limit',
+    stage_name: 'DJ Limit',
+    slug: 'dj-limit',
     type: 'DJ',
     years_of_experience: 2,
     total_shows: 6,
@@ -118,7 +122,8 @@ export default [
   },
   {
     id: 5,
-    name: 'DJ Enimoney',
+    stage_name: 'DJ Enimoney',
+    slug: 'dj-enimoney',
     type: 'DJ',
     years_of_experience: 8,
     total_shows: 16,
@@ -142,7 +147,8 @@ export default [
   },
   {
     id: 6,
-    name: 'DJ Fira',
+    stage_name: 'DJ Fira',
+    slug: 'dj-fira',
     type: 'DJ',
     years_of_experience: 4,
     total_shows: 4,
@@ -166,7 +172,8 @@ export default [
   },
   {
     id: 7,
-    name: 'DJ Winas',
+    stage_name: 'DJ Winas',
+    slug: 'dj-winas',
     type: 'DJ',
     years_of_experience: 5,
     total_shows: 0,
@@ -190,7 +197,8 @@ export default [
   },
   {
     id: 8,
-    name: 'DJ Zebrah',
+    stage_name: 'DJ Zebrah',
+    slug: 'dj-zebrah',
     type: 'DJ',
     years_of_experience: 10,
     total_shows: 8,
@@ -214,7 +222,8 @@ export default [
   },
   {
     id: 9,
-    name: 'DJ Osky',
+    stage_name: 'DJ Osky',
+    slug: 'dj-osky',
     type: 'DJ',
     years_of_experience: 2,
     total_shows: 0,
@@ -238,7 +247,8 @@ export default [
   },
   {
     id: 10,
-    name: 'DJ Good Tyme',
+    stage_name: 'DJ Good Tyme',
+    slug: 'dj-good-tyme',
     type: 'DJ',
     years_of_experience: 1,
     total_shows: 0,

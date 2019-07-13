@@ -38,14 +38,7 @@ const EntertainerSection = () => (
         OUR <span>ENTERTAINERS</span>
       </h2>
       <Row className="pt-5">
-        <Entertainers.List
-          lists={[
-            ...entertainerLists,
-            ...entertainerLists,
-            ...entertainerLists,
-            ...entertainerLists
-          ]}
-        />
+        <Entertainers.List lists={entertainerLists} />
       </Row>
     </div>
   </section>
