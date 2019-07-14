@@ -4,15 +4,23 @@
   background: rgba(white, 0.03);
 
   &__content {
-    padding: 6.3rem 0 0;
+    padding: 6.3rem 0 3rem;
   }
 
   &__links {
     li {
-      color: $white;
-      font-size: 0.8rem;
-      font-weight: bold;
-      padding-bottom: 20px;
+      a {
+        color: rgba($white, 0.7);
+        display: block;
+        font-size: 0.8rem;
+        font-weight: normal;
+        padding-bottom: 20px;
+
+        &:hover {
+          color: $danger;
+          text-decoration: none;
+        }
+      }
 
       &.footer__header {
         color: $gray-600;

@@ -76,6 +76,7 @@ $top-header-list-spacing: 1rem;
       width: 100%;
       text-align: center;
       background: rgba($black, 0.98);
+      z-index: 1000;
 
       .navbar-nav .nav-item {
         font-size: 1rem;
@@ -158,29 +159,5 @@ $top-header-list-spacing: 1rem;
         }
       }
     }
-  }
-}
-
-.header {
-  span {
-    color: $red-300;
-  }
-}
-
-.spacer {
-  &-1 {
-    padding-top: 1rem;
-  }
-  &-2 {
-    padding-top: 2rem;
-  }
-  &-3 {
-    padding-top: 3rem;
-  }
-  &-4 {
-    padding-top: 4rem;
-  }
-  &-5 {
-    padding-top: 5rem;
   }
 }

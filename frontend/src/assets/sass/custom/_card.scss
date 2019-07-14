@@ -1,0 +1,115 @@
+.card-custom {
+  border-radius: 3px;
+  margin-bottom: 30px;
+  background: rgba($admin-card-bg, 0.1);
+  border: 1px solid rgba($admin-card-bg, 0.3);
+  transition: all 0.3s ease-out;
+
+  &.card-form {
+    padding: 1rem;
+  }
+
+  &.card-blue {
+    background: rgba($blue, 0.1);
+    border: 1px solid rgba($blue, 0.2);
+    &:hover {
+      background: rgba($blue-400, 0.5);
+    }
+    .card-header {
+      background: rgba($blue, 0.1);
+    }
+  }
+
+  &.card-green {
+    background: rgba($green-300, 0.08);
+    border: 1px solid rgba($green-300, 0.2);
+    &:hover {
+      background: rgba($green-400, 0.5);
+    }
+    .card-header {
+      background: rgba($green, 0.08);
+    }
+  }
+
+  &.card-yellow {
+    background: rgba($yellow, 0.1);
+    border: 1px solid rgba($yellow, 0.2);
+    &:hover {
+      background: rgba($yellow-400, 0.5);
+    }
+    .card-header {
+      background: rgba($yellow, 0.1);
+    }
+  }
+
+  &.card-red {
+    background: rgba($red, 0.08);
+    border: 1px solid rgba($red, 0.2);
+    &:hover {
+      background: rgba($red-400, 0.5);
+    }
+    .card-header {
+      background: rgba($red, 0.08);
+    }
+  }
+
+  &.card-black {
+    background: rgba($admin-card-bg, 0.1);
+    border: 1px solid rgba($admin-card-bg, 0.3);
+    &:hover {
+      background: rgba($black, 0.5);
+    }
+    .card-header {
+      background: rgba($admin-card-bg, 0.1);
+    }
+  }
+
+  &-body {
+    padding: 1.5rem;
+  }
+
+  &-footer {
+    background-color: transparent;
+  }
+
+  .img-thumbnail {
+    background-color: transparent;
+  }
+
+  &-tiles {
+    padding: 0.5rem;
+  }
+
+  .spacer--tiles {
+    margin-top: 6rem;
+  }
+
+  .spacer--tiles--1 {
+    margin-top: 2rem;
+  }
+
+  .spacer--tiles--2 {
+    margin-top: 4rem;
+  }
+
+  &-title,
+  &-subtitle {
+    font-weight: normal;
+    font-size: 18px;
+    margin-bottom: 30px;
+  }
+
+  &-text {
+    font-size: 0.8rem;
+  }
+
+  .header__with-border {
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid $gray-700;
+  }
+
+  &.no-br {
+    border-radius: 0;
+  }
+}

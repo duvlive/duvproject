@@ -20,8 +20,7 @@ $section-height: 50rem;
       right: 0;
       margin-left: auto;
       margin-right: auto;
-      width: 100%;
-      max-width: 25rem;
+      width: 25rem;
       text-align: center;
       height: 26rem;
       transform: rotateX(-50%);
@@ -39,6 +38,32 @@ $section-height: 50rem;
     font-size: 3.5rem;
     padding-top: 16rem;
     margin-bottom: 2rem;
+  }
+
+  .card__menu {
+    height: 36rem;
+    background: url('../img/bg/menu-section.png') center center no-repeat;
+    background-size: cover;
+
+    .card-img-overlay {
+      background: rgba($black, 0.8);
+
+      &:before {
+        width: 20rem;
+        height: 20rem;
+      }
+    }
+
+    .card-title {
+      margin-bottom: 0;
+    }
+
+    .card-subtitle {
+      font-size: 1.2rem;
+      font-family: $font-family-sans-serif;
+      padding-top: 1rem;
+      color: $gray-500;
+    }
   }
 }
 

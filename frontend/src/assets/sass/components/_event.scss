@@ -1,12 +1,12 @@
 .event-card {
-  margin-bottom: 30px;
-  height: 365px;
-  max-height: 365px;
+  margin-bottom: 2rem;
+  height: 23rem;
+  max-height: 23rem;
   overflow: hidden;
 
   &__image-container {
     position: relative;
-    height: 234px;
+    height: 15rem;
     overflow: hidden;
   }
 
@@ -26,13 +26,13 @@
   }
 
   &__datetime {
-    width: 100px;
+    width: 6.5rem;
     height: 100%;
     float: left;
     background: rgba(#111111, 0.8);
     color: white;
     font-family: $headings-font-family;
-    font-size: 13px;
+    font-size: 0.85rem;
     text-align: center;
   }
 
@@ -46,32 +46,74 @@
   }
 
   &__info {
-    padding-left: 120px;
+    padding-left: 7.5rem;
+    padding-right: 1rem;
   }
 
   &__title {
-    font-size: 14px;
-    margin-top: 20px;
+    font-size: 0.9rem;
+    margin-top: 1.25rem;
     font-family: $font-family-sans-serif;
-    color: $black;
+    color: rgba($black, 0.8);
   }
 
   &__address {
-    font-size: 12px;
-    margin-top: 10px;
+    font-size: 0.8rem;
+    margin: 0.65rem 0 0;
     font-family: $headings-font-family;
-    color: $secondary;
-    margin-bottom: 10px;
+    color: $text-color;
   }
   &__ticket {
-    font-size: 11px;
-    color: $red-300;
-    margin-bottom: 30px;
+    font-size: 0.8rem;
+    color: rgba($red-300, 0.7);
+    margin-bottom: 1.5rem;
   }
 
   &:hover {
     img {
       transform: scale(1.2);
     }
+
+    .event-card {
+      &__title {
+        color: $black;
+      }
+      &__datetime {
+        background: $blue-400;
+      }
+      &__address {
+        color: $secondary;
+      }
+      &__ticket {
+        color: $red-300;
+      }
+    }
+  }
+}
+
+.single-event {
+  &__title {
+    font-size: 2rem;
+    font-weight: normal;
+  }
+
+  &__location,
+  &__date-time {
+    display: inline-block;
+    margin-right: 3rem;
+  }
+}
+
+.event-details {
+  margin-bottom: 1.5rem;
+  &__title {
+    font-size: 1rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__details {
+    color: lighten($red-100, 5%);
+    font-size: 0.8rem;
   }
 }

@@ -1,0 +1,29 @@
+.form-group {
+  label {
+    font-size: $input-font-size;
+  }
+}
+
+.form-row > .col,
+.form-row > [class*='col-'] {
+  @include media-breakpoint-up(sm) {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  &:first-child {
+    @include media-breakpoint-up(sm) {
+      padding-left: 5px;
+    }
+  }
+
+  &:last-child {
+    @include media-breakpoint-up(sm) {
+      padding-right: 5px;
+    }
+  }
+}
+
+.form-group {
+  margin-bottom: 2rem;
+}

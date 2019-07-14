@@ -1,3 +1,7 @@
+// stylelint-disable value-keyword-case
+$text-font: 'Lato', sans-serif;
+$headings-font: 'Montserrat', sans-serif;
+// stylelint-enable value-keyword-case
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,700|Lato:400,900');
 
 @import '~bootstrap/scss/functions';
