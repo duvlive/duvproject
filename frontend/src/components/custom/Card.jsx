@@ -1,25 +1,37 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from '@reach/router';
+import classNames from 'classnames';
 
-const Card = () => {
-  return <div>This is a card</div>;
+const Card = ({ hollow, children, color, header }) => (
+  <section
+    className={classNames(
+      'card card-custom',
+      { [`card-${color}`]: true },
+      {
+        'card-hollow': hollow
+      }
+    )}
+  >
+    {header && (
+      <div className="card-header">
+        <h4 className="subtitle--2 pt-3 gray text-center">{header}</h4>
+      </div>
+    )}
+    {children && <div className="card-body">{children}</div>}
+  </section>
+);
+
+Card.propTypes = {
+  children: PropTypes.node,
+  color: PropTypes.string.isRequired,
+  header: PropTypes.string,
+  hollow: PropTypes.bool
+};
+
+Card.defaultProps = {
+  children: null,
+  header: '',
+  hollow: false
 };
 
 export default Card;
-
-Card.Hollow = ({ color, description, name, link }) => (
-  <Link className={`card card-custom card-hollow card-${color}`} to={link}>
-    <div className="card-header">
-      <h4 className="card-subtitle--1 gray text-center">{name}</h4>
-    </div>
-    <div className="card-body">{description}</div>
-  </Link>
-);
-
-Card.Hollow.propTypes = {
-  color: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
-  link: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired
-};

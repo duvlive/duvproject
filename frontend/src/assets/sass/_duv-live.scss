@@ -51,36 +51,6 @@ a:hover {
   }
 }
 
-button:focus {
-  outline: none;
-}
-
-.btn-danger.hvr-sweep-to-left,
-.btn-danger.hvr-sweep-to-right {
-  &:before {
-    background: $green-400;
-  }
-
-  &:hover,
-  &:focus,
-  &:active {
-    border-color: $green-400;
-  }
-}
-.btn-light.hvr-sweep-to-left,
-.btn-light.hvr-sweep-to-right {
-  &:before {
-    background: $blue;
-  }
-
-  &:hover,
-  &:focus,
-  &:active {
-    color: $white;
-    border-color: $blue;
-  }
-}
-
 .about-us {
   @include media-breakpoint-up(sm) {
     &__content {

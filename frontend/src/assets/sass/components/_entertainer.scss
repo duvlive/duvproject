@@ -31,11 +31,12 @@
 
   .entertainer_type {
     right: 0;
-    background: rgba($red, 0.5);
+    background: rgba($black, 0.5);
     padding: 0.5rem 0.75rem;
     margin-bottom: 1rem;
     margin-right: 1.25rem;
     font-size: 0.7rem;
+    opacity: 0.8;
     transition: all 0.3s ease-out;
   }
 
@@ -50,6 +51,7 @@
     }
 
     .entertainer_type {
+      opacity: 1;
       background: rgba($red, 0.8);
     }
   }

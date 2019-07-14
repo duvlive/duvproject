@@ -30,3 +30,32 @@ $transparent-btn-colors: (
     padding: 0.5rem 1rem;
   }
 }
+
+button:focus {
+  outline: none;
+}
+
+.btn-danger.hvr-sweep-to-left,
+.btn-danger.hvr-sweep-to-right {
+  &:before {
+    background: darken($red, 15%);
+  }
+
+  &:hover,
+  &:focus,
+  &:active {
+    border-color: darken($red, 15%);
+  }
+}
+.btn-light.hvr-sweep-to-left,
+.btn-light.hvr-sweep-to-right {
+  &:before {
+    background: darken($white, 15%);
+  }
+
+  &:hover,
+  &:focus,
+  &:active {
+    border-color: darken($white, 15%);
+  }
+}

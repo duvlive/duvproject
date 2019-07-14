@@ -1,6 +1,7 @@
 import React from 'react';
 import Card from 'components/custom/Card';
 import { Col, Row } from 'reactstrap';
+import { Link } from '@reach/router';
 
 const SelectRegistration = () => (
   <section className="spacer--4">
@@ -12,21 +13,22 @@ const SelectRegistration = () => (
           </h2>
           <Row>
             <Col sm={{ size: 6 }}>
-              <Card.Hollow
-                color="green"
-                description="Users can ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio.
-                Quisque volutpat mattis eros. Nullam malesuada erat ut turpis."
-                link="/register/user"
-                name="User"
-              />
+              <Link to="/register/user">
+                <Card color="blue">
+                  <div className="selection__text">
+                    Register as a <span>User</span>
+                  </div>
+                </Card>
+              </Link>
             </Col>
             <Col sm={{ size: 6 }}>
-              <Card.Hollow
-                color="yellow"
-                description="Entertainer will enjoy volutpat mattis eros. Nullam malesuada erat ut turpis. Ipsum dolor sit amet, consectetuer adipiscing elit."
-                link="/register/entertainer"
-                name="Entertainer"
-              />
+              <Link to="/register/user">
+                <Card color="green">
+                  <div className="selection__text">
+                    Register as an <span>Entertainer</span>
+                  </div>
+                </Card>
+              </Link>
             </Col>
           </Row>
         </Col>

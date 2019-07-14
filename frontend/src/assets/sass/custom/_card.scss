@@ -3,27 +3,18 @@
   margin-bottom: 30px;
   background: rgba($admin-card-bg, 0.1);
   border: 1px solid rgba($admin-card-bg, 0.3);
+  transition: all 0.3s ease-out;
 
   &.card-form {
     padding: 1rem;
   }
 
-  &.card-hollow {
-    background: rgba($black, 0.8) !important;
-    display: block;
-    .card-header {
-      padding: 2rem 0;
-      text-transform: uppercase;
-      font-weight: bold;
-    }
-    .card-body {
-      color: $text-color;
-    }
-  }
-
   &.card-blue {
     background: rgba($blue, 0.1);
     border: 1px solid rgba($blue, 0.2);
+    &:hover {
+      background: rgba($blue-400, 0.5);
+    }
     .card-header {
       background: rgba($blue, 0.1);
     }
@@ -32,6 +23,9 @@
   &.card-green {
     background: rgba($green-300, 0.08);
     border: 1px solid rgba($green-300, 0.2);
+    &:hover {
+      background: rgba($green-400, 0.5);
+    }
     .card-header {
       background: rgba($green, 0.08);
     }
@@ -40,6 +34,9 @@
   &.card-yellow {
     background: rgba($yellow, 0.1);
     border: 1px solid rgba($yellow, 0.2);
+    &:hover {
+      background: rgba($yellow-400, 0.5);
+    }
     .card-header {
       background: rgba($yellow, 0.1);
     }
@@ -48,6 +45,9 @@
   &.card-red {
     background: rgba($red, 0.08);
     border: 1px solid rgba($red, 0.2);
+    &:hover {
+      background: rgba($red-400, 0.5);
+    }
     .card-header {
       background: rgba($red, 0.08);
     }
@@ -56,6 +56,9 @@
   &.card-black {
     background: rgba($admin-card-bg, 0.1);
     border: 1px solid rgba($admin-card-bg, 0.3);
+    &:hover {
+      background: rgba($black, 0.5);
+    }
     .card-header {
       background: rgba($admin-card-bg, 0.1);
     }
