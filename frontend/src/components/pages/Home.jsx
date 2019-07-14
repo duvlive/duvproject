@@ -9,6 +9,7 @@ import eventLists from 'data/events.js';
 import Footer from 'components/common/Footer';
 import Slideshow from 'components/custom/Slideshow';
 import { SLIDESHOW_TYPE } from 'utils/constants';
+import YouTube from 'react-youtube';
 
 const Home = () => {
   return (
@@ -28,6 +29,7 @@ const LandingSection = () => (
     <div className="card bg-dark text-white">
       <Header />
       <div className="card-img-overlay">
+        <VideoSection />
         <div className="card-img-overlay__content">
           <h2 className="card-title">
             GET THE BEST <br />
@@ -147,5 +149,60 @@ const EventSection = () => (
     </div>
   </section>
 );
+
+// https://www.internetrix.com.au/blog/how-to-use-youtube-video-as-your-webpage-background-2/
+const VideoSection = () => {
+  const onReady = event => {
+    // access to player in all event handlers via event.target
+    // event.target.pauseVideo();
+    event.target.mute();
+    event.target.playVideo();
+  };
+  const onStateChange = event => {
+    if (event && event.data === 1) {
+      var videoHolder = document.getElementById('home-banner-box');
+      if (videoHolder && videoHolder.id) {
+        videoHolder.classList.remove('loading');
+      }
+    } else if (event && event.data === 0) {
+      event.target.playVideo();
+    }
+  };
+  const opts = {
+    width: '100%', // Player width (in px)
+    height: '720',
+    playerVars: {
+      // https://developers.google.com/youtube/player_parameters
+      autoplay: 1, // Auto-play the video on load
+      disablekb: 1, // Disable Keyboard
+      controls: 0, // Hide pause/play buttons in player
+      showinfo: 0, // Hide the video title
+      modestbranding: 1, // Hide the Youtube Logo
+      loop: 1, // Run the video in a loop
+      fs: 0, // Hide the full screen button
+      autohide: 0, // Hide video controls when playing
+      rel: 0,
+      enablejsapi: 1
+    }
+  };
+
+  return (
+    <section className="loading" id="home-banner-box">
+      <div className="video-background">
+        <div
+          className="video-foreground embed-responsive embed-responsive-16by9"
+          id="YouTubeBackgroundVideoPlayer"
+        >
+          <YouTube
+            onReady={onReady}
+            onStateChange={onStateChange}
+            opts={opts}
+            videoId="W0LHTWG-UmQ"
+          />
+        </div>
+      </div>
+    </section>
+  );
+};
 
 export default Home;
