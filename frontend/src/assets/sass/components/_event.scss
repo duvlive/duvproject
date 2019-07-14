@@ -1,0 +1,119 @@
+.event-card {
+  margin-bottom: 2rem;
+  height: 23rem;
+  max-height: 23rem;
+  overflow: hidden;
+
+  &__image-container {
+    position: relative;
+    height: 15rem;
+    overflow: hidden;
+  }
+
+  img {
+    object-fit: cover;
+    height: 100%;
+    overflow: hidden;
+    transition: all 0.4s ease-out;
+  }
+
+  .card-img-overlay {
+    background: rgba($black, 0.5);
+  }
+
+  .event-card__body {
+    background: $white;
+  }
+
+  &__datetime {
+    width: 6.5rem;
+    height: 100%;
+    float: left;
+    background: rgba(#111111, 0.8);
+    color: white;
+    font-family: $headings-font-family;
+    font-size: 0.85rem;
+    text-align: center;
+  }
+
+  &__weekday,
+  &__date {
+    display: block;
+  }
+
+  &__weekday {
+    margin-top: 1rem;
+  }
+
+  &__info {
+    padding-left: 7.5rem;
+    padding-right: 1rem;
+  }
+
+  &__title {
+    font-size: 0.9rem;
+    margin-top: 1.25rem;
+    font-family: $font-family-sans-serif;
+    color: rgba($black, 0.8);
+  }
+
+  &__address {
+    font-size: 0.8rem;
+    margin: 0.65rem 0 0;
+    font-family: $headings-font-family;
+    color: $text-color;
+  }
+  &__ticket {
+    font-size: 0.8rem;
+    color: rgba($red-300, 0.7);
+    margin-bottom: 1.5rem;
+  }
+
+  &:hover {
+    img {
+      transform: scale(1.2);
+    }
+
+    .event-card {
+      &__title {
+        color: $black;
+      }
+      &__datetime {
+        background: $blue-400;
+      }
+      &__address {
+        color: $secondary;
+      }
+      &__ticket {
+        color: $red-300;
+      }
+    }
+  }
+}
+
+.single-event {
+  &__title {
+    font-size: 2rem;
+    font-weight: normal;
+  }
+
+  &__location,
+  &__date-time {
+    display: inline-block;
+    margin-right: 3rem;
+  }
+}
+
+.event-details {
+  margin-bottom: 1.5rem;
+  &__title {
+    font-size: 1rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__details {
+    color: lighten($red-100, 5%);
+    font-size: 0.8rem;
+  }
+}

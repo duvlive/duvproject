@@ -1,0 +1,19 @@
+.spacer {
+  padding-top: 12.5rem;
+}
+$spacer: (
+  '1': 12.5rem,
+  '2': 10rem,
+  '3': 7.5rem,
+  '4': 5rem
+);
+
+@each $number, $size in $spacer {
+  .spacer--#{$number},
+  .spacer-up--#{$number} {
+    padding-top: $size;
+  }
+  .spacer-down--#{$number} {
+    padding-bottom: $size;
+  }
+}

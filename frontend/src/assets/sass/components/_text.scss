@@ -1,0 +1,94 @@
+.title-border {
+  span {
+    color: $red-300;
+  }
+  &:after {
+    content: ''; /* This is necessary for the pseudo element to work. */
+    display: block; /* This will put the pseudo element on its own line. */
+    width: 3rem; /* Change this to whatever width you want to have before hover. */
+    padding-top: 20px; /* This creates some space between the element and the border. */
+    border-bottom: 2px solid white; /* This creates the border. Replace black with whatever color you want. */
+    transition: all 0.2s ease-out; /* This establishes the amount of time in seconds the animation should take from start to finish */
+  }
+}
+
+.header {
+  span {
+    color: $red-300;
+  }
+}
+
+// .title-border:hover:after {
+//   width: 5rem; /* This will be the new width of your border when on hover */
+// }
+
+$text-colors: (
+  'red': $danger,
+  'green': $green,
+  'blue': $blue,
+  'yellow': $yellow,
+  'white': $white,
+  'gray': $text-color,
+  'red-100': $red-100,
+  'red-200': $red-200,
+  'red-300': $red-300,
+  'red-400': $red-400,
+  'yellow-100': $yellow-100,
+  'yellow-200': $yellow-200,
+  'yellow-300': $yellow-300,
+  'yellow-400': $yellow-400,
+  'blue-100': $blue-100,
+  'blue-200': $blue-200,
+  'blue-300': $blue-300,
+  'blue-400': $blue-400,
+  'green-100': $green-100,
+  'green-200': $green-200,
+  'green-300': $green-300,
+  'green-400': $green-400
+);
+
+@each $name, $code in $text-colors {
+  .text-#{$name} {
+    color: $code;
+  }
+}
+
+$sub-title: (
+  '1': 1.8rem,
+  '2': 1.5rem,
+  '3': 1.2rem,
+  '4': 1rem
+);
+
+@each $number, $size in $sub-title {
+  .subtitle--#{$number} {
+    font-size: $size;
+    font-weight: normal;
+  }
+}
+
+$small: (
+  '1': 0.9rem,
+  '2': 0.8rem,
+  '3': 0.7rem
+);
+
+@each $number, $size in $small {
+  .small--#{$number} {
+    font-size: $size;
+    font-weight: normal;
+  }
+}
+
+.selection__text {
+  font-size: 1.2rem;
+  font-family: $headings-font;
+  color: white;
+  text-align: center;
+  padding: 5rem 0;
+  span {
+    display: block;
+    font-size: 2rem;
+    font-weight: bold;
+  }
+}
