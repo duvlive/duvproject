@@ -283,15 +283,26 @@ button:focus {
 
   &__container {
     background-color: $black;
-    background-color: rgba($black, 0.85);
-    margin-top: 6rem;
-    padding: 75px 40px 60px;
-    margin-left: 4.5rem;
+    background-color: rgba($black, 0.6);
+    @include media-breakpoint-up(sm) {
+      background-color: rgba($black, 0.6);
+    }
     margin-bottom: 5rem;
     border-radius: 5px;
+    margin-top: 3rem;
+    padding: 2.3rem 1.5rem 2rem;
+    @include media-breakpoint-up(sm) {
+      padding: 4.6rem 2.5rem 3.8rem;
+      margin-top: 6rem;
+      margin-left: 4.5rem;
+    }
 
     &--lg {
-      padding: 75px 60px;
+      padding: 3rem 2.2rem;
+
+      @include media-breakpoint-up(sm) {
+        padding: 4.6rem 3.8rem;
+      }
     }
   }
 
@@ -308,10 +319,11 @@ button:focus {
       left: -2.5rem;
     }
     &--text {
-      font-size: 1.5rem;
+      font-size: 0.9rem;
+      margin-right: 3rem;
       font-weight: normal;
       line-height: 1.6;
-      margin-right: 3rem;
+      margin-top: 3rem;
     }
   }
 

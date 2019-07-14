@@ -1,8 +1,8 @@
 .entertainer-card {
   border: none;
   margin-bottom: 2rem;
-  height: 23rem;
-  max-height: 23rem;
+  height: 16rem;
+  max-height: 16rem;
   overflow: hidden;
 
   img {
@@ -31,10 +31,12 @@
 
   .entertainer_type {
     right: 0;
-    background: rgba($red, 0.3);
-    padding: 0.5rem 1rem;
-    margin-bottom: 0.75rem;
+    background: rgba($red, 0.5);
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 1rem;
     margin-right: 1.25rem;
+    font-size: 0.7rem;
+    transition: all 0.3s ease-out;
   }
 
   &:hover {
@@ -48,7 +50,7 @@
     }
 
     .entertainer_type {
-      background: rgba($red, 0.6);
+      background: rgba($red, 0.8);
     }
   }
 }

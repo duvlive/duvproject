@@ -23,7 +23,7 @@ const Content = () => {
     <section>
       <div className="container-fluid">
         <Row>
-          <Col sm={{ size: 6, offset: 1 }}>
+          <Col className="d-none d-sm-block" sm={{ size: 6, offset: 1 }}>
             <Text.VerticalAlign>
               <div className="auth__quotes">
                 <h4 className="auth__quotes--text">{quote.text}</h4>
