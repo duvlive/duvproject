@@ -32,7 +32,7 @@ const Events = ({
               <span className="event-card__time">{start_time}</span>
             </div>
             <div className="event-card__info">
-              <h6 className="event-card__title">{title}</h6>
+              <h6 className="event-card__title text-truncate">{title}</h6>
               <p className="event-card__address">{location}</p>
               <div className="event-card__ticket">Ticket: {ticket}</div>
             </div>

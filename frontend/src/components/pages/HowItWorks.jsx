@@ -61,7 +61,7 @@ const WhyUseDuvLive = () => (
   <section className="why-use-duv-live spacer">
     <div className="container-fluid">
       <h2 className="title-border">
-        WHY USE <span className="d-sm-inline d-block">DUV LIVE</span>
+        WHY USE <span>DUV LIVE</span>
       </h2>
       <Row className="pt-5">
         <BorderedListItem.List
@@ -90,7 +90,7 @@ const CounterSection = () => (
 const EntertainersCounter = ({ icon, name, number }) => (
   <Col className="entertainers-counter__content" sm={4}>
     <Text.VerticalAlign>
-      <div className="entertainers-counter__icon">
+      <div className="entertainers-counter__icon d-none d-sm-block">
         <i className={`icon icon-${icon}`} />
       </div>
       <h2 className="entertainers-counter__number">{number}</h2>

@@ -1,12 +1,12 @@
 .event-card {
-  margin-bottom: 30px;
-  height: 365px;
-  max-height: 365px;
+  margin-bottom: 2rem;
+  height: 23rem;
+  max-height: 23rem;
   overflow: hidden;
 
   &__image-container {
     position: relative;
-    height: 234px;
+    height: 15rem;
     overflow: hidden;
   }
 
@@ -26,15 +26,14 @@
   }
 
   &__datetime {
-    width: 100px;
+    width: 6.5rem;
     height: 100%;
     float: left;
     background: rgba(#111111, 0.8);
     color: white;
     font-family: $headings-font-family;
-    font-size: 13px;
+    font-size: 0.85rem;
     text-align: center;
-    padding-top: 1rem;
   }
 
   &__weekday,
@@ -47,29 +46,27 @@
   }
 
   &__info {
-    padding-left: 120px;
+    padding-left: 7.5rem;
+    padding-right: 1rem;
   }
 
   &__title {
-    font-size: 0.8rem;
-    line-height: 1.5;
-    height: 2rem;
-    margin-top: 20px;
+    font-size: 0.9rem;
+    margin-top: 1.25rem;
     font-family: $font-family-sans-serif;
     color: $black;
   }
 
   &__address {
-    font-size: 12px;
-    margin-top: 10px;
+    font-size: 0.8rem;
+    margin: 0.65rem 0 0;
     font-family: $headings-font-family;
     color: $secondary;
-    margin-bottom: 10px;
   }
   &__ticket {
-    font-size: 11px;
+    font-size: 0.8rem;
     color: $red-300;
-    margin-bottom: 30px;
+    margin-bottom: 1.5rem;
   }
 
   &:hover {
