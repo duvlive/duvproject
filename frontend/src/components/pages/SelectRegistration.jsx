@@ -30,6 +30,12 @@ const SelectRegistration = () => (
                 </Card>
               </Link>
             </Col>
+
+            <div className="col-12 text-center mt-5 mb-5">
+              <Link className="auth__link" to="/login">
+                Back to Login Page
+              </Link>
+            </div>
           </Row>
         </Col>
       </Row>

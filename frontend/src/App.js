@@ -14,6 +14,7 @@ import Register from 'components/pages/Register';
 import SingleEntertainer from 'components/pages/SingleEntertainer';
 import SingleEvent from 'components/pages/SingleEvent';
 import { ScrollToTop } from 'components/custom/ScrollToTop';
+import ForgotPassword from 'components/pages/ForgotPassword';
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
           <TermsOfUse path="terms-of-use" />
           <PrivacyPolicy path="privacy-policy" />
           <Login path="login" />
+          <ForgotPassword path="forgot-password" />
           <Register path="register" />
           <Register path="register/:type" />
           <SingleEntertainer path="entertainer/:slug" />

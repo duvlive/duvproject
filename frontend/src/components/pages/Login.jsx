@@ -49,7 +49,7 @@ const Content = () => {
                     <div className="form-group">
                       <label className="d-block" htmlFor="inputPassword4">
                         Password
-                        <Link className="float-right" to="forgot-password">
+                        <Link className="float-right" to="/forgot-password">
                           Forgot Password?
                         </Link>
                       </label>
