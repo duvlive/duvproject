@@ -5,6 +5,7 @@
 @import 'components/event';
 @import 'components/footer';
 @import 'components/text';
+@import 'custom/accordion';
 @import 'custom/slideshow';
 @import 'custom/modal';
 @import 'custom/card';
@@ -182,7 +183,7 @@ button:focus {
   flex-wrap: wrap;
 
   &__box {
-    height: 31rem;
+    height: 26rem;
     padding-left: 5.5rem;
     padding-right: 5.5rem;
     @include media-breakpoint-up(sm) {

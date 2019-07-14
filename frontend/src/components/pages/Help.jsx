@@ -4,7 +4,7 @@ import FrontEndPage from 'components/common/FrontEndPage';
 import Text from 'components/common/Text';
 import { Col, Row } from 'reactstrap';
 import FAQs from 'data/faqs';
-import DuvLiveModal from 'components/custom/Modal';
+import { Accordion, AccordionItem } from 'react-light-accordion';
 
 const Help = () => {
   return (
@@ -34,75 +34,24 @@ const HelpSection = () => (
           FAQs, help, and official info on every DUV LIVE feature can be found
           below.
         </h3>
-        <form>
-          <input
-            aria-label="Search"
-            className="form-control form-control-lg mt-5 help__search"
-            placeholder="Search"
-            type="text"
-          />
-        </form>
+        <div className="subtitle--3">
+          Can't find an answer, you can ask us your questions directly below
+        </div>
       </Text.VerticalAlign>
     </Col>
   </section>
 );
 
 const FAQsSection = () => (
-  <section className="faqs spacer">
+  <section className="faqs spacer--3">
     <div className="container-fluid">
       <Row>
+        <h2 className="header title-border mb-5 col-12">
+          FREQUENTLY ASKED <span>QUESTIONS</span>
+        </h2>
         {getFAQs(FAQs.general)}
-        <Col sm="4">
-          <h4>HIRING AN ENTERTAINER</h4>
-          <ul>
-            <li>Aliquam tincidunt mauris eu risus.</li>
-            <li>Vestibulum auctor dapibus neque.</li>
-            <li>Nunc dignissim risus id metus.</li>
-            <li>Cras ornare tristique elit.</li>
-            <li>Vivamus vestibulum ntulla nec ante.</li>
-          </ul>
-        </Col>
-        <Col sm="4">
-          <h4>LOGIN/REGISTRATION</h4>
-          <ul>
-            <li>Aliquam tincidunt mauris eu risus.</li>
-            <li>Vestibulum auctor dapibus neque.</li>
-            <li>Nunc dignissim risus id metus.</li>
-            <li>Cras ornare tristique elit.</li>
-            <li>Vivamus vestibulum ntulla nec ante.</li>
-          </ul>
-        </Col>
-        <div className="separator" />
-        <Col sm="4">
-          <h4>BECOMING AN ENTERTAINER</h4>
-          <ul>
-            <li>Aliquam tincidunt mauris eu risus.</li>
-            <li>Vestibulum auctor dapibus neque.</li>
-            <li>Nunc dignissim risus id metus.</li>
-            <li>Cras ornare tristique elit.</li>
-            <li>Vivamus vestibulum ntulla nec ante.</li>
-          </ul>
-        </Col>
-        <Col sm="4">
-          <h4>PAYMENT ISSUES</h4>
-          <ul>
-            <li>Aliquam tincidunt mauris eu risus.</li>
-            <li>Vestibulum auctor dapibus neque.</li>
-            <li>Nunc dignissim risus id metus.</li>
-            <li>Cras ornare tristique elit.</li>
-            <li>Vivamus vestibulum ntulla nec ante.</li>
-          </ul>
-        </Col>
-        <Col sm="4">
-          <h4>EVENTS</h4>
-          <ul>
-            <li>Aliquam tincidunt mauris eu risus.</li>
-            <li>Vestibulum auctor dapibus neque.</li>
-            <li>Nunc dignissim risus id metus.</li>
-            <li>Cras ornare tristique elit.</li>
-            <li>Vivamus vestibulum ntulla nec ante.</li>
-          </ul>
-        </Col>
+        {getFAQs(FAQs.entertainers)}
+        {getFAQs(FAQs.users)}
       </Row>
     </div>
   </section>
@@ -163,16 +112,16 @@ const HelpForm = () => (
 );
 
 const getFAQs = ({ title, faqs }) => {
-  const faqsList = faqs.map(({ question, answer }) => (
-    <DuvLiveModal body={answer} title={question}>
-      <li>{question}</li>
-    </DuvLiveModal>
+  const faqsList = faqs.map(({ question, answer }, index) => (
+    <AccordionItem key={title + index} title={question}>
+      {answer}
+    </AccordionItem>
   ));
 
   return (
     <Col sm="4">
-      <h4 className="text-uppercase">{title}</h4>
-      <ul>{faqsList}</ul>
+      <h4 className="accordion-header">{title}</h4>
+      <Accordion atomic={true}>{faqsList}</Accordion>
     </Col>
   );
 };

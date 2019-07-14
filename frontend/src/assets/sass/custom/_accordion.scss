@@ -1,0 +1,49 @@
+.accordion {
+  border: 1px solid rgba($blue, 0.2);
+  border-bottom: none;
+  &-header {
+    background: rgba($yellow-300, 0.2);
+    border: 1px solid rgba($blue, 0.2);
+    border-bottom: none;
+    margin: 0;
+    padding: 1.5rem 1rem;
+    border-radius: 3px 3px 0 0;
+  }
+  .accordion-item {
+    .title {
+      background: transparent;
+      color: $text-color;
+      font-size: 0.8rem;
+      cursor: pointer;
+      padding: 1rem;
+      width: 100%;
+      text-align: left;
+      border: none;
+      border-bottom: 1px solid rgba($blue, 0.2);
+      outline: none;
+
+      &:hover {
+        background: rgba($yellow-100, 0.05);
+      }
+    }
+
+    .panel {
+      height: 0;
+      font-size: 0.8rem;
+      // transition: all 0.15s ease-out;
+      overflow: hidden;
+    }
+    &.active .title {
+      background: rgba($blue, 0.1);
+      border: none;
+    }
+    &.active .panel {
+      height: auto;
+      max-height: 15rem;
+      transition: height 0.4s ease-out;
+      padding: 1.5rem 1.5rem 2rem;
+      border: 1px solid rgba($blue, 0.2);
+    }
+  }
+}
+/*# sourceMappingURL=index.css.map*/
