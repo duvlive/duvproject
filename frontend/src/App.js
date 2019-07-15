@@ -21,6 +21,7 @@ import Auctions from 'components/pages/user/Auctions';
 import Events from 'components/pages/user/Events';
 import Notifications from 'components/pages/user/Notifications';
 import UserHelp from 'components/pages/user/Help';
+import Payments from 'components/pages/user/Payments';
 
 function App() {
   return (
@@ -50,8 +51,8 @@ function App() {
             <Events path="/events" />
             <Notifications path="/notifications" />
             <UserHelp path="/help" />
+            <Payments path="/payments-history" />
             {/*
-          <Payments path="/payments-history" />
           <Approval path="/approval" />
           <HireEntertainers path="/hire-entertainers" />
           <NewEventAuction path="/auction/new" />

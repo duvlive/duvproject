@@ -14,7 +14,7 @@ const Dashboard = () => {
       <section className="app-content">
         <div className="row">
           <div className="col-sm-8">
-            <div className="tour--upcoming-events card">
+            <div className="card card-custom">
               <div className="card-body">
                 <h5 className="card-title green">Upcoming Events</h5>
 
@@ -99,7 +99,7 @@ const Dashboard = () => {
 };
 
 Dashboard.PendingReview = ({ entertainer }) => (
-  <div className="tour--pending-reviews card">
+  <div className="card card-custom">
     <div className="card-body">
       <h5 className="card-title red header__with-border">Pending Review</h5>
       <p className="card-text">
@@ -127,7 +127,7 @@ Dashboard.PendingReview = ({ entertainer }) => (
 );
 
 Dashboard.AuctionTable = ({ entertainerList }) => (
-  <div className="tour--auctions card">
+  <div className="card card-custom">
     <div className="card-body">
       <h5 className="card-title blue">
         Auction (Recent Bids) <br />
@@ -191,7 +191,7 @@ Dashboard.AuctionRow = ({ entertainer }) => (
 );
 
 Dashboard.RecommendedTable = ({ entertainerList }) => (
-  <div className="card">
+  <div className="card card-custom">
     <div className="card-body">
       <h5 className="card-title blue">Recommended For You</h5>
       <div className="table-responsive">
