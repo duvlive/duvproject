@@ -17,6 +17,7 @@ import { ScrollToTop } from 'components/custom/ScrollToTop';
 import ForgotPassword from 'components/pages/auth/ForgotPassword';
 import BackEndPage from 'components/common/BackEndPage';
 import Dashboard from 'components/pages/user/Dashboard';
+import Auctions from 'components/pages/user/Auctions';
 
 function App() {
   return (
@@ -42,7 +43,8 @@ function App() {
 
           <BackEndPage path="/user">
             <Dashboard path="/dashboard" />
-            {/* <Auctions path="/auctions" />
+            <Auctions path="/auctions" />
+            {/*
           <Notifications path="/notifications" />
           <Events path="/events" />
           <Payments path="/payments-history" />

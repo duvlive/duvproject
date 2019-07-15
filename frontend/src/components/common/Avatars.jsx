@@ -1,0 +1,43 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+
+const Avatars = ({ entertainers, others }) => (
+  <ul class="avatars">
+    {entertainers.map(entertainer => (
+      <Avatars.Item name={entertainer.name} src={entertainer.img.profile} />
+    ))}
+    {!!others && <Avatars.Others others={others} />}
+  </ul>
+);
+
+Avatars.propTypes = {
+  entertainers: PropTypes.object.isRequired,
+  others: PropTypes.number
+};
+
+Avatars.defaultProps = {
+  others: 0
+};
+
+Avatars.Item = ({ src, name }) => (
+  <li class="avatars__item">
+    <img alt={name} className="avatars__img" src={src} title={name} />
+  </li>
+);
+
+Avatars.Item.propTypes = {
+  name: PropTypes.string.isRequired,
+  src: PropTypes.string.isRequired
+};
+
+Avatars.Others = ({ others }) => (
+  <li class="avatars__item">
+    <div class="avatars__others">+{others}</div>
+  </li>
+);
+
+Avatars.Others.propTypes = {
+  others: PropTypes.number.isRequired
+};
+
+export default Avatars;
