@@ -20,6 +20,7 @@ import Dashboard from 'components/pages/user/Dashboard';
 import Auctions from 'components/pages/user/Auctions';
 import Events from 'components/pages/user/Events';
 import Notifications from 'components/pages/user/Notifications';
+import UserHelp from 'components/pages/user/Help';
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
             <Auctions path="/auctions" />
             <Events path="/events" />
             <Notifications path="/notifications" />
+            <UserHelp path="/help" />
             {/*
           <Payments path="/payments-history" />
           <Approval path="/approval" />
