@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Header from 'components/common/Header';
 import Footer from 'components/common/Footer';
-import SelectRegistration from 'components/pages/SelectRegistration';
+import SelectRegistration from 'components/pages/auth/SelectRegistration';
 import { Link } from '@reach/router';
 import { Col, Row } from 'reactstrap';
 

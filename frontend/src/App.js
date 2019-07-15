@@ -9,12 +9,12 @@ import HireEntertainers from 'components/pages/HireEntertainers';
 import Help from 'components/pages/Help';
 import TermsOfUse from 'components/pages/TermsOfUse';
 import PrivacyPolicy from 'components/pages/PrivacyPolicy';
-import Login from 'components/pages/Login';
-import Register from 'components/pages/Register';
+import Login from 'components/pages/auth/Login';
+import Register from 'components/pages/auth/Register';
 import SingleEntertainer from 'components/pages/SingleEntertainer';
 import SingleEvent from 'components/pages/SingleEvent';
 import { ScrollToTop } from 'components/custom/ScrollToTop';
-import ForgotPassword from 'components/pages/ForgotPassword';
+import ForgotPassword from 'components/pages/auth/ForgotPassword';
 
 function App() {
   return (
