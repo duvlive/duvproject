@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import RedLogo from 'assets/img/logo/red-white.svg';
 import UserAvatar from 'assets/img/avatar/user.png';
 import PerfectScrollbar from 'react-perfect-scrollbar';
@@ -53,6 +54,10 @@ Sidebar.Navigation = ({ menus }) => {
     </ul>
   ));
   return <div>{sideMenu}</div>;
+};
+
+Sidebar.Navigation.propTypes = {
+  menus: PropTypes.array.isRequired
 };
 
 export default Sidebar;
