@@ -12,7 +12,7 @@ const SelectRegistration = () => (
             SELECT YOUR CHOICE
           </h2>
           <Row>
-            <Col sm={{ size: 6 }}>
+            <Col sm={{ size: 6, offset: 0 }} xs={{ size: 8, offset: 2 }}>
               <Link to="/register/user">
                 <Card color="blue">
                   <div className="selection__text">
@@ -21,7 +21,7 @@ const SelectRegistration = () => (
                 </Card>
               </Link>
             </Col>
-            <Col sm={{ size: 6 }}>
+            <Col sm={{ size: 6, offset: 0 }} xs={{ size: 8, offset: 2 }}>
               <Link to="/register/user">
                 <Card color="green">
                   <div className="selection__text">
