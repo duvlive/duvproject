@@ -1,0 +1,211 @@
+.main-app {
+  margin-top: 10px;
+  padding: 40px;
+
+  &__title {
+    font-size: 24px;
+    font-weight: normal;
+    color: $gray-400;
+  }
+
+  &__subtitle {
+    font-size: 18px;
+    font-weight: normal;
+    font-family: $font-family-sans-serif;
+    color: $text-color;
+    margin-bottom: 1rem;
+  }
+
+  &__date {
+    color: $text-color;
+    font-size: 14px;
+  }
+
+  .app-content {
+    margin-top: 30px;
+  }
+
+  .card {
+    border-radius: 3px;
+    margin-bottom: 30px;
+    background: rgba($admin-card-bg, 0.1);
+    border: 1px solid rgba($admin-card-bg, 0.3);
+
+    &.card-form {
+      padding: 1rem;
+    }
+
+    &.card-hollow {
+      background: $black !important;
+      display: block;
+      .card-header {
+        padding: 2rem 0;
+        text-transform: uppercase;
+        font-weight: bold;
+      }
+      .card-body {
+        color: $text-color;
+      }
+    }
+
+    &.card-blue {
+      background: rgba($blue, 0.1);
+      border: 1px solid rgba($blue, 0.2);
+      .card-header {
+        background: rgba($blue, 0.1);
+      }
+    }
+
+    &.card-green {
+      background: rgba($green-300, 0.08);
+      border: 1px solid rgba($green-300, 0.2);
+      .card-header {
+        background: rgba($green-300, 0.08);
+      }
+    }
+
+    &.card-yellow {
+      background: rgba($yellow, 0.1);
+      border: 1px solid rgba($yellow, 0.2);
+      .card-header {
+        background: rgba($yellow, 0.1);
+      }
+    }
+
+    &.card-red {
+      background: rgba($red, 0.08);
+      border: 1px solid rgba($red, 0.2);
+      .card-header {
+        background: rgba($red, 0.08);
+      }
+    }
+
+    &.card-black {
+      background: rgba($admin-card-bg, 0.1);
+      border: 1px solid rgba($admin-card-bg, 0.3);
+      .card-header {
+        background: rgba($admin-card-bg, 0.1);
+      }
+    }
+
+    &-body {
+      padding: 1.5rem;
+    }
+
+    &-footer {
+      background-color: transparent;
+    }
+
+    .img-thumbnail {
+      background-color: transparent;
+    }
+
+    &-tiles {
+      padding: 0.5rem;
+    }
+
+    .spacer--tiles {
+      margin-top: 6rem;
+    }
+
+    .spacer--tiles--1 {
+      margin-top: 2rem;
+    }
+
+    .spacer--tiles--2 {
+      margin-top: 4rem;
+    }
+
+    .small {
+      &--1 {
+        font-size: 14px;
+      }
+
+      &--2 {
+        font-size: 12px;
+      }
+
+      &--3 {
+        font-size: 10px;
+      }
+    }
+
+    &-title,
+    &-subtitle {
+      font-weight: normal;
+      font-size: 18px;
+      margin-bottom: 30px;
+
+      &.green {
+        color: $green-200;
+      }
+      &.red {
+        color: $red-200;
+      }
+      &.yellow {
+        color: $yellow-200;
+      }
+      &.blue {
+        color: $blue;
+      }
+      &.white {
+        color: $white;
+      }
+      &.gray {
+        color: $text-color;
+      }
+    }
+
+    &-subtitle {
+      &--1 {
+        font-size: 1.5rem;
+        font-weight: normal;
+      }
+
+      &--2 {
+        font-size: 1.2rem;
+        font-weight: normal;
+      }
+
+      &--3 {
+        font-size: 0.9rem;
+        font-weight: normal;
+      }
+
+      &--4 {
+        font-size: 0.75rem;
+        font-weight: normal;
+      }
+    }
+
+    &-text {
+      font-size: 0.8rem;
+    }
+
+    .header__with-border {
+      padding-bottom: 15px;
+      margin-bottom: 15px;
+      border-bottom: 1px solid $gray-700;
+    }
+  }
+}
+
+// text colors
+.text-blue {
+  color: $blue;
+}
+.text-green {
+  color: $green-100;
+}
+.text-red {
+  color: $red-100;
+}
+.text-yellow {
+  color: $yellow-100;
+}
+.text-white {
+  color: #e5e5e5;
+}
+.text-gray {
+  color: $text-color;
+}

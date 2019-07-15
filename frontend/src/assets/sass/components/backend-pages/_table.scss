@@ -1,0 +1,87 @@
+.table__no-border th,
+.table__no-border td,
+.table__no-border thead th {
+  border-color: transparent !important;
+}
+
+.table__with-bg {
+  border-collapse: separate;
+  border-spacing: 0 0.7rem;
+  tr {
+    background-color: rgba($admin-card-bg, 0.3) !important;
+    padding: 5px;
+
+    th,
+    td {
+      padding-top: 1.2rem;
+    }
+
+    th:first-child,
+    td:first-child {
+      border-radius: 5px 0 0 5px;
+      padding-left: 20px;
+      vertical-align: middle;
+    }
+
+    td:last-child {
+      border-radius: 0 5px 5px 0;
+      padding-right: 20px;
+    }
+
+    td:first-child {
+      font-weight: normal;
+    }
+  }
+}
+
+.table {
+  font-size: 14px;
+  &__number {
+    font-size: 24px;
+    line-height: 24px;
+    color: #394046;
+  }
+
+  &__title {
+    font-size: 0.9rem;
+    font-weight: normal;
+    margin: 0;
+    margin-top: -4px;
+  }
+
+  span {
+    font-size: 12px;
+    display: block;
+    line-height: 20px;
+  }
+
+  .circle {
+    width: 16px;
+    height: 16px;
+    background: $text-color;
+    display: inline-block;
+    margin-right: 5px;
+    border-radius: 50%;
+
+    &.red {
+      background: $red-300;
+    }
+
+    &.yellow {
+      background: $yellow;
+    }
+
+    &.blue {
+      background: $blue;
+    }
+
+    &.green {
+      background: $green-300;
+    }
+  }
+
+  &-heading {
+    font-size: 18px;
+    color: $text-color;
+  }
+}
