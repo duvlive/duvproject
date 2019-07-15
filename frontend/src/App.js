@@ -1,18 +1,18 @@
 import React from 'react';
 import { Router } from '@reach/router';
 import { Helmet } from 'react-helmet';
-import Home from 'components/pages/Home';
-import HowItWorks from 'components/pages/HowItWorks';
+import Home from 'components/pages/frontend/Home';
+import HowItWorks from 'components/pages/frontend/HowItWorks';
 import 'assets/sass/App.scss';
-import UpcomingEvents from 'components/pages/UpcomingEvents';
-import HireEntertainers from 'components/pages/HireEntertainers';
-import Help from 'components/pages/Help';
-import TermsOfUse from 'components/pages/TermsOfUse';
-import PrivacyPolicy from 'components/pages/PrivacyPolicy';
+import UpcomingEvents from 'components/pages/frontend/UpcomingEvents';
+import HireEntertainers from 'components/pages/frontend/HireEntertainers';
+import Help from 'components/pages/frontend/Help';
+import TermsOfUse from 'components/pages/frontend/TermsOfUse';
+import PrivacyPolicy from 'components/pages/frontend/PrivacyPolicy';
 import Login from 'components/pages/auth/Login';
 import Register from 'components/pages/auth/Register';
-import SingleEntertainer from 'components/pages/SingleEntertainer';
-import SingleEvent from 'components/pages/SingleEvent';
+import SingleEntertainer from 'components/pages/frontend/SingleEntertainer';
+import SingleEvent from 'components/pages/frontend/SingleEvent';
 import { ScrollToTop } from 'components/custom/ScrollToTop';
 import ForgotPassword from 'components/pages/auth/ForgotPassword';
 
