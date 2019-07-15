@@ -2,16 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const Avatars = ({ entertainers, others }) => (
-  <ul class="avatars">
+  <ul className="avatars">
     {entertainers.map(entertainer => (
-      <Avatars.Item name={entertainer.name} src={entertainer.img.profile} />
+      <Avatars.Item
+        key={entertainer.stage_name}
+        name={entertainer.stage_name}
+        src={entertainer.img.profile}
+      />
     ))}
     {!!others && <Avatars.Others others={others} />}
   </ul>
 );
 
 Avatars.propTypes = {
-  entertainers: PropTypes.object.isRequired,
+  entertainers: PropTypes.array.isRequired,
   others: PropTypes.number
 };
 
@@ -20,7 +24,7 @@ Avatars.defaultProps = {
 };
 
 Avatars.Item = ({ src, name }) => (
-  <li class="avatars__item">
+  <li className="avatars__item">
     <img alt={name} className="avatars__img" src={src} title={name} />
   </li>
 );
@@ -31,8 +35,8 @@ Avatars.Item.propTypes = {
 };
 
 Avatars.Others = ({ others }) => (
-  <li class="avatars__item">
-    <div class="avatars__others">+{others}</div>
+  <li className="avatars__item">
+    <div className="avatars__others">+{others}</div>
   </li>
 );
 

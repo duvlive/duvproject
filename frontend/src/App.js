@@ -18,6 +18,7 @@ import ForgotPassword from 'components/pages/auth/ForgotPassword';
 import BackEndPage from 'components/common/BackEndPage';
 import Dashboard from 'components/pages/user/Dashboard';
 import Auctions from 'components/pages/user/Auctions';
+import Events from 'components/pages/user/Events';
 
 function App() {
   return (
@@ -44,9 +45,9 @@ function App() {
           <BackEndPage path="/user">
             <Dashboard path="/dashboard" />
             <Auctions path="/auctions" />
+            <Events path="/events" />
             {/*
           <Notifications path="/notifications" />
-          <Events path="/events" />
           <Payments path="/payments-history" />
           <Approval path="/approval" />
           <HireEntertainers path="/hire-entertainers" />
