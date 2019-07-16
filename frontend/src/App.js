@@ -22,6 +22,10 @@ import Events from 'components/pages/user/Events';
 import Notifications from 'components/pages/user/Notifications';
 import UserHelp from 'components/pages/user/Help';
 import Payments from 'components/pages/user/Payments';
+import SelectEntertainer from 'components/pages/user/HireEntertainers';
+import NewEvent from 'components/pages/user/NewEvent';
+import Bids from 'components/pages/user/Bids';
+import Approval from 'components/pages/user/Approval';
 
 function App() {
   return (
@@ -52,13 +56,10 @@ function App() {
             <Notifications path="/notifications" />
             <UserHelp path="/help" />
             <Payments path="/payments-history" />
-            {/*
-          <Approval path="/approval" />
-          <HireEntertainers path="/hire-entertainers" />
-          <NewEventAuction path="/auction/new" />
-          <Bids path="/auction/bids" />
-          <NewEventSearch path="/search/entertainers" />
-          <NewEventRecommend path="/recommend/entertainers" /> */}
+            <SelectEntertainer path="/hire-entertainers" />
+            <NewEvent path="/hire-entertainers/new-events" />
+            <Bids path="/auction/bids" />
+            <Approval path="/approval" />
             {/* <Dashboard default /> */}
           </BackEndPage>
         </ScrollToTop>

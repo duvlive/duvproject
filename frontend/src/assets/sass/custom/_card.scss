@@ -68,10 +68,7 @@
     padding: 1.5rem;
   }
 
-  .card-footer {
-    background-color: transparent;
-  }
-
+  .card-footer,
   .img-thumbnail {
     background-color: transparent;
   }
@@ -112,5 +109,38 @@
 
   &.no-br {
     border-radius: 0;
+  }
+
+  .selection__text {
+    font-size: 1.2rem;
+    font-family: $headings-font;
+    color: darken($white, 35%);
+    text-align: center;
+    padding: 5rem 0;
+    transition: all 0.8s ease-in;
+
+    span,
+    h4 {
+      display: block;
+      font-size: 2rem;
+      font-weight: bold;
+      color: darken($white, 10%);
+    }
+
+    &--description {
+      font-size: 0.7rem;
+      font-weight: normal;
+      height: 4rem;
+    }
+  }
+
+  &:hover {
+    .selection__text {
+      span,
+      h4,
+      &--description {
+        color: $white;
+      }
+    }
   }
 }

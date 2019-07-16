@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
@@ -13,8 +13,8 @@ const DuvLiveModal = ({
 }) => {
   const [modal, setModal] = useState(false);
   return (
-    <div>
-      <div onClick={() => setModal(!modal)}>{children}</div>
+    <Fragment>
+      <span onClick={() => setModal(!modal)}>{children}</span>
       <Modal
         className={className}
         isOpen={modal}
@@ -36,7 +36,7 @@ const DuvLiveModal = ({
           </Button>
         </ModalFooter>
       </Modal>
-    </div>
+    </Fragment>
   );
 };
 
@@ -47,7 +47,7 @@ DuvLiveModal.propTypes = {
   children: PropTypes.node.isRequired,
   className: PropTypes.string,
   closeModalText: PropTypes.string,
-  title: PropTypes.string.isRequired
+  title: PropTypes.node.isRequired
 };
 
 DuvLiveModal.defaultProps = {
