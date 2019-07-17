@@ -19,7 +19,7 @@ export default [
       },
       {
         title: 'Hire Entertainers',
-        to: '/user/hire-entertainers',
+        to: '/user/hire-entertainer',
         icon: 'hire-entertainers'
       }
     ]

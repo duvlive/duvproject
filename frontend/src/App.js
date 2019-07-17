@@ -56,8 +56,12 @@ function App() {
             <Notifications path="/notifications" />
             <UserHelp path="/help" />
             <Payments path="/payments-history" />
-            <SelectEntertainer path="/hire-entertainers" />
-            <NewEvent path="/hire-entertainers/new-events" />
+            <SelectEntertainer path="/hire-entertainer" />
+            <SelectEntertainer path="/hire-entertainer/:event_id" />
+            <NewEvent path="events/new" />
+            {/* <NewEvent path="events/new/:hire_type" /> */}
+            {/* <ViewEvent path="events/:id" /> */}
+            {/* <AddEntertainerToEvent path="events/:id/add-entertainer/:type" /> */}
             <Bids path="/auction/bids" />
             <Approval path="/approval" />
             {/* <Dashboard default /> */}
