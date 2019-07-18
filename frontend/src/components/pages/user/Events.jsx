@@ -4,13 +4,16 @@ import Avatars from 'components/common/Avatars';
 import { Link } from '@reach/router';
 import { getItems } from 'utils/helpers';
 import djLists from 'data/entertainers/djs';
+import Timeago from 'react-timeago';
 
 const Events = () => (
   <div className="main-app">
     <TopMessage message="Upcoming Events" />
 
     <section className="app-content">
-      <h4 className="main-app__subtitle">Less than 7 days</h4>
+      <h4 className="main-app__subtitle">
+        <Timeago date="Aug 29, 2014" />
+      </h4>
       <div className="table-responsive">
         <table className="table table-dark table__no-border table__with-bg">
           <tbody>
