@@ -94,9 +94,11 @@ a:hover {
   }
 
   &__content {
-    height: 16rem;
+    height: 10rem;
+    margin-top: 5rem;
     @include media-breakpoint-up(sm) {
       height: 54rem;
+      margin-top: 0;
     }
     text-align: center;
     color: $white;

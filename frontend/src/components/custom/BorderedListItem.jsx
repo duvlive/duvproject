@@ -15,7 +15,7 @@ const BorderedListItem = ({ number, title, description }) => {
 
 BorderedListItem.propTypes = {
   description: PropTypes.string.isRequired,
-  number: PropTypes.number.isRequired,
+  number: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired
 };
 
