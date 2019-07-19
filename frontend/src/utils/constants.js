@@ -4,3 +4,9 @@ export const SLIDESHOW_TYPE = {
   events: 'events',
   testimonials: 'testimonials'
 };
+
+export const HIRE_ENTERTAINERS = {
+  search: 'Search',
+  auction: 'Auction',
+  recommend: 'Recommendation'
+};

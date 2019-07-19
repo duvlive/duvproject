@@ -17,7 +17,7 @@ const HireEntertainers = () => (
           <Col sm={{ size: 10, offset: 1 }}>
             <Row className="row-eq-height">
               <Col sm={{ size: 4, offset: 0 }} xs={{ size: 8, offset: 2 }}>
-                <Link to="/user/hire-entertainers/search">
+                <Link to="/user/events/new/search">
                   <Card color="blue">
                     <div className="selection__text">
                       <h4>Search</h4>
@@ -30,7 +30,7 @@ const HireEntertainers = () => (
                 </Link>
               </Col>
               <Col sm={{ size: 4, offset: 0 }} xs={{ size: 8, offset: 2 }}>
-                <Link to="/user/hire-entertainers/auction">
+                <Link to="/user/events/new/auction">
                   <Card color="red">
                     <div className="selection__text">
                       <h4>Auction</h4>
@@ -43,7 +43,7 @@ const HireEntertainers = () => (
                 </Link>
               </Col>
               <Col sm={{ size: 4, offset: 0 }} xs={{ size: 8, offset: 2 }}>
-                <Link to="/user/hire-entertainers/recommend">
+                <Link to="/user/events/new/recommend">
                   <Card color="green">
                     <div className="selection__text">
                       <h4>Recommend</h4>
