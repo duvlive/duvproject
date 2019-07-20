@@ -4,18 +4,9 @@
   "description": "A simple freelance platform for event managers and performers",
   "main": "index.js",
   "scripts": {
-    "postinstall": "npm run db:prepare && npm run build",
-    "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore ./node_modules,./test,./coverage,./docs, ./frontend",
-    "start:dev": "babel-watch index.js",
     "start:dev:frontend": "cd frontend && npm start",
-    "start": "node ./dist/index.js",
-    "test": "istanbul cover _mocha -- test/tests.spec.js --compilers js:babel-register --timeout 30000",
-    "test:watch": "npm test --watch",
-    "coveralls": "npm test && cat ./coverage/lcov.info | coveralls",
-    "migrate": "npx sequelize-cli db:migrate",
-    "seed": "npx sequelize-cli db:seed:all",
-    "db:prepare": "npm run migrate && npm run seed",
-    "lint": "eslint ./"
+    "prestart": "cd frontend && npm run build",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -30,55 +21,8 @@
     "url": "https://github.com/duv-live/duvproject/issues"
   },
   "homepage": "https://github.com/duv-live/duvproject#readme",
-  "devDependencies": {
-    "babel-core": "^6.26.0",
-    "babel-eslint": "^8.1.2",
-    "babel-watch": "^2.0.7",
-    "coveralls": "^3.0.0",
-    "eslint": "^4.14.0",
-    "eslint-config-airbnb-base": "^12.1.0",
-    "eslint-plugin-import": "^2.8.0",
-    "faker": "^4.1.0",
-    "istanbul": "^0.4.5",
-    "mocha": "^4.1.0",
-    "should": "^13.2.0"
-  },
+  "devDependencies": {},
   "dependencies": {
-    "@sendgrid/mail": "^6.2.1",
-    "axios": "^0.17.1",
-    "babel-cli": "^6.26.0",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-preset-latest-node": "^0.4.0",
-    "bcryptjs": "^2.4.3",
-    "bluebird": "^3.5.1",
-    "body-parser": "^1.18.2",
-    "circular-json": "^0.5.1",
-    "compression": "^1.7.1",
-    "cors": "^2.8.4",
-    "crypto": "^1.0.1",
-    "dotenv": "^4.0.0",
-    "express": "^4.16.2",
-    "express-session": "^1.15.6",
-    "express-validator": "^4.3.0",
-    "helmet": "^3.9.0",
-    "jsonwebtoken": "^8.1.0",
-    "morgan": "^1.9.0",
-    "passport": "^0.4.0",
-    "passport-facebook": "^2.1.1",
-    "passport-google-oauth": "^1.0.0",
-    "passport-twitter": "^1.0.4",
-    "pg": "^7.4.0",
-    "pg-hstore": "^2.3.2",
-    "response-time": "^2.3.2",
-    "rimraf": "^2.6.2",
-    "sequelize": "^4.28.6",
-    "sequelize-cli": "^5.4.0",
-    "swagger-ui-express": "^2.0.14",
-    "underscore": "^1.8.3",
-    "winston": "^2.4.0"
-  },
-  "engines": {
-    "node": "8.9.1",
-    "npm": "5.6.0"
+    "express": "^4.17.1"
   }
 }
