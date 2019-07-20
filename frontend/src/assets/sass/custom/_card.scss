@@ -12,7 +12,7 @@
   &.card-blue {
     background: rgba($blue, 0.1);
     border: 1px solid rgba($blue, 0.2);
-    &:hover:not(.card__no-hover) {
+    &.card-hover:hover {
       background: rgba($blue-400, 0.5);
     }
     .card-header {
@@ -23,7 +23,7 @@
   &.card-green {
     background: rgba($green-300, 0.08);
     border: 1px solid rgba($green-300, 0.2);
-    &:hover:not(.card__no-hover) {
+    &.card-hover:hover {
       background: rgba($green-400, 0.5);
     }
     .card-header {
@@ -34,7 +34,7 @@
   &.card-yellow {
     background: rgba($yellow, 0.1);
     border: 1px solid rgba($yellow, 0.2);
-    &:hover:not(.card__no-hover) {
+    &.card-hover:hover {
       background: rgba($yellow-400, 0.5);
     }
     .card-header {
@@ -45,7 +45,7 @@
   &.card-red {
     background: rgba($red, 0.08);
     border: 1px solid rgba($red, 0.2);
-    &:hover:not(.card__no-hover) {
+    &.card-hover:hover {
       background: rgba($red-400, 0.5);
     }
     .card-header {

@@ -2,13 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-const Card = ({ children, color, header, className, tiles }) => (
+const Card = ({ children, color, header, className, tiles, hover }) => (
   <section
     className={classNames(
+      { className },
       'card card-custom',
       { [`card-${color}`]: true },
       {
         'card-tiles': tiles
+      },
+      {
+        'card-hover': hover
       }
     )}
   >
@@ -26,6 +30,7 @@ Card.propTypes = {
   className: PropTypes.string,
   color: PropTypes.string.isRequired,
   header: PropTypes.string,
+  hover: PropTypes.bool,
   tiles: PropTypes.bool
 };
 
@@ -33,6 +38,7 @@ Card.defaultProps = {
   children: null,
   className: '',
   header: '',
+  hover: false,
   tiles: false
 };
 

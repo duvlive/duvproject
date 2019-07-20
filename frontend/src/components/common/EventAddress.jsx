@@ -1,7 +1,7 @@
 import React from 'react';
 
 const EventAddress = () => (
-  <div className="card card-custom  card__no-hover  card-black card-form">
+  <div className="card card-custom card-black card-form">
     <div className="card-body col-md-10">
       <h4 className="card-title blue">Event Address</h4>
       <form>

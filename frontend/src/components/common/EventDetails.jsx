@@ -1,7 +1,7 @@
 import React from 'react';
 
 const EventDetails = () => (
-  <div className="card card-custom  card__no-hover  card-black card-form ">
+  <div className="card card-custom card-black card-form ">
     <div className="card-body col-md-10">
       <h4 className="card-title yellow">Event Details</h4>
       <form>
@@ -50,7 +50,7 @@ const EventDetails = () => (
               className="form-control"
               id="message"
               name="message"
-              placeholder="Questions, Complaints or Suggestions"
+              placeholder="More information about your event"
               rows="4"
             />
           </div>

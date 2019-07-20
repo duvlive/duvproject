@@ -1,7 +1,7 @@
 import React from 'react';
 
 const AddEntertainer = () => (
-  <div className="card card-custom  card__no-hover  card-black card-form">
+  <div className="card card-custom card-black card-form">
     <div className="card-body col-md-10">
       <h4 className="card-title green">Add Entertainer </h4>
       <form>
@@ -17,10 +17,10 @@ const AddEntertainer = () => (
           <div className="form-group col-md-6">
             <label htmlFor="inputEmail4">Age Group</label>
             <select className="form-control" id="location" name="location">
-              <option value="dj">Children</option>
-              <option value="live-band">Adults</option>
-              <option value="mc">Old People</option>
-              <option value="mc">Everyone</option>
+              <option value="all">All</option>
+              <option value="children">Children</option>
+              <option value="adults">Adults</option>
+              <option value="old">Old People</option>
             </select>
           </div>
         </div>
