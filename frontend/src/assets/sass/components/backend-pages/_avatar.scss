@@ -1,0 +1,42 @@
+.avatar--small {
+  height: 32px;
+  width: 32px;
+}
+
+.avatar--medium {
+  height: 64px;
+  width: 64px;
+}
+
+.avatar--large {
+  height: 128px;
+  width: 128px;
+}
+
+.avatars {
+  padding-left: 0;
+  margin: 0;
+  list-style: none;
+
+  &__item {
+    display: inline-block;
+    margin-right: -0.8rem;
+  }
+
+  &__img,
+  &__others {
+    background-color: #596376;
+    border: 2px solid #1f2532;
+    border-radius: 50%;
+    color: #ffffff;
+    font-family: sans-serif;
+    font-size: 12px;
+    height: 3rem;
+    line-height: 3rem;
+    text-align: center;
+    width: 3rem;
+  }
+  &__others {
+    background-color: $blue;
+  }
+}

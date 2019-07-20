@@ -9,7 +9,7 @@ const Image = ({ src, name, className, bordered, rounded }) => (
       className,
       'img-responsive',
       {
-        'img-thumbnails': bordered
+        'img-thumbnail': bordered
       },
       {
         'rounded-circle': rounded

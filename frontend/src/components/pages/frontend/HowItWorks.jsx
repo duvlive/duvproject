@@ -6,6 +6,7 @@ import HowItWorksImage from 'assets/img/bg/how-it-works.jpg';
 import Text from 'components/common/Text';
 import BorderedListItem from 'components/custom/BorderedListItem';
 import Slideshow from 'components/custom/Slideshow';
+import Counter from 'components/custom/Counter';
 import { SLIDESHOW_TYPE } from 'utils/constants';
 import noGoSpoilYourPartyList from 'data/duvSteps';
 import testimonialLists from 'data/testimonials';
@@ -93,7 +94,9 @@ const EntertainersCounter = ({ icon, name, number }) => (
       <div className="entertainers-counter__icon d-none d-sm-block">
         <i className={`icon icon-${icon}`} />
       </div>
-      <h2 className="entertainers-counter__number">{number}</h2>
+      <h2 className="entertainers-counter__number">
+        <Counter number={number} />
+      </h2>
       <h3 className="entertainers-counter__name">{name}</h3>
     </Text.VerticalAlign>
   </Col>

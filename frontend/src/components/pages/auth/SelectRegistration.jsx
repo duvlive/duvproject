@@ -12,18 +12,18 @@ const SelectRegistration = () => (
             SELECT YOUR CHOICE
           </h2>
           <Row>
-            <Col sm={{ size: 6 }}>
+            <Col sm={{ size: 6, offset: 0 }} xs={{ size: 8, offset: 2 }}>
               <Link to="/register/user">
-                <Card color="blue">
+                <Card color="blue" hover>
                   <div className="selection__text">
                     Register as a <span>User</span>
                   </div>
                 </Card>
               </Link>
             </Col>
-            <Col sm={{ size: 6 }}>
+            <Col sm={{ size: 6, offset: 0 }} xs={{ size: 8, offset: 2 }}>
               <Link to="/register/user">
-                <Card color="green">
+                <Card color="green" hover>
                   <div className="selection__text">
                     Register as an <span>Entertainer</span>
                   </div>

@@ -57,7 +57,7 @@ const FAQsSection = () => (
   </section>
 );
 
-const HelpForm = () => (
+export const HelpForm = () => (
   <section className="brain-box-form spacer">
     <div className="container-fluid">
       <Row>
@@ -111,7 +111,7 @@ const HelpForm = () => (
   </section>
 );
 
-const getFAQs = ({ title, faqs }) => {
+export const getFAQs = ({ title, faqs }) => {
   const faqsList = faqs.map(({ question, answer }, index) => (
     <AccordionItem key={title + index} title={question}>
       {answer}

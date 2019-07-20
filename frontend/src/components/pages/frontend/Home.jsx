@@ -1,8 +1,8 @@
 import React from 'react';
 import { Row, Col } from 'reactstrap';
 import Header from 'components/common/Header';
-import BorderedListItem from '../custom/BorderedListItem';
-import Text from '../common/Text';
+import BorderedListItem from '../../custom/BorderedListItem';
+import Text from '../../common/Text';
 import noGoSpoilYourPartyList from 'data/duvSteps.js';
 import entertainerLists from 'data/entertainers.js';
 import eventLists from 'data/events.js';

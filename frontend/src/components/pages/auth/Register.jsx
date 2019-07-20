@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Header from 'components/common/Header';
 import Footer from 'components/common/Footer';
-import SelectRegistration from 'components/pages/SelectRegistration';
+import SelectRegistration from 'components/pages/auth/SelectRegistration';
 import { Link } from '@reach/router';
 import { Col, Row } from 'reactstrap';
 
@@ -53,7 +53,9 @@ const Content = ({ type }) => (
                 <h5 className="header font-weight-normal text-uppercase mb-1">
                   REGISTER AS AN {type}
                 </h5>
-                <div className="text-red-100 mb-5">{text[type].subtitle}</div>
+                <div className="text-red-100 small--2 mb-5">
+                  {text[type].subtitle}
+                </div>
 
                 <section className="auth__social-media text-center">
                   <p className="auth__social-media--text">Register with:</p>

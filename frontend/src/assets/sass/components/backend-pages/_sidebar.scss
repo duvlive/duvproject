@@ -1,0 +1,93 @@
+$sidebar-width: 300px;
+
+.sidebar {
+  top: 0px;
+  position: fixed;
+  width: $sidebar-width;
+  z-index: 10;
+  background: $sidebar-bg;
+  background: rgba($sidebar-bg, 0.3);
+  bottom: 0;
+  margin-top: 0;
+  padding-bottom: 30px;
+  box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.06), 0 1px 0 0 rgba(0, 0, 0, 0.02);
+}
+
+.logo {
+  padding: 30px;
+  text-align: center;
+}
+
+.user-box {
+  text-align: center;
+
+  .user-img {
+    position: relative;
+    height: 100px;
+    width: 100px;
+    margin: 20px auto 10px;
+
+    .img-thumbnail {
+      background: transparent;
+      border: 2px solid $gray-600;
+    }
+  }
+
+  .user-status {
+    height: 16px;
+    width: 16px;
+    position: absolute;
+    border-radius: 50%;
+    bottom: 12px;
+    right: 8px;
+
+    &.away {
+      background: $warning;
+    }
+    &.offline {
+      background: $danger;
+    }
+    &.online {
+      background: $success;
+    }
+  }
+
+  h5 {
+    color: $white;
+    font-family: $headings-font-family;
+    font-size: 18px;
+    font-weight: normal;
+  }
+}
+
+.sidebar-menu {
+  list-style: none;
+  margin-top: 80px;
+
+  &__header {
+    font-size: 12px;
+    font-family: $headings-font-family;
+    font-weight: normal;
+    color: $text-color;
+    margin-bottom: 15px;
+  }
+
+  li {
+    margin-bottom: 20px;
+    i {
+      margin-right: 8px;
+      margin-left: -3px;
+      font-size: 16px;
+    }
+    a {
+      display: block;
+      color: $white;
+      font-size: 14px;
+    }
+  }
+}
+
+.content-page {
+  margin-left: $sidebar-width;
+  overflow: hidden;
+}

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const BorderedListItem = ({ number, title, description }) => {
   return (
@@ -12,6 +13,12 @@ const BorderedListItem = ({ number, title, description }) => {
   );
 };
 
+BorderedListItem.propTypes = {
+  description: PropTypes.string.isRequired,
+  number: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired
+};
+
 BorderedListItem.List = ({ items }) =>
   items.map(({ title, description }, index) => (
     <BorderedListItem
@@ -21,5 +28,9 @@ BorderedListItem.List = ({ items }) =>
       title={title}
     />
   ));
+
+BorderedListItem.List.propTypes = {
+  items: PropTypes.array.isRequired
+};
 
 export default BorderedListItem;
