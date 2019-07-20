@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start:dev:frontend": "cd frontend && npm start",
-    "prestart": "cd frontend && npm run build",
-    "start": "node server.js"
+    "start": "node server.js",
+    "heroku-postbuild": "cd frontend && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },
   "repository": {
     "type": "git",
@@ -23,6 +23,7 @@
   "homepage": "https://github.com/duv-live/duvproject#readme",
   "devDependencies": {},
   "dependencies": {
+    "dotenv": "^8.0.0",
     "express": "^4.17.1"
   }
 }

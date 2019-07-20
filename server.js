@@ -1,7 +1,9 @@
 const express = require('express');
-const bodyParser = require('body-parser');
+const port = parseInt(process.env.PORT, 10) || 8080;
 const path = require('path');
 const app = express();
+require('dotenv').config();
+
 app.use(express.static(path.join(__dirname, 'frontend/build')));
 
 app.get('/ping', function(req, res) {
@@ -12,4 +14,6 @@ app.get('/', function(req, res) {
   res.sendFile(path.join(__dirname, 'frontend/build', 'index.html'));
 });
 
-app.listen(process.env.PORT || 8080);
+app.listen(port, () => {
+  console.info(`Started up at port port ${port}`);
+});
