@@ -22,7 +22,7 @@ const SelectRegistration = () => (
               </Link>
             </Col>
             <Col sm={{ size: 6, offset: 0 }} xs={{ size: 8, offset: 2 }}>
-              <Link to="/register/user">
+              <Link to="/register/entertainer">
                 <Card color="green" hover>
                   <div className="selection__text">
                     Register as an <span>Entertainer</span>
