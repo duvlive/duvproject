@@ -6,6 +6,7 @@ import EventDetails from 'components/common/EventDetails';
 import EventAddress from 'components/common/EventAddress';
 import AddEntertainer from 'components/common/AddEntertainer';
 import { HIRE_ENTERTAINERS } from 'utils/constants';
+import { navigate } from '@reach/router';
 
 const NewEvent = ({ hire_type }) => {
   const validHireType = Object.keys(HIRE_ENTERTAINERS).includes(
@@ -16,6 +17,12 @@ const NewEvent = ({ hire_type }) => {
     ? `Hire an Entertainer (${currentHireType})`
     : 'Enter a New Event';
   const btnText = validHireType ? `Start ${currentHireType}` : 'Save Event';
+  const onSubmit = () => {
+    const urlToRedirect = validHireType
+      ? '/user/events'
+      : '/user/hire-entertainer/1';
+    return navigate(urlToRedirect);
+  };
   return (
     <div className="main-app">
       <TopMessage message={message} />
@@ -27,6 +34,7 @@ const NewEvent = ({ hire_type }) => {
         <div className="mt-5">
           <button
             className="btn btn-transparent btn-primary text-right btn-lg"
+            onClick={onSubmit}
             type="submit"
           >
             {btnText}

@@ -1,3 +1,5 @@
+import React from 'react';
+import TimeAgo from 'react-timeago';
 import { format, parse } from 'date-fns';
 
 /**
@@ -49,12 +51,14 @@ export const getOtherSlugs = (items, slug) =>
 
 export const getRelatedEntertainers = (items, slug, type) =>
   items.filter(item => item.slug !== slug && item.type === type);
+
 /**
  * Date and Time
  * @param {*} date
  */
 export const getShortDate = date => format(parse(date), 'ddd, MMM D YYYY');
 export const getLongDate = date => format(parse(date), 'dddd, Do MMMM YYYY');
+export const remainingDays = date => <TimeAgo date={date} />;
 
 /**
  * Create HTML Markup

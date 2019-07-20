@@ -2,7 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-const Card = ({ children, color, header, className, tiles, hover }) => (
+const Card = ({
+  children,
+  color,
+  header,
+  className,
+  tiles,
+  hover,
+  title,
+  titleColor
+}) => (
   <section
     className={classNames(
       { className },
@@ -21,7 +30,12 @@ const Card = ({ children, color, header, className, tiles, hover }) => (
         <h4 className="subtitle--2 pt-3 gray text-center">{header}</h4>
       </div>
     )}
-    {children && <div className="card-body">{children}</div>}
+    {children && (
+      <div className="card-body">
+        {title && <h5 className={`card-title text-${titleColor}`}>{title}</h5>}
+        {children}
+      </div>
+    )}
   </section>
 );
 
@@ -31,7 +45,9 @@ Card.propTypes = {
   color: PropTypes.string.isRequired,
   header: PropTypes.string,
   hover: PropTypes.bool,
-  tiles: PropTypes.bool
+  tiles: PropTypes.bool,
+  title: PropTypes.string,
+  titleColor: PropTypes.string
 };
 
 Card.defaultProps = {
@@ -39,7 +55,9 @@ Card.defaultProps = {
   className: '',
   header: '',
   hover: false,
-  tiles: false
+  tiles: false,
+  title: '',
+  titleColor: 'white'
 };
 
 export default Card;

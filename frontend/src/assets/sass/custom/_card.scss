@@ -56,7 +56,7 @@
   &.card-black {
     background: rgba($admin-card-bg, 0.1);
     border: 1px solid rgba($admin-card-bg, 0.3);
-    &:hover:not(.card__no-hover) {
+    &.card-hover:hover {
       background: rgba($black, 0.5);
     }
     .card-header {

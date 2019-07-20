@@ -41,7 +41,7 @@ const Events = () => (
               <td className="text-right">
                 <Link
                   className="btn btn-info btn-transparent"
-                  to="/user/auction/bids"
+                  to="/user/events/1"
                 >
                   View Event
                 </Link>

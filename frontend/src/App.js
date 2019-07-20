@@ -24,6 +24,7 @@ import UserHelp from 'components/pages/user/Help';
 import Payments from 'components/pages/user/Payments';
 import SelectEntertainer from 'components/pages/user/HireEntertainers';
 import NewEvent from 'components/pages/user/NewEvent';
+import ViewEvent from 'components/pages/user/ViewEvent';
 import Bids from 'components/pages/user/Bids';
 import Approval from 'components/pages/user/Approval';
 
@@ -57,10 +58,10 @@ function App() {
             <UserHelp path="/help" />
             <Payments path="/payments-history" />
             <SelectEntertainer path="/hire-entertainer" />
-            {/* <SelectEntertainer path="/hire-entertainer/:event_id" /> */}
+            <SelectEntertainer path="/hire-entertainer/:event_id" />
             <NewEvent path="events/new" />
             <NewEvent path="events/new/:hire_type" />
-            {/* <ViewEvent path="events/:id" /> */}
+            <ViewEvent path="events/:id" />
             {/* <AddEntertainerToEvent path="events/:id/add-entertainer/:type" /> */}
             <Bids path="/auction/bids" />
             <Approval path="/approval" />

@@ -1,6 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import Image from 'components/common/Image';
 
 const DuvLiveModal = ({
   actionText,
@@ -55,6 +56,28 @@ DuvLiveModal.defaultProps = {
   actionText: '',
   className: '',
   closeModalText: 'Close'
+};
+
+DuvLiveModal.ViewEntertainerProfile = ({ entertainer }) => (
+  <DuvLiveModal
+    body={entertainer.summary}
+    title={
+      <Image
+        className="avatar--medium"
+        name={entertainer.stage_name}
+        rounded={false}
+        src={entertainer.img.profile}
+      />
+    }
+  >
+    <button className="btn btn-info btn-sm btn-transparent">
+      View Profile
+    </button>{' '}
+  </DuvLiveModal>
+);
+
+DuvLiveModal.ViewEntertainerProfile.propTypes = {
+  entertainer: PropTypes.object.isRequired
 };
 
 export default DuvLiveModal;
