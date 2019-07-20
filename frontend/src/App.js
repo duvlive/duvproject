@@ -1,20 +1,32 @@
 import React from 'react';
 import { Router } from '@reach/router';
 import { Helmet } from 'react-helmet';
-import Home from 'components/pages/Home';
-import HowItWorks from 'components/pages/HowItWorks';
+import Home from 'components/pages/frontend/Home';
+import HowItWorks from 'components/pages/frontend/HowItWorks';
 import 'assets/sass/App.scss';
-import UpcomingEvents from 'components/pages/UpcomingEvents';
-import HireEntertainers from 'components/pages/HireEntertainers';
-import Help from 'components/pages/Help';
-import TermsOfUse from 'components/pages/TermsOfUse';
-import PrivacyPolicy from 'components/pages/PrivacyPolicy';
-import Login from 'components/pages/Login';
-import Register from 'components/pages/Register';
-import SingleEntertainer from 'components/pages/SingleEntertainer';
-import SingleEvent from 'components/pages/SingleEvent';
+import UpcomingEvents from 'components/pages/frontend/UpcomingEvents';
+import HireEntertainers from 'components/pages/frontend/HireEntertainers';
+import Help from 'components/pages/frontend/Help';
+import TermsOfUse from 'components/pages/frontend/TermsOfUse';
+import PrivacyPolicy from 'components/pages/frontend/PrivacyPolicy';
+import Login from 'components/pages/auth/Login';
+import Register from 'components/pages/auth/Register';
+import SingleEntertainer from 'components/pages/frontend/SingleEntertainer';
+import SingleEvent from 'components/pages/frontend/SingleEvent';
 import { ScrollToTop } from 'components/custom/ScrollToTop';
-import ForgotPassword from 'components/pages/ForgotPassword';
+import ForgotPassword from 'components/pages/auth/ForgotPassword';
+import BackEndPage from 'components/common/BackEndPage';
+import Dashboard from 'components/pages/user/Dashboard';
+import Auctions from 'components/pages/user/Auctions';
+import Events from 'components/pages/user/Events';
+import Notifications from 'components/pages/user/Notifications';
+import UserHelp from 'components/pages/user/Help';
+import Payments from 'components/pages/user/Payments';
+import SelectEntertainer from 'components/pages/user/HireEntertainers';
+import NewEvent from 'components/pages/user/NewEvent';
+import ViewEvent from 'components/pages/user/ViewEvent';
+import Bids from 'components/pages/user/Bids';
+import Approval from 'components/pages/user/Approval';
 
 function App() {
   return (
@@ -37,6 +49,24 @@ function App() {
           <Register path="register/:type" />
           <SingleEntertainer path="entertainer/:slug" />
           <SingleEvent path="event/:slug" />
+
+          <BackEndPage path="/user">
+            <Dashboard path="/dashboard" />
+            <Auctions path="/auctions" />
+            <Events path="/events" />
+            <Notifications path="/notifications" />
+            <UserHelp path="/help" />
+            <Payments path="/payments-history" />
+            <SelectEntertainer path="/hire-entertainer" />
+            <SelectEntertainer path="/hire-entertainer/:event_id" />
+            <NewEvent path="events/new" />
+            <NewEvent path="events/new/:hire_type" />
+            <ViewEvent path="events/:id" />
+            {/* <AddEntertainerToEvent path="events/:id/add-entertainer/:type" /> */}
+            <Bids path="/auction/bids" />
+            <Approval path="/approval" />
+            {/* <Dashboard default /> */}
+          </BackEndPage>
         </ScrollToTop>
       </Router>
     </div>

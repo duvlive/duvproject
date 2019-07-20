@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import Image from 'components/common/Image';
 
 const DuvLiveModal = ({
   actionText,
@@ -13,8 +14,8 @@ const DuvLiveModal = ({
 }) => {
   const [modal, setModal] = useState(false);
   return (
-    <div>
-      <div onClick={() => setModal(!modal)}>{children}</div>
+    <Fragment>
+      <span onClick={() => setModal(!modal)}>{children}</span>
       <Modal
         className={className}
         isOpen={modal}
@@ -36,7 +37,7 @@ const DuvLiveModal = ({
           </Button>
         </ModalFooter>
       </Modal>
-    </div>
+    </Fragment>
   );
 };
 
@@ -47,7 +48,7 @@ DuvLiveModal.propTypes = {
   children: PropTypes.node.isRequired,
   className: PropTypes.string,
   closeModalText: PropTypes.string,
-  title: PropTypes.string.isRequired
+  title: PropTypes.node.isRequired
 };
 
 DuvLiveModal.defaultProps = {
@@ -55,6 +56,28 @@ DuvLiveModal.defaultProps = {
   actionText: '',
   className: '',
   closeModalText: 'Close'
+};
+
+DuvLiveModal.ViewEntertainerProfile = ({ entertainer }) => (
+  <DuvLiveModal
+    body={entertainer.summary}
+    title={
+      <Image
+        className="avatar--medium"
+        name={entertainer.stage_name}
+        rounded={false}
+        src={entertainer.img.profile}
+      />
+    }
+  >
+    <button className="btn btn-info btn-sm btn-transparent">
+      View Profile
+    </button>{' '}
+  </DuvLiveModal>
+);
+
+DuvLiveModal.ViewEntertainerProfile.propTypes = {
+  entertainer: PropTypes.object.isRequired
 };
 
 export default DuvLiveModal;
