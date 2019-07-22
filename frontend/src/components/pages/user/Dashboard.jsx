@@ -16,7 +16,7 @@ const Dashboard = () => {
           <div className="col-sm-8">
             <div className="card card-custom">
               <div className="card-body">
-                <h5 className="card-title green">Upcoming Events</h5>
+                <h5 className="card-title text-green">Upcoming Events</h5>
 
                 <div className="table-responsive">
                   <table className="table table-dark table__no-border">
@@ -101,7 +101,9 @@ const Dashboard = () => {
 Dashboard.PendingReview = ({ entertainer }) => (
   <div className="card card-custom">
     <div className="card-body">
-      <h5 className="card-title red header__with-border">Pending Review</h5>
+      <h5 className="card-title text-red header__with-border">
+        Pending Review
+      </h5>
       <p className="card-text">
         To serve you better, kindly help us improve our service and give other
         users a better understanding about entertainers.
@@ -129,7 +131,7 @@ Dashboard.PendingReview = ({ entertainer }) => (
 Dashboard.AuctionTable = ({ entertainerList }) => (
   <div className="card card-custom">
     <div className="card-body">
-      <h5 className="card-title blue">
+      <h5 className="card-title text-blue">
         Auction (Recent Bids) <br />
         <small className="small--2 text-gray">
           Celebration Party for Wifey on{' '}
@@ -193,7 +195,7 @@ Dashboard.AuctionRow = ({ entertainer }) => (
 Dashboard.RecommendedTable = ({ entertainerList }) => (
   <div className="card card-custom">
     <div className="card-body">
-      <h5 className="card-title blue">Recommended For You</h5>
+      <h5 className="card-title text-blue">Recommended For You</h5>
       <div className="table-responsive">
         <table className="table table-dark">
           <tbody>

@@ -79,3 +79,7 @@ $small: (
     font-weight: normal;
   }
 }
+
+a.text-muted:hover {
+  color: $red-300 !important;
+}
