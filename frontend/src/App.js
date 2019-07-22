@@ -17,6 +17,7 @@ import { ScrollToTop } from 'components/custom/ScrollToTop';
 import ForgotPassword from 'components/pages/auth/ForgotPassword';
 import BackEndPage from 'components/common/BackEndPage';
 import Dashboard from 'components/pages/user/Dashboard';
+import EmptyDashboard from 'components/pages/user/EmptyDashboard';
 import Auctions from 'components/pages/user/Auctions';
 import Events from 'components/pages/user/Events';
 import Notifications from 'components/pages/user/Notifications';
@@ -65,7 +66,7 @@ function App() {
             {/* <AddEntertainerToEvent path="events/:id/add-entertainer/:type" /> */}
             <Bids path="/auction/bids" />
             <Approval path="/approval" />
-            {/* <Dashboard default /> */}
+            <EmptyDashboard default />
           </BackEndPage>
         </ScrollToTop>
       </Router>
