@@ -35,9 +35,12 @@ const Sidebar = ({ showSidebar, closeSidebar }) => (
           </button>
         </div>
       </div>
-      <PerfectScrollbar style={{ height: 'calc(100% - 190px)' }}>
+      <PerfectScrollbar style={{ height: 'calc(100% - 12rem)' }}>
         <Sidebar.UserBox />
-        <Sidebar.Navigation menus={userSideMenu} />
+        <Sidebar.Navigation closeSidebar={closeSidebar} menus={userSideMenu} />
+        <div class="text-center d-block d-sm-none" onClick={closeSidebar}>
+          Close Menu
+        </div>
       </PerfectScrollbar>
       <div className="clearfix" />
     </aside>
@@ -66,13 +69,13 @@ Sidebar.UserBox = () => {
   );
 };
 
-Sidebar.Navigation = ({ menus }) => {
+Sidebar.Navigation = ({ menus, closeSidebar }) => {
   const sideMenu = menus.map(({ name, menus }) => (
     <ul className="sidebar-menu" key={name}>
       <h6 className="sidebar-menu__header">{name}</h6>
       {menus.map(({ title, to, icon }) => (
         <li key={title}>
-          <Link to={to}>
+          <Link onClick={closeSidebar} to={to}>
             <i className={`icon icon-${icon}`} />
             {title}
           </Link>
@@ -84,6 +87,7 @@ Sidebar.Navigation = ({ menus }) => {
 };
 
 Sidebar.Navigation.propTypes = {
+  closeSidebar: PropTypes.func.isRequired,
   menus: PropTypes.array.isRequired
 };
 

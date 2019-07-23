@@ -2,77 +2,80 @@ import React from 'react';
 import UserAvatar from 'assets/img/avatar/user.png';
 import TopMessage from 'components/common/TopMessage';
 import Image from 'components/common/Image';
+import BackEndPage from 'components/common/BackEndPage';
 
 const Approval = () => (
-  <div className="main-app">
-    <TopMessage message="Approve as Party DJ" />
+  <BackEndPage title="Approval">
+    <div className="main-app">
+      <TopMessage message="Approve as Party DJ" />
 
-    <section className="app-content">
-      <div className="card card-custom">
-        <div className="card-body">
-          <h5 className="card-title blue">Party DJ</h5>
-          <div className="row">
-            <div className="col-sm-4">
-              <p className="">
-                I am holding a beach party. I need a DJ to play 80s music for me
-                and my friends.
-              </p>
+      <section className="app-content">
+        <div className="card card-custom">
+          <div className="card-body">
+            <h5 className="card-title blue">Party DJ</h5>
+            <div className="row">
+              <div className="col-sm-4">
+                <p className="">
+                  I am holding a beach party. I need a DJ to play 80s music for
+                  me and my friends.
+                </p>
 
-              <span className="">Address</span>
-              <address>
-                Pan-Atlantic University, Km 22 Lekki - Epe Expressway, Ajah,
-                Lagos, Nigeria
-              </address>
-            </div>
-            <div className="col-sm-4">
-              <div className="table-responsive">
-                <table className="table table-dark">
-                  <tbody>
-                    <tr>
-                      <td>Entertainer</td>
-                      <td className="text-right">DJ</td>
-                    </tr>
-                    <tr>
-                      <td>Event Date</td>
-                      <td className="text-right">17th Apr, 2019</td>
-                    </tr>
-                    <tr>
-                      <td>Location</td>
-                      <td className="text-right">Lagos</td>
-                    </tr>
-                  </tbody>
-                </table>
+                <span className="">Address</span>
+                <address>
+                  Pan-Atlantic University, Km 22 Lekki - Epe Expressway, Ajah,
+                  Lagos, Nigeria
+                </address>
               </div>
-            </div>
+              <div className="col-sm-4">
+                <div className="table-responsive">
+                  <table className="table table-dark">
+                    <tbody>
+                      <tr>
+                        <td>Entertainer</td>
+                        <td className="text-right">DJ</td>
+                      </tr>
+                      <tr>
+                        <td>Event Date</td>
+                        <td className="text-right">17th Apr, 2019</td>
+                      </tr>
+                      <tr>
+                        <td>Location</td>
+                        <td className="text-right">Lagos</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
 
-            <div className="col-sm-4">
-              <div className="table-responsive">
-                <table className="table table-dark">
-                  <tbody>
-                    <tr>
-                      <td>Budget</td>
-                      <td className="text-right">N50,000 - N150,000</td>
-                    </tr>
-                    <tr>
-                      <td>Need</td>
-                      <td className="text-right">Party DJ</td>
-                    </tr>
-                    <tr>
-                      <td>Bid closes on</td>
-                      <td className="text-right">17th Apr, 2019</td>
-                    </tr>
-                  </tbody>
-                </table>
+              <div className="col-sm-4">
+                <div className="table-responsive">
+                  <table className="table table-dark">
+                    <tbody>
+                      <tr>
+                        <td>Budget</td>
+                        <td className="text-right">N50,000 - N150,000</td>
+                      </tr>
+                      <tr>
+                        <td>Need</td>
+                        <td className="text-right">Party DJ</td>
+                      </tr>
+                      <tr>
+                        <td>Bid closes on</td>
+                        <td className="text-right">17th Apr, 2019</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className="row">
-        <Approval.Card color="blue" />
-      </div>
-    </section>
-  </div>
+        <div className="row">
+          <Approval.Card color="blue" />
+        </div>
+      </section>
+    </div>
+  </BackEndPage>
 );
 
 Approval.Card = ({ color }) => (

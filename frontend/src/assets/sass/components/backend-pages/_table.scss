@@ -10,6 +10,11 @@
   border-color: rgba($text-color, 0.2);
 }
 
+.table th,
+.table td {
+  padding: 1rem 0;
+}
+
 .table__with-bg {
   border-collapse: separate;
   border-spacing: 0 0.7rem;
@@ -56,9 +61,9 @@
   }
 
   span {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     display: block;
-    line-height: 1.6;
+    line-height: 2.6;
   }
 
   .circle {

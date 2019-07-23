@@ -29,9 +29,10 @@
 
   &__close {
     position: absolute;
-    padding: 2.5rem;
+    padding: 2rem;
     top: 0;
-    right: 0;
+    left: 0;
+    opacity: 0.3;
     cursor: pointer;
   }
 }
@@ -47,7 +48,7 @@
     left: 0;
     bottom: 0;
     right: 0;
-    background: rgba($body-bg, 0.7);
+    background: rgba($body-bg, 0.9);
     z-index: 100;
     opacity: 1;
   }
@@ -130,14 +131,14 @@
       display: block;
       color: $white;
       font-size: 1rem;
-      transition: all 0.3s ease-out;
+      transition: all 0.4s ease-out;
       @include media-breakpoint-up(sm) {
         font-size: 0.85rem;
       }
 
       &:hover {
         color: $red-300;
-        transform: translateX(0.35rem);
+        transform: translateX(0.25rem);
       }
     }
   }
