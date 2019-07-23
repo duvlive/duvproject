@@ -38,6 +38,11 @@ body {
   z-index: -1;
 }
 
+body.modal-open {
+  overflow: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
 a:hover {
   text-decoration: none;
 }

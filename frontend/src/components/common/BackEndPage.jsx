@@ -5,13 +5,21 @@ import LandingSection from 'components/common/LandingSection';
 
 const BackEndPage = ({ children, title, subtitle }) => {
   const [showSidebar, setShowSidebar] = useState(false);
+  const closeSidebar = () => {
+    document.body.classList.remove('modal-open');
+    setShowSidebar(false);
+  };
+  const openSidebar = () => {
+    document.body.classList.add('modal-open');
+    setShowSidebar(true);
+  };
   return (
     <div>
-      <Sidebar close={() => setShowSidebar(false)} show={showSidebar} />
+      <Sidebar closeSidebar={closeSidebar} showSidebar={showSidebar} />
       <div className="content-page">
         <LandingSection
           isDashboard
-          showSidebar={() => setShowSidebar(true)}
+          showSidebar={openSidebar}
           subtitle={subtitle}
           title={title}
         />

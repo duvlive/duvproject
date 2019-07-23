@@ -1,9 +1,9 @@
-$sidebar-width: 300px;
-
 .sidebar {
-  top: 0px;
+  top: 0;
+  left: 0;
+  bottom: 0;
   position: fixed;
-  width: 100%;
+  width: 22rem;
   z-index: 10;
   bottom: 0;
   margin-top: 0;
@@ -20,10 +20,11 @@ $sidebar-width: 300px;
     box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.06), 0 1px 0 0 rgba(0, 0, 0, 0.02);
   }
 
-  &.show {
+  &.showSidebar {
     transform: translateX(0);
     animation-name: bounceInLeft;
     animation-duration: 0.75s;
+    z-index: 1000;
   }
 
   &__close {
@@ -35,6 +36,22 @@ $sidebar-width: 300px;
   }
 }
 
+.backdrop {
+  transition: transform 3s ease-in-out;
+  opacity: 0;
+  &.showSidebar {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: rgba($body-bg, 0.7);
+    z-index: 100;
+    opacity: 1;
+  }
+}
 .sidebar__logo {
   position: relative;
   padding: 2rem;

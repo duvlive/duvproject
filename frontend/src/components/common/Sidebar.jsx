@@ -8,37 +8,45 @@ import 'react-perfect-scrollbar/dist/css/styles.css';
 import userSideMenu from 'data/sidebar/user.js';
 import classNames from 'classnames';
 
-const Sidebar = ({ show, close }) => (
-  <div
-    className={classNames('sidebar', {
-      show
-    })}
-  >
-    <div className="sidebar__logo">
-      <Link to="/">
-        <img alt="Duv Live Red-White Logo" src={RedLogo} />
-      </Link>
-      <div className="sidebar__close" onClick={close}>
-        <button
-          aria-label="Close"
-          className="close d-block d-sm-none"
-          type="button"
-        >
-          <span aria-hidden="true">&times;</span>
-        </button>
+const Sidebar = ({ showSidebar, closeSidebar }) => (
+  <>
+    <div
+      className={classNames('backdrop', {
+        showSidebar
+      })}
+      onClick={closeSidebar}
+    />
+    <aside
+      className={classNames('sidebar', {
+        showSidebar
+      })}
+    >
+      <div className="sidebar__logo">
+        <Link to="/">
+          <img alt="Duv Live Red-White Logo" src={RedLogo} />
+        </Link>
+        <div className="sidebar__close" onClick={closeSidebar}>
+          <button
+            aria-label="Close"
+            className="close d-block d-sm-none"
+            type="button"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
       </div>
-    </div>
-    <PerfectScrollbar style={{ height: 'calc(100% - 190px)' }}>
-      <Sidebar.UserBox />
-      <Sidebar.Navigation menus={userSideMenu} />
-    </PerfectScrollbar>
-    <div className="clearfix" />
-  </div>
+      <PerfectScrollbar style={{ height: 'calc(100% - 190px)' }}>
+        <Sidebar.UserBox />
+        <Sidebar.Navigation menus={userSideMenu} />
+      </PerfectScrollbar>
+      <div className="clearfix" />
+    </aside>
+  </>
 );
 
 Sidebar.propTypes = {
-  close: PropTypes.func.isRequired,
-  show: PropTypes.bool.isRequired
+  closeSidebar: PropTypes.func.isRequired,
+  showSidebar: PropTypes.bool.isRequired
 };
 
 Sidebar.UserBox = () => {
