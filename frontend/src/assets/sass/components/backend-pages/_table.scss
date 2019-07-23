@@ -4,6 +4,12 @@
   border-color: transparent !important;
 }
 
+.table-dark th,
+.table-dark td,
+.table-dark thead th {
+  border-color: rgba($text-color, 0.2);
+}
+
 .table__with-bg {
   border-collapse: separate;
   border-spacing: 0 0.7rem;
@@ -35,10 +41,10 @@
 }
 
 .table {
-  font-size: 14px;
+  font-size: 0.9rem;
   &__number {
-    font-size: 24px;
-    line-height: 24px;
+    font-size: 1.6rem;
+    line-height: 1.6;
     color: #394046;
   }
 
@@ -50,17 +56,17 @@
   }
 
   span {
-    font-size: 12px;
+    font-size: 0.75rem;
     display: block;
-    line-height: 20px;
+    line-height: 1.6;
   }
 
   .circle {
-    width: 16px;
-    height: 16px;
+    width: 1rem;
+    height: 1rem;
     background: $text-color;
     display: inline-block;
-    margin-right: 5px;
+    margin-right: 0.3rem;
     border-radius: 50%;
 
     &.red {
@@ -81,7 +87,7 @@
   }
 
   &-heading {
-    font-size: 18px;
+    font-size: 1rem;
     color: $text-color;
   }
 }

@@ -98,7 +98,10 @@
   }
 
   .card-text {
-    font-size: 0.8rem;
+    font-size: 0.95rem;
+    @include media-breakpoint-up(sm) {
+      font-size: 0.8rem;
+    }
   }
 
   .header__with-border {

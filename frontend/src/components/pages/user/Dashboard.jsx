@@ -90,8 +90,7 @@ Dashboard.UpcomingEvents = () => (
             </tr>
           </tbody>
         </table>
-        <br />
-        <br />
+        <div className="pt-4" />
       </div>
     </div>
   </div>
