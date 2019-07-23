@@ -6,13 +6,27 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import { Link } from '@reach/router';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import userSideMenu from 'data/sidebar/user.js';
+import classNames from 'classnames';
 
-const Sidebar = () => (
-  <div className="sidebar">
-    <div className="logo">
+const Sidebar = ({ show, close }) => (
+  <div
+    className={classNames('sidebar', {
+      show
+    })}
+  >
+    <div className="sidebar__logo">
       <Link to="/">
-        <img alt="Duv Live Red-White Logo" height="130" src={RedLogo} />
+        <img alt="Duv Live Red-White Logo" src={RedLogo} />
       </Link>
+      <div className="sidebar__close" onClick={close}>
+        <button
+          aria-label="Close"
+          className="close d-block d-sm-none"
+          type="button"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
     </div>
     <PerfectScrollbar style={{ height: 'calc(100% - 190px)' }}>
       <Sidebar.UserBox />
@@ -21,6 +35,11 @@ const Sidebar = () => (
     <div className="clearfix" />
   </div>
 );
+
+Sidebar.propTypes = {
+  close: PropTypes.func.isRequired,
+  show: PropTypes.bool.isRequired
+};
 
 Sidebar.UserBox = () => {
   return (
