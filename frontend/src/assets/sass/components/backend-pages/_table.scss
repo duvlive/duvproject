@@ -85,3 +85,18 @@
     color: $text-color;
   }
 }
+
+// loops through 20 times
+// @for $i from 1 through 20 {
+//   .tw-#{$i} {
+//     width: percentage($i/20);
+//   }
+// }
+
+.table-responsive {
+  td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

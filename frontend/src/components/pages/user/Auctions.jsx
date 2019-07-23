@@ -11,8 +11,8 @@ const Auctions = () => (
     <TopMessage message="Auctions" />
 
     <section className="app-content">
-      <div class="table-responsive">
-        <table class="table table-dark table__no-border table__with-bg">
+      <div className="table-responsive">
+        <table className="table table-dark table__no-border table__with-bg">
           <tbody>
             <tr>
               <th className="table__number" scope="row">

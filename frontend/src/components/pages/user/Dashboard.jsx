@@ -5,98 +5,97 @@ import { randomItem, getItems } from 'utils/helpers';
 import djLists from 'data/entertainers/djs';
 import mcLists from 'data/entertainers/mcs';
 import lbLists from 'data/entertainers/live-bands';
+import BackEndPage from 'components/common/BackEndPage';
 
 const Dashboard = () => {
   return (
-    <div className="main-app">
-      <TopMessage message="Welcome back Mariam," />
+    <BackEndPage title="Dashboard">
+      <div className="main-app">
+        <TopMessage message="Welcome back Mariam," />
 
-      <section className="app-content">
-        <div className="row">
-          <div className="col-sm-8">
-            <div className="card card-custom">
-              <div className="card-body">
-                <h5 className="card-title text-green">Upcoming Events</h5>
-
-                <div className="table-responsive">
-                  <table className="table table-dark table__no-border">
-                    <tbody>
-                      <tr>
-                        <th className="table__number" scope="row">
-                          01
-                        </th>
-                        <td>
-                          <div className="table__title text-white">
-                            Wedding Ceremony
-                          </div>
-                          <span>
-                            <i className="icon icon-location" />
-                            Yaba, Lagos state
-                          </span>
-                        </td>
-                        <td>
-                          <span className="text-red">3 days to go</span>
-                          <span>
-                            <strong className="text-blue"> DJ Cuppy</strong>{' '}
-                            (DJ)
-                          </span>
-                        </td>
-                        <td className="text-right">
-                          <span>
-                            <i className="icon icon-clock" /> Sun, April 17,
-                            2019
-                          </span>
-                          <span>9:00am</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th className="table__number" scope="row">
-                          02
-                        </th>
-                        <td>
-                          <div className="table__title text-white">
-                            Birthday Party
-                          </div>
-                          <span>
-                            <i className="icon icon-location" />
-                            Yaba, Lagos state
-                          </span>
-                        </td>
-                        <td>
-                          <span className="text-green">2 months to go</span>
-                          <span>
-                            <strong className="text-blue"> High Soul</strong>{' '}
-                            (Live Band)
-                          </span>
-                        </td>
-                        <td className="text-right">
-                          <span>
-                            <i className="icon icon-clock" /> Sun, April 17,
-                            2019
-                          </span>
-                          <span>9:00am</span>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <br />
-                  <br />
-                </div>
-              </div>
+        <section className="app-content">
+          <div className="row">
+            <div className="col-sm-8">
+              <Dashboard.UpcomingEvents />
+              <Dashboard.AuctionTable entertainerList={getItems(djLists, 3)} />
             </div>
-            <Dashboard.AuctionTable entertainerList={getItems(djLists, 3)} />
+            <div className="col-sm-4">
+              <Dashboard.RecommendedTable
+                entertainerList={[randomItem(lbLists), randomItem(mcLists)]}
+              />
+              <Dashboard.PendingReview entertainer={djLists[7]} />
+            </div>
           </div>
-          <div className="col-sm-4">
-            <Dashboard.RecommendedTable
-              entertainerList={[randomItem(lbLists), randomItem(mcLists)]}
-            />
-            <Dashboard.PendingReview entertainer={djLists[7]} />
-          </div>
-        </div>
-      </section>
-    </div>
+        </section>
+      </div>
+    </BackEndPage>
   );
 };
+
+Dashboard.UpcomingEvents = () => (
+  <div className="card card-custom">
+    <div className="card-body">
+      <h5 className="card-title text-green">Upcoming Events</h5>
+
+      <div className="table-responsive">
+        <table className="table table-dark table__no-border">
+          <tbody>
+            <tr>
+              <th className="table__number" scope="row">
+                01
+              </th>
+              <td>
+                <div className="table__title text-white">Wedding Ceremony</div>
+                <span>
+                  <i className="icon icon-location" />
+                  Yaba, Lagos state
+                </span>
+              </td>
+              <td>
+                <span className="text-red">3 days to go</span>
+                <span>
+                  <strong className="text-blue"> DJ Cuppy</strong> (DJ)
+                </span>
+              </td>
+              <td className="text-right">
+                <span>
+                  <i className="icon icon-clock" /> Sun, April 17, 2019
+                </span>
+                <span>9:00am</span>
+              </td>
+            </tr>
+            <tr>
+              <th className="table__number" scope="row">
+                02
+              </th>
+              <td>
+                <div className="table__title text-white">Birthday Party</div>
+                <span>
+                  <i className="icon icon-location" />
+                  Yaba, Lagos state
+                </span>
+              </td>
+              <td>
+                <span className="text-green">2 months to go</span>
+                <span>
+                  <strong className="text-blue"> High Soul</strong> (Live Band)
+                </span>
+              </td>
+              <td className="text-right">
+                <span>
+                  <i className="icon icon-clock" /> Sun, April 17, 2019
+                </span>
+                <span>9:00am</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <br />
+        <br />
+      </div>
+    </div>
+  </div>
+);
 
 Dashboard.PendingReview = ({ entertainer }) => (
   <div className="card card-custom">
