@@ -6,21 +6,51 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import { Link } from '@reach/router';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import userSideMenu from 'data/sidebar/user.js';
+import classNames from 'classnames';
 
-const Sidebar = () => (
-  <div className="sidebar">
-    <div className="logo">
-      <Link to="/">
-        <img alt="Duv Live Red-White Logo" height="130" src={RedLogo} />
-      </Link>
-    </div>
-    <PerfectScrollbar style={{ height: 'calc(100% - 190px)' }}>
-      <Sidebar.UserBox />
-      <Sidebar.Navigation menus={userSideMenu} />
-    </PerfectScrollbar>
-    <div className="clearfix" />
-  </div>
+const Sidebar = ({ showSidebar, closeSidebar }) => (
+  <>
+    <div
+      className={classNames('backdrop', {
+        showSidebar
+      })}
+      onClick={closeSidebar}
+    />
+    <aside
+      className={classNames('sidebar', {
+        showSidebar
+      })}
+    >
+      <div className="sidebar__logo">
+        <Link to="/">
+          <img alt="Duv Live Red-White Logo" src={RedLogo} />
+        </Link>
+        <div className="sidebar__close" onClick={closeSidebar}>
+          <button
+            aria-label="Close"
+            className="close d-block d-sm-none"
+            type="button"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      </div>
+      <PerfectScrollbar style={{ height: 'calc(100% - 12rem)' }}>
+        <Sidebar.UserBox />
+        <Sidebar.Navigation closeSidebar={closeSidebar} menus={userSideMenu} />
+        <div class="text-center d-block d-sm-none" onClick={closeSidebar}>
+          Close Menu
+        </div>
+      </PerfectScrollbar>
+      <div className="clearfix" />
+    </aside>
+  </>
 );
+
+Sidebar.propTypes = {
+  closeSidebar: PropTypes.func.isRequired,
+  showSidebar: PropTypes.bool.isRequired
+};
 
 Sidebar.UserBox = () => {
   return (
@@ -39,13 +69,13 @@ Sidebar.UserBox = () => {
   );
 };
 
-Sidebar.Navigation = ({ menus }) => {
+Sidebar.Navigation = ({ menus, closeSidebar }) => {
   const sideMenu = menus.map(({ name, menus }) => (
     <ul className="sidebar-menu" key={name}>
       <h6 className="sidebar-menu__header">{name}</h6>
       {menus.map(({ title, to, icon }) => (
         <li key={title}>
-          <Link to={to}>
+          <Link onClick={closeSidebar} to={to}>
             <i className={`icon icon-${icon}`} />
             {title}
           </Link>
@@ -57,6 +87,7 @@ Sidebar.Navigation = ({ menus }) => {
 };
 
 Sidebar.Navigation.propTypes = {
+  closeSidebar: PropTypes.func.isRequired,
   menus: PropTypes.array.isRequired
 };
 

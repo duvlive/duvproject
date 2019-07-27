@@ -15,7 +15,7 @@ import SingleEntertainer from 'components/pages/frontend/SingleEntertainer';
 import SingleEvent from 'components/pages/frontend/SingleEvent';
 import { ScrollToTop } from 'components/custom/ScrollToTop';
 import ForgotPassword from 'components/pages/auth/ForgotPassword';
-import BackEndPage from 'components/common/BackEndPage';
+import UserPage from 'components/pages/user/Index';
 import Dashboard from 'components/pages/user/Dashboard';
 import EmptyDashboard from 'components/pages/user/EmptyDashboard';
 import Auctions from 'components/pages/user/Auctions';
@@ -51,7 +51,7 @@ function App() {
           <SingleEntertainer path="entertainer/:slug" />
           <SingleEvent path="event/:slug" />
 
-          <BackEndPage path="/user">
+          <UserPage path="/user">
             <Dashboard path="/dashboard" />
             <Auctions path="/auctions" />
             <Events path="/events" />
@@ -67,7 +67,7 @@ function App() {
             <Bids path="/auction/bids" />
             <Approval path="/approval" />
             <EmptyDashboard default />
-          </BackEndPage>
+          </UserPage>
         </ScrollToTop>
       </Router>
     </div>

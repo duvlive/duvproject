@@ -7,6 +7,7 @@ import EventAddress from 'components/common/EventAddress';
 import AddEntertainer from 'components/common/AddEntertainer';
 import { HIRE_ENTERTAINERS } from 'utils/constants';
 import { navigate } from '@reach/router';
+import BackEndPage from 'components/common/BackEndPage';
 
 const NewEvent = ({ hire_type }) => {
   const validHireType = Object.keys(HIRE_ENTERTAINERS).includes(
@@ -24,24 +25,26 @@ const NewEvent = ({ hire_type }) => {
     return navigate(urlToRedirect);
   };
   return (
-    <div className="main-app">
-      <TopMessage message={message} />
+    <BackEndPage title="New Events">
+      <div className="main-app">
+        <TopMessage message={message} />
 
-      <section className="app-content">
-        <EventDetails />
-        <EventAddress />
-        {validHireType && <AddEntertainer />}
-        <div className="mt-5">
-          <button
-            className="btn btn-transparent btn-primary text-right btn-lg"
-            onClick={onSubmit}
-            type="submit"
-          >
-            {btnText}
-          </button>
-        </div>
-      </section>
-    </div>
+        <section className="app-content">
+          <EventDetails />
+          <EventAddress />
+          {validHireType && <AddEntertainer />}
+          <div className="mt-5">
+            <button
+              className="btn btn-transparent btn-primary text-right btn-lg"
+              onClick={onSubmit}
+              type="submit"
+            >
+              {btnText}
+            </button>
+          </div>
+        </section>
+      </div>
+    </BackEndPage>
   );
 };
 

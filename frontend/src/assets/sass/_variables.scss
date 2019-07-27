@@ -67,6 +67,9 @@ $theme-colors: map-merge(
   $theme-colors
 );
 
+//Sidebar
+$sidebar-width: 18rem;
+
 // Body
 //
 // Settings for the `<body>` element.
@@ -338,3 +341,24 @@ $modal-footer-border-color: rgba($white, 0.1);
 
 $modal-fade-transform: translate(0, -100px);
 $modal-transition: transform 0.4s ease-out;
+
+// Close
+$close-font-size: 3rem;
+$close-color: $white;
+$close-text-shadow: none;
+
+// Dropdowns
+//
+// Dropdown menu container and contents.
+$dropdown-font-size: 0.8rem;
+$dropdown-bg: $black;
+$dropdown-border-radius: 0;
+$dropdown-inner-border-radius: 0;
+$dropdown-divider-bg: rgba($text-color, 0.1);
+
+$dropdown-link-color: $text-color;
+$dropdown-link-hover-color: $red-300;
+$dropdown-link-hover-bg: $black;
+
+$dropdown-item-padding-y: 0.5rem;
+$dropdown-item-padding-x: 2.5rem;

@@ -3,16 +3,19 @@ import TopMessage from 'components/common/TopMessage';
 import FAQs from 'data/faqs';
 import { Row } from 'reactstrap';
 import { getFAQs } from 'components/pages/frontend/Help';
+import BackEndPage from 'components/common/BackEndPage';
 
 const Help = () => (
-  <div className="main-app">
-    <TopMessage message="Help" />
+  <BackEndPage title="Help">
+    <div className="main-app">
+      <TopMessage message="Help" />
 
-    <section className="app-content">
-      <FAQsSection />
-      <HelpForm />
-    </section>
-  </div>
+      <section className="app-content">
+        <FAQsSection />
+        <HelpForm />
+      </section>
+    </div>
+  </BackEndPage>
 );
 
 const FAQsSection = () => (
