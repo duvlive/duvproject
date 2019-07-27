@@ -8,7 +8,7 @@ const TopMessage = ({ message }) => (
       <div className="col-sm-6">
         <h3 className="main-app__title">{message}</h3>
       </div>
-      <div className="col-sm-6 main-app__date text-right">
+      <div className="col-sm-6 main-app__date d-none d-sm-block text-right">
         {getLongDate(new Date())}
       </div>
     </div>

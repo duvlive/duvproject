@@ -1,26 +1,11 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import Header from 'components/common/Header';
 import Footer from 'components/common/Footer';
-import Humanize from 'humanize-plus';
+import LandingSection from './LandingSection';
 
 const FrontEndPage = ({ title, subtitle, children }) => (
   <Fragment>
-    <section className="landing">
-      <div className="card card__menu bg-dark text-white">
-        <Header />
-        <div className="card-img-overlay">
-          <div className="card-img-overlay__content">
-            <h2 className="card-title">
-              {title && Humanize.capitalize(title)}
-            </h2>
-            <p className="card-subtitle text-uppercase">
-              DUV LIVE &nbsp;/ &nbsp;{subtitle || title}
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
+    <LandingSection subtitle={subtitle} title={title} />
     {children}
     <Footer />
   </Fragment>

@@ -98,7 +98,10 @@
   }
 
   .card-text {
-    font-size: 0.8rem;
+    font-size: 0.95rem;
+    @include media-breakpoint-up(sm) {
+      font-size: 0.8rem;
+    }
   }
 
   .header__with-border {
@@ -122,13 +125,13 @@
     span,
     h4 {
       display: block;
-      font-size: 2rem;
+      font-size: 1.9rem;
       font-weight: bold;
       color: darken($white, 10%);
     }
 
     &--description {
-      font-size: 0.7rem;
+      font-size: 0.8rem;
       font-weight: normal;
       height: 4rem;
     }

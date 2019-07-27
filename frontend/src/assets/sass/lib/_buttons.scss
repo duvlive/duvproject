@@ -22,7 +22,7 @@ $transparent-btn-colors: (
 }
 
 .btn-wide {
-  padding: 10px 40px;
+  padding: 0.7rem 2.5rem;
 }
 
 .btn-sm {
@@ -57,5 +57,24 @@ button:focus {
   &:focus,
   &:active {
     border-color: darken($white, 15%);
+  }
+}
+
+.menu-button {
+  width: 2.2rem;
+  padding: 0;
+  margin-right: 1rem;
+  background: transparent;
+  border: none;
+  outline: none;
+
+  &:after,
+  &:before,
+  & div {
+    background-color: $text-color;
+    content: '';
+    display: block;
+    height: 3px;
+    margin: 6px 0;
   }
 }

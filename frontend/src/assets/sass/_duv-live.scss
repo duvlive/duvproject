@@ -38,6 +38,11 @@ body {
   z-index: -1;
 }
 
+body.modal-open {
+  overflow: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
 a:hover {
   text-decoration: none;
 }
@@ -217,14 +222,14 @@ a:hover {
     }
 
     &__search {
-      background: red;
+      background: $red;
     }
   }
 }
 
 .faqs {
   ul {
-    margin-left: -20px;
+    margin-left: -1.25rem;
     margin-bottom: 5rem;
   }
 
@@ -235,7 +240,7 @@ a:hover {
 
   h4 {
     font-family: $font-family-sans-serif;
-    font-size: 20px;
+    font-size: 1.25rem;
   }
 }
 
@@ -303,21 +308,21 @@ a:hover {
 
   &__social-media {
     &--text {
-      font-size: 12px;
-      margin: 30px 0 0;
+      font-size: 0.8rem;
+      margin: 2rem 0 0;
     }
     &--icons {
-      font-size: 32px;
+      font-size: 2rem;
       color: white;
       display: inline-block;
-      margin-right: 10px;
+      margin-right: 0.7rem;
       margin-left: -0.6rem;
     }
   }
 
   &__footer {
-    margin-top: 60px;
-    font-size: 12px;
+    margin-top: 3.75rem;
+    font-size: 0.75rem;
   }
   .form-check-label {
     font-size: 0.85rem;
