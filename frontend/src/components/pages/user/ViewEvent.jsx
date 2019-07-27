@@ -5,60 +5,63 @@ import { randomItem, remainingDays } from 'utils/helpers';
 import Image from 'components/common/Image';
 import Card from 'components/custom/Card';
 import DuvLiveModal from 'components/custom/Modal';
+import BackEndPage from 'components/common/BackEndPage';
 
 const ViewEvent = () => {
   const event = randomItem(events);
   return (
-    <div className="main-app">
-      <TopMessage message="View Event" />
+    <BackEndPage title="View Event">
+      <div className="main-app">
+        <TopMessage message="View Event" />
 
-      <section className="app-content">
-        <div className="row">
-          <div className="col-sm-6">
-            <Card color="blue" title={event.details.event_type}>
-              <table className="table table-dark">
-                <tbody>
-                  <tr>
-                    <td className="text-red-100">Entertainer</td>
-                    <td className="text-right">
-                      {event.request[0].entertainer}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="text-red-100">Event Date</td>
-                    <td className="text-right">{event.details.event_date}</td>
-                  </tr>
-                  <tr>
-                    <td className="text-red-100">Location</td>
-                    <td className="text-right">{event.address.location}</td>
-                  </tr>
-                  <tr>
-                    <td className="text-red-100">Remaining Days</td>
-                    <td className="text-right">
-                      {remainingDays(event.details.event_date)}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="text-red-100">Address</td>
-                    <td className="text-right">
-                      <address className="text-muted">
-                        {event.address.street_line_1} <br />
-                        {event.address.street_line_2}, {event.address.lga}{' '}
-                        <br />
-                        {event.address.landmark}, {event.address.location}
-                      </address>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </Card>
+        <section className="app-content">
+          <div className="row">
+            <div className="col-sm-6">
+              <Card color="blue" title={event.details.event_type}>
+                <table className="table table-dark">
+                  <tbody>
+                    <tr>
+                      <td className="text-red-100">Entertainer</td>
+                      <td className="text-right">
+                        {event.request[0].entertainer}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="text-red-100">Event Date</td>
+                      <td className="text-right">{event.details.event_date}</td>
+                    </tr>
+                    <tr>
+                      <td className="text-red-100">Location</td>
+                      <td className="text-right">{event.address.location}</td>
+                    </tr>
+                    <tr>
+                      <td className="text-red-100">Remaining Days</td>
+                      <td className="text-right">
+                        {remainingDays(event.details.event_date)}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="text-red-100">Address</td>
+                      <td className="text-right">
+                        <address className="text-muted">
+                          {event.address.street_line_1} <br />
+                          {event.address.street_line_2}, {event.address.lga}{' '}
+                          <br />
+                          {event.address.landmark}, {event.address.location}
+                        </address>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </Card>
+            </div>
+            <div className="col-sm-6">
+              <ViewEvent.EntertainersTable entertainers={event.entertainers} />
+            </div>
           </div>
-          <div className="col-sm-6">
-            <ViewEvent.EntertainersTable entertainers={event.entertainers} />
-          </div>
-        </div>
-      </section>
-    </div>
+        </section>
+      </div>
+    </BackEndPage>
   );
 };
 

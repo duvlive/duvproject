@@ -15,8 +15,9 @@ import SingleEntertainer from 'components/pages/frontend/SingleEntertainer';
 import SingleEvent from 'components/pages/frontend/SingleEvent';
 import { ScrollToTop } from 'components/custom/ScrollToTop';
 import ForgotPassword from 'components/pages/auth/ForgotPassword';
-import BackEndPage from 'components/common/BackEndPage';
+import UserPage from 'components/pages/user/Index';
 import Dashboard from 'components/pages/user/Dashboard';
+import EmptyDashboard from 'components/pages/user/EmptyDashboard';
 import Auctions from 'components/pages/user/Auctions';
 import Events from 'components/pages/user/Events';
 import Notifications from 'components/pages/user/Notifications';
@@ -50,7 +51,7 @@ function App() {
           <SingleEntertainer path="entertainer/:slug" />
           <SingleEvent path="event/:slug" />
 
-          <BackEndPage path="/user">
+          <UserPage path="/user">
             <Dashboard path="/dashboard" />
             <Auctions path="/auctions" />
             <Events path="/events" />
@@ -65,8 +66,8 @@ function App() {
             {/* <AddEntertainerToEvent path="events/:id/add-entertainer/:type" /> */}
             <Bids path="/auction/bids" />
             <Approval path="/approval" />
-            {/* <Dashboard default /> */}
-          </BackEndPage>
+            <EmptyDashboard default />
+          </UserPage>
         </ScrollToTop>
       </Router>
     </div>

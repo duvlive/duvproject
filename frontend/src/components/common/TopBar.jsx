@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Collapse,
   Navbar,
-  NavbarToggler,
   Nav,
   NavItem,
   NavLink,
@@ -12,28 +12,25 @@ import {
   DropdownItem
 } from 'reactstrap';
 import { Link } from '@reach/router';
-import classNames from 'classnames';
 import UserAvatar from 'assets/img/avatar/user.png';
 
-const TopBar = () => {
-  const [isOpen, setOpen] = useState(false);
+const TopBar = ({ showSidebar }) => {
   return (
     <div className="topbar">
-      <Navbar color="transparent" expand="md">
-        <NavbarToggler
-          className={classNames({ open: isOpen })}
-          onClick={() => setOpen(!isOpen)}
-        >
-          <span />
-          <span />
-          <span />
-        </NavbarToggler>
-        <Collapse className="topbar__header" isOpen={isOpen} navbar>
+      <Navbar color="transparent" expand>
+        <Collapse className="topbar__header" navbar>
+          <button
+            className={'d-block d-sm-none menu-button'}
+            onClick={showSidebar}
+          >
+            <div />
+          </button>
+
           <span className="navbar-text">Live Your Best Live</span>
           <Nav className="ml-auto" navbar>
             <NavItem>
               <NavLink
-                className="topbar__notification"
+                className="topbar__notification d-none d-sm-block"
                 tag={Link}
                 to="/user/notifications"
               >
@@ -43,7 +40,7 @@ const TopBar = () => {
             </NavItem>
             <UncontrolledDropdown inNavbar nav>
               <DropdownToggle caret nav>
-                Mariam Obi{' '}
+                <span className="d-none d-sm-inline">Mariam Obi </span>
                 <img
                   alt="Mariam Obi"
                   className="rounded-circle img-responsive avatar--small"
@@ -63,6 +60,10 @@ const TopBar = () => {
       </Navbar>
     </div>
   );
+};
+
+TopBar.propTypes = {
+  showSidebar: PropTypes.func.isRequired
 };
 
 export default TopBar;

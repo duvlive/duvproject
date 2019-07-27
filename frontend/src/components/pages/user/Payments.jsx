@@ -3,24 +3,27 @@ import PropTypes from 'prop-types';
 import UserAvatar from 'assets/img/avatar/user.png';
 import TopMessage from 'components/common/TopMessage';
 import Image from 'components/common/Image';
+import BackEndPage from 'components/common/BackEndPage';
 
 const Payments = () => (
-  <div className="main-app">
-    <TopMessage message="Payments History" />
+  <BackEndPage title="Payments History">
+    <div className="main-app">
+      <TopMessage message="Payments History" />
 
-    <section className="app-content">
-      <section className="payments">
-        <h4 className="main-app__subtitle">June 2019</h4>
-        <div className="row">
-          <Payments.Card color="blue" />
-          <Payments.Card color="red" />
-          <Payments.Card color="green" />
-          <Payments.Card color="black" />
-          <Payments.Card color="yellow" />
-        </div>
+      <section className="app-content">
+        <section className="payments">
+          <h4 className="main-app__subtitle">June 2019</h4>
+          <div className="row">
+            <Payments.Card color="blue" />
+            <Payments.Card color="red" />
+            <Payments.Card color="green" />
+            <Payments.Card color="black" />
+            <Payments.Card color="yellow" />
+          </div>
+        </section>
       </section>
-    </section>
-  </div>
+    </div>
+  </BackEndPage>
 );
 
 Payments.Card = ({ color }) => (
