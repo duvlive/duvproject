@@ -10,6 +10,7 @@ import Footer from 'components/common/Footer';
 import Slideshow from 'components/custom/Slideshow';
 import { SLIDESHOW_TYPE } from 'utils/constants';
 import YouTube from 'react-youtube';
+import { Link } from '@reach/router';
 
 const Home = () => {
   return (
@@ -37,16 +38,19 @@ const LandingSection = () => (
           </h2>
           <p className="card-text">
             {' '}
-            <button
+            <Link
               className="btn btn-danger btn-lg hvr-sweep-to-right"
-              href="/"
+              to="register/hire-entertainer"
             >
               Hire Entertainers
-            </button>{' '}
+            </Link>{' '}
             &nbsp; &nbsp;
-            <button className="btn btn-light btn-lg hvr-sweep-to-left" href="/">
+            <Link
+              className="btn btn-light btn-lg hvr-sweep-to-left"
+              to="register/become-an-entertainer"
+            >
               Become an Entertainer
-            </button>
+            </Link>
           </p>
         </div>
       </div>

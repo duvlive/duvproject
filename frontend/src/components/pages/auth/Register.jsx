@@ -6,17 +6,25 @@ import SelectRegistration from 'components/pages/auth/SelectRegistration';
 import { Link } from '@reach/router';
 import { Col, Row } from 'reactstrap';
 
-const text = {
+const registrationType = {
+  'become-an-entertainer': {
+    subtitle: 'MC, DJ OR OWN A LIVE BAND?',
+    text: 'Become an Entertainer'
+  },
   entertainer: {
     subtitle: 'MC, DJ OR OWN A LIVE BAND?',
-    buttonText: 'Register as an Entertainer'
+    text: 'Register as an Entertainer'
+  },
+  'hire-entertainer': {
+    subtitle: 'NO GO SPOIL YOUR PARTY O!!!',
+    text: 'Hire an entertainer'
   },
   user: {
     subtitle: 'NO GO SPOIL YOUR PARTY O!!!',
-    buttonText: 'Register as a User'
+    text: 'Register as a User'
   }
 };
-const allowedTypes = ['entertainer', 'user'];
+const allowedTypes = Object.keys(registrationType);
 const showRegistrationPage = type => {
   return allowedTypes.includes(type);
 };
@@ -51,10 +59,10 @@ const Content = ({ type }) => (
             <section>
               <form>
                 <h5 className="header font-weight-normal text-uppercase mb-1">
-                  REGISTER AS AN {type}
+                  {registrationType[type].text}
                 </h5>
                 <div className="text-red-100 small--2 mb-5">
-                  {text[type].subtitle}
+                  {registrationType[type].subtitle}
                 </div>
 
                 <section className="auth__social-media text-center">
@@ -144,7 +152,7 @@ const Content = ({ type }) => (
                   </div>
 
                   <button className="btn btn-danger btn-wide btn-transparent mt-4">
-                    {text[type].buttonText}
+                    {registrationType[type].text}
                   </button>
                 </section>
               </form>
