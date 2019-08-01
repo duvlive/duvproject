@@ -219,11 +219,15 @@ Dashboard.RecommendedRow = ({ entertainer }) => (
         src={entertainer.img.profile}
       />
     </td>
-    <td>{entertainer.stage_name}</td>
     <td>
-      <span className="text-yellow">{entertainer.type}</span>
+      <span className="text-truncate--1">{entertainer.stage_name}</span>
     </td>
-    <td>{entertainer.average_ratings}</td>
+    <td>
+      <span className="text-yellow small--3">{entertainer.type}</span>
+    </td>
+    <td>
+      <span className="small--3">{entertainer.ratings.average}</span>
+    </td>
   </tr>
 );
 

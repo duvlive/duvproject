@@ -37,7 +37,6 @@
 }
 
 .backdrop {
-  // transition: transform 0.1s linear;
   display: none;
   &.showSidebar {
     position: fixed;
@@ -138,7 +137,7 @@
 
       &:hover {
         color: $red-300;
-        transform: translateX(0.25rem);
+        transform: translateX(0.15rem);
       }
     }
   }
