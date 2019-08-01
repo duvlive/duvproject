@@ -41,15 +41,15 @@ const AddEntertainer = () => (
         </div>
         <div className="form-row">
           <div className="form-group col-md-6">
-            <label htmlFor="inputEmail4">Lowest Budget</label>
+            <label htmlFor="inputEmail4">Expected Audience Size</label>
             <input
               className="form-control"
-              placeholder="Lowest Budget"
+              placeholder="Expected Audience Size"
               type="text"
             />
           </div>
           <div className="form-group col-md-6">
-            <label htmlFor="inputPassword4">Highest Budget</label>
+            <label htmlFor="inputPassword4">Budget</label>
             <input
               className="form-control"
               id="inputPassword4"
