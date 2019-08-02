@@ -38,14 +38,18 @@ const EventAddress = () => (
         </div>
         <div className="form-row">
           <div className="form-group col-md-6">
-            <label htmlFor="inputEmail4">Location</label>
-            <select className="form-control" id="location" name="location">
-              <option value="lagos">Lagos State</option>
-              <option value="ogun">Ogun State</option>
-              <option value="oyo">Oyo State</option>
-            </select>
+            <label htmlFor="inputEmail4">State</label>
+            <input className="form-control" placeholder="State" type="text" />
           </div>
-          <div className="form-group col-md-6" />
+          <div className="form-group col-md-6">
+            <label htmlFor="inputPassword4">Country</label>
+            <input
+              className="form-control"
+              id="inputPassword4"
+              placeholder="Enter Country"
+              type="text"
+            />
+          </div>
         </div>
       </form>
     </div>
