@@ -3,6 +3,7 @@ import TagsInput from 'react-tagsinput';
 import 'react-tagsinput/react-tagsinput.css';
 import AutoComplete from 'components/custom/AutoComplete';
 import { RangeTooltip } from 'components/custom/SliderTooltip';
+import Ratings from 'components/custom/Ratings';
 
 const AddEntertainer = () => {
   const [tags, setTags] = useState([]);
@@ -82,6 +83,11 @@ const AddEntertainer = () => {
                 placeholder="E.g 10 special songs, your favorite song e.t.c."
                 rows="8"
               />
+            </div>
+          </div>
+          <div className="form-row">
+            <div className="form-group col-md-12 mt-5">
+              <Ratings onRate={rating => {}} rating={0} total={5} />
             </div>
           </div>
         </form>
