@@ -87,7 +87,8 @@ const AddEntertainer = () => {
           </div>
           <div className="form-row">
             <div className="form-group col-md-12 mt-5">
-              <Ratings onRate={rating => {}} rating={0} total={5} />
+              <Ratings onRate={rating => {}} rating={0} total={5} /> <br />
+              <Ratings interactive={false} rating={5} total={5} />
             </div>
           </div>
         </form>
