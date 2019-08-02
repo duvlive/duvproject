@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import TagsInput from 'react-tagsinput';
 import 'react-tagsinput/react-tagsinput.css';
 import AutoComplete from 'components/custom/AutoComplete';
+import { RangeTooltip } from 'components/custom/SliderTooltip';
 
 const AddEntertainer = () => {
   const [tags, setTags] = useState([]);
@@ -59,13 +60,15 @@ const AddEntertainer = () => {
                 type="text"
               />
             </div>
-            <div className="form-group col-md-6">
+            <div className="form-group col-md-6 position-relative">
               <label htmlFor="inputPassword4">Budget</label>
-              <input
-                className="form-control"
-                id="inputPassword4"
-                placeholder="Highest Budget"
-                type="text"
+              <RangeTooltip
+                allowCross={false}
+                className="mb-5"
+                defaultValue={[800, 1200]}
+                max={1500}
+                min={500}
+                pushable={100}
               />
             </div>
           </div>
