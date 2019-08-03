@@ -1,8 +1,8 @@
 import React from 'react';
-import TopMessage from 'components/common/TopMessage';
+import TopMessage from 'components/common/layout/TopMessage';
 import bids from 'data/events/bids';
-import EntertainerViewCard from 'components/common/EntertainerViewCard';
-import BackEndPage from 'components/common/BackEndPage';
+import EntertainerViewCard from 'components/common/entertainers/EntertainerViewCard';
+import BackEndPage from 'components/common/layout/BackEndPage';
 
 const Bids = () => (
   <BackEndPage title="All Bids">

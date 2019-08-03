@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import Header from 'components/common/Header';
+import Header from 'components/common/layout/Header';
 import Humanize from 'humanize-plus';
-import TopBar from 'components/common/TopBar';
+import TopBar from 'components/common/layout/TopBar';
 
 const LandingSection = ({ showSidebar, isDashboard, title, subtitle }) => (
   <section className="landing">

@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import UserAvatar from 'assets/img/avatar/user.png';
-import TopMessage from 'components/common/TopMessage';
-import Image from 'components/common/Image';
-import BackEndPage from 'components/common/BackEndPage';
+import TopMessage from 'components/common/layout/TopMessage';
+import Image from 'components/common/utils/Image';
+import BackEndPage from 'components/common/layout/BackEndPage';
 
 const Payments = () => (
   <BackEndPage title="Payments History">

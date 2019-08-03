@@ -1,6 +1,6 @@
 import React from 'react';
-import TopMessage from 'components/common/TopMessage';
-import BackEndPage from 'components/common/BackEndPage';
+import TopMessage from 'components/common/layout/TopMessage';
+import BackEndPage from 'components/common/layout/BackEndPage';
 
 const Notifications = () => (
   <BackEndPage title="Notifications">

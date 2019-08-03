@@ -1,5 +1,5 @@
 import React from 'react';
-import FrontEndPage from 'components/common/FrontEndPage';
+import FrontEndPage from 'components/common/layout/FrontEndPage';
 import { Col, Row } from 'reactstrap';
 
 const PrivacyPolicy = () => (

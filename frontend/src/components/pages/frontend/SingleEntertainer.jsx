@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col } from 'reactstrap';
-import FrontEndPage from 'components/common/FrontEndPage';
-import Entertainers from 'components/common/Entertainers';
+import FrontEndPage from 'components/common/layout/FrontEndPage';
+import Entertainers from 'components/common/entertainers/Entertainers';
 import entertainerLists from 'data/entertainers.js';
 import { getSlug, getRelatedEntertainers } from 'utils/helpers';
 

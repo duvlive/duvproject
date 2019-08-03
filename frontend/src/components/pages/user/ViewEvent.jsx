@@ -1,11 +1,11 @@
 import React from 'react';
-import TopMessage from 'components/common/TopMessage';
+import TopMessage from 'components/common/layout/TopMessage';
 import events from 'data/events/all-events';
 import { randomItem, remainingDays } from 'utils/helpers';
-import Image from 'components/common/Image';
+import Image from 'components/common/utils/Image';
 import Card from 'components/custom/Card';
 import DuvLiveModal from 'components/custom/Modal';
-import BackEndPage from 'components/common/BackEndPage';
+import BackEndPage from 'components/common/layout/BackEndPage';
 
 const ViewEvent = () => {
   const event = randomItem(events);

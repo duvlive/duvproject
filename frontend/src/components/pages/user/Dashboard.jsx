@@ -1,11 +1,11 @@
 import React from 'react';
-import TopMessage from 'components/common/TopMessage';
-import Image from 'components/common/Image';
+import TopMessage from 'components/common/layout/TopMessage';
+import Image from 'components/common/utils/Image';
 import { randomItem, getItems } from 'utils/helpers';
 import djLists from 'data/entertainers/djs';
 import mcLists from 'data/entertainers/mcs';
 import lbLists from 'data/entertainers/live-bands';
-import BackEndPage from 'components/common/BackEndPage';
+import BackEndPage from 'components/common/layout/BackEndPage';
 
 const Dashboard = () => {
   return (

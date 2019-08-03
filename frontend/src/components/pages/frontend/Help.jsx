@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import FrontEndPage from 'components/common/FrontEndPage';
-import Text from 'components/common/Text';
+import FrontEndPage from 'components/common/layout/FrontEndPage';
+import Text from 'components/common/utils/Text';
 import { Col, Row } from 'reactstrap';
 import FAQs from 'data/faqs';
 import { Accordion, AccordionItem } from 'react-light-accordion';

@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import Image from 'components/common/Image';
+import Image from 'components/common/utils/Image';
 
 const DuvLiveModal = ({
   actionText,

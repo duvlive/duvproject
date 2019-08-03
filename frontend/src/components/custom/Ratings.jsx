@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Rater from 'react-rater';
 import 'react-rater/lib/react-rater.css';
-import Stars from 'components/common/Stars';
+import Stars from 'components/common/utils/Stars';
 
 const Rating = props => (
   <Rater {...props}>

@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col } from 'reactstrap';
-import FrontEndPage from 'components/common/FrontEndPage';
-import Events from 'components/common/Events';
+import FrontEndPage from 'components/common/layout/FrontEndPage';
+import Events from 'components/common/events/Events';
 import eventLists from 'data/events.js';
 import { getSlug, getOtherSlugs, createMarkup } from 'utils/helpers';
 import { format, parse } from 'date-fns';
-import Image from 'components/common/Image';
+import Image from 'components/common/utils/Image';
 import { Link } from '@reach/router';
 
 const SingleEvent = ({ slug }) => {
