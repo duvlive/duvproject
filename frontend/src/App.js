@@ -28,6 +28,7 @@ import NewEvent from 'components/pages/user/NewEvent';
 import ViewEvent from 'components/pages/user/ViewEvent';
 import Bids from 'components/pages/user/Bids';
 import Approval from 'components/pages/user/Approval';
+import FormikForm from 'components/forms/FormikForm';
 
 function App() {
   return (
@@ -68,6 +69,8 @@ function App() {
             <Approval path="/approval" />
             <EmptyDashboard default />
           </UserPage>
+
+          <FormikForm path="formik" />
         </ScrollToTop>
       </Router>
     </div>
