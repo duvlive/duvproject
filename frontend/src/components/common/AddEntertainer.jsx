@@ -4,9 +4,13 @@ import 'react-tagsinput/react-tagsinput.css';
 import AutoComplete from 'components/custom/AutoComplete';
 import { RangeTooltip } from 'components/custom/SliderTooltip';
 import Ratings from 'components/custom/Ratings';
+import { FormGroup, Label, CustomInput, Form } from 'reactstrap';
+import Switch from 'rc-switch';
+import 'rc-switch/assets/index.css';
 
 const AddEntertainer = () => {
   const [tags, setTags] = useState([]);
+  const [primary, setPrimary] = useState(false);
   return (
     <div className="card card-custom card-black card-form">
       <div className="card-body col-md-10">
@@ -92,6 +96,76 @@ const AddEntertainer = () => {
             </div>
           </div>
         </form>
+        <Form>
+          <FormGroup>
+            <Label for="exCustomCheckbox">CheckBoxes</Label>
+            <div>
+              <CustomInput
+                id="exCustomCheckbox"
+                label="Check this custom checkbox"
+                type="checkbox"
+              />
+              <CustomInput
+                id="exCustomCheckbox2"
+                label="Or this one"
+                type="checkbox"
+              />
+              <CustomInput
+                disabled
+                id="exCustomCheckbox3"
+                label="But not this disabled one"
+                type="checkbox"
+              />
+            </div>
+          </FormGroup>
+          <FormGroup>
+            <Label for="exCustomRadio">Radios</Label>
+            <div>
+              <CustomInput
+                id="exCustomRadio"
+                label="Select this custom radio"
+                name="customRadio"
+                type="radio"
+              />
+              <CustomInput
+                id="exCustomRadio2"
+                label="Or this one"
+                name="customRadio"
+                type="radio"
+              />
+              <CustomInput
+                disabled
+                id="exCustomRadio3"
+                label="But not this disabled one"
+                type="radio"
+              />
+            </div>
+          </FormGroup>
+          <FormGroup>
+            <Label for="exCustomInline">Inline</Label>
+            <div>
+              <CustomInput
+                id="exCustomInline"
+                inline
+                label="An inline custom input"
+                type="checkbox"
+              />
+              <CustomInput
+                id="exCustomInline2"
+                inline
+                label="and another one"
+                type="checkbox"
+              />
+            </div>
+            <div className="mt-5">
+              <Switch
+                checked={primary}
+                className="custom-switch custom-switch-primary"
+                onChange={primary => setPrimary(primary)}
+              />
+            </div>
+          </FormGroup>
+        </Form>
       </div>
     </div>
   );
