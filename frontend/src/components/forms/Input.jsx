@@ -22,6 +22,7 @@ const Input = ({
   labelClassName,
   name,
   placeholder,
+  showFeedback,
   tooltip,
   tooltipPosition,
   type
@@ -41,7 +42,7 @@ const Input = ({
           className={classNames(
             'form-control',
             inputClassName,
-            getValidityClass(formik, name)
+            showFeedback && getValidityClass(formik, name)
           )}
           id={name}
           name={name}
@@ -49,12 +50,14 @@ const Input = ({
           type={type}
         />
       </div>
-      <FeedbackMessage
-        formik={formik}
-        helpText={helpText}
-        name={name}
-        validMessage={isValidMessage}
-      />
+      {showFeedback && (
+        <FeedbackMessage
+          formik={formik}
+          helpText={helpText}
+          name={name}
+          validMessage={isValidMessage}
+        />
+      )}
     </div>
   );
 };
@@ -74,6 +77,7 @@ Input.defaultProps = {
   labelClassName: 12,
   name: null,
   placeholder: null,
+  showFeedback: true,
   tooltip: null,
   tooltipPosition: 'right',
   type: null
@@ -92,6 +96,7 @@ Input.propTypes = {
   labelClassName: PropTypes.number,
   name: PropTypes.string,
   placeholder: PropTypes.string,
+  showFeedback: PropTypes.bool,
   tooltip: PropTypes.string,
   tooltipPosition: PropTypes.string,
   type: PropTypes.string

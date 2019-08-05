@@ -34,6 +34,7 @@ const FormikForm = () => (
                     label="Emaill"
                     name="email"
                     placeholder="Email Address"
+                    showFeedback={false}
                     tooltip="Your email address"
                     type="email"
                   />
@@ -42,6 +43,7 @@ const FormikForm = () => (
                     label="Password"
                     name="password"
                     placeholder="Password"
+                    showFeedback
                     tooltip="Your password"
                     type="password"
                   />
