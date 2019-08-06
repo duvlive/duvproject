@@ -5,6 +5,8 @@ import Input from 'components/forms/Input';
 import { Formik, Form } from 'formik';
 import * as yup from 'yup';
 import RadioSelect from './RadioSelect';
+import CheckboxGroup from './CheckboxGroup';
+import Select from './Select';
 
 export const DisplayFormikState = props => (
   <div style={{ margin: '1rem 0' }}>
@@ -89,6 +91,36 @@ const FormikForm = () => {
                           label="Preference"
                           name="preference"
                           options={[{ label: 'Rice' }, { value: 'beans' }]}
+                          // options can contain either value or label
+                        />
+                      </div>
+                    </div>
+
+                    <div className="row">
+                      <div className="col-12">
+                        <CheckboxGroup
+                          inline
+                          label="Preference"
+                          name="pref"
+                          options={[
+                            { label: 'Receive Newsletter' },
+                            { value: 'Love Newsletter' }
+                          ]}
+                          // options can contain either value or label
+                        />
+                      </div>
+                    </div>
+
+                    <div className="row">
+                      <div className="col-12">
+                        <Select
+                          blankOption="Select Options"
+                          label="Preference"
+                          name="prefs"
+                          options={[
+                            { label: 'Receive Newsletter' },
+                            { value: 'Love Newsletter' }
+                          ]}
                           // options can contain either value or label
                         />
                       </div>
