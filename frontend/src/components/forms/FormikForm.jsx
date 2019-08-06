@@ -4,95 +4,121 @@ import BackEndPage from 'components/common/layout/BackEndPage';
 import Input from 'components/forms/Input';
 import { Formik, Form } from 'formik';
 import * as yup from 'yup';
+import RadioSelect from './RadioSelect';
 
-const FormikForm = () => (
-  <BackEndPage title="Formik Form">
-    <div className="main-app">
-      <TopMessage message="Formik Form" />
+export const DisplayFormikState = props => (
+  <div style={{ margin: '1rem 0' }}>
+    <pre
+      style={{
+        color: '#aaa',
+        fontSize: '.65rem',
+        border: '1px solid #666',
+        marginTop: '5rem',
+        padding: '1.5rem 2rem'
+      }}
+    >
+      <strong>props</strong> = {JSON.stringify(props, null, 2)}
+    </pre>
+  </div>
+);
 
-      <section className="app-content">
-        <div className="card card-custom card-black card-form">
-          <div className="card-body col-md-10">
-            <h4 className="card-title green">Form Testing </h4>
+const FormikForm = () => {
+  const [result, setResult] = React.useState(null);
+  return (
+    <BackEndPage title="Formik Form">
+      <div className="main-app">
+        <TopMessage message="Formik Form" />
 
-            <Formik
-              initialValues={{
-                email: 'harunpopson@yahoo.com',
-                password: '123456'
-              }}
-              onSubmit={(values, actions) => {
-                setTimeout(() => {
-                  actions.setSubmitting(false);
-                }, 400);
-              }}
-              render={({ isSubmitting, handleSubmit }) => (
-                <Form>
-                  <h4 className="mb-4">Log into your Account</h4>
-                  <Input
-                    helpText="Help is on the way"
-                    isValidMessage="Name looks good"
-                    label="Emaill"
-                    name="email"
-                    placeholder="Email Address"
-                    showFeedback={false}
-                    tooltip="Your email address"
-                    type="email"
-                  />
-                  <Input
-                    isValidMessage="Sweet, the password is strong"
-                    label="Password"
-                    name="password"
-                    placeholder="Password"
-                    showFeedback
-                    tooltip="Your password"
-                    type="password"
-                  />
+        <section className="app-content">
+          <div className="card card-custom card-black card-form">
+            <div className="card-body col-md-10">
+              <h4 className="card-title green">Form Testing </h4>
 
-                  <div className="mb-3 d-flex align-items-center justify-content-between">
-                    {/* <Button
-              color="primary"
-              className="text-uppercase"
-              onClick={handleSubmit}
-              disabled={isSubmitting}
-            >
-              Sign In
-            </Button> */}
-                    {/* <Link className="btn btn-primary" to="dashboard">
+              <Formik
+                initialValues={{
+                  email: 'harunpopson@yahoo.com',
+                  password: '123456'
+                }}
+                onSubmit={(values, actions) => {
+                  setTimeout(() => {
+                    setResult(JSON.stringify(values, null, 2));
+                    actions.setSubmitting(false);
+                  }, 400);
+                }}
+                render={props => (
+                  <Form>
+                    <h4 className="mb-4">Log into your Account</h4>
+                    <div className="">{result}</div>
+                    <Input
+                      helpText="Help is on the way"
+                      isValidMessage="Name looks good"
+                      label="Emaill"
+                      name="email"
+                      placeholder="Email Address"
+                      showFeedback={false}
+                      tooltip="Your email address"
+                      type="email"
+                    />
+                    <Input
+                      isValidMessage="Sweet, the password is strong"
+                      label="Password"
+                      name="password"
+                      placeholder="Password"
+                      showFeedback
+                      tooltip="Your password"
+                      type="password"
+                    />
+
+                    <div className="row">
+                      <div className="col-12">
+                        <RadioSelect
+                          inline
+                          label="sex"
+                          name="sex"
+                          options={[
+                            { label: 'Male', value: 'male' },
+                            { label: 'Female', value: 'female' }
+                          ]}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="mb-3 d-flex align-items-center justify-content-between">
+                      <button
+                        className="btn btn-primary text-uppercase"
+                        disabled={props.isSubmitting}
+                        onClick={props.handleSubmit}
+                        type="button"
+                      >
+                        Sign In
+                      </button>
+                      {/* <Link className="btn btn-primary" to="dashboard">
                       {' '}
                       Sign In{' '}
                     </Link> */}
-                  </div>
-                  {/*
-          <div className="row">
-            <div className="col-12">
-              <RadioSelect
-                name="sex"
-                label="sex"
-                options={[
-                  { label: 'Male', value: 'Male' },
-                  { label: 'Female', value: 'Female' }
-                ]}
+                    </div>
+
+                    <DisplayFormikState {...props} />
+                  </Form>
+                )}
+                validationSchema={yup.object().shape({
+                  email: yup
+                    .string()
+                    .email()
+                    .required(),
+                  password: yup
+                    .string()
+                    .min(6)
+                    .required(),
+                  sex: yup.string().required()
+                })}
               />
             </div>
-          </div> */}
-                </Form>
-              )}
-              validationSchema={yup.object().shape({
-                email: yup
-                  .string()
-                  .email()
-                  .required(),
-                password: yup
-                  .string()
-                  .min(6)
-                  .required()
-              })}
-            />
           </div>
-        </div>
-      </section>
-    </div>
-  </BackEndPage>
-);
+        </section>
+      </div>
+    </BackEndPage>
+  );
+};
 
 export default FormikForm;
