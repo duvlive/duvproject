@@ -73,12 +73,23 @@ const FormikForm = () => {
                       <div className="col-12">
                         <RadioSelect
                           inline
-                          label="sex"
                           name="sex"
                           options={[
                             { label: 'Male', value: 'male' },
                             { label: 'Female', value: 'female' }
                           ]}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="row">
+                      <div className="col-12">
+                        <RadioSelect
+                          inline
+                          label="Preference"
+                          name="preference"
+                          options={[{ label: 'Rice' }, { value: 'beans' }]}
+                          // options can contain either value or label
                         />
                       </div>
                     </div>

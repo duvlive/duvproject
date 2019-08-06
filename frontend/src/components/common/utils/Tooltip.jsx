@@ -2,14 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { UncontrolledTooltip } from 'reactstrap';
 
-const Tooltip = ({ name, message, selector, position }) => {
+const Tooltip = ({ name, text, selector, position }) => {
   return (
     <>
-      {message && (
+      {text && (
         <>
           <span id={name}>{selector}</span>
           <UncontrolledTooltip placement={position} target={name}>
-            {message}
+            {text}
           </UncontrolledTooltip>
         </>
       )}
@@ -20,12 +20,13 @@ const Tooltip = ({ name, message, selector, position }) => {
 export default Tooltip;
 
 Tooltip.propTypes = {
-  message: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   position: PropTypes.oneOf(['top', 'bottom', 'left', 'right']).isRequired,
-  selector: PropTypes.node
+  selector: PropTypes.node,
+  text: PropTypes.string
 };
 
 Tooltip.defaultProps = {
+  text: null,
   selector: <i className="icon-help" />
 };
