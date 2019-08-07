@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Humanize from 'humanize-plus';
-import TopMessage from 'components/common/TopMessage';
-import EventDetails from 'components/common/EventDetails';
-import EventAddress from 'components/common/EventAddress';
-import AddEntertainer from 'components/common/AddEntertainer';
+import TopMessage from 'components/common/layout/TopMessage';
+import EventDetails from 'components/common/events/EventDetails';
+import EventAddress from 'components/common/events/EventAddress';
+import AddEntertainer from 'components/common/entertainers/AddEntertainer';
 import { HIRE_ENTERTAINERS } from 'utils/constants';
 import { navigate } from '@reach/router';
-import BackEndPage from 'components/common/BackEndPage';
+import BackEndPage from 'components/common/layout/BackEndPage';
 
 const NewEvent = ({ hire_type }) => {
   const validHireType = Object.keys(HIRE_ENTERTAINERS).includes(

@@ -38,7 +38,7 @@ const Sidebar = ({ showSidebar, closeSidebar }) => (
       <PerfectScrollbar style={{ height: 'calc(100% - 12rem)' }}>
         <Sidebar.UserBox />
         <Sidebar.Navigation closeSidebar={closeSidebar} menus={userSideMenu} />
-        <div class="text-center d-block d-sm-none" onClick={closeSidebar}>
+        <div className="text-center d-block d-sm-none" onClick={closeSidebar}>
           Close Menu
         </div>
       </PerfectScrollbar>

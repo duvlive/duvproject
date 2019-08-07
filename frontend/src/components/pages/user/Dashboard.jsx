@@ -1,11 +1,11 @@
 import React from 'react';
-import TopMessage from 'components/common/TopMessage';
-import Image from 'components/common/Image';
+import TopMessage from 'components/common/layout/TopMessage';
+import Image from 'components/common/utils/Image';
 import { randomItem, getItems } from 'utils/helpers';
 import djLists from 'data/entertainers/djs';
 import mcLists from 'data/entertainers/mcs';
 import lbLists from 'data/entertainers/live-bands';
-import BackEndPage from 'components/common/BackEndPage';
+import BackEndPage from 'components/common/layout/BackEndPage';
 
 const Dashboard = () => {
   return (
@@ -219,11 +219,15 @@ Dashboard.RecommendedRow = ({ entertainer }) => (
         src={entertainer.img.profile}
       />
     </td>
-    <td>{entertainer.stage_name}</td>
     <td>
-      <span className="text-yellow">{entertainer.type}</span>
+      <span className="text-truncate--1">{entertainer.stage_name}</span>
     </td>
-    <td>{entertainer.average_ratings}</td>
+    <td>
+      <span className="text-yellow small--3">{entertainer.type}</span>
+    </td>
+    <td>
+      <span className="small--3">{entertainer.ratings.average}</span>
+    </td>
   </tr>
 );
 

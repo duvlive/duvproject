@@ -7,8 +7,8 @@ import {
   CarouselIndicators,
   CarouselItem
 } from 'reactstrap';
-import Entertainers from 'components/common/Entertainers';
-import Events from 'components/common/Events';
+import Entertainers from 'components/common/entertainers/Entertainers';
+import Events from 'components/common/events/Events';
 import { SLIDESHOW_TYPE } from 'utils/constants';
 import Testimonials from './Testimonials';
 

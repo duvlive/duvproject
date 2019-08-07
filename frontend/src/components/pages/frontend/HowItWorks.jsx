@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col, Card, CardImgOverlay } from 'reactstrap';
-import FrontEndPage from 'components/common/FrontEndPage';
+import FrontEndPage from 'components/common/layout/FrontEndPage';
 import HowItWorksImage from 'assets/img/bg/how-it-works.jpg';
-import Text from 'components/common/Text';
+import Text from 'components/common/utils/Text';
 import BorderedListItem from 'components/custom/BorderedListItem';
 import Slideshow from 'components/custom/Slideshow';
 import Counter from 'components/custom/Counter';

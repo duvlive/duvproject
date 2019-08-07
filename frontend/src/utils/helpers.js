@@ -65,3 +65,5 @@ export const remainingDays = date => <TimeAgo date={date} />;
  * @param {*} text
  */
 export const createMarkup = text => ({ __html: text });
+
+export const dashedLowerCase = text => text.replace(/\s+/g, '-').toLowerCase();

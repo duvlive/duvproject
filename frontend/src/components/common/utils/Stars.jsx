@@ -29,4 +29,6 @@ const FullStar = () => <span className="icon icon-star" />;
 const HalfStar = () => <span className="icon icon-star-half-empty" />;
 const EmptyStar = () => <span className="icon icon-star-empty" />;
 
+Stars.Full = FullStar;
+
 export default Stars;

@@ -1,11 +1,11 @@
 import React from 'react';
-import TopMessage from 'components/common/TopMessage';
-import Avatars from 'components/common/Avatars';
+import TopMessage from 'components/common/layout/TopMessage';
+import Avatars from 'components/common/utils/Avatars';
 import { Link } from '@reach/router';
 import { getItems } from 'utils/helpers';
 import djLists from 'data/entertainers/djs';
 import Timeago from 'react-timeago';
-import BackEndPage from 'components/common/BackEndPage';
+import BackEndPage from 'components/common/layout/BackEndPage';
 
 const Events = () => (
   <BackEndPage title="My Events">

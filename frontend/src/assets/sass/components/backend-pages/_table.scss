@@ -1,3 +1,5 @@
+$duv-td-line-height: 1.8;
+
 .table__no-border th,
 .table__no-border td,
 .table__no-border thead th {
@@ -12,7 +14,7 @@
 
 .table th,
 .table td {
-  padding: 1rem 0;
+  line-height: $duv-td-line-height;
 }
 
 .table__with-bg {
@@ -48,22 +50,21 @@
 .table {
   font-size: 0.9rem;
   &__number {
-    font-size: 1.6rem;
-    line-height: 1.6;
+    font-size: 1.2rem;
+    line-height: $duv-td-line-height;
     color: #394046;
   }
 
   &__title {
-    font-size: 0.9rem;
     font-weight: normal;
     margin: 0;
-    margin-top: -4px;
+    line-height: $duv-td-line-height;
   }
 
   span {
-    font-size: 0.7rem;
+    font-size: 0.8rem;
     display: block;
-    line-height: 2.6;
+    line-height: $duv-td-line-height;
   }
 
   .circle {

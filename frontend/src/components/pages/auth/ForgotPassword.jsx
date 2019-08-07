@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react';
-import Header from 'components/common/Header';
-import Footer from 'components/common/Footer';
+import Header from 'components/common/layout/Header';
+import Footer from 'components/common/layout/Footer';
 import { Link } from '@reach/router';
 import { Col, Row } from 'reactstrap';
-import Text from 'components/common/Text';
+import Text from 'components/common/utils/Text';
 import Quotes from 'data/quotes';
 import { randomItem } from 'utils/helpers';
 

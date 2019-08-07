@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import Sidebar from 'components/common/Sidebar';
-import LandingSection from 'components/common/LandingSection';
+import Sidebar from 'components/common/layout/Sidebar';
+import LandingSection from 'components/common/layout/LandingSection';
 
 const BackEndPage = ({ children, title, subtitle }) => {
   const [showSidebar, setShowSidebar] = useState(false);
