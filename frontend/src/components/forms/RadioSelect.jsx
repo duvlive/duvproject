@@ -214,7 +214,7 @@ RadioSelect.withLabel.propTypes = {
 };
 
 RadioSelect.withLabel.defaultProps = {
-  tooltip: null
+  tooltipText: null
 };
 
 export default connect(RadioSelect);

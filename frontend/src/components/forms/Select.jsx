@@ -25,7 +25,7 @@ const Select = ({
   options,
   blankOption,
   showFeedback,
-  tooltip,
+  tooltipText,
   tooltipPosition
 }) => {
   return (
@@ -34,7 +34,7 @@ const Select = ({
     >
       <label className={labelClassName} htmlFor={name}>
         {label}{' '}
-        <Tooltip message={tooltip} name={name} position={tooltipPosition} />
+        <Tooltip name={name} position={tooltipPosition} text={tooltipText} />
       </label>
       <div className={inputSizeClassName}>
         <Field
@@ -78,7 +78,7 @@ Select.defaultProps = {
   labelClassName: 12,
   name: null,
   showFeedback: true,
-  tooltip: null,
+  tooltipText: null,
   tooltipPosition: 'right'
 };
 
@@ -96,8 +96,8 @@ Select.propTypes = {
   name: PropTypes.string,
   options: PropTypes.array.isRequired,
   showFeedback: PropTypes.bool,
-  tooltip: PropTypes.string,
-  tooltipPosition: PropTypes.string
+  tooltipPosition: PropTypes.string,
+  tooltipText: PropTypes.string
 };
 
 Select.options = ({ options }) => {

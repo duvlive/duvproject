@@ -7,8 +7,8 @@ const Tooltip = ({ name, text, selector, position }) => {
     <>
       {text && (
         <>
-          <span id={name}>{selector}</span>
-          <UncontrolledTooltip placement={position} target={name}>
+          <span id={`${name}-tooltip`}>{selector}</span>
+          <UncontrolledTooltip placement={position} target={`${name}-tooltip`}>
             {text}
           </UncontrolledTooltip>
         </>

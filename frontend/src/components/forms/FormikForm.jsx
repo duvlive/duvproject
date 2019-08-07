@@ -7,6 +7,7 @@ import * as yup from 'yup';
 import RadioSelect from './RadioSelect';
 import CheckboxGroup from './CheckboxGroup';
 import Select from './Select';
+import Switch from './Switch';
 
 export const DisplayFormikState = props => (
   <div style={{ margin: '1rem 0' }}>
@@ -58,7 +59,7 @@ const FormikForm = () => {
                       name="email"
                       placeholder="Email Address"
                       showFeedback={false}
-                      tooltip="Your email address"
+                      tooltipText="Your email address"
                       type="email"
                     />
                     <Input
@@ -67,7 +68,7 @@ const FormikForm = () => {
                       name="password"
                       placeholder="Password"
                       showFeedback
-                      tooltip="Your password"
+                      tooltipText="Your password"
                       type="password"
                     />
 
@@ -123,6 +124,12 @@ const FormikForm = () => {
                           ]}
                           // options can contain either value or label
                         />
+                      </div>
+                    </div>
+
+                    <div className="row">
+                      <div className="col-12">
+                        <Switch label={'I agree'} name="agree" value={false} />
                       </div>
                     </div>
 

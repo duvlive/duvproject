@@ -23,7 +23,7 @@ const Input = ({
   name,
   placeholder,
   showFeedback,
-  tooltip,
+  tooltipText,
   tooltipPosition,
   type
 }) => {
@@ -33,7 +33,7 @@ const Input = ({
     >
       <label className={labelClassName} htmlFor={name}>
         {label}{' '}
-        <Tooltip message={tooltip} name={name} position={tooltipPosition} />
+        <Tooltip name={name} position={tooltipPosition} text={tooltipText} />
       </label>
       <div className={inputSizeClassName}>
         <Field
@@ -67,18 +67,16 @@ const Input = ({
 Input.defaultProps = {
   autoComplete: '',
   formGroupClassName: null,
-  formGroupSize: 12,
   helpText: null,
   inline: false,
   inputClassName: null,
   inputSizeClassName: null,
   isValidMessage: '',
   label: null,
-  labelClassName: 12,
-  name: null,
+  labelClassName: null,
   placeholder: null,
   showFeedback: true,
-  tooltip: null,
+  tooltipText: null,
   tooltipPosition: 'right',
   type: null
 };
@@ -93,12 +91,12 @@ Input.propTypes = {
   inputSizeClassName: PropTypes.number,
   isValidMessage: PropTypes.string,
   label: PropTypes.string,
-  labelClassName: PropTypes.number,
-  name: PropTypes.string,
+  labelClassName: PropTypes.string,
+  name: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
   showFeedback: PropTypes.bool,
-  tooltip: PropTypes.string,
   tooltipPosition: PropTypes.string,
+  tooltipText: PropTypes.string,
   type: PropTypes.string
 };
 

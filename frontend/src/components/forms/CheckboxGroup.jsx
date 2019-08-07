@@ -30,8 +30,6 @@ const Checkbox = ({
     >
       <Field name={name}>
         {({ field, form }) => {
-          console.log('field', field);
-          console.log('form', form);
           const fieldValue = field.value || [];
           return (
             <input
@@ -227,7 +225,7 @@ CheckboxGroup.withLabel.propTypes = {
 };
 
 CheckboxGroup.withLabel.defaultProps = {
-  tooltip: null
+  tooltipText: null
 };
 
 export default connect(CheckboxGroup);
