@@ -8,6 +8,7 @@ import RadioSelect from './RadioSelect';
 import CheckboxGroup from './CheckboxGroup';
 import Select from './Select';
 import Switch from './Switch';
+import DatePicker from './DatePicker';
 
 export const DisplayFormikState = props => (
   <div style={{ margin: '1rem 0' }}>
@@ -131,6 +132,15 @@ const FormikForm = () => {
                       <div className="col-12">
                         <Switch label={'I agree'} name="agree" value={false} />
                       </div>
+                    </div>
+
+                    <div className="form-group col-md-6">
+                      <label htmlFor="inputPassword4">Event Date</label>
+                      <DatePicker
+                        className="form-control"
+                        name="event-date"
+                        placeholderText="Event Date"
+                      />
                     </div>
 
                     <div className="mb-3 d-flex align-items-center justify-content-between">

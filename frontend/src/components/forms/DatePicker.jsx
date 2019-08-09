@@ -9,7 +9,6 @@ import ReactDatePicker from 'react-datepicker';
 const DatePicker = ({
   name,
   className,
-  value,
   helpText,
   isValidMessage,
   formGroupClassName,
@@ -24,17 +23,17 @@ const DatePicker = ({
   <div className={classNames('form-group', formGroupClassName)}>
     <div className="switchSizeClassName">
       <Field name={name}>
-        {({ field, form }) => {
-          console.log('field', field.value);
+        {({ form }) => {
           return (
             <ReactDatePicker
               className={classNames('form-control', className)}
               id={name}
               name={name}
-              onChange={() => {
-                form.setFieldValue(name, field.value);
+              onChange={date => {
+                form.setFieldValue(name, date);
               }}
               placeholderText={placeholder}
+              selected={form.values[name]}
             />
           );
         }}
@@ -67,8 +66,7 @@ DatePicker.propTypes = {
   placeholder: PropTypes.string,
   showFeedback: PropTypes.bool,
   tooltipPosition: PropTypes.string,
-  tooltipText: PropTypes.string,
-  value: PropTypes.bool
+  tooltipText: PropTypes.string
 };
 
 DatePicker.defaultProps = {
@@ -81,8 +79,7 @@ DatePicker.defaultProps = {
   placeholder: null,
   showFeedback: true,
   tooltipText: null,
-  tooltipPosition: 'right',
-  value: false
+  tooltipPosition: 'right'
 };
 
 export default connect(DatePicker);
