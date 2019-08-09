@@ -134,13 +134,25 @@ const FormikForm = () => {
                       </div>
                     </div>
 
-                    <div className="form-group col-md-6">
-                      <label htmlFor="inputPassword4">Event Date</label>
-                      <DatePicker
-                        className="form-control"
-                        name="event-date"
-                        placeholderText="Event Date"
-                      />
+                    <div className="form-row">
+                      <div className="form-group col-md-6">
+                        <label htmlFor="inputPassword4">Event Date</label>
+                        <DatePicker
+                          name="event-date"
+                          placeholderText="Event Date"
+                        />
+                      </div>
+                      <div className="form-group col-md-6">
+                        <label htmlFor="inputEmail4">Start Time</label>
+                        <DatePicker
+                          dateFormat="h:mm aa"
+                          name="event-time"
+                          showTimeSelect
+                          showTimeSelectOnly
+                          timeCaption="Start Time"
+                          timeIntervals={30}
+                        />
+                      </div>
                     </div>
 
                     <div className="mb-3 d-flex align-items-center justify-content-between">

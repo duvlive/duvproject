@@ -6,9 +6,12 @@ import { FeedbackMessage } from 'components/forms/form-helper';
 import Tooltip from 'components/common/utils/Tooltip';
 import ReactDatePicker from 'react-datepicker';
 
+let selectedDateTime;
+
 const DatePicker = ({
   name,
   className,
+  dateFormat,
   helpText,
   isValidMessage,
   formGroupClassName,
@@ -17,23 +20,37 @@ const DatePicker = ({
   label,
   placeholder,
   showFeedback,
+  showTimeSelect,
+  showTimeSelectOnly,
+  timeCaption,
+  timeIntervals,
   tooltipText,
   tooltipPosition
 }) => (
   <div className={classNames('form-group', formGroupClassName)}>
-    <div className="switchSizeClassName">
+    <div>
       <Field name={name}>
         {({ form }) => {
           return (
             <ReactDatePicker
+              autoComplete="off"
               className={classNames('form-control', className)}
+              dateFormat={dateFormat}
               id={name}
               name={name}
               onChange={date => {
-                form.setFieldValue(name, date);
+                selectedDateTime = date;
+                const dateTime = showTimeSelectOnly
+                  ? date.toLocaleTimeString()
+                  : date.toLocaleString();
+                form.setFieldValue(name, dateTime);
               }}
               placeholderText={placeholder}
-              selected={form.values[name]}
+              selected={selectedDateTime}
+              showTimeSelect={showTimeSelect}
+              showTimeSelectOnly={showTimeSelectOnly}
+              timeCaption={timeCaption}
+              timeIntervals={timeIntervals}
             />
           );
         }}
@@ -56,6 +73,7 @@ const DatePicker = ({
 
 DatePicker.propTypes = {
   className: PropTypes.string,
+  dateFormat: PropTypes.string,
   formGroupClassName: PropTypes.string,
   formik: PropTypes.object.isRequired,
   helpText: PropTypes.string,
@@ -65,12 +83,17 @@ DatePicker.propTypes = {
   name: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
   showFeedback: PropTypes.bool,
+  showTimeSelect: PropTypes.bool,
+  showTimeSelectOnly: PropTypes.bool,
+  timeCaption: PropTypes.string,
+  timeIntervals: PropTypes.number,
   tooltipPosition: PropTypes.string,
   tooltipText: PropTypes.string
 };
 
 DatePicker.defaultProps = {
-  className: null,
+  className: 'form-control',
+  dateFormat: 'MMMM d, yyyy',
   formGroupClassName: null,
   helpText: null,
   isValidMessage: '',
@@ -78,6 +101,10 @@ DatePicker.defaultProps = {
   labelClassName: null,
   placeholder: null,
   showFeedback: true,
+  showTimeSelect: false,
+  showTimeSelectOnly: false,
+  timeCaption: null,
+  timeIntervals: null,
   tooltipText: null,
   tooltipPosition: 'right'
 };
