@@ -9,6 +9,7 @@ import CheckboxGroup from './CheckboxGroup';
 import Select from './Select';
 import Switch from './Switch';
 import DatePicker from './DatePicker';
+import AutoComplete from 'components/forms/AutoComplete';
 
 export const DisplayFormikState = props => (
   <div style={{ margin: '1rem 0' }}>
@@ -124,6 +125,32 @@ const FormikForm = () => {
                             { value: 'Love Newsletter' }
                           ]}
                           // options can contain either value or label
+                        />
+                      </div>
+                    </div>
+
+                    <div className="row">
+                      <div className="col-12">
+                        <AutoComplete
+                          name="autocomplete"
+                          suggestions={[
+                            {
+                              label: 'Suggestions 1',
+                              value: '1'
+                            },
+                            {
+                              label: 'Suggestions 2',
+                              value: '2'
+                            },
+                            {
+                              label: 'Another suggestions',
+                              value: 'X'
+                            }
+                          ]}
+                          value={[
+                            { id: 1, name: 'Apples' },
+                            { id: 2, name: 'Pears' }
+                          ]}
                         />
                       </div>
                     </div>

@@ -1,7 +1,4 @@
 import React, { useState } from 'react';
-import TagsInput from 'react-tagsinput';
-import 'react-tagsinput/react-tagsinput.css';
-import AutoComplete from 'components/custom/AutoComplete';
 import { RangeTooltip } from 'components/custom/SliderTooltip';
 import Ratings from 'components/custom/Ratings';
 import { FormGroup, Label, CustomInput, Form } from 'reactstrap';
@@ -9,7 +6,6 @@ import Switch from 'rc-switch';
 import 'rc-switch/assets/index.css';
 
 const AddEntertainer = () => {
-  const [tags, setTags] = useState([]);
   const [primary, setPrimary] = useState(false);
   return (
     <div className="card card-custom card-black card-form">
@@ -38,13 +34,7 @@ const AddEntertainer = () => {
           <div className="form-row">
             <div className="form-group col-md-6">
               <label htmlFor="inputEmail4">Genre</label>
-              <TagsInput
-                onChange={tags => setTags(tags)}
-                renderInput={AutoComplete}
-                test="testing"
-                value={tags}
-              />
-              {/* <input className="form-control" placeholder="Genre" type="text" /> */}
+              <input className="form-control" placeholder="Genre" type="text" />
             </div>
             <div className="form-group col-md-6">
               <label htmlFor="inputEmail4">Preferred Language</label>
