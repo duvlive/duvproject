@@ -134,18 +134,10 @@ const FormikForm = () => {
                         <AutoComplete
                           name="autocomplete"
                           suggestions={[
-                            {
-                              label: 'Suggestions 1',
-                              value: '1'
-                            },
-                            {
-                              label: 'Suggestions 2',
-                              value: '2'
-                            },
-                            {
-                              label: 'Another suggestions',
-                              value: 'X'
-                            }
+                            { id: 3, name: 'Bananas' },
+                            { id: 4, name: 'Mangos' },
+                            { id: 5, name: 'Lemons' },
+                            { id: 6, name: 'Apricots', disabled: true }
                           ]}
                           value={[
                             { id: 1, name: 'Apples' },

@@ -92,7 +92,7 @@ DatePicker.propTypes = {
 };
 
 DatePicker.defaultProps = {
-  className: 'form-control',
+  className: null,
   dateFormat: 'MMMM d, yyyy',
   formGroupClassName: null,
   helpText: null,
