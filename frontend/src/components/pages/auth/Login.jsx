@@ -1,11 +1,15 @@
 import React, { Fragment } from 'react';
 import Header from 'components/common/layout/Header';
 import Footer from 'components/common/layout/Footer';
+import { Formik, Form } from 'formik';
+import * as yup from 'yup';
+import Input from 'components/forms/Input';
 import { Link } from '@reach/router';
 import { Col, Row } from 'reactstrap';
 import Text from 'components/common/utils/Text';
 import Quotes from 'data/quotes';
 import { randomItem } from 'utils/helpers';
+import { DisplayFormikState } from 'components/forms/form-helper';
 
 const Login = () => (
   <Fragment>
@@ -36,7 +40,8 @@ const Content = () => {
               <section>
                 <form>
                   <h5 className="header font-weight-normal mb-4">Login</h5>
-                  <div>
+                  <Login.Form />
+                  {/* <div>
                     <div className="form-group">
                       <label htmlFor="inputEmail4">Email</label>
                       <input
@@ -61,6 +66,7 @@ const Content = () => {
                       />
                     </div>
                   </div>
+                   */}
                   <button
                     className="btn btn-danger btn-wide btn-transparent"
                     href="/"
@@ -96,4 +102,42 @@ const Content = () => {
     </section>
   );
 };
+
+Login.Form = () => (
+  <Formik
+    initialValues={{
+      email: '',
+      password: ''
+    }}
+    onSubmit={(values, actions) => {
+      setTimeout(() => {
+        actions.setSubmitting(false);
+      }, 400);
+    }}
+    render={props => (
+      <Form>
+        <Input label="Email" name="email" placeholder="Email Address" />
+        <Input
+          label="Password"
+          name="password"
+          placeholder="Password"
+          type="password"
+        />
+        <DisplayFormikState {...props} />
+      </Form>
+    )}
+    validationSchema={yup.object().shape({
+      email: yup
+        .string()
+        .email()
+        .required(),
+      password: yup
+        .string()
+        .min(6)
+        .required(),
+      sex: yup.string().required()
+    })}
+  />
+);
+
 export default Login;

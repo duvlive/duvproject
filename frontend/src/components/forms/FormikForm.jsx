@@ -10,22 +10,42 @@ import Select from './Select';
 import Switch from './Switch';
 import DatePicker from './DatePicker';
 import AutoComplete from 'components/forms/AutoComplete';
+import { DisplayFormikState } from './form-helper';
 
-export const DisplayFormikState = props => (
-  <div style={{ margin: '1rem 0' }}>
-    <pre
-      style={{
-        color: '#aaa',
-        fontSize: '.65rem',
-        border: '1px solid #666',
-        marginTop: '5rem',
-        padding: '1.5rem 2rem'
-      }}
-    >
-      <strong>props</strong> = {JSON.stringify(props, null, 2)}
-    </pre>
-  </div>
-);
+// import { Formik, Form } from 'formik';
+// import * as yup from 'yup';
+// import { DisplayFormikState } from 'components/forms/form-helper';
+
+// const FormikForm = () => (
+//   <Formik
+//     initialValues={{
+//       email: 'harunpopson@yahoo.com',
+//       password: '123456'
+//     }}
+//     onSubmit={(values, actions) => {
+//       setTimeout(() => {
+//         actions.setSubmitting(false);
+//       }, 400);
+//     }}
+//     render={props => (
+//       <Form>
+//         {/* Form Content Here */}
+//         <DisplayFormikState {...props} />
+//       </Form>
+//     )}
+//     validationSchema={yup.object().shape({
+//       email: yup
+//         .string()
+//         .email()
+//         .required(),
+//       password: yup
+//         .string()
+//         .min(6)
+//         .required(),
+//       sex: yup.string().required()
+//     })}
+//   />
+// );
 
 const FormikForm = () => {
   const [result, setResult] = React.useState(null);

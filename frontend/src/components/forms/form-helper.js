@@ -58,3 +58,33 @@ HelpText.propTypes = {
   name: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired
 };
+
+export const DisplayFormikState = props => (
+  <div style={{ margin: '1rem 0' }}>
+    <pre
+      style={{
+        color: '#aaa',
+        fontSize: '.65rem',
+        border: '1px solid #666',
+        marginTop: '5rem',
+        padding: '1.5rem 2rem'
+      }}
+    >
+      {props.showAll ? (
+        <div>
+          <strong>props</strong> = {JSON.stringify(props, null, 2)}
+        </div>
+      ) : (
+        JSON.stringify(props.values, null, 2)
+      )}
+    </pre>
+  </div>
+);
+
+DisplayFormikState.propTypes = {
+  showAll: PropTypes.bool,
+  values: PropTypes.object.isRequired
+};
+DisplayFormikState.defaultProps = {
+  showAll: false
+};
