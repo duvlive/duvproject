@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'formik';
+import { Link } from '@reach/router';
 import { connect } from 'formik';
 import classNames from 'classnames';
 import {
@@ -20,6 +21,7 @@ const Input = ({
   inputSizeClassName,
   isValidMessage,
   label,
+  labelLink,
   labelClassName,
   name,
   placeholder,
@@ -35,6 +37,11 @@ const Input = ({
       <label className={labelClassName} htmlFor={name}>
         {label}{' '}
         <Tooltip name={name} position={tooltipPosition} text={tooltipText} />
+        {labelLink && (
+          <Link className="float-right" to={labelLink.to}>
+            {labelLink.text}
+          </Link>
+        )}
       </label>
       <div className={inputSizeClassName}>
         <Field
@@ -74,6 +81,7 @@ Input.defaultProps = {
   isValidMessage: '',
   label: null,
   labelClassName: null,
+  labelLink: null,
   placeholder: null,
   showFeedback: feedback.ALL,
   tooltipText: null,
@@ -92,6 +100,10 @@ Input.propTypes = {
   isValidMessage: PropTypes.string,
   label: PropTypes.string,
   labelClassName: PropTypes.string,
+  labelLink: PropTypes.shape({
+    to: PropTypes.string.isRequired,
+    text: PropTypes.string.isRequired
+  }),
   name: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
   showFeedback: PropTypes.oneOf(Object.keys(feedback)),

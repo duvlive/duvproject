@@ -12,6 +12,17 @@ const feebackOptions = {
   invalid: 'invalid-feedback'
 };
 
+const showErrors = ({ showFeedback, formik }) => {
+  return (
+    formik.submitCount > 0 || // Errors should be shown if form is submitted
+    (showFeedback === feedback.ALL || showFeedback === feedback.ERROR)
+  );
+};
+
+const showSuccess = ({ showFeedback, formik }) => {
+  return showFeedback === feedback.ALL || showFeedback === feedback.SUCCESS;
+};
+
 export const feedback = {
   ALL: 'ALL',
   ERROR: 'ERROR',
@@ -27,18 +38,10 @@ export const getValidityClass = (
 ) => {
   const error = getIn(formik.errors, name);
   const touch = getIn(formik.touched, name);
-  if (
-    !!touch &&
-    !!error &&
-    (showFeedback === feedback.ALL || showFeedback === feedback.ERROR)
-  ) {
+  if (!!touch && !!error && showErrors({ formik, showFeedback })) {
     // mark as invalid
     return options.invalid;
-  } else if (
-    !!touch &&
-    !error &&
-    (showFeedback === feedback.ALL || showFeedback === feedback.SUCCESS)
-  ) {
+  } else if (!!touch && !error && showSuccess({ showFeedback, formik })) {
     // mark as valid
     return options.valid;
   }

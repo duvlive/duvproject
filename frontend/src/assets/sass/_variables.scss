@@ -312,7 +312,7 @@ $input-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out 
 // $form-feedback-margin-top: $form-text-margin-top !default;
 // $form-feedback-font-size: $small-font-size !default;
 $form-feedback-valid-color: theme-color('success');
-$form-feedback-invalid-color: theme-color('danger');
+$form-feedback-invalid-color: rgba($red-200, 0.8);
 
 $form-feedback-icon-valid-color: $form-feedback-valid-color;
 $form-feedback-icon-invalid-color: $form-feedback-invalid-color;
