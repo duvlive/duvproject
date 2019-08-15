@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect, Field } from 'formik';
 import classNames from 'classnames';
-import { FeedbackMessage } from 'components/forms/form-helper';
+import { FeedbackMessage, feedback } from 'components/forms/form-helper';
 import Tooltip from 'components/common/utils/Tooltip';
 import ReactTags from 'react-tag-autocomplete';
 
@@ -35,6 +35,7 @@ const AutoComplete = ({
               <ReactTags
                 allowBackspace={false}
                 allowNew
+                className={className}
                 delimiters={['Enter', 'Tab', ',']}
                 maxSuggestionsLength={18}
                 onAddition={tag => {
@@ -60,14 +61,13 @@ const AutoComplete = ({
           <Tooltip name={name} position={tooltipPosition} text={tooltipText} />
         </label>
       </div>
-      {showFeedback && (
-        <FeedbackMessage
-          formik={formik}
-          helpText={helpText}
-          name={name}
-          validMessage={isValidMessage}
-        />
-      )}
+      <FeedbackMessage
+        formik={formik}
+        helpText={helpText}
+        name={name}
+        showFeedback={showFeedback}
+        validMessage={isValidMessage}
+      />
     </div>
   );
 };
@@ -83,7 +83,7 @@ AutoComplete.propTypes = {
   name: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
   removeButtonText: PropTypes.string,
-  showFeedback: PropTypes.bool,
+  showFeedback: PropTypes.oneOf(Object.keys(feedback)),
   suggestions: PropTypes.array,
   tooltipPosition: PropTypes.string,
   tooltipText: PropTypes.string,
@@ -99,7 +99,7 @@ AutoComplete.defaultProps = {
   labelClassName: null,
   placeholder: null,
   removeButtonText: 'Click tag to remove',
-  showFeedback: true,
+  showFeedback: feedback.ALL,
   suggestions: [],
   tooltipPosition: 'right',
   tooltipText: null,

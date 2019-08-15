@@ -2,7 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect, Field } from 'formik';
 import classNames from 'classnames';
-import { FeedbackMessage } from 'components/forms/form-helper';
+import {
+  getValidityClass,
+  FeedbackMessage,
+  feedback
+} from 'components/forms/form-helper';
 import Tooltip from 'components/common/utils/Tooltip';
 import ReactDatePicker from 'react-datepicker';
 
@@ -34,7 +38,11 @@ const DatePicker = ({
           return (
             <ReactDatePicker
               autoComplete="off"
-              className={classNames('form-control', className)}
+              className={classNames(
+                'form-control',
+                className,
+                getValidityClass(formik, name, showFeedback)
+              )}
               dateFormat={dateFormat}
               id={name}
               name={name}
@@ -60,14 +68,13 @@ const DatePicker = ({
         <Tooltip name={name} position={tooltipPosition} text={tooltipText} />
       </label>
     </div>
-    {showFeedback && (
-      <FeedbackMessage
-        formik={formik}
-        helpText={helpText}
-        name={name}
-        validMessage={isValidMessage}
-      />
-    )}
+    <FeedbackMessage
+      formik={formik}
+      helpText={helpText}
+      name={name}
+      showFeedback={showFeedback}
+      validMessage={isValidMessage}
+    />
   </div>
 );
 
@@ -82,7 +89,7 @@ DatePicker.propTypes = {
   labelClassName: PropTypes.string,
   name: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
-  showFeedback: PropTypes.bool,
+  showFeedback: PropTypes.oneOf(Object.keys(feedback)),
   showTimeSelect: PropTypes.bool,
   showTimeSelectOnly: PropTypes.bool,
   timeCaption: PropTypes.string,
@@ -100,7 +107,7 @@ DatePicker.defaultProps = {
   label: '',
   labelClassName: null,
   placeholder: null,
-  showFeedback: true,
+  showFeedback: feedback.ALL,
   showTimeSelect: false,
   showTimeSelectOnly: false,
   timeCaption: null,
