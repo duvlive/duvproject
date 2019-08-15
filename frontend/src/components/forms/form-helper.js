@@ -12,21 +12,52 @@ const feebackOptions = {
   invalid: 'invalid-feedback'
 };
 
-export const getValidityClass = (formik, name, options = validityOptions) => {
+export const feedback = {
+  ALL: 'ALL',
+  ERROR: 'ERROR',
+  SUCCESS: 'SUCCESS',
+  NONE: 'NONE'
+};
+
+export const getValidityClass = (
+  formik,
+  name,
+  showFeedback,
+  options = validityOptions
+) => {
   const error = getIn(formik.errors, name);
   const touch = getIn(formik.touched, name);
-  if (!!touch && !!error) {
+  if (
+    !!touch &&
+    !!error &&
+    (showFeedback === feedback.ALL || showFeedback === feedback.ERROR)
+  ) {
     // mark as invalid
     return options.invalid;
-  } else if (!!touch && !error) {
+  } else if (
+    !!touch &&
+    !error &&
+    (showFeedback === feedback.ALL || showFeedback === feedback.SUCCESS)
+  ) {
     // mark as valid
     return options.valid;
   }
   return; //not touched
 };
 
-export const FeedbackMessage = ({ formik, name, helpText, validMessage }) => {
-  const className = getValidityClass(formik, name, feebackOptions);
+export const FeedbackMessage = ({
+  formik,
+  helpText,
+  name,
+  showFeedback,
+  validMessage
+}) => {
+  const className = getValidityClass(
+    formik,
+    name,
+    showFeedback,
+    feebackOptions
+  );
   const message = getIn(formik.errors, name) || validMessage;
 
   return className && message ? (
@@ -40,6 +71,7 @@ FeedbackMessage.propTypes = {
   formik: PropTypes.object.isRequired,
   helpText: PropTypes.string,
   name: PropTypes.string.isRequired,
+  showFeedback: PropTypes.string.isRequired,
   validMessage: PropTypes.string
 };
 

@@ -10,7 +10,7 @@ import Select from './Select';
 import Switch from './Switch';
 import DatePicker from './DatePicker';
 import AutoComplete from 'components/forms/AutoComplete';
-import { DisplayFormikState } from './form-helper';
+import { DisplayFormikState, feedback } from './form-helper';
 
 // import { Formik, Form } from 'formik';
 // import * as yup from 'yup';
@@ -80,7 +80,7 @@ const FormikForm = () => {
                       label="Emaill"
                       name="email"
                       placeholder="Email Address"
-                      showFeedback={false}
+                      showFeedback={feedback.ALL}
                       tooltipText="Your email address"
                       type="email"
                     />

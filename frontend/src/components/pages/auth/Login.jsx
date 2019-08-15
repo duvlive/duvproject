@@ -9,7 +9,7 @@ import { Col, Row } from 'reactstrap';
 import Text from 'components/common/utils/Text';
 import Quotes from 'data/quotes';
 import { randomItem } from 'utils/helpers';
-import { DisplayFormikState } from 'components/forms/form-helper';
+import { DisplayFormikState, feedback } from 'components/forms/form-helper';
 
 const Login = () => (
   <Fragment>
@@ -116,11 +116,19 @@ Login.Form = () => (
     }}
     render={props => (
       <Form>
-        <Input label="Email" name="email" placeholder="Email Address" />
         <Input
+          isValidMessage="Name looks good"
+          label="Email"
+          name="email"
+          placeholder="Email Address"
+          showFeedback={feedback.SUCCESS}
+        />
+        <Input
+          isValidMessage="Password looks good"
           label="Password"
           name="password"
           placeholder="Password"
+          showFeedback={feedback.ERROR}
           type="password"
         />
         <DisplayFormikState {...props} />

@@ -5,7 +5,8 @@ import { connect } from 'formik';
 import classNames from 'classnames';
 import {
   getValidityClass,
-  FeedbackMessage
+  FeedbackMessage,
+  feedback
 } from 'components/forms/form-helper';
 import Tooltip from 'components/common/utils/Tooltip';
 
@@ -42,7 +43,7 @@ const Input = ({
           className={classNames(
             'form-control',
             inputClassName,
-            showFeedback && getValidityClass(formik, name)
+            getValidityClass(formik, name, showFeedback)
           )}
           id={name}
           name={name}
@@ -55,6 +56,7 @@ const Input = ({
           formik={formik}
           helpText={helpText}
           name={name}
+          showFeedback={showFeedback}
           validMessage={isValidMessage}
         />
       )}
@@ -75,7 +77,7 @@ Input.defaultProps = {
   label: null,
   labelClassName: null,
   placeholder: null,
-  showFeedback: true,
+  showFeedback: feedback.ALL,
   tooltipText: null,
   tooltipPosition: 'right',
   type: null
@@ -94,7 +96,7 @@ Input.propTypes = {
   labelClassName: PropTypes.string,
   name: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
-  showFeedback: PropTypes.bool,
+  showFeedback: PropTypes.oneOf(Object.keys(feedback)),
   tooltipPosition: PropTypes.string,
   tooltipText: PropTypes.string,
   type: PropTypes.string
