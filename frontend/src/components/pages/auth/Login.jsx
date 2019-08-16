@@ -1,25 +1,25 @@
-import React, { useState, Fragment } from 'react';
+import React from 'react';
 import Header from 'components/common/layout/Header';
 import Footer from 'components/common/layout/Footer';
 import { Formik, Form } from 'formik';
-import * as yup from 'yup';
 import Input from 'components/forms/Input';
 import { Link } from '@reach/router';
 import { Col, Row } from 'reactstrap';
 import Text from 'components/common/utils/Text';
 import Quotes from 'data/quotes';
 import { randomItem } from 'utils/helpers';
-import { DisplayFormikState, feedback } from 'components/forms/form-helper';
+import { feedback } from 'components/forms/form-helper';
 import Button from 'components/forms/Button';
+import { loginSchema } from 'components/forms/schema/userSchema';
 
 const Login = () => (
-  <Fragment>
+  <>
     <section className="auth">
       <Header showRedLogo />
       <Content />
     </section>
     <Footer className="mt-0" />
-  </Fragment>
+  </>
 );
 
 const Content = () => {
@@ -110,19 +110,9 @@ Login.Form = () => {
           >
             Sign in
           </Button>
-          <DisplayFormikState showAll {...props} />
         </Form>
       )}
-      validationSchema={yup.object().shape({
-        email: yup
-          .string()
-          .email()
-          .required(),
-        password: yup
-          .string()
-          .min(6)
-          .required()
-      })}
+      validationSchema={loginSchema}
     />
   );
 };
