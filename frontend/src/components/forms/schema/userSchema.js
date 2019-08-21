@@ -18,12 +18,27 @@ const confirmPassword = yup
   .label('Confirm Password')
   .oneOf([yup.ref('password')], 'Passwords must match');
 
+const phone = yup
+  .string()
+  .label('Phone')
+  .required('Phone is required');
+
+const defaultNameValidation = label =>
+  yup
+    .string()
+    .label(label)
+    .min(2, `${label} should be more than 2 characters`)
+    .required(`${label} is really required`);
+
 const loginSchema = yup.object().shape({
   email,
   password
 });
 
 const registerSchema = yup.object().shape({
+  firstName: defaultNameValidation('First Name'),
+  lastName: defaultNameValidation('Last Name'),
+  phone,
   email,
   password: strongPassword,
   confirmPassword
