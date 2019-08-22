@@ -13,38 +13,56 @@ import AutoComplete from 'components/forms/AutoComplete';
 import { DisplayFormikState, feedback } from './form-helper';
 
 // import { Formik, Form } from 'formik';
-// import * as yup from 'yup';
-// import { DisplayFormikState } from 'components/forms/form-helper';
+// import Input from 'components/forms/Input';
+// import { feedback } from 'components/forms/form-helper';
+// import Button from 'components/forms/Button';
+// import { registerSchema } from 'components/forms/schema/userSchema';
 
-// const FormikForm = () => (
+// const Register.Form = () => (
 //   <Formik
-//     initialValues={{
-//       email: 'harunpopson@yahoo.com',
-//       password: '123456'
-//     }}
-//     onSubmit={(values, actions) => {
-//       setTimeout(() => {
-//         actions.setSubmitting(false);
-//       }, 400);
-//     }}
-//     render={props => (
-//       <Form>
-//         {/* Form Content Here */}
-//         <DisplayFormikState {...props} />
-//       </Form>
-//     )}
-//     validationSchema={yup.object().shape({
-//       email: yup
-//         .string()
-//         .email()
-//         .required(),
-//       password: yup
-//         .string()
-//         .min(6)
-//         .required(),
-//       sex: yup.string().required()
-//     })}
-//   />
+//   initialValues={{
+//     email: 'harunpopson@yahoo.com',
+//     password: '123456'
+//   }}
+//   onSubmit={(values, actions) => {
+//     console.log(values);
+//     setTimeout(() => {
+//       actions.setSubmitting(false);
+//     }, 400);
+//   }}
+//   render={({ isSubmitting, handleSubmit }) => (
+//     <Form>
+//       <div className="form-row">
+//         <Input
+//           formGroupClassName="col-md-6"
+//           label="First Name"
+//           name="firstName"
+//           placeholder="First Name"
+//         />
+//         <Input
+//           formGroupClassName="col-md-6"
+//           label="Last Name"
+//           name="lastName"
+//           placeholder="Last Name"
+//         />
+//       </div>
+//       <Input
+//         label="Password"
+//         name="password"
+//         placeholder="Password"
+//         type="password"
+//       />
+//       <Button
+//         className="btn-danger btn-wide btn-transparent"
+//         loading={isSubmitting}
+//         onClick={handleSubmit}
+//       >
+//         Register
+//       </Button>
+//     </Form>
+//   )}
+//   validationSchema={registerSchema}
+// />
 // );
 
 const FormikForm = () => {

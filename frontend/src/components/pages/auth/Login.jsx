@@ -83,7 +83,7 @@ Login.Form = () => {
           actions.setSubmitting(false);
         }, 400);
       }}
-      render={({ isSubmitting, handleSubmit, ...props }) => (
+      render={({ isSubmitting, handleSubmit }) => (
         <Form>
           <Input
             label="Email"
