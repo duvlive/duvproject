@@ -113,3 +113,7 @@ Input.propTypes = {
 };
 
 export default connect(Input);
+
+// TODO:
+// - Create label component
+// - Use name for label if not given

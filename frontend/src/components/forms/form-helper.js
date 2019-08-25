@@ -120,6 +120,19 @@ DisplayFormikState.propTypes = {
   showAll: PropTypes.bool,
   values: PropTypes.object.isRequired
 };
+
 DisplayFormikState.defaultProps = {
   showAll: false
+};
+
+export const setInitialValues = (schema, initialValues = {}) => {
+  const values = {};
+  Object.keys(schema).forEach(key => {
+    if (initialValues[key]) {
+      values[key] = initialValues[key];
+    } else {
+      values[key] = '';
+    }
+  });
+  return values;
 };

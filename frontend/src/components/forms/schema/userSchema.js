@@ -16,6 +16,7 @@ const strongPassword = password.min(6, 'Seems a bit short...');
 const confirmPassword = yup
   .string()
   .label('Confirm Password')
+  .required('Enter your password again')
   .oneOf([yup.ref('password')], 'Passwords must match');
 
 const phone = yup
@@ -35,12 +36,15 @@ const loginSchema = yup.object().shape({
   password
 });
 
-const registerSchema = yup.object().shape({
-  firstName: defaultNameValidation('First Name'),
-  lastName: defaultNameValidation('Last Name'),
+const registerObject = {
+  first_name: defaultNameValidation('First Name'),
+  last_name: defaultNameValidation('Last Name'),
   phone,
   email,
   password: strongPassword,
-  confirmPassword
-});
-export { loginSchema, registerSchema };
+  confirm_password: confirmPassword
+};
+
+const registerSchema = yup.object().shape(registerObject);
+
+export { loginSchema, registerSchema, registerObject };
