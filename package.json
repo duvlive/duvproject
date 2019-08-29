@@ -6,8 +6,7 @@
   "scripts": {
     "start:dev:frontend": "cd frontend && npm start",
     "start:dev": "nodemon --exec babel-node server.js",
-    "start": "babel-node server.js",
-    "heroku-postbuild": "npm install && npm install --only=dev --no-shrinkwrap && npm run start"
+    "start": "babel-node server.js"
   },
   "repository": {
     "type": "git",
