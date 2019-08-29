@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start:dev:frontend": "cd frontend && npm start",
-    "start": "node server.js",
+    "start:dev": "nodemon --exec babel-node server.js",
     "heroku-postbuild": "cd frontend && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },
   "repository": {
@@ -21,8 +21,16 @@
     "url": "https://github.com/duv-live/duvproject/issues"
   },
   "homepage": "https://github.com/duv-live/duvproject#readme",
-  "devDependencies": {},
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  },
   "dependencies": {
-    "express": "^4.17.1"
+    "@babel/core": "^7.5.5",
+    "@babel/node": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.1.0",
+    "express": "^4.17.1",
+    "morgan": "^1.9.1"
   }
 }
