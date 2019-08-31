@@ -117,3 +117,4 @@ export default connect(Input);
 // TODO:
 // - Create label component
 // - Use name for label if not given
+// - Add all label properties into options, tooltip and other related stuffs
