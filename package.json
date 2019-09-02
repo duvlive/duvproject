@@ -6,7 +6,8 @@
   "scripts": {
     "start:dev:frontend": "cd frontend && npm start",
     "start:dev": "nodemon --exec babel-node server.js",
-    "start": "babel-node server.js"
+    "start": "babel-node server.js",
+    "test": "NODE_ENV=test jest ./**/tests/**/*.test.js"
   },
   "repository": {
     "type": "git",
@@ -22,7 +23,12 @@
   },
   "homepage": "https://github.com/duv-live/duvproject#readme",
   "devDependencies": {
-    "nodemon": "^1.19.1"
+    "eslint": "^6.2.2",
+    "eslint-plugin-react": "^7.14.3",
+    "jest": "^24.9.0",
+    "nodemon": "^1.19.1",
+    "supertest": "^4.0.2",
+    "sequelize-cli": "^5.5.0"
   },
   "dependencies": {
     "@babel/core": "^7.5.5",
@@ -31,6 +37,10 @@
     "body-parser": "^1.19.0",
     "dotenv": "^8.1.0",
     "express": "^4.17.1",
-    "morgan": "^1.9.1"
+    "global": "^4.4.0",
+    "morgan": "^1.9.1",
+    "pg": "^7.12.1",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^5.17.2"
   }
 }

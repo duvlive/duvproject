@@ -1,15 +1,16 @@
 import 'dotenv/config';
 import express from 'express';
 import path from 'path';
-import logger from  "morgan";
+import logger from "morgan";
 import bodyParser from "body-parser";
 
-console.log(process.env.MY_SECRET, '///')
+console.log(process.env.MY_SECRET, '///');
 const port = parseInt(process.env.PORT, 10) || 8080;
 
 // Set up the express app
 const app = express();
 
+app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -32,7 +33,3 @@ app.get('*', function(req, res) {
 app.listen(port, () => {
   console.info(`Started up at port ${port}`);
 });
-
-// eslint
-// model
-//route
