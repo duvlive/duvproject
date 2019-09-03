@@ -46,5 +46,6 @@ const registerObject = {
 };
 
 const registerSchema = yup.object().shape(registerObject);
+const forgotPasswordSchema = yup.object().shape({ email });
 
-export { loginSchema, registerSchema, registerObject };
+export { loginSchema, registerSchema, registerObject, forgotPasswordSchema };
