@@ -8,22 +8,62 @@ import RadioSelect from './RadioSelect';
 import CheckboxGroup from './CheckboxGroup';
 import Select from './Select';
 import Switch from './Switch';
+import DatePicker from './DatePicker';
+import AutoComplete from 'components/forms/AutoComplete';
+import { DisplayFormikState, feedback } from './form-helper';
 
-export const DisplayFormikState = props => (
-  <div style={{ margin: '1rem 0' }}>
-    <pre
-      style={{
-        color: '#aaa',
-        fontSize: '.65rem',
-        border: '1px solid #666',
-        marginTop: '5rem',
-        padding: '1.5rem 2rem'
-      }}
-    >
-      <strong>props</strong> = {JSON.stringify(props, null, 2)}
-    </pre>
-  </div>
-);
+// import { Formik, Form } from 'formik';
+// import Input from 'components/forms/Input';
+// import { feedback } from 'components/forms/form-helper';
+// import Button from 'components/forms/Button';
+// import { registerSchema } from 'components/forms/schema/userSchema';
+
+// const Register.Form = () => (
+//   <Formik
+//   initialValues={{
+//     email: 'harunpopson@yahoo.com',
+//     password: '123456'
+//   }}
+//   onSubmit={(values, actions) => {
+//     console.log(values);
+//     setTimeout(() => {
+//       actions.setSubmitting(false);
+//     }, 400);
+//   }}
+//   render={({ isSubmitting, handleSubmit }) => (
+//     <Form>
+//       <div className="form-row">
+//         <Input
+//           formGroupClassName="col-md-6"
+//           label="First Name"
+//           name="firstName"
+//           placeholder="First Name"
+//         />
+//         <Input
+//           formGroupClassName="col-md-6"
+//           label="Last Name"
+//           name="lastName"
+//           placeholder="Last Name"
+//         />
+//       </div>
+//       <Input
+//         label="Password"
+//         name="password"
+//         placeholder="Password"
+//         type="password"
+//       />
+//       <Button
+//         className="btn-danger btn-wide btn-transparent"
+//         loading={isSubmitting}
+//         onClick={handleSubmit}
+//       >
+//         Register
+//       </Button>
+//     </Form>
+//   )}
+//   validationSchema={registerSchema}
+// />
+// );
 
 const FormikForm = () => {
   const [result, setResult] = React.useState(null);
@@ -58,7 +98,7 @@ const FormikForm = () => {
                       label="Emaill"
                       name="email"
                       placeholder="Email Address"
-                      showFeedback={false}
+                      showFeedback={feedback.ALL}
                       tooltipText="Your email address"
                       type="email"
                     />
@@ -129,7 +169,46 @@ const FormikForm = () => {
 
                     <div className="row">
                       <div className="col-12">
+                        <AutoComplete
+                          name="autocomplete"
+                          suggestions={[
+                            { id: 3, name: 'Bananas' },
+                            { id: 4, name: 'Mangos' },
+                            { id: 5, name: 'Lemons' },
+                            { id: 6, name: 'Apricots', disabled: true }
+                          ]}
+                          value={[
+                            { id: 1, name: 'Apples' },
+                            { id: 2, name: 'Pears' }
+                          ]}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="row">
+                      <div className="col-12">
                         <Switch label={'I agree'} name="agree" value={false} />
+                      </div>
+                    </div>
+
+                    <div className="form-row">
+                      <div className="form-group col-md-6">
+                        <label htmlFor="inputPassword4">Event Date</label>
+                        <DatePicker
+                          name="event-date"
+                          placeholderText="Event Date"
+                        />
+                      </div>
+                      <div className="form-group col-md-6">
+                        <label htmlFor="inputEmail4">Start Time</label>
+                        <DatePicker
+                          dateFormat="h:mm aa"
+                          name="event-time"
+                          showTimeSelect
+                          showTimeSelectOnly
+                          timeCaption="Start Time"
+                          timeIntervals={30}
+                        />
                       </div>
                     </div>
 

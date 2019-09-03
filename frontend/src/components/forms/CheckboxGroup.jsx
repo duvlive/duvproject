@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect, Field } from 'formik';
 import classNames from 'classnames';
-import { FeedbackMessage } from 'components/forms/form-helper';
+import { FeedbackMessage, feedback } from 'components/forms/form-helper';
 import Tooltip from 'components/common/utils/Tooltip';
 import Humanize from 'humanize-plus';
 import { dashedLowerCase } from 'utils/helpers';
@@ -147,14 +147,13 @@ const CheckboxGroup = ({
       ) : (
         checkedGroup
       )}
-      {showFeedback && (
-        <FeedbackMessage
-          formik={formik}
-          helpText={helpText}
-          name={name}
-          validMessage={isValidMessage}
-        />
-      )}
+      <FeedbackMessage
+        formik={formik}
+        helpText={helpText}
+        name={name}
+        showFeedback={showFeedback}
+        validMessage={isValidMessage}
+      />
     </>
   );
 };
@@ -172,7 +171,7 @@ CheckboxGroup.propTypes = {
   name: PropTypes.string.isRequired,
   options: PropTypes.array.isRequired,
   radioSizeClassName: PropTypes.string,
-  showFeedback: PropTypes.bool,
+  showFeedback: PropTypes.oneOf(Object.keys(feedback)),
   tooltipPosition: PropTypes.string,
   tooltipText: PropTypes.string
 };
@@ -187,7 +186,7 @@ CheckboxGroup.defaultProps = {
   label: null,
   labelSizeClassName: 'col-sm-2',
   radioSizeClassName: 'col-sm-10',
-  showFeedback: true,
+  showFeedback: feedback.ALL,
   tooltipPosition: 'right',
   tooltipText: null
 };

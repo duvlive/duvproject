@@ -130,14 +130,14 @@
       display: block;
       color: $white;
       font-size: 1rem;
-      transition: all 0.4s ease-out;
+      transition: all 0.5s ease-out;
       @include media-breakpoint-up(sm) {
         font-size: 0.85rem;
       }
 
       &:hover {
         color: $red-300;
-        transform: translateX(0.15rem);
+        // transform: translateX(0.15rem);
       }
     }
   }
