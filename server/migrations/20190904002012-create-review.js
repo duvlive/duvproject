@@ -31,7 +31,7 @@ module.exports = {
         type: Sequelize.TEXT
       },
       rating: {
-        type: Sequelize.NUMBER
+        type: Sequelize.FLOAT
       },
       quality: {
         type: Sequelize.INTEGER

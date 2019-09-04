@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     comment: DataTypes.TEXT,
-    rating: DataTypes.NUMBER,
+    rating: DataTypes.FLOAT,
     quality: DataTypes.INTEGER,
     professionalism: DataTypes.INTEGER
   }, {
