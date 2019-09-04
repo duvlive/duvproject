@@ -4,7 +4,6 @@ import path from 'path';
 import logger from "morgan";
 import bodyParser from "body-parser";
 
-console.log(process.env.MY_SECRET, '///');
 const port = parseInt(process.env.PORT, 10) || 8080;
 
 // Set up the express app
@@ -13,8 +12,6 @@ const app = express();
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-// app.use(router);
 
 app.get("*", (req, res) =>
   res.status(200).send({
