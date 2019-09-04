@@ -7,7 +7,8 @@
     "start:dev:frontend": "cd frontend && npm start",
     "start:dev": "nodemon --exec babel-node server.js",
     "start": "babel-node server.js",
-    "test": "NODE_ENV=test jest ./**/tests/**/*.test.js"
+    "test": "NODE_ENV=test jest ./**/tests/**/*.test.js",
+    "server-debug": "babel-node server-debug.js"
   },
   "repository": {
     "type": "git",

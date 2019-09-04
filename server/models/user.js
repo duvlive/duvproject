@@ -1,9 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
-    badgeId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
     firstName: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -29,13 +25,16 @@ module.exports = (sequelize, DataTypes) => {
     password: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        min: 8,
+      },
     },
-    phoneNumber: {
+    phoneNumber1: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
         len: [11, 14],
-      },
+      }
     },
     type: {
       type: DataTypes.INTEGER,
@@ -50,32 +49,8 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {
     classMethods: {
-      associate: (models) => {
-        User.hasOne(models.UserProfile);
-        User.belongsToMany(models.Badge, {
-          foreignKey: 'badgeId',
-          onDelete: 'CASCADE',
-        });
-        User.hasMany(models.Media, {
-          foreignKey: 'userId',
-          onDelete: 'CASCADE',
-        });
-        User.hasMany(models.Event, {
-          foreignKey: 'userId',
-          onDelete: 'CASCADE',
-        });
-        User.hasMany(models.Review, {
-          foreignKey: 'receiverId',
-          onDelete: 'CASCADE',
-        });
-        User.hasMany(models.Review, {
-          foreignKey: 'giverId',
-          onDelete: 'CASCADE',
-        });
-        User.hasMany(models.Bid, {
-          foreignKey: 'userId',
-          onDelete: 'CASCADE',
-        });
+      associate: (/*models*/) => {
+        // associations can be defined here
       }
     }
   });

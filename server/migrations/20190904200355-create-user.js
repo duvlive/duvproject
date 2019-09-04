@@ -7,29 +7,25 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      badgeId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        onDelete: 'CASCADE',
-        references: {
-          model: 'Badges',
-          key: 'id',
-          as: 'badgeId',
-        },
-      },
       firstName: {
-        type: Sequelize.STRING, allowNull: false },
+        type: Sequelize.STRING,
+        allowNull: false
+      },
       lastName: {
-        type: Sequelize.STRING, allowNull: false
+        type: Sequelize.STRING,
+        allowNull: false
       },
       email: {
-        type: Sequelize.STRING, allowNull: false
+        type: Sequelize.STRING,
+        allowNull: false
       },
       password: {
-        type: Sequelize.STRING, allowNull: false
+        type: Sequelize.STRING,
+        allowNull: false
       },
       phoneNumber1: {
-        type: Sequelize.STRING, allowNull: false
+        type: Sequelize.STRING,
+        allowNull: false
       },
       type: {
         type: Sequelize.INTEGER,
@@ -48,7 +44,7 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
-      },
+      }
     });
   },
   down: (queryInterface, /*Sequelize*/) => {
