@@ -17,7 +17,8 @@ module.exports = {
       },
       email: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        unique: true
       },
       password: {
         type: Sequelize.STRING,
@@ -26,6 +27,10 @@ module.exports = {
       phoneNumber1: {
         type: Sequelize.STRING,
         allowNull: false
+      },
+      username: {
+        type: Sequelize.STRING,
+        unique: true,
       },
       type: {
         type: Sequelize.INTEGER,
@@ -36,6 +41,9 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         allowNull: false,
         defaultValue: false,
+      },
+      token: {
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,

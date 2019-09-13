@@ -1,3 +1,7 @@
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import emailSender from '../MailSender';
+
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
     firstName: {
@@ -36,6 +40,10 @@ module.exports = (sequelize, DataTypes) => {
         len: [11, 14],
       }
     },
+    username: {
+      type: DataTypes.STRING,
+      unique: true,
+    },
     type: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -47,6 +55,23 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: false,
     },
+    token: {
+      type: DataTypes.STRING,
+    },
+  }, {
+    hooks: {
+      beforeCreate: (user) => {
+        user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10));
+        user.token = jwt.sign({
+          userId: user.id,
+          type: user.type,
+        }, process.env.SECRET, { expiresIn: 120 });
+      },
+      afterCreate: (user) => {
+        const { email, token } = user;
+        emailSender(email, token).catch(console.error);
+      }
+    }
   }, {
     classMethods: {
       associate: (/*models*/) => {

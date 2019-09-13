@@ -37,5 +37,10 @@ describe('User Model Unit Test', () => {
           done();
         });
     });
+    it('ensures password is hashed', () => {
+      expect(newUser.password)
+        .not
+        .toBe(regularUser.password);
+    });
   });
 });

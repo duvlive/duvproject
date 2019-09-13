@@ -3,6 +3,7 @@ import express from 'express';
 import path from 'path';
 import logger from "morgan";
 import bodyParser from "body-parser";
+import router from './server/routes';
 
 const port = parseInt(process.env.PORT, 10) || 8080;
 
@@ -10,14 +11,9 @@ const port = parseInt(process.env.PORT, 10) || 8080;
 const app = express();
 
 app.use(logger('dev'));
-app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-app.get("*", (req, res) =>
-  res.status(200).send({
-    message: "Welcome to the DUV"
-  })
-);
+app.use(bodyParser.json());
+app.use(router);
 
 // Serve any static files
 app.use(express.static(path.join(__dirname, 'frontend/build')));
