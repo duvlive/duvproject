@@ -1,4 +1,6 @@
+import bcrypt from 'bcrypt';
 import { User } from '../models';
+import emailSender from '../MailSender';
 
 const UserController = {
   /**
@@ -123,6 +125,110 @@ const UserController = {
     .catch((error) => {
       const errorMessage = error.message || error;
       return res.status(500).json({ message: errorMessage });
+    });
+  },
+
+  /**
+   * user login
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  userLogin(req, res) {
+    const { email, password } = req.body;
+    if(!email || !password) {
+      return res.status(400).json({ message: 'Email and password cannot be empty'});
+    }
+    User.findOne({
+      where: { email }
+    })
+    .then((user) => {
+      if (user.length === 0 || !user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      if (!user.isActive) {
+        return res.status(403).json({ message: 'User needs to activate account' });
+      }
+      if(!bcrypt.compareSync(password, user.password)) {
+        return res.status(403).json({ message: "Incorrect login detail"});
+      }
+      else {
+        return res.status(200).json({
+          message: 'You are successfully Logged in',
+        });
+      }
+    })
+    .catch(error => {
+      return res.status(500).json({ error: error.message });
+    });
+  },
+
+  /**
+   * password reset
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  passwordReset(req, res) {
+    const { email } = req.body;
+    if (!email) {
+      return res.status(400).json({ message: 'Email cannot be empty'});
+    }
+
+    User.findOne({
+      where: { email }
+    })
+    .then((user) => {
+      if(!user || user.length === 0) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      else {
+        const title = 'Password Recovery | DUV LIVE';
+        emailSender(email, user.token, title).catch(console.error);
+        return res.status(200).json({
+          message: 'Password reset email sent successfully' });
+      }
+    })
+    .catch(error => {
+      return res.status(500).json({ error: error.message });
+    });
+  },
+
+  /**
+  * update password
+  * @function
+  * @param {object} req is req object
+  * @param {object} res is res object
+  * @return {object} returns res object
+  */
+  updatePassword(req, res) {
+    const { password, confirmPassword } = req.body;
+    if (!password || !confirmPassword) {
+      return res.status(400).json({ message: 'Please fill both fields, cannot be empty'});
+    }
+
+    User.findOne({
+      where: { token: req.query.token }
+    })
+    .then((user) => {
+      if(!user || user.length === 0) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      if(password !== confirmPassword) {
+        return res.status(403).json({ message: "Passwords do not match"});
+      }
+
+      return User.update({ password: bcrypt.hashSync(user.password, bcrypt.genSaltSync(10)) }, {
+        where: {
+          token: req.query.token
+        }
+      })
+      .then(() => res.status(200).json({ message: 'Password update successful' }));
+    })
+    .catch(error => {
+      return res.status(500).json({ error: error.message });
     });
   }
 };
