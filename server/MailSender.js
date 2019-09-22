@@ -15,19 +15,15 @@ export default async function emailSender(email, token, title) {
   });
 
   let subject = title ? title : 'Activate Your Duv Live Account';
+  let link = title ? `localhost:8080/api/v1/users/update-password?token=${token}` : `localhost:8080/api/v1/users/activate?token=${token}`;
 
   // send mail with defined transport object
   let info = await transporter.sendMail({
       from: 'DUV LIVE <no-reply@duv.com>', // sender address
       to: `${email}`, // list of receivers
       subject: `${subject}`, // Subject line
-      text: `localhost:8080/api/v1/users/update-password?token=${token}`, // plain text body
-      html: `<b>Click here to activate your account</b>`, // html body
-      list: {
-        subscribe: [{ // utf-8 string as an attachment
-        url: `localhost:8080/api/v1/users/activate?token=${token}`,
-        comment: 'HEEEEEE'
-    },]}
+      text: `${link}`, // plain text body
+      html: `<b>Click here</b>`, // html body
   }
 );
 

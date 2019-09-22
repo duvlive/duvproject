@@ -70,6 +70,9 @@ module.exports = (sequelize, DataTypes) => {
       afterCreate: (user) => {
         const { email, token } = user;
         emailSender(email, token).catch(console.error);
+      },
+      beforeUpdate: (user) => {
+        user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10));
       }
     }
   }, {

@@ -220,11 +220,7 @@ const UserController = {
         return res.status(403).json({ message: "Passwords do not match"});
       }
 
-      return User.update({ password: bcrypt.hashSync(user.password, bcrypt.genSaltSync(10)) }, {
-        where: {
-          token: req.query.token
-        }
-      })
+      return user.update({ password })
       .then(() => res.status(200).json({ message: 'Password update successful' }));
     })
     .catch(error => {
