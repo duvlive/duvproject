@@ -49,10 +49,22 @@ const TopBar = ({ showSidebar }) => {
                 />{' '}
               </DropdownToggle>
               <DropdownMenu right>
-                <DropdownItem>Auctions</DropdownItem>
-                <DropdownItem>Payment History</DropdownItem>
+                <DropdownItem>
+                  <Link className="text-color" to="/user/auctions">
+                    Auctions
+                  </Link>
+                </DropdownItem>
+                <DropdownItem>
+                  <Link className="text-color" to="/user/payments-history">
+                    Payment History
+                  </Link>
+                </DropdownItem>
                 <DropdownItem divider />
-                <DropdownItem>Logout</DropdownItem>
+                <DropdownItem>
+                  <Link className="text-color" to="/login">
+                    Logout
+                  </Link>
+                </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>
           </Nav>

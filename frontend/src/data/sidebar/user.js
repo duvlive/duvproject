@@ -44,7 +44,7 @@ export default [
       },
       {
         title: 'Logout',
-        to: '/user/logout',
+        to: '/logout',
         icon: 'logout'
       }
     ]

@@ -10,6 +10,7 @@ import Help from 'components/pages/frontend/Help';
 import TermsOfUse from 'components/pages/frontend/TermsOfUse';
 import PrivacyPolicy from 'components/pages/frontend/PrivacyPolicy';
 import Login from 'components/pages/auth/Login';
+import Logout from 'components/pages/auth/Logout';
 import Register from 'components/pages/auth/Register';
 import SingleEntertainer from 'components/pages/frontend/SingleEntertainer';
 import SingleEvent from 'components/pages/frontend/SingleEvent';
@@ -46,6 +47,7 @@ function App() {
           <TermsOfUse path="terms-of-use" />
           <PrivacyPolicy path="privacy-policy" />
           <Login path="login" />
+          <Logout path="logout" />
           <ForgotPassword path="forgot-password" />
           <Register path="register" />
           <Register path="register/:type" />

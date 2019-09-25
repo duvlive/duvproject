@@ -47,12 +47,21 @@ $top-header-list-spacing: 1rem;
 
     a {
       color: $white !important;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
       transition: all 0.3s ease-out;
+      &.nav-link {
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+      &.text-color {
+        color: $text-color !important;
+      }
 
       &:hover {
         opacity: 0.5;
+
+        &.text-color {
+          color: $primary !important;
+        }
       }
 
       &.active {
