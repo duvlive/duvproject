@@ -28,6 +28,7 @@ import SelectEntertainer from 'components/pages/user/HireEntertainers';
 import NewEvent from 'components/pages/user/NewEvent';
 import ViewEvent from 'components/pages/user/ViewEvent';
 import Bids from 'components/pages/user/Bids';
+import EditProfile from 'components/pages/user/EditProfile';
 import Approval from 'components/pages/user/Approval';
 import FormikForm from 'components/forms/FormikForm';
 
@@ -69,6 +70,7 @@ function App() {
             {/* <AddEntertainerToEvent path="events/:id/add-entertainer/:type" /> */}
             <Bids path="/auction/bids" />
             <Approval path="/approval" />
+            <EditProfile path="/edit-profile" />
             <EmptyDashboard default />
           </UserPage>
 
