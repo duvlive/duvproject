@@ -1,16 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Header from 'components/common/layout/Header';
 import Footer from 'components/common/layout/Footer';
 import { Formik, Form } from 'formik';
 import Input from 'components/forms/Input';
 import { Link } from '@reach/router';
-import { Col, Row } from 'reactstrap';
+import { Col, Row, Alert } from 'reactstrap';
 import Text from 'components/common/utils/Text';
 import Quotes from 'data/quotes';
 import { randomItem } from 'utils/helpers';
 import { feedback } from 'components/forms/form-helper';
 import Button from 'components/forms/Button';
 import { loginSchema } from 'components/forms/schema/userSchema';
+import { navigate } from '@reach/router';
 
 const Login = () => (
   <>
@@ -40,7 +41,7 @@ const Content = () => {
             <div className="auth__container">
               <section>
                 <h5 className="header font-weight-normal mb-4">Login</h5>
-                <Login.Form />
+                <LoginForm />
               </section>
               <section className="auth__social-media">
                 <p className="auth__social-media--text">or login with:</p>
@@ -70,7 +71,8 @@ const Content = () => {
   );
 };
 
-Login.Form = () => {
+const LoginForm = () => {
+  const [error, setError] = useState(null);
   return (
     <Formik
       initialValues={{
@@ -81,6 +83,12 @@ Login.Form = () => {
         console.log(values);
         setTimeout(() => {
           actions.setSubmitting(false);
+          const { email, password } = values;
+          if (email === 'user@duvlive.com' && password === 'passworded') {
+            return navigate('/user/dashboard');
+          } else {
+            setError('Invalid email or password');
+          }
         }, 400);
       }}
       render={({ isSubmitting, handleSubmit }) => (
@@ -103,6 +111,7 @@ Login.Form = () => {
             showFeedback={feedback.NONE}
             type="password"
           />
+          {error && <Alert color="danger">{error}</Alert>}
           <Button
             className="btn-danger btn-wide btn-transparent"
             loading={isSubmitting}
