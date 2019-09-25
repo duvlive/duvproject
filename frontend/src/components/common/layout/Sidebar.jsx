@@ -5,7 +5,7 @@ import UserAvatar from 'assets/img/avatar/user.png';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { Link } from '@reach/router';
 import 'react-perfect-scrollbar/dist/css/styles.css';
-import userSideMenu from 'data/sidebar/user.js';
+import userSideMenu from 'data/sidebar/user';
 import classNames from 'classnames';
 
 const Sidebar = ({ showSidebar, closeSidebar }) => (

@@ -38,6 +38,11 @@ export default [
         icon: 'credit-card-alt'
       },
       {
+        title: 'Register as Entertainer',
+        to: '/user/register-as-entertainer',
+        icon: 'paper-plane'
+      },
+      {
         title: 'Help',
         to: '/user/help',
         icon: 'help'
