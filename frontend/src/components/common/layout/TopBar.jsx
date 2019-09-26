@@ -59,6 +59,11 @@ const TopBar = ({ showSidebar }) => {
                     Payment History
                   </Link>
                 </DropdownItem>
+                <DropdownItem>
+                  <Link className="text-color" to="/user/change-password">
+                    Change Password
+                  </Link>
+                </DropdownItem>
                 <DropdownItem divider />
                 <DropdownItem>
                   <Link className="text-color" to="/login">

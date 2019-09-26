@@ -1,5 +1,9 @@
 import * as yup from 'yup';
 
+/////////////////////////
+// Fields
+////////////////////////
+
 const email = yup
   .string()
   .label('Email')
@@ -36,6 +40,9 @@ const loginSchema = yup.object().shape({
   password
 });
 
+/////////////////////////
+// Objects
+////////////////////////
 const registerObject = {
   first_name: defaultNameValidation('First Name'),
   last_name: defaultNameValidation('Last Name'),
@@ -45,7 +52,38 @@ const registerObject = {
   confirm_password: confirmPassword
 };
 
+const profileObject = {
+  first_name: defaultNameValidation('First Name'),
+  last_name: defaultNameValidation('Last Name'),
+  phone,
+  email,
+  location: defaultNameValidation('Location'),
+  address: defaultNameValidation('Address')
+};
+
+const changePasswordObject = {
+  old_password: strongPassword,
+  password: strongPassword,
+  confirm_password: confirmPassword
+};
+
+/////////////////////////
+// Schema
+////////////////////////
+export const createSchema = object => {
+  return yup.object().shape(object);
+};
+
 const registerSchema = yup.object().shape(registerObject);
+const profileSchema = yup.object().shape(profileObject);
 const forgotPasswordSchema = yup.object().shape({ email });
 
-export { loginSchema, registerSchema, registerObject, forgotPasswordSchema };
+export {
+  loginSchema,
+  registerSchema,
+  registerObject,
+  forgotPasswordSchema,
+  changePasswordObject,
+  profileObject,
+  profileSchema
+};

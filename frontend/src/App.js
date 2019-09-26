@@ -29,6 +29,7 @@ import NewEvent from 'components/pages/user/NewEvent';
 import ViewEvent from 'components/pages/user/ViewEvent';
 import Bids from 'components/pages/user/Bids';
 import EditProfile from 'components/pages/user/EditProfile';
+import ChangePassword from 'components/pages/user/ChangePassword';
 import Approval from 'components/pages/user/Approval';
 import FormikForm from 'components/forms/FormikForm';
 
@@ -71,6 +72,7 @@ function App() {
             <Bids path="/auction/bids" />
             <Approval path="/approval" />
             <EditProfile path="/edit-profile" />
+            <ChangePassword path="/change-password" />
             <EmptyDashboard default />
           </UserPage>
 
