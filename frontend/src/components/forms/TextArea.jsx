@@ -11,7 +11,7 @@ import {
 } from 'components/forms/form-helper';
 import Tooltip from 'components/common/utils/Tooltip';
 
-const Input = ({
+const TextArea = ({
   autoComplete,
   formGroupClassName,
   formik,
@@ -28,7 +28,7 @@ const Input = ({
   showFeedback,
   tooltipText,
   tooltipPosition,
-  type
+  ...others
 }) => {
   return (
     <div
@@ -52,10 +52,11 @@ const Input = ({
             inputClassName,
             getValidityClass(formik, name, showFeedback)
           )}
+          component="textarea"
           id={name}
           name={name}
           placeholder={placeholder}
-          type={type}
+          {...others}
         />
       </div>
       <FeedbackMessage
@@ -71,7 +72,7 @@ const Input = ({
 
 // NB: Wrap multiple fields in .form-row and give formGroupClassname the size e.g form-group col-md-6
 
-Input.defaultProps = {
+TextArea.defaultProps = {
   autoComplete: '',
   formGroupClassName: null,
   helpText: null,
@@ -89,7 +90,7 @@ Input.defaultProps = {
   type: null
 };
 
-Input.propTypes = {
+TextArea.propTypes = {
   autoComplete: PropTypes.string,
   formGroupClassName: PropTypes.string,
   formik: PropTypes.object.isRequired,
@@ -112,11 +113,10 @@ Input.propTypes = {
   type: PropTypes.string
 };
 
-export default connect(Input);
+export default connect(TextArea);
 
 // TODO:
 // - Create label component
 // - Use name for label if not given
 // - Add all label properties into options, tooltip and other related stuffs
 // - Seems better to use label as placeholder too
-// - Use ...others instead on adding all props
