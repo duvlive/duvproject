@@ -3,29 +3,35 @@ import TopMessage from 'components/common/layout/TopMessage';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import { Formik, Form } from 'formik';
 import Input from 'components/forms/Input';
-import Button from 'components/forms/Button';
+import TextArea from 'components/forms/TextArea';
+import Select from 'components/forms/Select';
+// import Button from 'components/forms/Button';
 import {
   profileObject,
   profileSchema
 } from 'components/forms/schema/userSchema';
 import { navigate } from '@reach/router';
 import { setInitialValues } from 'components/forms/form-helper';
+import { range } from 'utils/helpers';
+import AutoComplete from 'components/forms/AutoComplete';
 
-const EditProfile = () => {
+const currentYear = new Date().getFullYear();
+
+const RegisterAsEntertainer = () => {
   return (
     <BackEndPage title="Edit Profile">
       <div className="main-app">
         <TopMessage message="Edit Profile" />
 
         <section className="app-content">
-          <UserProfileForm />
+          <RegisterAsEntertainerForm />
         </section>
       </div>
     </BackEndPage>
   );
 };
 
-const UserProfileForm = () => {
+const RegisterAsEntertainerForm = () => {
   return (
     <Formik
       initialValues={setInitialValues(profileObject)}
@@ -40,73 +46,118 @@ const UserProfileForm = () => {
         }, 400);
       }}
       render={({ isSubmitting, handleSubmit }) => (
-        <div className="card card-custom card-black card-form ">
-          <div className="card-body col-md-10">
-            <h4 className="card-title yellow">Event Details</h4>
-            <Form>
-              <div className="form-row">
-                <Input
-                  formGroupClassName="col-md-6"
-                  isValidMessage="First Name looks good"
-                  label="First Name"
-                  name="first_name"
-                  placeholder="First Name"
-                />
-                <Input
-                  formGroupClassName="col-md-6"
-                  isValidMessage="Last Name looks good"
-                  label="Last Name"
-                  name="last_name"
-                  placeholder="Last Name"
-                />
-              </div>
-              <div className="form-row">
-                <Input
-                  formGroupClassName="col-md-6"
-                  isValidMessage="Email address seems valid"
-                  label="Email"
-                  name="email"
-                  placeholder="Email Address"
-                />
-                <Input
-                  formGroupClassName="col-md-6"
-                  isValidMessage="Phone number looks good"
-                  label="Phone"
-                  name="phone"
-                  placeholder="Phone"
-                />
-              </div>
-
-              <div className="form-row">
-                <Input
-                  formGroupClassName="col-md-6"
-                  isValidMessage="Location seems valid"
-                  label="Location"
-                  name="location"
-                  placeholder="Location"
-                />
-                <Input
-                  formGroupClassName="col-md-6"
-                  isValidMessage="Address looks okay"
-                  label="Address"
-                  name="address"
-                  placeholder="Address"
-                />
-              </div>
-              <Button
-                className="btn-danger btn-wide btn-transparent mt-4"
-                loading={isSubmitting}
-                onClick={handleSubmit}
-              >
-                Update Profile
-              </Button>
-            </Form>
-          </div>
-        </div>
+        <>
+          <PersonalInfoForm />
+          <EntertainerDetailsForm />
+        </>
       )}
       validationSchema={profileSchema}
     />
   );
 };
 
-export default EditProfile;
+const PersonalInfoForm = () => (
+  <div className="card card-custom card-black card-form ">
+    <div className="card-body col-md-10">
+      <h4 className="card-title yellow">Personal Information</h4>
+      <Form>
+        <div className="form-row">
+          <Input
+            formGroupClassName="col-md-6"
+            isValidMessage="First Name looks good"
+            label="First Name"
+            name="first_name"
+            placeholder="First Name"
+          />
+          <Input
+            formGroupClassName="col-md-6"
+            isValidMessage="Last Name looks good"
+            label="Last Name"
+            name="last_name"
+            placeholder="Last Name"
+          />
+        </div>
+        <div className="form-row">
+          <Input
+            formGroupClassName="col-md-6"
+            isValidMessage="Email address seems valid"
+            label="Email"
+            name="email"
+            placeholder="Email Address"
+          />
+          <Input
+            formGroupClassName="col-md-6"
+            isValidMessage="Phone number looks good"
+            label="Phone"
+            name="phone"
+            placeholder="Phone"
+          />
+        </div>
+        <TextArea
+          label="About"
+          name="about"
+          placeholder="Write some interesting facts about you."
+          rows="8"
+          type="textarea"
+        />
+      </Form>
+    </div>
+  </div>
+);
+
+const EntertainerDetailsForm = () => (
+  <div className="card card-custom card-black card-form ">
+    <div className="card-body col-md-10">
+      <h4 className="card-title yellow">Entertainers Details</h4>
+      <Form>
+        <div className="form-row">
+          <Input
+            formGroupClassName="col-md-6"
+            isValidMessage="Stage Name looks good"
+            label="Stage Name"
+            name="stage_name"
+            placeholder="Stage Name"
+          />
+          <Input
+            formGroupClassName="col-md-6"
+            isValidMessage="Location looks good"
+            label="Location"
+            name="location"
+            placeholder="Location"
+          />
+        </div>
+        <div className="form-row">
+          <Select
+            blankOption="Select Year"
+            formGroupClassName="col-md-6"
+            label="Year you started"
+            name="started_year"
+            options={range(currentYear, currentYear - 20, -1).map(year => ({
+              label: year
+            }))}
+          />
+          <Select
+            blankOption="Select Option"
+            formGroupClassName="col-md-6"
+            label="Willing to Travel"
+            name="started_year"
+            options={[{ label: 'Yes' }, { label: 'No' }]}
+          />
+        </div>
+        <AutoComplete
+          label="Available for"
+          name="autocomplete"
+          suggestions={[
+            { id: 3, name: 'Bananas' },
+            { id: 4, name: 'Mangos' },
+            { id: 5, name: 'Lemons' },
+            { id: 6, name: 'Apricots', disabled: true }
+          ]}
+          value={[{ id: 1, name: 'Apples' }, { id: 2, name: 'Pears' }]}
+        />
+      </Form>
+    </div>
+  </div>
+);
+
+export default RegisterAsEntertainer;

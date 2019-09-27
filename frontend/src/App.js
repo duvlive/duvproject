@@ -30,6 +30,7 @@ import ViewEvent from 'components/pages/user/ViewEvent';
 import Bids from 'components/pages/user/Bids';
 import EditProfile from 'components/pages/user/EditProfile';
 import ChangePassword from 'components/pages/user/ChangePassword';
+import RegisterAsEntertainer from 'components/pages/user/RegisterAsEntertainer';
 import Approval from 'components/pages/user/Approval';
 import FormikForm from 'components/forms/FormikForm';
 
@@ -73,6 +74,7 @@ function App() {
             <Approval path="/approval" />
             <EditProfile path="/edit-profile" />
             <ChangePassword path="/change-password" />
+            <RegisterAsEntertainer path="/register-as-entertainer" />
             <EmptyDashboard default />
           </UserPage>
 
