@@ -71,10 +71,9 @@ export const range = (start, stop, step = 1) => {
  */
 export const createMarkup = text => ({ __html: text });
 
-export const dashedLowerCase = text => {
+export const dashedLowerCase = text =>
   text &&
-    text
-      .toString()
-      .replace(/\s+/g, '-')
-      .toLowerCase();
-};
+  text
+    .toString()
+    .replace(/\s+/g, '-')
+    .toLowerCase();

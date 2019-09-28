@@ -49,7 +49,11 @@ const Select = ({
           id={name}
           name={name}
         >
-          {blankOption && <option value="">{blankOption}</option>}
+          {blankOption && (
+            <option key={`blankOptionfor${name}`} value="">
+              {blankOption}
+            </option>
+          )}
           {<Select.options options={options} />}
         </Field>
       </div>
@@ -105,6 +109,7 @@ Select.options = ({ options }) => {
     if (!(label || value)) return null;
     const optionValue = value || dashedLowerCase(label);
     const optionLabel = label || Humanize.capitalize(value);
+    console.log('optionValue', optionValue);
     return (
       <option key={optionValue} value={optionValue}>
         {optionLabel}

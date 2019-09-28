@@ -28,6 +28,9 @@ const phone = yup
   .label('Phone')
   .required('Phone is required');
 
+/////////////////////////
+// Functions
+////////////////////////
 const defaultNameValidation = label =>
   yup
     .string()
@@ -35,10 +38,13 @@ const defaultNameValidation = label =>
     .min(2, `${label} should be more than 2 characters`)
     .required(`${label} is really required`);
 
-const loginSchema = yup.object().shape({
-  email,
-  password
-});
+const optionalValidation = validation =>
+  yup.lazy(value => {
+    if (value) {
+      return validation;
+    }
+    return yup.mixed().notRequired();
+  });
 
 /////////////////////////
 // Objects
@@ -67,12 +73,29 @@ const changePasswordObject = {
   confirm_password: confirmPassword
 };
 
+const personalInfo = {
+  first_name: defaultNameValidation('First Name'),
+  last_name: defaultNameValidation('Last Name'),
+  email,
+  phone,
+  about: optionalValidation(defaultNameValidation('About'))
+};
+
+const registerAsEntertainerObject = {
+  ...personalInfo
+};
+
 /////////////////////////
 // Schema
 ////////////////////////
 export const createSchema = object => {
   return yup.object().shape(object);
 };
+
+const loginSchema = yup.object().shape({
+  email,
+  password
+});
 
 const registerSchema = yup.object().shape(registerObject);
 const profileSchema = yup.object().shape(profileObject);
@@ -85,5 +108,6 @@ export {
   forgotPasswordSchema,
   changePasswordObject,
   profileObject,
-  profileSchema
+  profileSchema,
+  registerAsEntertainerObject
 };

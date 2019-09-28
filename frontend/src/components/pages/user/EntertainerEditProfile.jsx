@@ -7,24 +7,25 @@ import TextArea from 'components/forms/TextArea';
 import Select from 'components/forms/Select';
 // import Button from 'components/forms/Button';
 import {
-  registerAsEntertainerObject,
-  createSchema
+  profileObject,
+  profileSchema
 } from 'components/forms/schema/userSchema';
-import {
-  setInitialValues,
-  DisplayFormikState
-} from 'components/forms/form-helper';
+import { navigate } from '@reach/router';
+import { setInitialValues } from 'components/forms/form-helper';
 import { range } from 'utils/helpers';
 import AutoComplete from 'components/forms/AutoComplete';
-import Button from 'components/forms/Button';
 
 const currentYear = new Date().getFullYear();
 
 const RegisterAsEntertainer = () => {
+  console.log('currentYear', currentYear);
+  const testing = range(currentYear, currentYear - 40, -1);
+  console.log('testing', testing);
   return (
-    <BackEndPage title="Register as an Entertainer">
+    <BackEndPage title="Edit Profile">
       <div className="main-app">
-        <TopMessage message="Register as an Entertainer" />
+        <TopMessage message="Edit Profile" />
+
         <section className="app-content">
           <RegisterAsEntertainerForm />
         </section>
@@ -36,29 +37,25 @@ const RegisterAsEntertainer = () => {
 const RegisterAsEntertainerForm = () => {
   return (
     <Formik
-      initialValues={setInitialValues(registerAsEntertainerObject)}
+      initialValues={setInitialValues(profileObject)}
       onSubmit={(values, actions) => {
         console.log(values);
         setTimeout(() => {
           actions.setSubmitting(false);
+          const { email, password } = values;
+          if (email === 'user@duvlive.com' && password === 'passworded') {
+            return navigate('/user/dashboard');
+          }
         }, 400);
       }}
-      render={({ isSubmitting, handleSubmit, ...props }) => (
+      render={({ isSubmitting, handleSubmit }) => (
         <>
           <PersonalInfoForm />
           <EntertainerDetailsForm />
-          <Button
-            className="btn-danger btn-lg btn-wide btn-transparent"
-            loading={isSubmitting}
-            onClick={handleSubmit}
-          >
-            Register as an Entertainer
-          </Button>
-
-          <DisplayFormikState {...props} />
+          <BankDetailsForm />
         </>
       )}
-      validationSchema={createSchema(registerAsEntertainerObject)}
+      validationSchema={profileSchema}
     />
   );
 };
@@ -155,13 +152,58 @@ const EntertainerDetailsForm = () => (
           label="Available for"
           name="autocomplete"
           suggestions={[
-            { id: 3, name: 'Yoruba Party' },
-            { id: 4, name: 'Party' },
-            { id: 5, name: 'Weddings' },
-            { id: 6, name: 'Aniversary' }
+            { id: 3, name: 'Bananas' },
+            { id: 4, name: 'Mangos' },
+            { id: 5, name: 'Lemons' },
+            { id: 6, name: 'Apricots', disabled: true }
           ]}
-          value={[{ id: 1, name: 'Birthdays' }, { id: 2, name: 'Weddings' }]}
+          value={[{ id: 1, name: 'Apples' }, { id: 2, name: 'Pears' }]}
         />
+      </Form>
+    </div>
+  </div>
+);
+
+const BankDetailsForm = () => (
+  <div className="card card-custom card-black card-form ">
+    <div className="card-body col-md-10">
+      <h4 className="card-title yellow">Entertainers Details</h4>
+      <Form>
+        <div className="row">
+          <div className="col-md-6">
+            <Input
+              isValidMessage="Stage Name looks good"
+              label="Stage Name"
+              name="stage_name"
+              placeholder="Stage Name"
+            />
+            <Input
+              isValidMessage="Stage Name looks good"
+              label="Stage Name"
+              name="stage_name"
+              placeholder="Stage Name"
+            />
+            <Input
+              isValidMessage="Stage Name looks good"
+              label="Stage Name"
+              name="stage_name"
+              placeholder="Stage Name"
+            />
+          </div>
+          <div className="col-md-6">
+            <p>Note:</p>
+            <p>
+              For payments to be made, your account name must tally with your
+              first name and last name or stage name.
+            </p>
+            <p>
+              Details on how we pay and when we pay would be explained here.
+              Quisque volutpat mattis eros. Nullam malesuada erat ut turpis.
+              Suspendisse urna nibh, viverra non, semper suscipit, posuere a,
+              pede.
+            </p>
+          </div>
+        </div>
       </Form>
     </div>
   </div>
