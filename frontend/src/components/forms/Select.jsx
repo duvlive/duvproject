@@ -109,7 +109,6 @@ Select.options = ({ options }) => {
     if (!(label || value)) return null;
     const optionValue = value || dashedLowerCase(label);
     const optionLabel = label || Humanize.capitalize(value);
-    console.log('optionValue', optionValue);
     return (
       <option key={optionValue} value={optionValue}>
         {optionLabel}

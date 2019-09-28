@@ -1,5 +1,6 @@
 import * as yup from 'yup';
-
+import { stringValidation, optionalValidation } from './schema-helpers';
+// import { entertainerDetailsObject } from './entertainerSchema';
 /////////////////////////
 // Fields
 ////////////////////////
@@ -29,29 +30,11 @@ const phone = yup
   .required('Phone is required');
 
 /////////////////////////
-// Functions
-////////////////////////
-const defaultNameValidation = label =>
-  yup
-    .string()
-    .label(label)
-    .min(2, `${label} should be more than 2 characters`)
-    .required(`${label} is really required`);
-
-const optionalValidation = validation =>
-  yup.lazy(value => {
-    if (value) {
-      return validation;
-    }
-    return yup.mixed().notRequired();
-  });
-
-/////////////////////////
 // Objects
 ////////////////////////
 const registerObject = {
-  first_name: defaultNameValidation('First Name'),
-  last_name: defaultNameValidation('Last Name'),
+  first_name: stringValidation('First Name'),
+  last_name: stringValidation('Last Name'),
   phone,
   email,
   password: strongPassword,
@@ -59,12 +42,12 @@ const registerObject = {
 };
 
 const profileObject = {
-  first_name: defaultNameValidation('First Name'),
-  last_name: defaultNameValidation('Last Name'),
+  first_name: stringValidation('First Name'),
+  last_name: stringValidation('Last Name'),
   phone,
   email,
-  location: defaultNameValidation('Location'),
-  address: defaultNameValidation('Address')
+  location: stringValidation('Location'),
+  address: stringValidation('Address')
 };
 
 const changePasswordObject = {
@@ -73,25 +56,17 @@ const changePasswordObject = {
   confirm_password: confirmPassword
 };
 
-const personalInfo = {
-  first_name: defaultNameValidation('First Name'),
-  last_name: defaultNameValidation('Last Name'),
+const personalInfoObject = {
+  first_name: stringValidation('First Name'),
+  last_name: stringValidation('Last Name'),
   email,
   phone,
-  about: optionalValidation(defaultNameValidation('About'))
-};
-
-const registerAsEntertainerObject = {
-  ...personalInfo
+  about: optionalValidation(stringValidation('About', 20))
 };
 
 /////////////////////////
 // Schema
 ////////////////////////
-export const createSchema = object => {
-  return yup.object().shape(object);
-};
-
 const loginSchema = yup.object().shape({
   email,
   password
@@ -109,5 +84,5 @@ export {
   changePasswordObject,
   profileObject,
   profileSchema,
-  registerAsEntertainerObject
+  personalInfoObject
 };

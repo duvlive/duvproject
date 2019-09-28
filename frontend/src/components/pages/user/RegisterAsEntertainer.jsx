@@ -5,11 +5,8 @@ import { Formik, Form } from 'formik';
 import Input from 'components/forms/Input';
 import TextArea from 'components/forms/TextArea';
 import Select from 'components/forms/Select';
-// import Button from 'components/forms/Button';
-import {
-  registerAsEntertainerObject,
-  createSchema
-} from 'components/forms/schema/userSchema';
+import { personalInfoObject } from 'components/forms/schema/userSchema';
+import { createSchema } from 'components/forms/schema/schema-helpers';
 import {
   setInitialValues,
   DisplayFormikState
@@ -17,6 +14,7 @@ import {
 import { range } from 'utils/helpers';
 import AutoComplete from 'components/forms/AutoComplete';
 import Button from 'components/forms/Button';
+import { entertainerDetailsObject } from 'components/forms/schema/entertainerSchema';
 
 const currentYear = new Date().getFullYear();
 
@@ -36,7 +34,15 @@ const RegisterAsEntertainer = () => {
 const RegisterAsEntertainerForm = () => {
   return (
     <Formik
-      initialValues={setInitialValues(registerAsEntertainerObject)}
+      initialValues={{
+        entertainer: setInitialValues(entertainerDetailsObject, {
+          available_for: [
+            { id: 1, name: 'Birthdays' },
+            { id: 2, name: 'Weddings' }
+          ]
+        }),
+        personal: setInitialValues(personalInfoObject)
+      }}
       onSubmit={(values, actions) => {
         console.log(values);
         setTimeout(() => {
@@ -58,7 +64,10 @@ const RegisterAsEntertainerForm = () => {
           <DisplayFormikState {...props} />
         </>
       )}
-      validationSchema={createSchema(registerAsEntertainerObject)}
+      validationSchema={createSchema({
+        entertainer: createSchema(entertainerDetailsObject),
+        personal: createSchema(personalInfoObject)
+      })}
     />
   );
 };
@@ -73,14 +82,14 @@ const PersonalInfoForm = () => (
             formGroupClassName="col-md-6"
             isValidMessage="First Name looks good"
             label="First Name"
-            name="first_name"
+            name="personal.first_name"
             placeholder="First Name"
           />
           <Input
             formGroupClassName="col-md-6"
             isValidMessage="Last Name looks good"
             label="Last Name"
-            name="last_name"
+            name="personal.last_name"
             placeholder="Last Name"
           />
         </div>
@@ -89,20 +98,20 @@ const PersonalInfoForm = () => (
             formGroupClassName="col-md-6"
             isValidMessage="Email address seems valid"
             label="Email"
-            name="email"
+            name="personal.email"
             placeholder="Email Address"
           />
           <Input
             formGroupClassName="col-md-6"
             isValidMessage="Phone number looks good"
             label="Phone"
-            name="phone"
+            name="personal.phone"
             placeholder="Phone"
           />
         </div>
         <TextArea
           label="About"
-          name="about"
+          name="personal.about"
           placeholder="Write some interesting facts about you."
           rows="8"
           type="textarea"
@@ -122,14 +131,14 @@ const EntertainerDetailsForm = () => (
             formGroupClassName="col-md-6"
             isValidMessage="Stage Name looks good"
             label="Stage Name"
-            name="stage_name"
+            name="entertainer.stage_name"
             placeholder="Stage Name"
           />
           <Input
             formGroupClassName="col-md-6"
             isValidMessage="Location looks good"
             label="Location"
-            name="location"
+            name="entertainer.location"
             placeholder="Location"
           />
         </div>
@@ -138,7 +147,7 @@ const EntertainerDetailsForm = () => (
             blankOption="Select Year"
             formGroupClassName="col-md-6"
             label="Year you started"
-            name="started_year"
+            name="entertainer.started_year"
             options={range(currentYear, currentYear - 20, -1).map(year => ({
               label: year
             }))}
@@ -147,20 +156,19 @@ const EntertainerDetailsForm = () => (
             blankOption="Select Option"
             formGroupClassName="col-md-6"
             label="Willing to Travel"
-            name="started_year"
+            name="entertainer.willing_to_travel"
             options={[{ label: 'Yes' }, { label: 'No' }]}
           />
         </div>
         <AutoComplete
           label="Available for"
-          name="autocomplete"
+          name="entertainer.available_for"
           suggestions={[
             { id: 3, name: 'Yoruba Party' },
             { id: 4, name: 'Party' },
             { id: 5, name: 'Weddings' },
             { id: 6, name: 'Aniversary' }
           ]}
-          value={[{ id: 1, name: 'Birthdays' }, { id: 2, name: 'Weddings' }]}
         />
       </Form>
     </div>

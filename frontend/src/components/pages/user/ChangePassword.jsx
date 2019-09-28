@@ -5,10 +5,8 @@ import { Formik, Form } from 'formik';
 import { feedback } from 'components/forms/form-helper';
 import Input from 'components/forms/Input';
 import Button from 'components/forms/Button';
-import {
-  changePasswordObject,
-  createSchema
-} from 'components/forms/schema/userSchema';
+import { changePasswordObject } from 'components/forms/schema/userSchema';
+import { createSchema } from 'components/forms/schema/schema-helpers';
 import { setInitialValues } from 'components/forms/form-helper';
 
 const ChangePassword = () => {
