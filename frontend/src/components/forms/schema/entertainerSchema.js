@@ -8,7 +8,7 @@ import {
 /////////////////////////
 // Objects
 ////////////////////////
-const entertainerDetailsObject = {
+export const entertainerDetailsSchema = {
   stage_name: stringValidation('Stage Name'),
   location: stringValidation('Location'),
   year_started: positiveNumberValidation('Started Year'),
@@ -16,4 +16,4 @@ const entertainerDetailsObject = {
   available_for: autocompleteValidation('Available for')
 };
 
-export { entertainerDetailsObject };
+// export { entertainerDetailsObject };

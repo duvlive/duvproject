@@ -14,7 +14,7 @@ import {
 import { range } from 'utils/helpers';
 import AutoComplete from 'components/forms/AutoComplete';
 import Button from 'components/forms/Button';
-import { entertainerDetailsObject } from 'components/forms/schema/entertainerSchema';
+import { entertainerDetailsSchema } from 'components/forms/schema/entertainerSchema';
 
 const currentYear = new Date().getFullYear();
 
@@ -35,7 +35,7 @@ const RegisterAsEntertainerForm = () => {
   return (
     <Formik
       initialValues={{
-        entertainer: setInitialValues(entertainerDetailsObject, {
+        entertainer: setInitialValues(entertainerDetailsSchema, {
           available_for: [
             { id: 1, name: 'Birthdays' },
             { id: 2, name: 'Weddings' }
@@ -65,7 +65,7 @@ const RegisterAsEntertainerForm = () => {
         </>
       )}
       validationSchema={createSchema({
-        entertainer: createSchema(entertainerDetailsObject),
+        entertainer: createSchema(entertainerDetailsSchema),
         personal: createSchema(personalInfoObject)
       })}
     />

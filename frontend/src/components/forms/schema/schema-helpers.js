@@ -1,10 +1,6 @@
 import * as yup from 'yup';
 
-export const required = label =>
-  yup
-    .mixed()
-    .label(label)
-    .required(`${label} is required`);
+export const required = label => yup.string().required(`${label} is required`);
 
 export const stringValidation = (label, length = 2) =>
   yup
