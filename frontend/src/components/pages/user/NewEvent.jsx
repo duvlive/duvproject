@@ -9,14 +9,16 @@ import {
 import Button from 'components/forms/Button';
 import TopMessage from 'components/common/layout/TopMessage';
 import EventDetails from 'components/common/events/EventDetails';
-// import EventAddress from 'components/common/events/EventAddress';
+import EventAddress from 'components/common/events/EventAddress';
 // import AddEntertainer from 'components/common/entertainers/AddEntertainer';
 import { HIRE_ENTERTAINERS } from 'utils/constants';
 import { navigate } from '@reach/router';
 import BackEndPage from 'components/common/layout/BackEndPage';
-import { eventDetailsObject } from 'components/forms/schema/eventSchema';
+import {
+  eventDetailsSchema,
+  eventAddressSchema
+} from 'components/forms/schema/eventSchema';
 import { createSchema } from 'components/forms/schema/schema-helpers';
-// import { entertainerDetailsObject } from 'components/forms/schema/entertainerSchema';
 
 const NewEvent = ({ hire_type }) => {
   const validHireType = Object.keys(HIRE_ENTERTAINERS).includes(
@@ -67,11 +69,9 @@ NewEvent.defaultProps = {
 const NewEventForm = () => {
   return (
     <Formik
-      // initialValues={{
-      //   event: setInitialValues({ ...eventDetailsObject })
-      // }}
       initialValues={{
-        event: setInitialValues({ ...eventDetailsObject })
+        event: setInitialValues(eventDetailsSchema),
+        address: setInitialValues(eventAddressSchema, { description: '12345' })
       }}
       onSubmit={(values, actions) => {
         console.log(values);
@@ -82,7 +82,7 @@ const NewEventForm = () => {
       render={({ isSubmitting, handleSubmit, ...props }) => (
         <>
           <EventDetails />
-          {/* <EventAddress /> */}
+          <EventAddress />
           <Button
             className="btn-danger btn-lg btn-wide btn-transparent"
             loading={isSubmitting}
@@ -95,7 +95,8 @@ const NewEventForm = () => {
         </>
       )}
       validationSchema={createSchema({
-        event: createSchema(eventDetailsObject)
+        event: createSchema(eventDetailsSchema),
+        address: createSchema(eventAddressSchema)
       })}
     />
   );

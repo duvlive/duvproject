@@ -50,13 +50,21 @@ const DatePicker = ({
               id={name}
               name={name}
               onChange={date => {
-                const dateTime = showTimeSelectOnly
-                  ? date.toLocaleTimeString()
-                  : date.toLocaleDateString();
-                form.setFieldValue(name, { date, value: dateTime });
+                if (date) {
+                  const dateTime = showTimeSelectOnly
+                    ? date.toLocaleTimeString()
+                    : date.toLocaleDateString();
+                  form.setFieldValue(name, { date, value: dateTime });
+                } else {
+                  form.setFieldValue(name, '');
+                }
               }}
               placeholderText={placeholder}
-              selected={getIn(formik.values, name).date}
+              selected={
+                getIn(formik.values, name) !== ''
+                  ? getIn(formik.values, name).date
+                  : null
+              }
               showTimeSelect={showTimeSelect}
               showTimeSelectOnly={showTimeSelectOnly}
               timeCaption={timeCaption}

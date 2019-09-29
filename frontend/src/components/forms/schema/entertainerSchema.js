@@ -6,7 +6,7 @@ import {
 } from './schema-helpers';
 
 /////////////////////////
-// Objects
+// Schema
 ////////////////////////
 export const entertainerDetailsSchema = {
   stage_name: stringValidation('Stage Name'),
@@ -15,5 +15,3 @@ export const entertainerDetailsSchema = {
   willing_to_travel: stringValidation('Willing to travel'),
   available_for: autocompleteValidation('Available for')
 };
-
-// export { entertainerDetailsObject };
