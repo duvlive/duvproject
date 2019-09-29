@@ -1056,7 +1056,7 @@ const statesAndLga = [
 ];
 
 export const getStates = () =>
-  statesAndLga.map(({ state }) => ({ label: state }));
+  statesAndLga.map(({ state }) => ({ label: state, value: state }));
 
 export const getLgas = currentState => {
   if (!currentState) return [];
@@ -1066,5 +1066,6 @@ export const getLgas = currentState => {
       state.trim().toLowerCase() === currentState.trim().toLowerCase()
   );
 
+  if (!stateWithLga) return [];
   return stateWithLga['lgas'].map(lga => ({ label: lga }));
 };
