@@ -7,6 +7,7 @@ import UpcomingEvents from 'components/pages/entertainer/UpcomingEvents';
 import Payments from 'components/pages/entertainer/Payments';
 import EditProfile from 'components/pages/entertainer/EditProfile';
 import Gallery from 'components/pages/entertainer/Gallery';
+import Video from 'components/pages/entertainer/Video';
 
 const UserRouter = () => (
   <Router>
@@ -17,6 +18,7 @@ const UserRouter = () => (
     <Payments path="/payments" />
     <EditProfile path="/edit-profile" />
     <Gallery path="/gallery" />
+    <Video path="/videos" />
   </Router>
 );
 
