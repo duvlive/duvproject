@@ -18,6 +18,11 @@ export default [
         icon: 'events'
       },
       {
+        title: 'Notifications',
+        to: '/user/notifications',
+        icon: 'megaphone'
+      },
+      {
         title: 'Hire Entertainers',
         to: '/user/hire-entertainer',
         icon: 'hire-entertainers'

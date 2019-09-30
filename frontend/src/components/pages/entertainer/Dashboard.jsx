@@ -18,7 +18,7 @@ const Dashboard = () => {
               to="/entertainer/auctions"
             />
             <DashboardCard
-              icon="events"
+              icon="calendar"
               number="81"
               summary="5 upcoming events"
               title="Total Events"
@@ -181,5 +181,7 @@ Dashboard.RecentBadges = () => (
     </div>
   </div>
 );
+
+// const Badges = () => <div className="badge yellow"> Certified Entertainer</div>;
 
 export default Dashboard;
