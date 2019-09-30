@@ -10,6 +10,7 @@ import Gallery from 'components/pages/entertainer/Gallery';
 import Video from 'components/pages/entertainer/Video';
 import Badges from 'components/pages/entertainer/Badges';
 import BandMembers from 'components/pages/entertainer/BandMembers';
+import EmergencyContacts from 'components/pages/entertainer/EmergencyContacts';
 
 const UserRouter = () => (
   <Router>
@@ -23,6 +24,7 @@ const UserRouter = () => (
     <Video path="/videos" />
     <Badges path="/badges" />
     <BandMembers path="/band-members" />
+    <EmergencyContacts path="/emergency-contacts" />
   </Router>
 );
 
