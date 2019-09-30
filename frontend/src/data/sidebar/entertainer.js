@@ -30,12 +30,12 @@ export default [
     ]
   },
   {
-    name: 'Profile',
+    name: 'Gems',
     menus: [
       {
-        title: 'Edit Profile',
-        to: '/entertainer/edit-profile',
-        icon: 'user-circle'
+        title: 'Badges',
+        to: '/entertainer/badges',
+        icon: 'badge'
       },
       {
         title: 'Gallery',
@@ -63,14 +63,19 @@ export default [
     name: 'Others',
     menus: [
       {
-        title: 'Badges',
-        to: '/entertainer/badges',
-        icon: 'badge'
+        title: 'Edit Profile',
+        to: '/entertainer/edit-profile',
+        icon: 'user-circle'
       },
       {
         title: 'Invite Friends',
         to: '/entertainer/invite-friends',
         icon: 'invite-friend'
+      },
+      {
+        title: 'Login As User',
+        to: '/user/dashboard',
+        icon: 'loop'
       },
       {
         title: 'Help',

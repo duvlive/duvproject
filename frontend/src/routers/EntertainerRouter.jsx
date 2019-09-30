@@ -11,6 +11,9 @@ import Video from 'components/pages/entertainer/Video';
 import Badges from 'components/pages/entertainer/Badges';
 import BandMembers from 'components/pages/entertainer/BandMembers';
 import EmergencyContacts from 'components/pages/entertainer/EmergencyContacts';
+import InviteFriends from 'components/pages/entertainer/InviteFriends';
+import Help from 'components/pages/user/Help';
+import Logout from 'components/pages/auth/Logout';
 
 const UserRouter = () => (
   <Router>
@@ -25,6 +28,9 @@ const UserRouter = () => (
     <Badges path="/badges" />
     <BandMembers path="/band-members" />
     <EmergencyContacts path="/emergency-contacts" />
+    <InviteFriends path="/invite-friends" />
+    <Help path="/help" />
+    <Logout path="/logout" />
   </Router>
 );
 
