@@ -39,7 +39,7 @@ const Sidebar = ({ showSidebar, closeSidebar }) => (
         </div>
       </div>
       <PerfectScrollbar style={{ height: 'calc(100% - 12rem)' }}>
-        <Match path="/entertainer/:item">
+        <Match path="/entertainer/*">
           {props =>
             props.match ? (
               <div>
@@ -52,7 +52,7 @@ const Sidebar = ({ showSidebar, closeSidebar }) => (
             ) : null
           }
         </Match>
-        <Match path="/user/:item">
+        <Match path="/user/*">
           {props =>
             props.match ? (
               <div>

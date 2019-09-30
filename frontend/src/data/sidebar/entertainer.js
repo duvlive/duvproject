@@ -8,9 +8,9 @@ export default [
         icon: 'gauge'
       },
       {
-        title: 'Auctions',
-        to: '/entertainer/auctions',
-        icon: 'auction'
+        title: 'Bids',
+        to: '/entertainer/bids',
+        icon: 'bid'
       },
       {
         title: 'Notifications',
