@@ -9,6 +9,7 @@ import EditProfile from 'components/pages/entertainer/EditProfile';
 import Gallery from 'components/pages/entertainer/Gallery';
 import Video from 'components/pages/entertainer/Video';
 import Badges from 'components/pages/entertainer/Badges';
+import BandMembers from 'components/pages/entertainer/BandMembers';
 
 const UserRouter = () => (
   <Router>
@@ -21,6 +22,7 @@ const UserRouter = () => (
     <Gallery path="/gallery" />
     <Video path="/videos" />
     <Badges path="/badges" />
+    <BandMembers path="/band-members" />
   </Router>
 );
 
