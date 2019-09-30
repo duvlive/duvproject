@@ -5,6 +5,7 @@ import 'assets/sass/App.scss';
 import { ScrollToTop } from 'components/custom/ScrollToTop';
 import FrontPageRouter from 'routers/FrontPageRouter';
 import UserRouter from 'routers/UserRouter';
+import EntertainerRouter from 'routers/EntertainerRouter';
 import FormikForm from 'components/forms/FormikForm';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
         <ScrollToTop path="/">
           <FrontPageRouter path="/*" />
           <UserRouter path="user/*" />
+          <EntertainerRouter path="entertainer/*" />
 
           {/* To remove */}
           <FormikForm path="formik" />
