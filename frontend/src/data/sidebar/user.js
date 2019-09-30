@@ -40,7 +40,7 @@ export default [
       {
         title: 'Payments History',
         to: '/user/payments-history',
-        icon: 'credit-card-alt'
+        icon: 'credit-card'
       },
       {
         title: 'Register as Entertainer',

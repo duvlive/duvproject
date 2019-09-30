@@ -8,6 +8,7 @@ import Payments from 'components/pages/entertainer/Payments';
 import EditProfile from 'components/pages/entertainer/EditProfile';
 import Gallery from 'components/pages/entertainer/Gallery';
 import Video from 'components/pages/entertainer/Video';
+import Badges from 'components/pages/entertainer/Badges';
 
 const UserRouter = () => (
   <Router>
@@ -19,6 +20,7 @@ const UserRouter = () => (
     <EditProfile path="/edit-profile" />
     <Gallery path="/gallery" />
     <Video path="/videos" />
+    <Badges path="/badges" />
   </Router>
 );
 

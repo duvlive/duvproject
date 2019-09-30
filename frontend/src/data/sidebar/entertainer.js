@@ -64,17 +64,17 @@ export default [
     menus: [
       {
         title: 'Badges',
-        to: '/user/badges',
+        to: '/entertainer/badges',
         icon: 'badge'
       },
       {
         title: 'Invite Friends',
-        to: '/user/invite-friends',
+        to: '/entertainer/invite-friends',
         icon: 'invite-friend'
       },
       {
         title: 'Help',
-        to: '/user/help',
+        to: '/entertainer/help',
         icon: 'help'
       },
       {
