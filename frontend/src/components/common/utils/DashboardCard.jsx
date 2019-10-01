@@ -3,13 +3,13 @@ import Card from 'components/custom/Card';
 import PropTypes from 'prop-types';
 import { Link } from '@reach/router';
 
-const DashboardCard = ({ icon, number, summary, title, to }) => (
-  <Link className="d-block  col-sm-4" to={to}>
+const DashboardCard = ({ color, icon, number, summary, title, to }) => (
+  <Link className="d-block col-sm-4" to={to}>
     <Card className="dashboard__card" hover>
-      <h4 classname="dashboard__card__title">{title}</h4>
-      <h5 classname="dashboard__card--number pt-4 mb-0">{number}</h5>
-      <small classname="dashboard__card--summary">{summary}</small>
-      <span classname="dashboard__card--icon">
+      <h4 className="dashboard__card--title">{title}</h4>
+      <h5 className={`dashboard__card--number pt-4 mb-0 ${color}`}>{number}</h5>
+      <small className={`dashboard__card--summary ${color}`}>{summary}</small>
+      <span className="dashboard__card--icon">
         <span className={`icon-${icon}`}></span>
       </span>
     </Card>
@@ -17,6 +17,7 @@ const DashboardCard = ({ icon, number, summary, title, to }) => (
 );
 
 DashboardCard.propTypes = {
+  color: PropTypes.string.isRequired,
   icon: PropTypes.string.isRequired,
   number: PropTypes.string.isRequired,
   summary: PropTypes.string.isRequired,

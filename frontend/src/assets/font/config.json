@@ -97,12 +97,6 @@
       "src": "typicons"
     },
     {
-      "uid": "212ab54aac31030950fec3e2448ebee9",
-      "css": "bid",
-      "code": 59407,
-      "src": "modernpics"
-    },
-    {
       "uid": "9affc98d652b86628d650ee58dbf0357",
       "css": "auction",
       "code": 59408,
@@ -256,6 +250,12 @@
       "uid": "47a1f80457068fbeab69fdb83d7d0817",
       "css": "video",
       "code": 61802,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "f279f25007794fa6837ff78fe94b216e",
+      "css": "bid",
+      "code": 61654,
       "src": "fontawesome"
     }
   ]

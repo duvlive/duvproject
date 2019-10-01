@@ -119,7 +119,7 @@ const PersonalInfoForm = () => (
 const EntertainerDetailsForm = () => (
   <div className="card card-custom card-black card-form ">
     <div className="card-body col-md-10">
-      <h4 className="card-title yellow">Entertainers Details</h4>
+      <h4 className="card-title yellow">Your Details</h4>
       <Form>
         <div className="form-row">
           <Input

@@ -73,7 +73,7 @@ export default [
         icon: 'invite-friend'
       },
       {
-        title: 'Login As User',
+        title: 'Switch to User Account',
         to: '/user/dashboard',
         icon: 'loop'
       },

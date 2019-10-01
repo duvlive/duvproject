@@ -11,6 +11,7 @@ const Dashboard = () => {
         <section className="app-content">
           <div className="row">
             <DashboardCard
+              color="yellow"
               icon="auction"
               number="08"
               summary="3 applications sent"
@@ -18,6 +19,7 @@ const Dashboard = () => {
               to="/entertainer/auctions"
             />
             <DashboardCard
+              color="green"
               icon="calendar"
               number="81"
               summary="5 upcoming events"
@@ -25,6 +27,7 @@ const Dashboard = () => {
               to="/entertainer/events"
             />
             <DashboardCard
+              color="blue"
               icon="credit-card"
               number="79"
               summary="2 pending payments"
@@ -167,13 +170,17 @@ Dashboard.RecentBadges = () => (
       <div className="table-responsive">
         <table className="table table-dark">
           <tbody>
-            <tr>
-              <td>17 Mar. 2019</td>
-              <td className="text-white">Certified Duv Entertainer</td>
+            <tr valign="middle">
+              <td>
+                <i className="icon icon-badge text-yellow icon-sm"></i>{' '}
+              </td>
+              <td className="text-white pt-4">Certified Duv Entertainer</td>
             </tr>
             <tr>
-              <td>20 Jan. 2019</td>
-              <td className="text-white">Completed 5 events</td>
+              <td>
+                <i className="icon icon-badge text-red icon-sm d-inline-block"></i>{' '}
+              </td>
+              <td className="text-white pt-4">Completed 5 events</td>
             </tr>
           </tbody>
         </table>
@@ -181,7 +188,5 @@ Dashboard.RecentBadges = () => (
     </div>
   </div>
 );
-
-// const Badges = () => <div className="badge yellow"> Certified Entertainer</div>;
 
 export default Dashboard;
