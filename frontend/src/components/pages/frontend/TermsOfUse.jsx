@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Row } from 'reactstrap';
-import FrontEndPage from 'components/common/FrontEndPage';
+import FrontEndPage from 'components/common/layout/FrontEndPage';
 
 const TermsOfUse = () => (
   <FrontEndPage>

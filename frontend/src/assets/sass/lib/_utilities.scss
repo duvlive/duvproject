@@ -17,3 +17,32 @@ $spacer: (
     padding-bottom: $size;
   }
 }
+
+$fixed-height: (
+  '1': 2rem,
+  '2': 4rem,
+  '3': 6rem,
+  '4': 8rem,
+  '5': 10rem
+);
+
+@each $number, $height in $fixed-height {
+  .fh-#{$number} {
+    height: $height;
+    max-height: $height;
+    overflow: hidden;
+  }
+}
+
+$icon-size: (
+  'xs': 1rem,
+  'sm': 2rem,
+  'md': 4rem,
+  'xl': 6rem
+);
+
+@each $size, $number in $icon-size {
+  .icon-#{$size} {
+    font-size: $number;
+  }
+}

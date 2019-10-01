@@ -1,0 +1,54 @@
+$datepicker__background-color: $black;
+$datepicker__border-color: $gray-900;
+$datepicker__highlighted-color: $primary;
+$datepicker__muted-color: $text-muted;
+$datepicker__selected-color: $red;
+$datepicker__text-color: $text-color;
+$datepicker__header-color: $white;
+$datepicker__navigation-disabled-color: lighten($datepicker__muted-color, 50%);
+
+$datepicker__border-radius: 0.3rem !default;
+$datepicker__day-margin: 0.166rem !default;
+$datepicker__font-size: 0.8rem !default;
+$datepicker__font-family: $text-color;
+$datepicker__item-size: 1.7rem !default;
+$datepicker__margin: 0.4rem !default;
+$datepicker__navigation-size: 0.45rem !default;
+$datepicker__triangle-size: 8px !default;
+
+@import '~react-datepicker/src/stylesheets/mixins';
+@import '~react-datepicker/src/stylesheets/datepicker';
+
+.react-datepicker,
+.react-datepicker__time-container .react-datepicker__time {
+  background-color: $datepicker__background-color;
+}
+
+.react-datepicker-popper[data-placement^='top'] .react-datepicker__triangle,
+.react-datepicker__year-read-view--down-arrow,
+.react-datepicker__month-read-view--down-arrow,
+.react-datepicker__month-year-read-view--down-arrow,
+.react-datepicker-popper[data-placement^='top']
+  .react-datepicker__triangle::before,
+.react-datepicker__year-read-view--down-arrow::before,
+.react-datepicker__month-read-view--down-arrow::before,
+.react-datepicker__month-year-read-view--down-arrow::before {
+  border-top-color: $datepicker__background-color;
+}
+
+.react-datepicker__time-container
+  .react-datepicker__time
+  .react-datepicker__time-box
+  ul.react-datepicker__time-list
+  li.react-datepicker__time-list-item {
+  height: 2rem;
+  margin-bottom: 0.4rem;
+  padding: 0.4rem 0.2rem;
+  line-height: 1.6;
+  font-size: 0.7rem;
+}
+
+.react-datepicker-wrapper,
+.react-datepicker__input-container {
+  display: block;
+}

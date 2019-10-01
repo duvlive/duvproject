@@ -60,3 +60,4 @@ typings/
 # distributable folders
 dist
 
+.DS_Store

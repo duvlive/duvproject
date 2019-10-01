@@ -1,20 +1,26 @@
-import React, { Fragment } from 'react';
-import Header from 'components/common/Header';
-import Footer from 'components/common/Footer';
+import React, { useState } from 'react';
+import Header from 'components/common/layout/Header';
+import Footer from 'components/common/layout/Footer';
+import { Formik, Form } from 'formik';
+import Input from 'components/forms/Input';
 import { Link } from '@reach/router';
-import { Col, Row } from 'reactstrap';
-import Text from 'components/common/Text';
+import { Col, Row, Alert } from 'reactstrap';
+import Text from 'components/common/utils/Text';
 import Quotes from 'data/quotes';
 import { randomItem } from 'utils/helpers';
+import { feedback } from 'components/forms/form-helper';
+import Button from 'components/forms/Button';
+import { loginSchema } from 'components/forms/schema/userSchema';
+import { navigate } from '@reach/router';
 
 const Login = () => (
-  <Fragment>
+  <>
     <section className="auth">
       <Header showRedLogo />
       <Content />
     </section>
     <Footer className="mt-0" />
-  </Fragment>
+  </>
 );
 
 const Content = () => {
@@ -34,40 +40,8 @@ const Content = () => {
           <Col sm={{ size: 5 }}>
             <div className="auth__container">
               <section>
-                <form>
-                  <h5 className="header font-weight-normal mb-4">Login</h5>
-                  <div>
-                    <div className="form-group">
-                      <label htmlFor="inputEmail4">Email</label>
-                      <input
-                        className="form-control"
-                        id="inputEmail4"
-                        placeholder="Enter your email address"
-                        type="email"
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label className="d-block" htmlFor="inputPassword4">
-                        Password
-                        <Link className="float-right" to="/forgot-password">
-                          Forgot Password?
-                        </Link>
-                      </label>
-                      <input
-                        className="form-control"
-                        id="inputPassword4"
-                        placeholder="Enter your password"
-                        type="password"
-                      />
-                    </div>
-                  </div>
-                  <button
-                    className="btn btn-danger btn-wide btn-transparent"
-                    href="/"
-                  >
-                    Sign in
-                  </button>
-                </form>
+                <h5 className="header font-weight-normal mb-4">Login</h5>
+                <LoginForm />
               </section>
               <section className="auth__social-media">
                 <p className="auth__social-media--text">or login with:</p>
@@ -96,4 +70,65 @@ const Content = () => {
     </section>
   );
 };
+
+const LoginForm = () => {
+  const [error, setError] = useState(null);
+  return (
+    <Formik
+      initialValues={{
+        email: '',
+        password: ''
+      }}
+      onSubmit={(values, actions) => {
+        console.log(values);
+        setTimeout(() => {
+          actions.setSubmitting(false);
+          const { email, password } = values;
+          if (email === 'user@duvlive.com' && password === 'passworded') {
+            return navigate('/user/dashboard');
+          } else if (
+            email === 'djcuppy@duvlive.com' &&
+            password === 'passworded'
+          ) {
+            return navigate('/entertainer/dashboard');
+          } else {
+            setError('Invalid email or password');
+          }
+        }, 400);
+      }}
+      render={({ isSubmitting, handleSubmit }) => (
+        <Form>
+          <Input
+            label="Email"
+            name="email"
+            placeholder="Email Address"
+            showFeedback={feedback.NONE}
+          />
+          <Input
+            label="Password"
+            labelClassName="d-block"
+            labelLink={{
+              to: '/forgot-password',
+              text: 'Forgot Password'
+            }}
+            name="password"
+            placeholder="Password"
+            showFeedback={feedback.NONE}
+            type="password"
+          />
+          {error && <Alert color="danger">{error}</Alert>}
+          <Button
+            className="btn-danger btn-wide btn-transparent"
+            loading={isSubmitting}
+            onClick={handleSubmit}
+          >
+            Sign in
+          </Button>
+        </Form>
+      )}
+      validationSchema={loginSchema}
+    />
+  );
+};
+
 export default Login;

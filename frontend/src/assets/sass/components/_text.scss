@@ -75,11 +75,18 @@ $small: (
 
 @each $number, $size in $small {
   .small--#{$number} {
-    font-size: $size;
+    font-size: $size !important;
     font-weight: normal;
   }
 }
 
 a.text-muted:hover {
   color: $red-300 !important;
+}
+
+.text-truncate--1 {
+  max-width: 8rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

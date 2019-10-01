@@ -2,11 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import RedLogo from 'assets/img/logo/red-white.svg';
 import UserAvatar from 'assets/img/avatar/user.png';
+import EntertainerAvatar from 'assets/img/avatar/entertainer.jpg';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { Link } from '@reach/router';
 import 'react-perfect-scrollbar/dist/css/styles.css';
-import userSideMenu from 'data/sidebar/user.js';
+import userSideMenu from 'data/sidebar/user';
+import entertainerSideMenu from 'data/sidebar/entertainer';
 import classNames from 'classnames';
+import { Match } from '@reach/router';
 
 const Sidebar = ({ showSidebar, closeSidebar }) => (
   <>
@@ -36,9 +39,33 @@ const Sidebar = ({ showSidebar, closeSidebar }) => (
         </div>
       </div>
       <PerfectScrollbar style={{ height: 'calc(100% - 12rem)' }}>
-        <Sidebar.UserBox />
-        <Sidebar.Navigation closeSidebar={closeSidebar} menus={userSideMenu} />
-        <div class="text-center d-block d-sm-none" onClick={closeSidebar}>
+        <Match path="/entertainer/*">
+          {props =>
+            props.match ? (
+              <div>
+                <Sidebar.EntertainerBox />
+                <Sidebar.Navigation
+                  closeSidebar={closeSidebar}
+                  menus={entertainerSideMenu}
+                />
+              </div>
+            ) : null
+          }
+        </Match>
+        <Match path="/user/*">
+          {props =>
+            props.match ? (
+              <div>
+                <Sidebar.UserBox />
+                <Sidebar.Navigation
+                  closeSidebar={closeSidebar}
+                  menus={userSideMenu}
+                />
+              </div>
+            ) : null
+          }
+        </Match>
+        <div className="text-center d-block d-sm-none" onClick={closeSidebar}>
           Close Menu
         </div>
       </PerfectScrollbar>
@@ -50,6 +77,40 @@ const Sidebar = ({ showSidebar, closeSidebar }) => (
 Sidebar.propTypes = {
   closeSidebar: PropTypes.func.isRequired,
   showSidebar: PropTypes.bool.isRequired
+};
+
+Sidebar.UserBox = () => {
+  return (
+    <div className="user-box">
+      <div className="user-img">
+        <img
+          alt="Mariam Obi"
+          className="rounded-circle img-thumbnail img-responsive"
+          src={UserAvatar}
+          title="Mariam Obi"
+        />
+        <div className="user-status offline" />
+      </div>
+      <h5 className="text-uppercase">Mariam Obi</h5>
+    </div>
+  );
+};
+
+Sidebar.EntertainerBox = () => {
+  return (
+    <div className="user-box">
+      <div className="user-img">
+        <img
+          alt="DJ Cuppy"
+          className="rounded-circle img-thumbnail img-responsive"
+          src={EntertainerAvatar}
+          title="DJ Cuppy"
+        />
+        <div className="user-status offline" />
+      </div>
+      <h5 className="text-uppercase">DJ Cuppy</h5>
+    </div>
+  );
 };
 
 Sidebar.UserBox = () => {
@@ -88,6 +149,7 @@ Sidebar.Navigation = ({ menus, closeSidebar }) => {
 
 Sidebar.Navigation.propTypes = {
   closeSidebar: PropTypes.func.isRequired,
+  match: PropTypes.bool.isRequired,
   menus: PropTypes.array.isRequired
 };
 

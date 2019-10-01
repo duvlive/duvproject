@@ -27,3 +27,9 @@
 .form-group {
   margin-bottom: 2rem;
 }
+
+.invalid-feedback,
+.valid-feedback {
+  display: block;
+  font-size: 0.8rem;
+}

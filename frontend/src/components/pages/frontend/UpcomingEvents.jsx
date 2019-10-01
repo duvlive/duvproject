@@ -1,8 +1,8 @@
 import React from 'react';
 import { Row } from 'reactstrap';
-import Events from 'components/common/Events';
+import Events from 'components/common/events/Events';
 import eventLists from 'data/events.js';
-import FrontEndPage from 'components/common/FrontEndPage';
+import FrontEndPage from 'components/common/layout/FrontEndPage';
 
 const UpcomingEvents = () => {
   return (

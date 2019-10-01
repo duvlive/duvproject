@@ -1,7 +1,7 @@
 import React from 'react';
-import FrontEndPage from 'components/common/FrontEndPage';
+import FrontEndPage from 'components/common/layout/FrontEndPage';
 import { Row } from 'reactstrap';
-import Entertainers from 'components/common/Entertainers';
+import Entertainers from 'components/common/entertainers/Entertainers';
 import entertainerLists from 'data/entertainers.js';
 
 const HireEntertainers = () => {

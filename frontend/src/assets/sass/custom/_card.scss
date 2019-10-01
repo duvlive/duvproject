@@ -147,3 +147,55 @@
     }
   }
 }
+
+.dashboard__card {
+  position: relative;
+  overflow: hidden;
+
+  a {
+    color: $text-color;
+  }
+
+  &--title {
+    font-size: 1.1rem;
+    font-weight: normal;
+    font-family: $headings-font;
+  }
+
+  &--number {
+    font-size: 4rem;
+    font-family: $headings-font;
+    &.yellow {
+      color: $yellow-300;
+    }
+    &.green {
+      color: $green-300;
+    }
+    &.blue {
+      color: $blue;
+    }
+  }
+
+  &--summary {
+    font-size: 0.9rem;
+    font-family: $text-font;
+    color: $text-color;
+    &.yellow {
+      color: $yellow-100;
+    }
+    &.green {
+      color: $green-100;
+    }
+    &.blue {
+      color: $blue;
+    }
+  }
+
+  &--icon {
+    font-size: 6rem;
+    position: absolute;
+    right: -1.5rem;
+    bottom: -2.5rem;
+    color: rgba($text-color, 0.3);
+  }
+}

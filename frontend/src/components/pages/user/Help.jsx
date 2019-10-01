@@ -1,9 +1,9 @@
 import React from 'react';
-import TopMessage from 'components/common/TopMessage';
+import TopMessage from 'components/common/layout/TopMessage';
 import FAQs from 'data/faqs';
 import { Row } from 'reactstrap';
 import { getFAQs } from 'components/pages/frontend/Help';
-import BackEndPage from 'components/common/BackEndPage';
+import BackEndPage from 'components/common/layout/BackEndPage';
 
 const Help = () => (
   <BackEndPage title="Help">

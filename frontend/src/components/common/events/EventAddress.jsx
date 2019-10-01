@@ -1,0 +1,73 @@
+import React from 'react';
+import Input from 'components/forms/Input';
+import { getStates, getLgas } from 'data/naija-states-and-lgas';
+import Select from 'components/forms/Select';
+import DynamicSelect from 'components/forms/DynamicSelect';
+import TextArea from 'components/forms/TextArea';
+
+const EventAddress = () => (
+  <div className="card card-custom card-black card-form">
+    <div className="card-body col-md-10">
+      <h4 className="card-title blue">Event Address</h4>
+      <form>
+        <Input
+          isValidMessage="looks good"
+          label="Street Line 1"
+          name="address.street_line_1"
+          placeholder="Street Line 1"
+        />
+        <Input
+          isValidMessage="looks good"
+          label="Street Line 2"
+          name="address.street_line_2"
+          placeholder="Street Line 2"
+        />
+        <div className="form-row">
+          <Select
+            blankOption="Select State"
+            formGroupClassName="col-md-6"
+            isValidMessage="looks good"
+            label="State"
+            name="address.state"
+            options={getStates()}
+            placeholder="State"
+          />
+          <DynamicSelect
+            blankOption="Select Local Government"
+            dependentOn="address.state"
+            formGroupClassName="col-md-6"
+            isValidMessage="looks good"
+            label="LGA"
+            name="address.lga"
+            options={getLgas}
+            placeholder="Local Goverment"
+          />
+        </div>
+        <div className="form-row">
+          <Input
+            formGroupClassName="col-md-6"
+            isValidMessage="looks good"
+            label="City"
+            name="address.city"
+            placeholder="City"
+          />
+          <Input
+            formGroupClassName="col-md-6"
+            isValidMessage="looks good"
+            label="Landmark"
+            name="address.landmark"
+            placeholder="Landmark"
+          />
+        </div>
+        <TextArea
+          label="Description"
+          name="address.description"
+          placeholder="Enter more description here to make locating your address easier"
+          rows="3"
+        />
+      </form>
+    </div>
+  </div>
+);
+
+export default EventAddress;

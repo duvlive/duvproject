@@ -2,8 +2,8 @@ import React from 'react';
 import { Link } from '@reach/router';
 import Card from 'components/custom/Card';
 import { Col, Row } from 'reactstrap';
-import TopMessage from 'components/common/TopMessage';
-import BackEndPage from 'components/common/BackEndPage';
+import TopMessage from 'components/common/layout/TopMessage';
+import BackEndPage from 'components/common/layout/BackEndPage';
 
 const HireEntertainers = () => (
   <BackEndPage title="Hire Entertainers">

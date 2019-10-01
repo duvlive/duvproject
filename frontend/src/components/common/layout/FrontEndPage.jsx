@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import Footer from 'components/common/Footer';
+import Footer from 'components/common/layout/Footer';
 import LandingSection from './LandingSection';
 
 const FrontEndPage = ({ title, subtitle, children }) => (

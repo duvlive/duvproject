@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Image from 'components/common/Image';
-import Stars from 'components/common/Stars';
+import Image from 'components/common/utils/Image';
+import Stars from 'components/common/utils/Stars';
 import DuvLiveModal from 'components/custom/Modal';
 
 const EntertainerViewCard = ({ price, entertainer, showApproveBtn }) => (

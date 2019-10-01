@@ -18,12 +18,11 @@
     background: $sidebar-bg;
     background: rgba($sidebar-bg, 0.3);
     box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.06), 0 1px 0 0 rgba(0, 0, 0, 0.02);
+    transition-timing-function: all 0.3s ease-in-out;
   }
 
   &.showSidebar {
     transform: translateX(0);
-    animation-name: bounceInLeft;
-    animation-duration: 0.75s;
     z-index: 1000;
   }
 
@@ -38,8 +37,7 @@
 }
 
 .backdrop {
-  transition: transform 3s ease-in-out;
-  opacity: 0;
+  display: none;
   &.showSidebar {
     position: fixed;
     width: 100%;
@@ -50,7 +48,8 @@
     right: 0;
     background: rgba($body-bg, 0.9);
     z-index: 100;
-    opacity: 1;
+    display: block;
+    opacity: 0.9;
   }
 }
 .sidebar__logo {
@@ -131,14 +130,14 @@
       display: block;
       color: $white;
       font-size: 1rem;
-      transition: all 0.4s ease-out;
+      transition: all 0.5s ease-out;
       @include media-breakpoint-up(sm) {
         font-size: 0.85rem;
       }
 
       &:hover {
         color: $red-300;
-        transform: translateX(0.25rem);
+        // transform: translateX(0.15rem);
       }
     }
   }
@@ -150,35 +149,4 @@
     margin-left: $sidebar-width;
   }
   overflow: hidden;
-}
-@keyframes bounceInLeft {
-  from,
-  60%,
-  75%,
-  90%,
-  to {
-    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
-  }
-
-  0% {
-    opacity: 0;
-    transform: translate3d(-3000px, 0, 0);
-  }
-
-  60% {
-    opacity: 1;
-    transform: translate3d(25px, 0, 0);
-  }
-
-  75% {
-    transform: translate3d(-10px, 0, 0);
-  }
-
-  90% {
-    transform: translate3d(5px, 0, 0);
-  }
-
-  to {
-    transform: translate3d(0, 0, 0);
-  }
 }

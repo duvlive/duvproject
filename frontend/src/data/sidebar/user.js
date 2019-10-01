@@ -18,6 +18,11 @@ export default [
         icon: 'events'
       },
       {
+        title: 'Notifications',
+        to: '/user/notifications',
+        icon: 'megaphone'
+      },
+      {
         title: 'Hire Entertainers',
         to: '/user/hire-entertainer',
         icon: 'hire-entertainers'
@@ -35,7 +40,12 @@ export default [
       {
         title: 'Payments History',
         to: '/user/payments-history',
-        icon: 'credit-card-alt'
+        icon: 'credit-card'
+      },
+      {
+        title: 'Register as Entertainer',
+        to: '/user/register-as-entertainer',
+        icon: 'paper-plane'
       },
       {
         title: 'Help',
@@ -44,7 +54,7 @@ export default [
       },
       {
         title: 'Logout',
-        to: '/user/logout',
+        to: '/logout',
         icon: 'logout'
       }
     ]
