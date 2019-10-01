@@ -9,8 +9,7 @@ import {
 } from 'components/forms/form-helper';
 import Tooltip from 'components/common/utils/Tooltip';
 import ReactDatePicker from 'react-datepicker';
-
-let selectedDateTime;
+import { getIn } from 'formik';
 
 const DatePicker = ({
   name,
@@ -33,6 +32,10 @@ const DatePicker = ({
 }) => (
   <div className={classNames('form-group', formGroupClassName)}>
     <div>
+      <label className={labelClassName} htmlFor={name} id={`${name}-label `}>
+        {label}{' '}
+        <Tooltip name={name} position={tooltipPosition} text={tooltipText} />
+      </label>
       <Field name={name}>
         {({ form }) => {
           return (
@@ -47,14 +50,21 @@ const DatePicker = ({
               id={name}
               name={name}
               onChange={date => {
-                selectedDateTime = date;
-                const dateTime = showTimeSelectOnly
-                  ? date.toLocaleTimeString()
-                  : date.toLocaleString();
-                form.setFieldValue(name, dateTime);
+                if (date) {
+                  const dateTime = showTimeSelectOnly
+                    ? date.toLocaleTimeString()
+                    : date.toLocaleDateString();
+                  form.setFieldValue(name, { date, value: dateTime });
+                } else {
+                  form.setFieldValue(name, '');
+                }
               }}
               placeholderText={placeholder}
-              selected={selectedDateTime}
+              selected={
+                getIn(formik.values, name) !== ''
+                  ? getIn(formik.values, name).date
+                  : null
+              }
               showTimeSelect={showTimeSelect}
               showTimeSelectOnly={showTimeSelectOnly}
               timeCaption={timeCaption}
@@ -63,10 +73,6 @@ const DatePicker = ({
           );
         }}
       </Field>
-      <label className={labelClassName} htmlFor={name} id={`${name}-label `}>
-        {label}{' '}
-        <Tooltip name={name} position={tooltipPosition} text={tooltipText} />
-      </label>
     </div>
     <FeedbackMessage
       formik={formik}

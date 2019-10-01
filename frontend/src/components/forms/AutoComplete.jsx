@@ -28,6 +28,10 @@ const AutoComplete = ({
   return (
     <div className={classNames('form-group', formGroupClassName)}>
       <div>
+        <label className={labelClassName} htmlFor={name} id={`${name}-label `}>
+          {label}{' '}
+          <Tooltip name={name} position={tooltipPosition} text={tooltipText} />
+        </label>
         <Field name={name}>
           {({ field, form }) => {
             const fieldValue = field.value || value || [];
@@ -56,10 +60,6 @@ const AutoComplete = ({
             );
           }}
         </Field>
-        <label className={labelClassName} htmlFor={name} id={`${name}-label `}>
-          {label}{' '}
-          <Tooltip name={name} position={tooltipPosition} text={tooltipText} />
-        </label>
       </div>
       <FeedbackMessage
         formik={formik}

@@ -49,7 +49,11 @@ const Select = ({
           id={name}
           name={name}
         >
-          {blankOption && <option value="">{blankOption}</option>}
+          {blankOption && (
+            <option key={`blankOptionfor${name}`} value="">
+              {blankOption}
+            </option>
+          )}
           {<Select.options options={options} />}
         </Field>
       </div>

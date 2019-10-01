@@ -1,4 +1,9 @@
 import * as yup from 'yup';
+import { stringValidation, optionalValidation } from './schema-helpers';
+// import { entertainerDetailsObject } from './entertainerSchema';
+/////////////////////////
+// Fields
+////////////////////////
 
 const email = yup
   .string()
@@ -24,28 +29,60 @@ const phone = yup
   .label('Phone')
   .required('Phone is required');
 
-const defaultNameValidation = label =>
-  yup
-    .string()
-    .label(label)
-    .min(2, `${label} should be more than 2 characters`)
-    .required(`${label} is really required`);
-
-const loginSchema = yup.object().shape({
-  email,
-  password
-});
-
+/////////////////////////
+// Objects
+////////////////////////
 const registerObject = {
-  first_name: defaultNameValidation('First Name'),
-  last_name: defaultNameValidation('Last Name'),
+  first_name: stringValidation('First Name'),
+  last_name: stringValidation('Last Name'),
   phone,
   email,
   password: strongPassword,
   confirm_password: confirmPassword
 };
 
+const profileObject = {
+  first_name: stringValidation('First Name'),
+  last_name: stringValidation('Last Name'),
+  phone,
+  email,
+  location: stringValidation('Location'),
+  address: stringValidation('Address')
+};
+
+const changePasswordObject = {
+  old_password: strongPassword,
+  password: strongPassword,
+  confirm_password: confirmPassword
+};
+
+const personalInfoObject = {
+  first_name: stringValidation('First Name'),
+  last_name: stringValidation('Last Name'),
+  email,
+  phone,
+  about: optionalValidation(stringValidation('About', 20))
+};
+
+/////////////////////////
+// Schema
+////////////////////////
+const loginSchema = yup.object().shape({
+  email,
+  password
+});
+
 const registerSchema = yup.object().shape(registerObject);
+const profileSchema = yup.object().shape(profileObject);
 const forgotPasswordSchema = yup.object().shape({ email });
 
-export { loginSchema, registerSchema, registerObject, forgotPasswordSchema };
+export {
+  loginSchema,
+  registerSchema,
+  registerObject,
+  forgotPasswordSchema,
+  changePasswordObject,
+  profileObject,
+  profileSchema,
+  personalInfoObject
+};
