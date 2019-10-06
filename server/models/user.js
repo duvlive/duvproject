@@ -51,21 +51,21 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: false,
     },
-    token: {
+    activationToken: {
       type: DataTypes.STRING,
     },
   }, {
     hooks: {
       beforeCreate: (user) => {
         user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10));
-        user.token = jwt.sign({
+        user.activationToken = jwt.sign({
           userId: user.id,
           type: user.type,
         }, process.env.SECRET);
       },
       afterCreate: (user) => {
-        const { email, token } = user;
-        emailSender(email, token).catch(console.error);
+        const { email, activationToken } = user;
+        emailSender(email, activationToken).catch(console.error);
       },
       beforeUpdate: (user) => {
         user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10));

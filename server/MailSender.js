@@ -3,10 +3,8 @@ import nodemailer from 'nodemailer';
 
 // async..await is not allowed in global scope, must use a wrapper
 export default async function emailSender(email, token, title, host) {
-  // eslint-disable-next-line no-undef
-  if (window) {
-    // eslint-disable-next-line no-undef
-    host = window.location.hostname;
+  if (global.window) {
+    host = global.window.location.hostname;
   } else {
     host = host ? host : 'localhost:8080';
   }

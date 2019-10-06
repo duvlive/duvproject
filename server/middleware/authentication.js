@@ -32,9 +32,9 @@ const authentication = {
    */
   generateToken(user) {
     return jwt.sign({
-      UserId: user.id,
-      RoleId: user.RoleId,
-    }, process.env.SECRET);
+      userId: user.id,
+      type: user.type,
+    }, process.env.SECRET, { expiresIn: '1 day' });
   },
 
   /**
@@ -46,11 +46,10 @@ const authentication = {
    */
   validateAdmin(request, response, next) {
     User.findOne({
-      where: { type: request.decoded.}
+      where: { type: request.decoded.type }
     })
-    User.find(request.decoded.RoleId)
-      .then((role) => {
-        if (role.title === 'admin') {
+      .then((user) => {
+        if (user.type === 3) {
           next();
         } else {
           response.status(401).send({

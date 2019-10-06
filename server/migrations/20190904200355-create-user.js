@@ -38,7 +38,7 @@ module.exports = {
         allowNull: false,
         defaultValue: false,
       },
-      token: {
+      activationToken: {
         type: Sequelize.STRING,
       },
       createdAt: {

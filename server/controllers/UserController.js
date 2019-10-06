@@ -1,6 +1,8 @@
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import { User } from '../models';
 import emailSender from '../MailSender';
+import Authentication from '../middleware/authentication';
 
 const UserController = {
   /**
@@ -18,7 +20,6 @@ const UserController = {
      phoneNumber: user.phoneNumber,
      type: user.type,
      isActive: user.isActive,
-     token: user.token,
    };
    return newUser;
  },
@@ -87,9 +88,14 @@ const UserController = {
           firstName, lastName, email, password, phoneNumber, type
           });
         }).then((newUser) => {
+          const token = jwt.sign({
+            userId: newUser.id,
+            type: newUser.type,
+          }, process.env.SECRET);
       return res.status(200).json({
         message: 'Signed up successfully',
         user: UserController.transformUser(newUser),
+        token
       });
     }).catch((error) => {
       const errorMessage = error.message || error;
@@ -106,7 +112,7 @@ const UserController = {
    */
   activateUser(req, res) {
     User.findOne({
-      where: { token: req.query.token }
+      where: { activationToken: req.query.token }
     })
     .then((userFound) => {
       if(!userFound || userFound.length === 0 ) {
@@ -116,9 +122,9 @@ const UserController = {
         return res.status(403).json({ message: 'User already Activated'});
       }
 
-      return User.update({ isActive: true }, {
+      return User.update({ isActive: true, activationToken: null }, {
         where: {
-          token: req.query.token
+          activationToken: req.query.token
         }
       })
       .then(() => res.status(200).json({ message: 'User activation successful' }));
@@ -155,9 +161,11 @@ const UserController = {
         return res.status(403).json({ message: "Incorrect login detail"});
       }
       else {
+        const token = Authentication.generateToken(user);
         return res.status(200).json({
           message: 'You are successfully Logged in',
           user: UserController.transformUser(user),
+          token
         });
       }
     })
@@ -189,7 +197,8 @@ const UserController = {
       }
       else {
         const title = 'Password Recovery | DUV LIVE';
-        emailSender(email, user.token, title, host).catch(console.error);
+        const resetToken = Authentication.generateToken(user);
+        emailSender(email, resetToken, title, host).catch(console.error);
         return res.status(200).json({
           message: 'Password reset email sent successfully' });
       }
@@ -212,8 +221,18 @@ const UserController = {
       return res.status(400).json({ message: 'Please fill both fields, cannot be empty'});
     }
 
+    const resetToken = req.query.token;
+    jwt.verify(resetToken, process.env.SECRET, (error, decoded) => {
+      if (error) {
+        return res.status(401).send({
+          message: 'Invalid token',
+        });
+      }
+      req.decoded = decoded;
+    });
+
     User.findOne({
-      where: { token: req.query.token }
+      where: { id: req.decoded.userId }
     })
     .then((user) => {
       if(!user || user.length === 0) {
@@ -229,7 +248,31 @@ const UserController = {
     .catch(error => {
       return res.status(500).json({ error: error.message });
     });
-  }
+  },
+
+  /**
+   *  user logout
+   * @function
+   * @param {object} req is request object
+   * @param {object} res is response object
+   * @return {undefined} returns undefined
+   * */
+  userLogout(req, res) {
+    User.findOne({
+      where: {
+        id: req.body.id,
+      },
+    })
+      .then(() => {
+        res.status(200).json({
+          message: 'You have been Logged out',
+        });
+      })
+      .catch(error =>
+        res.status(500).json({
+          message: error.message,
+        }));
+  },
 };
 
 export default UserController;
