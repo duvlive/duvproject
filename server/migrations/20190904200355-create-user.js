@@ -24,13 +24,9 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      phoneNumber1: {
+      phoneNumber: {
         type: Sequelize.STRING,
         allowNull: false
-      },
-      username: {
-        type: Sequelize.STRING,
-        unique: true,
       },
       type: {
         type: Sequelize.INTEGER,

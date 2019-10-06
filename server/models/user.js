@@ -30,19 +30,15 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        min: 8,
+        min: 6,
       },
     },
-    phoneNumber1: {
+    phoneNumber: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
         len: [11, 14],
       }
-    },
-    username: {
-      type: DataTypes.STRING,
-      unique: true,
     },
     type: {
       type: DataTypes.INTEGER,
@@ -65,7 +61,7 @@ module.exports = (sequelize, DataTypes) => {
         user.token = jwt.sign({
           userId: user.id,
           type: user.type,
-        }, process.env.SECRET, { expiresIn: 120 });
+        }, process.env.SECRET);
       },
       afterCreate: (user) => {
         const { email, token } = user;

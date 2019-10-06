@@ -15,9 +15,10 @@ const UserController = {
      firstName: user.firstName,
      lastName: user.lastName,
      email: user.email,
-     phoneNumber1: user.phoneNumber1,
+     phoneNumber: user.phoneNumber,
      type: user.type,
      isActive: user.isActive,
+     token: user.token,
    };
    return newUser;
  },
@@ -31,10 +32,10 @@ const UserController = {
   createUser(req, res) {
     const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
     const { firstName, lastName, email, password, confirmPassword,
-      phoneNumber1, type } = req.body;
+      phoneNumber, type } = req.body;
 
     if (!firstName, !lastName, !email, !password, !confirmPassword,
-      !phoneNumber1) {
+      !phoneNumber) {
         return res.status(400).json({
           message: 'Please fill all the fields'
         });
@@ -68,7 +69,7 @@ const UserController = {
       return res.status(400).json({ message: 'Password does not match' });
     }
 
-    if (phoneNumber1.length < 11 && phoneNumber1.length > 14) {
+    if (phoneNumber.length < 11 && phoneNumber.length > 14) {
       return res.status(400).json({
         message: 'Phone Number length must be between 11 and 14 characters'
       });
@@ -83,7 +84,7 @@ const UserController = {
         }
       return User
         .create({
-          firstName, lastName, email, password, phoneNumber1, type
+          firstName, lastName, email, password, phoneNumber, type
           });
         }).then((newUser) => {
       return res.status(200).json({
@@ -108,8 +109,8 @@ const UserController = {
       where: { token: req.query.token }
     })
     .then((userFound) => {
-      if(userFound.length === 0 ) {
-        return res.status(404).json({ message: 'Token expired'});
+      if(!userFound || userFound.length === 0 ) {
+        return res.status(404).json({ message: 'User not found'});
       }
       if (userFound.isActive) {
         return res.status(403).json({ message: 'User already Activated'});
@@ -156,6 +157,7 @@ const UserController = {
       else {
         return res.status(200).json({
           message: 'You are successfully Logged in',
+          user: UserController.transformUser(user),
         });
       }
     })
@@ -173,6 +175,7 @@ const UserController = {
    */
   passwordReset(req, res) {
     const { email } = req.body;
+    const host = req.headers.host;
     if (!email) {
       return res.status(400).json({ message: 'Email cannot be empty'});
     }
@@ -186,7 +189,7 @@ const UserController = {
       }
       else {
         const title = 'Password Recovery | DUV LIVE';
-        emailSender(email, user.token, title).catch(console.error);
+        emailSender(email, user.token, title, host).catch(console.error);
         return res.status(200).json({
           message: 'Password reset email sent successfully' });
       }

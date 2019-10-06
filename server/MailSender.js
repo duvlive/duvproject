@@ -2,8 +2,14 @@
 import nodemailer from 'nodemailer';
 
 // async..await is not allowed in global scope, must use a wrapper
-export default async function emailSender(email, token, title) {
-  // create reusable transporter object using the default SMTP transport
+export default async function emailSender(email, token, title, host) {
+  // eslint-disable-next-line no-undef
+  if (window) {
+    // eslint-disable-next-line no-undef
+    host = window.location.hostname;
+  } else {
+    host = host ? host : 'localhost:8080';
+  }
   let transporter = nodemailer.createTransport({
     host: "smtp.mailtrap.io",
     port: 2525,
@@ -11,19 +17,18 @@ export default async function emailSender(email, token, title) {
       user: process.env.TESTACCOUNT_USER,
       pass: process.env.TESTACCOUNT_PASS
     },
-    logger: true // log information in console
   });
 
   let subject = title ? title : 'Activate Your Duv Live Account';
-  let link = title ? `localhost:8080/api/v1/users/update-password?token=${token}` : `localhost:8080/api/v1/users/activate?token=${token}`;
+  let link = title ? `${host}/api/v1/users/update-password?token=${token}` : `${host}/api/v1/users/activate?token=${token}`;
 
   // send mail with defined transport object
   let info = await transporter.sendMail({
       from: 'DUV LIVE <no-reply@duv.com>', // sender address
       to: `${email}`, // list of receivers
       subject: `${subject}`, // Subject line
-      text: `${link}`, // plain text body
-      html: `<b>Click here</b>`, // html body
+      text: `<a href=${link} /> Click here </a>`, // plain text body
+      html: `<b><a href=${link} /> Click here </a></b>`, // html body
   }
 );
 
