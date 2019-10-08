@@ -2,8 +2,19 @@ import React from 'react';
 import TopMessage from 'components/common/layout/TopMessage';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import DashboardCard from 'components/common/utils/DashboardCard';
+import Onboarding from 'components/pages/entertainer/Onboarding';
 
 const Dashboard = () => {
+  const status = 'approved';
+
+  if (status === 'approved') {
+    return <Dashboard.Items />;
+  } else {
+    return <Onboarding />;
+  }
+};
+
+Dashboard.Items = () => {
   return (
     <BackEndPage title="Dashboard">
       <div className="main-app">
