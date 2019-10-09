@@ -5,7 +5,7 @@ import DashboardCard from 'components/common/utils/DashboardCard';
 import Onboarding from 'components/pages/entertainer/Onboarding';
 
 const Dashboard = () => {
-  const status = 'approved';
+  const status = '!approved';
 
   if (status === 'approved') {
     return <Dashboard.Items />;
