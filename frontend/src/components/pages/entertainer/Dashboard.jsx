@@ -6,59 +6,64 @@ import Onboarding from 'components/pages/entertainer/Onboarding';
 
 const Dashboard = () => {
   const status = '!approved';
+  let currentDashboard;
 
   if (status === 'approved') {
-    return <Dashboard.Items />;
+    currentDashboard = <Dashboard.Items />;
   } else {
-    return <Onboarding />;
+    currentDashboard = <Onboarding />;
   }
+
+  return (
+    <BackEndPage title="Dashboard">
+      <div className="main-app">{currentDashboard}</div>
+    </BackEndPage>
+  );
 };
 
 Dashboard.Items = () => {
   return (
-    <BackEndPage title="Dashboard">
-      <div className="main-app">
-        <TopMessage message="Welcome back DJ Cuppy," />
-        <section className="app-content">
-          <div className="row">
-            <DashboardCard
-              color="yellow"
-              icon="auction"
-              number="08"
-              summary="3 applications sent"
-              title="Available Auction"
-              to="/entertainer/auctions"
-            />
-            <DashboardCard
-              color="green"
-              icon="calendar"
-              number="81"
-              summary="5 upcoming events"
-              title="Total Events"
-              to="/entertainer/events"
-            />
-            <DashboardCard
-              color="blue"
-              icon="credit-card"
-              number="79"
-              summary="2 pending payments"
-              title="Payments Received"
-              to="/entertainer/payments"
-            />
+    <>
+      <TopMessage message="Welcome back DJ Cuppy," />
+      <section className="app-content">
+        <div className="row">
+          <DashboardCard
+            color="yellow"
+            icon="auction"
+            number="08"
+            summary="3 applications sent"
+            title="Available Auction"
+            to="/entertainer/auctions"
+          />
+          <DashboardCard
+            color="green"
+            icon="calendar"
+            number="81"
+            summary="5 upcoming events"
+            title="Total Events"
+            to="/entertainer/events"
+          />
+          <DashboardCard
+            color="blue"
+            icon="credit-card"
+            number="79"
+            summary="2 pending payments"
+            title="Payments Received"
+            to="/entertainer/payments"
+          />
+        </div>
+        <div className="row">
+          <div className="col-sm-8">
+            <Dashboard.UpcomingEvents />
+            <Dashboard.RecentBids />
           </div>
-          <div className="row">
-            <div className="col-sm-8">
-              <Dashboard.UpcomingEvents />
-              <Dashboard.RecentBids />
-            </div>
-            <div className="col-sm-4">
-              <Dashboard.PaymentHistory />
-              <Dashboard.RecentBadges />
-            </div>
+          <div className="col-sm-4">
+            <Dashboard.PaymentHistory />
+            <Dashboard.RecentBadges />
           </div>
-        </section>
-      </div>
-    </BackEndPage>
+        </div>
+      </section>
+    </>
   );
 };
 

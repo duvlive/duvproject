@@ -1,31 +1,69 @@
 import React from 'react';
+import TopMessage from 'components/common/layout/TopMessage';
+import PropTypes from 'prop-types';
+import Card from 'components/custom/Card';
+import classNames from 'classnames';
+
+const STATUS = {
+  PENDING: 'pending',
+  COMPLETED: 'completed'
+};
 
 const Onboarding = () => {
   return (
-    <div className="col-md-6 col-xl-3">
-      <div className="card m-b-30">
-        <div className="card-body">
-          <h4 className="card-title font-16 mt-0">Card title</h4>
-          <p className="card-text">
-            Some quick example text to build on the card title and make up the
-            bulk of the card's content.
-          </p>
+    <>
+      <TopMessage message="Welcome back DJ Cuppy," />
+      <Card className="dashboard__card offset-md-2 col-md-8 mt-5 mb-0 rounded-0">
+        <div className="card-header">
+          <h4 className="subtitle--2 pt-3 gray text-center">
+            You are just a few steps away
+            <br /> from activating your accounts.
+          </h4>
         </div>
-        <ul className="list-group list-group-flush">
-          <li className="list-group-item">Cras justo odio</li>
-          <li className="list-group-item">Dapibus ac facilisis in</li>
-        </ul>
-        <div className="card-body">
-          <a className="card-link" href="#">
-            Card link
-          </a>
-          <a className="card-link" href="#">
-            Another link
-          </a>
-        </div>
-      </div>
-    </div>
+      </Card>
+      <Card
+        className="dashboard__card offset-md-2 col-md-8 mb-0 rounded-0"
+        color="black"
+      >
+        Follow the 5 steps below to complete your account whenever you are
+        ready. <br />
+        Once completed, your account would be approved within 24 hours.
+      </Card>
+      <Onboarding.Card status={STATUS.COMPLETED} title="Entertainers Profile" />
+      <Onboarding.Card status={STATUS.PENDING} title="Bank Account Details" />
+      <Onboarding.Card status={STATUS.PENDING} title="Emergency Contact" />
+      <Onboarding.Card status={STATUS.PENDING} title="Youtube Video" />
+      <Onboarding.Card status={STATUS.PENDING} title="Valid Identification " />
+    </>
   );
+};
+
+Onboarding.Card = ({ title, status }) => (
+  <Card
+    className="dashboard__card offset-md-2 col-md-8 mb-0 rounded-0"
+    color={status === STATUS.COMPLETED ? 'green' : 'black'}
+    hover
+  >
+    <h3>
+      <span
+        className={classNames(
+          'icon',
+          {
+            'icon-circle': STATUS.PENDING
+          },
+          {
+            'icon-ok-circles': STATUS.COMPLETED
+          }
+        )}
+      />
+      {title}
+    </h3>
+  </Card>
+);
+
+Onboarding.Card.propTypes = {
+  status: PropTypes.oneOf(Object.values(STATUS)).isRequired,
+  title: PropTypes.string.isRequired
 };
 
 export default Onboarding;
