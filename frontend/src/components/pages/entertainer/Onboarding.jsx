@@ -3,6 +3,7 @@ import TopMessage from 'components/common/layout/TopMessage';
 import PropTypes from 'prop-types';
 import Card from 'components/custom/Card';
 import classNames from 'classnames';
+import { Link } from '@reach/router';
 
 const STATUS = {
   PENDING: 'pending',
@@ -12,56 +13,86 @@ const STATUS = {
 const Onboarding = () => {
   return (
     <>
-      <TopMessage message="Welcome back DJ Cuppy," />
-      <Card className="dashboard__card offset-md-2 col-md-8 mt-5 mb-0 rounded-0">
-        <div className="card-header">
-          <h4 className="subtitle--2 pt-3 gray text-center">
-            You are just a few steps away
-            <br /> from activating your accounts.
-          </h4>
-        </div>
+      <TopMessage message="Hello DJ Cuppy," />
+      <Card
+        className="dashboard__card offset-md-2 col-md-8 mt-5 mb-0 rounded-0"
+        color="blue"
+      >
+        <h4 className="onboarding__title">
+          You are just a few steps away
+          <br /> from activating your account.
+        </h4>
       </Card>
       <Card
         className="dashboard__card offset-md-2 col-md-8 mb-0 rounded-0"
         color="black"
       >
-        Follow the 5 steps below to complete your account whenever you are
-        ready. <br />
-        Once completed, your account would be approved within 24 hours.
+        <p className="onboarding__instruction">
+          Follow the 5 steps below to complete your account whenever you are
+          ready. <br />
+          Once completed, your account would be approved within 24 hours.
+        </p>
       </Card>
-      <Onboarding.Card status={STATUS.COMPLETED} title="Entertainers Profile" />
-      <Onboarding.Card status={STATUS.PENDING} title="Bank Account Details" />
-      <Onboarding.Card status={STATUS.PENDING} title="Emergency Contact" />
-      <Onboarding.Card status={STATUS.PENDING} title="Youtube Video" />
-      <Onboarding.Card status={STATUS.PENDING} title="Valid Identification " />
+      <Onboarding.List status={STATUS.COMPLETED} title="Entertainers Profile" />
+      <div className="text-center">
+        <button className="btn btn-danger btn-lg btn-wide btn-transparent mt-5">
+          Continue Setup
+        </button>
+      </div>
     </>
   );
 };
 
-Onboarding.Card = ({ title, status }) => (
-  <Card
-    className="dashboard__card offset-md-2 col-md-8 mb-0 rounded-0"
-    color={status === STATUS.COMPLETED ? 'green' : 'black'}
-    hover
-  >
-    <h3>
-      <span
-        className={classNames(
-          'icon',
-          {
-            'icon-circle': STATUS.PENDING
-          },
-          {
-            'icon-ok-circles': STATUS.COMPLETED
-          }
-        )}
-      />
-      {title}
-    </h3>
-  </Card>
-);
+Onboarding.List = () => {
+  const onboardingTasks = [
+    {
+      title: 'Entertainers Profile',
+      status: STATUS.COMPLETED,
+      link: '/profile'
+    },
+    { title: 'Bank Account Details', status: STATUS.PENDING, link: '/profile' },
+    { title: 'Emergency Contact', status: STATUS.PENDING, link: '/profile' },
+    { title: 'Youtube Video', status: STATUS.PENDING, link: '/profile' },
+    { title: 'Valid Identification', status: STATUS.PENDING, link: '/profile' }
+  ];
+
+  return onboardingTasks.map((task, index) => (
+    <Onboarding.Card key={index} number={index + 1} {...task} />
+  ));
+};
+
+Onboarding.Card = ({ title, status, number, link }) => {
+  const userHasCompletedTask = status === STATUS.COMPLETED;
+  return (
+    <Link to={link}>
+      <Card
+        className="dashboard__card offset-md-2 col-md-8 mb-0 rounded-0"
+        color={userHasCompletedTask ? 'green' : 'black'}
+        hover={!userHasCompletedTask}
+      >
+        <h5 className="onboarding__text">
+          <span
+            className={classNames(
+              'icon',
+              {
+                'icon-circle pending': !userHasCompletedTask
+              },
+              {
+                'icon-ok-circled completed': userHasCompletedTask
+              }
+            )}
+          />
+          {`${number}. `}
+          {title}
+        </h5>
+      </Card>
+    </Link>
+  );
+};
 
 Onboarding.Card.propTypes = {
+  link: PropTypes.string.isRequired,
+  number: PropTypes.number.isRequired,
   status: PropTypes.oneOf(Object.values(STATUS)).isRequired,
   title: PropTypes.string.isRequired
 };
