@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'formik';
+import { Link } from '@reach/router';
 import { connect } from 'formik';
 import classNames from 'classnames';
 import {
   getValidityClass,
-  FeedbackMessage
+  FeedbackMessage,
+  feedback
 } from 'components/forms/form-helper';
 import Tooltip from 'components/common/utils/Tooltip';
 
@@ -19,6 +21,7 @@ const Input = ({
   inputSizeClassName,
   isValidMessage,
   label,
+  labelLink,
   labelClassName,
   name,
   placeholder,
@@ -34,6 +37,11 @@ const Input = ({
       <label className={labelClassName} htmlFor={name}>
         {label}{' '}
         <Tooltip name={name} position={tooltipPosition} text={tooltipText} />
+        {labelLink && (
+          <Link className="float-right" to={labelLink.to}>
+            {labelLink.text}
+          </Link>
+        )}
       </label>
       <div className={inputSizeClassName}>
         <Field
@@ -42,7 +50,7 @@ const Input = ({
           className={classNames(
             'form-control',
             inputClassName,
-            showFeedback && getValidityClass(formik, name)
+            getValidityClass(formik, name, showFeedback)
           )}
           id={name}
           name={name}
@@ -50,14 +58,13 @@ const Input = ({
           type={type}
         />
       </div>
-      {showFeedback && (
-        <FeedbackMessage
-          formik={formik}
-          helpText={helpText}
-          name={name}
-          validMessage={isValidMessage}
-        />
-      )}
+      <FeedbackMessage
+        formik={formik}
+        helpText={helpText}
+        name={name}
+        showFeedback={showFeedback}
+        validMessage={isValidMessage}
+      />
     </div>
   );
 };
@@ -74,8 +81,9 @@ Input.defaultProps = {
   isValidMessage: '',
   label: null,
   labelClassName: null,
+  labelLink: null,
   placeholder: null,
-  showFeedback: true,
+  showFeedback: feedback.ALL,
   tooltipText: null,
   tooltipPosition: 'right',
   type: null
@@ -92,12 +100,23 @@ Input.propTypes = {
   isValidMessage: PropTypes.string,
   label: PropTypes.string,
   labelClassName: PropTypes.string,
+  labelLink: PropTypes.shape({
+    to: PropTypes.string.isRequired,
+    text: PropTypes.string.isRequired
+  }),
   name: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
-  showFeedback: PropTypes.bool,
+  showFeedback: PropTypes.oneOf(Object.keys(feedback)),
   tooltipPosition: PropTypes.string,
   tooltipText: PropTypes.string,
   type: PropTypes.string
 };
 
 export default connect(Input);
+
+// TODO:
+// - Create label component
+// - Use name for label if not given
+// - Add all label properties into options, tooltip and other related stuffs
+// - Seems better to use label as placeholder too
+// - Use ...others instead on adding all props

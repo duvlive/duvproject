@@ -5,7 +5,8 @@ import { connect } from 'formik';
 import classNames from 'classnames';
 import {
   getValidityClass,
-  FeedbackMessage
+  FeedbackMessage,
+  feedback
 } from 'components/forms/form-helper';
 import Tooltip from 'components/common/utils/Tooltip';
 import Humanize from 'humanize-plus';
@@ -42,24 +43,27 @@ const Select = ({
           className={classNames(
             'form-control',
             inputClassName,
-            showFeedback && getValidityClass(formik, name)
+            getValidityClass(formik, name, showFeedback)
           )}
           component="select"
           id={name}
           name={name}
         >
-          {blankOption && <option value="">{blankOption}</option>}
+          {blankOption && (
+            <option key={`blankOptionfor${name}`} value="">
+              {blankOption}
+            </option>
+          )}
           {<Select.options options={options} />}
         </Field>
       </div>
-      {showFeedback && (
-        <FeedbackMessage
-          formik={formik}
-          helpText={helpText}
-          name={name}
-          validMessage={isValidMessage}
-        />
-      )}
+      <FeedbackMessage
+        formik={formik}
+        helpText={helpText}
+        name={name}
+        showFeedback={showFeedback}
+        validMessage={isValidMessage}
+      />
     </div>
   );
 };
@@ -77,7 +81,7 @@ Select.defaultProps = {
   label: null,
   labelClassName: 12,
   name: null,
-  showFeedback: true,
+  showFeedback: feedback.ALL,
   tooltipText: null,
   tooltipPosition: 'right'
 };
@@ -95,7 +99,7 @@ Select.propTypes = {
   labelClassName: PropTypes.number,
   name: PropTypes.string,
   options: PropTypes.array.isRequired,
-  showFeedback: PropTypes.bool,
+  showFeedback: PropTypes.oneOf(Object.keys(feedback)),
   tooltipPosition: PropTypes.string,
   tooltipText: PropTypes.string
 };

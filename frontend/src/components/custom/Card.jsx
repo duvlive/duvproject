@@ -14,7 +14,7 @@ const Card = ({
 }) => (
   <section
     className={classNames(
-      { className },
+      className,
       'card card-custom',
       { [`card-${color}`]: true },
       {
@@ -42,7 +42,7 @@ const Card = ({
 Card.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
-  color: PropTypes.string.isRequired,
+  color: PropTypes.string,
   header: PropTypes.string,
   hover: PropTypes.bool,
   tiles: PropTypes.bool,
@@ -53,6 +53,7 @@ Card.propTypes = {
 Card.defaultProps = {
   children: null,
   className: '',
+  color: 'black',
   header: '',
   hover: false,
   tiles: false,

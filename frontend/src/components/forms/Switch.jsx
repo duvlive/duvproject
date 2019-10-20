@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect, Field } from 'formik';
 import classNames from 'classnames';
-import { FeedbackMessage } from 'components/forms/form-helper';
+import { FeedbackMessage, feedback } from 'components/forms/form-helper';
 import Tooltip from 'components/common/utils/Tooltip';
 import Switcher from 'rc-switch';
 import 'rc-switch/assets/index.css';
@@ -44,14 +44,13 @@ const Switch = ({
         <Tooltip name={name} position={tooltipPosition} text={tooltipText} />
       </label>
     </div>
-    {showFeedback && (
-      <FeedbackMessage
-        formik={formik}
-        helpText={helpText}
-        name={name}
-        validMessage={isValidMessage}
-      />
-    )}
+    <FeedbackMessage
+      formik={formik}
+      helpText={helpText}
+      name={name}
+      showFeedback={showFeedback}
+      validMessage={isValidMessage}
+    />
   </div>
 );
 
@@ -64,7 +63,7 @@ Switch.propTypes = {
   label: PropTypes.string,
   labelClassName: PropTypes.string,
   name: PropTypes.string.isRequired,
-  showFeedback: PropTypes.bool,
+  showFeedback: PropTypes.oneOf(Object.keys(feedback)),
   tooltipPosition: PropTypes.string,
   tooltipText: PropTypes.string,
   value: PropTypes.bool
@@ -75,9 +74,9 @@ Switch.defaultProps = {
   formGroupClassName: null,
   helpText: null,
   isValidMessage: '',
-  label: 'pl-2',
-  labelClassName: null,
-  showFeedback: true,
+  label: null,
+  labelClassName: 'pl-2',
+  showFeedback: feedback.ALL,
   tooltipText: null,
   tooltipPosition: 'right',
   value: false

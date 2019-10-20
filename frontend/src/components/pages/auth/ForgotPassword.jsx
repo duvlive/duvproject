@@ -1,6 +1,10 @@
 import React, { Fragment } from 'react';
 import Header from 'components/common/layout/Header';
 import Footer from 'components/common/layout/Footer';
+import { Formik, Form } from 'formik';
+import Input from 'components/forms/Input';
+import Button from 'components/forms/Button';
+import { forgotPasswordSchema } from 'components/forms/schema/userSchema';
 import { Link } from '@reach/router';
 import { Col, Row } from 'reactstrap';
 import Text from 'components/common/utils/Text';
@@ -34,23 +38,10 @@ const Content = () => {
           <Col sm={{ size: 5 }}>
             <div className="auth__container">
               <section>
-                <form>
-                  <h5 className="header font-weight-normal mb-4">
-                    Forgot Password
-                  </h5>
-                  <div className="form-group">
-                    <label htmlFor="inputEmail4">Email</label>
-                    <input
-                      className="form-control"
-                      id="inputEmail4"
-                      placeholder="Enter your email address"
-                      type="email"
-                    />
-                  </div>
-                  <button className="btn btn-danger btn-wide btn-transparent">
-                    Reset Password
-                  </button>
-                </form>
+                <h5 className="header font-weight-normal mb-4">
+                  Forgot Password
+                </h5>
+                <ForgotPassword.Form />
               </section>
               <section className="auth__footer">
                 <div className="mt-4 text-center">
@@ -62,10 +53,38 @@ const Content = () => {
             </div>
           </Col>
         </Row>
-
         <p />
       </div>
     </section>
+  );
+};
+
+ForgotPassword.Form = () => {
+  return (
+    <Formik
+      initialValues={{
+        email: ''
+      }}
+      onSubmit={(values, actions) => {
+        console.log(values);
+        setTimeout(() => {
+          actions.setSubmitting(false);
+        }, 400);
+      }}
+      render={({ isSubmitting, handleSubmit }) => (
+        <Form>
+          <Input label="Email" name="email" placeholder="Email Address" />
+          <Button
+            className="btn-danger btn-wide btn-transparent"
+            loading={isSubmitting}
+            onClick={handleSubmit}
+          >
+            Reset Password
+          </Button>
+        </Form>
+      )}
+      validationSchema={forgotPasswordSchema}
+    />
   );
 };
 export default ForgotPassword;

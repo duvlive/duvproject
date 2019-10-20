@@ -1,13 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Humanize from 'humanize-plus';
+import { Formik } from 'formik';
+import {
+  setInitialValues,
+  DisplayFormikState
+} from 'components/forms/form-helper';
+import Button from 'components/forms/Button';
 import TopMessage from 'components/common/layout/TopMessage';
 import EventDetails from 'components/common/events/EventDetails';
 import EventAddress from 'components/common/events/EventAddress';
-import AddEntertainer from 'components/common/entertainers/AddEntertainer';
+// import AddEntertainer from 'components/common/entertainers/AddEntertainer';
 import { HIRE_ENTERTAINERS } from 'utils/constants';
 import { navigate } from '@reach/router';
 import BackEndPage from 'components/common/layout/BackEndPage';
+import {
+  eventDetailsSchema,
+  eventAddressSchema
+} from 'components/forms/schema/eventSchema';
+import { createSchema } from 'components/forms/schema/schema-helpers';
 
 const NewEvent = ({ hire_type }) => {
   const validHireType = Object.keys(HIRE_ENTERTAINERS).includes(
@@ -30,9 +41,8 @@ const NewEvent = ({ hire_type }) => {
         <TopMessage message={message} />
 
         <section className="app-content">
-          <EventDetails />
-          <EventAddress />
-          {validHireType && <AddEntertainer />}
+          <NewEventForm />
+          {/* {validHireType && <AddEntertainer />} */}
           <div className="mt-5">
             <button
               className="btn btn-transparent btn-primary text-right btn-lg"
@@ -54,6 +64,42 @@ NewEvent.propTypes = {
 
 NewEvent.defaultProps = {
   hire_type: ''
+};
+
+const NewEventForm = () => {
+  return (
+    <Formik
+      initialValues={{
+        event: setInitialValues(eventDetailsSchema),
+        address: setInitialValues(eventAddressSchema, { description: '12345' })
+      }}
+      onSubmit={(values, actions) => {
+        console.log(values);
+        setTimeout(() => {
+          actions.setSubmitting(false);
+        }, 400);
+      }}
+      render={({ isSubmitting, handleSubmit, ...props }) => (
+        <>
+          <EventDetails />
+          <EventAddress />
+          <Button
+            className="btn-danger btn-lg btn-wide btn-transparent"
+            loading={isSubmitting}
+            onClick={handleSubmit}
+          >
+            Register as an Entertainer
+          </Button>
+
+          <DisplayFormikState {...props} />
+        </>
+      )}
+      validationSchema={createSchema({
+        event: createSchema(eventDetailsSchema),
+        address: createSchema(eventAddressSchema)
+      })}
+    />
+  );
 };
 
 export default NewEvent;
