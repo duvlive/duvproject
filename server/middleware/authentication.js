@@ -31,7 +31,7 @@ const authentication = {
     return jwt.sign({
       userId: user.id,
       type: user.type,
-    }, process.env.SECRET, { expiresIn: isLimitedExpiry ? undefined: '1 day' });
+    }, process.env.SECRET, { expiresIn: isLimitedExpiry ? undefined: '30 day' });
   },
 
   /**

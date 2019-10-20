@@ -35,6 +35,16 @@ module.exports = {
         { transaction }
       );
 
+      await queryInterface.addColumn(
+        'Users',
+        'userId',
+        {
+          type: Sequelize.INTEGER,
+          allowNull: true
+        },
+        { transaction }
+      );
+
       await transaction.commit();
     } catch (err) {
       await transaction.rollback();
@@ -46,6 +56,7 @@ module.exports = {
     const transaction = await queryInterface.sequelize.transaction();
     try {
       await queryInterface.removeColumn('Users', 'socialId', { transaction });
+      await queryInterface.removeColumn('Users', 'userId', { transaction });
       await transaction.commit();
     } catch (err) {
       await transaction.rollback();

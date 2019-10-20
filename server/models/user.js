@@ -72,11 +72,19 @@ module.exports = (sequelize, DataTypes) => {
         }, process.env.SECRET);
       },
       afterCreate: (user) => {
-        if(user.socialId) {
-          return;
-        }
-        const { email, activationToken } = user;
-        emailSender(email, activationToken).catch(console.error);
+        const models = require('./');
+        models.UserProfile.create({userId: user.id})
+        .then((res) => {
+          return user.setProfile(res);
+        }).then(() => {
+          if(user.socialId) {
+            return;
+          }
+          const { email, activationToken } = user;
+          return emailSender(email, activationToken);
+        }).catch((error) => {
+          console.log(error);
+        });
       },
       beforeUpdate: (user) => {
         user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10));
@@ -84,8 +92,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     classMethods: {
-      associate: (/*models*/) => {
+      associate: (models) => {
         // associations can be defined here
+        // User.hasMany(User, {foreignKey: 'userId', as: 'bandMembers'});
+        // User.hasOne(models.UserProfile, {foreignKey: 'userId', as: 'profile'});
       }
     }
   });
