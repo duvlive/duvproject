@@ -1,8 +1,5 @@
-import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 import { User } from '../models';
-
-dotenv.config();
 
 const authentication = {
   verifyToken(request, response, next) {
@@ -30,11 +27,11 @@ const authentication = {
    * @param {Object} user object
    * @returns {Object} jwt
    */
-  generateToken(user) {
+  generateToken(user, isLimitedExpiry=false) {
     return jwt.sign({
       userId: user.id,
       type: user.type,
-    }, process.env.SECRET, { expiresIn: '1 day' });
+    }, process.env.SECRET, { expiresIn: isLimitedExpiry ? undefined: '1 day' });
   },
 
   /**

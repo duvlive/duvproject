@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import { User } from '../models';
 import emailSender from '../MailSender';
 import Authentication from '../middleware/authentication';
+import UserValidation from '../utils/userValidation';
 
 const UserController = {
   /**
@@ -23,6 +24,7 @@ const UserController = {
    };
    return newUser;
  },
+
   /**
    * create User
    * @function
@@ -31,76 +33,76 @@ const UserController = {
    * @return {object} returns res object
    */
   createUser(req, res) {
-    const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
     const { firstName, lastName, email, password, confirmPassword,
       phoneNumber, type } = req.body;
+    const error = {...UserValidation.nameValidation(firstName, lastName),
+    ...UserValidation.emailValidation(email),
+    ...UserValidation.phoneNumberValidation(phoneNumber),
+    ...UserValidation.passwordValidaton(password, confirmPassword)
+  };
 
-    if (!firstName, !lastName, !email, !password, !confirmPassword,
-      !phoneNumber) {
-        return res.status(400).json({
-          message: 'Please fill all the fields'
-        });
-      }
-
-    if (firstName.length < 3) {
-      return res.status(400).json({
-        message: 'Firstname length must have a minimum of 3 characters'
-      });
-    }
-
-    if (lastName.length < 3) {
-      return res.status(400).json({
-        message: 'Lastname length must have a minimum of 3 characters'
-      });
-    }
-
-    if (!emailRegex.test(email)) {
-      return res.status(400).json({
-        message: 'Email is not rightly formatted',
-      });
-    }
-
-    if (password.length < 8) {
-      return res.status(400).json({
-        message: 'Password length must have a minimum of 8 characters'
-      });
-    }
-
-    if (password !== confirmPassword) {
-      return res.status(400).json({ message: 'Password does not match' });
-    }
-
-    if (phoneNumber.length < 11 && phoneNumber.length > 14) {
-      return res.status(400).json({
-        message: 'Phone Number length must be between 11 and 14 characters'
-      });
-    }
-
-    return User.findAll({
+  if (Object.keys(error).length) {
+    return res.status(400).json(error);
+  }
+  return User.findAll({
       where: { email }
     }).then((existingUser) => {
-        if (existingUser.length > 0) {
-          return res.status(409).json({ message:
-              'User already exists' });
-        }
+    if (existingUser.length > 0) {
+      throw {status: 409, message: 'This email address has already been taken'};
+    }
       return User
         .create({
           firstName, lastName, email, password, phoneNumber, type
           });
-        }).then((newUser) => {
-          const token = jwt.sign({
-            userId: newUser.id,
-            type: newUser.type,
-          }, process.env.SECRET);
+    }).then((newUser) => {
       return res.status(200).json({
         message: 'Signed up successfully',
         user: UserController.transformUser(newUser),
-        token
+        token: Authentication.generateToken(newUser, true)
       });
     }).catch((error) => {
+      const status = error.status || 500;
       const errorMessage = error.message || error;
-      return res.status(500).json({ message: errorMessage});
+      return res.status(status).json({ message: errorMessage});
     });
+  },
+
+  /**
+   * social login
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  socialLogin(req, res) {
+    const {lastName, firstName, email, id} = req.user;
+    User.findOne({where: {email}})
+    .then(user => {
+      if (user) {
+        throw {
+          status: 400,
+          message: "This email address has already been taken"
+        };
+      }
+      return User.findOrCreate({where: {socialId: id},
+        defaults: {
+          lastName,
+          firstName,
+          email,
+          isActive: true
+        }});
+    }).then(([user]) => {
+        const token = Authentication.generateToken(user);
+        return res.status(200).json({
+          message: 'You are successfully Logged in',
+          user: UserController.transformUser(user),
+          token
+        });
+      }).catch((error) => {
+        const status = error.status || 500;
+        const errorMessage = error.message || error;
+        return res.status(status).json({message: errorMessage});
+      });
   },
 
   /**
@@ -258,20 +260,9 @@ const UserController = {
    * @return {undefined} returns undefined
    * */
   userLogout(req, res) {
-    User.findOne({
-      where: {
-        id: req.body.id,
-      },
-    })
-      .then(() => {
-        res.status(200).json({
-          message: 'You have been Logged out',
-        });
-      })
-      .catch(error =>
-        res.status(500).json({
-          message: error.message,
-        }));
+    res.status(200).json({
+      message: 'You have been Logged out',
+    });
   },
 };
 

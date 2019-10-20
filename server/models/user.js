@@ -28,14 +28,14 @@ module.exports = (sequelize, DataTypes) => {
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
       validate: {
         min: 6,
       },
     },
     phoneNumber: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
       validate: {
         len: [11, 14],
       }
@@ -45,6 +45,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: 1,
       validate: { isIn: [[1, 2, 3]] },
+    },
+    socialId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      defaultValue: null,
     },
     isActive: {
       type: DataTypes.BOOLEAN,
@@ -57,6 +62,9 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     hooks: {
       beforeCreate: (user) => {
+        if(user.socialId) {
+          return;
+        }
         user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10));
         user.activationToken = jwt.sign({
           userId: user.id,
@@ -64,6 +72,9 @@ module.exports = (sequelize, DataTypes) => {
         }, process.env.SECRET);
       },
       afterCreate: (user) => {
+        if(user.socialId) {
+          return;
+        }
         const { email, activationToken } = user;
         emailSender(email, activationToken).catch(console.error);
       },
