@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 import RedLogo from 'assets/img/logo/red-white.svg';
 import UserAvatar from 'assets/img/avatar/user.png';
 import EntertainerAvatar from 'assets/img/avatar/entertainer.jpg';
+import BandMemberAvatar from 'assets/img/avatar/band-member.png';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { Link } from '@reach/router';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import userSideMenu from 'data/sidebar/user';
 import entertainerSideMenu from 'data/sidebar/entertainer';
+import bandMemberSideMenu from 'data/sidebar/band-member';
 import classNames from 'classnames';
 import { Match } from '@reach/router';
 
@@ -39,6 +41,7 @@ const Sidebar = ({ showSidebar, closeSidebar }) => (
         </div>
       </div>
       <PerfectScrollbar style={{ height: 'calc(100% - 12rem)' }}>
+        {/* Entertainer */}
         <Match path="/entertainer/*">
           {props =>
             props.match ? (
@@ -52,6 +55,23 @@ const Sidebar = ({ showSidebar, closeSidebar }) => (
             ) : null
           }
         </Match>
+
+        {/* Band Member */}
+        <Match path="/band-member/*">
+          {props =>
+            props.match ? (
+              <div>
+                <Sidebar.BandMemberBox />
+                <Sidebar.Navigation
+                  closeSidebar={closeSidebar}
+                  menus={bandMemberSideMenu}
+                />
+              </div>
+            ) : null
+          }
+        </Match>
+
+        {/* User */}
         <Match path="/user/*">
           {props =>
             props.match ? (
@@ -65,6 +85,7 @@ const Sidebar = ({ showSidebar, closeSidebar }) => (
             ) : null
           }
         </Match>
+
         <div className="text-center d-block d-sm-none" onClick={closeSidebar}>
           Close Menu
         </div>
@@ -113,19 +134,19 @@ Sidebar.EntertainerBox = () => {
   );
 };
 
-Sidebar.UserBox = () => {
+Sidebar.BandMemberBox = () => {
   return (
     <div className="user-box">
       <div className="user-img">
         <img
-          alt="Mariam Obi"
+          alt="High Soul"
           className="rounded-circle img-thumbnail img-responsive"
-          src={UserAvatar}
-          title="Mariam Obi"
+          src={BandMemberAvatar}
+          title="High Soul"
         />
         <div className="user-status offline" />
       </div>
-      <h5 className="text-uppercase">Mariam Obi</h5>
+      <h5 className="text-uppercase">High Soul</h5>
     </div>
   );
 };

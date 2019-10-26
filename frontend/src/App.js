@@ -6,6 +6,7 @@ import { ScrollToTop } from 'components/custom/ScrollToTop';
 import FrontPageRouter from 'routers/FrontPageRouter';
 import UserRouter from 'routers/UserRouter';
 import EntertainerRouter from 'routers/EntertainerRouter';
+import BandMemberRouter from 'routers/BandMemberRouter';
 import FormikForm from 'components/forms/FormikForm';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
           <FrontPageRouter path="/*" />
           <UserRouter path="user/*" />
           <EntertainerRouter path="entertainer/*" />
+          <BandMemberRouter path="band-member/*" />
 
           {/* To remove */}
           <FormikForm path="formik" />

@@ -22,9 +22,11 @@ const LandingSection = ({ showSidebar, isDashboard, title, subtitle }) => (
       <div className="card-img-overlay">
         <div className="card-img-overlay__content">
           <h2 className="card-title">{title && Humanize.capitalize(title)}</h2>
-          <p className="card-subtitle">
-            DUV LIVE &nbsp;/ &nbsp;{subtitle || title}
-          </p>
+          {!isDashboard && (
+            <p className="card-subtitle">
+              DUV LIVE &nbsp;/ &nbsp;{subtitle || title}
+            </p>
+          )}
         </div>
       </div>
     </div>

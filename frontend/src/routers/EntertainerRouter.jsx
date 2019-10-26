@@ -15,7 +15,7 @@ import InviteFriends from 'components/pages/entertainer/InviteFriends';
 import Help from 'components/pages/user/Help';
 import Logout from 'components/pages/auth/Logout';
 
-const UserRouter = () => (
+const EntertainerRouter = () => (
   <Router>
     <Dashboard path="/dashboard" />
     <Bids path="/bids" />
@@ -34,4 +34,4 @@ const UserRouter = () => (
   </Router>
 );
 
-export default UserRouter;
+export default EntertainerRouter;

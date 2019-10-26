@@ -14,6 +14,7 @@ import {
 import { Link } from '@reach/router';
 import UserAvatar from 'assets/img/avatar/user.png';
 import EntertainerAvatar from 'assets/img/avatar/entertainer.jpg';
+import BandMemberAvatar from 'assets/img/avatar/band-member.png';
 import { Match } from '@reach/router';
 
 const TopBar = ({ showSidebar }) => {
@@ -40,9 +41,17 @@ const TopBar = ({ showSidebar }) => {
                 <span className="dot" />
               </NavLink>
             </NavItem>
+            {/* User */}
             <Match path="/entertainer/*">
               {props => (props.match ? <EntertainerTopNavigation /> : null)}
             </Match>
+
+            {/* Band Member */}
+            <Match path="/band-member/*">
+              {props => (props.match ? <BandMemberTopNavigation /> : null)}
+            </Match>
+
+            {/* Entertainer */}
             <Match path="/user/*">
               {props => (props.match ? <UserTopNavigation /> : null)}
             </Match>
@@ -81,6 +90,38 @@ const UserTopNavigation = () => (
       </DropdownItem>
       <DropdownItem>
         <Link className="text-color" to="/user/change-password">
+          Change Password
+        </Link>
+      </DropdownItem>
+      <DropdownItem divider />
+      <DropdownItem>
+        <Link className="text-color" to="/logout">
+          Logout
+        </Link>
+      </DropdownItem>
+    </DropdownMenu>
+  </UncontrolledDropdown>
+);
+
+const BandMemberTopNavigation = () => (
+  <UncontrolledDropdown inNavbar nav>
+    <DropdownToggle caret nav>
+      <span className="d-none d-sm-inline">High Soul </span>
+      <img
+        alt="High Soul"
+        className="rounded-circle img-responsive avatar--small"
+        src={BandMemberAvatar}
+        title="High Soul"
+      />{' '}
+    </DropdownToggle>
+    <DropdownMenu right>
+      <DropdownItem>
+        <Link className="text-color" to="/band-member/payments-history">
+          Payment History
+        </Link>
+      </DropdownItem>
+      <DropdownItem>
+        <Link className="text-color" to="/band-member/change-password">
           Change Password
         </Link>
       </DropdownItem>
