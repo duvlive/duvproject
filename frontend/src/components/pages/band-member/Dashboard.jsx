@@ -158,11 +158,11 @@ Dashboard.PaymentHistory = () => (
           <tbody>
             <tr>
               <td>17 Mar. 2019</td>
-              <td className="text-white">N 50,000</td>
+              <td className="text-white">PAID</td>
             </tr>
             <tr>
               <td>20 Jan. 2019</td>
-              <td className="text-white">N 80,000</td>
+              <td className="text-white">PAID</td>
             </tr>
           </tbody>
         </table>

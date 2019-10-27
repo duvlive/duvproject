@@ -23,7 +23,7 @@ const BandMemberRouter = () => (
     <Gallery path="/gallery" />
     <Video path="/videos" />
     <Badges path="/badges" />
-    <BandMembers path="/band-members" />
+    <BandMembers path="/team-members" />
     <InviteFriends path="/invite-friends" />
     <Help path="/help" />
     <Logout path="/logout" />

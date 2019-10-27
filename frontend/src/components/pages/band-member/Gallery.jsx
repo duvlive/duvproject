@@ -11,9 +11,9 @@ import Image from 'components/common/utils/Image';
 import BackEndPage from 'components/common/layout/BackEndPage';
 
 const Gallery = () => (
-  <BackEndPage title="Gallery">
+  <BackEndPage title="Team Gallery">
     <div className="main-app">
-      <TopMessage message="Gallery" />
+      <TopMessage message="Team Gallery" />
 
       <section className="app-content">
         <section className="gallery">

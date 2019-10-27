@@ -4,9 +4,9 @@ import TopMessage from 'components/common/layout/TopMessage';
 import BackEndPage from 'components/common/layout/BackEndPage';
 
 const Video = () => (
-  <BackEndPage title="Videos">
+  <BackEndPage title="Team Videos">
     <div className="main-app">
-      <TopMessage message="Videos" />
+      <TopMessage message="Team Videos" />
 
       <section className="app-content">
         <section className="gallery">

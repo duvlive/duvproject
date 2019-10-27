@@ -30,7 +30,7 @@ Payments.Card = ({ color }) => (
   <div className="col-sm-4">
     <div className={`card card-custom card-tiles card-${color} card__no-hover`}>
       <div className="card-body">
-        <h4 className="subtitle--2 white mb-0">N50, 000</h4>
+        <h4 className="subtitle--2 white mb-0">PAID</h4>
         <div className="small--1 text-gray">Paid on Apr. 2, 2019</div>
       </div>
       <div className="spacer--tiles--3" />

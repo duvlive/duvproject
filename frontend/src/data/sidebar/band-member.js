@@ -33,18 +33,18 @@ export default [
         icon: 'badge'
       },
       {
-        title: 'Gallery',
+        title: 'Team Gallery',
         to: '/band-member/gallery',
         icon: 'gallery'
       },
       {
-        title: 'Videos',
+        title: 'Team Videos',
         to: '/band-member/videos',
         icon: 'video'
       },
       {
-        title: 'Band Members',
-        to: '/band-member/band-members',
+        title: 'Team Members',
+        to: '/band-member/team-members',
         icon: 'band-members'
       }
     ]
