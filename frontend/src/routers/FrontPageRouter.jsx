@@ -13,6 +13,7 @@ import Register from 'components/pages/auth/Register';
 import SingleEntertainer from 'components/pages/frontend/SingleEntertainer';
 import SingleEvent from 'components/pages/frontend/SingleEvent';
 import ForgotPassword from 'components/pages/auth/ForgotPassword';
+import ChangePassword from 'components/pages/auth/ChangePassword';
 
 const FrontPageRouter = () => (
   <Router>
@@ -26,6 +27,7 @@ const FrontPageRouter = () => (
     <Login path="login" />
     <Logout path="logout" />
     <ForgotPassword path="forgot-password" />
+    <ChangePassword path="change-password" />
     <Register path="register" />
     <Register path="register/:type" />
     <SingleEntertainer path="entertainer/:slug" />

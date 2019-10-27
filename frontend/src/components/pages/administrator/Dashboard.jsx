@@ -14,7 +14,7 @@ const Dashboard = () => (
 Dashboard.Items = () => {
   return (
     <>
-      <TopMessage message="Welcome back DJ Cuppy," />
+      <TopMessage message="Welcome back U.V," />
       <section className="app-content">
         <div className="row">
           <DashboardCard

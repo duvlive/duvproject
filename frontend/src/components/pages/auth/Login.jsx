@@ -86,6 +86,13 @@ const LoginForm = () => {
           const { email, password } = values;
           if (email === 'user@duvlive.com' && password === 'passworded') {
             return navigate('/user/dashboard');
+          } else if (email === 'uv@duvlive.com' && password === 'passworded') {
+            return navigate('/administrator/dashboard');
+          } else if (
+            email === 'highsoul@duvlive.com' &&
+            password === 'passworded'
+          ) {
+            return navigate('/band-member/dashboard');
           } else if (
             email === 'djcuppy@duvlive.com' &&
             password === 'passworded'
