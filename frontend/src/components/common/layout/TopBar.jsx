@@ -15,6 +15,7 @@ import { Link } from '@reach/router';
 import UserAvatar from 'assets/img/avatar/user.png';
 import EntertainerAvatar from 'assets/img/avatar/entertainer.jpg';
 import BandMemberAvatar from 'assets/img/avatar/band-member.png';
+import AdministratorAvatar from 'assets/img/avatar/administrator.png';
 import { Match } from '@reach/router';
 
 const TopBar = ({ showSidebar }) => {
@@ -54,6 +55,11 @@ const TopBar = ({ showSidebar }) => {
             {/* Entertainer */}
             <Match path="/user/*">
               {props => (props.match ? <UserTopNavigation /> : null)}
+            </Match>
+
+            {/* Administrator */}
+            <Match path="/administrator/*">
+              {props => (props.match ? <AdministratorTopNavigation /> : null)}
             </Match>
           </Nav>
         </Collapse>
@@ -155,6 +161,38 @@ const EntertainerTopNavigation = () => (
       <DropdownItem>
         <Link className="text-color" to="/entertainer/payments-history">
           Payment History
+        </Link>
+      </DropdownItem>
+      <DropdownItem>
+        <Link className="text-color" to="/user/dashboard">
+          Login as User
+        </Link>
+      </DropdownItem>
+      <DropdownItem divider />
+      <DropdownItem>
+        <Link className="text-color" to="/logout">
+          Logout
+        </Link>
+      </DropdownItem>
+    </DropdownMenu>
+  </UncontrolledDropdown>
+);
+
+const AdministratorTopNavigation = () => (
+  <UncontrolledDropdown inNavbar nav>
+    <DropdownToggle caret nav>
+      <span className="d-none d-sm-inline">U.V </span>
+      <img
+        alt="U.V"
+        className="rounded-circle img-responsive avatar--small"
+        src={AdministratorAvatar}
+        title="U.V"
+      />{' '}
+    </DropdownToggle>
+    <DropdownMenu right>
+      <DropdownItem>
+        <Link className="text-color" to="/entertainer/entertainer-payment">
+          Recent Entertainers' Payment
         </Link>
       </DropdownItem>
       <DropdownItem>

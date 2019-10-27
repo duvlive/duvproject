@@ -4,6 +4,7 @@ import RedLogo from 'assets/img/logo/red-white.svg';
 import UserAvatar from 'assets/img/avatar/user.png';
 import EntertainerAvatar from 'assets/img/avatar/entertainer.jpg';
 import BandMemberAvatar from 'assets/img/avatar/band-member.png';
+import AdministratorAvatar from 'assets/img/avatar/administrator.png';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { Link } from '@reach/router';
 import 'react-perfect-scrollbar/dist/css/styles.css';
@@ -86,6 +87,21 @@ const Sidebar = ({ showSidebar, closeSidebar }) => (
           }
         </Match>
 
+        {/* Administrator */}
+        <Match path="/administrator/*">
+          {props =>
+            props.match ? (
+              <div>
+                <Sidebar.AdministratorBox />
+                <Sidebar.Navigation
+                  closeSidebar={closeSidebar}
+                  menus={userSideMenu}
+                />
+              </div>
+            ) : null
+          }
+        </Match>
+
         <div className="text-center d-block d-sm-none" onClick={closeSidebar}>
           Close Menu
         </div>
@@ -147,6 +163,23 @@ Sidebar.BandMemberBox = () => {
         <div className="user-status offline" />
       </div>
       <h5 className="text-uppercase">High Soul</h5>
+    </div>
+  );
+};
+
+Sidebar.AdministratorBox = () => {
+  return (
+    <div className="user-box">
+      <div className="user-img">
+        <img
+          alt="U.V"
+          className="rounded-circle img-thumbnail img-responsive"
+          src={AdministratorAvatar}
+          title="U.V"
+        />
+        <div className="user-status offline" />
+      </div>
+      <h5 className="text-uppercase">U.V</h5>
     </div>
   );
 };
