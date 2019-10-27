@@ -28,14 +28,14 @@ export default [
     name: 'Users',
     menus: [
       {
-        title: 'Regsitered Users',
+        title: 'Registered Users',
         to: '/administrator/registered-users',
         icon: 'badge'
       },
       {
         title: 'Auctions',
         to: '/administrator/auctions',
-        icon: 'gallery'
+        icon: 'auction'
       },
       {
         title: 'Auctions Payment',
@@ -46,17 +46,17 @@ export default [
         title: 'Upcoming events',
         to: '/administrator/upcoming-events',
         icon: 'calendar'
-      },
-      {
-        title: 'Gallery',
-        to: '/administrator/gallery',
-        icon: 'gallery'
-      },
-      {
-        title: 'Videos',
-        to: '/administrator/videos',
-        icon: 'video'
       }
+      // {
+      //   title: 'Gallery',
+      //   to: '/administrator/gallery',
+      //   icon: 'gallery'
+      // },
+      // {
+      //   title: 'Videos',
+      //   to: '/administrator/videos',
+      //   icon: 'video'
+      // }
     ]
   },
   {
@@ -70,12 +70,7 @@ export default [
       {
         title: 'Badges',
         to: '/administrator/badges',
-        icon: 'badges'
-      },
-      {
-        title: 'Emergency Contacts',
-        to: '/administrator/emergency-contacts',
-        icon: 'guest'
+        icon: 'badge'
       }
     ]
   },

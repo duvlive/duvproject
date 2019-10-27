@@ -11,6 +11,7 @@ import 'react-perfect-scrollbar/dist/css/styles.css';
 import userSideMenu from 'data/sidebar/user';
 import entertainerSideMenu from 'data/sidebar/entertainer';
 import bandMemberSideMenu from 'data/sidebar/band-member';
+import administratorSideMenu from 'data/sidebar/administrator';
 import classNames from 'classnames';
 import { Match } from '@reach/router';
 
@@ -95,7 +96,7 @@ const Sidebar = ({ showSidebar, closeSidebar }) => (
                 <Sidebar.AdministratorBox />
                 <Sidebar.Navigation
                   closeSidebar={closeSidebar}
-                  menus={userSideMenu}
+                  menus={administratorSideMenu}
                 />
               </div>
             ) : null

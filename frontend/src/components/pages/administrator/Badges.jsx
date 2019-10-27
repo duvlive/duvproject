@@ -6,7 +6,7 @@ import BackEndPage from 'components/common/layout/BackEndPage';
 const Badges = () => (
   <BackEndPage title="Badges">
     <div className="main-app">
-      <TopMessage message="4 assigned badges" />
+      <TopMessage message="4 available badges" />
 
       <section className="app-content">
         <section className="gallery">
