@@ -136,14 +136,12 @@ Register.Form = ({ type }) => (
           />
         </div>
         <div className="form-check">
-          <input
-            className="form-check-input"
-            id="exampleCheck1"
-            type="checkbox"
-          />
-          <label className="form-check-label" htmlFor="exampleCheck1">
-            By checking here and continuing, I agree to the{' '}
-            <Link to="/privacy-policy">DUV LIVE Terms of Use</Link>
+          <input className="form-check-input" id="agreement" type="checkbox" />
+          <label className="form-check-label" htmlFor="agreement">
+            I agree to the terms listed in the{' '}
+            <Link to="/terms-of-use">DUV LIVE Terms of Use</Link> and
+            acknowledge the{' '}
+            <Link to="/privacy-policy">DUV LIVE Privacy Policy</Link>.
           </label>
         </div>
         <Button

@@ -2,21 +2,13 @@ import React from 'react';
 import TopMessage from 'components/common/layout/TopMessage';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import DashboardCard from 'components/common/utils/DashboardCard';
-import Onboarding from 'components/pages/entertainer/Onboarding';
 
 const Dashboard = () => {
-  const status = '!approved';
-  let currentDashboard;
-
-  if (status === 'approved') {
-    currentDashboard = <Dashboard.Items />;
-  } else {
-    currentDashboard = <Onboarding />;
-  }
-
   return (
     <BackEndPage title="Dashboard">
-      <div className="main-app">{currentDashboard}</div>
+      <div className="main-app">
+        <Dashboard.Items />
+      </div>
     </BackEndPage>
   );
 };
@@ -24,7 +16,7 @@ const Dashboard = () => {
 Dashboard.Items = () => {
   return (
     <>
-      <TopMessage message="Welcome back DJ Cuppy," />
+      <TopMessage message="Welcome back High Soul," />
       <section className="app-content">
         <div className="row">
           <DashboardCard
@@ -166,11 +158,11 @@ Dashboard.PaymentHistory = () => (
           <tbody>
             <tr>
               <td>17 Mar. 2019</td>
-              <td className="text-white">N 50,000</td>
+              <td className="text-white">PAID</td>
             </tr>
             <tr>
               <td>20 Jan. 2019</td>
-              <td className="text-white">N 80,000</td>
+              <td className="text-white">PAID</td>
             </tr>
           </tbody>
         </table>

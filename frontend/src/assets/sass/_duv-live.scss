@@ -336,3 +336,42 @@ a:hover {
   object-fit: cover;
   width: 100%;
 }
+
+.onboarding {
+  &__title {
+    font-size: 1.5rem;
+    font-weight: normal;
+    line-height: 1.6;
+    padding: 1rem 0 0;
+  }
+
+  &__instruction {
+    margin-top: 1rem;
+    font-size: 1rem;
+    font-weight: light;
+  }
+
+  &__text {
+    font-size: 1.2rem;
+    font-weight: normal;
+    margin: 1rem 0;
+    line-height: 2rem;
+    position: relative;
+    color: $text-color;
+
+    .icon {
+      font-size: 2.5rem;
+      position: absolute;
+      right: 0;
+      top: 0;
+
+      &.completed {
+        color: $green-300;
+      }
+
+      &.pending {
+        color: $gray-700;
+      }
+    }
+  }
+}

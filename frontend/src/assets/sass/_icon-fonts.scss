@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'duvlive';
-  src: url('../font/duvlive.eot?7777738');
-  src: url('../font/duvlive.eot?7777738#iefix') format('embedded-opentype'),
-    url('../font/duvlive.woff2?7777738') format('woff2'),
-    url('../font/duvlive.woff?7777738') format('woff'),
-    url('../font/duvlive.ttf?7777738') format('truetype'),
-    url('../font/duvlive.svg?7777738#duvlive') format('svg');
+  src: url('../font/duvlive.eot?30024660');
+  src: url('../font/duvlive.eot?30024660#iefix') format('embedded-opentype'),
+    url('../font/duvlive.woff2?30024660') format('woff2'),
+    url('../font/duvlive.woff?30024660') format('woff'),
+    url('../font/duvlive.ttf?30024660') format('truetype'),
+    url('../font/duvlive.svg?30024660#duvlive') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -15,7 +15,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: 'duvlive';
-    src: url('../font/duvlive.svg?7777738#duvlive') format('svg');
+    src: url('../font/duvlive.svg?30024660#duvlive') format('svg');
   }
 }
 */
@@ -101,6 +101,9 @@
 .icon-invite-friend:before {
   content: '\e80e';
 } /* '' */
+.icon-ok-circled:before {
+  content: '\e80f';
+} /* '' */
 .icon-auction:before {
   content: '\e810';
 } /* '' */
@@ -155,6 +158,9 @@
 .icon-quote-left:before {
   content: '\f10d';
 } /* '' */
+.icon-circle:before {
+  content: '\f111';
+} /* '' */
 .icon-star-half-empty:before {
   content: '\f123';
 } /* '' */
