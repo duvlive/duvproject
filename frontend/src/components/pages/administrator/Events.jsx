@@ -15,41 +15,45 @@ const Events = () => (
               <tr>
                 <th>S/N</th>
                 <th>Name</th>
-                <th>Stage Name</th>
-                <th>Type</th>
+                <th>Organizer</th>
                 <th>Location</th>
-                <th>Verified</th>
+                <th>Venue</th>
+                <th>Date</th>
+                <th>Time</th>
                 <th></th>
               </tr>
               <tr>
                 <td>01.</td>
-                <td>Olawale Adebisi</td>
-                <td>DJ Proton</td>
-                <td>DJ</td>
-                <td>Lagos State</td>
-                <td>NO</td>
+                <td>Party on the roof</td>
+                <td>Party Hub</td>
+                <td>Lagos</td>
+                <td>Sheraton Hotel</td>
+                <td>15 Oct. 2019</td>
+                <td>10am</td>
                 <td>
                   <Link to="#">Manage</Link>
                 </td>
               </tr>
               <tr>
                 <td>02.</td>
-                <td>Precious Jewel</td>
-                <td>Holy Guys</td>
-                <td>Live Band</td>
-                <td>Lagos State</td>
-                <td>NO</td>
+                <td>Party on the roof</td>
+                <td>Party Hub</td>
+                <td>Lagos</td>
+                <td>Sheraton Hotel</td>
+                <td>15 Oct. 2019</td>
+                <td>10am</td>
                 <td>
                   <Link to="#">Manage</Link>
                 </td>
               </tr>
               <tr>
                 <td>03.</td>
-                <td>Olawale Adebisi</td>
-                <td>Sweet Mouth</td>
-                <td>MC</td>
-                <td>Port Harcourt</td>
-                <td>YES</td>
+                <td>Party on the roof</td>
+                <td>Party Hub</td>
+                <td>Lagos</td>
+                <td>Sheraton Hotel</td>
+                <td>15 Oct. 2019</td>
+                <td>10am</td>
                 <td>
                   <Link to="#">Manage</Link>
                 </td>
