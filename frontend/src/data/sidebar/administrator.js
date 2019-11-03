@@ -38,8 +38,8 @@ export default [
         icon: 'auction'
       },
       {
-        title: 'Auctions Payment',
-        to: '/administrator/auctions-payment',
+        title: 'Users Payment',
+        to: '/administrator/users-payment',
         icon: 'credit-card'
       },
       {

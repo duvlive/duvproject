@@ -51,6 +51,72 @@ const Events = () => (
                   </Link>
                 </td>
               </tr>
+
+              <tr>
+                <td className="pl-4">
+                  <span className="subtitle--2 text-red text-uppercase">
+                    APR. 11 (SUN)
+                  </span>
+                  <span className="small--3 text-gray">9:00am - 4:00pm</span>
+                </td>
+                <td>
+                  <div className="table__title text-white">
+                    Wedding Ceremony
+                  </div>
+                  <span>
+                    <i className="icon icon-location" />
+                    Yaba, Lagos state
+                  </span>
+                </td>
+                <td>
+                  <span className="text-yellow">DJ, Live Band</span>
+                  <span>DJ Cuppy, High Soul</span>
+                </td>
+                <td className="text-right pr-5">
+                  <Avatars entertainers={getItems(djLists, 2)} />
+                </td>
+                <td className="text-right">
+                  <Link
+                    className="btn btn-info btn-transparent"
+                    to="/user/events/1"
+                  >
+                    View Event
+                  </Link>
+                </td>
+              </tr>
+
+              <tr>
+                <td className="pl-4">
+                  <span className="subtitle--2 text-red text-uppercase">
+                    APR. 11 (SUN)
+                  </span>
+                  <span className="small--3 text-gray">9:00am - 4:00pm</span>
+                </td>
+                <td>
+                  <div className="table__title text-white">
+                    Wedding Ceremony
+                  </div>
+                  <span>
+                    <i className="icon icon-location" />
+                    Yaba, Lagos state
+                  </span>
+                </td>
+                <td>
+                  <span className="text-yellow">DJ, Live Band</span>
+                  <span>DJ Cuppy, High Soul</span>
+                </td>
+                <td className="text-right pr-5">
+                  <Avatars entertainers={getItems(djLists, 2)} />
+                </td>
+                <td className="text-right">
+                  <Link
+                    className="btn btn-info btn-transparent"
+                    to="/user/events/1"
+                  >
+                    View Event
+                  </Link>
+                </td>
+              </tr>
             </tbody>
           </table>
           <br />

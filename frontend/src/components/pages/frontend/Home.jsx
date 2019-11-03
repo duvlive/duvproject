@@ -77,7 +77,7 @@ const LiveYourLifeSection = () => (
       <Text.VerticalAlign>
         {' '}
         <h2 className="title-border">LIVE YOUR BEST LIFE</h2>
-        <p>WE TUNE UP YOUR EVENTS</p>
+        <p className="text-uppercase">Celebrate the great moments</p>
       </Text.VerticalAlign>
     </Col>
     <Col className="live-your-life__content--2 live-your-life__box" sm="4">

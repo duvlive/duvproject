@@ -40,7 +40,7 @@ Dashboard.Items = () => {
             number="79"
             summary="2 pending payments"
             title="Payments Received"
-            to="/administrator/payments"
+            to="/administrator/users-payment"
           />
           <DashboardCard
             color="yellow"
