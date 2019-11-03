@@ -56,6 +56,11 @@ const changePasswordObject = {
   confirm_password: confirmPassword
 };
 
+const changePasswordByEmailObject = {
+  password: strongPassword,
+  confirm_password: confirmPassword
+};
+
 const personalInfoObject = {
   first_name: stringValidation('First Name'),
   last_name: stringValidation('Last Name'),
@@ -82,6 +87,7 @@ export {
   registerObject,
   forgotPasswordSchema,
   changePasswordObject,
+  changePasswordByEmailObject,
   profileObject,
   profileSchema,
   personalInfoObject
