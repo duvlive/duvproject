@@ -75,33 +75,25 @@ const UserController = {
    * @return {object} returns res object
    */
   socialLogin(req, res) {
-    const {lastName, firstName, email, id} = req.user;
+    const {lastName, firstName, email} = req.user;
     User.findOne({where: {email}})
     .then(user => {
-      if (user) {
-        throw {
-          status: 400,
-          message: "This email address has already been taken"
-        };
-      }
-      return User.findOrCreate({where: {socialId: id},
-        defaults: {
-          lastName,
-          firstName,
-          email,
-          isActive: true
-        }});
-    }).then(([user]) => {
+      if (!user || user.length === 0) {
+        return res.status(200).json({
+          user: {lastName, firstName, email} });
+        }
+      else {
         const token = Authentication.generateToken(user);
         return res.status(200).json({
           message: 'You are successfully Logged in',
-          user: UserController.transformUser(user),
+          user: UserController.transformUser(user.dataValues),
           token
         });
-      }).catch((error) => {
-        const status = error.status || 500;
+      }
+    })
+    .catch((error) => {
         const errorMessage = error.message || error;
-        return res.status(status).json({message: errorMessage});
+        return res.status(400).json({error: errorMessage});
       });
   },
 

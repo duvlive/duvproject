@@ -13,7 +13,7 @@ router.get('/api/v1/users/activate', UserController.activateUser);
 router.post('/api/v1/users/password-reset', UserController.passwordReset);
 router.post('/api/v1/users/update-password', UserController.updatePassword);
 
-router.get('/api/v1/auth/facebook',passport.authenticate('facebook', { scope: ['email'] }));
+router.get('/api/v1/auth/facebook', passport.authenticate('facebook', { scope: ['email'] }));
 router.get('/api/v1/auth/facebook/callback', passport.authenticate('facebook', { session: false }),  UserController.socialLogin);
 
 

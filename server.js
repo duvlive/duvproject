@@ -24,11 +24,11 @@ passport.use(new facebookStrategy({
   clientID: process.env.FACEBOOK_APP_ID,
   clientSecret: process.env.FACEBOOK_APP_SECRET,
   callbackURL: "http://localhost:8080/api/v1/auth/facebook/callback",
-  profileFields: ['id', 'emails', 'name']
+  profileFields: ['emails', 'name']
 },
 function(accessToken, refreshToken, profile, done) {
-  const {last_name: lastName, first_name: firstName, email, id} = profile._json;
-  done(null, {firstName, lastName, email, id});
+  const {last_name: lastName, first_name: firstName, email} = profile._json;
+  done(null, {firstName, lastName, email});
 
 }
 ));
@@ -37,16 +37,15 @@ passport.use(new googleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   callbackURL: "http://localhost:8080/api/v1/auth/google/callback",
-  profileFields: ['id', 'emails', 'name']
+  profileFields: ['emails', 'name']
 
 },
 function(accessToken, refreshToken, profile, done) {
   const {family_name: lastName,
     given_name: firstName,
-    sub: id,
     email
   } = profile._json;
-  done(null, {firstName, lastName, email, id});
+  done(null, {firstName, lastName, email});
  }
 ));
 

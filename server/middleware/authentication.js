@@ -28,10 +28,11 @@ const authentication = {
    * @returns {Object} jwt
    */
   generateToken(user, isLimitedExpiry=false) {
-    return jwt.sign({
+    const signData = {
       userId: user.id,
       type: user.type,
-    }, process.env.SECRET, { expiresIn: isLimitedExpiry ? undefined: '30 day' });
+    };
+    return isLimitedExpiry ? jwt.sign(signData, process.env.SECRET) : jwt.sign(signData, process.env.SECRET, { expiresIn: '30 day' });
   },
 
   /**

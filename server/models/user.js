@@ -46,11 +46,6 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: 1,
       validate: { isIn: [[1, 2, 3]] },
     },
-    socialId: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      defaultValue: null,
-    },
     isActive: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
@@ -62,9 +57,6 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     hooks: {
       beforeCreate: (user) => {
-        if(user.socialId) {
-          return;
-        }
         user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10));
         user.activationToken = jwt.sign({
           userId: user.id,
@@ -77,9 +69,6 @@ module.exports = (sequelize, DataTypes) => {
         .then((res) => {
           return user.setProfile(res);
         }).then(() => {
-          if(user.socialId) {
-            return;
-          }
           const { email, activationToken } = user;
           return emailSender(email, activationToken);
         }).catch((error) => {
