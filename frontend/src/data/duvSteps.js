@@ -1,17 +1,38 @@
 export default [
   {
-    title: 'Register Your Account',
+    title: 'Enter Event Details',
     description:
-      'Creating an account is easy, consectetur adipiscing elit. Etiam varius leo felis, a tincidunt ex molestie quis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
+      'Tell us about the nature,date and location of your party so entertainers can better understand your event.'
   },
   {
-    title: 'Enter Your Event Details',
+    title: 'Choose Entertainer',
     description:
-      'Enter your events details, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam varius leo felis, a tincidunt ex molestie quis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
+      'You could select an entertainer from the list provided or we could recommend one for you. If neither is the case, then you could create an auction for entertainers to bid for.'
   },
   {
-    title: 'Choose Your Entertainer',
+    title: ' RELAX & Enjoy your party.',
     description:
-      'Either by getting bids from our trusted entertainers or by recommendation, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam varius leo felis, a tincidunt ex molestie quis.'
+      'Make payments with ease on our secure platform, to finalise the booking arrangement for the chosen entertainer'
+  }
+];
+
+export const howItWorksSteps = [
+  {
+    icon: 'wallet',
+    title: 'No More Pay Cuts',
+    description:
+      'With DUV Live, you no longer get underpaid by any event host you perform for. All payments are upfront.'
+  },
+  {
+    icon: 'loop',
+    title: 'No More  Show Swapping',
+    description:
+      'You could select an entertainer from the list provided or we could recommend one for you. If neither is the case, then you could create an auction for entertainers to bid for.'
+  },
+  {
+    icon: 'bid',
+    title: 'Zero Fraud',
+    description:
+      'All payments for entertainers are locked-in by DUV Live until the show is completed. Nobody skips town with your money.'
   }
 ];
