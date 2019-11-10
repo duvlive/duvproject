@@ -8,7 +8,7 @@ import BorderedListItem from 'components/custom/BorderedListItem';
 import Slideshow from 'components/custom/Slideshow';
 import Counter from 'components/custom/Counter';
 import { SLIDESHOW_TYPE } from 'utils/constants';
-import noGoSpoilYourPartyList from 'data/duvSteps';
+import { howItWorksSteps } from 'data/duvSteps';
 import testimonialLists from 'data/testimonials';
 
 const HowItWorks = () => {
@@ -17,7 +17,12 @@ const HowItWorks = () => {
       <AboutUs />
       <WhyUseDuvLive />
       <CounterSection />
-      <Slideshow items={testimonialLists} type={SLIDESHOW_TYPE.testimonials} />
+      {false && (
+        <Slideshow
+          items={testimonialLists}
+          type={SLIDESHOW_TYPE.testimonials}
+        />
+      )}
     </FrontEndPage>
   );
 };
@@ -42,14 +47,11 @@ const AboutUs = () => (
               DUV LIVE SUPPORTS THE BEST DJS, MCS AND LIVE BANDS IN NIGERIA.
             </h3>
             <p className="about-us__text">
-              Praesent eget egestas lectus. Vestibulum eleifend augue a erat
-              condimentum, ac laoreet mi tristique. Fusce porttitor est augue.
-              Nunc rutrum volutpat orci, quis pharetra nisl lacinia sit amet. In
-              in tellus nec nisl tincidunt feugiat. Vestibulum magna mauris,
-              posuere vel facilisis ut, pulvinar nec nisi. Class aptent taciti
-              sociosqu ad litora torquent per conubia nostra, per inceptos
-              himenaeos. Nullam facilisis faucibus nisi, eget porta arcu ornare
-              nec. Quisque dapibus mi id ultricies consectetur.
+              DUV LIVE is an online platform that supports the best of live
+              entertainers in Nigeria. Our range of services affords upcoming
+              and professional talent the power to manage their bookings online
+              , while delivery a world class Simply hire the entertainer of your
+              choice for that upcoming party by following these simple steps:
             </p>
           </div>
         </Col>
@@ -65,9 +67,7 @@ const WhyUseDuvLive = () => (
         WHY USE <span>DUV LIVE</span>
       </h2>
       <Row className="pt-5">
-        <BorderedListItem.List
-          items={[...noGoSpoilYourPartyList, ...noGoSpoilYourPartyList]}
-        />{' '}
+        <BorderedListItem.List items={[...howItWorksSteps]} />{' '}
       </Row>
     </div>
     <div className="mb-5" />

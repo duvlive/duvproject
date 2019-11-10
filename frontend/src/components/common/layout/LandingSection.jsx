@@ -35,13 +35,14 @@ const LandingSection = ({ showSidebar, isDashboard, title, subtitle }) => (
 
 LandingSection.propTypes = {
   isDashboard: PropTypes.bool,
-  showSidebar: PropTypes.func.isRequired,
+  showSidebar: PropTypes.func,
   subtitle: PropTypes.string,
   title: PropTypes.string.isRequired
 };
 
 LandingSection.defaultProps = {
   isDashboard: false,
-  subtitle: null
+  subtitle: null,
+  showSidebar: () => {}
 };
 export default LandingSection;
