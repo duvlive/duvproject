@@ -1,7 +1,6 @@
 import React from 'react';
 import TopMessage from 'components/common/layout/TopMessage';
 import BackEndPage from 'components/common/layout/BackEndPage';
-import { Link } from '@reach/router';
 
 const EntertainersPayment = () => (
   <BackEndPage title="Entertainers Payment">

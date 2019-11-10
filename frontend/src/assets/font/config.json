@@ -254,7 +254,7 @@
     },
     {
       "uid": "f279f25007794fa6837ff78fe94b216e",
-      "css": "bid",
+      "css": "money",
       "code": 61654,
       "src": "fontawesome"
     },
@@ -269,6 +269,18 @@
       "css": "circle",
       "code": 61713,
       "src": "fontawesome"
+    },
+    {
+      "uid": "212ab54aac31030950fec3e2448ebee9",
+      "css": "bid",
+      "code": 59419,
+      "src": "modernpics"
+    },
+    {
+      "uid": "d58dc0a0927a7dea2992f615f2fbf400",
+      "css": "wallet",
+      "code": 59420,
+      "src": "linecons"
     }
   ]
 }

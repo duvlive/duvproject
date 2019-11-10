@@ -86,12 +86,14 @@ const LiveYourLifeSection = () => (
           HOW IT <span>WORKS</span>
         </h3>
         <p>
-          As the world’s leading live entertainment company, we are privileged
-          to work with artists to bring their creativity to life on stages
-          around the world. Whether it’s two hours at a packed club, or an
-          entire weekend of sets at a festival, a live show does more than
-          entertain. It can uplift, inspire and create a memory that lasts a
-          lifetime
+          DUV LIVE is an online platform that supports the best of live
+          entertainers in Nigeria. Our range of services affords upcoming and
+          professional talent the power to manage their bookings online , while
+          delivery a world class Simply hire the entertainer of your choice for
+          that upcoming party by following these simple steps:
+          <Link className="d-block mt-3" to="/how-it-works">
+            Learn more &rarr;
+          </Link>
         </p>
       </Text.VerticalAlign>
     </Col>
