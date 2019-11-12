@@ -7,11 +7,16 @@ module.exports = function(sequelize, DataTypes) {
       defaultValue: null,
       validate: { isIn: [['MC', 'DJ', 'Liveband', null]]
     },
-  userId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
   },
-  },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    approved: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      defaultValue: null,
+    },
   }, {
     classMethods: {
       associate: function(models) {

@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { User } from '../models';
+import { User, UserProfile } from '../models';
 import emailSender from '../MailSender';
 import Authentication from '../middleware/authentication';
 import UserValidation from '../utils/userValidation';
@@ -76,19 +76,31 @@ const UserController = {
    */
   socialLogin(req, res) {
     const {lastName, firstName, email} = req.user;
-    User.findOne({where: {email}})
+    User.findOne({
+      where: {email},
+      include: [{
+        model: UserProfile,
+        as: "profile"
+      }]
+    })
     .then(user => {
       if (!user || user.length === 0) {
         return res.status(200).json({
           user: {lastName, firstName, email} });
         }
       else {
-        const token = Authentication.generateToken(user);
-        return res.status(200).json({
-          message: 'You are successfully Logged in',
-          user: UserController.transformUser(user.dataValues),
-          token
-        });
+        const user = user.dataValues;
+        if (user.type === 1 || (user.type === 2 && user)) {
+          const token = Authentication.generateToken(user);
+          return res.status(200).json({
+            message: 'You are successfully Logged in',
+            user: UserController.transformUser(user),
+            token
+          });
+        }
+        if (user.dataValues.type === 2){
+          // check for approved entertainer
+        }
       }
     })
     .catch((error) => {
@@ -142,7 +154,10 @@ const UserController = {
       return res.status(400).json({ message: 'Email and password cannot be empty'});
     }
     User.findOne({
-      where: { email }
+      where: { email }, include: [{
+        model: UserProfile,
+        as: "profile"
+      }]
     })
     .then((user) => {
       if (user.length === 0 || !user) {
@@ -156,6 +171,7 @@ const UserController = {
       }
       else {
         const token = Authentication.generateToken(user);
+        console.log({user: user.dataValues.profile});
         return res.status(200).json({
           message: 'You are successfully Logged in',
           user: UserController.transformUser(user),

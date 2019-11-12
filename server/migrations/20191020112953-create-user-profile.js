@@ -15,6 +15,9 @@ module.exports = {
       entertainerType: {
         type: Sequelize.STRING
       },
+      approved: {
+        type: Sequelize.BOOLEAN,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

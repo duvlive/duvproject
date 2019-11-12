@@ -12,8 +12,8 @@ export default async function emailSender(email, token, title, host) {
     host: "smtp.mailtrap.io",
     port: 2525,
     auth: {
-      user: process.env.TESTACCOUNT_USER,
-      pass: process.env.TESTACCOUNT_PASS
+      user: process.env.MAIL_TRAP_USER,
+      pass: process.env.MAIL_TRAP_PASS
     },
   });
 
