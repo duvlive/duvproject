@@ -38,6 +38,13 @@ export const autocompleteValidation = label =>
       })
     );
 
+export const urlValidation = label =>
+  yup
+    .string()
+    .label(label)
+    .url('Must be a valid url')
+    .required(`${label} is required`);
+
 export const optionalValidation = validation =>
   yup.lazy(value => {
     if (value) {
