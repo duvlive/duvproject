@@ -1,8 +1,8 @@
-// import * as yup from 'yup';
 import {
   stringValidation,
   autocompleteValidation,
-  positiveNumberValidation
+  positiveNumberValidation,
+  urlValidation
 } from './schema-helpers';
 
 /////////////////////////
@@ -14,4 +14,9 @@ export const entertainerDetailsSchema = {
   year_started: positiveNumberValidation('Started Year'),
   willing_to_travel: stringValidation('Willing to travel'),
   available_for: autocompleteValidation('Available for')
+};
+
+export const videoSchema = {
+  youtube_url: urlValidation('Youtube URL'),
+  title: stringValidation('Title')
 };
