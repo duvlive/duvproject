@@ -194,8 +194,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba($black, 0.7);
-    transition: background-color 0.4s ease-out;
+    background: rgba($black, 0.5);
+    transition: background-color 0.4s ease-in;
     cursor: pointer;
 
     &:hover {
@@ -208,7 +208,7 @@
   .icon-video {
     font-size: 4rem;
     color: rgba($white, 0.8);
-    transition: color 0.4s ease-out;
+    transition: color 0.4s ease-in;
   }
 }
 
