@@ -33,7 +33,7 @@ const LandingSection = () => (
         <VideoSection />
         <div className="card-img-overlay__content">
           <h2 className="card-title">
-            GET THE BEST <br />
+            <br />
             DJS, MCS &amp; LIVE BANDS
           </h2>
           <p className="card-text">
@@ -98,7 +98,7 @@ const LiveYourLifeSection = () => (
       </Text.VerticalAlign>
     </Col>
     <Col className="live-your-life__content--3 live-your-life__box" sm="4">
-      <Text.VerticalAlign>
+      {/* <Text.VerticalAlign>
         <h3>
           HIRE AN <span>ENTERTAINER</span>
         </h3>
@@ -110,7 +110,7 @@ const LiveYourLifeSection = () => (
           entertain. It can uplift, inspire and create a memory that lasts a
           lifetime
         </p>
-      </Text.VerticalAlign>
+      </Text.VerticalAlign> */}
     </Col>
   </section>
 );
@@ -119,7 +119,7 @@ const EntertainerSection = () => (
   <section className="entertainers spacer">
     <div className="container-fluid">
       <h2 className="header title-border">
-        OUR <span>ENTERTAINERS</span>
+        <span>ENTERTAINER</span>
       </h2>
       <Row className="pt-5">
         {/* <Entertainers.List lists={entertainerLists} /> */}
