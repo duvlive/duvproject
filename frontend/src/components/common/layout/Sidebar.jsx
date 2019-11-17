@@ -204,8 +204,12 @@ Sidebar.Navigation = ({ menus, closeSidebar }) => {
 
 Sidebar.Navigation.propTypes = {
   closeSidebar: PropTypes.func.isRequired,
-  match: PropTypes.bool.isRequired,
+  match: PropTypes.bool,
   menus: PropTypes.array.isRequired
+};
+
+Sidebar.Navigation.defaultProps = {
+  match: false
 };
 
 export default Sidebar;

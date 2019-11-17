@@ -8,6 +8,7 @@ const DuvLiveModal = ({
   actionFn,
   body,
   children,
+  childrenClassName,
   className,
   closeModalText,
   title
@@ -15,7 +16,9 @@ const DuvLiveModal = ({
   const [modal, setModal] = useState(false);
   return (
     <Fragment>
-      <span onClick={() => setModal(!modal)}>{children}</span>
+      <span className={childrenClassName} onClick={() => setModal(!modal)}>
+        {children}
+      </span>
       <Modal
         className={className}
         isOpen={modal}
@@ -46,6 +49,7 @@ DuvLiveModal.propTypes = {
   actionText: PropTypes.string,
   body: PropTypes.node.isRequired,
   children: PropTypes.node.isRequired,
+  childrenClassName: PropTypes.string,
   className: PropTypes.string,
   closeModalText: PropTypes.string,
   title: PropTypes.node.isRequired
@@ -54,6 +58,7 @@ DuvLiveModal.propTypes = {
 DuvLiveModal.defaultProps = {
   actionFn: () => {},
   actionText: '',
+  childrenClassName: '',
   className: '',
   closeModalText: 'Close'
 };

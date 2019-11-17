@@ -184,3 +184,35 @@
     color: rgba($text-color, 0.3);
   }
 }
+
+.card-img-overlay {
+  background: rgba($black, 0.5);
+}
+
+.card__with-icon {
+  .card-img-overlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba($black, 0.7);
+    transition: background-color 0.4s ease-out;
+    cursor: pointer;
+
+    &:hover {
+      background: rgba($blue, 0.1);
+      .icon-video {
+        color: rgba($white, 0.3);
+      }
+    }
+  }
+  .icon-video {
+    font-size: 4rem;
+    color: rgba($white, 0.8);
+    transition: color 0.4s ease-out;
+  }
+}
+
+.modal-full {
+  min-width: 100%;
+  margin: 0;
+}
