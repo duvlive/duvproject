@@ -46,9 +46,6 @@ const FAQsSection = () => (
   <section className="faqs spacer--3">
     <div className="container-fluid">
       <Row>
-        <h2 className="header title-border mb-5 col-12">
-          FREQUENTLY ASKED <span>QUESTIONS</span>
-        </h2>
         {getFAQs(FAQs.general)}
         {getFAQs(FAQs.entertainers)}
         {getFAQs(FAQs.users)}
@@ -119,7 +116,7 @@ export const getFAQs = ({ title, faqs }) => {
   ));
 
   return (
-    <Col sm="4">
+    <Col sm={{ size: 8, offset: 2}}>
       <h4 className="accordion-header">{title}</h4>
       <Accordion atomic={true}>{faqsList}</Accordion>
     </Col>

@@ -2,47 +2,62 @@
   border: 1px solid rgba($blue, 0.2);
   border-bottom: none;
   &-header {
-    background: rgba($yellow-300, 0.2);
-    border: 1px solid rgba($blue, 0.2);
-    border-bottom: none;
     margin: 0;
-    padding: 1.5rem 1rem;
-    border-radius: 3px 3px 0 0;
+    padding: 6rem 0 1.5rem;
+    text-transform: uppercase;
+    font-size: 2rem;
+    color: $white;
   }
   .accordion-item {
     .title {
       background: transparent;
+      position: relative;
       color: $text-color;
-      font-size: 0.8rem;
+      font-size: 0.9rem;
+      font-family: $headings-font;
       cursor: pointer;
-      padding: 1rem;
+      padding: 1.5rem;
       width: 100%;
       text-align: left;
       border: none;
       border-bottom: 1px solid rgba($blue, 0.2);
       outline: none;
 
+      &:after {
+        content: '+';
+        position: absolute;
+        right: 1.5rem;
+        top: 50%;
+        transform: translateY(-50%);
+        font-weight: 700;
+        font-size: 1rem;
+      }
+
       &:hover {
-        background: rgba($yellow-100, 0.05);
+        background: rgba($red-300, 0.05);
       }
     }
 
     .panel {
       height: 0;
-      font-size: 0.8rem;
-      // transition: all 0.15s ease-out;
+      font-size: 1rem;
+      transition: all 0.15s ease-out;
       overflow: hidden;
     }
     &.active .title {
-      background: rgba($blue, 0.1);
-      border: none;
+      background: rgba($blue, 0.08);
+      border-bottom: none;
+      &:after {
+        content: '-';
+      }
     }
     &.active .panel {
+      background: rgba($blue, 0.03);
       height: auto;
       max-height: 15rem;
       transition: height 0.4s ease-out;
       padding: 1.5rem 1.5rem 2rem;
-      border: 1px solid rgba($blue, 0.2);
+      border-bottom: 1px solid rgba($blue, 0.2);
     }
   }
 }
