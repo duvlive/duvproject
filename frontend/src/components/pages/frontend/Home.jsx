@@ -31,10 +31,10 @@ const LandingSection = () => (
       <Header />
       <div className="card-img-overlay">
         <VideoSection />
-        <div className="card-img-overlay__content">
+        <div className="card-img-overlay__conten\t">
           <h2 className="card-title">
             <br />
-            DJS, MCS &amp; LIVE BANDS
+            DJs, MCs &amp; LIVE BANDs
           </h2>
           <p className="card-text">
             {' '}
