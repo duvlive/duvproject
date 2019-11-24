@@ -45,6 +45,9 @@ const HelpSection = () => (
 const FAQsSection = () => (
   <section className="faqs spacer--3">
     <div className="container-fluid">
+    <h2 className="header title-border offset-sm-2">
+        Frequently <span>Asked Questions</span>
+      </h2>
       <Row>
         {getFAQs(FAQs.general)}
         {getFAQs(FAQs.entertainers)}
@@ -58,7 +61,7 @@ export const HelpForm = () => (
   <section className="brain-box-form spacer">
     <div className="container-fluid">
       <Row>
-        <Col sm="8">
+        <Col sm={{ size: 8, offset: 2}}>
           <form>
             <h2 className="header title-border mb-4">
               CAN'T FIND <span>AN ANSWER</span>

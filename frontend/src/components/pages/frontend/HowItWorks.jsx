@@ -47,11 +47,7 @@ const AboutUs = () => (
               DUV LIVE SUPPORTS THE BEST DJS, MCS AND LIVE BANDS IN NIGERIA.
             </h3>
             <p className="about-us__text">
-              DUV LIVE is an online platform that supports the best of live
-              entertainers in Nigeria. Our range of services affords upcoming
-              and professional talent the power to manage their bookings online
-              , while delivery a world class Simply hire the entertainer of your
-              choice for that upcoming party by following these simple steps:
+              DUV LIVE is an online platform that supports and promotes the best in live entertainment. Our range of services affords talented performers the power to manage their bookings personally, while delivering world class exposure to all levels of live entertainment
             </p>
           </div>
         </Col>

@@ -3,17 +3,20 @@ export default {
     title: 'General',
     faqs: [
       {
+        question: 'How much does it cost to register and use the platform?',
+        answer: `Although certain charges may apply to specific services, registration and use of the platform is free.`
+      },
+      {
         question: 'What payment mediums are available for use?',
-        answer: `At the moment, users have the options of either electronic transfers or card debits on the secure payment platform provided.`
+        answer: `At the moment, users have the options of either electronic transfers or direct debits on the secure payment platform provided.`
       },
       {
-        question: 'How do I change my privacy settings',
-        answer: `Kindly go to the _____ to edit what can be viewed or not viewed.`
-      },
-      {
-        question:
-          'What is the minimum age allowed to have accounts on DUV Live?',
+        question: 'What is the minimum age allowed to have accounts on DUV Live?',
         answer: `If you live in any country, you must be at least 13 years old (or such greater age required in your country) to register for and use DUV Live.`
+      },
+      {
+        question: 'Does the platform sell tickets to live shows?',
+        answer: `For now, the platform does not engage in the sale of tickets to any live event. Simply check our upcoming events section to know about future parties. `
       }
     ]
   },
@@ -46,24 +49,20 @@ export default {
     title: 'Users',
     faqs: [
       {
-        question: 'What is DUV Live all about',
-        answer: `DUV Live is a directory of world class entertainers (DJs, MCs and Live Bands) used by the general public and professional bookers from around the world. Our powerful yet simple to use search mechanism will help you to find exactly what you need for your upcoming event.`
+        question: 'How do I pay the entertainer?',
+        answer: `If you choose to deal with the entertainer while on the platform,payments can only be made through the platform's secure payment channels.`
       },
       {
-        question: 'How do I get started',
-        answer: `Simply click register anywhere on the website and create your profile as a user.`
+        question: 'Does the entertainer get his money immediately?',
+        answer: `The entertainer receives value after the performance has been completed. If cases of breaches are reported, then payments to entertainers will be delayed.`
       },
       {
-        question: 'What is DUV Live all about',
-        answer: `DUV Live is a directory of world class entertainers (DJs, MCs and Live Bands) used by the general public and professional bookers from around the world. Our powerful yet simple to use search mechanism will help you to find exactly what you need for your upcoming event.`
+        question: 'How long before the date should I  hire an entertainer?',
+        answer: `The standard amount of time allowed to finalise a booking is 48hrs before the event date.`
       },
       {
-        question: 'What is DUV Live all about',
-        answer: `DUV Live is a directory of world class entertainers (DJs, MCs and Live Bands) used by the general public and professional bookers from around the world. Our powerful yet simple to use search mechanism will help you to find exactly what you need for your upcoming event.`
-      },
-      {
-        question: 'What is DUV Live all about',
-        answer: `DUV Live is a directory of world class entertainers (DJs, MCs and Live Bands) used by the general public and professional bookers from around the world. Our powerful yet simple to use search mechanism will help you to find exactly what you need for your upcoming event.`
+        question: 'Can Event Planners & Promoters Hire too?',
+        answer: `Event planners, promoters and agents can hire entertainers for their upcoming events as registered Users on the platform.`
       }
     ]
   }

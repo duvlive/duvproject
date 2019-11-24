@@ -1,27 +1,26 @@
 .accordion {
-  border: 1px solid rgba($blue, 0.2);
-  border-bottom: none;
   &-header {
     margin: 0;
-    padding: 6rem 0 1.5rem;
+    padding: 3rem 0 1rem;
     text-transform: uppercase;
+    font-weight: 300;
     font-size: 2rem;
-    color: $white;
+    color: rgba($white, 0.8);
   }
   .accordion-item {
     .title {
       background: transparent;
       position: relative;
-      color: $text-color;
+      color: rgba($text-color, 0.7);
       font-size: 0.9rem;
       font-family: $headings-font;
       cursor: pointer;
-      padding: 1.5rem;
+      padding: 1.25rem 1.5rem;
       width: 100%;
       text-align: left;
-      border: none;
-      border-bottom: 1px solid rgba($blue, 0.2);
+      border: 1px solid rgba($text-color, 0.1);
       outline: none;
+      margin-bottom: 1.5rem;
 
       &:after {
         content: '+';
@@ -34,30 +33,35 @@
       }
 
       &:hover {
-        background: rgba($red-300, 0.05);
+        background: rgba($blue, 0.1);
       }
     }
 
     .panel {
       height: 0;
-      font-size: 1rem;
-      transition: all 0.15s ease-out;
+      font-size: 0.9rem;
       overflow: hidden;
     }
     &.active .title {
       background: rgba($blue, 0.08);
+      border-color: rgba($blue, 0.2);
       border-bottom: none;
+      color: rgba($white, 0.7);
+
       &:after {
         content: '-';
       }
     }
     &.active .panel {
-      background: rgba($blue, 0.03);
       height: auto;
       max-height: 15rem;
-      transition: height 0.4s ease-out;
-      padding: 1.5rem 1.5rem 2rem;
-      border-bottom: 1px solid rgba($blue, 0.2);
+      transition: height 0.5s ease-in;
+      padding: 1.5rem 2rem 3rem;
+      border: 1px solid rgba($blue, 0.2);
+      border-top: none;
+      margin-top: -1.5rem;
+      margin-bottom: 2rem;
+      color: rgba($white, 0.7);
     }
   }
 }
