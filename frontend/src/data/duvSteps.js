@@ -36,3 +36,31 @@ export const howItWorksSteps = [
       'All payments for entertainers are locked-in by DUV Live until the show is completed. Nobody skips town with your money.'
   }
 ];
+
+export const otherWorksSteps = [
+  {
+    title: 'Create Account',
+    description:
+      'You will be required to enter your personal and contact information to enable us to get to know you better.'
+  },
+  {
+    title: 'Enter Event Details',
+    description:
+      'Tell entertainer(s) the date, location and kind of party you are having so that entertainers can better understand your event.'
+  },
+  {
+    title: 'Choose Entertainer',
+    description:
+      'You could select an entertainer from the list provided or we could recommend one for you. If neither is the case, then you could create an auction for which entertainers to bid.'
+  },
+  {
+    title: 'Make Payment',
+    description:
+      'Make payments with ease on our secure platform, to finalise the booking arrangement for the chosen entertainer.'
+  },
+  {
+    title: ' RELAX & Enjoy your party',
+    description:
+      'Bask in the excitement of being thrilled by performers from the biggest congregation of premium live entertainers.'
+  }
+];

@@ -8,7 +8,7 @@ import BorderedListItem from 'components/custom/BorderedListItem';
 import Slideshow from 'components/custom/Slideshow';
 import Counter from 'components/custom/Counter';
 import { SLIDESHOW_TYPE } from 'utils/constants';
-import { howItWorksSteps } from 'data/duvSteps';
+import { howItWorksSteps, otherWorksSteps } from 'data/duvSteps';
 import testimonialLists from 'data/testimonials';
 
 const HowItWorks = () => {
@@ -47,10 +47,18 @@ const AboutUs = () => (
               DUV LIVE SUPPORTS THE BEST DJS, MCS AND LIVE BANDS IN NIGERIA.
             </h3>
             <p className="about-us__text">
-              DUV LIVE is an online platform that supports and promotes the best in live entertainment. Our range of services affords talented performers the power to manage their bookings personally, while delivering world class exposure to all levels of live entertainment
+              DUV LIVE is an online platform that supports and promotes the best
+              in live entertainment. Our range of services affords talented
+              performers the power to manage their bookings personally, while
+              delivering world class exposure to all levels of live
+              entertainment. Simply hire the entertainer of your choice for that
+              upcoming party by following these simple steps:
             </p>
           </div>
         </Col>
+      </Row>
+      <Row className="mt-5">
+        <BorderedListItem.List items={[...otherWorksSteps]} />
       </Row>
     </div>
   </section>
