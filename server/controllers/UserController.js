@@ -78,7 +78,7 @@ const UserController = {
   socialLogin(req, res) {
     const {lastName, firstName, email} = req.user;
     User.findOne({
-      where: {email},
+      where: { email },
       include: [{
         model: UserProfile,
         as: "profile"
@@ -172,7 +172,6 @@ const UserController = {
       }
       else {
         const token = Authentication.generateToken(user);
-        console.log({user: user.dataValues.profile});
         return res.status(200).json({
           message: 'You are successfully Logged in',
           user: UserController.transformUser(user),
@@ -318,7 +317,6 @@ const UserController = {
     const { firstName, lastName, phoneNumber, about, location, stageName, yearStarted, willingToTravel, eventType, entertainerType } = req.body;
 
   const userProfileData = { about, location, stageName, yearStarted, willingToTravel, eventType, entertainerType };
-    console.log('got here', { about, location, stageName, yearStarted, willingToTravel, eventType, entertainerType })
 
     const updateUser = () => User.findOne({
       where: { id: userId }

@@ -5,13 +5,14 @@ const authentication = {
   verifyToken(request, response, next) {
     let token = request.headers.authorization ||
       request.headers['x-access-token'];
+    if(!token) return response.status(401).send({
+      message: 'Token required for this route',
+    });
     const tokenArray = token.split(' ');
     token = tokenArray.length > 1 ? tokenArray[1] : token;
-      console.log({token, secret: process.env.SECRET});
     if (token) {
       jwt.verify(token, process.env.SECRET, (error, decoded) => {
         if (error) {
-          console.log({token, error, decoded});
           return response.status(401).send({
             message: 'Invalid token',
           });

@@ -1,7 +1,9 @@
 import UserController from './UserController';
-import UserProfileControllers from './UserProfileControllers';
+import UserProfileController from './UserProfileController';
+import BankDetailController from './BankDetailController';
 
 export {
   UserController,
-  UserProfileControllers
+  UserProfileController,
+  BankDetailController,
 };

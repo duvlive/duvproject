@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { UserController, UserProfileControllers } from './controllers';
+import { UserController, UserProfileController, BankDetailController } from './controllers';
 import Authentication from './middleware/authentication';
 import passport from 'passport';
 
@@ -29,6 +29,12 @@ router.route('/api/v1/users/editUser')
 router.route('/api/v1/users/editEntertainer')
 .put(Authentication.verifyToken, Authentication.validateEntertainer, UserController.editEntertainer);
 router.route('/api/v1/users/updateUserProfile')
-.put(Authentication.verifyToken, Authentication.validateEntertainer, UserProfileControllers.updateUserAndUserProfile);
+.put(Authentication.verifyToken, Authentication.validateEntertainer, UserProfileController.updateUserAndUserProfile);
+
+// bankDetails routes
+router.route('/api/v1/bankDetail')
+.post(Authentication.verifyToken, Authentication.validateEntertainer, BankDetailController.createBankDetail)
+.put(Authentication.verifyToken, Authentication.validateEntertainer, BankDetailController.updateUserBankDetail);
+
 
 export default router;
