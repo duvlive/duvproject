@@ -14,8 +14,34 @@ module.exports = function(sequelize, DataTypes) {
     },
     approved: {
       type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+    about: {
+      type: DataTypes.STRING,
       allowNull: true,
-      defaultValue: null,
+    },
+    stageName: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      unique: true,
+    },
+    location: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    yearStarted: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    willingToTravel: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+    eventType: {
+      type: DataTypes.STRING,
+      allowNull: true
     },
   }, {
     classMethods: {

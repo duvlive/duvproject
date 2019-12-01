@@ -39,7 +39,14 @@ const UserValidation = {
     }
     return error;
 
-  }
+  },
+  isUserActive(isActive) {
+    let error = {};
+    if (!isActive) {
+       error['isActive'] = 'User needs to activate account';
+    }
+    return error;
+  },
 };
 
 export default UserValidation;

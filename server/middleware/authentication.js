@@ -3,11 +3,15 @@ import { User } from '../models';
 
 const authentication = {
   verifyToken(request, response, next) {
-    const token = request.headers.authorization ||
+    let token = request.headers.authorization ||
       request.headers['x-access-token'];
+    const tokenArray = token.split(' ');
+    token = tokenArray.length > 1 ? tokenArray[1] : token;
+      console.log({token, secret: process.env.SECRET});
     if (token) {
       jwt.verify(token, process.env.SECRET, (error, decoded) => {
         if (error) {
+          console.log({token, error, decoded});
           return response.status(401).send({
             message: 'Invalid token',
           });
@@ -51,7 +55,59 @@ const authentication = {
           next();
         } else {
           response.status(401).send({
-            error: 'Not authorized',
+            error: 'Not authorized to non-Admin',
+          });
+        }
+      }).catch((error) => {
+        response.status(500).send({
+          errors: error,
+        });
+      });
+  },
+
+  /**
+   * validateEntertainer
+   * @param {Object} request object
+   * @param {Object} response object
+   * @param {Object} next object
+   * @returns {Object} response message
+   */
+  validateEntertainer(request, response, next) {
+    User.findOne({
+      where: { type: request.decoded.type }
+    })
+      .then((user) => {
+        if (user.type === 2) {
+          next();
+        } else {
+          response.status(401).send({
+            error: 'Not authorized to non-entertainers',
+          });
+        }
+      }).catch((error) => {
+        response.status(500).send({
+          errors: error,
+        });
+      });
+  },
+
+  /**
+   * validateUser
+   * @param {Object} request object
+   * @param {Object} response object
+   * @param {Object} next object
+   * @returns {Object} response message
+   */
+  validateUser(request, response, next) {
+    User.findOne({
+      where: { type: request.decoded.type }
+    })
+      .then((user) => {
+        if (user.type === 1) {
+          next();
+        } else {
+          response.status(401).send({
+            error: 'Not authorized to non-users',
           });
         }
       }).catch((error) => {

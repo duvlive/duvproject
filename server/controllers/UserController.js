@@ -4,6 +4,7 @@ import { User, UserProfile } from '../models';
 import emailSender from '../MailSender';
 import Authentication from '../middleware/authentication';
 import UserValidation from '../utils/userValidation';
+import { userProfileUpdateHelper } from '../utils';
 
 const UserController = {
   /**
@@ -272,6 +273,78 @@ const UserController = {
       message: 'You have been Logged out',
     });
   },
+  
+  /**
+   *  user edit User
+   * @function
+   * @param {object} req is request object
+   * @param {object} res is response object
+   * @return {undefined} returns undefined
+   * */
+  editUser(req, res) {
+    const { userId } = req.decoded;
+    const { firstName,  lastName, phoneNumber} = req.body;
+    User.findOne({ 
+      where: { id: userId }
+    })
+    .then((user) => {
+      const error = {...UserValidation.isUserActive(user.isActive)};
+      if (Object.keys(error).length) {
+        return res.status(403).json(error);
+      }
+      if (!user) {
+        return res.status(404).send({
+          message: 'User not found',
+        });
+      }
+        return user
+          .update({ firstName,  lastName, phoneNumber })
+          .then(() => res.status(200).json(UserController.transformUser(user)));
+    })
+    .catch(error => {
+      return res.status(500).json({ error: error.message });
+    });
+  },
+
+  /**
+   *  user edit entertainer
+   * @function
+   * @param {object} req is request object
+   * @param {object} res is response object
+   * @return {undefined} returns undefined
+   * */
+  editEntertainer(req, res) {
+    const { userId } = req.decoded;
+    const { firstName, lastName, phoneNumber, about, location, stageName, yearStarted, willingToTravel, eventType, entertainerType } = req.body;
+
+  const userProfileData = { about, location, stageName, yearStarted, willingToTravel, eventType, entertainerType };
+    console.log('got here', { about, location, stageName, yearStarted, willingToTravel, eventType, entertainerType })
+
+    const updateUser = () => User.findOne({
+      where: { id: userId }
+    })
+    .then((user) => {
+      const error = {...UserValidation.isUserActive(user.isActive)};
+      if (Object.keys(error).length) {
+        return res.status(403).json(error);
+      }
+      if (!user) {
+        return res.status(404).send({
+          message: 'User not found',
+        });
+      }
+      return user
+      .update({ firstName, lastName, phoneNumber})
+    })
+    .catch(error => res.status(400).json({
+      message: error.message || error,
+    }));
+    return Promise.all([updateUser(), userProfileUpdateHelper(userId, userProfileData)])
+    .then((user) => {
+      res.status(200).json({user:  UserController.transformUser(user[0]), userProfile: user[1]});
+    })
+  }
+  
 };
 
 export default UserController;
