@@ -5,8 +5,11 @@
   "main": "index.js",
   "scripts": {
     "start:dev:frontend": "cd frontend && npm start",
-    "start": "node server.js",
-    "heroku-postbuild": "cd frontend && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
+    "start:dev": "nodemon --exec babel-node server.js",
+    "start": "babel-node server.js",
+    "test": "npm run seed && NODE_ENV=test jest ./**/tests/**/*.test.js",
+    "seed": "NODE_ENV=test babel-node server/tests/helpers/seedHelper.js",
+    "server-debug": "babel-node server-debug.js"
   },
   "repository": {
     "type": "git",
@@ -21,8 +24,32 @@
     "url": "https://github.com/duv-live/duvproject/issues"
   },
   "homepage": "https://github.com/duv-live/duvproject#readme",
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint": "5",
+    "eslint-plugin-react": "^7.14.3",
+    "faker": "^4.1.0",
+    "node-cron": "^2.0.3",
+    "nodemon": "^1.19.1",
+    "sequelize-cli": "^5.5.1",
+    "supertest": "^4.0.2"
+  },
   "dependencies": {
-    "express": "^4.17.1"
+    "@babel/core": "^7.5.5",
+    "@babel/node": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "bcrypt": "^3.0.6",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.1.0",
+    "express": "^4.17.1",
+    "global": "^4.4.0",
+    "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.9.1",
+    "nodemailer": "^6.3.0",
+    "passport": "^0.4.0",
+    "passport-facebook": "^3.0.0",
+    "passport-google-oauth": "^2.0.0",
+    "pg": "^7.12.1",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^5.21.2"
   }
 }
