@@ -1,7 +1,4 @@
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import { BankDetail } from '../models';
-import Authentication from '../middleware/authentication';
+import { BankDetail, User } from '../models';
 import { validString } from '../utils';
 
 const BankDetailController = {
@@ -19,6 +16,12 @@ const BankDetailController = {
       ...validString(bankName),
       ...validString(accountNumber),
     };
+
+    User.findOne({ where: { id: userId }})
+    .then(user => {
+      if(!user) return 
+    }
+    )
 
     return BankDetail.findAll({
       where: { userId }
