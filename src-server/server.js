@@ -15,6 +15,10 @@ const port = parseInt(process.env.PORT, 10) || 8080;
 
 const app = express();
 
+app.use((req, res, next) => {
+  global.host = req.protocol + '://' + req.get('host');
+  next();
+})
 app.use(passport.initialize());
 const facebookStrategy = FacebookStrategy.Strategy;
 const googleStrategy = GoogleStrategy.OAuth2Strategy;
@@ -23,7 +27,7 @@ passport.authenticate('facebook');
 passport.use(new facebookStrategy({
   clientID: process.env.FACEBOOK_APP_ID,
   clientSecret: process.env.FACEBOOK_APP_SECRET,
-  callbackURL: "http://localhost:8080/api/v1/auth/facebook/callback",
+  callbackURL: `${global.host}/api/v1/auth/facebook/callback`,
   profileFields: ['emails', 'name']
 },
 function(accessToken, refreshToken, profile, done) {
@@ -36,7 +40,7 @@ function(accessToken, refreshToken, profile, done) {
 passport.use(new googleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  callbackURL: "http://localhost:8080/api/v1/auth/google/callback",
+  callbackURL: `${global.host}/api/v1/auth/google/callback`,
   profileFields: ['emails', 'name']
 
 },
