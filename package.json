@@ -29,6 +29,7 @@
   "homepage": "https://github.com/duv-live/duvproject#readme",
   "devDependencies": {
     "@babel/cli": "^7.7.4",
+    "@babel/plugin-transform-runtime": "^7.7.4",
     "eslint": "5",
     "eslint-plugin-react": "^7.14.3",
     "faker": "^4.1.0",
@@ -41,6 +42,7 @@
     "@babel/core": "^7.5.5",
     "@babel/node": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
+    "@babel/runtime": "^7.7.4",
     "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
     "dotenv": "^8.1.0",
