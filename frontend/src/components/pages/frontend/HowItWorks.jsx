@@ -5,6 +5,7 @@ import FrontEndPage from 'components/common/layout/FrontEndPage';
 import HowItWorksImage from 'assets/img/bg/how-it-works.jpg';
 import Text from 'components/common/utils/Text';
 import BorderedListItem from 'components/custom/BorderedListItem';
+import DiamondListItem from 'components/custom/DiamondListItem';
 import Slideshow from 'components/custom/Slideshow';
 import Counter from 'components/custom/Counter';
 import { SLIDESHOW_TYPE } from 'utils/constants';
@@ -58,7 +59,7 @@ const AboutUs = () => (
         </Col>
       </Row>
       <Row className="mt-5">
-        <BorderedListItem.List items={[...otherWorksSteps]} />
+        <DiamondListItem.List items={[...otherWorksSteps]} />
       </Row>
     </div>
   </section>
