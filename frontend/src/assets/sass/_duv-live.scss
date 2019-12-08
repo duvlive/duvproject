@@ -83,6 +83,8 @@ a:hover {
   }
 
   &__text {
+    color: lighten($text-muted, 20%);
+    font-size: 1.25rem;
     margin-top: 2.5rem;
   }
 }

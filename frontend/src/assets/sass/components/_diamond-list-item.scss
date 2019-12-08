@@ -3,6 +3,12 @@
   align-items: flex-start;
   padding-right: 3rem;
   padding-left: 6rem;
+
+  h5 {
+    font-weight: normal;
+    color: lighten($red-100, 10%);
+  }
+
   .icon-box {
     margin-top: 0.5rem;
     margin-right: 2rem;
