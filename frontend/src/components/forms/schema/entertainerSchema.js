@@ -1,4 +1,5 @@
 import {
+  required,
   stringValidation,
   autocompleteValidation,
   positiveNumberValidation,
@@ -13,6 +14,9 @@ import {
 export const entertainerDetailsSchema = {
   stage_name: stringValidation('Stage Name'),
   location: stringValidation('Location'),
+  type: stringValidation('Entertainer Type'),
+  lga: required('Local Government'),
+  city: required('City'),
   year_started: positiveNumberValidation('Started Year'),
   willing_to_travel: stringValidation('Willing to travel'),
   available_for: autocompleteValidation('Available for')

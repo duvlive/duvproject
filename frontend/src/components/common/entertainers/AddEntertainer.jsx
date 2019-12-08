@@ -13,10 +13,10 @@ import Select from 'components/forms/Select';
 import MultiSelect from 'components/forms/MultiSelect';
 import TextArea from 'components/forms/TextArea';
 
-const EventAddress = () => (
+const AddEntertainer = () => (
   <div className="card card-custom card-black card-form">
     <div className="card-body col-md-10">
-      <h4 className="card-title blue">Event Address</h4>
+      <h4 className="card-title blue">Add Entertainer</h4>
       <div className="form-row">
         <Select
           blankOption="Choose your preferred Entertainer Type"
@@ -118,4 +118,4 @@ const EventAddress = () => (
   </div>
 );
 
-export default EventAddress;
+export default AddEntertainer;
