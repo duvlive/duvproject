@@ -287,6 +287,12 @@
       "css": "enjoy",
       "code": 59421,
       "src": "fontelico"
+    },
+    {
+      "uid": "0a3192de65a73ca1501b073ad601f87d",
+      "css": "select",
+      "code": 59422,
+      "src": "entypo"
     }
   ]
 }
