@@ -52,8 +52,11 @@ const AboutUs = () => (
               in live entertainment. Our range of services affords talented
               performers the power to manage their bookings personally, while
               delivering world class exposure to all levels of live
-              entertainment. Simply hire the entertainer of your choice for that
-              upcoming party by following these simple steps:
+              entertainment.
+            </p>
+            <p className="about-us__text">
+              Simply hire the entertainer of your choice for that upcoming party
+              by following these simple steps:
             </p>
           </div>
         </Col>

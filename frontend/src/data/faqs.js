@@ -11,7 +11,8 @@ export default {
         answer: `At the moment, users have the options of either electronic transfers or direct debits on the secure payment platform provided.`
       },
       {
-        question: 'What is the minimum age allowed to have accounts on DUV Live?',
+        question:
+          'What is the minimum age allowed to have accounts on DUV Live?',
         answer: `If you live in any country, you must be at least 13 years old (or such greater age required in your country) to register for and use DUV Live.`
       },
       {
@@ -29,7 +30,7 @@ export default {
       },
       {
         question: 'What Requirements Must I Meet Before Verification?',
-        answer: `Check out all requirements on the entertainer registration page, read the e-contract and sign up for free.`
+        answer: `Check out all requirements on the entertainer registration page, read the e-contract and sign up for free. Before an entertainer's account is approved, the user must provide personal details, exhibition video, account details, valid means of identification and an emergency contact.`
       },
       {
         question: 'How Do I Get Shows To Perform in?',
@@ -58,7 +59,12 @@ export default {
       },
       {
         question: 'How long before the date should I  hire an entertainer?',
-        answer: `The standard amount of time allowed to finalise a booking is 48hrs before the event date.`
+        answer: `The standard amount of time allowed to finalise a booking is 48hrs before the event date.
+
+        When using the Direct Hire And Recommend features, the booking must be concluded at least 48hrs before the event.
+        As for Auctions, the booking has to be concluded at least 72hrs before the event.
+        This is to allow for payments and preparations by the performers.
+        `
       },
       {
         question: 'Can Event Planners & Promoters Hire too?',
