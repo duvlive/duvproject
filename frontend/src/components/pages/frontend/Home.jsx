@@ -86,11 +86,12 @@ const LiveYourLifeSection = () => (
           HOW IT <span>WORKS</span>
         </h3>
         <p>
-          DUV LIVE is an online platform that supports the best of live
-          entertainers in Nigeria. Our range of services affords upcoming and
-          professional talent the power to manage their bookings online , while
-          delivery a world class Simply hire the entertainer of your choice for
-          that upcoming party by following these simple steps:
+          DUV LIVE is an online platform that supports and promotes the best in
+          live entertainment. Our range of services affords talented performers
+          the power to manage their bookings personally, while delivering world
+          class exposure to all levels of live entertainment. Simply hire the
+          entertainer of your choice for that upcoming party by following these
+          simple steps:
           <Link className="d-block mt-3" to="/how-it-works">
             Learn more &rarr;
           </Link>
