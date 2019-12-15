@@ -28,33 +28,13 @@ const NewEvent = ({ hire_type }) => {
   const message = validHireType
     ? `Hire an Entertainer (${currentHireType})`
     : 'Enter a New Event';
-  const btnText = validHireType ? `Start ${currentHireType}` : 'Save Event';
-  const onSubmit = () => {
-    const urlToRedirect = validHireType
-      ? '/user/events'
-      : '/user/hire-entertainer/1';
-    return navigate(urlToRedirect);
-  };
   return (
     <BackEndPage title="New Events">
       <div className="main-app">
         <TopMessage message={message} />
 
         <section className="app-content">
-          <NewEventForm
-            isAuction={
-              validHireType && currentHireType === HIRE_ENTERTAINERS.auction
-            }
-          />
-          <div className="mt-5">
-            <button
-              className="btn btn-transparent btn-primary text-right btn-lg"
-              onClick={onSubmit}
-              type="submit"
-            >
-              {btnText}
-            </button>
-          </div>
+          <NewEventForm currentHireType={currentHireType} />
         </section>
       </div>
     </BackEndPage>
@@ -69,7 +49,8 @@ NewEvent.defaultProps = {
   hire_type: ''
 };
 
-const NewEventForm = ({ isAuction }) => {
+const NewEventForm = ({ currentHireType }) => {
+  const isSearch = currentHireType === HIRE_ENTERTAINERS.search;
   const initialValues = {
     event: setInitialValues(eventDetailsSchema),
     address: setInitialValues(eventAddressSchema)
@@ -80,7 +61,7 @@ const NewEventForm = ({ isAuction }) => {
   };
 
   // We are showing the AddEntertainer Form for Auction only
-  if (isAuction) {
+  if (!isSearch) {
     initialValues.entertainer = setInitialValues(addEntertainerSchema);
     entertainersSchema.entertainer = createSchema(addEntertainerSchema);
   }
@@ -92,23 +73,41 @@ const NewEventForm = ({ isAuction }) => {
         console.log(values);
         setTimeout(() => {
           actions.setSubmitting(false);
+          let urlToRedirect;
+          console.log('currentHireType', currentHireType);
+          if (currentHireType === HIRE_ENTERTAINERS.search) {
+            urlToRedirect = '/user/entertainer/search/1';
+          } else if (currentHireType === HIRE_ENTERTAINERS.recommend) {
+            urlToRedirect = '/user/entertainer/recommended/1';
+          } else {
+            urlToRedirect = '/user/auctions';
+          }
+          return navigate(urlToRedirect);
         }, 400);
       }}
       render={({ isSubmitting, handleSubmit, ...props }) => (
         <>
           <EventDetails />
           <EventAddress />
-          {isAuction && <AddEntertainer />}
+          {!isSearch && <AddEntertainer />}
+          <div className="mt-5">
+            <button
+              className="btn btn-transparent btn-primary text-right btn-lg"
+              onClick={handleSubmit}
+            >
+              {currentHireType}
+            </button>
+          </div>
           {/* <DisplayFormikState {...props} /> */}
         </>
       )}
-      validationSchema={createSchema(entertainersSchema)}
+      validationSchema={createSchema({})}
     />
   );
 };
 
 NewEventForm.propTypes = {
-  isAuction: PropTypes.bool.isRequired
+  currentHireType: PropTypes.string.isRequired
 };
 
 export default NewEvent;
