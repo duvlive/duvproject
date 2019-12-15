@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {
   SELECT_ENTERTAINERS_TYPE,
   EVENT_AGE_GROUP,
@@ -86,7 +85,7 @@ const FilterEntertainerFieldsForm = () => (
   </div>
 );
 
-const FilterEntertainerFields = ({ isAuction }) => (
+const FilterEntertainerFields = () => (
   <Formik
     initialValues={{ entertainer: setInitialValues(addEntertainerSchema) }}
     onSubmit={(values, actions) => {
@@ -104,9 +103,5 @@ const FilterEntertainerFields = ({ isAuction }) => (
     validationSchema={{ entertainer: createSchema(addEntertainerSchema) }}
   />
 );
-
-FilterEntertainerFields.propTypes = {
-  isAuction: PropTypes.bool.isRequired
-};
 
 export default FilterEntertainerFields;

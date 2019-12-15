@@ -8,7 +8,7 @@ export const SLIDESHOW_TYPE = {
 export const HIRE_ENTERTAINERS = {
   search: 'Search',
   auction: 'Auction',
-  recommend: 'Recommendation'
+  recommend: 'Recommend'
 };
 
 export const SELECT_ENTERTAINERS_TYPE = [
