@@ -50,7 +50,7 @@ NewEvent.defaultProps = {
 };
 
 const NewEventForm = ({ currentHireType }) => {
-  const isSearch = currentHireType === HIRE_ENTERTAINERS.search;
+  const isRecommend = currentHireType === HIRE_ENTERTAINERS.recommend;
   const initialValues = {
     event: setInitialValues(eventDetailsSchema),
     address: setInitialValues(eventAddressSchema)
@@ -60,8 +60,8 @@ const NewEventForm = ({ currentHireType }) => {
     address: createSchema(eventAddressSchema)
   };
 
-  // We are showing the AddEntertainer Form for Auction only
-  if (!isSearch) {
+  // We are only making the fields required for Auction
+  if (HIRE_ENTERTAINERS.auction) {
     initialValues.entertainer = setInitialValues(addEntertainerSchema);
     entertainersSchema.entertainer = createSchema(addEntertainerSchema);
   }
@@ -89,7 +89,7 @@ const NewEventForm = ({ currentHireType }) => {
         <>
           <EventDetails />
           <EventAddress />
-          {!isSearch && <AddEntertainer />}
+          {!isRecommend && <AddEntertainer />}
           <div className="mt-5">
             <button
               className="btn btn-transparent btn-primary text-right btn-lg"

@@ -8,9 +8,9 @@ import { Row } from 'reactstrap';
 
 const SearchEntertainer = ({ event_type }) => {
   return (
-    <BackEndPage title="Search Entertainer">
+    <BackEndPage title="Recommend Entertainer">
       <div className="main-app">
-        <TopMessage message="Search Entertainer" />
+        <TopMessage message="Recommend Entertainer" />
 
         <section className="app-content">
           <Row>
