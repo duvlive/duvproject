@@ -97,3 +97,12 @@ a.text-muted:hover {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+label {
+  width: 100%;
+  .optional {
+    margin-left: auto;
+    float: right;
+    color: $text-muted;
+  }
+}

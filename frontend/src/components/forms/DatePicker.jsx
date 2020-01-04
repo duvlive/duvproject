@@ -7,7 +7,7 @@ import {
   FeedbackMessage,
   feedback
 } from 'components/forms/form-helper';
-import Tooltip from 'components/common/utils/Tooltip';
+import Label from './Label';
 import ReactDatePicker from 'react-datepicker';
 import { getIn } from 'formik';
 
@@ -21,6 +21,7 @@ const DatePicker = ({
   formik,
   labelClassName,
   label,
+  optional,
   placeholder,
   showFeedback,
   showTimeSelect,
@@ -32,10 +33,14 @@ const DatePicker = ({
 }) => (
   <div className={classNames('form-group', formGroupClassName)}>
     <div>
-      <label className={labelClassName} htmlFor={name} id={`${name}-label `}>
-        {label}{' '}
-        <Tooltip name={name} position={tooltipPosition} text={tooltipText} />
-      </label>
+      <Label
+        className={labelClassName}
+        name={name}
+        optional={optional}
+        text={label}
+        tooltipPosition={tooltipPosition}
+        tooltipText={tooltipText}
+      />
       <Field name={name}>
         {({ form }) => {
           return (
@@ -94,6 +99,7 @@ DatePicker.propTypes = {
   label: PropTypes.string,
   labelClassName: PropTypes.string,
   name: PropTypes.string.isRequired,
+  optional: PropTypes.bool,
   placeholder: PropTypes.string,
   showFeedback: PropTypes.oneOf(Object.keys(feedback)),
   showTimeSelect: PropTypes.bool,
@@ -112,6 +118,7 @@ DatePicker.defaultProps = {
   isValidMessage: '',
   label: '',
   labelClassName: null,
+  optional: false,
   placeholder: null,
   showFeedback: feedback.ALL,
   showTimeSelect: false,

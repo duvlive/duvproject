@@ -50,21 +50,16 @@ NewEvent.defaultProps = {
 };
 
 const NewEventForm = ({ currentHireType }) => {
-  const isRecommend = currentHireType === HIRE_ENTERTAINERS.recommend;
   const initialValues = {
     event: setInitialValues(eventDetailsSchema),
-    address: setInitialValues(eventAddressSchema)
+    address: setInitialValues(eventAddressSchema),
+    entertainer: setInitialValues(addEntertainerSchema)
   };
   const entertainersSchema = {
     event: createSchema(eventDetailsSchema),
-    address: createSchema(eventAddressSchema)
+    address: createSchema(eventAddressSchema),
+    entertainer: createSchema(addEntertainerSchema)
   };
-
-  // We are only making the fields required for Auction
-  if (HIRE_ENTERTAINERS.auction) {
-    initialValues.entertainer = setInitialValues(addEntertainerSchema);
-    entertainersSchema.entertainer = createSchema(addEntertainerSchema);
-  }
 
   return (
     <Formik
@@ -89,7 +84,7 @@ const NewEventForm = ({ currentHireType }) => {
         <>
           <EventDetails />
           <EventAddress />
-          {!isRecommend && <AddEntertainer />}
+          <AddEntertainer />
           <div className="mt-5">
             <button
               className="btn btn-transparent btn-primary text-right btn-lg"
@@ -101,7 +96,7 @@ const NewEventForm = ({ currentHireType }) => {
           {/* <DisplayFormikState {...props} /> */}
         </>
       )}
-      validationSchema={createSchema({})}
+      validationSchema={createSchema(entertainersSchema)}
     />
   );
 };

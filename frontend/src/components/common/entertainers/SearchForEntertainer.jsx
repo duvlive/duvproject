@@ -6,13 +6,14 @@ import {
   LANGUAGE,
   AUDIENCE_SIZE,
   BUDGET,
-  PLACE_OF_EVENTS
+  PLACE_OF_EVENTS,
+  OCCASSION_TYPE
 } from 'utils/constants';
 import Select from 'components/forms/Select';
 import MultiSelect from 'components/forms/MultiSelect';
 import TextArea from 'components/forms/TextArea';
 
-const AddEntertainer = () => (
+const SearchForEntertainer = () => (
   <div className="card card-custom card-black card-form">
     <div className="card-body col-md-10">
       <h4 className="card-title blue">Add Entertainer</h4>
@@ -27,13 +28,13 @@ const AddEntertainer = () => (
           placeholder="Entertainer Type"
         />
         <Select
-          blankOption="Choose a place of event"
+          blankOption="Select Event Type"
           formGroupClassName="col-md-6"
           isValidMessage="looks good"
-          label="Place of Event"
-          name="entertainer.place"
-          options={PLACE_OF_EVENTS}
-          placeholder="Place of Event"
+          label="Event Type"
+          name="entertainer.event_type"
+          options={OCCASSION_TYPE}
+          placeholder="Event Type"
         />
       </div>
       <div className="form-row">
@@ -95,7 +96,16 @@ const AddEntertainer = () => (
         />
       </div>
       <div className="form-row">
-        <div className="col-md-12">
+        <Select
+          blankOption="Choose a place of event"
+          formGroupClassName="col-md-6"
+          isValidMessage="looks good"
+          label="Place of Event"
+          name="entertainer.place"
+          options={PLACE_OF_EVENTS}
+          placeholder="Place of Event"
+        />
+        <div className="col-md-6">
           <TextArea
             label="Special Requests"
             name="entertainer.special_requests"
@@ -108,4 +118,4 @@ const AddEntertainer = () => (
   </div>
 );
 
-export default AddEntertainer;
+export default SearchForEntertainer;

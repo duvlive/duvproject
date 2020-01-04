@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'formik';
-import { Link } from '@reach/router';
 import Select from 'react-select';
 import { connect } from 'formik';
 import classNames from 'classnames';
@@ -10,7 +9,7 @@ import {
   FeedbackMessage,
   feedback
 } from 'components/forms/form-helper';
-import Tooltip from 'components/common/utils/Tooltip';
+import Label from './Label';
 
 const customStyles = {
   control: () => ({
@@ -42,6 +41,7 @@ const MultiSelect = ({
   labelLink,
   labelClassName,
   name,
+  optional,
   placeholder,
   showFeedback,
   tooltipText,
@@ -52,15 +52,15 @@ const MultiSelect = ({
     <div
       className={classNames('form-group', formGroupClassName, { row: inline })}
     >
-      <label className={labelClassName} htmlFor={name}>
-        {label}{' '}
-        <Tooltip name={name} position={tooltipPosition} text={tooltipText} />
-        {labelLink && (
-          <Link className="float-right" to={labelLink.to}>
-            {labelLink.text}
-          </Link>
-        )}
-      </label>
+      <Label
+        className={labelClassName}
+        labelLink={labelLink}
+        name={name}
+        optional={optional}
+        text={label}
+        tooltipPosition={tooltipPosition}
+        tooltipText={tooltipText}
+      />
       <div className={inputSizeClassName}>
         <Field name={name}>
           {({ field, form }) => {
@@ -145,6 +145,7 @@ MultiSelect.defaultProps = {
   label: null,
   labelClassName: null,
   labelLink: null,
+  optional: false,
   placeholder: null,
   showFeedback: feedback.ALL,
   tooltipText: null,
@@ -168,6 +169,7 @@ MultiSelect.propTypes = {
     text: PropTypes.string.isRequired
   }),
   name: PropTypes.string.isRequired,
+  optional: PropTypes.bool,
   options: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,
