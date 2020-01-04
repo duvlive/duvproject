@@ -17,6 +17,7 @@ import EntertainerAvatar from 'assets/img/avatar/entertainer.jpg';
 import BandMemberAvatar from 'assets/img/avatar/band-member.png';
 import AdministratorAvatar from 'assets/img/avatar/administrator.png';
 import { Match } from '@reach/router';
+import LiveYourBestLife from '../utils/LiveYourBestLife';
 
 const TopBar = ({ showSidebar }) => {
   return (
@@ -30,7 +31,9 @@ const TopBar = ({ showSidebar }) => {
             <div />
           </button>
 
-          <span className="navbar-text">Live Your Best Live</span>
+          <span className="navbar-text">
+            <LiveYourBestLife />
+          </span>
           <Nav className="ml-auto" navbar>
             <NavItem>
               <NavLink

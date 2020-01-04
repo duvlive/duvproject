@@ -2,6 +2,13 @@
   span {
     color: $red-300;
   }
+  &.best-life {
+    span {
+      color: $white;
+      font-size: 3.5rem;
+      text-transform: uppercase;
+    }
+  }
   &:after {
     content: ''; /* This is necessary for the pseudo element to work. */
     display: block; /* This will put the pseudo element on its own line. */

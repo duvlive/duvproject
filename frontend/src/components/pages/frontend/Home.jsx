@@ -11,6 +11,7 @@ import Slideshow from 'components/custom/Slideshow';
 import { SLIDESHOW_TYPE } from 'utils/constants';
 import YouTube from 'react-youtube';
 import { Link } from '@reach/router';
+import LiveYourBestLife from 'components/common/utils/LiveYourBestLife';
 
 const Home = () => {
   return (
@@ -76,7 +77,9 @@ const LiveYourLifeSection = () => (
     <Col className="live-your-life__content--1 live-your-life__box" sm="4">
       <Text.VerticalAlign>
         {' '}
-        <h2 className="title-border">LIVE YOUR BEST LIFE</h2>
+        <h2 className="title-border best-life">
+          <LiveYourBestLife />
+        </h2>
         <p className="text-uppercase">Celebrate the great moments</p>
       </Text.VerticalAlign>
     </Col>
