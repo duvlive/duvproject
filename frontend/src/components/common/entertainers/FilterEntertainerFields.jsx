@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  SELECT_ENTERTAINERS_TYPE,
-  EVENT_AGE_GROUP,
-  GENRE,
-  LANGUAGE,
-  AUDIENCE_SIZE,
-  BUDGET,
-  OCCASSION_TYPE
-} from 'utils/constants';
+import { GENRE, LANGUAGE, BUDGET } from 'utils/constants';
 import Select from 'components/forms/Select';
 import MultiSelect from 'components/forms/MultiSelect';
 import { Formik } from 'formik';
