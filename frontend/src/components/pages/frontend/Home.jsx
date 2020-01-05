@@ -12,8 +12,8 @@ import { SLIDESHOW_TYPE } from 'utils/constants';
 import YouTube from 'react-youtube';
 import { Link } from '@reach/router';
 import LiveYourBestLife from 'components/common/utils/LiveYourBestLife';
-import Quotes from 'data/quotes';
-import { randomItem } from 'utils/helpers';
+import Quotes from 'components/common/utils/Quotes';
+import PlayingMusicAnimation from 'components/common/utils/PlayingMusicAnimation';
 
 const Home = () => {
   return (
@@ -75,7 +75,6 @@ const IntroSection = () => (
 );
 
 const LiveYourLifeSection = () => {
-  const quote = randomItem(Quotes);
   return (
     <section className="live-your-life">
       <Col className="live-your-life__content--1 live-your-life__box" sm="4">
@@ -109,21 +108,8 @@ const LiveYourLifeSection = () => {
         className="live-your-life__content--3 live-your-life__box position-relative"
         sm="4"
       >
-        <Text.VerticalAlign>
-          <div className="auth__quotes">
-            <h4 className="auth__quotes--text">{quote.text}</h4>
-            <p>- {quote.name}</p>
-          </div>
-        </Text.VerticalAlign>
-        <div className="music-background">
-          <div class="la-line-scale-pulse-out la-sm">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-          </div>
-        </div>
+        <Quotes />
+        <PlayingMusicAnimation />
       </Col>
     </section>
   );
