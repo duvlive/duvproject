@@ -9,7 +9,7 @@ import UserHelp from 'components/pages/user/Help';
 import Payments from 'components/pages/user/Payments';
 import SelectEntertainer from 'components/pages/user/HireEntertainers';
 import SearchEntertainer from 'components/pages/user/SearchEntertainer';
-import RecommendedEntertainers from 'components/pages/user/RecommendedEntertainers';
+import RecommendedEntertainers from 'components/pages/user/RecommendedEntertainer';
 import NewEvent from 'components/pages/user/NewEvent';
 import ViewEvent from 'components/pages/user/ViewEvent';
 import Bids from 'components/pages/user/Bids';

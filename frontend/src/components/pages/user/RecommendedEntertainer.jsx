@@ -2,18 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TopMessage from 'components/common/layout/TopMessage';
 import BackEndPage from 'components/common/layout/BackEndPage';
+import FilterEntertainerFields from 'components/common/entertainers/FilterEntertainerFields';
 import EntertainersSearchResult from 'components/common/entertainers/EntertainersSearchResult';
 import { Row } from 'reactstrap';
 
-const RecommendedEntertainers = ({ event_type }) => {
+const SearchEntertainer = ({ event_type }) => {
   return (
-    <BackEndPage title="Recommended Entertainers">
+    <BackEndPage title="Recommend Entertainer">
       <div className="main-app">
-        <TopMessage message="Recommended Entertainers" />
+        <TopMessage message="Recommend Entertainer" />
 
         <section className="app-content">
           <Row>
-            <EntertainersSearchResult col={12} />
+            <FilterEntertainerFields />
+            <EntertainersSearchResult />
           </Row>
         </section>
       </div>
@@ -21,12 +23,12 @@ const RecommendedEntertainers = ({ event_type }) => {
   );
 };
 
-RecommendedEntertainers.propTypes = {
+SearchEntertainer.propTypes = {
   event_type: PropTypes.string
 };
 
-RecommendedEntertainers.defaultProps = {
+SearchEntertainer.defaultProps = {
   event_type: ''
 };
 
-export default RecommendedEntertainers;
+export default SearchEntertainer;

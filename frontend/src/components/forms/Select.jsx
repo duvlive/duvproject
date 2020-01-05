@@ -8,9 +8,9 @@ import {
   FeedbackMessage,
   feedback
 } from 'components/forms/form-helper';
-import Tooltip from 'components/common/utils/Tooltip';
 import Humanize from 'humanize-plus';
 import { dashedLowerCase } from 'utils/helpers';
+import Label from './Label';
 
 const Select = ({
   formGroupClassName,
@@ -23,6 +23,7 @@ const Select = ({
   label,
   labelClassName,
   name,
+  optional,
   options,
   blankOption,
   showFeedback,
@@ -33,10 +34,14 @@ const Select = ({
     <div
       className={classNames('form-group', formGroupClassName, { row: inline })}
     >
-      <label className={labelClassName} htmlFor={name}>
-        {label}{' '}
-        <Tooltip name={name} position={tooltipPosition} text={tooltipText} />
-      </label>
+      <Label
+        className={labelClassName}
+        name={name}
+        optional={optional}
+        text={label}
+        tooltipPosition={tooltipPosition}
+        tooltipText={tooltipText}
+      />
       <div className={inputSizeClassName}>
         <Field
           aria-describedby={name}
@@ -79,8 +84,9 @@ Select.defaultProps = {
   inputSizeClassName: null,
   isValidMessage: '',
   label: null,
-  labelClassName: 12,
+  labelClassName: null,
   name: null,
+  optional: false,
   showFeedback: feedback.ALL,
   tooltipText: null,
   tooltipPosition: 'right'
@@ -98,6 +104,7 @@ Select.propTypes = {
   label: PropTypes.string,
   labelClassName: PropTypes.number,
   name: PropTypes.string,
+  optional: PropTypes.bool,
   options: PropTypes.array.isRequired,
   showFeedback: PropTypes.oneOf(Object.keys(feedback)),
   tooltipPosition: PropTypes.string,

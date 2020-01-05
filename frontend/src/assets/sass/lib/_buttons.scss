@@ -82,3 +82,8 @@ button:focus {
     margin: 6px 0;
   }
 }
+
+.input-group-prepend .btn,
+.input-group-append .btn {
+  z-index: 0;
+}

@@ -30,7 +30,7 @@ const FrontPageRouter = () => (
     <ChangePassword path="change-password" />
     <Register path="register" />
     <Register path="register/:type" />
-    <SingleEntertainer path="entertainer/:slug" />
+    <SingleEntertainer path="entertainers/:slug" />
     <SingleEvent path="event/:slug" />
   </Router>
 );

@@ -1,5 +1,6 @@
 import React from 'react';
-import Input from 'components/forms/Input';
+import { OCCASSION_TYPE } from 'utils/constants';
+import Select from 'components/forms/Select';
 import TextArea from 'components/forms/TextArea';
 import DatePicker from 'components/forms/DatePicker';
 
@@ -10,12 +11,14 @@ const EventDetails = () => {
         <h4 className="card-title yellow">Event Details</h4>
         <form>
           <div className="form-row">
-            <Input
+            <Select
+              blankOption="Select Event Type"
               formGroupClassName="col-md-6"
               isValidMessage="looks good"
               label="Event Type"
-              name="event.type"
-              placeholder="E.g Wedding, Aniversary, Naming Ceremony"
+              name="entertainer.event_type"
+              options={OCCASSION_TYPE}
+              placeholder="Event Type"
             />
             <DatePicker
               formGroupClassName="col-md-6"
@@ -54,6 +57,7 @@ const EventDetails = () => {
           <TextArea
             label="More Information"
             name="event.information"
+            optional
             placeholder="More information about your event"
             rows="8"
           />

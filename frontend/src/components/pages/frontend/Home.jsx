@@ -11,6 +11,9 @@ import Slideshow from 'components/custom/Slideshow';
 import { SLIDESHOW_TYPE } from 'utils/constants';
 import YouTube from 'react-youtube';
 import { Link } from '@reach/router';
+import LiveYourBestLife from 'components/common/utils/LiveYourBestLife';
+import Quotes from 'components/common/utils/Quotes';
+import PlayingMusicAnimation from 'components/common/utils/PlayingMusicAnimation';
 
 const Home = () => {
   return (
@@ -71,50 +74,46 @@ const IntroSection = () => (
   </section>
 );
 
-const LiveYourLifeSection = () => (
-  <section className="live-your-life">
-    <Col className="live-your-life__content--1 live-your-life__box" sm="4">
-      <Text.VerticalAlign>
-        {' '}
-        <h2 className="title-border">LIVE YOUR BEST LIFE</h2>
-        <p className="text-uppercase">Celebrate the great moments</p>
-      </Text.VerticalAlign>
-    </Col>
-    <Col className="live-your-life__content--2 live-your-life__box" sm="4">
-      <Text.VerticalAlign>
-        <h3>
-          HOW IT <span>WORKS</span>
-        </h3>
-        <p>
-          DUV LIVE is an online platform that supports and promotes the best in
-          live entertainment. Our range of services affords talented performers
-          the power to manage their bookings personally, while delivering world
-          class exposure to all levels of live entertainment. Simply hire the
-          entertainer of your choice for that upcoming party by following these
-          simple steps:
-          <Link className="d-block mt-3" to="/how-it-works">
-            Learn more &rarr;
-          </Link>
-        </p>
-      </Text.VerticalAlign>
-    </Col>
-    <Col className="live-your-life__content--3 live-your-life__box" sm="4">
-      {/* <Text.VerticalAlign>
-        <h3>
-          HIRE AN <span>ENTERTAINER</span>
-        </h3>
-        <p>
-          As the world’s leading live entertainment company, we are privileged
-          to work with artists to bring their creativity to life on stages
-          around the world. Whether it’s two hours at a packed club, or an
-          entire weekend of sets at a festival, a live show does more than
-          entertain. It can uplift, inspire and create a memory that lasts a
-          lifetime
-        </p>
-      </Text.VerticalAlign> */}
-    </Col>
-  </section>
-);
+const LiveYourLifeSection = () => {
+  return (
+    <section className="live-your-life">
+      <Col className="live-your-life__content--1 live-your-life__box" sm="4">
+        <Text.VerticalAlign>
+          {' '}
+          <h2 className="title-border best-life">
+            <LiveYourBestLife />
+          </h2>
+          <p className="text-uppercase">Celebrate the great moments</p>
+        </Text.VerticalAlign>
+      </Col>
+      <Col className="live-your-life__content--2 live-your-life__box" sm="4">
+        <Text.VerticalAlign>
+          <h3>
+            HOW IT <span>WORKS</span>
+          </h3>
+          <p>
+            DUV LIVE is an online platform that supports and promotes the best
+            in live entertainment. Our range of services affords talented
+            performers the power to manage their bookings personally, while
+            delivering world class exposure to all levels of live entertainment.
+            Simply hire the entertainer of your choice for that upcoming party
+            by following these simple steps:
+            <Link className="d-block mt-3" to="/how-it-works">
+              Learn more &rarr;
+            </Link>
+          </p>
+        </Text.VerticalAlign>
+      </Col>
+      <Col
+        className="live-your-life__content--3 live-your-life__box position-relative"
+        sm="4"
+      >
+        <Quotes />
+        <PlayingMusicAnimation />
+      </Col>
+    </section>
+  );
+};
 
 const EntertainerSection = () => (
   <section className="entertainers spacer">

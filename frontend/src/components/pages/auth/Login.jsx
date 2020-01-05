@@ -5,9 +5,7 @@ import { Formik, Form } from 'formik';
 import Input from 'components/forms/Input';
 import { Link } from '@reach/router';
 import { Col, Row, Alert } from 'reactstrap';
-import Text from 'components/common/utils/Text';
-import Quotes from 'data/quotes';
-import { randomItem } from 'utils/helpers';
+import Quotes from 'components/common/utils/Quotes';
 import { feedback } from 'components/forms/form-helper';
 import Button from 'components/forms/Button';
 import { loginSchema } from 'components/forms/schema/userSchema';
@@ -24,18 +22,12 @@ const Login = () => (
 );
 
 const Content = () => {
-  const quote = randomItem(Quotes);
   return (
     <section>
       <div className="container-fluid">
         <Row>
           <Col className="d-none d-sm-block" sm={{ size: 6, offset: 1 }}>
-            <Text.VerticalAlign>
-              <div className="auth__quotes">
-                <h4 className="auth__quotes--text">{quote.text}</h4>
-                <p>- {quote.name}</p>
-              </div>
-            </Text.VerticalAlign>
+            <Quotes />
           </Col>
           <Col sm={{ size: 5 }}>
             <div className="auth__container">

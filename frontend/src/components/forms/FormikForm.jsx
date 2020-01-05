@@ -8,7 +8,7 @@ import RadioSelect from './RadioSelect';
 import CheckboxGroup from './CheckboxGroup';
 import Select from './Select';
 import Switch from './Switch';
-import DatePicker from './DatePicker';
+// import DatePicker from './DatePicker';
 import AutoComplete from 'components/forms/AutoComplete';
 import { DisplayFormikState, feedback } from './form-helper';
 
@@ -191,7 +191,7 @@ const FormikForm = () => {
                       </div>
                     </div>
 
-                    <div className="form-row">
+                    {/* <div className="form-row">
                       <div className="form-group col-md-6">
                         <label htmlFor="inputPassword4">Event Date</label>
                         <DatePicker
@@ -210,7 +210,7 @@ const FormikForm = () => {
                           timeIntervals={30}
                         />
                       </div>
-                    </div>
+                    </div> */}
 
                     <div className="mb-3 d-flex align-items-center justify-content-between">
                       <button
