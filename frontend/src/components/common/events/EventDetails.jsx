@@ -57,6 +57,7 @@ const EventDetails = () => {
           <TextArea
             label="More Information"
             name="event.information"
+            optional
             placeholder="More information about your event"
             rows="8"
           />

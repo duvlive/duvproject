@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Humanize from 'humanize-plus';
 import { Formik } from 'formik';
 import {
   setInitialValues
@@ -9,7 +8,7 @@ import {
 import TopMessage from 'components/common/layout/TopMessage';
 import EventDetails from 'components/common/events/EventDetails';
 import EventAddress from 'components/common/events/EventAddress';
-import AddEntertainer from 'components/common/entertainers/AddEntertainer';
+import AddEntertainerDetails from 'components/common/entertainers/AddEntertainerDetails';
 import { HIRE_ENTERTAINERS } from 'utils/constants';
 import { navigate } from '@reach/router';
 import BackEndPage from 'components/common/layout/BackEndPage';
@@ -24,7 +23,7 @@ const NewEvent = ({ hire_type }) => {
   const validHireType = Object.keys(HIRE_ENTERTAINERS).includes(
     hire_type.toLowerCase()
   );
-  const currentHireType = Humanize.capitalize(hire_type);
+  const currentHireType = validHireType ? HIRE_ENTERTAINERS[hire_type] : '';
   const message = validHireType
     ? `Hire an Entertainer (${currentHireType})`
     : 'Enter a New Event';
@@ -53,7 +52,9 @@ const NewEventForm = ({ currentHireType }) => {
   const initialValues = {
     event: setInitialValues(eventDetailsSchema),
     address: setInitialValues(eventAddressSchema),
-    entertainer: setInitialValues(addEntertainerSchema)
+    entertainer: setInitialValues(addEntertainerSchema, {
+      highest_budget: '1M+'
+    })
   };
   const entertainersSchema = {
     event: createSchema(eventDetailsSchema),
@@ -84,19 +85,19 @@ const NewEventForm = ({ currentHireType }) => {
         <>
           <EventDetails />
           <EventAddress />
-          <AddEntertainer />
+          <AddEntertainerDetails />
           <div className="mt-5">
             <button
               className="btn btn-transparent btn-primary text-right btn-lg"
               onClick={handleSubmit}
             >
-              {currentHireType}
+              Start {currentHireType}
             </button>
           </div>
           {/* <DisplayFormikState {...props} /> */}
         </>
       )}
-      validationSchema={createSchema(entertainersSchema)}
+      // validationSchema={createSchema(entertainersSchema)}
     />
   );
 };

@@ -13,7 +13,12 @@ const Label = ({
   labelLink
 }) => (
   <label className={className} htmlFor={name}>
-    {text} {optional && <em className="optional">(optional)</em>}
+    {text}{' '}
+    {optional ? (
+      <em className="optional">(optional)</em>
+    ) : (
+      <small className="text-white">*</small>
+    )}
     <Tooltip name={name} position={tooltipPosition} text={tooltipText} />
     {labelLink && (
       <Link className="float-right" to={labelLink.to}>

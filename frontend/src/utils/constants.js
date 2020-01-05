@@ -8,7 +8,7 @@ export const SLIDESHOW_TYPE = {
 export const HIRE_ENTERTAINERS = {
   search: 'Search',
   auction: 'Auction',
-  recommend: 'Recommend'
+  recommend: 'Recommendation'
 };
 
 export const SELECT_ENTERTAINERS_TYPE = [
@@ -151,17 +151,17 @@ export const PLACE_OF_EVENTS = [
 ];
 
 export const BUDGET = [
-  { label: '50,000', value: '50K' },
-  { label: '100,000', value: '100K' },
-  { label: '200,000', value: '200K' },
-  { label: '300,000', value: '300K' },
-  { label: '400,000', value: '400K' },
-  { label: '500,000', value: '500K' },
-  { label: '600,000', value: '600K' },
-  { label: '700,000', value: '700K' },
-  { label: '800,000', value: '800K' },
-  { label: '900,000', value: '900K' },
-  { label: 'Over 1,000,000', value: '1M' }
+  { label: '50 thousand naira', value: '50K' },
+  { label: '100 thousand naira', value: '100K' },
+  { label: '200 thousand naira', value: '200K' },
+  { label: '300 thousand naira', value: '300K' },
+  { label: '400 thousand naira', value: '400K' },
+  { label: '500 thousand naira', value: '500K' },
+  { label: '600 thousand naira', value: '600K' },
+  { label: '700 thousand naira', value: '700K' },
+  { label: '800 thousand naira', value: '800K' },
+  { label: '900 thousand naira', value: '900K' },
+  { label: 'Over 1 million naira ', value: '1M+' }
 ];
 
 export const LANGUAGE = [

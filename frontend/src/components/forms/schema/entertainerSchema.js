@@ -29,7 +29,7 @@ export const addEntertainerSchema = {
   language: multiSelectValidation('Language'),
   audience: stringValidation('audience'),
   age_group: stringValidation('Age Group'),
-  lowest_budget: stringValidation('Lowest Budget'),
+  base_budget: stringValidation('Lowest Budget'),
   highest_budget: stringValidation('Highest Budget'),
   place: stringValidation('Place of Event'),
   special_events: optionalValidation(stringValidation('Special Events', 20))

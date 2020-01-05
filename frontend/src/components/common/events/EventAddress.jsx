@@ -20,6 +20,7 @@ const EventAddress = () => (
           isValidMessage="looks good"
           label="Street Line 2"
           name="address.street_line_2"
+          optional
           placeholder="Street Line 2"
         />
         <div className="form-row">
@@ -56,12 +57,14 @@ const EventAddress = () => (
             isValidMessage="looks good"
             label="Landmark"
             name="address.landmark"
+            optional
             placeholder="Landmark"
           />
         </div>
         <TextArea
           label="Description"
           name="address.description"
+          optional
           placeholder="Enter more description here to make locating your address easier"
           rows="3"
         />
