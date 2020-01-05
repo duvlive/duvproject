@@ -17,6 +17,7 @@ const HowItWorks = () => {
     <FrontEndPage title="How it Works">
       <AboutUs />
       <CounterSection />
+      <WhyUseDuvLive />
       {false && (
         <Slideshow
           items={testimonialLists}

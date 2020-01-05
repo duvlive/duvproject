@@ -136,6 +136,14 @@ export const GENRE = [
   { label: 'Indian', value: 'indian' }
 ];
 
+export const RATINGS = [
+  { label: 'One Star and above', value: '1star+' },
+  { label: 'Two Stars and above', value: '2stars+' },
+  { label: 'Three Stars and above', value: '3stars+' },
+  { label: 'Four Stars and above', value: '4stars+' },
+  { label: 'Five Stars', value: '5stars' }
+];
+
 export const PLACE_OF_EVENTS = [
   { label: 'Village hall' },
   { label: 'Conference Centry' },
