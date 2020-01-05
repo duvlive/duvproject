@@ -20,22 +20,6 @@ import { createSchema } from 'components/forms/schema/schema-helpers';
 
 const FilterEntertainerFieldsForm = () => (
   <div className="card card-custom card-black card-form col-md-4">
-    <Select
-      blankOption="Choose your preferred Entertainer Type"
-      isValidMessage="looks good"
-      label="Entertainer Type"
-      name="entertainer.type"
-      options={SELECT_ENTERTAINERS_TYPE}
-      placeholder="Entertainer Type"
-    />
-    <Select
-      blankOption="Select Event Type"
-      isValidMessage="looks good"
-      label="Event Type"
-      name="entertainer.event_type"
-      options={OCCASSION_TYPE}
-      placeholder="Event Type"
-    />
     <MultiSelect
       isValidMessage="looks good"
       label="Genre"
@@ -49,22 +33,6 @@ const FilterEntertainerFieldsForm = () => (
       name="entertainer.language"
       options={LANGUAGE}
       placeholder="Preferred Language"
-    />
-    <Select
-      blankOption="Select an audience size"
-      isValidMessage="looks good"
-      label="Expected Audience Size"
-      name="entertainer.audience"
-      options={AUDIENCE_SIZE}
-      placeholder="Expected Audience Size"
-    />
-    <Select
-      blankOption="Select the event's age group"
-      isValidMessage="looks good"
-      label="Age Group"
-      name="entertainer.age_group"
-      options={EVENT_AGE_GROUP}
-      placeholder="Select the event's age group"
     />
     <Select
       blankOption="Choose your lowest budget"

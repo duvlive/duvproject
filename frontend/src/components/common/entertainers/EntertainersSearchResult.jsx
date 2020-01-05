@@ -5,29 +5,31 @@ import bids from 'data/events/bids';
 import DuvLiveModal from 'components/custom/Modal';
 import Image from 'components/common/utils/Image';
 
-const EntertainersSearchResult = ({ col }) => (
+const EntertainersSearchResult = ({ col, cardsPerRow }) => (
   <section className={`entertainerssearchresult col-md-${col}`}>
     <h4 className="main-app__subtitle">Search Result</h4>
     <div className="row">
-      <EntertainersSearchResult.Card {...bids[0]} />
-      <EntertainersSearchResult.Card {...bids[1]} />
-      <EntertainersSearchResult.Card {...bids[2]} />
-      <EntertainersSearchResult.Card {...bids[3]} />
-      <EntertainersSearchResult.Card {...bids[4]} />
+      <EntertainersSearchResult.Card cardsPerRow={cardsPerRow} {...bids[0]} />
+      <EntertainersSearchResult.Card cardsPerRow={cardsPerRow} {...bids[1]} />
+      <EntertainersSearchResult.Card cardsPerRow={cardsPerRow} {...bids[2]} />
+      <EntertainersSearchResult.Card cardsPerRow={cardsPerRow} {...bids[3]} />
+      <EntertainersSearchResult.Card cardsPerRow={cardsPerRow} {...bids[4]} />
     </div>
   </section>
 );
 
 EntertainersSearchResult.defaultProps = {
-  col: 8
+  col: 8,
+  cardsPerRow: 2
 };
 
 EntertainersSearchResult.propTypes = {
+  cardsPerRow: PropTypes.number,
   col: PropTypes.number
 };
 
-EntertainersSearchResult.Card = ({ price, entertainer, showApproveBtn }) => (
-  <div className="col-sm-6">
+EntertainersSearchResult.Card = ({ price, entertainer, cardsPerRow }) => (
+  <div className={`col-sm-${12 / cardsPerRow}`}>
     <div className="card card-custom card-tiles card-blue text-center">
       <div className="card-body">
         <Image
@@ -47,20 +49,18 @@ EntertainersSearchResult.Card = ({ price, entertainer, showApproveBtn }) => (
       <div className="card-footer">
         <DuvLiveModal.ViewEntertainerProfile entertainer={entertainer} />
         &nbsp; &nbsp;
-        {showApproveBtn && (
-          <button className="btn btn-success btn-sm btn-transparent">
-            Approve Bid
-          </button>
-        )}
+        <button className="btn btn-success btn-sm btn-transparent">
+          Select Entertainer
+        </button>
       </div>
     </div>
   </div>
 );
 
 EntertainersSearchResult.Card.propTypes = {
+  cardsPerRow: PropTypes.number.isRequired,
   entertainer: PropTypes.object.isRequired,
-  price: PropTypes.string.isRequired,
-  showApproveBtn: PropTypes.bool.isRequired
+  price: PropTypes.string.isRequired
 };
 
 export default EntertainersSearchResult;

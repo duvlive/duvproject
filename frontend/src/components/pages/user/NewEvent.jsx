@@ -97,7 +97,7 @@ const NewEventForm = ({ currentHireType }) => {
           {/* <DisplayFormikState {...props} /> */}
         </>
       )}
-      // validationSchema={createSchema(entertainersSchema)}
+      validationSchema={entertainersSchema && createSchema({})}
     />
   );
 };

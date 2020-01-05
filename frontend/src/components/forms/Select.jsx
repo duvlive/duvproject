@@ -84,7 +84,7 @@ Select.defaultProps = {
   inputSizeClassName: null,
   isValidMessage: '',
   label: null,
-  labelClassName: 12,
+  labelClassName: null,
   name: null,
   optional: false,
   showFeedback: feedback.ALL,

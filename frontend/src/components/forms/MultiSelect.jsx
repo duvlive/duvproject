@@ -110,7 +110,7 @@ const MultiSelect = ({
                   }
                 })}
                 value={
-                  options
+                  options && field.value
                     ? options.filter(
                         option => field.value.indexOf(option.value) >= 0
                       )
