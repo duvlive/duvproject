@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import Header from 'components/common/layout/Header';
 import Footer from 'components/common/layout/Footer';
 import { Formik, Form } from 'formik';
 import Input from 'components/forms/Input';
 import { Link } from '@reach/router';
-import { Col, Row, Alert } from 'reactstrap';
+import { Col, Row } from 'reactstrap';
 import Quotes from 'components/common/utils/Quotes';
 import { feedback } from 'components/forms/form-helper';
 import Button from 'components/forms/Button';
 import { loginSchema } from 'components/forms/schema/userSchema';
 import { navigate } from '@reach/router';
+import { DASHBOARD_PAGE } from 'utils/constants';
+import AlertMessage from 'components/common/utils/AlertMessage';
 
 const Login = () => (
   <>
@@ -64,7 +67,7 @@ const Content = () => {
 };
 
 const LoginForm = () => {
-  const [error, setError] = useState(null);
+  const [message, setMessage] = useState(null);
   return (
     <Formik
       initialValues={{
@@ -73,27 +76,54 @@ const LoginForm = () => {
       }}
       onSubmit={(values, actions) => {
         console.log(values);
-        setTimeout(() => {
-          actions.setSubmitting(false);
-          const { email, password } = values;
-          if (email === 'user@duvlive.com' && password === 'passworded') {
-            return navigate('/user/dashboard');
-          } else if (email === 'uv@duvlive.com' && password === 'passworded') {
-            return navigate('/administrator/dashboard');
-          } else if (
-            email === 'highsoul@member.com' &&
-            password === 'passworded'
-          ) {
-            return navigate('/band-member/dashboard');
-          } else if (
-            email === 'djcuppy@duvlive.com' &&
-            password === 'passworded'
-          ) {
-            return navigate('/entertainer/dashboard');
-          } else {
-            setError('Invalid email or password');
-          }
-        }, 400);
+        // post to api
+        axios
+          .post('/api/v1/users/login', values)
+          .then(function(response) {
+            const { status, data } = response;
+            // handle success
+            console.log(status, data);
+            if (status === 200) {
+              return navigate(`/${DASHBOARD_PAGE[data.user.type]}/dashboard`);
+            }
+
+            // Save some information in the local storage
+
+            // build logged in navbar
+
+            // add navbar to website
+          })
+          .catch(function(error) {
+            console.log('error', error.response.data);
+            setMessage({
+              message: error.response.data.message,
+              lists:
+                error.response.data.errors &&
+                Object.values(error.response.data.errors)
+            });
+          });
+        actions.setSubmitting(false);
+        // setTimeout(() => {
+        //   actions.setSubmitting(false);
+        //   const { email, password } = values;
+        //   if (email === 'user@duvlive.com' && password === 'passworded') {
+        //     return navigate('/user/dashboard');
+        //   } else if (email === 'uv@duvlive.com' && password === 'passworded') {
+        //     return navigate('/administrator/dashboard');
+        //   } else if (
+        //     email === 'highsoul@member.com' &&
+        //     password === 'passworded'
+        //   ) {
+        //     return navigate('/band-member/dashboard');
+        //   } else if (
+        //     email === 'djcuppy@duvlive.com' &&
+        //     password === 'passworded'
+        //   ) {
+        //     return navigate('/entertainer/dashboard');
+        //   } else {
+        //     setMessage('Invalid email or password');
+        //   }
+        // }, 400);
       }}
       render={({ isSubmitting, handleSubmit }) => (
         <Form>
@@ -115,7 +145,7 @@ const LoginForm = () => {
             showFeedback={feedback.NONE}
             type="password"
           />
-          {error && <Alert color="danger">{error}</Alert>}
+          <AlertMessage {...message} />
           <Button
             className="btn-danger btn-wide btn-transparent"
             loading={isSubmitting}

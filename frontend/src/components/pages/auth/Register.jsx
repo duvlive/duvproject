@@ -36,7 +36,7 @@ const registrationType = {
     text: 'Hire an entertainer'
   },
   user: {
-    id: USER_TYPES.regular,
+    id: USER_TYPES.user,
     subtitle: 'NO GO SPOIL YOUR PARTY O!!!',
     text: 'Register as a User'
   }
@@ -83,7 +83,8 @@ const RegisterForm = ({ type }) => {
       onSubmit={(values, actions) => {
         delete values.agreement;
         values.type = registrationType[type].id;
-        console.log(values);
+
+        // post to api
         axios
           .post('/api/v1/users', values)
           .then(function(response) {
@@ -93,8 +94,7 @@ const RegisterForm = ({ type }) => {
             if (status === 200) {
               setMessage({
                 type: 'success',
-                message:
-                  'Your registration is successful. Kindly confirm your email by clicking on the confirmation link'
+                message: `Your registration is successful. Kindly confirm your email by clicking on the confirmation link`
               });
               actions.resetForm();
             }
@@ -103,7 +103,7 @@ const RegisterForm = ({ type }) => {
 
             // build logged in navbar
 
-            // add back to website
+            // add navbar to website
           })
           .catch(function(error) {
             console.log('error', error.response.data);
@@ -252,3 +252,16 @@ Content.defaultProps = {
 };
 
 export default Register;
+
+// Validation is wrong
+// - if name is totally omitted, gives error
+// - phone number is 11 to 14, what about foreign numbers
+// - password is 8, i think 6 is ideal
+// - resend email (incase user didn't receive it)
+// - we might need first time login
+// - function of userprofile table, why are we populating this when we sign up
+// - we will need time user activates their account
+// - create referral link for user
+// - inconsistent  api - use of message && error
+// - how do we know the type of entertainer when we login
+// - how do you run your sequlize migration

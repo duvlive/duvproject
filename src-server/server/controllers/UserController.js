@@ -192,27 +192,27 @@ const UserController = {
       ]
     })
       .then(user => {
-        if (user.length === 0 || !user) {
-          return res.status(404).json({ message: 'User not found' });
+        if (!user) {
+          return res.status(404).json({ message: 'Invalid email or password' });
         }
         if (!user.isActive) {
-          return res
-            .status(403)
-            .json({ message: 'User needs to activate account' });
+          return res.status(403).json({
+            message: 'User needs to activate account.'
+          });
         }
         if (!bcrypt.compareSync(password, user.password)) {
-          return res.status(403).json({ message: 'Incorrect login detail' });
+          return res.status(403).json({ message: 'Invalid email or password' });
         } else {
           const token = Authentication.generateToken(user);
           return res.status(200).json({
-            message: 'You are successfully Logged in',
+            message: 'You are successfully logged in',
             user: UserController.transformUser(user),
             token
           });
         }
       })
       .catch(error => {
-        return res.status(500).json({ error: error.message });
+        return res.status(500).json({ message: error.message });
       });
   },
 
