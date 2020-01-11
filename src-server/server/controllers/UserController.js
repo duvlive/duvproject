@@ -8,23 +8,23 @@ import { userProfileUpdateHelper } from '../utils';
 
 const UserController = {
   /**
-  * transformUser
-  * @function
-  * @param {object} user
-  * @return {object} returns newUser
-  */
- transformUser(user) {
-   const newUser = {
-     id: user.id,
-     firstName: user.firstName,
-     lastName: user.lastName,
-     email: user.email,
-     phoneNumber: user.phoneNumber,
-     type: user.type,
-     isActive: user.isActive,
-   };
-   return newUser;
- },
+   * transformUser
+   * @function
+   * @param {object} user
+   * @return {object} returns newUser
+   */
+  transformUser(user) {
+    const newUser = {
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      phoneNumber: user.phoneNumber,
+      type: user.type,
+      isActive: user.isActive
+    };
+    return newUser;
+  },
 
   /**
    * create User
@@ -34,38 +34,58 @@ const UserController = {
    * @return {object} returns res object
    */
   createUser(req, res) {
-    const { firstName, lastName, email, password, confirmPassword,
-      phoneNumber, type } = req.body;
-    const error = {...UserValidation.nameValidation(firstName, lastName),
-    ...UserValidation.emailValidation(email),
-    ...UserValidation.phoneNumberValidation(phoneNumber),
-    ...UserValidation.passwordValidaton(password, confirmPassword)
-  };
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      confirmPassword,
+      phoneNumber,
+      type
+    } = req.body;
+    const errors = {
+      ...UserValidation.nameValidation(firstName, lastName),
+      ...UserValidation.emailValidation(email),
+      ...UserValidation.phoneNumberValidation(phoneNumber),
+      ...UserValidation.passwordValidaton(password, confirmPassword)
+    };
 
-  if (Object.keys(error).length) {
-    return res.status(400).json(error);
-  }
-  return User.findAll({
-      where: { email }
-    }).then((existingUser) => {
-    if (existingUser.length > 0) {
-      throw {status: 409, message: 'This email address has already been taken'};
+    if (Object.keys(errors).length) {
+      return res
+        .status(400)
+        .json({ message: 'There are invalid fields in the form', errors });
     }
-      return User
-        .create({
-          firstName, lastName, email, password, phoneNumber, type
-          });
-    }).then((newUser) => {
-      return res.status(200).json({
-        message: 'Signed up successfully',
-        user: UserController.transformUser(newUser),
-        token: Authentication.generateToken(newUser, true)
+    return User.findAll({
+      where: { email }
+    })
+      .then(existingUser => {
+        if (existingUser.length > 0) {
+          throw {
+            status: 409,
+            message: 'This email address has already been taken'
+          };
+        }
+        return User.create({
+          firstName,
+          lastName,
+          email,
+          password,
+          phoneNumber,
+          type
+        });
+      })
+      .then(newUser => {
+        return res.status(200).json({
+          message: 'Signed up successfully',
+          user: UserController.transformUser(newUser),
+          token: Authentication.generateToken(newUser, true)
+        });
+      })
+      .catch(error => {
+        const status = error.status || 500;
+        const errorMessage = error.message || error;
+        return res.status(status).json({ message: errorMessage });
       });
-    }).catch((error) => {
-      const status = error.status || 500;
-      const errorMessage = error.message || error;
-      return res.status(status).json({ message: errorMessage});
-    });
   },
 
   /**
@@ -76,37 +96,39 @@ const UserController = {
    * @return {object} returns res object
    */
   socialLogin(req, res) {
-    const {lastName, firstName, email} = req.user;
+    const { lastName, firstName, email } = req.user;
     User.findOne({
       where: { email },
-      include: [{
-        model: UserProfile,
-        as: "profile"
-      }]
-    })
-    .then(user => {
-      if (!user || user.length === 0) {
-        return res.status(200).json({
-          user: {lastName, firstName, email} });
+      include: [
+        {
+          model: UserProfile,
+          as: 'profile'
         }
-      else {
-        const user = user.dataValues;
-        if (user.type === 1 || (user.type === 2 && user)) {
-          const token = Authentication.generateToken(user);
+      ]
+    })
+      .then(user => {
+        if (!user || user.length === 0) {
           return res.status(200).json({
-            message: 'You are successfully Logged in',
-            user: UserController.transformUser(user),
-            token
+            user: { lastName, firstName, email }
           });
+        } else {
+          const user = user.dataValues;
+          if (user.type === 1 || (user.type === 2 && user)) {
+            const token = Authentication.generateToken(user);
+            return res.status(200).json({
+              message: 'You are successfully Logged in',
+              user: UserController.transformUser(user),
+              token
+            });
+          }
+          if (user.dataValues.type === 2) {
+            // check for approved entertainer
+          }
         }
-        if (user.dataValues.type === 2){
-          // check for approved entertainer
-        }
-      }
-    })
-    .catch((error) => {
+      })
+      .catch(error => {
         const errorMessage = error.message || error;
-        return res.status(400).json({error: errorMessage});
+        return res.status(400).json({ error: errorMessage });
       });
   },
 
@@ -121,25 +143,29 @@ const UserController = {
     User.findOne({
       where: { activationToken: req.query.token }
     })
-    .then((userFound) => {
-      if(!userFound || userFound.length === 0 ) {
-        return res.status(404).json({ message: 'User not found'});
-      }
-      if (userFound.isActive) {
-        return res.status(403).json({ message: 'User already Activated'});
-      }
-
-      return User.update({ isActive: true, activationToken: null }, {
-        where: {
-          activationToken: req.query.token
+      .then(userFound => {
+        if (!userFound || userFound.length === 0) {
+          return res.status(404).json({ message: 'User not found' });
         }
+        if (userFound.isActive) {
+          return res.status(403).json({ message: 'User already Activated' });
+        }
+
+        return User.update(
+          { isActive: true, activationToken: null },
+          {
+            where: {
+              activationToken: req.query.token
+            }
+          }
+        ).then(() =>
+          res.status(200).json({ message: 'User activation successful' })
+        );
       })
-      .then(() => res.status(200).json({ message: 'User activation successful' }));
-    })
-    .catch((error) => {
-      const errorMessage = error.message || error;
-      return res.status(500).json({ message: errorMessage });
-    });
+      .catch(error => {
+        const errorMessage = error.message || error;
+        return res.status(500).json({ message: errorMessage });
+      });
   },
 
   /**
@@ -151,37 +177,43 @@ const UserController = {
    */
   userLogin(req, res) {
     const { email, password } = req.body;
-    if(!email || !password) {
-      return res.status(400).json({ message: 'Email and password cannot be empty'});
+    if (!email || !password) {
+      return res
+        .status(400)
+        .json({ message: 'Email and password cannot be empty' });
     }
     User.findOne({
-      where: { email }, include: [{
-        model: UserProfile,
-        as: "profile"
-      }]
+      where: { email },
+      include: [
+        {
+          model: UserProfile,
+          as: 'profile'
+        }
+      ]
     })
-    .then((user) => {
-      if (user.length === 0 || !user) {
-        return res.status(404).json({ message: 'User not found' });
-      }
-      if (!user.isActive) {
-        return res.status(403).json({ message: 'User needs to activate account' });
-      }
-      if(!bcrypt.compareSync(password, user.password)) {
-        return res.status(403).json({ message: "Incorrect login detail"});
-      }
-      else {
-        const token = Authentication.generateToken(user);
-        return res.status(200).json({
-          message: 'You are successfully Logged in',
-          user: UserController.transformUser(user),
-          token
-        });
-      }
-    })
-    .catch(error => {
-      return res.status(500).json({ error: error.message });
-    });
+      .then(user => {
+        if (user.length === 0 || !user) {
+          return res.status(404).json({ message: 'User not found' });
+        }
+        if (!user.isActive) {
+          return res
+            .status(403)
+            .json({ message: 'User needs to activate account' });
+        }
+        if (!bcrypt.compareSync(password, user.password)) {
+          return res.status(403).json({ message: 'Incorrect login detail' });
+        } else {
+          const token = Authentication.generateToken(user);
+          return res.status(200).json({
+            message: 'You are successfully Logged in',
+            user: UserController.transformUser(user),
+            token
+          });
+        }
+      })
+      .catch(error => {
+        return res.status(500).json({ error: error.message });
+      });
   },
 
   /**
@@ -195,47 +227,49 @@ const UserController = {
     const { email } = req.body;
     const host = req.headers.host;
     if (!email) {
-      return res.status(400).json({ message: 'Email cannot be empty'});
+      return res.status(400).json({ message: 'Email cannot be empty' });
     }
 
     User.findOne({
       where: { email }
     })
-    .then((user) => {
-      if(!user || user.length === 0) {
-        return res.status(404).json({ message: 'User not found' });
-      }
-      else {
-        const title = 'Password Recovery | DUV LIVE';
-        const resetToken = Authentication.generateToken(user);
-        emailSender(email, resetToken, title, host).catch(console.error);
-        return res.status(200).json({
-          message: 'Password reset email sent successfully' });
-      }
-    })
-    .catch(error => {
-      return res.status(500).json({ error: error.message });
-    });
+      .then(user => {
+        if (!user || user.length === 0) {
+          return res.status(404).json({ message: 'User not found' });
+        } else {
+          const title = 'Password Recovery | DUV LIVE';
+          const resetToken = Authentication.generateToken(user);
+          emailSender(email, resetToken, title, host).catch(console.error);
+          return res.status(200).json({
+            message: 'Password reset email sent successfully'
+          });
+        }
+      })
+      .catch(error => {
+        return res.status(500).json({ error: error.message });
+      });
   },
 
   /**
-  * update password
-  * @function
-  * @param {object} req is req object
-  * @param {object} res is res object
-  * @return {object} returns res object
-  */
+   * update password
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
   updatePassword(req, res) {
     const { password, confirmPassword } = req.body;
     if (!password || !confirmPassword) {
-      return res.status(400).json({ message: 'Please fill both fields, cannot be empty'});
+      return res
+        .status(400)
+        .json({ message: 'Please fill both fields, cannot be empty' });
     }
 
     const resetToken = req.query.token;
     jwt.verify(resetToken, process.env.SECRET, (error, decoded) => {
       if (error) {
         return res.status(401).send({
-          message: 'Invalid token',
+          message: 'Invalid token'
         });
       }
       req.decoded = decoded;
@@ -244,20 +278,23 @@ const UserController = {
     User.findOne({
       where: { id: req.decoded.userId }
     })
-    .then((user) => {
-      if(!user || user.length === 0) {
-        return res.status(404).json({ message: 'User not found' });
-      }
-      if(password !== confirmPassword) {
-        return res.status(403).json({ message: "Passwords do not match"});
-      }
+      .then(user => {
+        if (!user || user.length === 0) {
+          return res.status(404).json({ message: 'User not found' });
+        }
+        if (password !== confirmPassword) {
+          return res.status(403).json({ message: 'Passwords do not match' });
+        }
 
-      return user.update({ password })
-      .then(() => res.status(200).json({ message: 'Password update successful' }));
-    })
-    .catch(error => {
-      return res.status(500).json({ error: error.message });
-    });
+        return user
+          .update({ password })
+          .then(() =>
+            res.status(200).json({ message: 'Password update successful' })
+          );
+      })
+      .catch(error => {
+        return res.status(500).json({ error: error.message });
+      });
   },
 
   /**
@@ -269,10 +306,10 @@ const UserController = {
    * */
   userLogout(req, res) {
     res.status(200).json({
-      message: 'You have been Logged out',
+      message: 'You have been Logged out'
     });
   },
-  
+
   /**
    *  user edit User
    * @function
@@ -283,26 +320,26 @@ const UserController = {
   editUser(req, res) {
     const { userId } = req.decoded;
     const { firstName, lastName, phoneNumber } = req.body;
-    User.findOne({ 
+    User.findOne({
       where: { id: userId }
     })
-    .then((user) => {
-      const error = {...UserValidation.isUserActive(user.isActive)};
-      if (Object.keys(error).length) {
-        return res.status(403).json(error);
-      }
-      if (!user) {
-        return res.status(404).send({
-          message: 'User not found',
-        });
-      }
+      .then(user => {
+        const error = { ...UserValidation.isUserActive(user.isActive) };
+        if (Object.keys(error).length) {
+          return res.status(403).json(error);
+        }
+        if (!user) {
+          return res.status(404).send({
+            message: 'User not found'
+          });
+        }
         return user
-          .update({ firstName,  lastName, phoneNumber })
+          .update({ firstName, lastName, phoneNumber })
           .then(() => res.status(200).json(UserController.transformUser(user)));
-    })
-    .catch(error => {
-      return res.status(500).json({ error: error.message });
-    });
+      })
+      .catch(error => {
+        return res.status(500).json({ error: error.message });
+      });
   },
 
   /**
@@ -314,33 +351,57 @@ const UserController = {
    **/
   editEntertainer(req, res) {
     const { userId } = req.decoded;
-    const { phoneNumber, about, location, stageName, yearStarted, willingToTravel, eventType, entertainerType } = req.body;
+    const {
+      phoneNumber,
+      about,
+      location,
+      stageName,
+      yearStarted,
+      willingToTravel,
+      eventType,
+      entertainerType
+    } = req.body;
 
-    const userProfileData = { about, location, stageName, yearStarted, willingToTravel, eventType, entertainerType };
+    const userProfileData = {
+      about,
+      location,
+      stageName,
+      yearStarted,
+      willingToTravel,
+      eventType,
+      entertainerType
+    };
 
-    const updateUser = () => User.findOne({
-      where: { id: userId }
-    })
-    .then((user) => {
-      const error = {...UserValidation.isUserActive(user.isActive)};
-      if (Object.keys(error).length) {
-        return res.status(403).json(error);
-      }
-      if (!user) {
-        return res.status(404).send({
-          message: 'User not found',
-        });
-      }
-      return user
-      .update({ phoneNumber })
-    })
-    .catch(error => res.status(400).json({
-      message: error.message || error,
-    }));
-    return Promise.all([updateUser(), userProfileUpdateHelper(userId, userProfileData)])
-    .then((user) => {
-      res.status(200).json({user:  UserController.transformUser(user[0]), userProfile: user[1]});
-    })
+    const updateUser = () =>
+      User.findOne({
+        where: { id: userId }
+      })
+        .then(user => {
+          const error = { ...UserValidation.isUserActive(user.isActive) };
+          if (Object.keys(error).length) {
+            return res.status(403).json(error);
+          }
+          if (!user) {
+            return res.status(404).send({
+              message: 'User not found'
+            });
+          }
+          return user.update({ phoneNumber });
+        })
+        .catch(error =>
+          res.status(400).json({
+            message: error.message || error
+          })
+        );
+    return Promise.all([
+      updateUser(),
+      userProfileUpdateHelper(userId, userProfileData)
+    ]).then(user => {
+      res.status(200).json({
+        user: UserController.transformUser(user[0]),
+        userProfile: user[1]
+      });
+    });
   }
 };
 

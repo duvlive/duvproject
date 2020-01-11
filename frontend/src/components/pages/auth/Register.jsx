@@ -1,4 +1,5 @@
-import React, { Fragment } from 'react';
+import React, { useState, Fragment } from 'react';
+import axios from 'axios';
 import PropTypes from 'prop-types';
 import Header from 'components/common/layout/Header';
 import Footer from 'components/common/layout/Footer';
@@ -18,6 +19,7 @@ import {
   DisplayFormikState
 } from 'components/forms/form-helper';
 import { USER_TYPES } from 'utils/constants';
+import AlertMessage from 'components/common/utils/AlertMessage';
 
 const registrationType = {
   'become-an-entertainer': {
@@ -66,7 +68,8 @@ Register.defaultProps = {
   type: null
 };
 
-Register.Form = ({ type }) => {
+const RegisterForm = ({ type }) => {
+  const [message, setMessage] = useState(null);
   const agreementText = (
     <>
       I agree to the terms listed in the{' '}
@@ -76,12 +79,42 @@ Register.Form = ({ type }) => {
   );
   return (
     <Formik
-      initialValues={setInitialValues(registerObject)}
+      initialValues={setInitialValues(registerObject, { agreement: [] })}
       onSubmit={(values, actions) => {
+        delete values.agreement;
+        values.type = registrationType[type].id;
         console.log(values);
-        setTimeout(() => {
-          actions.setSubmitting(false);
-        }, 400);
+        axios
+          .post('/api/v1/users', values)
+          .then(function(response) {
+            const { status, data } = response;
+            // handle success
+            console.log(status, data);
+            if (status === 200) {
+              setMessage({
+                type: 'success',
+                message:
+                  'Your registration is successful. Kindly confirm your email by clicking on the confirmation link'
+              });
+              actions.resetForm();
+            }
+
+            // Save some information in the local storage
+
+            // build logged in navbar
+
+            // add back to website
+          })
+          .catch(function(error) {
+            console.log('error', error.response.data);
+            setMessage({
+              message: error.response.data.message,
+              lists:
+                error.response.data.errors &&
+                Object.values(error.response.data.errors)
+            });
+          });
+        actions.setSubmitting(false);
       }}
       render={({ isSubmitting, handleSubmit, ...props }) => (
         <Form>
@@ -102,6 +135,7 @@ Register.Form = ({ type }) => {
             </Link>
             <p className="auth__social-media--text mt-0 mb-5">OR</p>
           </section>
+          <AlertMessage {...message} />
           <div className="form-row">
             <Input
               formGroupClassName="col-md-6"
@@ -130,7 +164,7 @@ Register.Form = ({ type }) => {
               formGroupClassName="col-md-6"
               isValidMessage="Phone number looks good"
               label="Phone"
-              name="phone"
+              name="phoneNumber"
               placeholder="Phone"
             />
           </div>
@@ -141,6 +175,7 @@ Register.Form = ({ type }) => {
               label="Password"
               name="password"
               placeholder="Password"
+              type="password"
             />
             <Input
               formGroupClassName="col-md-6"
@@ -148,6 +183,7 @@ Register.Form = ({ type }) => {
               label="Confirm Password"
               name="confirmPassword"
               placeholder="Confirm Password"
+              type="password"
             />
           </div>
           <div className="form-row ml-0">
@@ -166,8 +202,7 @@ Register.Form = ({ type }) => {
           >
             {registrationType[type].text}
           </Button>
-
-          <DisplayFormikState {...props} showAll />
+          <DisplayFormikState {...props} hide showAll />
         </Form>
       )}
       validationSchema={registerSchema}
@@ -175,11 +210,11 @@ Register.Form = ({ type }) => {
   );
 };
 
-Register.Form.propTypes = {
+RegisterForm.propTypes = {
   type: PropTypes.oneOf(allowedTypes)
 };
 
-Register.Form.defaultProps = {
+RegisterForm.defaultProps = {
   type: null
 };
 
@@ -189,7 +224,7 @@ const Content = ({ type }) => (
       <Row>
         <Col sm={{ size: 8, offset: 2 }}>
           <div className="auth__container auth__container--lg">
-            <Register.Form type={type} />
+            <RegisterForm type={type} />
             <section className="auth__footer">
               <div className="register mt-4 text-center">
                 Already have an account with us?
