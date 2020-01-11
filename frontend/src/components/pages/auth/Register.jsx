@@ -8,11 +8,16 @@ import { Col, Row } from 'reactstrap';
 import { Formik, Form } from 'formik';
 import Input from 'components/forms/Input';
 import Button from 'components/forms/Button';
+import CheckboxGroup from 'components/forms/CheckboxGroup';
 import {
   registerSchema,
   registerObject
 } from 'components/forms/schema/userSchema';
-import { setInitialValues } from 'components/forms/form-helper';
+import {
+  setInitialValues,
+  DisplayFormikState
+} from 'components/forms/form-helper';
+import { USER_TYPES } from 'utils/constants';
 
 const registrationType = {
   'become-an-entertainer': {
@@ -20,6 +25,7 @@ const registrationType = {
     text: 'Become an Entertainer'
   },
   entertainer: {
+    id: USER_TYPES.entertainer,
     subtitle: 'MC, DJ OR OWN A LIVE BAND?',
     text: 'Register as an Entertainer'
   },
@@ -28,6 +34,7 @@ const registrationType = {
     text: 'Hire an entertainer'
   },
   user: {
+    id: USER_TYPES.regular,
     subtitle: 'NO GO SPOIL YOUR PARTY O!!!',
     text: 'Register as a User'
   }
@@ -59,103 +66,114 @@ Register.defaultProps = {
   type: null
 };
 
-Register.Form = ({ type }) => (
-  <Formik
-    initialValues={setInitialValues(registerObject)}
-    onSubmit={(values, actions) => {
-      console.log(values);
-      setTimeout(() => {
-        actions.setSubmitting(false);
-      }, 400);
-    }}
-    render={({ isSubmitting, handleSubmit }) => (
-      <Form>
-        <h5 className="header font-weight-normal text-uppercase mb-1">
-          {registrationType[type].text}
-        </h5>
-        <div className="text-red-100 small--2 mb-5">
-          {registrationType[type].subtitle}
-        </div>
+Register.Form = ({ type }) => {
+  const agreementText = (
+    <>
+      I agree to the terms listed in the{' '}
+      <Link to="/terms-of-use">DUV LIVE Terms of Use</Link> and acknowledge the{' '}
+      <Link to="/privacy-policy">DUV LIVE Privacy Policy</Link>.
+    </>
+  );
+  return (
+    <Formik
+      initialValues={setInitialValues(registerObject)}
+      onSubmit={(values, actions) => {
+        console.log(values);
+        setTimeout(() => {
+          actions.setSubmitting(false);
+        }, 400);
+      }}
+      render={({ isSubmitting, handleSubmit, ...props }) => (
+        <Form>
+          <h5 className="header font-weight-normal text-uppercase mb-1">
+            {registrationType[type].text}
+          </h5>
+          <div className="text-red-100 small--2 mb-5">
+            {registrationType[type].subtitle}
+          </div>
 
-        <section className="auth__social-media text-center">
-          <p className="auth__social-media--text">Register with:</p>
-          <Link className="auth__social-media--icons" to="/">
-            <span className="icon-google" />
-          </Link>
-          <Link className="auth__social-media--icons" to="/">
-            <span className="icon-facebook-official" />
-          </Link>
-          <p className="auth__social-media--text mt-0 mb-5">OR</p>
-        </section>
-        <div className="form-row">
-          <Input
-            formGroupClassName="col-md-6"
-            isValidMessage="First Name looks good"
-            label="First Name"
-            name="first_name"
-            placeholder="First Name"
-          />
-          <Input
-            formGroupClassName="col-md-6"
-            isValidMessage="Last Name looks good"
-            label="Last Name"
-            name="last_name"
-            placeholder="Last Name"
-          />
-        </div>
-        <div className="form-row">
-          <Input
-            formGroupClassName="col-md-6"
-            isValidMessage="Email address seems valid"
-            label="Email"
-            name="email"
-            placeholder="Email Address"
-          />
-          <Input
-            formGroupClassName="col-md-6"
-            isValidMessage="Phone number looks good"
-            label="Phone"
-            name="phone"
-            placeholder="Phone"
-          />
-        </div>
-        <div className="form-row">
-          <Input
-            formGroupClassName="col-md-6"
-            isValidMessage="Password seems good"
-            label="Password"
-            name="password"
-            placeholder="Password"
-          />
-          <Input
-            formGroupClassName="col-md-6"
-            isValidMessage="Phone matches"
-            label="Confirm Password"
-            name="confirm_password"
-            placeholder="Confirm Password"
-          />
-        </div>
-        <div className="form-check">
-          <input className="form-check-input" id="agreement" type="checkbox" />
-          <label className="form-check-label" htmlFor="agreement">
-            I agree to the terms listed in the{' '}
-            <Link to="/terms-of-use">DUV LIVE Terms of Use</Link> and
-            acknowledge the{' '}
-            <Link to="/privacy-policy">DUV LIVE Privacy Policy</Link>.
-          </label>
-        </div>
-        <Button
-          className="btn-danger btn-wide btn-transparent mt-4"
-          loading={isSubmitting}
-          onClick={handleSubmit}
-        >
-          {registrationType[type].text}
-        </Button>
-      </Form>
-    )}
-    validationSchema={registerSchema}
-  />
-);
+          <section className="auth__social-media text-center">
+            <p className="auth__social-media--text">Register with:</p>
+            <Link className="auth__social-media--icons" to="/">
+              <span className="icon-google" />
+            </Link>
+            <Link className="auth__social-media--icons" to="/">
+              <span className="icon-facebook-official" />
+            </Link>
+            <p className="auth__social-media--text mt-0 mb-5">OR</p>
+          </section>
+          <div className="form-row">
+            <Input
+              formGroupClassName="col-md-6"
+              isValidMessage="First Name looks good"
+              label="First Name"
+              name="firstName"
+              placeholder="First Name"
+            />
+            <Input
+              formGroupClassName="col-md-6"
+              isValidMessage="Last Name looks good"
+              label="Last Name"
+              name="lastName"
+              placeholder="Last Name"
+            />
+          </div>
+          <div className="form-row">
+            <Input
+              formGroupClassName="col-md-6"
+              isValidMessage="Email address seems valid"
+              label="Email"
+              name="email"
+              placeholder="Email Address"
+            />
+            <Input
+              formGroupClassName="col-md-6"
+              isValidMessage="Phone number looks good"
+              label="Phone"
+              name="phone"
+              placeholder="Phone"
+            />
+          </div>
+          <div className="form-row">
+            <Input
+              formGroupClassName="col-md-6"
+              isValidMessage="Password seems good"
+              label="Password"
+              name="password"
+              placeholder="Password"
+            />
+            <Input
+              formGroupClassName="col-md-6"
+              isValidMessage="Awesome. Password matches"
+              label="Confirm Password"
+              name="confirmPassword"
+              placeholder="Confirm Password"
+            />
+          </div>
+          <div className="form-row ml-0">
+            <CheckboxGroup
+              custom
+              inline
+              name="agreement"
+              options={[{ label: agreementText, value: true }]}
+            />
+            <label className="form-check-label" htmlFor="agreement"></label>
+          </div>
+          <Button
+            className="btn-danger btn-wide btn-transparent mt-4"
+            loading={isSubmitting}
+            onClick={handleSubmit}
+          >
+            {registrationType[type].text}
+          </Button>
+
+          <DisplayFormikState {...props} showAll />
+        </Form>
+      )}
+      validationSchema={registerSchema}
+    />
+  );
+};
 
 Register.Form.propTypes = {
   type: PropTypes.oneOf(allowedTypes)

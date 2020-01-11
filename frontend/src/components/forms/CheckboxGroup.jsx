@@ -24,7 +24,7 @@ const Checkbox = ({
       className={classNames(
         { 'form-check': !inline && !custom },
         { 'form-check-inline': inline && !custom },
-        { 'custom-control custom-radio': custom },
+        { 'custom-control custom-checkbox': custom },
         { ' custom-control-inline': inline && custom }
       )}
     >
@@ -84,9 +84,9 @@ Checkbox.propTypes = {
   formGroupLabelClassName: PropTypes.string.isRequired,
   inline: PropTypes.bool.isRequired,
   inputClassName: PropTypes.string.isRequired,
-  label: PropTypes.string,
+  label: PropTypes.node,
   name: PropTypes.string.isRequired,
-  value: PropTypes.string
+  value: PropTypes.any
 };
 
 Checkbox.defaultProps = {
@@ -106,7 +106,7 @@ const CheckboxGroup = ({
   labelSizeClassName,
   name,
   options,
-  radioSizeClassName,
+  checkboxSizeClassName,
   showFeedback,
   tooltipPosition,
   tooltipText
@@ -135,10 +135,10 @@ const CheckboxGroup = ({
     <>
       {label ? (
         <CheckboxGroup.withLabel
+          checkboxSizeClassName={checkboxSizeClassName}
           label={label}
           labelSizeClassName={labelSizeClassName}
           name={name}
-          radioSizeClassName={radioSizeClassName}
           tooltipPosition={tooltipPosition}
           tooltipText={tooltipText}
         >
@@ -159,6 +159,7 @@ const CheckboxGroup = ({
 };
 
 CheckboxGroup.propTypes = {
+  checkboxSizeClassName: PropTypes.string,
   custom: PropTypes.bool,
   formGroupLabelClassName: PropTypes.string,
   formik: PropTypes.object.isRequired,
@@ -170,7 +171,6 @@ CheckboxGroup.propTypes = {
   labelSizeClassName: PropTypes.string,
   name: PropTypes.string.isRequired,
   options: PropTypes.array.isRequired,
-  radioSizeClassName: PropTypes.string,
   showFeedback: PropTypes.oneOf(Object.keys(feedback)),
   tooltipPosition: PropTypes.string,
   tooltipText: PropTypes.string
@@ -185,7 +185,7 @@ CheckboxGroup.defaultProps = {
   isValidMessage: null,
   label: null,
   labelSizeClassName: 'col-sm-2',
-  radioSizeClassName: 'col-sm-10',
+  checkboxSizeClassName: 'col-sm-10',
   showFeedback: feedback.ALL,
   tooltipPosition: 'right',
   tooltipText: null
@@ -196,7 +196,7 @@ CheckboxGroup.withLabel = ({
   label,
   labelSizeClassName,
   name,
-  radioSizeClassName,
+  checkboxSizeClassName,
   tooltipText,
   tooltipPosition
 }) => {
@@ -207,18 +207,18 @@ CheckboxGroup.withLabel = ({
           {label}{' '}
           <Tooltip name={name} position={tooltipPosition} text={tooltipText} />
         </legend>
-        <div className={radioSizeClassName}>{children}</div>
+        <div className={checkboxSizeClassName}>{children}</div>
       </div>
     </fieldset>
   );
 };
 
 CheckboxGroup.withLabel.propTypes = {
+  checkboxSizeClassName: PropTypes.string.isRequired,
   children: PropTypes.array.isRequired,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.node.isRequired,
   labelSizeClassName: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  radioSizeClassName: PropTypes.string.isRequired,
   tooltipPosition: PropTypes.string.isRequired,
   tooltipText: PropTypes.string
 };

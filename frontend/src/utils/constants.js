@@ -1,3 +1,9 @@
+export const USER_TYPES = {
+  regular: 1,
+  entertainer: 2,
+  admin: 3
+};
+
 export const SLIDESHOW_TYPE = {
   image: 'image',
   entertainers: 'entertainers',

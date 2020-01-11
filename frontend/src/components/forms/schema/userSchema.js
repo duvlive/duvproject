@@ -29,16 +29,22 @@ const phone = yup
   .label('Phone')
   .required('Phone is required');
 
+const agreement = yup
+  .bool()
+  .required('You must agree with our terms and policy to proceed')
+  .oneOf([true], 'You must agree with our terms and policy to proceed');
+
 /////////////////////////
 // Objects
 ////////////////////////
 const registerObject = {
-  first_name: stringValidation('First Name'),
-  last_name: stringValidation('Last Name'),
+  firstName: stringValidation('First Name'),
+  lastName: stringValidation('Last Name'),
   phone,
   email,
   password: strongPassword,
-  confirm_password: confirmPassword
+  confirmPassword: confirmPassword,
+  agreement
 };
 
 const profileObject = {
