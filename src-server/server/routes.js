@@ -34,7 +34,8 @@ router.route('/api/v1/users/updateUserProfile')
 // bankDetails routes
 router.route('/api/v1/bankDetail')
 .post(Authentication.verifyToken, Authentication.validateEntertainer, BankDetailController.createBankDetail)
-.put(Authentication.verifyToken, Authentication.validateEntertainer, BankDetailController.updateUserBankDetail);
+.put(Authentication.verifyToken, Authentication.validateEntertainer, BankDetailController.updateUserBankDetail)
+.get(Authentication.verifyToken, Authentication.validateEntertainer, BankDetailController.getUserBankDetail);
 
 
 export default router;

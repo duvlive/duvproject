@@ -67,5 +67,5 @@ app.get('*', function(req, res) {
 });
 
 app.listen(port, () => {
-  console.info(`Started up at port ${port}`);
+  console.info(`Started up the server at port ${port}`);
 });

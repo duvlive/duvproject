@@ -45,6 +45,7 @@ const UserController = {
   if (Object.keys(error).length) {
     return res.status(400).json(error);
   }
+
   return User.findAll({
       where: { email }
     }).then((existingUser) => {
@@ -323,9 +324,11 @@ const UserController = {
     })
     .then((user) => {
       const error = {...UserValidation.isUserActive(user.isActive)};
+      
       if (Object.keys(error).length) {
         return res.status(403).json(error);
       }
+
       if (!user) {
         return res.status(404).send({
           message: 'User not found',
