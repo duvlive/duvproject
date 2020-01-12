@@ -218,3 +218,11 @@ $icon-size: (
   bottom: 2rem;
   right: 2rem;
 }
+
+.alert {
+  padding: 1rem 1.5rem;
+  ul {
+    margin-bottom: 0;
+    font-size: 0.9rem;
+  }
+}

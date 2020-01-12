@@ -67,6 +67,8 @@ app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(router);
+// set the view engine to ejs
+app.set('view engine', 'ejs');
 
 // Serve any static files
 app.use(express.static(path.join(__dirname, 'build')));
