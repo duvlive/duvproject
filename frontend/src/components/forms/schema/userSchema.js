@@ -24,27 +24,33 @@ const confirmPassword = yup
   .required('Enter your password again')
   .oneOf([yup.ref('password')], 'Passwords must match');
 
-const phone = yup
+const phoneNumber = yup
   .string()
   .label('Phone')
   .required('Phone is required');
+
+const agreement = yup
+  .array()
+  .of(yup.boolean())
+  .required('You must agree with our terms and policy to proceed');
 
 /////////////////////////
 // Objects
 ////////////////////////
 const registerObject = {
-  first_name: stringValidation('First Name'),
-  last_name: stringValidation('Last Name'),
-  phone,
+  firstName: stringValidation('First Name'),
+  lastName: stringValidation('Last Name'),
+  phoneNumber,
   email,
   password: strongPassword,
-  confirm_password: confirmPassword
+  confirmPassword: confirmPassword,
+  agreement
 };
 
 const profileObject = {
   first_name: stringValidation('First Name'),
   last_name: stringValidation('Last Name'),
-  phone,
+  phoneNumber,
   email,
   location: stringValidation('Location'),
   address: stringValidation('Address')
@@ -65,7 +71,7 @@ const personalInfoObject = {
   first_name: stringValidation('First Name'),
   last_name: stringValidation('Last Name'),
   email,
-  phone,
+  phoneNumber,
   about: optionalValidation(stringValidation('About', 20))
 };
 
