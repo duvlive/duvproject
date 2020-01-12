@@ -8,7 +8,7 @@ const AlertMessage = ({ type, message, lists }) => {
     message && (
       <Alert color={type}>
         {message && message}
-        {messageList && <ul>{messageList}</ul>}
+        {messageList && messageList.length > 0 && <ul>{messageList}</ul>}
       </Alert>
     )
   );
