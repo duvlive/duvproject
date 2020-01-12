@@ -1,3 +1,15 @@
+export const USER_TYPES = {
+  user: 1,
+  entertainer: 2,
+  admin: 3
+};
+
+export const DASHBOARD_PAGE = {
+  [USER_TYPES.user]: 'user',
+  [USER_TYPES.entertainer]: 'entertainer',
+  [USER_TYPES.admin]: 'admin'
+};
+
 export const SLIDESHOW_TYPE = {
   image: 'image',
   entertainers: 'entertainers',

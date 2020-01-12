@@ -1,4 +1,5 @@
-import React, { Fragment } from 'react';
+import React, { useState, Fragment } from 'react';
+import axios from 'axios';
 import PropTypes from 'prop-types';
 import Header from 'components/common/layout/Header';
 import Footer from 'components/common/layout/Footer';
@@ -8,11 +9,17 @@ import { Col, Row } from 'reactstrap';
 import { Formik, Form } from 'formik';
 import Input from 'components/forms/Input';
 import Button from 'components/forms/Button';
+import CheckboxGroup from 'components/forms/CheckboxGroup';
 import {
   registerSchema,
   registerObject
 } from 'components/forms/schema/userSchema';
-import { setInitialValues } from 'components/forms/form-helper';
+import {
+  setInitialValues,
+  DisplayFormikState
+} from 'components/forms/form-helper';
+import { USER_TYPES } from 'utils/constants';
+import AlertMessage from 'components/common/utils/AlertMessage';
 
 const registrationType = {
   'become-an-entertainer': {
@@ -20,6 +27,7 @@ const registrationType = {
     text: 'Become an Entertainer'
   },
   entertainer: {
+    id: USER_TYPES.entertainer,
     subtitle: 'MC, DJ OR OWN A LIVE BAND?',
     text: 'Register as an Entertainer'
   },
@@ -28,6 +36,7 @@ const registrationType = {
     text: 'Hire an entertainer'
   },
   user: {
+    id: USER_TYPES.user,
     subtitle: 'NO GO SPOIL YOUR PARTY O!!!',
     text: 'Register as a User'
   }
@@ -59,109 +68,153 @@ Register.defaultProps = {
   type: null
 };
 
-Register.Form = ({ type }) => (
-  <Formik
-    initialValues={setInitialValues(registerObject)}
-    onSubmit={(values, actions) => {
-      console.log(values);
-      setTimeout(() => {
+const RegisterForm = ({ type }) => {
+  const [message, setMessage] = useState(null);
+  const agreementText = (
+    <>
+      I agree to the terms listed in the{' '}
+      <Link to="/terms-of-use">DUV LIVE Terms of Use</Link> and acknowledge the{' '}
+      <Link to="/privacy-policy">DUV LIVE Privacy Policy</Link>.
+    </>
+  );
+  return (
+    <Formik
+      initialValues={setInitialValues(registerObject, { agreement: [] })}
+      onSubmit={(values, actions) => {
+        delete values.agreement;
+        values.type = registrationType[type].id;
+
+        // post to api
+        axios
+          .post('/api/v1/users', values)
+          .then(function(response) {
+            const { status, data } = response;
+            // handle success
+            console.log(status, data);
+            if (status === 200) {
+              setMessage({
+                type: 'success',
+                message: `Your registration is successful. Kindly confirm your email by clicking on the confirmation link`
+              });
+              actions.resetForm();
+            }
+
+            // Save some information in the local storage
+
+            // build logged in navbar
+
+            // add navbar to website
+          })
+          .catch(function(error) {
+            console.log('error', error.response.data);
+            setMessage({
+              message: error.response.data.message,
+              lists:
+                error.response.data.errors &&
+                Object.values(error.response.data.errors)
+            });
+          });
         actions.setSubmitting(false);
-      }, 400);
-    }}
-    render={({ isSubmitting, handleSubmit }) => (
-      <Form>
-        <h5 className="header font-weight-normal text-uppercase mb-1">
-          {registrationType[type].text}
-        </h5>
-        <div className="text-red-100 small--2 mb-5">
-          {registrationType[type].subtitle}
-        </div>
+      }}
+      render={({ isSubmitting, handleSubmit, ...props }) => (
+        <Form>
+          <h5 className="header font-weight-normal text-uppercase mb-1">
+            {registrationType[type].text}
+          </h5>
+          <div className="text-red-100 small--2 mb-5">
+            {registrationType[type].subtitle}
+          </div>
 
-        <section className="auth__social-media text-center">
-          <p className="auth__social-media--text">Register with:</p>
-          <Link className="auth__social-media--icons" to="/">
-            <span className="icon-google" />
-          </Link>
-          <Link className="auth__social-media--icons" to="/">
-            <span className="icon-facebook-official" />
-          </Link>
-          <p className="auth__social-media--text mt-0 mb-5">OR</p>
-        </section>
-        <div className="form-row">
-          <Input
-            formGroupClassName="col-md-6"
-            isValidMessage="First Name looks good"
-            label="First Name"
-            name="first_name"
-            placeholder="First Name"
-          />
-          <Input
-            formGroupClassName="col-md-6"
-            isValidMessage="Last Name looks good"
-            label="Last Name"
-            name="last_name"
-            placeholder="Last Name"
-          />
-        </div>
-        <div className="form-row">
-          <Input
-            formGroupClassName="col-md-6"
-            isValidMessage="Email address seems valid"
-            label="Email"
-            name="email"
-            placeholder="Email Address"
-          />
-          <Input
-            formGroupClassName="col-md-6"
-            isValidMessage="Phone number looks good"
-            label="Phone"
-            name="phone"
-            placeholder="Phone"
-          />
-        </div>
-        <div className="form-row">
-          <Input
-            formGroupClassName="col-md-6"
-            isValidMessage="Password seems good"
-            label="Password"
-            name="password"
-            placeholder="Password"
-          />
-          <Input
-            formGroupClassName="col-md-6"
-            isValidMessage="Phone matches"
-            label="Confirm Password"
-            name="confirm_password"
-            placeholder="Confirm Password"
-          />
-        </div>
-        <div className="form-check">
-          <input className="form-check-input" id="agreement" type="checkbox" />
-          <label className="form-check-label" htmlFor="agreement">
-            I agree to the terms listed in the{' '}
-            <Link to="/terms-of-use">DUV LIVE Terms of Use</Link> and
-            acknowledge the{' '}
-            <Link to="/privacy-policy">DUV LIVE Privacy Policy</Link>.
-          </label>
-        </div>
-        <Button
-          className="btn-danger btn-wide btn-transparent mt-4"
-          loading={isSubmitting}
-          onClick={handleSubmit}
-        >
-          {registrationType[type].text}
-        </Button>
-      </Form>
-    )}
-    validationSchema={registerSchema}
-  />
-);
+          <section className="auth__social-media text-center">
+            <p className="auth__social-media--text">Register with:</p>
+            <Link className="auth__social-media--icons" to="/">
+              <span className="icon-google" />
+            </Link>
+            <Link className="auth__social-media--icons" to="/">
+              <span className="icon-facebook-official" />
+            </Link>
+            <p className="auth__social-media--text mt-0 mb-5">OR</p>
+          </section>
+          <AlertMessage {...message} />
+          <div className="form-row">
+            <Input
+              formGroupClassName="col-md-6"
+              isValidMessage="First Name looks good"
+              label="First Name"
+              name="firstName"
+              placeholder="First Name"
+            />
+            <Input
+              formGroupClassName="col-md-6"
+              isValidMessage="Last Name looks good"
+              label="Last Name"
+              name="lastName"
+              placeholder="Last Name"
+            />
+          </div>
+          <div className="form-row">
+            <Input
+              formGroupClassName="col-md-6"
+              isValidMessage="Email address seems valid"
+              label="Email"
+              name="email"
+              placeholder="Email Address"
+            />
+            <Input
+              formGroupClassName="col-md-6"
+              isValidMessage="Phone number looks good"
+              label="Phone"
+              name="phoneNumber"
+              placeholder="Phone"
+            />
+          </div>
+          <div className="form-row">
+            <Input
+              formGroupClassName="col-md-6"
+              isValidMessage="Password seems good"
+              label="Password"
+              name="password"
+              placeholder="Password"
+              type="password"
+            />
+            <Input
+              formGroupClassName="col-md-6"
+              isValidMessage="Awesome. Password matches"
+              label="Confirm Password"
+              name="confirmPassword"
+              placeholder="Confirm Password"
+              type="password"
+            />
+          </div>
+          <div className="form-row ml-0">
+            <CheckboxGroup
+              custom
+              inline
+              name="agreement"
+              options={[{ label: agreementText, value: true }]}
+            />
+            <label className="form-check-label" htmlFor="agreement"></label>
+          </div>
+          <Button
+            className="btn-danger btn-wide btn-transparent mt-4"
+            loading={isSubmitting}
+            onClick={handleSubmit}
+          >
+            {registrationType[type].text}
+          </Button>
+          <DisplayFormikState {...props} hide showAll />
+        </Form>
+      )}
+      validationSchema={registerSchema}
+    />
+  );
+};
 
-Register.Form.propTypes = {
+RegisterForm.propTypes = {
   type: PropTypes.oneOf(allowedTypes)
 };
 
-Register.Form.defaultProps = {
+RegisterForm.defaultProps = {
   type: null
 };
 
@@ -171,7 +224,7 @@ const Content = ({ type }) => (
       <Row>
         <Col sm={{ size: 8, offset: 2 }}>
           <div className="auth__container auth__container--lg">
-            <Register.Form type={type} />
+            <RegisterForm type={type} />
             <section className="auth__footer">
               <div className="register mt-4 text-center">
                 Already have an account with us?
@@ -199,3 +252,16 @@ Content.defaultProps = {
 };
 
 export default Register;
+
+// Validation is wrong
+// - if name is totally omitted, gives error
+// - phone number is 11 to 14, what about foreign numbers
+// - password is 8, i think 6 is ideal
+// - resend email (incase user didn't receive it)
+// - we might need first time login
+// - function of userprofile table, why are we populating this when we sign up
+// - we will need time user activates their account
+// - create referral link for user
+// - inconsistent  api - use of message && error
+// - how do we know the type of entertainer when we login
+// - how do you run your sequlize migration

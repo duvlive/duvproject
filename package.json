@@ -1,0 +1,63 @@
+{
+  "name": "duvproject",
+  "version": "1.0.0",
+  "description": "A simple freelance platform for event managers and performers",
+  "main": "index.js",
+  "scripts": {
+    "start:dev:frontend": "cd frontend && npm start",
+    "start:dev:server": "nodemon --exec babel-node src-server/server.js",
+    "start:dev": "concurrently --kill-others-on-fail \"yarn start:dev:server\" \"yarn start:dev:frontend\"",
+    "test": "npm run seed && NODE_ENV=test jest ./**/tests/**/*.test.js",
+    "seed": "NODE_ENV=test babel-node server/tests/helpers/seedHelper.js",
+    "start": "node dist/server.js",
+    "server:debug": "babel-node server-debug.js",
+    "build:server": "babel ./src-server -d ./dist -D",
+    "build:frontend": "cd frontend && npm install && npm install --only=dev --no-shrinkwrap && npm run build && cd .. && cp -R frontend/build dist/ && cp -R frontend/build src-server",
+    "heroku-postbuild": "rm -rf ./dist && yarn run build:server && yarn run build:frontend && cd dist/server && sequelize db:migrate"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/duv-live/duvproject.git"
+  },
+  "keywords": [
+    "Event"
+  ],
+  "author": "DUV-LIVE",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/duv-live/duvproject/issues"
+  },
+  "homepage": "https://github.com/duv-live/duvproject#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.7.4",
+    "@babel/plugin-transform-runtime": "^7.7.4",
+    "concurrently": "^5.0.2",
+    "eslint": "5",
+    "eslint-plugin-react": "^7.14.3",
+    "faker": "^4.1.0",
+    "node-cron": "^2.0.3",
+    "nodemon": "^1.19.1",
+    "sequelize-cli": "^5.5.1",
+    "supertest": "^4.0.2"
+  },
+  "dependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/node": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/runtime": "^7.7.4",
+    "bcrypt": "^3.0.6",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.1.0",
+    "express": "^4.17.1",
+    "global": "^4.4.0",
+    "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.9.1",
+    "nodemailer": "^6.3.0",
+    "passport": "^0.4.0",
+    "passport-facebook": "^3.0.0",
+    "passport-google-oauth": "^2.0.0",
+    "pg": "^7.12.1",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^5.21.2"
+  }
+}

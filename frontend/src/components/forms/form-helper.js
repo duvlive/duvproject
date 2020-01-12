@@ -15,7 +15,8 @@ const feebackOptions = {
 const showErrors = ({ showFeedback, formik }) => {
   return (
     formik.submitCount > 0 || // Errors should be shown if form is submitted
-    (showFeedback === feedback.ALL || showFeedback === feedback.ERROR)
+    showFeedback === feedback.ALL ||
+    showFeedback === feedback.ERROR
   );
 };
 
@@ -94,35 +95,40 @@ HelpText.propTypes = {
   text: PropTypes.string.isRequired
 };
 
-export const DisplayFormikState = props => (
-  <div style={{ margin: '1rem 0' }}>
-    <pre
-      style={{
-        color: '#aaa',
-        fontSize: '.65rem',
-        border: '1px solid #666',
-        marginTop: '5rem',
-        padding: '1.5rem 2rem'
-      }}
-    >
-      {props.showAll ? (
-        <div>
-          <strong>props</strong> = {JSON.stringify(props, null, 2)}
-        </div>
-      ) : (
-        JSON.stringify(props.values, null, 2)
-      )}
-    </pre>
-  </div>
-);
+export const DisplayFormikState = props => {
+  const displayFormikValues = (
+    <div style={{ margin: '1rem 0' }}>
+      <pre
+        style={{
+          color: '#aaa',
+          fontSize: '.65rem',
+          border: '1px solid #666',
+          marginTop: '5rem',
+          padding: '1.5rem 2rem'
+        }}
+      >
+        {props.showAll ? (
+          <div>
+            <strong>props</strong> = {JSON.stringify(props, null, 2)}
+          </div>
+        ) : (
+          JSON.stringify(props.values, null, 2)
+        )}
+      </pre>
+    </div>
+  );
+  return !props.hide && displayFormikValues;
+};
 
 DisplayFormikState.propTypes = {
+  hide: PropTypes.bool,
   showAll: PropTypes.bool,
   values: PropTypes.object.isRequired
 };
 
 DisplayFormikState.defaultProps = {
-  showAll: false
+  showAll: false,
+  hide: false
 };
 
 export const setInitialValues = (schema, initialValues = {}) => {
