@@ -84,6 +84,10 @@ router
     Authentication.verifyToken,
     Authentication.validateEntertainer,
     BankDetailController.updateUserBankDetail
-  );
+  )
+  .get(Authentication.verifyToken,
+    Authentication.validateEntertainer,
+    BankDetailController.getUserBankDetail
+    );
 
 export default router;

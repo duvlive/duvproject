@@ -12,6 +12,7 @@ const BankDetailController = {
   createBankDetail(req, res) {
     const { userId } = req.decoded;
     const { accountName, bankName, accountNumber } = req.body;
+
     const error = {...validString(accountName),
       ...validString(bankName),
       ...validString(accountNumber),
@@ -19,9 +20,14 @@ const BankDetailController = {
 
     User.findOne({ where: { id: userId }})
     .then(user => {
-      if(!user) return 
+      if(!user) {
+        error['user'] = 'user not found';
+      }
+    })
+
+    if (Object.keys(error).length) {
+      return res.status(400).json(error);
     }
-    )
 
     return BankDetail.findAll({
       where: { userId }
@@ -72,6 +78,22 @@ const BankDetailController = {
       const errorMessage = error.message || error;
       return res.status(status).json({ message: errorMessage});
     });
+  },
+
+  // GetUserAccountName
+  getUserBankDetail(req,res) {
+    const { userId } = req.decoded;
+
+    BankDetail.findOne({
+      where: { userId }
+    })
+    .then((bankDetail) => {
+      if(!bankDetail || bankDetail.length === 0) {
+        return res.status(404).json({ message: 'Bank Detail not found' });
+      }
+      return res.status(200).json({ bankDetail});
+
+    })
   },
 };
 
