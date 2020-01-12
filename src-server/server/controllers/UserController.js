@@ -359,7 +359,8 @@ const UserController = {
       yearStarted,
       willingToTravel,
       eventType,
-      entertainerType
+      entertainerType, 
+      youTubeChannel,
     } = req.body;
 
     const userProfileData = {
@@ -369,7 +370,8 @@ const UserController = {
       yearStarted,
       willingToTravel,
       eventType,
-      entertainerType
+      entertainerType,
+      youTubeChannel,
     };
 
     return Promise.all([
