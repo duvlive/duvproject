@@ -1,5 +1,5 @@
 import UserValidation from './userValidation';
-import { userProfileUpdateHelper } from './modelHelper';
+import { updateUser } from './modelHelper';
 
 const validString = (data) => {
   if(data === null || data === undefined || data.length <= 0) {
@@ -11,7 +11,7 @@ const validString = (data) => {
 }
 
 export {
-  userProfileUpdateHelper,
+  updateUser,
   UserValidation,
   validString,
 };

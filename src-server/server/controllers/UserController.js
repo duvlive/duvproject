@@ -4,7 +4,7 @@ import { User, UserProfile } from '../models';
 import emailSender from '../MailSender';
 import Authentication from '../middleware/authentication';
 import { UserValidation } from '../utils';
-import { userProfileUpdateHelper } from '../utils';
+import { updateUser } from '../utils';
 
 const UserController = {
   /**
@@ -372,30 +372,10 @@ const UserController = {
       entertainerType
     };
 
-    const updateUser = () =>
-      User.findOne({
-        where: { id: userId }
-      })
-        .then(user => {
-          const error = { ...UserValidation.isUserActive(user.isActive) };
-          if (Object.keys(error).length) {
-            return res.status(403).json(error);
-          }
-          if (!user) {
-            return res.status(404).send({
-              message: 'User not found'
-            });
-          }
-          return user.update({ phoneNumber });
-        })
-        .catch(error =>
-          res.status(400).json({
-            message: error.message || error
-          })
-        );
+ 
     return Promise.all([
-      updateUser(),
-      userProfileUpdateHelper(userId, userProfileData)
+      req.user.update({phoneNumber}),
+      updateUser(req.user, userProfileData, 'Profile')
     ]).then(user => {
       res.status(200).json({
         user: UserController.transformUser(user[0]),
@@ -404,5 +384,6 @@ const UserController = {
     });
   }
 };
+
 
 export default UserController;

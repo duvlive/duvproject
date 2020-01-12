@@ -1,4 +1,4 @@
-const model = require('./server/models');
+const model = require('./src-server/server/models');
 
 const repl = require('repl');
 // const msg = 'message';

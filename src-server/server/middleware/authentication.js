@@ -18,7 +18,10 @@ const authentication = {
           });
         }
         request.decoded = decoded;
-        next();
+        User.findOne({ where: { id: request.decoded.userId}}).then((x) => {
+          request.user = x;
+          next();
+        })
       });
     } else {
       return response.status(401).send({
