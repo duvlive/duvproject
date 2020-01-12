@@ -6,6 +6,7 @@ import {
 } from './controllers';
 import Authentication from './middleware/authentication';
 import passport from 'passport';
+import { generateEmailTemplate } from './MailSender';
 
 const router = Router();
 
@@ -15,6 +16,21 @@ router.get('/api/v1', (_, res) =>
     .status(200)
     .json({ success: 'Welcome to DUV Live API V1. Live your Best Live' })
 );
+
+// TODO: create controller for this
+// email route
+router.get('/email-template', (req, res) => {
+  const options = {
+    firstName: '[FirstName]',
+    contentTop: '[Top Content]',
+    contentBottom: '[Bottom Content]',
+    ButtonText: '[Button Text]',
+    ButtonLink: 'https://www.duvlive.herokuapp.com'
+  };
+  generateEmailTemplate(options).then(data => {
+    return res.send(data);
+  });
+});
 
 // user routes.
 router.post('/api/v1/users', UserController.createUser);
