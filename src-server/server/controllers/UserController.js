@@ -372,7 +372,6 @@ const UserController = {
       entertainerType
     };
 
- 
     return Promise.all([
       req.user.update({phoneNumber}),
       updateUser(req.user, userProfileData, 'Profile')
