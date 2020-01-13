@@ -253,15 +253,16 @@ Content.defaultProps = {
 
 export default Register;
 
-// Validation is wrong
-// - if name is totally omitted, gives error
-// - phone number is 11 to 14, what about foreign numbers
-// - password is 8, i think 6 is ideal
-// - resend email (incase user didn't receive it)
-// - we might need first time login
-// - function of userprofile table, why are we populating this when we sign up
-// - we will need time user activates their account
-// - create referral link for user
-// - inconsistent  api - use of message && error
+// Validation is wrong *
+// - if name is totally omitted, gives error *
+// - phone number is 11 to 14, what about foreign numbers *
+// - password is 8, i think 6 is ideal *
+// - resend email confirmation (incase user didn't receive it) (*)
+// - we might need first time login ()
+// - function of userprofile table, why are we populating this when we sign up *
+// - we will need the time user activates their account (data analysis)
+// - create referral link for user *
+// - inconsistent  api - use of message && error *
 // - how do we know the type of entertainer when we login
 // - how do you run your sequlize migration
+// - instead of user not found after activation, just show that the user has validated his account
