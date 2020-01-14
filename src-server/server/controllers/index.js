@@ -4,8 +4,8 @@ import BankDetailController from './BankDetailController';
 import ContactController from './ContactController';
 
 export {
-	UserController,
-	UserProfileController,
-	BankDetailController,
-	ContactController
+  UserController,
+  UserProfileController,
+  BankDetailController,
+  ContactController
 };
