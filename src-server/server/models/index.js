@@ -1,11 +1,11 @@
-"use strict";
+'use strict';
 
-import fs from "fs";
-import path from "path";
-import Sequelize from "sequelize";
+import fs from 'fs';
+import path from 'path';
+import Sequelize from 'sequelize';
 const basename = path.basename(module.filename);
-const env = process.env.NODE_ENV || "development";
-const config = require(path.join(__dirname + "/../config/config.json"))[env];
+const env = process.env.NODE_ENV || 'development';
+const config = require(path.join(__dirname + '/../config/config.json'))[env];
 const db = {};
 let sequelize;
 
@@ -23,11 +23,11 @@ if (config.use_env_variable) {
 fs.readdirSync(__dirname)
 	.filter(function(file) {
 		return (
-			file.indexOf(".") !== 0 && file !== basename && file.slice(-3) === ".js"
+			file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js'
 		);
 	})
 	.forEach(function(file) {
-		const model = sequelize["import"](path.join(__dirname, file));
+		const model = sequelize['import'](path.join(__dirname, file));
 		db[model.name] = model;
 	});
 
@@ -37,13 +37,13 @@ Object.keys(db).forEach(function(modelName) {
 	}
 });
 
-db.User.hasOne(db.UserProfile, { foreignKey: "userId", as: "profile" });
-db.User.hasMany(db.User, { foreignKey: "userId", as: "bandMembers" });
-db.User.hasOne(db.BankDetail, { foreignKey: "userId", as: "bankDetail" });
+db.User.hasOne(db.UserProfile, { foreignKey: 'userId', as: 'profile' });
+db.User.hasMany(db.User, { foreignKey: 'userId', as: 'bandMembers' });
+db.User.hasOne(db.BankDetail, { foreignKey: 'userId', as: 'bankDetail' });
 db.User.hasMany(db.Contact, {
-	foreignKey: "userId",
-	as: "contacts",
-	targetKey: "contacts"
+	foreignKey: 'userId',
+	as: 'contacts',
+	targetKey: 'contacts'
 });
 
 db.sequelize = sequelize;

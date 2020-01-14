@@ -1,6 +1,6 @@
-import { Contact, User } from "../models";
-import { validString, updateUser } from "../utils";
-import { request } from "http";
+import { Contact, User } from '../models';
+import { validString, updateUser } from '../utils';
+import { request } from 'http';
 
 const ContactController = {
 	/**
@@ -29,7 +29,7 @@ const ContactController = {
 			...validString(relationship)
 		};
 		if (Object.keys(error).length > 1) {
-			return res.status(400).json({ message: error.message.join("") });
+			return res.status(400).json({ message: error.message.join('') });
 		}
 		if (!contactId) {
 			return Contact.create({
@@ -47,7 +47,7 @@ const ContactController = {
 					return res
 						.status(200)
 						.json({
-							message: "Contact added successfully",
+							message: 'Contact added successfully',
 							contact
 						})
 						.catch(e => {
@@ -71,7 +71,7 @@ const ContactController = {
 			})
 			.then(contact => {
 				return res.status(200).json({
-					message: "Contact updated successfully",
+					message: 'Contact updated successfully',
 					contact
 				});
 			})
@@ -91,7 +91,7 @@ const ContactController = {
 	getUserContact(req, res) {
 		req.user.getContacts().then(contact => {
 			if (!contact || contact.length === 0) {
-				return res.status(404).json({ message: "Contact not found" });
+				return res.status(404).json({ message: 'Contact not found' });
 			}
 			return res.status(200).json({ contact });
 		});

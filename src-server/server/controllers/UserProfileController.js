@@ -1,4 +1,4 @@
-import { updateUser } from "../utils";
+import { updateUser } from '../utils';
 
 const UserProfileController = {
 	updateUserAndUserProfile(req, res) {
@@ -23,11 +23,11 @@ const UserProfileController = {
 			youTubeChannel
 		};
 
-		updateUser(req.user, userProfileData, "Profile")
+		updateUser(req.user, userProfileData, 'Profile')
 			.then(userProfile => {
 				return res
 					.status(200)
-					.json({ userProfile, message: "User profile update is succesful" });
+					.json({ userProfile, message: 'User profile update is succesful' });
 			})
 			.catch(error => {
 				return res.status(error.status || 400).json(error.message);

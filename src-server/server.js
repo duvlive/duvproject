@@ -1,13 +1,13 @@
-import dotenv from "dotenv";
-import express from "express";
-import path from "path";
-import logger from "morgan";
-import passport from "passport";
-import FacebookStrategy from "passport-facebook";
-import GoogleStrategy from "passport-google-oauth";
-import bodyParser from "body-parser";
+import dotenv from 'dotenv';
+import express from 'express';
+import path from 'path';
+import logger from 'morgan';
+import passport from 'passport';
+import FacebookStrategy from 'passport-facebook';
+import GoogleStrategy from 'passport-google-oauth';
+import bodyParser from 'body-parser';
 
-import router from "./server/routes";
+import router from './server/routes';
 
 dotenv.config();
 
@@ -16,7 +16,7 @@ const port = parseInt(process.env.PORT, 10) || 8080;
 const app = express();
 
 app.use((req, res, next) => {
-	global.host = req.protocol + "://" + req.get("host");
+	global.host = req.protocol + '://' + req.get('host');
 	next();
 });
 
@@ -24,14 +24,14 @@ app.use(passport.initialize());
 const facebookStrategy = FacebookStrategy.Strategy;
 const googleStrategy = GoogleStrategy.OAuth2Strategy;
 
-passport.authenticate("facebook");
+passport.authenticate('facebook');
 passport.use(
 	new facebookStrategy(
 		{
 			clientID: process.env.FACEBOOK_APP_ID,
 			clientSecret: process.env.FACEBOOK_APP_SECRET,
 			callbackURL: `${global.host}/api/v1/auth/facebook/callback`,
-			profileFields: ["emails", "name"]
+			profileFields: ['emails', 'name']
 		},
 		function(accessToken, refreshToken, profile, done) {
 			const {
@@ -50,7 +50,7 @@ passport.use(
 			clientID: process.env.GOOGLE_CLIENT_ID,
 			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
 			callbackURL: `${global.host}/api/v1/auth/google/callback`,
-			profileFields: ["emails", "name"]
+			profileFields: ['emails', 'name']
 		},
 		function(accessToken, refreshToken, profile, done) {
 			const {
@@ -63,7 +63,7 @@ passport.use(
 	)
 );
 
-app.use(logger("dev"));
+app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(router);
@@ -71,12 +71,12 @@ app.use(router);
 app.set('view engine', 'ejs');
 
 // Serve any static files
-app.use(express.static(path.join(__dirname, "build")));
+app.use(express.static(path.join(__dirname, 'build')));
 
-if (process.env.NODE_ENV === "production") {
+if (process.env.NODE_ENV === 'production') {
 	// Handle React routing, return all requests to React app
-	app.get("*", function(req, res) {
-		res.sendFile(path.join(__dirname, "build", "index.html"));
+	app.get('*', function(req, res) {
+		res.sendFile(path.join(__dirname, 'build', 'index.html'));
 	});
 }
 

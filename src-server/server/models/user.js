@@ -1,10 +1,10 @@
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import emailSender from "../MailSender";
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import emailSender from '../MailSender';
 
 module.exports = (sequelize, DataTypes) => {
 	const User = sequelize.define(
-		"User",
+		'User',
 		{
 			firstName: {
 				type: DataTypes.STRING,
@@ -73,7 +73,7 @@ module.exports = (sequelize, DataTypes) => {
 					);
 				},
 				afterCreate: user => {
-					const models = require("./");
+					const models = require('./');
 					models.UserProfile.create({ userId: user.id })
 						.then(res => {
 							return user.setProfile(res);

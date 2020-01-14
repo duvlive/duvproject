@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 module.exports = function(sequelize, DataTypes) {
 	var Contact = sequelize.define(
-		"Contact",
+		'Contact',
 		{
 			userId: {
 				type: DataTypes.INTEGER,

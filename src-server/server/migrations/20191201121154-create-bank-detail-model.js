@@ -1,6 +1,6 @@
 module.exports = {
 	up: (queryInterface, Sequelize) => {
-		return queryInterface.createTable("BankDetails", {
+		return queryInterface.createTable('BankDetails', {
 			id: {
 				allowNull: false,
 				autoIncrement: true,
@@ -35,6 +35,6 @@ module.exports = {
 		});
 	},
 	down: (queryInterface /*Sequelize*/) => {
-		return queryInterface.dropTable("BankDetails");
+		return queryInterface.dropTable('BankDetails');
 	}
 };

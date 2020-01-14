@@ -3,8 +3,8 @@ module.exports = {
 		const transaction = await queryInterface.sequelize.transaction();
 		try {
 			await queryInterface.addColumn(
-				"Users",
-				"userId",
+				'Users',
+				'userId',
 				{
 					type: Sequelize.INTEGER,
 					allowNull: true
@@ -22,7 +22,7 @@ module.exports = {
 	down: async function(queryInterface, Sequelize) {
 		const transaction = await queryInterface.sequelize.transaction();
 		try {
-			await queryInterface.removeColumn("Users", "userId", { transaction });
+			await queryInterface.removeColumn('Users', 'userId', { transaction });
 			await transaction.commit();
 		} catch (err) {
 			await transaction.rollback();

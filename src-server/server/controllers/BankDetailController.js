@@ -1,5 +1,5 @@
-import { BankDetail, User } from "../models";
-import { validString, updateUser } from "../utils";
+import { BankDetail, User } from '../models';
+import { validString, updateUser } from '../utils';
 
 const BankDetailController = {
 	/**
@@ -19,7 +19,7 @@ const BankDetailController = {
 			...validString(accountNumber)
 		};
 		if (Object.keys(error).length > 1) {
-			return res.status(400).json({ message: error.message.join("") });
+			return res.status(400).json({ message: error.message.join('') });
 		}
 		return updateUser(
 			req.user,
@@ -29,11 +29,11 @@ const BankDetailController = {
 				accountNumber,
 				userId
 			},
-			"BankDetail"
+			'BankDetail'
 		)
 			.then(newAccountDetail => {
 				return res.status(200).json({
-					message: "Bank Detail added successfully",
+					message: 'Bank Detail added successfully',
 					bankDetail: newAccountDetail
 				});
 			})
@@ -54,7 +54,7 @@ const BankDetailController = {
 	getUserBankDetail(req, res) {
 		req.user.getBankDetail().then(bankDetail => {
 			if (!bankDetail || bankDetail.length === 0) {
-				return res.status(404).json({ message: "Bank Detail not found" });
+				return res.status(404).json({ message: 'Bank Detail not found' });
 			}
 			return res.status(200).json({ bankDetail });
 		});

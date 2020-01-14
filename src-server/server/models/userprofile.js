@@ -1,13 +1,13 @@
-"use strict";
+'use strict';
 module.exports = function(sequelize, DataTypes) {
 	var UserProfile = sequelize.define(
-		"UserProfile",
+		'UserProfile',
 		{
 			entertainerType: {
 				type: DataTypes.STRING,
 				allowNull: true,
 				defaultValue: null,
-				validate: { isIn: [["MC", "DJ", "Liveband", null]] }
+				validate: { isIn: [['MC', 'DJ', 'Liveband', null]] }
 			},
 			userId: {
 				type: DataTypes.INTEGER,

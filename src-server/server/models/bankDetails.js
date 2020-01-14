@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 module.exports = function(sequelize, DataTypes) {
 	var BankDetail = sequelize.define(
-		"BankDetail",
+		'BankDetail',
 		{
 			userId: {
 				type: DataTypes.INTEGER,

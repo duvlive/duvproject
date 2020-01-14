@@ -1,21 +1,21 @@
-import jwt from "jsonwebtoken";
-import { User } from "../models";
+import jwt from 'jsonwebtoken';
+import { User } from '../models';
 
 const authentication = {
 	verifyToken(request, response, next) {
 		let token =
-			request.headers.authorization || request.headers["x-access-token"];
+			request.headers.authorization || request.headers['x-access-token'];
 		if (!token)
 			return response.status(401).send({
-				message: "Token required for this route"
+				message: 'Token required for this route'
 			});
-		const tokenArray = token.split(" ");
+		const tokenArray = token.split(' ');
 		token = tokenArray.length > 1 ? tokenArray[1] : token;
 		if (token) {
 			jwt.verify(token, process.env.SECRET, (error, decoded) => {
 				if (error) {
 					return response.status(401).send({
-						message: "Invalid token"
+						message: 'Invalid token'
 					});
 				}
 				request.decoded = decoded;
@@ -26,7 +26,7 @@ const authentication = {
 			});
 		} else {
 			return response.status(401).send({
-				message: "Token required for access"
+				message: 'Token required for access'
 			});
 		}
 	},
@@ -43,7 +43,7 @@ const authentication = {
 		};
 		return isLimitedExpiry
 			? jwt.sign(signData, process.env.SECRET)
-			: jwt.sign(signData, process.env.SECRET, { expiresIn: "30 day" });
+			: jwt.sign(signData, process.env.SECRET, { expiresIn: '30 day' });
 	},
 
 	/**
@@ -62,7 +62,7 @@ const authentication = {
 					next();
 				} else {
 					response.status(401).send({
-						error: "Not authorized to non-Admin"
+						error: 'Not authorized to non-Admin'
 					});
 				}
 			})
@@ -89,7 +89,7 @@ const authentication = {
 					next();
 				} else {
 					response.status(401).send({
-						error: "Not authorized to non-entertainers"
+						error: 'Not authorized to non-entertainers'
 					});
 				}
 			})
@@ -116,7 +116,7 @@ const authentication = {
 					next();
 				} else {
 					response.status(401).send({
-						error: "Not authorized to non-users"
+						error: 'Not authorized to non-users'
 					});
 				}
 			})
