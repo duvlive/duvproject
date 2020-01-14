@@ -3,26 +3,30 @@ import { User } from '../models';
 
 const authentication = {
   verifyToken(request, response, next) {
-    let token = request.headers.authorization ||
-      request.headers['x-access-token'];
-    if(!token) return response.status(401).send({
-      message: 'Token required for this route',
-    });
+    let token =
+      request.headers.authorization || request.headers['x-access-token'];
+    if (!token)
+      return response.status(401).send({
+        message: 'Token required for this route'
+      });
     const tokenArray = token.split(' ');
     token = tokenArray.length > 1 ? tokenArray[1] : token;
     if (token) {
       jwt.verify(token, process.env.SECRET, (error, decoded) => {
         if (error) {
           return response.status(401).send({
-            message: 'Invalid token',
+            message: 'Invalid token'
           });
         }
         request.decoded = decoded;
-        next();
+        User.findOne({ where: { id: request.decoded.userId } }).then(x => {
+          request.user = x;
+          next();
+        });
       });
     } else {
       return response.status(401).send({
-        message: 'Token required for access',
+        message: 'Token required for access'
       });
     }
   },
@@ -32,12 +36,14 @@ const authentication = {
    * @param {Object} user object
    * @returns {Object} jwt
    */
-  generateToken(user, isLimitedExpiry=false) {
+  generateToken(user, isLimitedExpiry = false) {
     const signData = {
       userId: user.id,
-      type: user.type,
+      type: user.type
     };
-    return isLimitedExpiry ? jwt.sign(signData, process.env.SECRET) : jwt.sign(signData, process.env.SECRET, { expiresIn: '30 day' });
+    return isLimitedExpiry
+      ? jwt.sign(signData, process.env.SECRET)
+      : jwt.sign(signData, process.env.SECRET, { expiresIn: '30 day' });
   },
 
   /**
@@ -51,17 +57,18 @@ const authentication = {
     User.findOne({
       where: { type: request.decoded.type }
     })
-      .then((user) => {
+      .then(user => {
         if (user.type === 3) {
           next();
         } else {
           response.status(401).send({
-            error: 'Not authorized to non-Admin',
+            error: 'Not authorized to non-Admin'
           });
         }
-      }).catch((error) => {
+      })
+      .catch(error => {
         response.status(500).send({
-          errors: error,
+          errors: error
         });
       });
   },
@@ -77,17 +84,18 @@ const authentication = {
     User.findOne({
       where: { type: request.decoded.type }
     })
-      .then((user) => {
+      .then(user => {
         if (user.type === 2) {
           next();
         } else {
           response.status(401).send({
-            error: 'Not authorized to non-entertainers',
+            error: 'Not authorized to non-entertainers'
           });
         }
-      }).catch((error) => {
+      })
+      .catch(error => {
         response.status(500).send({
-          errors: error,
+          errors: error
         });
       });
   },
@@ -103,19 +111,20 @@ const authentication = {
     User.findOne({
       where: { type: request.decoded.type }
     })
-      .then((user) => {
+      .then(user => {
         if (user.type === 1) {
           next();
         } else {
           response.status(401).send({
-            error: 'Not authorized to non-users',
+            error: 'Not authorized to non-users'
           });
         }
-      }).catch((error) => {
+      })
+      .catch(error => {
         response.status(500).send({
-          errors: error,
+          errors: error
         });
       });
-  },
+  }
 };
 export default authentication;

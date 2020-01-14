@@ -9,7 +9,7 @@ module.exports = {
       },
       userId: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: false
       },
       accountName: {
         type: Sequelize.STRING,
@@ -22,7 +22,7 @@ module.exports = {
       accountNumber: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: true,
+        unique: true
       },
       createdAt: {
         allowNull: false,
@@ -34,7 +34,7 @@ module.exports = {
       }
     });
   },
-  down: (queryInterface, /*Sequelize*/) => {
+  down: (queryInterface /*Sequelize*/) => {
     return queryInterface.dropTable('BankDetails');
   }
 };

@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-  up: async function (queryInterface, Sequelize) {
+  up: async function(queryInterface, Sequelize) {
     const transaction = await queryInterface.sequelize.transaction();
     try {
       await queryInterface.addColumn(
@@ -20,7 +20,7 @@ module.exports = {
         {
           type: Sequelize.STRING,
           allowNull: true,
-          unique: true,
+          unique: true
         },
         { transaction }
       );
@@ -51,7 +51,7 @@ module.exports = {
         {
           type: Sequelize.BOOLEAN,
           allowNull: false,
-          defaultValue: false,
+          defaultValue: false
         },
         { transaction }
       );
@@ -73,15 +73,27 @@ module.exports = {
     }
   },
 
-  down: async function (queryInterface, Sequelize) {
+  down: async function(queryInterface, Sequelize) {
     const transaction = await queryInterface.sequelize.transaction();
     try {
-      await queryInterface.removeColumn('UserProfiles', 'about', { transaction });
-      await queryInterface.removeColumn('UserProfiles', 'stageName', { transaction });
-      await queryInterface.removeColumn('UserProfiles', 'location', { transaction });
-      await queryInterface.removeColumn('UserProfiles', 'yearStarted', { transaction });
-      await queryInterface.removeColumn('UserProfiles', 'willingToTravel', { transaction });
-      await queryInterface.removeColumn('UserProfiles', 'eventType', { transaction });
+      await queryInterface.removeColumn('UserProfiles', 'about', {
+        transaction
+      });
+      await queryInterface.removeColumn('UserProfiles', 'stageName', {
+        transaction
+      });
+      await queryInterface.removeColumn('UserProfiles', 'location', {
+        transaction
+      });
+      await queryInterface.removeColumn('UserProfiles', 'yearStarted', {
+        transaction
+      });
+      await queryInterface.removeColumn('UserProfiles', 'willingToTravel', {
+        transaction
+      });
+      await queryInterface.removeColumn('UserProfiles', 'eventType', {
+        transaction
+      });
       await transaction.commit();
     } catch (err) {
       await transaction.rollback();

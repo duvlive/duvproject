@@ -31,15 +31,15 @@ module.exports = {
       type: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        defaultValue: 1,
+        defaultValue: 1
       },
       isActive: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
-        defaultValue: false,
+        defaultValue: false
       },
       activationToken: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
@@ -51,7 +51,7 @@ module.exports = {
       }
     });
   },
-  down: (queryInterface, /*Sequelize*/) => {
+  down: (queryInterface /*Sequelize*/) => {
     return queryInterface.dropTable('Users');
   }
 };

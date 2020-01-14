@@ -1,15 +1,10 @@
-import { User, UserProfile } from '../models';
-import { UserValidation } from './index';
-
-export const userProfileUpdateHelper = (id, data) =>  {
-  return UserProfile.findOne(
-    { where: { userId: id }})
-    .then( async (userProfile) => {
-      if (!userProfile) {
-        throw { status: 404, message:  'User profile not found' }
-      }
-    return userProfile
-      .update(data)
-      .then(() => userProfile);
-  })
-}
+export const updateUser = (user, data, part = 'Profile') => {
+  const getMethod = `get${part}`;
+  const setMethod = `set${part}`;
+  return user[getMethod]().then(userProfile => {
+    if (!userProfile) {
+      return user[setMethod](data);
+    }
+    return userProfile.update(data).then(() => userProfile);
+  });
+};

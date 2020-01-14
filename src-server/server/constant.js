@@ -1,4 +1,4 @@
-module .exports = {
+module.exports = {
   USER_TYPES: {
     1: 'regular',
     2: 'entertainer',

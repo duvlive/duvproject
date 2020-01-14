@@ -1,78 +1,101 @@
-// import { Contact } from '../models';
-// import { validString } from '../utils';
+import { Contact, User } from '../models';
+import { validString, updateUser } from '../utils';
+import { request } from 'http';
 
-// const ContactController = {
-//   /**
-//    * create Contact
-//    * @function
-//    * @param {object} req is req object
-//    * @param {object} res is res object
-//    * @return {object} returns res object
-//    */
-//   createContact(req, res) {
-//     const { userId } = req.decoded;
-//     const { firstName, lastName, email, phoneNumber, relationship } = req.body;
-//     const error = {...validString(firstName),
-//       ...validString(lastName),
-//       ...validString(accountNumber),
-//     };
+const ContactController = {
+  /**
+   * create Contact
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  updateUserContact(req, res) {
+    const { userId } = req.decoded;
+    const {
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+      relationship,
+      contactId
+    } = req.body;
 
-//     const error = {...UserValidation.nameValidation(firstName, lastName),
-//       ...UserValidation.emailValidation(email),
-//       ...UserValidation.phoneNumberValidation(phoneNumber),
-//       ...UserValidation.passwordValidaton(password, confirmPassword)
-//     };
+    const error = {
+      ...validString(firstName),
+      ...validString(lastName),
+      ...validString(email),
+      ...validString(phoneNumber),
+      ...validString(relationship)
+    };
+    if (Object.keys(error).length > 1) {
+      return res.status(400).json({ message: error.message.join('') });
+    }
+    if (!contactId) {
+      return Contact.create({
+        firstName,
+        lastName,
+        email,
+        phoneNumber,
+        relationship,
+        userId: req.user.id
+      })
+        .then(contact => {
+          return req.user.addContact(contact);
+        })
+        .then(contact => {
+          return res
+            .status(200)
+            .json({
+              message: 'Contact added successfully',
+              contact
+            })
+            .catch(e => {
+              console.log(e.message);
+            });
+        });
+    }
+    return req.user
+      .getContacts({ where: { id: contactId } })
+      .then(contacts => {
+        if (contacts && contacts.length > 0) {
+          return contacts[0].update({
+            firstName,
+            lastName,
+            email,
+            phoneNumber,
+            relationship
+          });
+        }
+        throw `No contact with id ${contactId}`;
+      })
+      .then(contact => {
+        return res.status(200).json({
+          message: 'Contact updated successfully',
+          contact
+        });
+      })
+      .catch(error => {
+        const status = error.status || 500;
+        const errorMessage = error.message || error;
+        return res.status(status).json({ message: errorMessage });
+      });
+  },
+  /**
+   * get Contact
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  getUserContact(req, res) {
+    req.user.getContacts().then(contact => {
+      if (!contact || contact.length === 0) {
+        return res.status(404).json({ message: 'Contact not found' });
+      }
+      return res.status(200).json({ contact });
+    });
+  }
+};
 
-//     return Contact.findAll({
-//       where: { userId }
-//     }).then((existingBankDetail) => {
-//     if (existingBankDetail.length > 0) {
-//       throw {status: 409, message: 'This user already has a bank detail'};
-//     }
-//       return Contact
-//         .create({
-//           accountName, bankName, accountNumber, userId
-//           });
-//     }).then((newAccountDetail) => {
-//       return res.status(200).json({
-//         message: 'Bank Detail added successfully',
-//         bankDetail: newAccountDetail,
-//       });
-//     }).catch((error) => {
-//       const status = error.status || 500;
-//       const errorMessage = error.message || error;
-//       return res.status(status).json({ message: errorMessage});
-//     });
-//   },
-
-//   /**
-//    * update user Contact
-//    * @function
-//    * @param {object} req is req object
-//    * @param {object} res is res object
-//    * @return {object} returns res object
-//    */
-//   updateUserBankDetail(req, res) {
-//     const { userId } = req.decoded;
-//     const { accountNumber } = req.body;
-//     const error = {...validString(accountNumber)};
-
-//     Contact.findOne({
-//       where: { userId }
-//     })
-//     .then((bankDetail) => {
-//       if(!bankDetail || bankDetail.length === 0) {
-//         return res.status(404).json({ message: 'Bank Detail not found' });
-//       }
-
-//       return bankDetail.update({ accountNumber })
-//       .then(() => res.status(200).json({ message: 'Bank Detail updated successfully' }));
-//     }).catch((error) => {
-//       const status = error.status || 500;
-//       const errorMessage = error.message || error;
-//       return res.status(status).json({ message: errorMessage});
-//     });
-//   },
-// };
-
-// export default ContactController;
+export default ContactController;

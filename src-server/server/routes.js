@@ -2,7 +2,8 @@ import { Router } from 'express';
 import {
   UserController,
   UserProfileController,
-  BankDetailController
+  BankDetailController,
+  ContactController
 } from './controllers';
 import Authentication from './middleware/authentication';
 import passport from 'passport';
@@ -91,19 +92,17 @@ router
 // bankDetails routes
 router
   .route('/api/v1/bankDetail')
-  .post(
-    Authentication.verifyToken,
-    Authentication.validateEntertainer,
-    BankDetailController.createBankDetail
-  )
-  .put(
-    Authentication.verifyToken,
-    Authentication.validateEntertainer,
-    BankDetailController.updateUserBankDetail
-  )
-  .get(Authentication.verifyToken,
-    Authentication.validateEntertainer,
-    BankDetailController.getUserBankDetail
-    );
+  .all(Authentication.verifyToken, Authentication.validateEntertainer)
+  .post(BankDetailController.updateUserBankDetail)
+  .put(BankDetailController.updateUserBankDetail)
+  .get(BankDetailController.getUserBankDetail);
+
+// Contact routes
+router
+  .route('/api/v1/contact')
+  .all(Authentication.verifyToken, Authentication.validateEntertainer)
+  .post(ContactController.updateUserContact)
+  .put(ContactController.updateUserContact)
+  .get(ContactController.getUserContact);
 
 export default router;
