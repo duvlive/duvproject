@@ -1,18 +1,22 @@
 'use strict';
 import nodemailer from 'nodemailer';
 import ejs from 'ejs';
+import htmlToText from 'html-email-to-text';
+
+const DUV_LIVE_NO_REPLY_EMAIL = 'DUV LIVE <no-reply@duvlive.com>';
+const emailLogo = `http:localhost:4000/email-logo.png`;
 
 export function generateEmailTemplate(options) {
   return new Promise((resolve, reject) => {
     return ejs.renderFile(
       __dirname + '/email-template/duv-html-email-template.ejs',
-      options,
-      function(err, data) {
+      { ...options, emailLogo },
+      function(err, html) {
         if (err) {
           return reject(err);
         } else {
-          console.log(data);
-          return resolve(data);
+          const text = htmlToText(html);
+          return resolve({ html, text });
         }
       }
     );
@@ -20,28 +24,39 @@ export function generateEmailTemplate(options) {
 }
 
 // async..await is not allowed in global scope, must use a wrapper
-export default async function emailSender(email, token, title) {
+// sendMail(EMAIL_CONTENT.ACTIVATE_YOUR_ACCOUNT, user, options)
+export default async function sendMail(content, user, additionalOptions = {}) {
   let transporter = nodemailer.createTransport({
-    host: 'smtp.mailtrap.io',
-    port: 2525,
+    host: process.env.EMAIL_SMTP || 'smtp.mailtrap.io',
+    port: process.env.EMAIL_PORT || 2525,
     auth: {
-      user: process.env.MAIL_TRAP_USER,
-      pass: process.env.MAIL_TRAP_PASS
+      user: process.env.EMAIL_USER || process.env.MAIL_TRAP_USER,
+      pass: process.env.EMAIL_Pass || process.env.MAIL_TRAP_PASS
     }
   });
+  // ensure userEmail is always present
 
-  let subject = title ? title : 'Activate Your Duv Live Account';
-  let link = title
-    ? `${global.host}/api/v1/users/update-password?token=${token}`
-    : `${global.host}/api/v1/users/activate?token=${token}`;
+  // let subject = title ? title : 'Activate Your Duv Live Account';
+  // let link = title
+  //   ? `${global.host}/api/v1/users/update-password?token=${token}`
+  //   : `${global.host}/api/v1/users/activate?token=${token}`;
+
+  // Generate html mail
+  const options = {
+    ...content,
+    ...additionalOptions,
+    firstName: user.firstName
+  };
+
+  const { html, text } = await generateEmailTemplate(options);
 
   // send mail with defined transport object
   let info = await transporter.sendMail({
-    from: 'DUV LIVE <no-reply@duv.com>', // sender address
-    to: `${email}`, // list of receivers
-    subject: `${subject}`, // Subject line
-    text: `<a href=${link} /> Click here </a>`, // plain text body
-    html: `<b><a href=${link} /> Click here </a></b>` // html body
+    from: DUV_LIVE_NO_REPLY_EMAIL, // sender address
+    to: `${user.email}`, // list of receivers
+    subject: `${options.subject}`, // Subject line
+    text,
+    html
   });
 
   console.log('Message sent: %s', info.messageId);

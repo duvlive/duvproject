@@ -8,6 +8,7 @@ import {
 import Authentication from './middleware/authentication';
 import passport from 'passport';
 import { generateEmailTemplate } from './MailSender';
+import EMAIL_CONTENT from './email-template/content';
 
 const router = Router();
 
@@ -22,14 +23,13 @@ router.get('/api/v1', (_, res) =>
 // email route
 router.get('/email-template', (req, res) => {
   const options = {
-    firstName: '[FirstName]',
-    contentTop: '[Top Content]',
-    contentBottom: '[Bottom Content]',
-    ButtonText: '[Button Text]',
-    ButtonLink: 'https://www.duvlive.herokuapp.com'
+    ...EMAIL_CONTENT.ACTIVATE_YOUR_ACCOUNT,
+    link: 'http://duvlive.herokuapp.com/',
+    firstName: '[FirstName]'
   };
   generateEmailTemplate(options).then(data => {
-    return res.send(data);
+    const { text } = data;
+    return res.send(text);
   });
 });
 

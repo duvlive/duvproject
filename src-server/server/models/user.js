@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import emailSender from '../MailSender';
+import sendMail from '../MailSender';
+import EMAIL_CONTENT from '../email-template/content';
 
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(
@@ -79,8 +80,10 @@ module.exports = (sequelize, DataTypes) => {
               return user.setProfile(res);
             })
             .then(() => {
-              const { email, activationToken } = user;
-              return emailSender(email, activationToken);
+              const link = `${global.host}/api/v1/users/activate?token=${user.token}`;
+              return sendMail(EMAIL_CONTENT.ACTIVATE_YOUR_ACCOUNT, user, {
+                link
+              });
             })
             .catch(error => {
               console.log(error);
