@@ -1,7 +1,7 @@
 'use strict';
 import nodemailer from 'nodemailer';
 import ejs from 'ejs';
-import htmlToText from 'html-email-to-text';
+import textEmailTemplate from './email-template/duv-text-email-template';
 
 const DUV_LIVE_NO_REPLY_EMAIL = 'DUV LIVE <no-reply@duvlive.com>';
 const emailLogo = `http:localhost:4000/email-logo.png`;
@@ -15,7 +15,7 @@ export function generateEmailTemplate(options) {
         if (err) {
           return reject(err);
         } else {
-          const text = htmlToText(html);
+          const text = textEmailTemplate(options);
           return resolve({ html, text });
         }
       }
