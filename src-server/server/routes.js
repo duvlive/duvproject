@@ -22,14 +22,18 @@ router.get('/api/v1', (_, res) =>
 // TODO: create controller for this
 // email route
 router.get('/email-template', (req, res) => {
+  const email = req.query.email || 'NOT_FOUND';
+  if (!EMAIL_CONTENT[email]) {
+    return res.json({ message: 'Email Template not found' });
+  }
+  const emailType = req.query.type === 'text' ? 'text' : 'html';
   const options = {
-    ...EMAIL_CONTENT.ACTIVATE_YOUR_ACCOUNT,
+    ...EMAIL_CONTENT[email],
     link: 'http://duvlive.herokuapp.com/',
     firstName: '[FirstName]'
   };
   generateEmailTemplate(options).then(data => {
-    const { text } = data;
-    return res.send(text);
+    return res.send(data[emailType]);
   });
 });
 
