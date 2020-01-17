@@ -1,5 +1,6 @@
 const textEmailTemplate = ({
   title, // compulsory
+  greeting,
   firstName,
   contentTop,
   contentBottom,
@@ -7,9 +8,10 @@ const textEmailTemplate = ({
   link
 }) => {
   let content = '';
+  const hello = greeting || 'Hello';
   const heading = `${title.toUpperCase()}`;
   const separator = '-'.repeat(title.length + 3);
-  const greetings = firstName ? `Hello ${firstName}` : 'Hello';
+  const greetings = firstName ? `${hello} ${firstName}` : hello;
   const button = link
     ? `${buttonText} [${link}] or copy this url and view in a web browser ${link}`
     : '';
