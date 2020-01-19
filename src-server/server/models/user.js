@@ -80,12 +80,15 @@ module.exports = (sequelize, DataTypes) => {
 						},
 						process.env.SECRET
 					);
-					user.referral = Array.from({length: 4}).map((_, index) => (Date.now()).toString(36-index)).join('-');
+					user.referral = (Date.now().toString(36).slice(-5))
+						.join('-');
 				},
 				afterCreate: user => {
 					const models = require('./');
-					const { email, activationToken } = user;
-					emailSender(email, activationToken)
+					const link = `${global.host}/activate/${user.activationToken}`;
+					sendMail(EMAIL_CONTENT.ACTIVATE_YOUR_ACCOUNT, user, {
+						link,
+					})
 						.then(() => {
 							if (user.type === 2) {
 								return models.EntertainerProfile.create({ userId: user.id });

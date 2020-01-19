@@ -23,7 +23,6 @@ const UserController = {
 			type: user.type,
 			isActive: user.isActive,
 			referral: user.referral,
-			firstTimeLogin: user.firstTimeLogin,
 		};
 		return newUser;
 	},
@@ -105,14 +104,15 @@ const UserController = {
 					});
 				}
 				const user = user.dataValues;
-				if (user.type === 1 || (user.type === 2 && user)) {
-					const token = Authentication.generateToken(user);
-					return res.status(200).json({
-						message: 'You are successfully Logged in',
-						user: UserController.transformUser(user),
-						token,
-					});
+				if (!user.firstTimeLogin) {
+					user.update({ firstTimeLogin: true });
 				}
+				const token = Authentication.generateToken(user);
+				return res.status(200).json({
+						message: 'You are successfully Logged in',
+						user: {firstTimeLogin: !user.firstTimeLogin, ...UserController.transformUser(user)},
+						token,
+				});
 				if (user.dataValues.type === 2) {
 					// check for approved entertainer
 				}
@@ -196,7 +196,7 @@ const UserController = {
 				const token = Authentication.generateToken(user);
 				return res.status(200).json({
 					message: 'You are successfully logged in',
-					user: UserController.transformUser(user),
+					user: {firstTimeLogin: !user.firstTimeLogin, ...UserController.transformUser(user)},
 					token,
 				});
 			})
