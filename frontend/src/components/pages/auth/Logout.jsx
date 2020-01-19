@@ -4,7 +4,7 @@ import { Redirect } from '@reach/router';
 
 const Logout = () => {
   clearStorage();
-  return <Redirect to="login" />;
+  return <Redirect noThrow to="/login" />;
 };
 
 export default Logout;

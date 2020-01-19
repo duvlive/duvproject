@@ -13,7 +13,7 @@ import Button from 'components/forms/Button';
 import { loginSchema } from 'components/forms/schema/userSchema';
 import { navigate } from '@reach/router';
 import { DASHBOARD_PAGE } from 'utils/constants';
-import { storeCurrentUser } from 'utils/localStorage';
+import { storeCurrentUser, getCurrentUser } from 'utils/localStorage';
 import AlertMessage from 'components/common/utils/AlertMessage';
 
 const Login = ({ token }) => (
@@ -104,6 +104,14 @@ const LoginForm = ({ token }) => {
           });
         });
   }, [token]);
+
+  // CHECK IF USER HAS PREVIOUSLY SIGNED IN
+  useEffect(() => {
+    if (getCurrentUser()) {
+      const user = getCurrentUser();
+      navigate(`/${DASHBOARD_PAGE[user.type]}/dashboard`);
+    }
+  }, []);
 
   return (
     <Formik

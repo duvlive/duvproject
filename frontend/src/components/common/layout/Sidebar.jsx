@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import RedLogo from 'assets/img/logo/red-white.svg';
-import UserAvatar from 'assets/img/avatar/user.png';
+import MariamAvatar from 'assets/img/avatar/user.png';
+import ProfileAvatar from 'assets/img/avatar/profile.png';
 import EntertainerAvatar from 'assets/img/avatar/entertainer.jpg';
 import BandMemberAvatar from 'assets/img/avatar/band-member.png';
 import AdministratorAvatar from 'assets/img/avatar/administrator.png';
@@ -14,6 +15,7 @@ import bandMemberSideMenu from 'data/sidebar/band-member';
 import administratorSideMenu from 'data/sidebar/administrator';
 import classNames from 'classnames';
 import { Match } from '@reach/router';
+import { getCurrentUser } from 'utils/localStorage';
 
 const Sidebar = ({ showSidebar, closeSidebar }) => (
   <>
@@ -118,18 +120,23 @@ Sidebar.propTypes = {
 };
 
 Sidebar.UserBox = () => {
+  const currentUser = getCurrentUser();
+  const src = currentUser ? ProfileAvatar : MariamAvatar;
+  const userName = currentUser
+    ? currentUser.firstName + ' ' + currentUser.lastName
+    : 'Mariam Obi';
   return (
     <div className="user-box">
       <div className="user-img">
         <img
           alt="Mariam Obi"
           className="rounded-circle img-thumbnail img-responsive"
-          src={UserAvatar}
+          src={src}
           title="Mariam Obi"
         />
         <div className="user-status offline" />
       </div>
-      <h5 className="text-uppercase">Mariam Obi</h5>
+      <h5 className="text-uppercase">{userName}</h5>
     </div>
   );
 };

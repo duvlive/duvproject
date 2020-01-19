@@ -14,6 +14,8 @@ import IconPhone from 'assets/icons/phone.svg';
 import WhiteLogo from 'assets/img/logo/white-white.svg';
 import RedLogo from 'assets/img/logo/red-white.svg';
 import classNames from 'classnames';
+import { getCurrentUser } from 'utils/localStorage';
+import UserAvatar from 'assets/img/avatar/user.png';
 
 const menus = [
   { name: 'Home', to: '/' },
@@ -83,16 +85,34 @@ Header.TopNav = () => {
               </li>
             </ul>
           </div>
-          <div className="top-header__right text-right col-6">
-            <ul className="list-inline">
-              <li className="list-inline-item">
-                <Link to="/login">Login </Link>
-              </li>
-              <li className="list-inline-item">
-                <Link to="/register">Register Now </Link>
-              </li>
-            </ul>
-          </div>
+          {getCurrentUser() ? (
+            <div className="top-header__right text-right col-6">
+              <ul className="list-inline">
+                <li className="list-inline-item">
+                  <Link to="/login">
+                    <span className="d-none d-sm-inline">Mariam Obi </span>
+                    <img
+                      alt="Mariam Obi"
+                      className="rounded-circle img-responsive avatar--small"
+                      src={UserAvatar}
+                      title="Mariam Obi"
+                    />{' '}
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          ) : (
+            <div className="top-header__right text-right col-6">
+              <ul className="list-inline">
+                <li className="list-inline-item">
+                  <Link to="/login">Login </Link>
+                </li>
+                <li className="list-inline-item">
+                  <Link to="/register">Register Now </Link>
+                </li>
+              </ul>
+            </div>
+          )}
         </div>
       </div>
     </section>
