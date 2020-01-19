@@ -58,7 +58,7 @@ const Video = () => {
 };
 
 Video.Card = ({ youtubeId, title }) => (
-  <div class="embed-responsive embed-responsive-16by9">
+  <div className="embed-responsive embed-responsive-16by9">
     <iframe
       allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
       allowFullScreen

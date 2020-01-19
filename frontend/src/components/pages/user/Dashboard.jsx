@@ -6,12 +6,15 @@ import djLists from 'data/entertainers/djs';
 import mcLists from 'data/entertainers/mcs';
 import lbLists from 'data/entertainers/live-bands';
 import BackEndPage from 'components/common/layout/BackEndPage';
+import { getCurrentUser } from 'utils/localStorage';
 
 const Dashboard = () => {
+  const currentUser = getCurrentUser() || { firstName: 'Mariam' };
+
   return (
     <BackEndPage title="Dashboard">
       <div className="main-app">
-        <TopMessage message="Welcome back Mariam," />
+        <TopMessage message={`Welcome back ${currentUser.firstName},`} />
 
         <section className="app-content">
           <div className="row">

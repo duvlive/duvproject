@@ -30,6 +30,7 @@
     "react-visibility-sensor": "^5.1.0",
     "react-youtube": "^7.9.0",
     "reactstrap": "^8.0.0",
+    "store2": "^2.10.0",
     "yup": "^0.27.0"
   },
   "scripts": {

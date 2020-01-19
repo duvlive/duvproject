@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import axios from 'axios';
 import Header from 'components/common/layout/Header';
 import Footer from 'components/common/layout/Footer';
@@ -12,19 +13,25 @@ import Button from 'components/forms/Button';
 import { loginSchema } from 'components/forms/schema/userSchema';
 import { navigate } from '@reach/router';
 import { DASHBOARD_PAGE } from 'utils/constants';
+import { storeCurrentUser, getCurrentUser } from 'utils/localStorage';
 import AlertMessage from 'components/common/utils/AlertMessage';
 
-const Login = ({ token }) => {
-  console.log('token', token);
-  return (
-    <>
-      <section className="auth">
-        <Header showRedLogo />
-        <Content token={token} />
-      </section>
-      <Footer className="mt-0" />
-    </>
-  );
+const Login = ({ token }) => (
+  <>
+    <section className="auth">
+      <Header showRedLogo />
+      <Content token={token} />
+    </section>
+    <Footer className="mt-0" />
+  </>
+);
+
+Login.propTypes = {
+  token: PropTypes.string
+};
+
+Login.defaultProps = {
+  token: ''
 };
 
 const Content = ({ token }) => {
@@ -69,8 +76,14 @@ const Content = ({ token }) => {
   );
 };
 
+Content.propTypes = {
+  token: PropTypes.string.isRequired
+};
+
 const LoginForm = ({ token }) => {
   const [message, setMessage] = useState(null);
+
+  // CHECK TOKEN ACTIVATION
   useEffect(() => {
     token &&
       axios
@@ -78,7 +91,6 @@ const LoginForm = ({ token }) => {
         .then(function(response) {
           const { status, data } = response;
           // handle success
-          console.log(status, data);
           if (status === 200) {
             setMessage({
               type: 'success',
@@ -92,6 +104,15 @@ const LoginForm = ({ token }) => {
           });
         });
   }, [token]);
+
+  // CHECK IF USER HAS PREVIOUSLY SIGNED IN
+  useEffect(() => {
+    if (getCurrentUser()) {
+      const user = getCurrentUser();
+      navigate(`/${DASHBOARD_PAGE[user.type]}/dashboard`);
+    }
+  }, []);
+
   return (
     <Formik
       initialValues={{
@@ -99,7 +120,6 @@ const LoginForm = ({ token }) => {
         password: ''
       }}
       onSubmit={(values, actions) => {
-        console.log(values);
         // defalt Logins
         const { email, password } = values;
         if (email === 'user@duvlive.com' && password === 'passworded') {
@@ -127,6 +147,7 @@ const LoginForm = ({ token }) => {
             // handle success
             console.log(status, data);
             if (status === 200) {
+              storeCurrentUser(data.user);
               return navigate(`/${DASHBOARD_PAGE[data.user.type]}/dashboard`);
             }
 
@@ -177,6 +198,10 @@ const LoginForm = ({ token }) => {
       validationSchema={loginSchema}
     />
   );
+};
+
+LoginForm.propTypes = {
+  token: PropTypes.string.isRequired
 };
 
 export default Login;

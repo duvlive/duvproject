@@ -11,7 +11,7 @@ const SearchEntertainerFields = () => {
           placeholder="Entertainers Name or Stage Name"
           type="text"
         />
-        <div class="input-group-append">
+        <div className="input-group-append">
           <button className="btn btn-primary">Search</button>
         </div>
       </div>
