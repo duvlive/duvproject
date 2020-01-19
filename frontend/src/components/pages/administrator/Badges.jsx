@@ -42,7 +42,7 @@ Badges.Card = ({ title, color, date }) => (
   <div className="col-sm-4">
     <div className={`card card-custom card-tiles card-${color} card__no-hover`}>
       <div className="text-center">
-        <i class="icon icon-xl icon-badge"></i>
+        <i className="icon icon-xl icon-badge"></i>
       </div>
       <div className="card-body m-0 fh-3 text-center">
         <h4 className="subtitle--4 text-white mb-1">{title}</h4>

@@ -9,7 +9,7 @@ const TermsOfUse = () => (
 );
 
 const Content = () => (
-  <section class="text-only_content spacer">
+  <section className="text-only_content spacer">
     <div className="container-fluid terms-of-use">
       <Row>
         <Col sm={{ size: 8, offset: 2 }}>

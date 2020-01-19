@@ -40,7 +40,7 @@ const Video = () => (
 
 Video.Card = ({ src, title }) => (
   <div className="col-md-4 col-6 mb-5">
-    <div class="embed-responsive embed-responsive-16by9">
+    <div className="embed-responsive embed-responsive-16by9">
       <iframe
         allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen
