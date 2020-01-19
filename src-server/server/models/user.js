@@ -80,7 +80,7 @@ module.exports = (sequelize, DataTypes) => {
               return user.setProfile(res);
             })
             .then(() => {
-              const link = `${global.host}/api/v1/users/activate?token=${user.token}`;
+              const link = `${global.host}/activate/${user.activationToken}`;
               return sendMail(EMAIL_CONTENT.ACTIVATE_YOUR_ACCOUNT, user, {
                 link
               });

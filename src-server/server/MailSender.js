@@ -36,11 +36,6 @@ export default async function sendMail(content, user, additionalOptions = {}) {
   });
   // ensure userEmail is always present
 
-  // let subject = title ? title : 'Activate Your Duv Live Account';
-  // let link = title
-  //   ? `${global.host}/api/v1/users/update-password?token=${token}`
-  //   : `${global.host}/api/v1/users/activate?token=${token}`;
-
   // Generate html mail
   const options = {
     ...content,
@@ -58,6 +53,8 @@ export default async function sendMail(content, user, additionalOptions = {}) {
     text,
     html
   });
+
+  // html: ejs.render( fs.readFileSync('e-mail.ejs', 'utf-8') , {mensagem: 'olá, funciona'})
 
   console.log('Message sent: %s', info.messageId);
   // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>

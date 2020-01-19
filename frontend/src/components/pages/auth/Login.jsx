@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Header from 'components/common/layout/Header';
 import Footer from 'components/common/layout/Footer';
@@ -14,17 +14,20 @@ import { navigate } from '@reach/router';
 import { DASHBOARD_PAGE } from 'utils/constants';
 import AlertMessage from 'components/common/utils/AlertMessage';
 
-const Login = () => (
-  <>
-    <section className="auth">
-      <Header showRedLogo />
-      <Content />
-    </section>
-    <Footer className="mt-0" />
-  </>
-);
+const Login = ({ token }) => {
+  console.log('token', token);
+  return (
+    <>
+      <section className="auth">
+        <Header showRedLogo />
+        <Content token={token} />
+      </section>
+      <Footer className="mt-0" />
+    </>
+  );
+};
 
-const Content = () => {
+const Content = ({ token }) => {
   return (
     <section>
       <div className="container-fluid">
@@ -36,7 +39,7 @@ const Content = () => {
             <div className="auth__container">
               <section>
                 <h5 className="header font-weight-normal mb-4">Login</h5>
-                <LoginForm />
+                <LoginForm token={token} />
               </section>
               <section className="auth__social-media">
                 <p className="auth__social-media--text">or login with:</p>
@@ -66,8 +69,29 @@ const Content = () => {
   );
 };
 
-const LoginForm = () => {
+const LoginForm = ({ token }) => {
   const [message, setMessage] = useState(null);
+  useEffect(() => {
+    token &&
+      axios
+        .get('/api/v1/users/activate', { params: { token } })
+        .then(function(response) {
+          const { status, data } = response;
+          // handle success
+          console.log(status, data);
+          if (status === 200) {
+            setMessage({
+              type: 'success',
+              message: data.message
+            });
+          }
+        })
+        .catch(function(error) {
+          setMessage({
+            message: error.response.data.message
+          });
+        });
+  }, [token]);
   return (
     <Formik
       initialValues={{
@@ -76,6 +100,25 @@ const LoginForm = () => {
       }}
       onSubmit={(values, actions) => {
         console.log(values);
+        // defalt Logins
+        const { email, password } = values;
+        if (email === 'user@duvlive.com' && password === 'passworded') {
+          return navigate('/user/dashboard');
+        } else if (email === 'uv@duvlive.com' && password === 'passworded') {
+          return navigate('/administrator/dashboard');
+        } else if (
+          email === 'highsoul@member.com' &&
+          password === 'passworded'
+        ) {
+          return navigate('/band-member/dashboard');
+        } else if (
+          email === 'djcuppy@duvlive.com' &&
+          password === 'passworded'
+        ) {
+          return navigate('/entertainer/dashboard');
+        } else {
+          setMessage('Invalid email or password');
+        }
         // post to api
         axios
           .post('/api/v1/users/login', values)
@@ -96,37 +139,14 @@ const LoginForm = () => {
           .catch(function(error) {
             console.log('error', error.response.data);
             setMessage({
-              message: error.response.data.message,
-              lists:
-                error.response.data.errors &&
-                Object.values(error.response.data.errors)
+              message: error.response.data.message
             });
           });
         actions.setSubmitting(false);
-        // setTimeout(() => {
-        //   actions.setSubmitting(false);
-        //   const { email, password } = values;
-        //   if (email === 'user@duvlive.com' && password === 'passworded') {
-        //     return navigate('/user/dashboard');
-        //   } else if (email === 'uv@duvlive.com' && password === 'passworded') {
-        //     return navigate('/administrator/dashboard');
-        //   } else if (
-        //     email === 'highsoul@member.com' &&
-        //     password === 'passworded'
-        //   ) {
-        //     return navigate('/band-member/dashboard');
-        //   } else if (
-        //     email === 'djcuppy@duvlive.com' &&
-        //     password === 'passworded'
-        //   ) {
-        //     return navigate('/entertainer/dashboard');
-        //   } else {
-        //     setMessage('Invalid email or password');
-        //   }
-        // }, 400);
       }}
       render={({ isSubmitting, handleSubmit }) => (
         <Form>
+          <AlertMessage {...message} />
           <Input
             label="Email"
             name="email"
@@ -145,7 +165,6 @@ const LoginForm = () => {
             showFeedback={feedback.NONE}
             type="password"
           />
-          <AlertMessage {...message} />
           <Button
             className="btn-danger btn-wide btn-transparent"
             loading={isSubmitting}

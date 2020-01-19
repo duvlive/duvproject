@@ -13,7 +13,7 @@ const textEmailTemplate = ({
   const separator = '-'.repeat(title.length + 3);
   const greetings = firstName ? `${hello} ${firstName}` : hello;
   const button = link
-    ? `${buttonText} [${link}] or copy this url and view in a web browser ${link}`
+    ? `${buttonText} [${link}] \n\n or copy this url and view in a web browser ${link}`
     : '';
   content += contentTop || '';
   content += contentBottom ? '\n\n' + contentBottom : '';

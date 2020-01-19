@@ -25,6 +25,7 @@ const FrontPageRouter = () => (
     <TermsOfUse path="terms-of-use" />
     <PrivacyPolicy path="privacy-policy" />
     <Login path="login" />
+    <Login path="activate/:token" />
     <Logout path="logout" />
     <ForgotPassword path="forgot-password" />
     <ChangePassword path="change-password" />

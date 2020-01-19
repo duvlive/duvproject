@@ -29,7 +29,8 @@ router.get('/email-template', (req, res) => {
   const emailType = req.query.type === 'text' ? 'text' : 'html';
   const options = {
     ...EMAIL_CONTENT[email],
-    link: 'http://duvlive.herokuapp.com/',
+    link:
+      'http://duvlive.herokuapp.com/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOm51bGwsInR5cGUiOjIsImlhdCI6MTU3OTQzMDYzMH0.Wc-0c9uGNgf2fIKDR_58ZFHHtEftWB1Tso8ym5YTSQY',
     firstName: '[FirstName]'
   };
   generateEmailTemplate(options).then(data => {
