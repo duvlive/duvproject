@@ -73,6 +73,11 @@ app.set('view engine', 'ejs');
 // Serve any static files
 app.use(express.static(path.join(__dirname, 'build')));
 
+// Logo displayed in sent emails
+app.get('/email-logo.png', function(req, res) {
+  res.sendFile(path.join(__dirname, 'server', 'email-template', 'logo.png'));
+});
+
 if (process.env.NODE_ENV === 'production') {
   // Handle React routing, return all requests to React app
   app.get('*', function(req, res) {

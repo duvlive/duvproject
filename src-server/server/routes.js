@@ -8,6 +8,7 @@ import {
 import Authentication from './middleware/authentication';
 import passport from 'passport';
 import { generateEmailTemplate } from './MailSender';
+import EMAIL_CONTENT from './email-template/content';
 
 const router = Router();
 
@@ -21,15 +22,19 @@ router.get('/api/v1', (_, res) =>
 // TODO: create controller for this
 // email route
 router.get('/email-template', (req, res) => {
+  const email = req.query.email || 'NOT_FOUND';
+  if (!EMAIL_CONTENT[email]) {
+    return res.json({ message: 'Email Template not found' });
+  }
+  const emailType = req.query.type === 'text' ? 'text' : 'html';
   const options = {
-    firstName: '[FirstName]',
-    contentTop: '[Top Content]',
-    contentBottom: '[Bottom Content]',
-    ButtonText: '[Button Text]',
-    ButtonLink: 'https://www.duvlive.herokuapp.com'
+    ...EMAIL_CONTENT[email],
+    link:
+      'http://duvlive.herokuapp.com/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOm51bGwsInR5cGUiOjIsImlhdCI6MTU3OTQzMDYzMH0.Wc-0c9uGNgf2fIKDR_58ZFHHtEftWB1Tso8ym5YTSQY',
+    firstName: '[FirstName]'
   };
   generateEmailTemplate(options).then(data => {
-    return res.send(data);
+    return res.send(data[emailType]);
   });
 });
 
