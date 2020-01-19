@@ -16,6 +16,7 @@ import RedLogo from 'assets/img/logo/red-white.svg';
 import classNames from 'classnames';
 import { getCurrentUser } from 'utils/localStorage';
 import UserAvatar from 'assets/img/avatar/user.png';
+import ProfileAvatar from 'assets/img/avatar/profile.png';
 
 const menus = [
   { name: 'Home', to: '/' },
@@ -64,6 +65,11 @@ Header.defaultProps = {
 };
 
 Header.TopNav = () => {
+  const currentUser = getCurrentUser();
+  const Avatar = currentUser ? ProfileAvatar : UserAvatar;
+  const userName = currentUser
+    ? currentUser.firstName + ' ' + currentUser.lastName
+    : 'Mariam Obi';
   return (
     <section className="top-header">
       <div className="container-fluid">
@@ -89,12 +95,14 @@ Header.TopNav = () => {
             <div className="top-header__right text-right col-6">
               <ul className="list-inline">
                 <li className="list-inline-item">
-                  <Link to="/login">
-                    <span className="d-none d-sm-inline">Mariam Obi </span>
+                  <Link to="/user/dashboard">{userName} &nbsp;</Link>
+                </li>
+                <li className="list-inline-item">
+                  <Link to="/user/dashboard">
                     <img
                       alt="Mariam Obi"
                       className="rounded-circle img-responsive avatar--small"
-                      src={UserAvatar}
+                      src={Avatar}
                       title="Mariam Obi"
                     />{' '}
                   </Link>

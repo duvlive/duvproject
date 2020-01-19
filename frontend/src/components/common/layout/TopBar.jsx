@@ -18,6 +18,8 @@ import BandMemberAvatar from 'assets/img/avatar/band-member.png';
 import AdministratorAvatar from 'assets/img/avatar/administrator.png';
 import { Match } from '@reach/router';
 import LiveYourBestLife from '../utils/LiveYourBestLife';
+import { getCurrentUser } from 'utils/localStorage';
+import ProfileAvatar from 'assets/img/avatar/profile.png';
 
 const TopBar = ({ showSidebar }) => {
   return (
@@ -75,42 +77,49 @@ TopBar.propTypes = {
   showSidebar: PropTypes.func.isRequired
 };
 
-const UserTopNavigation = () => (
-  <UncontrolledDropdown inNavbar nav>
-    <DropdownToggle caret nav>
-      <span className="d-none d-sm-inline">Mariam Obi </span>
-      <img
-        alt="Mariam Obi"
-        className="rounded-circle img-responsive avatar--small"
-        src={UserAvatar}
-        title="Mariam Obi"
-      />{' '}
-    </DropdownToggle>
-    <DropdownMenu right>
-      <DropdownItem>
-        <Link className="text-color" to="/user/auctions">
-          Auctions
-        </Link>
-      </DropdownItem>
-      <DropdownItem>
-        <Link className="text-color" to="/user/payments-history">
-          Payment History
-        </Link>
-      </DropdownItem>
-      <DropdownItem>
-        <Link className="text-color" to="/user/change-password">
-          Change Password
-        </Link>
-      </DropdownItem>
-      <DropdownItem divider />
-      <DropdownItem>
-        <Link className="text-color" to="/logout">
-          Logout
-        </Link>
-      </DropdownItem>
-    </DropdownMenu>
-  </UncontrolledDropdown>
-);
+const UserTopNavigation = () => {
+  const currentUser = getCurrentUser();
+  const Avatar = currentUser ? ProfileAvatar : UserAvatar;
+  const userName = currentUser
+    ? currentUser.firstName + ' ' + currentUser.lastName
+    : 'Mariam Obi';
+  return (
+    <UncontrolledDropdown inNavbar nav>
+      <DropdownToggle caret nav>
+        <span className="d-none d-sm-inline">{userName} &nbsp;</span>
+        <img
+          alt="Mariam Obi"
+          className="rounded-circle img-responsive avatar--small"
+          src={Avatar}
+          title="Mariam Obi"
+        />{' '}
+      </DropdownToggle>
+      <DropdownMenu right>
+        <DropdownItem>
+          <Link className="text-color" to="/user/auctions">
+            Auctions
+          </Link>
+        </DropdownItem>
+        <DropdownItem>
+          <Link className="text-color" to="/user/payments-history">
+            Payment History
+          </Link>
+        </DropdownItem>
+        <DropdownItem>
+          <Link className="text-color" to="/user/change-password">
+            Change Password
+          </Link>
+        </DropdownItem>
+        <DropdownItem divider />
+        <DropdownItem>
+          <Link className="text-color" to="/logout">
+            Logout
+          </Link>
+        </DropdownItem>
+      </DropdownMenu>
+    </UncontrolledDropdown>
+  );
+};
 
 const BandMemberTopNavigation = () => (
   <UncontrolledDropdown inNavbar nav>
@@ -144,42 +153,50 @@ const BandMemberTopNavigation = () => (
   </UncontrolledDropdown>
 );
 
-const EntertainerTopNavigation = () => (
-  <UncontrolledDropdown inNavbar nav>
-    <DropdownToggle caret nav>
-      <span className="d-none d-sm-inline">DJ Cuppy </span>
-      <img
-        alt="DJ Cuppy"
-        className="rounded-circle img-responsive avatar--small"
-        src={EntertainerAvatar}
-        title="DJ Cuppy"
-      />{' '}
-    </DropdownToggle>
-    <DropdownMenu right>
-      <DropdownItem>
-        <Link className="text-color" to="/entertainer/bids">
-          My Bids
-        </Link>
-      </DropdownItem>
-      <DropdownItem>
-        <Link className="text-color" to="/entertainer/payments-history">
-          Payment History
-        </Link>
-      </DropdownItem>
-      <DropdownItem>
-        <Link className="text-color" to="/user/dashboard">
-          Login as User
-        </Link>
-      </DropdownItem>
-      <DropdownItem divider />
-      <DropdownItem>
-        <Link className="text-color" to="/logout">
-          Logout
-        </Link>
-      </DropdownItem>
-    </DropdownMenu>
-  </UncontrolledDropdown>
-);
+const EntertainerTopNavigation = () => {
+  const currentUser = getCurrentUser();
+  const Avatar = currentUser ? ProfileAvatar : EntertainerAvatar;
+  const userName = currentUser
+    ? currentUser.firstName + ' ' + currentUser.lastName
+    : 'DJ Cuppy';
+
+  return (
+    <UncontrolledDropdown inNavbar nav>
+      <DropdownToggle caret nav>
+        <span className="d-none d-sm-inline">{userName} &nbsp;</span>
+        <img
+          alt="DJ Cuppy"
+          className="rounded-circle img-responsive avatar--small"
+          src={Avatar}
+          title="DJ Cuppy"
+        />{' '}
+      </DropdownToggle>
+      <DropdownMenu right>
+        <DropdownItem>
+          <Link className="text-color" to="/entertainer/bids">
+            My Bids
+          </Link>
+        </DropdownItem>
+        <DropdownItem>
+          <Link className="text-color" to="/entertainer/payments-history">
+            Payment History
+          </Link>
+        </DropdownItem>
+        <DropdownItem>
+          <Link className="text-color" to="/user/dashboard">
+            Login as User
+          </Link>
+        </DropdownItem>
+        <DropdownItem divider />
+        <DropdownItem>
+          <Link className="text-color" to="/logout">
+            Logout
+          </Link>
+        </DropdownItem>
+      </DropdownMenu>
+    </UncontrolledDropdown>
+  );
+};
 
 const AdministratorTopNavigation = () => (
   <UncontrolledDropdown inNavbar nav>

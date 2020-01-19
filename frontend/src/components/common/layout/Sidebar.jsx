@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import RedLogo from 'assets/img/logo/red-white.svg';
-import MariamAvatar from 'assets/img/avatar/user.png';
+import UserAvatar from 'assets/img/avatar/user.png';
 import ProfileAvatar from 'assets/img/avatar/profile.png';
 import EntertainerAvatar from 'assets/img/avatar/entertainer.jpg';
 import BandMemberAvatar from 'assets/img/avatar/band-member.png';
@@ -121,7 +121,7 @@ Sidebar.propTypes = {
 
 Sidebar.UserBox = () => {
   const currentUser = getCurrentUser();
-  const src = currentUser ? ProfileAvatar : MariamAvatar;
+  const src = currentUser ? ProfileAvatar : UserAvatar;
   const userName = currentUser
     ? currentUser.firstName + ' ' + currentUser.lastName
     : 'Mariam Obi';
@@ -142,18 +142,23 @@ Sidebar.UserBox = () => {
 };
 
 Sidebar.EntertainerBox = () => {
+  const currentUser = getCurrentUser();
+  const Avatar = currentUser ? ProfileAvatar : EntertainerAvatar;
+  const userName = currentUser
+    ? currentUser.firstName + ' ' + currentUser.lastName
+    : 'DJ Cuppy';
   return (
     <div className="user-box">
       <div className="user-img">
         <img
           alt="DJ Cuppy"
           className="rounded-circle img-thumbnail img-responsive"
-          src={EntertainerAvatar}
+          src={Avatar}
           title="DJ Cuppy"
         />
         <div className="user-status offline" />
       </div>
-      <h5 className="text-uppercase">DJ Cuppy</h5>
+      <h5 className="text-uppercase">{userName}</h5>
     </div>
   );
 };
