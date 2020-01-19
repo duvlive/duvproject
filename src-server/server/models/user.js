@@ -80,8 +80,7 @@ module.exports = (sequelize, DataTypes) => {
 						},
 						process.env.SECRET
 					);
-					user.referral = (Date.now().toString(36).slice(-5))
-						.join('-');
+					user.referral = (Date.now().toString(36).slice(-5));
 				},
 				afterCreate: user => {
 					const models = require('./');
