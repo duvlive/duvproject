@@ -29,9 +29,10 @@ export default async function sendMail(content, user, additionalOptions = {}) {
   let transporter = nodemailer.createTransport({
     host: process.env.EMAIL_SMTP || 'smtp.mailtrap.io',
     port: process.env.EMAIL_PORT || 2525,
+    secure: !!process.env.EMAIL_SECURE || false,
     auth: {
       user: process.env.EMAIL_USER || process.env.MAIL_TRAP_USER,
-      pass: process.env.EMAIL_Pass || process.env.MAIL_TRAP_PASS
+      pass: process.env.EMAIL_PASS || process.env.MAIL_TRAP_PASS
     }
   });
   // ensure userEmail is always present
