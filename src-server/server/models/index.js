@@ -37,7 +37,7 @@ Object.keys(db).forEach(function(modelName) {
   }
 });
 
-db.User.hasOne(db.UserProfile, { foreignKey: 'userId', as: 'profile' });
+db.User.hasOne(db.EntertainerProfile, { foreignKey: 'userId', as: 'profile' });
 db.User.hasMany(db.User, { foreignKey: 'userId', as: 'bandMembers' });
 db.User.hasOne(db.BankDetail, { foreignKey: 'userId', as: 'bankDetail' });
 db.User.hasMany(db.Contact, {

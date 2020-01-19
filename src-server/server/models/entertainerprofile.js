@@ -1,7 +1,7 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
-  var UserProfile = sequelize.define(
-    'UserProfile',
+  var EntertainerProfile = sequelize.define(
+    'EntertainerProfile',
     {
       entertainerType: {
         type: DataTypes.STRING,
@@ -53,10 +53,10 @@ module.exports = function(sequelize, DataTypes) {
       classMethods: {
         associate: function(models) {
           // associations can be defined here
-          // models.UserProfile.belongsTo(models.User);
+          // models.EntertainerProfile.belongsTo(models.User);
         }
       }
     }
   );
-  return UserProfile;
+  return EntertainerProfile;
 };

@@ -3,10 +3,10 @@ module.exports = {
     const transaction = await queryInterface.sequelize.transaction();
     try {
       await queryInterface.addColumn(
-        'EntertainerProfiles',
-        'youTubeChannel',
+        'Users',
+        'activatedAt',
         {
-          type: Sequelize.STRING,
+          type: Sequelize.DATE,
           allowNull: true
         },
         { transaction }
@@ -22,7 +22,7 @@ module.exports = {
   down: async function(queryInterface, Sequelize) {
     const transaction = await queryInterface.sequelize.transaction();
     try {
-      await queryInterface.removeColumn('EntertainerProfiles', 'youTubeChannel', {
+      await queryInterface.removeColumn('Users', 'activatedAt', {
         transaction
       });
       await transaction.commit();
