@@ -1,11 +1,11 @@
 import UserController from './UserController';
-import UserProfileController from './UserProfileController';
+import EntertainerProfileController from './EntertainerProfileController';
 import BankDetailController from './BankDetailController';
 import ContactController from './ContactController';
 
 export {
   UserController,
-  UserProfileController,
+  EntertainerProfileController,
   BankDetailController,
   ContactController
 };

@@ -5,7 +5,7 @@ module.exports = {
     const transaction = await queryInterface.sequelize.transaction();
     try {
       await queryInterface.addColumn(
-        'UserProfiles',
+        'EntertainerProfiles',
         'about',
         {
           type: Sequelize.STRING,
@@ -15,7 +15,7 @@ module.exports = {
       );
 
       await queryInterface.addColumn(
-        'UserProfiles',
+        'EntertainerProfiles',
         'stageName',
         {
           type: Sequelize.STRING,
@@ -26,7 +26,7 @@ module.exports = {
       );
 
       await queryInterface.addColumn(
-        'UserProfiles',
+        'EntertainerProfiles',
         'location',
         {
           type: Sequelize.STRING,
@@ -36,7 +36,7 @@ module.exports = {
       );
 
       await queryInterface.addColumn(
-        'UserProfiles',
+        'EntertainerProfiles',
         'yearStarted',
         {
           type: Sequelize.STRING,
@@ -46,7 +46,7 @@ module.exports = {
       );
 
       await queryInterface.addColumn(
-        'UserProfiles',
+        'EntertainerProfiles',
         'willingToTravel',
         {
           type: Sequelize.BOOLEAN,
@@ -57,7 +57,7 @@ module.exports = {
       );
 
       await queryInterface.addColumn(
-        'UserProfiles',
+        'EntertainerProfiles',
         'eventType',
         {
           type: Sequelize.STRING,
@@ -76,22 +76,22 @@ module.exports = {
   down: async function(queryInterface, Sequelize) {
     const transaction = await queryInterface.sequelize.transaction();
     try {
-      await queryInterface.removeColumn('UserProfiles', 'about', {
+      await queryInterface.removeColumn('EntertainerProfiles', 'about', {
         transaction
       });
-      await queryInterface.removeColumn('UserProfiles', 'stageName', {
+      await queryInterface.removeColumn('EntertainerProfiles', 'stageName', {
         transaction
       });
-      await queryInterface.removeColumn('UserProfiles', 'location', {
+      await queryInterface.removeColumn('EntertainerProfiles', 'location', {
         transaction
       });
-      await queryInterface.removeColumn('UserProfiles', 'yearStarted', {
+      await queryInterface.removeColumn('EntertainerProfiles', 'yearStarted', {
         transaction
       });
-      await queryInterface.removeColumn('UserProfiles', 'willingToTravel', {
+      await queryInterface.removeColumn('EntertainerProfiles', 'willingToTravel', {
         transaction
       });
-      await queryInterface.removeColumn('UserProfiles', 'eventType', {
+      await queryInterface.removeColumn('EntertainerProfiles', 'eventType', {
         transaction
       });
       await transaction.commit();

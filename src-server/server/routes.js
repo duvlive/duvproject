@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import {
   UserController,
-  UserProfileController,
+  EntertainerProfileController,
   BankDetailController,
   ContactController
 } from './controllers';
@@ -87,11 +87,11 @@ router
     UserController.editEntertainer
   );
 router
-  .route('/api/v1/users/updateUserProfile')
+  .route('/api/v1/users/updateEntertainerProfile')
   .put(
     Authentication.verifyToken,
     Authentication.validateEntertainer,
-    UserProfileController.updateUserAndUserProfile
+    EntertainerProfileController.updateUserAndEntertainerProfile
   );
 
 // bankDetails routes

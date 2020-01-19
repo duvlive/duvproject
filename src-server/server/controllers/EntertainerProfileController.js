@@ -1,7 +1,7 @@
 import { updateUser } from '../utils';
 
-const UserProfileController = {
-  updateUserAndUserProfile(req, res) {
+const EntertainerProfileController = {
+  updateUserAndEntertainerProfile(req, res) {
     const {
       about,
       location,
@@ -12,7 +12,7 @@ const UserProfileController = {
       entertainerType,
       youTubeChannel
     } = req.body;
-    const userProfileData = {
+    const entertainerProfileData = {
       about,
       location,
       stageName,
@@ -23,11 +23,11 @@ const UserProfileController = {
       youTubeChannel
     };
 
-    updateUser(req.user, userProfileData, 'Profile')
-      .then(userProfile => {
+    updateUser(req.user, entertainerProfileData, 'Profile')
+      .then(entertainerProfile => {
         return res
           .status(200)
-          .json({ userProfile, message: 'User profile update is succesful' });
+          .json({ entertainerProfile, message: 'User profile update is succesful' });
       })
       .catch(error => {
         return res.status(error.status || 400).json(error.message);
@@ -35,4 +35,4 @@ const UserProfileController = {
   }
 };
 
-export default UserProfileController;
+export default EntertainerProfileController;
