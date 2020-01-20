@@ -17,6 +17,7 @@ import classNames from 'classnames';
 import { Match } from '@reach/router';
 import { getCurrentUser } from 'utils/localStorage';
 
+// CONSOLIDATE THIS INTO A SINGLE ONE
 const Sidebar = ({ showSidebar, closeSidebar }) => (
   <>
     <div

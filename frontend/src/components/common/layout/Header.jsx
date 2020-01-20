@@ -100,10 +100,10 @@ Header.TopNav = () => {
                 <li className="list-inline-item">
                   <Link to="/user/dashboard">
                     <img
-                      alt="Mariam Obi"
+                      alt={userName}
                       className="rounded-circle img-responsive avatar--small"
                       src={Avatar}
-                      title="Mariam Obi"
+                      title={userName}
                     />{' '}
                   </Link>
                 </li>
