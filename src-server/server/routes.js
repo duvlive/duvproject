@@ -3,7 +3,8 @@ import {
   UserController,
   EntertainerProfileController,
   BankDetailController,
-  ContactController
+  ContactController,
+	IdentificationController,
 } from './controllers';
 import Authentication from './middleware/authentication';
 import passport from 'passport';
@@ -109,5 +110,13 @@ router
   .post(ContactController.updateUserContact)
   .put(ContactController.updateUserContact)
   .get(ContactController.getUserContact);
+
+// Identification routes
+router
+  .route('/api/v1/identification')
+  .all(Authentication.verifyToken, Authentication.validateEntertainer)
+  .post(IdentificationController.updateEntertainerIdentification)
+  .put(IdentificationController.updateEntertainerIdentification)
+  .get(IdentificationController.updateEntertainerIdentification);
 
 export default router;
