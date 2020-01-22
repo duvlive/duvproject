@@ -1,6 +1,5 @@
-import { Contact, User } from '../models';
-import { validString, updateUser } from '../utils';
-import { request } from 'http';
+import { Contact } from '../models';
+import { validString } from '../utils';
 
 const ContactController = {
   /**
@@ -11,7 +10,6 @@ const ContactController = {
    * @return {object} returns res object
    */
   updateUserContact(req, res) {
-    const { userId } = req.decoded;
     const {
       firstName,
       lastName,
@@ -85,6 +83,7 @@ const ContactController = {
         return res.status(status).json({ message: errorMessage });
       });
   },
+
   /**
    * get Contact
    * @function

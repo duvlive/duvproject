@@ -1,19 +1,25 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
-  var BankDetail = sequelize.define(
-    'BankDetail',
+  var Identification = sequelize.define(
+    'Identification',
     {
       userId: {
         type: DataTypes.INTEGER,
         allowNull: false
       },
-      accountName: {
+      idType: {
         type: DataTypes.STRING,
       },
-      bankName: {
+      idNumber: {
+        type: DataTypes.STRING,
+        validate: {
+          min: 3
+        }
+      },
+      issueDate: {
         type: DataTypes.STRING,
       },
-      accountNumber: {
+      expiryDate: {
         type: DataTypes.STRING,
       }
     },
@@ -21,10 +27,10 @@ module.exports = function(sequelize, DataTypes) {
       classMethods: {
         associate: function(models) {
           // associations can be defined here
-          // models.BankDetail.belongsTo(models.User);
+          // models.Identification.belongsTo(models.User);
         }
       }
     }
   );
-  return BankDetail;
+  return Identification;
 };

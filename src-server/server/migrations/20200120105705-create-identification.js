@@ -1,6 +1,6 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('BankDetails', {
+    return queryInterface.createTable('Identifications', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -11,15 +11,18 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false
       },
-      accountName: {
+      idType: {
         type: Sequelize.STRING,
       },
-      bankName: {
-        type: Sequelize.STRING,
-      },
-      accountNumber: {
+      idNumber: {
         type: Sequelize.STRING,
         unique: true
+      },
+      issueDate: {
+        type: Sequelize.STRING,
+      },
+      expiryDate: {
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,
@@ -32,6 +35,6 @@ module.exports = {
     });
   },
   down: (queryInterface /*Sequelize*/) => {
-    return queryInterface.dropTable('BankDetails');
+    return queryInterface.dropTable('Identifications');
   }
 };
