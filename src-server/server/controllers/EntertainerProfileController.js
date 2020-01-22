@@ -27,10 +27,10 @@ const EntertainerProfileController = {
       .then(entertainerProfile => {
         return res
           .status(200)
-          .json({ entertainerProfile, message: 'User profile update is succesful' });
+          .json({message: 'User profile update is succesful',  entertainerProfile,  });
       })
       .catch(error => {
-        return res.status(error.status || 400).json(error.message);
+        return res.status(error.status || 400).json({ message: error.message});
       });
   }
 };
