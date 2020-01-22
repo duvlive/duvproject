@@ -1,4 +1,3 @@
-import { BankDetail, User } from '../models';
 import { validString, updateUser } from '../utils';
 
 const BankDetailController = {

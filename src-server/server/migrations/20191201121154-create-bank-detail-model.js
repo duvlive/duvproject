@@ -13,15 +13,12 @@ module.exports = {
       },
       accountName: {
         type: Sequelize.STRING,
-        allowNull: false
       },
       bankName: {
         type: Sequelize.STRING,
-        allowNull: false
       },
       accountNumber: {
         type: Sequelize.STRING,
-        allowNull: false,
         unique: true
       },
       createdAt: {

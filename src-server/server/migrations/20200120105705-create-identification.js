@@ -13,20 +13,16 @@ module.exports = {
       },
       idType: {
         type: Sequelize.STRING,
-        allowNull: false
       },
       idNumber: {
         type: Sequelize.STRING,
-        allowNull: false,
         unique: true
       },
       issueDate: {
         type: Sequelize.STRING,
-        allowNull: false
       },
       expiryDate: {
         type: Sequelize.STRING,
-        allowNull: false
       },
       createdAt: {
         allowNull: false,

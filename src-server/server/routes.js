@@ -98,8 +98,7 @@ router
 // bankDetails routes
 router
   .route('/api/v1/bankDetail')
-  .all(Authentication.verifyToken, Authentication.validateEntertainer)
-  .post(BankDetailController.updateUserBankDetail)
+  .all(Authentication.verifyToken, Authentication.validateEntertainer, Authentication.isActiveUser)
   .put(BankDetailController.updateUserBankDetail)
   .get(BankDetailController.getUserBankDetail);
 
@@ -114,9 +113,8 @@ router
 // Identification routes
 router
   .route('/api/v1/identification')
-  .all(Authentication.verifyToken, Authentication.validateEntertainer)
-  .post(IdentificationController.updateEntertainerIdentification)
+  .all(Authentication.verifyToken, Authentication.validateEntertainer, Authentication.isActiveUser)
   .put(IdentificationController.updateEntertainerIdentification)
-  .get(IdentificationController.updateEntertainerIdentification);
+  .get(IdentificationController.getIdentification);
 
 export default router;

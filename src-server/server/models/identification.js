@@ -9,22 +9,18 @@ module.exports = function(sequelize, DataTypes) {
       },
       idType: {
         type: DataTypes.STRING,
-        allowNull: false,
       },
       idNumber: {
         type: DataTypes.STRING,
-        allowNull: false,
         validate: {
           min: 3
         }
       },
       issueDate: {
         type: DataTypes.STRING,
-        allowNull: false,
       },
       expiryDate: {
         type: DataTypes.STRING,
-        allowNull: false,
       }
     },
     {

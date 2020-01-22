@@ -164,7 +164,7 @@ const UserController = {
   userLogin(req, res) {
     const { email, password } = req.body;
     if (!email || !password) {
-      return res.status(400).json({ message: 'Email and password cannot be empty' });
+      return res.status(400).json({ message: 'Email or password cannot be empty' });
     }
     User.findOne({
       where: { email },
@@ -184,7 +184,7 @@ const UserController = {
             message: 'User needs to activate account.',
           });
         }
-        if (!bcrypt.compareSync(password, user.password)) {
+        if (!bcrypt.compare(password, user.password)) {
           return res.status(403).json({ message: 'Invalid email or password' });
         }
         if (!user.firstTimeLogin) {

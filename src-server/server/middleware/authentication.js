@@ -19,9 +19,15 @@ const authentication = {
           });
         }
         request.decoded = decoded;
-        User.findOne({ where: { id: request.decoded.userId } }).then(x => {
-          request.user = x;
-          next();
+        User.findOne({ where: { id: request.decoded.userId } }).then((user) => {
+          if (!user) {
+            return response.status(401).send({
+              message: 'User not found'
+            });
+          } else {
+            request.user = user;
+            next();
+          }
         });
       });
     } else {
@@ -54,23 +60,9 @@ const authentication = {
    * @returns {Object} response message
    */
   validateAdmin(request, response, next) {
-    User.findOne({
-      where: { type: request.decoded.type }
-    })
-      .then(user => {
-        if (user.type === 3) {
-          next();
-        } else {
-          response.status(401).send({
-            error: 'Not authorized to non-Admin'
-          });
-        }
-      })
-      .catch(error => {
-        response.status(500).send({
-          errors: error
-        });
-      });
+    return request.user.type === 3 ? next() : response.status(401).send({
+      message: 'Not authorized to non-Admin'
+    });
   },
 
   /**
@@ -81,23 +73,9 @@ const authentication = {
    * @returns {Object} response message
    */
   validateEntertainer(request, response, next) {
-    User.findOne({
-      where: { type: request.decoded.type }
-    })
-      .then(user => {
-        if (user.type === 2) {
-          next();
-        } else {
-          response.status(401).send({
-            error: 'Not authorized to non-entertainers'
-          });
-        }
-      })
-      .catch(error => {
-        response.status(500).send({
-          errors: error
-        });
-      });
+    return request.user.type === 2 ? next() : response.status(401).send({
+      message: 'Not authorized to non-entertainers'
+    });
   },
 
   /**
@@ -108,23 +86,22 @@ const authentication = {
    * @returns {Object} response message
    */
   validateUser(request, response, next) {
-    User.findOne({
-      where: { type: request.decoded.type }
-    })
-      .then(user => {
-        if (user.type === 1) {
-          next();
-        } else {
-          response.status(401).send({
-            error: 'Not authorized to non-users'
-          });
-        }
-      })
-      .catch(error => {
-        response.status(500).send({
-          errors: error
-        });
-      });
+    return request.user.type === 1 ? next() : response.status(401).send({
+      message: 'Not authorized to non-users'
+    });
+  },
+
+  /**
+   * isActiveUser
+   * @param {Object} request object
+   * @param {Object} response object
+   * @param {Object} next object
+   * @returns {Object} response message
+   */
+  isActiveUser(request, response, next) {
+    return request.user.isActive ? next() : response.status(403).send({
+      message: 'User needs to activate account'
+    });
   }
 };
 export default authentication;

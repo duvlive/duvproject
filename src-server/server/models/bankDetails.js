@@ -9,15 +9,12 @@ module.exports = function(sequelize, DataTypes) {
       },
       accountName: {
         type: DataTypes.STRING,
-        allowNull: false
       },
       bankName: {
         type: DataTypes.STRING,
-        allowNull: false
       },
       accountNumber: {
         type: DataTypes.STRING,
-        allowNull: false
       }
     },
     {
