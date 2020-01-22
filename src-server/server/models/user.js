@@ -89,8 +89,8 @@ module.exports = (sequelize, DataTypes) => {
             link,
           })
             .then(() => {
-							const indentityInformation = () => ['EntertainerProfile', 'BankDetail', 'Identification']
-								.map((model) => models[model].create({ userId: user.id }))
+              const indentityInformation = () => ['EntertainerProfile', 'BankDetail', 'Identification']
+                .map((model) => models[model].create({ userId: user.id }))
               if (user.type === 2) {
                 return Promise.all(indentityInformation())
               }
@@ -101,9 +101,9 @@ module.exports = (sequelize, DataTypes) => {
                 return user.setProfile(res);
               }
             })
-						.catch(error => {
-							console.log(error)
-						});
+            .catch(error => {
+              console.log(error)
+            });
         },
         beforeUpdate: user => {
           user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10));

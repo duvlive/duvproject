@@ -10,38 +10,38 @@ const db = {};
 let sequelize;
 
 if (config.use_env_variable) {
-	sequelize = new Sequelize(process.env[config.use_env_variable]);
+  sequelize = new Sequelize(process.env[config.use_env_variable]);
 } else {
-	sequelize = new Sequelize(config.database, config.username, config.password, config);
+  sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
 
 fs.readdirSync(__dirname)
-	.filter(function(file) {
-		return file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js';
-	})
-	.forEach(function(file) {
-		const model = sequelize['import'](path.join(__dirname, file));
-		db[model.name] = model;
-	});
+  .filter(function(file) {
+    return file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js';
+  })
+  .forEach(function(file) {
+    const model = sequelize['import'](path.join(__dirname, file));
+    db[model.name] = model;
+  });
 
 Object.keys(db).forEach(function(modelName) {
-	if (db[modelName].associate) {
-		db[modelName].associate(db);
-	}
+  if (db[modelName].associate) {
+    db[modelName].associate(db);
+  }
 });
 
 db.User.hasOne(db.EntertainerProfile, { foreignKey: 'userId', as: 'profile' });
 db.User.hasMany(db.User, { foreignKey: 'userId', as: 'bandMembers' });
 db.User.hasOne(db.BankDetail, { foreignKey: 'userId', as: 'bankDetail' });
 db.User.hasMany(db.Contact, {
-	foreignKey: 'userId',
-	as: 'contacts',
-	targetKey: 'contacts',
+  foreignKey: 'userId',
+  as: 'contacts',
+  targetKey: 'contacts',
 });
 db.User.hasOne(db.Identification, {
-	foreignKey: 'userId',
-	as: 'identification',
-	targetKey: 'identification',
+  foreignKey: 'userId',
+  as: 'identification',
+  targetKey: 'identification',
 });
 
 db.sequelize = sequelize;
