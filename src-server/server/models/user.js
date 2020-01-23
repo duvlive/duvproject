@@ -70,9 +70,10 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     {
+
       hooks: {
         beforeCreate: user => {
-          user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10));
+          user.password = bcrypt.hashSync(user.password, 10);
           user.activationToken = jwt.sign(
             {
               userId: user.id,

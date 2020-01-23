@@ -184,8 +184,9 @@ const UserController = {
             message: 'User needs to activate account.',
           });
         }
-        if (!bcrypt.compare(password, user.password)) {
-          return res.status(403).json({ message: 'Invalid email or password' });
+
+        if (!bcrypt.compareSync(password, user.password)) {
+          return res.status(403).json({ message: 'Invalid email or password', password });
         }
         if (!user.firstTimeLogin) {
           user.update({ firstTimeLogin: true });

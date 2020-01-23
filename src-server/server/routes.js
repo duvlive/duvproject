@@ -5,6 +5,7 @@ import {
   BankDetailController,
   ContactController,
 	IdentificationController,
+	EventController,
 } from './controllers';
 import Authentication from './middleware/authentication';
 import passport from 'passport';
@@ -78,6 +79,7 @@ router
   .put(
     Authentication.verifyToken,
     Authentication.validateUser,
+		Authentication.isActiveUser,
     UserController.editUser
   );
 router
@@ -85,6 +87,7 @@ router
   .put(
     Authentication.verifyToken,
     Authentication.validateEntertainer,
+		Authentication.isActiveUser,
     UserController.editEntertainer
   );
 router
@@ -92,6 +95,7 @@ router
   .put(
     Authentication.verifyToken,
     Authentication.validateEntertainer,
+		Authentication.isActiveUser,
     EntertainerProfileController.updateUserAndEntertainerProfile
   );
 
@@ -105,10 +109,10 @@ router
 // Contact routes
 router
   .route('/api/v1/contact')
-  .all(Authentication.verifyToken, Authentication.validateEntertainer)
+  .all(Authentication.verifyToken, Authentication.validateEntertainer, Authentication.isActiveUser)
   .post(ContactController.updateUserContact)
   .put(ContactController.updateUserContact)
-  .get(ContactController.getUserContact);
+  .get(ContactController.getUserContacts);
 
 // Identification routes
 router
@@ -116,5 +120,19 @@ router
   .all(Authentication.verifyToken, Authentication.validateEntertainer, Authentication.isActiveUser)
   .put(IdentificationController.updateEntertainerIdentification)
   .get(IdentificationController.getIdentification);
+
+// Admin routes
+router
+  .route('/api/v1/approveEntertainer')
+  .all(Authentication.verifyToken, Authentication.validateAdmin)
+  .put(EntertainerProfileController.approveEntertainerWithComment);
+
+// Events routes
+router
+  .route('/api/v1/events')
+  .all(Authentication.verifyToken, Authentication.validateUser, Authentication.isActiveUser)
+  .post(EventController.updateUserEvent)
+  .put(EventController.updateUserEvent)
+  .get(EventController.getUserEvent);
 
 export default router;

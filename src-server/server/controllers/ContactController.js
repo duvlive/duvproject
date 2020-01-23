@@ -43,7 +43,7 @@ const ContactController = {
           newContact = contact;
           return req.user.addContact(contact);
         })
-        .then((user) => {
+        .then(() => {
           return res
             .status(200)
             .json({
@@ -91,12 +91,12 @@ const ContactController = {
    * @param {object} res is res object
    * @return {object} returns res object
    */
-  getUserContact(req, res) {
-    req.user.getContacts().then(contact => {
-      if (!contact || contact.length === 0) {
-        return res.status(404).json({ message: 'Contact not found' });
+  getUserContacts(req, res) {
+    req.user.getContacts().then(contacts => {
+      if (!contacts || contacts.length === 0) {
+        return res.status(404).json({ message: 'Contacts not found' });
       }
-      return res.status(200).json({ contact });
+      return res.status(200).json({ contacts });
     });
   }
 };
