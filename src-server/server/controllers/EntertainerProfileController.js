@@ -1,6 +1,13 @@
 import { updateUser } from '../utils';
 
 const EntertainerProfileController = {
+  /**
+   * update User And Entertainer Profile
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
   updateUserAndEntertainerProfile(req, res) {
     const {
       about,
@@ -32,7 +39,36 @@ const EntertainerProfileController = {
       .catch(error => {
         return res.status(error.status || 400).json({ message: error.message});
       });
-  }
+  },
+
+	
+  /**
+   * approve Entertainer with comment
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  approveEntertainerWithComment(req, res) {
+		const {
+      approved,
+      approvalComment
+    } = req.body;
+    const approvalData = {
+      approved,
+      approvalComment
+    };
+
+    updateUser(req.user, approvalData, 'Profile')
+      .then(entertainerProfile => {
+        return res
+          .status(200)
+          .json({message: 'Entertainer approval updated ',  entertainerProfile,  });
+      })
+      .catch(error => {
+        return res.status(error.status || 400).json({ message: error.message});
+      });
+		}
 };
 
 export default EntertainerProfileController;

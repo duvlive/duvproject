@@ -2,7 +2,7 @@ import { validString, updateUser } from '../utils';
 
 const IdentificationController = {
   /**
-   * create Identification
+   * update Entertainer Identification
    * @function
    * @param {object} req is req object
    * @param {object} res is res object
