@@ -4,8 +4,8 @@ import {
   EntertainerProfileController,
   BankDetailController,
   ContactController,
-	IdentificationController,
-	EventController,
+  IdentificationController,
+  EventController,
 } from './controllers';
 import Authentication from './middleware/authentication';
 import passport from 'passport';
@@ -79,7 +79,7 @@ router
   .put(
     Authentication.verifyToken,
     Authentication.validateUser,
-		Authentication.isActiveUser,
+    Authentication.isActiveUser,
     UserController.editUser
   );
 router
@@ -87,7 +87,7 @@ router
   .put(
     Authentication.verifyToken,
     Authentication.validateEntertainer,
-		Authentication.isActiveUser,
+    Authentication.isActiveUser,
     UserController.editEntertainer
   );
 router
@@ -95,7 +95,7 @@ router
   .put(
     Authentication.verifyToken,
     Authentication.validateEntertainer,
-		Authentication.isActiveUser,
+    Authentication.isActiveUser,
     EntertainerProfileController.updateUserAndEntertainerProfile
   );
 
