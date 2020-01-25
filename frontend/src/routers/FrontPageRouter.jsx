@@ -28,7 +28,7 @@ const FrontPageRouter = () => (
     <Login path="activate/:token" />
     <Logout path="logout" />
     <ForgotPassword path="forgot-password" />
-    <ChangePassword path="change-password" />
+    <ChangePassword path="change-password/:token" />
     <Register path="register" />
     <Register path="register/:type" />
     <SingleEntertainer path="entertainers/:slug" />

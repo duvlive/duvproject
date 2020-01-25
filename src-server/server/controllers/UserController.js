@@ -249,7 +249,7 @@ const UserController = {
           return res.status(404).json({ message: 'User not found' });
         } else {
           const resetToken = Authentication.generateToken(user);
-          const link = `${host}/password-reset/${resetToken}`;
+          const link = `${host}/change-password/${resetToken}`;
           sendMail(EMAIL_CONTENT.PASSWORD_RESET, user, {
             link
           });
@@ -299,11 +299,12 @@ const UserController = {
           return res.status(403).json({ message: 'Passwords do not match' });
         }
 
-        return user
-          .update({ password })
-          .then(() =>
-            res.status(200).json({ message: 'Password update successful' })
-          );
+        return user.update({ password }).then(() => {
+          sendMail(EMAIL_CONTENT.CHANGE_PASSWORD, user);
+          return res
+            .status(200)
+            .json({ message: 'Password update successful' });
+        });
       })
       .catch(error => {
         return res.status(500).json({ error: error.message });

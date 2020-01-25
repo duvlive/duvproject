@@ -64,7 +64,7 @@ const changePasswordObject = {
 
 const changePasswordByEmailObject = {
   password: strongPassword,
-  confirm_password: confirmPassword
+  confirmPassword: confirmPassword
 };
 
 const personalInfoObject = {

@@ -8,10 +8,8 @@ import Button from 'components/forms/Button';
 import { forgotPasswordSchema } from 'components/forms/schema/userSchema';
 import { Link } from '@reach/router';
 import { Col, Row } from 'reactstrap';
-import Text from 'components/common/utils/Text';
-import Quotes from 'data/quotes';
-import { randomItem } from 'utils/helpers';
 import AlertMessage from 'components/common/utils/AlertMessage';
+import Quotes from 'components/common/utils/Quotes';
 
 const ForgotPassword = () => (
   <>
@@ -24,18 +22,12 @@ const ForgotPassword = () => (
 );
 
 const Content = () => {
-  const quote = randomItem(Quotes);
   return (
     <section>
       <div className="container-fluid">
         <Row>
           <Col className="d-none d-sm-block" sm={{ size: 6, offset: 1 }}>
-            <Text.VerticalAlign>
-              <div className="auth__quotes">
-                <h4 className="auth__quotes--text">{quote.text}</h4>
-                <p>- {quote.name}</p>
-              </div>
-            </Text.VerticalAlign>
+            <Quotes />
           </Col>
           <Col sm={{ size: 5 }}>
             <div className="auth__container">
