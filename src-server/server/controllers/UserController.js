@@ -1,10 +1,10 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { User, EntertainerProfile } from '../models';
-import emailSender from '../MailSender';
+import sendMail from '../MailSender';
 import Authentication from '../middleware/authentication';
-import { UserValidation } from '../utils';
-import { updateUser } from '../utils';
+import { UserValidation, updateUser } from '../utils';
+import EMAIL_CONTENT from '../email-template/content';
 
 const UserController = {
   /**
@@ -22,7 +22,7 @@ const UserController = {
       phoneNumber: user.phoneNumber,
       type: user.type,
       isActive: user.isActive,
-      referral: user.referral,
+      referral: user.referral
     };
     return newUser;
   },
@@ -35,25 +35,35 @@ const UserController = {
    * @return {object} returns res object
    */
   createUser(req, res) {
-    const { firstName, lastName, email, password, confirmPassword, phoneNumber, type } = req.body;
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      confirmPassword,
+      phoneNumber,
+      type
+    } = req.body;
     const errors = {
       ...UserValidation.nameValidation(firstName, lastName),
       ...UserValidation.emailValidation(email),
       ...UserValidation.phoneNumberValidation(phoneNumber),
-      ...UserValidation.passwordValidaton(password, confirmPassword),
+      ...UserValidation.passwordValidaton(password, confirmPassword)
     };
 
     if (Object.keys(errors).length) {
-      return res.status(400).json({ message: 'There are invalid fields in the form', errors });
+      return res
+        .status(400)
+        .json({ message: 'There are invalid fields in the form', errors });
     }
     return User.findAll({
-      where: { email },
+      where: { email }
     })
       .then(existingUser => {
         if (existingUser.length > 0) {
           throw {
             status: 409,
-            message: 'This email address has already been taken',
+            message: 'This email address has already been taken'
           };
         }
         return User.create({
@@ -62,14 +72,14 @@ const UserController = {
           email,
           password,
           phoneNumber,
-          type,
+          type
         });
       })
       .then(newUser => {
         return res.status(200).json({
           message: 'Signed up successfully',
           user: UserController.transformUser(newUser),
-          token: Authentication.generateToken(newUser, true),
+          token: Authentication.generateToken(newUser, true)
         });
       })
       .catch(error => {
@@ -93,14 +103,14 @@ const UserController = {
       include: [
         {
           model: EntertainerProfile,
-          as: 'profile',
-        },
-      ],
+          as: 'profile'
+        }
+      ]
     })
       .then(usr => {
         if (!usr || usr.length === 0) {
           return res.status(200).json({
-            user: { lastName, firstName, email },
+            user: { lastName, firstName, email }
           });
         }
         const user = user.dataValues;
@@ -109,9 +119,12 @@ const UserController = {
         }
         const token = Authentication.generateToken(user);
         return res.status(200).json({
-            message: 'You are successfully Logged in',
-            user: {firstTimeLogin: !user.firstTimeLogin, ...UserController.transformUser(user)},
-            token,
+          message: 'You are successfully Logged in',
+          user: {
+            firstTimeLogin: !user.firstTimeLogin,
+            ...UserController.transformUser(user)
+          },
+          token
         });
       })
       .catch(error => {
@@ -129,24 +142,28 @@ const UserController = {
    */
   activateUser(req, res) {
     User.findOne({
-      where: { activationToken: req.query.token },
+      where: { activationToken: req.query.token }
     })
       .then(userFound => {
         if (!userFound || userFound.length === 0) {
           return res.status(404).json({ message: 'User not found' });
         }
         if (userFound.isActive) {
-          return res.status(403).json({ message: 'Your account has been activated' });
+          return res
+            .status(403)
+            .json({ message: 'Your account has been activated' });
         }
 
         return User.update(
           { isActive: true, activatedAt: new Date().toISOString() },
           {
             where: {
-              activationToken: req.query.token,
-            },
+              activationToken: req.query.token
+            }
           }
-        ).then(() => res.status(200).json({ message: 'User activation successful' }));
+        ).then(() =>
+          res.status(200).json({ message: 'User activation successful' })
+        );
       })
       .catch(error => {
         const errorMessage = error.message || error;
@@ -164,16 +181,18 @@ const UserController = {
   userLogin(req, res) {
     const { email, password } = req.body;
     if (!email || !password) {
-      return res.status(400).json({ message: 'Email or password cannot be empty' });
+      return res
+        .status(400)
+        .json({ message: 'Email or password cannot be empty' });
     }
     User.findOne({
       where: { email },
       include: [
         {
           model: EntertainerProfile,
-          as: 'profile',
-        },
-      ],
+          as: 'profile'
+        }
+      ]
     })
       .then(user => {
         if (!user) {
@@ -181,12 +200,14 @@ const UserController = {
         }
         if (!user.isActive) {
           return res.status(403).json({
-            message: 'User needs to activate account.',
+            message: 'User needs to activate account.'
           });
         }
 
         if (!bcrypt.compareSync(password, user.password)) {
-          return res.status(403).json({ message: 'Invalid email or password', password });
+          return res
+            .status(403)
+            .json({ message: 'Invalid email or password', password });
         }
         if (!user.firstTimeLogin) {
           user.update({ firstTimeLogin: true });
@@ -194,8 +215,11 @@ const UserController = {
         const token = Authentication.generateToken(user);
         return res.status(200).json({
           message: 'You are successfully logged in',
-          user: {firstTimeLogin: !user.firstTimeLogin, ...UserController.transformUser(user)},
-          token,
+          user: {
+            firstTimeLogin: !user.firstTimeLogin,
+            ...UserController.transformUser(user)
+          },
+          token
         });
       })
       .catch(error => {
@@ -218,18 +242,21 @@ const UserController = {
     }
 
     User.findOne({
-      where: { email },
+      where: { email }
     })
       .then(user => {
         if (!user || user.length === 0) {
           return res.status(404).json({ message: 'User not found' });
+        } else {
+          const resetToken = Authentication.generateToken(user);
+          const link = `${host}/password-reset/${resetToken}`;
+          sendMail(EMAIL_CONTENT.PASSWORD_RESET, user, {
+            link
+          });
+          return res.status(200).json({
+            message: 'Password reset email sent successfully'
+          });
         }
-        const title = 'Password Recovery | DUV LIVE';
-        const resetToken = Authentication.generateToken(user);
-        emailSender(email, resetToken, title, host).catch(console.error);
-        return res.status(200).json({
-          message: 'Password reset email sent successfully',
-        });
       })
       .catch(error => {
         return res.status(500).json({ error: error.message });
@@ -246,21 +273,23 @@ const UserController = {
   updatePassword(req, res) {
     const { password, confirmPassword } = req.body;
     if (!password || !confirmPassword) {
-      return res.status(400).json({ message: 'Please fill both fields, cannot be empty' });
+      return res
+        .status(400)
+        .json({ message: 'Please fill both fields, cannot be empty' });
     }
 
     const resetToken = req.query.token;
     jwt.verify(resetToken, process.env.SECRET, (error, decoded) => {
       if (error) {
         return res.status(401).send({
-          message: 'Invalid token',
+          message: 'Invalid token'
         });
       }
       req.decoded = decoded;
     });
 
     User.findOne({
-      where: { id: req.decoded.userId },
+      where: { id: req.decoded.userId }
     })
       .then(user => {
         if (!user || user.length === 0) {
@@ -272,7 +301,9 @@ const UserController = {
 
         return user
           .update({ password })
-          .then(() => res.status(200).json({ message: 'Password update successful' }));
+          .then(() =>
+            res.status(200).json({ message: 'Password update successful' })
+          );
       })
       .catch(error => {
         return res.status(500).json({ error: error.message });
@@ -288,7 +319,7 @@ const UserController = {
    * */
   userLogout(req, res) {
     res.status(200).json({
-      message: 'You have been Logged out',
+      message: 'You have been Logged out'
     });
   },
 
@@ -303,7 +334,7 @@ const UserController = {
     const { userId } = req.decoded;
     const { firstName, lastName, phoneNumber } = req.body;
     User.findOne({
-      where: { id: userId },
+      where: { id: userId }
     })
       .then(user => {
         const error = { ...UserValidation.isUserActive(user.isActive) };
@@ -312,7 +343,7 @@ const UserController = {
         }
         if (!user) {
           return res.status(404).send({
-            message: 'User not found',
+            message: 'User not found'
           });
         }
         return user
@@ -342,7 +373,7 @@ const UserController = {
       willingToTravel,
       eventType,
       entertainerType,
-      youTubeChannel,
+      youTubeChannel
     } = req.body;
 
     const entertainerProfileData = {
@@ -353,19 +384,19 @@ const UserController = {
       willingToTravel,
       eventType,
       entertainerType,
-      youTubeChannel,
+      youTubeChannel
     };
 
     return Promise.all([
       req.user.update({ phoneNumber }),
-      updateUser(req.user, entertainerProfileData, 'Profile'),
+      updateUser(req.user, entertainerProfileData, 'Profile')
     ]).then(user => {
       res.status(200).json({
         user: UserController.transformUser(user[0]),
-        entertainerProfile: user[1],
+        entertainerProfile: user[1]
       });
     });
-  },
+  }
 };
 
 export default UserController;

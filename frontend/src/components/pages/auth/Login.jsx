@@ -50,10 +50,16 @@ const Content = ({ token }) => {
               </section>
               <section className="auth__social-media">
                 <p className="auth__social-media--text">or login with:</p>
-                <Link className="auth__social-media--icons" to="/">
+                <Link
+                  className="auth__social-media--icons"
+                  to="/api/v1/auth/google"
+                >
                   <span className="icon-google" />
                 </Link>
-                <Link className="auth__social-media--icons" to="/">
+                <Link
+                  className="auth__social-media--icons"
+                  to="/api/v1/auth/facebook"
+                >
                   <span className="icon-facebook-official" />
                 </Link>
               </section>
