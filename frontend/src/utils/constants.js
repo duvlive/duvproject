@@ -1,13 +1,15 @@
 export const USER_TYPES = {
+  admin: 0,
   user: 1,
   entertainer: 2,
-  admin: 3
+  bandMember: 3
 };
 
 export const DASHBOARD_PAGE = {
   [USER_TYPES.user]: 'user',
   [USER_TYPES.entertainer]: 'entertainer',
-  [USER_TYPES.admin]: 'admin'
+  [USER_TYPES.admin]: 'admin',
+  [USER_TYPES.bandMember]: 'band-member'
 };
 
 export const SLIDESHOW_TYPE = {

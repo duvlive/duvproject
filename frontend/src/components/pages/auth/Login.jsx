@@ -123,18 +123,22 @@ const LoginForm = ({ token }) => {
         // defalt Logins
         const { email, password } = values;
         if (email === 'user@duvlive.com' && password === 'passworded') {
+          storeCurrentUser({ firstName: 'Mariam', lastName: 'Obi', type: 1 });
           return navigate('/user/dashboard');
         } else if (email === 'uv@duvlive.com' && password === 'passworded') {
+          storeCurrentUser({ firstName: 'UV', lastName: '', type: 3 });
           return navigate('/administrator/dashboard');
         } else if (
           email === 'highsoul@member.com' &&
           password === 'passworded'
         ) {
+          storeCurrentUser({ firstName: 'High', lastName: 'Soul', type: 4 });
           return navigate('/band-member/dashboard');
         } else if (
           email === 'djcuppy@duvlive.com' &&
           password === 'passworded'
         ) {
+          storeCurrentUser({ firstName: 'DJ', lastName: 'Cuppy', type: 2 });
           return navigate('/entertainer/dashboard');
         } else {
           setMessage('Invalid email or password');

@@ -5,7 +5,7 @@ const EMAIL_CONTENT = {
     subject: '[D.U.V LIVE] Verify your Email',
     title: 'Verify Your Email',
     contentTop:
-      'You have successfully created your D.U.V Live account. Please click on the link below to complete your registration.',
+      'You have successfully created your D.U.V Live account. To complete your registration, you need to confirm that we got your email address right.',
     buttonText: 'Verify Email'
   },
   PASSWORD_RESET: {

@@ -1,199 +1,93 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import RedLogo from 'assets/img/logo/red-white.svg';
-import UserAvatar from 'assets/img/avatar/user.png';
 import ProfileAvatar from 'assets/img/avatar/profile.png';
-import EntertainerAvatar from 'assets/img/avatar/entertainer.jpg';
-import BandMemberAvatar from 'assets/img/avatar/band-member.png';
-import AdministratorAvatar from 'assets/img/avatar/administrator.png';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { Link } from '@reach/router';
 import 'react-perfect-scrollbar/dist/css/styles.css';
-import userSideMenu from 'data/sidebar/user';
-import entertainerSideMenu from 'data/sidebar/entertainer';
-import bandMemberSideMenu from 'data/sidebar/band-member';
-import administratorSideMenu from 'data/sidebar/administrator';
+import userSideMenu from 'data/menu/user';
+import entertainerSideMenu from 'data/menu/entertainer';
+import bandMemberSideMenu from 'data/menu/band-member';
+import administratorSideMenu from 'data/menu/administrator';
 import classNames from 'classnames';
-import { Match } from '@reach/router';
 import { getCurrentUser } from 'utils/localStorage';
+import { getSampleUser, getSampleAvatar } from 'utils/sampleData';
+import { USER_TYPES } from 'utils/constants';
 
-// CONSOLIDATE THIS INTO A SINGLE ONE
-const Sidebar = ({ showSidebar, closeSidebar }) => (
-  <>
-    <div
-      className={classNames('backdrop', {
-        showSidebar
-      })}
-      onClick={closeSidebar}
-    />
-    <aside
-      className={classNames('sidebar', {
-        showSidebar
-      })}
-    >
-      <div className="sidebar__logo">
-        <Link to="/">
-          <img alt="Duv Live Red-White Logo" src={RedLogo} />
-        </Link>
-        <div className="sidebar__close" onClick={closeSidebar}>
-          <button
-            aria-label="Close"
-            className="close d-block d-sm-none"
-            type="button"
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
+const SIDE_MENU = {
+  [USER_TYPES.user]: userSideMenu,
+  [USER_TYPES.entertainer]: entertainerSideMenu,
+  [USER_TYPES.admin]: administratorSideMenu,
+  [USER_TYPES.bandMember]: bandMemberSideMenu
+};
+
+const Sidebar = ({ showSidebar, closeSidebar }) => {
+  const currentUser = getCurrentUser();
+  // TODO: sort out band members
+  const sideMenu = SIDE_MENU[currentUser.type];
+  return (
+    <>
+      <div
+        className={classNames('backdrop', {
+          showSidebar
+        })}
+        onClick={closeSidebar}
+      />
+      <aside
+        className={classNames('sidebar', {
+          showSidebar
+        })}
+      >
+        <div className="sidebar__logo">
+          <Link to="/">
+            <img alt="Duv Live Red-White Logo" src={RedLogo} />
+          </Link>
+          <div className="sidebar__close" onClick={closeSidebar}>
+            <button
+              aria-label="Close"
+              className="close d-block d-sm-none"
+              type="button"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
         </div>
-      </div>
-      <PerfectScrollbar style={{ height: 'calc(100% - 12rem)' }}>
-        {/* Entertainer */}
-        <Match path="/entertainer/*">
-          {props =>
-            props.match ? (
-              <div>
-                <Sidebar.EntertainerBox />
-                <Sidebar.Navigation
-                  closeSidebar={closeSidebar}
-                  menus={entertainerSideMenu}
-                />
-              </div>
-            ) : null
-          }
-        </Match>
-
-        {/* Band Member */}
-        <Match path="/band-member/*">
-          {props =>
-            props.match ? (
-              <div>
-                <Sidebar.BandMemberBox />
-                <Sidebar.Navigation
-                  closeSidebar={closeSidebar}
-                  menus={bandMemberSideMenu}
-                />
-              </div>
-            ) : null
-          }
-        </Match>
-
-        {/* User */}
-        <Match path="/user/*">
-          {props =>
-            props.match ? (
-              <div>
-                <Sidebar.UserBox />
-                <Sidebar.Navigation
-                  closeSidebar={closeSidebar}
-                  menus={userSideMenu}
-                />
-              </div>
-            ) : null
-          }
-        </Match>
-
-        {/* Administrator */}
-        <Match path="/administrator/*">
-          {props =>
-            props.match ? (
-              <div>
-                <Sidebar.AdministratorBox />
-                <Sidebar.Navigation
-                  closeSidebar={closeSidebar}
-                  menus={administratorSideMenu}
-                />
-              </div>
-            ) : null
-          }
-        </Match>
-
-        <div className="text-center d-block d-sm-none" onClick={closeSidebar}>
-          Close Menu
-        </div>
-      </PerfectScrollbar>
-      <div className="clearfix" />
-    </aside>
-  </>
-);
+        <PerfectScrollbar style={{ height: 'calc(100% - 12rem)' }}>
+          <Sidebar.Menu />
+          <Sidebar.Navigation closeSidebar={closeSidebar} menus={sideMenu} />
+          <div className="text-center d-block d-sm-none" onClick={closeSidebar}>
+            Close Menu
+          </div>
+        </PerfectScrollbar>
+        <div className="clearfix" />
+      </aside>
+    </>
+  );
+};
 
 Sidebar.propTypes = {
   closeSidebar: PropTypes.func.isRequired,
   showSidebar: PropTypes.bool.isRequired
 };
 
-Sidebar.UserBox = () => {
+Sidebar.Menu = () => {
   const currentUser = getCurrentUser();
-  const src = currentUser ? ProfileAvatar : UserAvatar;
-  const userName = currentUser
+  const src = currentUser.id ? ProfileAvatar : getSampleAvatar();
+  const userName = currentUser.id
     ? currentUser.firstName + ' ' + currentUser.lastName
-    : 'Mariam Obi';
+    : getSampleUser();
   return (
     <div className="user-box">
       <div className="user-img">
         <img
-          alt="Mariam Obi"
+          alt={userName}
           className="rounded-circle img-thumbnail img-responsive"
           src={src}
-          title="Mariam Obi"
+          title={userName}
         />
         <div className="user-status offline" />
       </div>
       <h5 className="text-uppercase">{userName}</h5>
-    </div>
-  );
-};
-
-Sidebar.EntertainerBox = () => {
-  const currentUser = getCurrentUser();
-  const Avatar = currentUser ? ProfileAvatar : EntertainerAvatar;
-  const userName = currentUser
-    ? currentUser.firstName + ' ' + currentUser.lastName
-    : 'DJ Cuppy';
-  return (
-    <div className="user-box">
-      <div className="user-img">
-        <img
-          alt="DJ Cuppy"
-          className="rounded-circle img-thumbnail img-responsive"
-          src={Avatar}
-          title="DJ Cuppy"
-        />
-        <div className="user-status offline" />
-      </div>
-      <h5 className="text-uppercase">{userName}</h5>
-    </div>
-  );
-};
-
-Sidebar.BandMemberBox = () => {
-  return (
-    <div className="user-box">
-      <div className="user-img">
-        <img
-          alt="High Soul"
-          className="rounded-circle img-thumbnail img-responsive"
-          src={BandMemberAvatar}
-          title="High Soul"
-        />
-        <div className="user-status offline" />
-      </div>
-      <h5 className="text-uppercase">High Soul</h5>
-    </div>
-  );
-};
-
-Sidebar.AdministratorBox = () => {
-  return (
-    <div className="user-box">
-      <div className="user-img">
-        <img
-          alt="U.V"
-          className="rounded-circle img-thumbnail img-responsive"
-          src={AdministratorAvatar}
-          title="U.V"
-        />
-        <div className="user-status offline" />
-      </div>
-      <h5 className="text-uppercase">U.V</h5>
     </div>
   );
 };
@@ -217,12 +111,7 @@ Sidebar.Navigation = ({ menus, closeSidebar }) => {
 
 Sidebar.Navigation.propTypes = {
   closeSidebar: PropTypes.func.isRequired,
-  match: PropTypes.bool,
   menus: PropTypes.array.isRequired
-};
-
-Sidebar.Navigation.defaultProps = {
-  match: false
 };
 
 export default Sidebar;

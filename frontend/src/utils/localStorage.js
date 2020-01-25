@@ -5,4 +5,7 @@ const CURRENT_USER = `${PREFIX}-user`;
 
 export const storeCurrentUser = data => store(CURRENT_USER, data);
 export const getCurrentUser = () => store(CURRENT_USER);
-export const clearStorage = () => store(false);
+export const clearStorage = () => {
+  console.log('clearStorage');
+  return store(false);
+};
