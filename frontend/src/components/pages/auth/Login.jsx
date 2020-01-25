@@ -215,3 +215,9 @@ LoginForm.propTypes = {
 };
 
 export default Login;
+
+// Please verify your email address by clicking the link you received in email.
+// Not verifying within 24 hours since registration will disable your account.
+// Click here to resend the verification email to duvtest.123@gmail.com.
+// If this is not your correct email address, please update it under User Settings.
+// If you need any assistance, please contact our support.
