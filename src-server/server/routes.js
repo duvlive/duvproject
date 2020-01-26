@@ -6,7 +6,8 @@ import {
   ContactController,
   IdentificationController,
   EventController,
-  EmailController
+  EmailController,
+  ImageController
 } from './controllers';
 import Authentication from './middleware/authentication';
 import passport from 'passport';
@@ -19,6 +20,13 @@ router.get('/email-template', EmailController.getEmailTemplate);
 // Welcome route
 router.get('/api/v1', (_, res) =>
   res.json({ success: 'Welcome to DUV Live API V1. Live your Best Live' })
+);
+
+// image upload
+router.post(
+  '/api/v1/image-upload',
+  ImageController.uploadImage,
+  ImageController.saveImage
 );
 
 // user routes.
