@@ -7,7 +7,6 @@ import mcLists from 'data/entertainers/mcs';
 import lbLists from 'data/entertainers/live-bands';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import { getCurrentUser } from 'utils/localStorage';
-import UploadImage from 'components/common/utils/UploadImage';
 
 const Dashboard = () => {
   const currentUser = getCurrentUser() || { firstName: 'Mariam' };
@@ -16,12 +15,6 @@ const Dashboard = () => {
     <BackEndPage title="Dashboard">
       <div className="main-app">
         <TopMessage message={`Welcome back ${currentUser.firstName},`} />
-
-        <div className="container">
-          <div className="row">
-            <UploadImage />
-          </div>
-        </div>
 
         <section className="app-content">
           <div className="row">

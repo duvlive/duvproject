@@ -22,7 +22,9 @@ const UserController = {
       phoneNumber: user.phoneNumber,
       type: user.type,
       isActive: user.isActive,
-      referral: user.referral
+      referral: user.referral,
+      profileImageID: user.profileImageID,
+      profileImageURL: user.profileImageURL
     };
     return newUser;
   },
@@ -209,6 +211,7 @@ const UserController = {
             .status(403)
             .json({ message: 'Invalid email or password', password });
         }
+
         if (!user.firstTimeLogin) {
           user.update({ firstTimeLogin: true });
         }

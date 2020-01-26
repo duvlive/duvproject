@@ -13,7 +13,11 @@ import Button from 'components/forms/Button';
 import { loginSchema } from 'components/forms/schema/userSchema';
 import { navigate } from '@reach/router';
 import { DASHBOARD_PAGE } from 'utils/constants';
-import { storeCurrentUser, getCurrentUser } from 'utils/localStorage';
+import {
+  storeCurrentUser,
+  getCurrentUser,
+  storeToken
+} from 'utils/localStorage';
 import AlertMessage from 'components/common/utils/AlertMessage';
 
 const Login = ({ token }) => (
@@ -158,6 +162,7 @@ const LoginForm = ({ token }) => {
             console.log(status, data);
             if (status === 200) {
               storeCurrentUser(data.user);
+              storeToken(data.token);
               return navigate(`/${DASHBOARD_PAGE[data.user.type]}/dashboard`);
             }
 

@@ -1,6 +1,11 @@
 .upload-button {
+  img {
+    width: 12rem;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
   label {
-    max-width: 12rem;
+    width: 12rem;
   }
   // hide current file
   input[type='file'] {

@@ -1,4 +1,6 @@
 require('dotenv').config();
+import { User } from '../models';
+
 const cloudinary = require('cloudinary');
 const multer = require('multer');
 const cloudinaryStorage = require('multer-storage-cloudinary');
@@ -13,7 +15,7 @@ const storage = cloudinaryStorage({
   cloudinary: cloudinary,
   folder: 'profile',
   allowedFormats: ['jpg', 'png'],
-  transformation: [{ width: 250, height: 250, crop: 'limit' }]
+  transformation: [{ width: 256, height: 256, crop: 'limit' }]
 });
 
 const MAX_IMG_SIZE = 500000; //500kb
@@ -36,13 +38,35 @@ const ImageController = {
   saveImage(req, res) {
     // console.log(req.file); // to see what is returned to you
     if (req.file) {
-      const image = {};
-      image.url = req.file.url;
-      image.id = req.file.public_id;
-      // Delete previous image if present
-      const previousImage = req.query.previousImage;
-      previousImage && cloudinary.uploader.destroy(previousImage);
-      return res.json({ image });
+      const { userId } = req.decoded;
+      User.findOne({
+        where: { id: userId }
+      })
+        .then(user => {
+          if (!user) {
+            return res.status(404).send({
+              message: 'User not found'
+            });
+          }
+
+          // get upload image
+          const previousImageID = user.profileImageID;
+          const image = {};
+          image.url = req.file.url;
+          image.id = req.file.public_id;
+
+          // update profile image in database
+          return user
+            .update({ profileImageID: image.id, profileImageURL: image.url })
+            .then(() => {
+              // Delete previous image if present
+              previousImageID && cloudinary.uploader.destroy(previousImageID);
+              return res.json({ image });
+            });
+        })
+        .catch(error => {
+          return res.status(500).json({ error: error.message });
+        });
     } else {
       return res.status(412).json({ message: 'Image cannot be uploaded' });
     }

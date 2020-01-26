@@ -10,6 +10,7 @@ import {
 } from 'components/forms/schema/userSchema';
 import { navigate } from '@reach/router';
 import { setInitialValues } from 'components/forms/form-helper';
+import UploadImage from 'components/common/utils/UploadImage';
 
 const EditProfile = () => {
   return (
@@ -44,6 +45,11 @@ const UserProfileForm = () => {
           <div className="card-body col-md-10">
             <h4 className="card-title yellow">Event Details</h4>
             <Form>
+              <div className="row">
+                <div className="col-12 mt-3 mb-5">
+                  <UploadImage />
+                </div>
+              </div>
               <div className="form-row">
                 <Input
                   formGroupClassName="col-md-6"

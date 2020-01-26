@@ -80,7 +80,9 @@ TopBar.Navigation = ({ menus }) => {
   ));
 
   const currentUser = getCurrentUser();
-  const src = currentUser.id ? ProfileAvatar : getSampleAvatar();
+  const src = currentUser.id
+    ? currentUser.profileImgURL || ProfileAvatar
+    : getSampleAvatar();
   const userName = currentUser.id
     ? currentUser.firstName + ' ' + currentUser.lastName
     : getSampleUser();
