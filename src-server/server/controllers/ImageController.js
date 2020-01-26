@@ -32,16 +32,7 @@ const ImageController = {
       next();
     });
   },
-  /**
-   * create Contact
-   * @function
-   * @param {object} req is req object
-   *  - Query
-   *    - name * - derived from the keys in Image CONTENT
-   *    - type - text || html
-   * @param {object} res
-   * @return {object} returns - json || text || html
-   */
+
   saveImage(req, res) {
     // console.log(req.file); // to see what is returned to you
     if (req.file) {
