@@ -30,7 +30,7 @@ const TOP_MENU = {
 };
 
 const TopBar = ({ showSidebar }) => {
-  const currentUser = getCurrentUser();
+  const currentUser = getCurrentUser() || { type: '1' };
   const menus = TOP_MENU[currentUser.type];
   return (
     <div className="topbar">
@@ -80,12 +80,14 @@ TopBar.Navigation = ({ menus }) => {
   ));
 
   const currentUser = getCurrentUser();
-  const src = currentUser.id
-    ? currentUser.profileImgURL || ProfileAvatar
-    : getSampleAvatar();
-  const userName = currentUser.id
-    ? currentUser.firstName + ' ' + currentUser.lastName
-    : getSampleUser();
+  const src =
+    currentUser && currentUser.id
+      ? currentUser.profileImgURL || ProfileAvatar
+      : getSampleAvatar();
+  const userName =
+    currentUser && currentUser.id
+      ? currentUser.firstName + ' ' + currentUser.lastName
+      : getSampleUser();
   return (
     <UncontrolledDropdown inNavbar nav>
       <DropdownToggle caret nav>

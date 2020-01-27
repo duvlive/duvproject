@@ -14,6 +14,7 @@ import SingleEntertainer from 'components/pages/frontend/SingleEntertainer';
 import SingleEvent from 'components/pages/frontend/SingleEvent';
 import ForgotPassword from 'components/pages/auth/ForgotPassword';
 import ChangePassword from 'components/pages/auth/ChangePassword';
+import ContextTest from 'components/pages/ContextTest';
 
 const FrontPageRouter = () => (
   <Router>
@@ -33,6 +34,7 @@ const FrontPageRouter = () => (
     <Register path="register/:type" />
     <SingleEntertainer path="entertainers/:slug" />
     <SingleEvent path="event/:slug" />
+    <ContextTest path="context" />
   </Router>
 );
 

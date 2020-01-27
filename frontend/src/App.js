@@ -9,10 +9,11 @@ import EntertainerRouter from 'routers/EntertainerRouter';
 import AdministratorRouter from 'routers/AdministratorRouter';
 import BandMemberRouter from 'routers/BandMemberRouter';
 import FormikForm from 'components/forms/FormikForm';
+import { ContextOneProvider } from 'context/ContextOne';
 
 function App() {
   return (
-    <div className="App">
+    <ContextOneProvider>
       <Helmet>
         <title>D.U.V LIVE | HOME OF LIVE ENTERTAINMENT</title>
       </Helmet>
@@ -28,7 +29,7 @@ function App() {
           <FormikForm path="formik" />
         </ScrollToTop>
       </Router>
-    </div>
+    </ContextOneProvider>
   );
 }
 
