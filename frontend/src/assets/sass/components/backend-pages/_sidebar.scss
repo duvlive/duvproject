@@ -73,8 +73,9 @@
     .img-thumbnail {
       background: transparent;
       border: 2px solid $gray-600;
-      height: 6rem;
+      object-fit: cover;
       width: 6rem;
+      height: 6rem;
     }
   }
 

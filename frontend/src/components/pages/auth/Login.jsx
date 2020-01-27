@@ -19,6 +19,7 @@ import {
   storeToken
 } from 'utils/localStorage';
 import AlertMessage from 'components/common/utils/AlertMessage';
+import { UserContext } from 'context/UserContext';
 
 const Login = ({ token }) => (
   <>
@@ -39,6 +40,8 @@ Login.defaultProps = {
 };
 
 const Content = ({ token }) => {
+  let { userState, userDispatch } = React.useContext(UserContext);
+  let updateUser = name => () => userDispatch({ type: 'save-user', name });
   return (
     <section>
       <div className="container-fluid">
@@ -48,6 +51,16 @@ const Content = ({ token }) => {
           </Col>
           <Col sm={{ size: 5 }}>
             <div className="auth__container">
+              {/* output user name */}
+              <h2>Name: {userState.name}</h2>
+              <button
+                className="btn btn-primary"
+                onClick={updateUser('Oladayo')}
+              >
+                Update Name
+              </button>
+              {/* End */}
+
               <section>
                 <h5 className="header font-weight-normal mb-4">Login</h5>
                 <LoginForm token={token} />

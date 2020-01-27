@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import ProfileAvatar from 'assets/img/avatar/profile.png';
-import { getToken, getCurrentUser, storeCurrentUser } from 'utils/localStorage';
+// import ProfileAvatar from 'assets/img/avatar/profile.png';
+import { getToken } from 'utils/localStorage';
+import { UserContext } from 'context/UserContext';
 
 const UploadImage = () => {
   const MAX_IMG_SIZE = 500000; //500kb
 
+  // Context
+  let { userState, userDispatch } = React.useContext(UserContext);
+
   // HOOKS
   const [message, setMessage] = useState(null);
-  const [imgSrc, setImgSrc] = useState(
-    getCurrentUser().profileImgURL || ProfileAvatar
-  );
   const [loading, setLoading] = useState(false);
 
   const onChangeHandler = event => {
@@ -25,10 +26,12 @@ const UploadImage = () => {
         }' is too large, please pick a file smaller than ${MAX_IMG_SIZE /
           1000}kb`
       );
+      setLoading(false);
     } else if (file.type !== 'image/png' && file.type !== 'image/jpeg') {
       setMessage(
         "Unsupported format. Only '.png' and '.jpg' files are supported"
       );
+      setLoading(false);
     } else {
       const data = new FormData();
       data.append('image', file);
@@ -43,10 +46,10 @@ const UploadImage = () => {
           console.log(status, data);
           if (status === 200) {
             console.log('data', data);
-            setImgSrc(data.image.url);
-            const user = getCurrentUser();
-            user.profileImgURL = data.image.url;
-            storeCurrentUser(user);
+            userDispatch({
+              type: 'update-profile-image',
+              link: data.image.url
+            });
             setLoading(false);
           }
         })
@@ -56,21 +59,25 @@ const UploadImage = () => {
           setLoading(false);
         });
     }
-    setLoading(false);
   };
 
   return (
-    <form>
+    <>
       <div className="upload-button">
-        {imgSrc && <img alt="profile" src={imgSrc} />}
+        {userState.profileImg && (
+          <img alt="profile" src={userState.profileImg} />
+        )}
         <input id="image" onChange={onChangeHandler} type="file" />
         <label
           className="btn btn-info btn-wide btn-transparent"
           htmlFor="image"
         >
           {loading ? (
-            <span class="spinner-border spinner-border-sm">&nbsp;</span>
-          ) : imgSrc ? (
+            <>
+              <span className="spinner-border spinner-border-sm">&nbsp;</span>
+              <span className="d-inline-block ml-2">Uploading</span>
+            </>
+          ) : userState.profileImg ? (
             'Change Image'
           ) : (
             'Upload Image'
@@ -78,7 +85,7 @@ const UploadImage = () => {
         </label>
       </div>
       <div className="invalid-feedback">{message}</div>
-    </form>
+    </>
   );
 };
 

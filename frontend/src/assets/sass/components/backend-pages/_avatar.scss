@@ -1,16 +1,24 @@
-.avatar--small {
-  height: 2rem;
-  width: 2rem;
-}
+.avatar {
+  &--small {
+    height: 2rem;
+    width: 2rem;
+  }
 
-.avatar--medium {
-  height: 4rem;
-  width: 4rem;
-}
+  &--medium {
+    height: 4rem;
+    width: 4rem;
+  }
 
-.avatar--large {
-  height: 8rem;
-  width: 8rem;
+  &--large {
+    height: 8rem;
+    width: 8rem;
+  }
+
+  &--small,
+  &--medium,
+  &--large {
+    object-fit: cover;
+  }
 }
 
 .avatars {

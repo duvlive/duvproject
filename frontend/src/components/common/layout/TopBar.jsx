@@ -18,9 +18,9 @@ import { bandMemberTopMenu } from 'data/menu/band-member';
 import { administratorTopMenu } from 'data/menu/administrator';
 import LiveYourBestLife from '../utils/LiveYourBestLife';
 import { getCurrentUser } from 'utils/localStorage';
-import ProfileAvatar from 'assets/img/avatar/profile.png';
-import { getSampleUser, getSampleAvatar } from 'utils/sampleData';
+import { getSampleUser } from 'utils/sampleData';
 import { USER_TYPES } from 'utils/constants';
+import { UserContext } from 'context/UserContext';
 
 const TOP_MENU = {
   [USER_TYPES.user]: userTopMenu,
@@ -58,7 +58,7 @@ const TopBar = ({ showSidebar }) => {
               </NavLink>
             </NavItem>
 
-            <TopBar.Navigation menus={menus} />
+            <TopBarNavigation menus={menus} />
           </Nav>
         </Collapse>
       </Navbar>
@@ -70,7 +70,9 @@ TopBar.propTypes = {
   showSidebar: PropTypes.func.isRequired
 };
 
-TopBar.Navigation = ({ menus }) => {
+const TopBarNavigation = ({ menus }) => {
+  // Context
+  let { userState } = React.useContext(UserContext);
   const topMenu = menus.map(({ title, to }) => (
     <DropdownItem key={title}>
       <Link className="text-color" to={to}>
@@ -80,10 +82,7 @@ TopBar.Navigation = ({ menus }) => {
   ));
 
   const currentUser = getCurrentUser();
-  const src =
-    currentUser && currentUser.id
-      ? currentUser.profileImgURL || ProfileAvatar
-      : getSampleAvatar();
+
   const userName =
     currentUser && currentUser.id
       ? currentUser.firstName + ' ' + currentUser.lastName
@@ -95,7 +94,7 @@ TopBar.Navigation = ({ menus }) => {
         <img
           alt={userName}
           className="rounded-circle img-responsive avatar--small"
-          src={src}
+          src={userState.profileImg}
           title={userName}
         />{' '}
       </DropdownToggle>
@@ -112,7 +111,7 @@ TopBar.Navigation = ({ menus }) => {
   );
 };
 
-TopBar.Navigation.propTypes = {
+TopBarNavigation.propTypes = {
   menus: PropTypes.array.isRequired
 };
 

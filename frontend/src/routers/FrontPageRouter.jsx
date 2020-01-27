@@ -14,28 +14,31 @@ import SingleEntertainer from 'components/pages/frontend/SingleEntertainer';
 import SingleEvent from 'components/pages/frontend/SingleEvent';
 import ForgotPassword from 'components/pages/auth/ForgotPassword';
 import ChangePassword from 'components/pages/auth/ChangePassword';
+import { UserContextProvider } from 'context/UserContext';
 import ContextTest from 'components/pages/ContextTest';
 
 const FrontPageRouter = () => (
-  <Router>
-    <Home path="/" />
-    <HowItWorks path="how-it-works" />
-    <UpcomingEvents path="upcoming-events" />
-    <HireEntertainers path="hire-entertainers" />
-    <Help path="help" />
-    <TermsOfUse path="terms-of-use" />
-    <PrivacyPolicy path="privacy-policy" />
-    <Login path="login" />
-    <Login path="activate/:token" />
-    <Logout path="logout" />
-    <ForgotPassword path="forgot-password" />
-    <ChangePassword path="change-password/:token" />
-    <Register path="register" />
-    <Register path="register/:type" />
-    <SingleEntertainer path="entertainers/:slug" />
-    <SingleEvent path="event/:slug" />
-    <ContextTest path="context" />
-  </Router>
+  <UserContextProvider>
+    <Router>
+      <Home path="/" />
+      <HowItWorks path="how-it-works" />
+      <UpcomingEvents path="upcoming-events" />
+      <HireEntertainers path="hire-entertainers" />
+      <Help path="help" />
+      <TermsOfUse path="terms-of-use" />
+      <PrivacyPolicy path="privacy-policy" />
+      <Login path="login" />
+      <Login path="activate/:token" />
+      <Logout path="logout" />
+      <ForgotPassword path="forgot-password" />
+      <ChangePassword path="change-password/:token" />
+      <Register path="register" />
+      <Register path="register/:type" />
+      <SingleEntertainer path="entertainers/:slug" />
+      <SingleEvent path="event/:slug" />
+      <ContextTest path="context" />
+    </Router>
+  </UserContextProvider>
 );
 
 export default FrontPageRouter;
