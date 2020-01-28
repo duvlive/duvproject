@@ -6,15 +6,15 @@ import djLists from 'data/entertainers/djs';
 import mcLists from 'data/entertainers/mcs';
 import lbLists from 'data/entertainers/live-bands';
 import BackEndPage from 'components/common/layout/BackEndPage';
-import { getCurrentUser } from 'utils/localStorage';
+import { UserContext } from 'context/UserContext';
 
 const Dashboard = () => {
-  const currentUser = getCurrentUser() || { firstName: 'Mariam' };
+  let { userState } = React.useContext(UserContext);
 
   return (
     <BackEndPage title="Dashboard">
       <div className="main-app">
-        <TopMessage message={`Welcome back ${currentUser.firstName},`} />
+        <TopMessage message={`Welcome back ${userState.firstName},`} />
 
         <section className="app-content">
           <div className="row">

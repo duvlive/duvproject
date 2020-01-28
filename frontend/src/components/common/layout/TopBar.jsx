@@ -17,10 +17,9 @@ import { entertainerTopMenu } from 'data/menu/entertainer';
 import { bandMemberTopMenu } from 'data/menu/band-member';
 import { administratorTopMenu } from 'data/menu/administrator';
 import LiveYourBestLife from '../utils/LiveYourBestLife';
-import { getCurrentUser } from 'utils/localStorage';
-import { getSampleUser } from 'utils/sampleData';
 import { USER_TYPES } from 'utils/constants';
 import { UserContext } from 'context/UserContext';
+import ProfileAvatar from 'assets/img/avatar/profile.png';
 
 const TOP_MENU = {
   [USER_TYPES.user]: userTopMenu,
@@ -30,8 +29,8 @@ const TOP_MENU = {
 };
 
 const TopBar = ({ showSidebar }) => {
-  const currentUser = getCurrentUser() || { type: '1' };
-  const menus = TOP_MENU[currentUser.type];
+  let { userState } = React.useContext(UserContext);
+  const menus = TOP_MENU[userState.type];
   return (
     <div className="topbar">
       <Navbar color="transparent" expand>
@@ -71,8 +70,9 @@ TopBar.propTypes = {
 };
 
 const TopBarNavigation = ({ menus }) => {
-  // Context
   let { userState } = React.useContext(UserContext);
+  const userName = userState.firstName + ' ' + userState.lastName;
+
   const topMenu = menus.map(({ title, to }) => (
     <DropdownItem key={title}>
       <Link className="text-color" to={to}>
@@ -81,12 +81,6 @@ const TopBarNavigation = ({ menus }) => {
     </DropdownItem>
   ));
 
-  const currentUser = getCurrentUser();
-
-  const userName =
-    currentUser && currentUser.id
-      ? currentUser.firstName + ' ' + currentUser.lastName
-      : getSampleUser();
   return (
     <UncontrolledDropdown inNavbar nav>
       <DropdownToggle caret nav>
@@ -94,7 +88,7 @@ const TopBarNavigation = ({ menus }) => {
         <img
           alt={userName}
           className="rounded-circle img-responsive avatar--small"
-          src={userState.profileImg}
+          src={userState.profileImg || ProfileAvatar}
           title={userName}
         />{' '}
       </DropdownToggle>

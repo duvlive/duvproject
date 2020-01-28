@@ -1,12 +1,16 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import ProfileAvatar from 'assets/img/avatar/profile.png';
-import { getCurrentUser } from 'utils/localStorage';
 
 const INITIAL_STATE = {
-  name: 'Haruna',
-  profileImg:
-    (getCurrentUser() && getCurrentUser().profileImgURL) || ProfileAvatar
+  id: null,
+  firstName: null,
+  lastName: null,
+  email: null,
+  phoneNumber: null,
+  type: 1,
+  referral: null,
+  profileImg: null,
+  isLoggedIn: false
 };
 
 // CONTEXT
@@ -19,8 +23,8 @@ let reducer = (state, action) => {
   switch (action.type) {
     case 'reset':
       return INITIAL_STATE;
-    case 'save-user':
-      return { ...state, name: action.name };
+    case 'user-login':
+      return { ...state, ...action.user, isLoggedIn: true };
     case 'update-profile-image':
       return { ...state, profileImg: action.link };
     default:
@@ -32,7 +36,7 @@ let reducer = (state, action) => {
 let UserContextProvider = props => {
   let [userState, userDispatch] = React.useReducer(reducer, INITIAL_STATE);
   let value = { userState, userDispatch };
-  console.log('userState', userState);
+  console.log('userState for provider', userState);
 
   return (
     <UserContext.Provider value={value}>{props.children}</UserContext.Provider>
@@ -43,7 +47,11 @@ UserContextProvider.propTypes = {
   children: PropTypes.any.isRequired
 };
 
-// CONSUMER
+// CONSUMER - ONLY USEFUL IN CLASSES
 let UserContextConsumer = UserContext.Consumer;
+
+// using in a function
+// let updateUser = name => () => userDispatch({ type: 'save-user', name });
+// <button className="btn btn-primary" onClick={updateUser('Oladayo')}></button>;
 
 export { UserContext, UserContextProvider, UserContextConsumer };

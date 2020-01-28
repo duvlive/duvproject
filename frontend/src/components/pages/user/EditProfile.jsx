@@ -43,69 +43,71 @@ const UserProfileForm = () => {
       render={({ isSubmitting, handleSubmit }) => (
         <div className="card card-custom card-black card-form ">
           <div className="card-body col-md-10">
-            <h4 className="card-title yellow">Event Details</h4>
+            <h4 className="card-title text-yellow">Profile Information</h4>
             <Form>
               <div className="row">
-                <div className="col-12 mt-3 mb-5">
+                <div className="col-md-3 mt-3 mb-5">
                   <UploadImage />
                 </div>
-              </div>
-              <div className="form-row">
-                <Input
-                  formGroupClassName="col-md-6"
-                  isValidMessage="First Name looks good"
-                  label="First Name"
-                  name="first_name"
-                  placeholder="First Name"
-                />
-                <Input
-                  formGroupClassName="col-md-6"
-                  isValidMessage="Last Name looks good"
-                  label="Last Name"
-                  name="last_name"
-                  placeholder="Last Name"
-                />
-              </div>
-              <div className="form-row">
-                <Input
-                  formGroupClassName="col-md-6"
-                  isValidMessage="Email address seems valid"
-                  label="Email"
-                  name="email"
-                  placeholder="Email Address"
-                />
-                <Input
-                  formGroupClassName="col-md-6"
-                  isValidMessage="Phone number looks good"
-                  label="Phone"
-                  name="phone"
-                  placeholder="Phone"
-                />
-              </div>
+                <div className="col-md-9">
+                  <div className="form-row">
+                    <Input
+                      formGroupClassName="col-md-6"
+                      isValidMessage="First Name looks good"
+                      label="First Name"
+                      name="first_name"
+                      placeholder="First Name"
+                    />
+                    <Input
+                      formGroupClassName="col-md-6"
+                      isValidMessage="Last Name looks good"
+                      label="Last Name"
+                      name="last_name"
+                      placeholder="Last Name"
+                    />
+                  </div>
+                  <div className="form-row">
+                    <Input
+                      formGroupClassName="col-md-6"
+                      isValidMessage="Email address seems valid"
+                      label="Email"
+                      name="email"
+                      placeholder="Email Address"
+                    />
+                    <Input
+                      formGroupClassName="col-md-6"
+                      isValidMessage="Phone number looks good"
+                      label="Phone"
+                      name="phone"
+                      placeholder="Phone"
+                    />
+                  </div>
 
-              <div className="form-row">
-                <Input
-                  formGroupClassName="col-md-6"
-                  isValidMessage="Location seems valid"
-                  label="Location"
-                  name="location"
-                  placeholder="Location"
-                />
-                <Input
-                  formGroupClassName="col-md-6"
-                  isValidMessage="Address looks okay"
-                  label="Address"
-                  name="address"
-                  placeholder="Address"
-                />
+                  <div className="form-row">
+                    <Input
+                      formGroupClassName="col-md-6"
+                      isValidMessage="Location seems valid"
+                      label="Location"
+                      name="location"
+                      placeholder="Location"
+                    />
+                    <Input
+                      formGroupClassName="col-md-6"
+                      isValidMessage="Address looks okay"
+                      label="Address"
+                      name="address"
+                      placeholder="Address"
+                    />
+                  </div>
+                  <Button
+                    className="btn-danger btn-wide btn-transparent mt-4"
+                    loading={isSubmitting}
+                    onClick={handleSubmit}
+                  >
+                    Update Profile
+                  </Button>
+                </div>
               </div>
-              <Button
-                className="btn-danger btn-wide btn-transparent mt-4"
-                loading={isSubmitting}
-                onClick={handleSubmit}
-              >
-                Update Profile
-              </Button>
             </Form>
           </div>
         </div>

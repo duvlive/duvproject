@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import RedLogo from 'assets/img/logo/red-white.svg';
-// import ProfileAvatar from 'assets/img/avatar/profile.png';
+import ProfileAvatar from 'assets/img/avatar/profile.png';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { Link } from '@reach/router';
 import 'react-perfect-scrollbar/dist/css/styles.css';
@@ -10,8 +10,6 @@ import entertainerSideMenu from 'data/menu/entertainer';
 import bandMemberSideMenu from 'data/menu/band-member';
 import administratorSideMenu from 'data/menu/administrator';
 import classNames from 'classnames';
-import { getCurrentUser } from 'utils/localStorage';
-import { getSampleUser } from 'utils/sampleData';
 import { USER_TYPES } from 'utils/constants';
 import { UserContext } from 'context/UserContext';
 
@@ -23,9 +21,9 @@ const SIDE_MENU = {
 };
 
 const Sidebar = ({ showSidebar, closeSidebar }) => {
-  const currentUser = getCurrentUser();
+  let { userState } = React.useContext(UserContext);
   // TODO: sort out band members
-  const sideMenu = SIDE_MENU[currentUser.type];
+  const sideMenu = SIDE_MENU[userState.type];
   return (
     <>
       <div
@@ -72,20 +70,16 @@ Sidebar.propTypes = {
 };
 
 const SidebarMenu = () => {
-  const currentUser = getCurrentUser();
-  // Context
   let { userState } = React.useContext(UserContext);
+  const userName = userState.firstName + ' ' + userState.lastName;
 
-  const userName = currentUser.id
-    ? currentUser.firstName + ' ' + currentUser.lastName
-    : getSampleUser();
   return (
     <div className="user-box">
       <div className="user-img">
         <img
           alt={userName}
           className="rounded-circle img-thumbnail img-responsive"
-          src={userState.profileImg}
+          src={userState.profileImg || ProfileAvatar}
           title={userName}
         />
         <div className="user-status offline" />

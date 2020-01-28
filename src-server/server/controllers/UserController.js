@@ -23,8 +23,7 @@ const UserController = {
       type: user.type,
       isActive: user.isActive,
       referral: user.referral,
-      profileImageID: user.profileImageID,
-      profileImageURL: user.profileImageURL
+      profileImg: user.profileImageURL
     };
     return newUser;
   },

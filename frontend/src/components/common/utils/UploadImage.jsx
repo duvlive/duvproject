@@ -3,6 +3,7 @@ import axios from 'axios';
 // import ProfileAvatar from 'assets/img/avatar/profile.png';
 import { getToken } from 'utils/localStorage';
 import { UserContext } from 'context/UserContext';
+import { Loading } from './PlayingMusicAnimation';
 
 const UploadImage = () => {
   const MAX_IMG_SIZE = 500000; //500kb
@@ -74,8 +75,8 @@ const UploadImage = () => {
         >
           {loading ? (
             <>
-              <span className="spinner-border spinner-border-sm">&nbsp;</span>
-              <span className="d-inline-block ml-2">Uploading</span>
+              <Loading />
+              <small>Uploading</small>
             </>
           ) : userState.profileImg ? (
             'Change Image'

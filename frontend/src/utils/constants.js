@@ -1,3 +1,14 @@
+export const COLOR_STYLE = [
+  'primary',
+  'secondary',
+  'success',
+  'danger',
+  'warning',
+  'info',
+  'light',
+  'dark'
+];
+
 export const USER_TYPES = {
   admin: 0,
   user: 1,

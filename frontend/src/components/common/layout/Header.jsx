@@ -14,8 +14,7 @@ import IconPhone from 'assets/icons/phone.svg';
 import WhiteLogo from 'assets/img/logo/white-white.svg';
 import RedLogo from 'assets/img/logo/red-white.svg';
 import classNames from 'classnames';
-import { getCurrentUser } from 'utils/localStorage';
-import UserAvatar from 'assets/img/avatar/user.png';
+import { UserContext } from 'context/UserContext';
 import ProfileAvatar from 'assets/img/avatar/profile.png';
 
 const menus = [
@@ -31,7 +30,7 @@ const Header = ({ showRedLogo }) => {
   const logo = showRedLogo ? RedLogo : WhiteLogo;
   return (
     <header>
-      <Header.TopNav />
+      <HeaderTopNav />
       <div className="container-fluid">
         <Navbar color="transparent" expand="md">
           <NavbarBrand tag={Link} to="/">
@@ -64,12 +63,11 @@ Header.defaultProps = {
   showRedLogo: false
 };
 
-Header.TopNav = () => {
-  const currentUser = getCurrentUser();
-  const Avatar = currentUser ? ProfileAvatar : UserAvatar;
-  const userName = currentUser
-    ? currentUser.firstName + ' ' + currentUser.lastName
-    : 'Mariam Obi';
+const HeaderTopNav = () => {
+  const { userState } = React.useContext(UserContext);
+  const Avatar = userState.profileImg || ProfileAvatar;
+  const userName = userState.firstName + ' ' + userState.lastName;
+
   return (
     <section className="top-header">
       <div className="container-fluid">
@@ -91,7 +89,7 @@ Header.TopNav = () => {
               </li>
             </ul>
           </div>
-          {getCurrentUser() ? (
+          {userState.isLoggedIn ? (
             <div className="top-header__right text-right col-6">
               <ul className="list-inline">
                 <li className="list-inline-item">

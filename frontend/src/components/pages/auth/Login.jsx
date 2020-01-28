@@ -13,11 +13,7 @@ import Button from 'components/forms/Button';
 import { loginSchema } from 'components/forms/schema/userSchema';
 import { navigate } from '@reach/router';
 import { DASHBOARD_PAGE } from 'utils/constants';
-import {
-  storeCurrentUser,
-  getCurrentUser,
-  storeToken
-} from 'utils/localStorage';
+import { storeToken } from 'utils/localStorage';
 import AlertMessage from 'components/common/utils/AlertMessage';
 import { UserContext } from 'context/UserContext';
 
@@ -40,8 +36,6 @@ Login.defaultProps = {
 };
 
 const Content = ({ token }) => {
-  let { userState, userDispatch } = React.useContext(UserContext);
-  let updateUser = name => () => userDispatch({ type: 'save-user', name });
   return (
     <section>
       <div className="container-fluid">
@@ -51,16 +45,6 @@ const Content = ({ token }) => {
           </Col>
           <Col sm={{ size: 5 }}>
             <div className="auth__container">
-              {/* output user name */}
-              <h2>Name: {userState.name}</h2>
-              <button
-                className="btn btn-primary"
-                onClick={updateUser('Oladayo')}
-              >
-                Update Name
-              </button>
-              {/* End */}
-
               <section>
                 <h5 className="header font-weight-normal mb-4">Login</h5>
                 <LoginForm token={token} />
@@ -92,7 +76,6 @@ const Content = ({ token }) => {
             </div>
           </Col>
         </Row>
-
         <p />
       </div>
     </section>
@@ -105,6 +88,7 @@ Content.propTypes = {
 
 const LoginForm = ({ token }) => {
   const [message, setMessage] = useState(null);
+  const { userState, userDispatch } = React.useContext(UserContext);
 
   // CHECK TOKEN ACTIVATION
   useEffect(() => {
@@ -130,11 +114,10 @@ const LoginForm = ({ token }) => {
 
   // CHECK IF USER HAS PREVIOUSLY SIGNED IN
   useEffect(() => {
-    if (getCurrentUser()) {
-      const user = getCurrentUser();
-      navigate(`/${DASHBOARD_PAGE[user.type]}/dashboard`);
+    if (userState && userState.isLoggedIn) {
+      navigate(`/${DASHBOARD_PAGE[userState.type]}/dashboard`);
     }
-  }, []);
+  }, [userState]);
 
   return (
     <Formik
@@ -143,50 +126,17 @@ const LoginForm = ({ token }) => {
         password: ''
       }}
       onSubmit={(values, actions) => {
-        // defalt Logins
-        const { email, password } = values;
-        if (email === 'user@duvlive.com' && password === 'passworded') {
-          storeCurrentUser({ firstName: 'Mariam', lastName: 'Obi', type: 1 });
-          return navigate('/user/dashboard');
-        } else if (email === 'uv@duvlive.com' && password === 'passworded') {
-          storeCurrentUser({ firstName: 'UV', lastName: '', type: 3 });
-          return navigate('/administrator/dashboard');
-        } else if (
-          email === 'highsoul@member.com' &&
-          password === 'passworded'
-        ) {
-          storeCurrentUser({ firstName: 'High', lastName: 'Soul', type: 4 });
-          return navigate('/band-member/dashboard');
-        } else if (
-          email === 'djcuppy@duvlive.com' &&
-          password === 'passworded'
-        ) {
-          storeCurrentUser({ firstName: 'DJ', lastName: 'Cuppy', type: 2 });
-          return navigate('/entertainer/dashboard');
-        } else {
-          setMessage('Invalid email or password');
-        }
         // post to api
         axios
           .post('/api/v1/users/login', values)
           .then(function(response) {
             const { status, data } = response;
-            // handle success
-            console.log(status, data);
             if (status === 200) {
-              storeCurrentUser(data.user);
+              userDispatch({ type: 'user-login', user: data.user });
               storeToken(data.token);
-              return navigate(`/${DASHBOARD_PAGE[data.user.type]}/dashboard`);
             }
-
-            // Save some information in the local storage
-
-            // build logged in navbar
-
-            // add navbar to website
           })
           .catch(function(error) {
-            console.log('error', error.response.data);
             setMessage({
               message: error.response.data.message
             });
@@ -214,11 +164,7 @@ const LoginForm = ({ token }) => {
             showFeedback={feedback.NONE}
             type="password"
           />
-          <Button
-            className="btn-danger btn-wide btn-transparent"
-            loading={isSubmitting}
-            onClick={handleSubmit}
-          >
+          <Button loading={isSubmitting} onClick={handleSubmit}>
             Sign in
           </Button>
         </Form>

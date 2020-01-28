@@ -17,33 +17,30 @@ import EditProfile from 'components/pages/user/EditProfile';
 import ChangePassword from 'components/pages/user/ChangePassword';
 import RegisterAsEntertainer from 'components/pages/user/RegisterAsEntertainer';
 import Approval from 'components/pages/user/Approval';
-import { UserContextProvider } from 'context/UserContext';
 
 const UserRouter = () => (
-  <UserContextProvider>
-    <Router>
-      <Dashboard path="/dashboard" />
-      <Auctions path="/auctions" />
-      <Events path="/events" />
-      <Notifications path="/notifications" />
-      <UserHelp path="/help" />
-      <Payments path="/payments-history" />
-      <SelectEntertainer path="/hire-entertainer" />
-      <SelectEntertainer path="/hire-entertainer/:event_id" />
-      <SearchEntertainer path="/entertainer/search/:event_id" />
-      <RecommendedEntertainers path="/entertainer/recommended/:event_id" />
-      <NewEvent path="events/new" />
-      <NewEvent path="events/new/:hire_type" />
-      <ViewEvent path="events/:id" />
-      {/* <AddEntertainerToEvent path="events/:id/add-entertainer/:type" /> */}
-      <Bids path="/auction/bids" />
-      <Approval path="/approval" />
-      <EditProfile path="/edit-profile" />
-      <ChangePassword path="/change-password" />
-      <RegisterAsEntertainer path="/register-as-entertainer" />
-      <EmptyDashboard default />
-    </Router>
-  </UserContextProvider>
+  <Router>
+    <Dashboard path="/dashboard" />
+    <Auctions path="/auctions" />
+    <Events path="/events" />
+    <Notifications path="/notifications" />
+    <UserHelp path="/help" />
+    <Payments path="/payments-history" />
+    <SelectEntertainer path="/hire-entertainer" />
+    <SelectEntertainer path="/hire-entertainer/:event_id" />
+    <SearchEntertainer path="/entertainer/search/:event_id" />
+    <RecommendedEntertainers path="/entertainer/recommended/:event_id" />
+    <NewEvent path="events/new" />
+    <NewEvent path="events/new/:hire_type" />
+    <ViewEvent path="events/:id" />
+    {/* <AddEntertainerToEvent path="events/:id/add-entertainer/:type" /> */}
+    <Bids path="/auction/bids" />
+    <Approval path="/approval" />
+    <EditProfile path="/edit-profile" />
+    <ChangePassword path="/change-password" />
+    <RegisterAsEntertainer path="/register-as-entertainer" />
+    <EmptyDashboard default />
+  </Router>
 );
 
 export default UserRouter;
