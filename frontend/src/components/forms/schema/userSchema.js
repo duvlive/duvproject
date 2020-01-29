@@ -48,12 +48,9 @@ const registerObject = {
 };
 
 const profileObject = {
-  first_name: stringValidation('First Name'),
-  last_name: stringValidation('Last Name'),
-  phoneNumber,
-  email,
-  location: stringValidation('Location'),
-  address: stringValidation('Address')
+  firstName: stringValidation('First Name'),
+  lastName: stringValidation('Last Name'),
+  phoneNumber
 };
 
 const changePasswordObject = {

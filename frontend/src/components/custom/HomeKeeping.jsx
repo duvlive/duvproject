@@ -16,7 +16,7 @@ export const HomeKeeping = ({ children, location }) => {
         .then(function(response) {
           const { status, data } = response;
           if (status === 200) {
-            userDispatch({ type: 'user-login', user: data });
+            userDispatch({ type: 'user-info', user: data });
           }
         })
         .catch(function(error) {

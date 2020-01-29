@@ -262,7 +262,7 @@ $input-padding-x-lg: $input-btn-padding-x-lg;
 $input-line-height-lg: 3;
 
 $input-bg: transparent;
-$input-disabled-bg: $gray-200;
+$input-disabled-bg: darken($gray-800, 5%);
 
 $input-color: $white;
 $input-border-color: rgba($white, 0.2);

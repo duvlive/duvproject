@@ -84,7 +84,9 @@ const TopBarNavigation = ({ menus }) => {
   return (
     <UncontrolledDropdown inNavbar nav>
       <DropdownToggle caret nav>
-        <span className="d-none d-sm-inline">{userName} &nbsp;</span>
+        <span className="d-none d-sm-inline text-capitalize">
+          {userName} &nbsp;
+        </span>
         <img
           alt={userName}
           className="rounded-circle img-responsive avatar--small"

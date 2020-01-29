@@ -21,7 +21,7 @@ const SIDE_MENU = {
 };
 
 const Sidebar = ({ showSidebar, closeSidebar }) => {
-  let { userState } = React.useContext(UserContext);
+  const { userState } = React.useContext(UserContext);
   // TODO: sort out band members
   const sideMenu = SIDE_MENU[userState.type];
   return (

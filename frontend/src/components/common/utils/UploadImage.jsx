@@ -49,7 +49,7 @@ const UploadImage = () => {
           if (status === 200) {
             console.log('data', data);
             userDispatch({
-              type: 'update-profile-image',
+              type: 'user-profile-image',
               link: data.image.url
             });
             setLoading(false);

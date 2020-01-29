@@ -21,11 +21,13 @@ let reducer = (state, action) => {
   console.log('userState', state);
   console.log('userAction', action);
   switch (action.type) {
-    case 'reset':
+    case 'user-logout':
       return INITIAL_STATE;
+    case 'user-info':
     case 'user-login':
+    case 'user-profile-update':
       return { ...state, ...action.user, isLoggedIn: true };
-    case 'update-profile-image':
+    case 'user-profile-image':
       return { ...state, profileImg: action.link };
     default:
       return state;

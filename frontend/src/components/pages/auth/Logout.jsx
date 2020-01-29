@@ -1,19 +1,22 @@
 import React, { useEffect } from 'react';
 import store from 'store2';
-import { navigate } from '@reach/router';
+import { UserContext } from 'context/UserContext';
+import BackEndPage from 'components/common/layout/BackEndPage';
 
 const Logout = () => {
+  const { userDispatch } = React.useContext(UserContext);
+
   useEffect(() => {
     store(false);
-    navigate('/');
+    userDispatch({ type: 'user-logout' });
   });
 
   return (
-    <div className="container">
-      <div className="content">
-        <div className="login-container">Logging you out</div>
+    <BackEndPage title="Edit Profile">
+      <div className="main-app">
+        <section className="app-content">Logging out</section>
       </div>
-    </div>
+    </BackEndPage>
   );
 };
 

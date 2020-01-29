@@ -8,9 +8,12 @@ import {
   profileObject,
   profileSchema
 } from 'components/forms/schema/userSchema';
-import { navigate } from '@reach/router';
+import axios from 'axios';
 import { setInitialValues } from 'components/forms/form-helper';
 import UploadImage from 'components/common/utils/UploadImage';
+import { UserContext } from 'context/UserContext';
+import { getToken } from 'utils/localStorage';
+import AlertMessage from 'components/common/utils/AlertMessage';
 
 const EditProfile = () => {
   return (
@@ -27,85 +30,87 @@ const EditProfile = () => {
 };
 
 const UserProfileForm = () => {
+  const [message, setMessage] = React.useState(null);
+  const { userState, userDispatch } = React.useContext(UserContext);
+
   return (
     <Formik
-      initialValues={setInitialValues(profileObject)}
+      enableReinitialize={true}
+      initialValues={setInitialValues(profileObject, userState)}
       onSubmit={(values, actions) => {
-        console.log(values);
-        setTimeout(() => {
-          actions.setSubmitting(false);
-          const { email, password } = values;
-          if (email === 'user@duvlive.com' && password === 'passworded') {
-            return navigate('/user/dashboard');
-          }
-        }, 400);
+        axios
+          .put('/api/v1/users/editUser', values, {
+            headers: { 'x-access-token': getToken() }
+          })
+          .then(function(response) {
+            const { status, data } = response;
+            console.log('status', status);
+            console.log('data', data);
+            // handle success
+            console.log(status, data);
+            if (status === 200) {
+              userDispatch({
+                type: 'user-profile-update',
+                user: data
+              });
+              setMessage({
+                type: 'success',
+                message: `Your profile has been successfully updated`
+              });
+              actions.setSubmitting(false);
+            }
+          })
+          .catch(function(error) {
+            console.log('error', error);
+            setMessage(error.response.data.message);
+            actions.setSubmitting(false);
+          });
       }}
       render={({ isSubmitting, handleSubmit }) => (
         <div className="card card-custom card-black card-form ">
           <div className="card-body col-md-10">
-            <h4 className="card-title text-yellow">Profile Information</h4>
             <Form>
               <div className="row">
-                <div className="col-md-3 mt-3 mb-5">
+                <div className="col-md-3 mt-5 mb-5">
                   <UploadImage />
                 </div>
                 <div className="col-md-9">
-                  <div className="form-row">
-                    <Input
-                      formGroupClassName="col-md-6"
-                      isValidMessage="First Name looks good"
-                      label="First Name"
-                      name="first_name"
-                      placeholder="First Name"
-                    />
-                    <Input
-                      formGroupClassName="col-md-6"
-                      isValidMessage="Last Name looks good"
-                      label="Last Name"
-                      name="last_name"
-                      placeholder="Last Name"
-                    />
+                  <div className="col-md-12">
+                    <h4 className="card-title text-blue">
+                      Profile Information
+                    </h4>
+                    <AlertMessage {...message} />
                   </div>
-                  <div className="form-row">
-                    <Input
-                      formGroupClassName="col-md-6"
-                      isValidMessage="Email address seems valid"
-                      label="Email"
-                      name="email"
-                      placeholder="Email Address"
-                    />
-                    <Input
-                      formGroupClassName="col-md-6"
-                      isValidMessage="Phone number looks good"
-                      label="Phone"
-                      name="phone"
-                      placeholder="Phone"
-                    />
+                  <Input
+                    formGroupClassName="col-md-8"
+                    isValidMessage="First Name looks good"
+                    label="First Name"
+                    name="firstName"
+                    placeholder="First Name"
+                  />
+                  <Input
+                    formGroupClassName="col-md-8"
+                    isValidMessage="Last Name looks good"
+                    label="Last Name"
+                    name="lastName"
+                    placeholder="Last Name"
+                  />
+                  <Input
+                    formGroupClassName="col-md-8"
+                    isValidMessage="Phone number looks good"
+                    label="Phone"
+                    name="phoneNumber"
+                    placeholder="Phone"
+                  />
+                  <div className="col-12">
+                    <Button
+                      className="btn-danger btn-wide btn-transparent mt-4"
+                      loading={isSubmitting}
+                      onClick={handleSubmit}
+                    >
+                      Update Profile
+                    </Button>
                   </div>
-
-                  <div className="form-row">
-                    <Input
-                      formGroupClassName="col-md-6"
-                      isValidMessage="Location seems valid"
-                      label="Location"
-                      name="location"
-                      placeholder="Location"
-                    />
-                    <Input
-                      formGroupClassName="col-md-6"
-                      isValidMessage="Address looks okay"
-                      label="Address"
-                      name="address"
-                      placeholder="Address"
-                    />
-                  </div>
-                  <Button
-                    className="btn-danger btn-wide btn-transparent mt-4"
-                    loading={isSubmitting}
-                    onClick={handleSubmit}
-                  >
-                    Update Profile
-                  </Button>
                 </div>
               </div>
             </Form>

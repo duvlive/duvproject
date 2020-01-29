@@ -14,7 +14,7 @@ const UserController = {
    * @return {object} returns newUser
    */
   transformUser(user) {
-    const newUser = {
+    return {
       id: user.id,
       firstName: user.firstName,
       lastName: user.lastName,
@@ -24,7 +24,6 @@ const UserController = {
       referral: user.referral,
       profileImg: user.profileImageURL
     };
-    return newUser;
   },
 
   /**
@@ -320,6 +319,7 @@ const UserController = {
    * @return {undefined} returns undefined
    * */
   userLogout(req, res) {
+    // TODO: set authorizaion and x-access- token to null
     res.status(200).json({
       message: 'You have been Logged out'
     });
