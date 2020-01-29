@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-// import ProfileAvatar from 'assets/img/avatar/profile.png';
+import ProfileAvatar from 'assets/img/avatar/profile.png';
 import { getToken } from 'utils/localStorage';
 import { UserContext } from 'context/UserContext';
 import { Loading } from './PlayingMusicAnimation';
+import Image from './Image';
 
 const UploadImage = () => {
   const MAX_IMG_SIZE = 500000; //500kb
@@ -64,10 +65,13 @@ const UploadImage = () => {
 
   return (
     <>
-      <div className="upload-button">
-        {userState.profileImg && (
-          <img alt="profile" src={userState.profileImg} />
-        )}
+      <div className="upload-button text-center">
+        <Image
+          bordered
+          className="avatar--large mb-3"
+          name={userState.firstName + ' ' + userState.lastName}
+          src={userState.profileImg || ProfileAvatar}
+        />
         <input id="image" onChange={onChangeHandler} type="file" />
         <label
           className="btn btn-info btn-wide btn-transparent"
@@ -76,12 +80,10 @@ const UploadImage = () => {
           {loading ? (
             <>
               <Loading />
-              <small>Uploading</small>
+              Uploading
             </>
-          ) : userState.profileImg ? (
-            'Change Image'
           ) : (
-            'Upload Image'
+            'Change Image'
           )}
         </label>
       </div>

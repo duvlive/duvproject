@@ -41,6 +41,12 @@ router.post('/api/v1/users/password-reset', UserController.passwordReset);
 router.post('/api/v1/users/update-password', UserController.updatePassword);
 
 router.get(
+  '/api/v1/who-am-i',
+  Authentication.verifyToken,
+  UserController.currentUser
+);
+
+router.get(
   '/api/v1/auth/facebook',
   passport.authenticate('facebook', { scope: ['email'] })
 );

@@ -2,14 +2,14 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 
 const INITIAL_STATE = {
-  id: null,
-  firstName: null,
-  lastName: null,
-  email: null,
-  phoneNumber: null,
+  id: '',
+  firstName: '',
+  lastName: '',
+  email: '',
+  phoneNumber: '',
   type: 1,
-  referral: null,
-  profileImg: null,
+  referral: '',
+  profileImg: '',
   isLoggedIn: false
 };
 

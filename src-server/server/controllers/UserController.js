@@ -21,7 +21,6 @@ const UserController = {
       email: user.email,
       phoneNumber: user.phoneNumber,
       type: user.type,
-      isActive: user.isActive,
       referral: user.referral,
       profileImg: user.profileImageURL
     };
@@ -324,6 +323,17 @@ const UserController = {
     res.status(200).json({
       message: 'You have been Logged out'
     });
+  },
+
+  /**
+   *  current-user
+   * @function
+   * @param {object} req is request object
+   * @param {object} res is response object
+   * @return {undefined} returns undefined
+   * */
+  currentUser(req, res) {
+    res.status(200).json(UserController.transformUser(req.user));
   },
 
   /**

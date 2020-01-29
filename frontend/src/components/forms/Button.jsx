@@ -10,10 +10,10 @@ const Button = ({
   loadingText,
   children,
   onClick,
-  style
+  color
 }) => (
   <button
-    className={classNames('btn', `btn-${style}`, className)}
+    className={classNames('btn', `btn-${color}`, className)}
     onClick={onClick}
     type="button"
   >
@@ -34,7 +34,7 @@ Button.propTypes = {
   loading: PropTypes.bool,
   loadingText: PropTypes.any,
   onClick: PropTypes.func,
-  style: PropTypes.oneOf(COLOR_STYLE)
+  color: PropTypes.oneOf(COLOR_STYLE)
 };
 
 Button.defaultProps = {
@@ -43,7 +43,7 @@ Button.defaultProps = {
   loading: false,
   loadingText: null,
   onClick: () => {},
-  style: COLOR_STYLE[0]
+  color: COLOR_STYLE[0]
 };
 
 export default Button;
