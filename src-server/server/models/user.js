@@ -3,6 +3,9 @@ import jwt from 'jsonwebtoken';
 import sendMail from '../MailSender';
 import EMAIL_CONTENT from '../email-template/content';
 
+const encryptPassword = password =>
+  bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(
     'User',
@@ -78,7 +81,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       hooks: {
         beforeCreate: user => {
-          user.password = bcrypt.hashSync(user.password, 10);
+          user.password = encryptPassword(user.password);
           user.activationToken = jwt.sign(
             {
               userId: user.id,
@@ -118,10 +121,9 @@ module.exports = (sequelize, DataTypes) => {
             });
         },
         beforeUpdate: user => {
-          user.password = bcrypt.hashSync(
-            user.password,
-            bcrypt.genSaltSync(10)
-          );
+          if (user.changed('password')) {
+            user.password = encryptPassword(user.password);
+          }
         }
       }
     },
