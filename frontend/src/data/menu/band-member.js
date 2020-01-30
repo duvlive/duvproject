@@ -4,27 +4,22 @@ export default [
     menus: [
       {
         title: 'Dashboard',
-        to: '/entertainer/dashboard',
+        to: '/band-member/dashboard',
         icon: 'gauge'
       },
       {
-        title: 'Bids',
-        to: '/entertainer/bids',
-        icon: 'bid'
-      },
-      {
         title: 'Notifications',
-        to: '/entertainer/notifications',
+        to: '/band-member/notifications',
         icon: 'megaphone'
       },
       {
         title: 'Upcoming Events',
-        to: '/entertainer/events',
+        to: '/band-member/events',
         icon: 'events'
       },
       {
         title: 'Payment History',
-        to: '/entertainer/payments',
+        to: '/band-member/payments',
         icon: 'credit-card'
       }
     ]
@@ -34,28 +29,23 @@ export default [
     menus: [
       {
         title: 'Badges',
-        to: '/entertainer/badges',
+        to: '/band-member/badges',
         icon: 'badge'
       },
       {
-        title: 'Gallery',
-        to: '/entertainer/gallery',
+        title: 'Team Gallery',
+        to: '/band-member/gallery',
         icon: 'gallery'
       },
       {
-        title: 'Videos',
-        to: '/entertainer/videos',
+        title: 'Team Videos',
+        to: '/band-member/videos',
         icon: 'video'
       },
       {
-        title: 'Band Members',
-        to: '/entertainer/band-members',
+        title: 'Team Members',
+        to: '/band-member/team-members',
         icon: 'band-members'
-      },
-      {
-        title: 'Emergency Contacts',
-        to: '/entertainer/emergency-contacts',
-        icon: 'guest'
       }
     ]
   },
@@ -64,12 +54,12 @@ export default [
     menus: [
       {
         title: 'Edit Profile',
-        to: '/entertainer/edit-profile',
+        to: '/band-member/edit-profile',
         icon: 'user-circle'
       },
       {
         title: 'Invite Friends',
-        to: '/entertainer/invite-friends',
+        to: '/band-member/invite-friends',
         icon: 'invite-friend'
       },
       {
@@ -79,7 +69,7 @@ export default [
       },
       {
         title: 'Help',
-        to: '/entertainer/help',
+        to: '/band-member/help',
         icon: 'help'
       },
       {
@@ -88,5 +78,16 @@ export default [
         icon: 'logout'
       }
     ]
+  }
+];
+
+export const bandMemberTopMenu = [
+  {
+    title: 'Payment History',
+    to: '/band-member/payments-history'
+  },
+  {
+    title: 'Change Password',
+    to: '/band-member/change-password'
   }
 ];

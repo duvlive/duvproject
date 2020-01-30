@@ -3,6 +3,9 @@ import jwt from 'jsonwebtoken';
 import sendMail from '../MailSender';
 import EMAIL_CONTENT from '../email-template/content';
 
+const encryptPassword = password =>
+  bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(
     'User',
@@ -11,89 +14,100 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-          min: 3,
-        },
+          min: 3
+        }
       },
       lastName: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-          min: 3,
-        },
+          min: 3
+        }
       },
       email: {
         type: DataTypes.STRING,
         unique: true,
         allowNull: false,
         validate: {
-          isEmail: true,
-        },
+          isEmail: true
+        }
       },
       password: {
         type: DataTypes.STRING,
         allowNull: true,
         validate: {
-          min: 6,
-        },
+          min: 6
+        }
       },
       phoneNumber: {
         type: DataTypes.STRING,
         allowNull: true,
         validate: {
-          len: [11, 14],
-        },
+          len: [11, 14]
+        }
       },
       type: {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 1,
-        validate: { isIn: [[1, 2, 3]] },
+        validate: { isIn: [[1, 2, 3]] }
       },
       isActive: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        defaultValue: false,
+        defaultValue: false
       },
       activationToken: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING
       },
       activatedAt: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATE
       },
       referral: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING
+      },
+      profileImageURL: {
+        type: DataTypes.STRING
+      },
+      profileImageID: {
+        type: DataTypes.STRING
       },
       firstTimeLogin: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        defaultValue: false,
-      },
+        defaultValue: false
+      }
     },
     {
-
       hooks: {
         beforeCreate: user => {
-          user.password = bcrypt.hashSync(user.password, 10);
+          user.password = encryptPassword(user.password);
           user.activationToken = jwt.sign(
             {
               userId: user.id,
-              type: user.type,
+              type: user.type
             },
             process.env.SECRET
           );
-          user.referral = (Date.now().toString(36).slice(-5));
+          user.referral = Date.now()
+            .toString(36)
+            .slice(-5);
         },
         afterCreate: user => {
           const models = require('./');
           const link = `${global.host}/activate/${user.activationToken}`;
           sendMail(EMAIL_CONTENT.ACTIVATE_YOUR_ACCOUNT, user, {
-            link,
+            link
           })
             .then(() => {
-              const indentityInformation = () => ['EntertainerProfile', 'BankDetail', 'Identification']
-                .map((model) => models[model].create({ userId: user.id }))
+              const indentityInformation = () =>
+                [
+                  'EntertainerProfile',
+                  'BankDetail',
+                  'Identification'
+                ].map(model => models[model].create({ userId: user.id }));
               if (user.type === 2) {
-                return Promise.all(indentityInformation())
+                return Promise.all(indentityInformation());
               }
               return Promise.resolve(null);
             })
@@ -103,13 +117,15 @@ module.exports = (sequelize, DataTypes) => {
               }
             })
             .catch(error => {
-              console.log(error)
+              console.log(error);
             });
         },
         beforeUpdate: user => {
-          user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10));
-        },
-      },
+          if (user.changed('password')) {
+            user.password = encryptPassword(user.password);
+          }
+        }
+      }
     },
     {
       classMethods: {
@@ -117,8 +133,8 @@ module.exports = (sequelize, DataTypes) => {
           // associations can be defined here
           // User.hasMany(User, {foreignKey: 'userId', as: 'bandMembers'});
           // User.hasOne(models.EntertainerProfile, {foreignKey: 'userId', as: 'profile'});
-        },
-      },
+        }
+      }
     }
   );
   return User;

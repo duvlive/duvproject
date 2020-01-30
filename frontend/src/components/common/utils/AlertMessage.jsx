@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Alert } from 'reactstrap';
+import { COLOR_STYLE } from 'utils/constants';
 
 const AlertMessage = ({ type, message, lists }) => {
   const messageList = lists && lists.map(list => <li>{list}</li>);
@@ -16,21 +17,12 @@ const AlertMessage = ({ type, message, lists }) => {
 AlertMessage.propTypes = {
   lists: PropTypes.array,
   message: PropTypes.any,
-  type: PropTypes.oneOf([
-    'primary',
-    'secondary',
-    'success',
-    'danger',
-    'warning',
-    'info',
-    'light',
-    'dark'
-  ])
+  type: PropTypes.oneOf(COLOR_STYLE)
 };
 
 AlertMessage.defaultProps = {
   lists: [],
   message: null,
-  type: 'danger'
+  type: COLOR_STYLE[0]
 };
 export default AlertMessage;

@@ -87,3 +87,13 @@ button:focus {
 .input-group-append .btn {
   z-index: 0;
 }
+
+// btn loading
+.btn {
+  position: relative;
+  .loading {
+    position: absolute;
+    left: 0.5rem;
+    top: 1rem;
+  }
+}

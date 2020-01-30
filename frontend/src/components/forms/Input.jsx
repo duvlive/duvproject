@@ -24,11 +24,11 @@ const Input = ({
   labelClassName,
   name,
   optional,
-  placeholder,
   showFeedback,
   tooltipText,
   tooltipPosition,
-  type
+  type,
+  ...props
 }) => {
   return (
     <div
@@ -54,8 +54,8 @@ const Input = ({
           )}
           id={name}
           name={name}
-          placeholder={placeholder}
           type={type}
+          {...props}
         />
       </div>
       <FeedbackMessage
@@ -83,7 +83,6 @@ Input.defaultProps = {
   labelClassName: null,
   labelLink: null,
   optional: false,
-  placeholder: null,
   showFeedback: feedback.ALL,
   tooltipText: null,
   tooltipPosition: 'right',
@@ -107,7 +106,6 @@ Input.propTypes = {
   }),
   name: PropTypes.string.isRequired,
   optional: PropTypes.bool,
-  placeholder: PropTypes.string,
   showFeedback: PropTypes.oneOf(Object.keys(feedback)),
   tooltipPosition: PropTypes.string,
   tooltipText: PropTypes.string,

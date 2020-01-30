@@ -1,0 +1,11 @@
+.upload-button {
+  label {
+    width: auto;
+  }
+  // hide current file
+  input[type='file'] {
+    height: 0;
+    overflow: hidden;
+    width: 0;
+  }
+}
