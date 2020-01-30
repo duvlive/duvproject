@@ -37,8 +37,14 @@ router.post('/api/v1/users', UserController.createUser);
 router.post('/api/v1/users/login', UserController.userLogin);
 router.get('/api/v1/users/logout', UserController.userLogout);
 router.get('/api/v1/users/activate', UserController.activateUser);
-router.post('/api/v1/users/password-reset', UserController.passwordReset);
-router.post('/api/v1/users/update-password', UserController.updatePassword);
+
+router.post('/api/v1/users/forgot-password', UserController.forgotPassword);
+router.post('/api/v1/users/reset-password', UserController.resetPassword);
+router.put(
+  '/api/v1/users/change-password',
+  Authentication.verifyToken,
+  UserController.changePassword
+);
 
 router.get(
   '/api/v1/who-am-i',

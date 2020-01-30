@@ -209,6 +209,7 @@ const UserController = {
             message: 'Invalid email or password'
           });
         }
+
         if (!user.firstTimeLogin) {
           user.update({ firstTimeLogin: true });
         }
@@ -229,13 +230,13 @@ const UserController = {
   },
 
   /**
-   * password reset
+   * forgot password - generates reset password link
    * @function
    * @param {object} req is req object
    * @param {object} res is res object
    * @return {object} returns res object
    */
-  passwordReset(req, res) {
+  forgotPassword(req, res) {
     const { email } = req.body;
     const host = req.headers.host;
     if (!email) {
@@ -250,7 +251,7 @@ const UserController = {
           return res.status(404).json({ message: 'User not found' });
         } else {
           const resetToken = Authentication.generateToken(user);
-          const link = `${host}/change-password/${resetToken}`;
+          const link = `${host}/reset-password/${resetToken}`;
           sendMail(EMAIL_CONTENT.PASSWORD_RESET, user, {
             link
           });
@@ -265,13 +266,13 @@ const UserController = {
   },
 
   /**
-   * update password
+   * reset password
    * @function
    * @param {object} req is req object
    * @param {object} res is res object
    * @return {object} returns res object
    */
-  updatePassword(req, res) {
+  resetPassword(req, res) {
     const { password, confirmPassword } = req.body;
     if (!password || !confirmPassword) {
       return res
@@ -310,6 +311,42 @@ const UserController = {
       .catch(error => {
         return res.status(500).json({ error: error.message });
       });
+  },
+
+  /**
+   * change password
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  changePassword(req, res) {
+    const { oldPassword, password, confirmPassword } = req.body;
+    const { user } = req;
+
+    if (!password || !confirmPassword || !oldPassword) {
+      return res.status(400).json({
+        message:
+          'The old, current and confirmation password fields cannot be empty'
+      });
+    }
+
+    if (password !== confirmPassword) {
+      return res.status(403).json({ message: 'Passwords do not match' });
+    }
+
+    if (!bcrypt.compareSync(oldPassword, user.password)) {
+      return res.status(403).json({
+        message: 'Invalid old password'
+      });
+    }
+
+    return user.update({ password }).then(() => {
+      sendMail(EMAIL_CONTENT.CHANGE_PASSWORD, user);
+      return res
+        .status(200)
+        .json({ message: 'Your password has been successfully updated' });
+    });
   },
 
   /**

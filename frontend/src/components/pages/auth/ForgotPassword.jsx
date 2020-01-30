@@ -63,7 +63,7 @@ const ForgotPasswordForm = () => {
       onSubmit={(values, actions) => {
         // post to api
         axios
-          .post('/api/v1/users/password-reset', values)
+          .post('/api/v1/users/forgot-password', values)
           .then(function(response) {
             const { status, data } = response;
             // handle success

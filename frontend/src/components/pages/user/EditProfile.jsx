@@ -14,6 +14,7 @@ import UploadImage from 'components/common/utils/UploadImage';
 import { UserContext } from 'context/UserContext';
 import { getToken } from 'utils/localStorage';
 import AlertMessage from 'components/common/utils/AlertMessage';
+import { ChangePasswordForm } from 'components/pages/user/ChangePassword';
 
 const EditProfile = () => {
   return (
@@ -74,43 +75,37 @@ const UserProfileForm = () => {
                 <div className="col-md-3 mt-5 mb-5">
                   <UploadImage />
                 </div>
-                <div className="col-md-9">
-                  <div className="col-md-12">
-                    <h4 className="card-title text-blue">
-                      Profile Information
-                    </h4>
-                    <AlertMessage {...message} />
-                  </div>
+                <div className="col-md-6">
+                  <h4 className="card-title text-blue">Profile Information</h4>
+                  <AlertMessage {...message} />
                   <Input
-                    formGroupClassName="col-md-8"
                     isValidMessage="First Name looks good"
                     label="First Name"
                     name="firstName"
                     placeholder="First Name"
                   />
                   <Input
-                    formGroupClassName="col-md-8"
                     isValidMessage="Last Name looks good"
                     label="Last Name"
                     name="lastName"
                     placeholder="Last Name"
                   />
                   <Input
-                    formGroupClassName="col-md-8"
                     isValidMessage="Phone number looks good"
                     label="Phone"
                     name="phoneNumber"
                     placeholder="Phone"
                   />
-                  <div className="col-12">
-                    <Button
-                      className="btn-danger btn-wide btn-transparent mt-4"
-                      loading={isSubmitting}
-                      onClick={handleSubmit}
-                    >
-                      Update Profile
-                    </Button>
-                  </div>
+                  <Button
+                    className="btn-danger btn-wide btn-transparent mt-3"
+                    loading={isSubmitting}
+                    onClick={handleSubmit}
+                  >
+                    Update Profile
+                  </Button>
+                  <section className="mt-5 pt-3 mb-5 pb-5">
+                    <ChangePasswordForm />
+                  </section>
                 </div>
               </div>
             </Form>

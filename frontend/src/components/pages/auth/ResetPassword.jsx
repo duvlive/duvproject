@@ -6,7 +6,7 @@ import Footer from 'components/common/layout/Footer';
 import { Formik, Form } from 'formik';
 import Input from 'components/forms/Input';
 import Button from 'components/forms/Button';
-import { changePasswordByEmailObject } from 'components/forms/schema/userSchema';
+import { resetPasswordObject } from 'components/forms/schema/userSchema';
 import { createSchema } from 'components/forms/schema/schema-helpers';
 import { setInitialValues } from 'components/forms/form-helper';
 import { Link } from '@reach/router';
@@ -14,7 +14,7 @@ import { Col, Row } from 'reactstrap';
 import AlertMessage from 'components/common/utils/AlertMessage';
 import Quotes from 'components/common/utils/Quotes';
 
-const ChangePassword = ({ token }) => (
+const ResetPassword = ({ token }) => (
   <>
     <section className="auth">
       <Header showRedLogo />
@@ -24,11 +24,11 @@ const ChangePassword = ({ token }) => (
   </>
 );
 
-ChangePassword.propTypes = {
+ResetPassword.propTypes = {
   token: PropTypes.string
 };
 
-ChangePassword.defaultProps = {
+ResetPassword.defaultProps = {
   token: ''
 };
 
@@ -46,7 +46,7 @@ const Content = ({ token }) => {
                 <h5 className="header font-weight-normal mb-4">
                   Change Password
                 </h5>
-                <ChangePasswordForm token={token} />
+                <ResetPasswordForm token={token} />
               </section>
               <section className="auth__footer">
                 <div className="mt-4 text-center">
@@ -68,16 +68,16 @@ Content.propTypes = {
   token: PropTypes.string.isRequired
 };
 
-const ChangePasswordForm = ({ token }) => {
+const ResetPasswordForm = ({ token }) => {
   const [message, setMessage] = useState(null);
   return (
     <Formik
-      initialValues={setInitialValues(changePasswordByEmailObject)}
+      initialValues={setInitialValues(resetPasswordObject)}
       onSubmit={(values, actions) => {
         // post to api
         console.log('values', values);
         axios
-          .post('/api/v1/users/update-password', values, { params: { token } })
+          .post('/api/v1/users/reset-password', values, { params: { token } })
           .then(function(response) {
             const { status, data } = response;
             // handle success
@@ -122,11 +122,11 @@ const ChangePasswordForm = ({ token }) => {
           </Button>
         </Form>
       )}
-      validationSchema={createSchema(changePasswordByEmailObject)}
+      validationSchema={createSchema(resetPasswordObject)}
     />
   );
 };
-ChangePasswordForm.propTypes = {
+ResetPasswordForm.propTypes = {
   token: PropTypes.string.isRequired
 };
-export default ChangePassword;
+export default ResetPassword;

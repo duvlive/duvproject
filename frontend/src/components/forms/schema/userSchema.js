@@ -54,19 +54,19 @@ const profileObject = {
 };
 
 const changePasswordObject = {
-  old_password: strongPassword,
+  oldPassword: strongPassword,
   password: strongPassword,
-  confirm_password: confirmPassword
+  confirmPassword: confirmPassword
 };
 
-const changePasswordByEmailObject = {
+const resetPasswordObject = {
   password: strongPassword,
   confirmPassword: confirmPassword
 };
 
 const personalInfoObject = {
-  first_name: stringValidation('First Name'),
-  last_name: stringValidation('Last Name'),
+  firstName: stringValidation('First Name'),
+  lastName: stringValidation('Last Name'),
   email,
   phoneNumber,
   about: optionalValidation(stringValidation('About', 20))
@@ -90,7 +90,7 @@ export {
   registerObject,
   forgotPasswordSchema,
   changePasswordObject,
-  changePasswordByEmailObject,
+  resetPasswordObject,
   profileObject,
   profileSchema,
   personalInfoObject

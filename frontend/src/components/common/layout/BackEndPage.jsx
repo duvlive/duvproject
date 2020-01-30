@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { navigate } from '@reach/router';
 import Sidebar from 'components/common/layout/Sidebar';
 import LandingSection from 'components/common/layout/LandingSection';
-import { UserContext } from 'context/UserContext';
+import { getToken } from 'utils/localStorage';
 
 const BackEndPage = ({ children, title, subtitle }) => {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -16,13 +16,12 @@ const BackEndPage = ({ children, title, subtitle }) => {
     setShowSidebar(true);
   };
 
-  const { userState } = React.useContext(UserContext);
   // CHECK IF USER HAS PREVIOUSLY SIGNED IN
   React.useEffect(() => {
-    if (!(userState && userState.isLoggedIn)) {
+    if (!getToken()) {
       navigate(`/login`);
     }
-  }, [userState]);
+  }, []);
 
   return (
     <div>
