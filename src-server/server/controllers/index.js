@@ -15,7 +15,7 @@ export {
   ContactController,
   IdentificationController,
   EventController,
-	ApproveCommentController,
+  ApproveCommentController,
   EmailController,
   ImageController
 };

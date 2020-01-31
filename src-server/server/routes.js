@@ -6,7 +6,7 @@ import {
   ContactController,
   IdentificationController,
   EventController,
-	ApproveCommentController,
+  ApproveCommentController,
   EmailController,
   ImageController
 } from './controllers';

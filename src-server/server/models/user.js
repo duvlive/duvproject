@@ -105,7 +105,7 @@ module.exports = (sequelize, DataTypes) => {
                   'EntertainerProfile',
                   'BankDetail',
                   'Identification',
-									'ApprovalComment'
+                  'ApprovalComment'
                 ].map(model => models[model].create({ userId: user.id }));
               if (user.type === 2) {
                 return Promise.all(indentityInformation());

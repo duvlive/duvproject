@@ -23,33 +23,33 @@ const ApproveCommentController = {
       return res.status(400).json({ message: error.message.join('') });
     }
     return User
-		.findOne({where: { id: userId }})
-		.then(user => Promise.all([updateUser(
+    .findOne({where: { id: userId }})
+    .then(user => Promise.all([updateUser(
       user,
       {
         entertainerProfile: 1, 
-				bankAccount, 
-				contact, 
-				identification, 
-				youTube,
-				approved,
+        bankAccount, 
+        contact, 
+        identification, 
+        youTube,
+        approved,
       },
       'ApprovalComment'
     ), updateUser(
       user,
       {
-				approved,
+        approved,
       },
       'Profile'
     )]))
-		.then(([newApprovalComment, profile]) => {
+    .then(([newApprovalComment, profile]) => {
         return res.status(200).json({
           message: 'Approval comment added successfully',
           approvalComment: newApprovalComment,
-					profile,
+          profile,
         });
     })
-		.catch(error => {
+    .catch(error => {
         const status = error.status || 500;
         const errorMessage = error.message || error;
         return res.status(status).json({ message: errorMessage });
@@ -64,16 +64,16 @@ const ApproveCommentController = {
    * @return {object} returns res object
    */
   getEntertainerApprovalWithComment(req, res) {
-		const { userId } = req.body;
-		User.findOne({where: { id: userId }})
-		.then(user =>
-			Promise.all([user.getApprovalComment(), user.getProfile()]))
-		.then(([comments, profile]) => res.status(200).json({ comments, profile }))
-		.catch(error => {
-			const status = error.status || 500;
-			const errorMessage = error.message || error;
-			return res.status(status).json({ message: errorMessage });
-		});
+    const { userId } = req.body;
+    User.findOne({where: { id: userId }})
+    .then(user =>
+      Promise.all([user.getApprovalComment(), user.getProfile()]))
+    .then(([comments, profile]) => res.status(200).json({ comments, profile }))
+    .catch(error => {
+      const status = error.status || 500;
+      const errorMessage = error.message || error;
+      return res.status(status).json({ message: errorMessage });
+    });
   }
 };
 
