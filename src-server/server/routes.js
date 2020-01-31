@@ -142,7 +142,8 @@ router
 router
   .route('/api/v1/approveEntertainer')
   .all(Authentication.verifyToken, Authentication.validateAdmin)
-  .put(ApproveCommentController.approveEntertainerWithComment);
+  .put(ApproveCommentController.approveEntertainerWithComment)
+  .get(ApproveCommentController.getEntertainerApprovalWithComment);
 
 // Events routes
 router
