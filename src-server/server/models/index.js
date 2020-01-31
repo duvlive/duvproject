@@ -32,10 +32,13 @@ Object.keys(db).forEach(function(modelName) {
 
 db.User.hasOne(db.EntertainerProfile, { foreignKey: 'userId', as: 'profile' });
 db.User.hasOne(db.BankDetail, { foreignKey: 'userId', as: 'bankDetail' });
-db.User.hasOne(db.Identification, {
-  foreignKey: 'userId',
+db.User.hasOne(db.Identification, { foreignKey: 'userId',
   as: 'identification',
   targetKey: 'identification',
+});
+db.User.hasOne(db.ApprovalComment, { foreignKey: 'userId',
+  as: 'approvalComment',
+  targetKey: 'approvalComment',
 });
 
 db.User.hasMany(db.User, { foreignKey: 'userId', as: 'bandMembers' });

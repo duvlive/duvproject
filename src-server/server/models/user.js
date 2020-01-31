@@ -104,17 +104,13 @@ module.exports = (sequelize, DataTypes) => {
                 [
                   'EntertainerProfile',
                   'BankDetail',
-                  'Identification'
+                  'Identification',
+                  'ApprovalComment'
                 ].map(model => models[model].create({ userId: user.id }));
               if (user.type === 2) {
                 return Promise.all(indentityInformation());
               }
               return Promise.resolve(null);
-            })
-            .then(res => {
-              if (res) {
-                return user.setProfile(res);
-              }
             })
             .catch(error => {
               console.log(error);
