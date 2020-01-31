@@ -60,3 +60,18 @@ export default [
     ]
   }
 ];
+
+export const userTopMenu = [
+  {
+    title: 'Auctions',
+    to: '/user/auctions'
+  },
+  {
+    title: 'Payment History',
+    to: '/user/payments-history'
+  },
+  {
+    title: 'Change Password',
+    to: '/user/change-password'
+  }
+];

@@ -1,31 +1,49 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
+import { COLOR_STYLE } from 'utils/constants';
+import { Loading } from 'components/common/utils/PlayingMusicAnimation';
 
-const Button = ({ type, onClick, loading, className, children }) => (
-  <button className={`btn ${className}`} onClick={onClick} type={type}>
-    {loading && (
-      <span
-        aria-hidden="true"
-        className="spinner-border spinner-border-sm mr-2"
-        role="status"
-      />
+const Button = ({
+  className,
+  loading,
+  loadingText,
+  children,
+  onClick,
+  color
+}) => (
+  <button
+    className={classNames('btn', `btn-${color}`, className)}
+    onClick={onClick}
+    type="button"
+  >
+    {loading ? (
+      <>
+        <Loading />
+        {loadingText || children}
+      </>
+    ) : (
+      children
     )}
-    {children}
   </button>
 );
 
 Button.propTypes = {
-  children: PropTypes.string.isRequired,
+  children: PropTypes.any,
   className: PropTypes.string,
   loading: PropTypes.bool,
-  onClick: PropTypes.func.isRequired,
-  type: PropTypes.string
+  loadingText: PropTypes.any,
+  onClick: PropTypes.func,
+  color: PropTypes.oneOf(COLOR_STYLE)
 };
 
 Button.defaultProps = {
-  type: 'submit',
+  children: 'Submit',
+  className: 'btn-wide btn-transparent',
   loading: false,
-  className: ''
+  loadingText: null,
+  onClick: () => {},
+  color: COLOR_STYLE[0]
 };
 
 export default Button;

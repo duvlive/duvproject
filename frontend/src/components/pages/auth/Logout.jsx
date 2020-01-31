@@ -1,10 +1,25 @@
-import React from 'react';
-import { clearStorage } from 'utils/localStorage';
-import { Redirect } from '@reach/router';
+import React, { useEffect } from 'react';
+import store from 'store2';
+import { UserContext } from 'context/UserContext';
+import BackEndPage from 'components/common/layout/BackEndPage';
+import { navigate } from '@reach/router';
 
 const Logout = () => {
-  clearStorage();
-  return <Redirect noThrow to="/login" />;
+  const { userDispatch } = React.useContext(UserContext);
+
+  useEffect(() => {
+    store(false);
+    userDispatch({ type: 'user-logout' });
+    navigate('/login');
+  });
+
+  return (
+    <BackEndPage title="Log Out">
+      <div className="main-app">
+        <section className="app-content">Logging out</section>
+      </div>
+    </BackEndPage>
+  );
 };
 
 export default Logout;

@@ -105,3 +105,18 @@ export default [
     ]
   }
 ];
+
+export const administratorTopMenu = [
+  {
+    title: "Recent Entertainers'  Payment",
+    to: '/entertainer/entertainer-payment'
+  },
+  {
+    title: 'Login as User',
+    to: '/user/dashboard'
+  },
+  {
+    title: 'Change Password',
+    to: '/administrator/change-password'
+  }
+];

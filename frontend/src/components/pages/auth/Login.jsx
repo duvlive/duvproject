@@ -13,8 +13,9 @@ import Button from 'components/forms/Button';
 import { loginSchema } from 'components/forms/schema/userSchema';
 import { navigate } from '@reach/router';
 import { DASHBOARD_PAGE } from 'utils/constants';
-import { storeCurrentUser, getCurrentUser } from 'utils/localStorage';
+import { storeToken } from 'utils/localStorage';
 import AlertMessage from 'components/common/utils/AlertMessage';
+import { UserContext } from 'context/UserContext';
 
 const Login = ({ token }) => (
   <>
@@ -50,10 +51,16 @@ const Content = ({ token }) => {
               </section>
               <section className="auth__social-media">
                 <p className="auth__social-media--text">or login with:</p>
-                <Link className="auth__social-media--icons" to="/">
+                <Link
+                  className="auth__social-media--icons"
+                  to="/api/v1/auth/google"
+                >
                   <span className="icon-google" />
                 </Link>
-                <Link className="auth__social-media--icons" to="/">
+                <Link
+                  className="auth__social-media--icons"
+                  to="/api/v1/auth/facebook"
+                >
                   <span className="icon-facebook-official" />
                 </Link>
               </section>
@@ -69,7 +76,6 @@ const Content = ({ token }) => {
             </div>
           </Col>
         </Row>
-
         <p />
       </div>
     </section>
@@ -82,6 +88,7 @@ Content.propTypes = {
 
 const LoginForm = ({ token }) => {
   const [message, setMessage] = useState(null);
+  const { userState, userDispatch } = React.useContext(UserContext);
 
   // CHECK TOKEN ACTIVATION
   useEffect(() => {
@@ -107,11 +114,10 @@ const LoginForm = ({ token }) => {
 
   // CHECK IF USER HAS PREVIOUSLY SIGNED IN
   useEffect(() => {
-    if (getCurrentUser()) {
-      const user = getCurrentUser();
-      navigate(`/${DASHBOARD_PAGE[user.type]}/dashboard`);
+    if (userState && userState.isLoggedIn) {
+      navigate(`/${DASHBOARD_PAGE[userState.type]}/dashboard`);
     }
-  }, []);
+  }, [userState]);
 
   return (
     <Formik
@@ -120,45 +126,17 @@ const LoginForm = ({ token }) => {
         password: ''
       }}
       onSubmit={(values, actions) => {
-        // defalt Logins
-        const { email, password } = values;
-        if (email === 'user@duvlive.com' && password === 'passworded') {
-          return navigate('/user/dashboard');
-        } else if (email === 'uv@duvlive.com' && password === 'passworded') {
-          return navigate('/administrator/dashboard');
-        } else if (
-          email === 'highsoul@member.com' &&
-          password === 'passworded'
-        ) {
-          return navigate('/band-member/dashboard');
-        } else if (
-          email === 'djcuppy@duvlive.com' &&
-          password === 'passworded'
-        ) {
-          return navigate('/entertainer/dashboard');
-        } else {
-          setMessage('Invalid email or password');
-        }
         // post to api
         axios
           .post('/api/v1/users/login', values)
           .then(function(response) {
             const { status, data } = response;
-            // handle success
-            console.log(status, data);
             if (status === 200) {
-              storeCurrentUser(data.user);
-              return navigate(`/${DASHBOARD_PAGE[data.user.type]}/dashboard`);
+              userDispatch({ type: 'user-login', user: data.user });
+              storeToken(data.token);
             }
-
-            // Save some information in the local storage
-
-            // build logged in navbar
-
-            // add navbar to website
           })
           .catch(function(error) {
-            console.log('error', error.response.data);
             setMessage({
               message: error.response.data.message
             });
@@ -186,11 +164,7 @@ const LoginForm = ({ token }) => {
             showFeedback={feedback.NONE}
             type="password"
           />
-          <Button
-            className="btn-danger btn-wide btn-transparent"
-            loading={isSubmitting}
-            onClick={handleSubmit}
-          >
+          <Button loading={isSubmitting} onClick={handleSubmit}>
             Sign in
           </Button>
         </Form>
@@ -205,3 +179,9 @@ LoginForm.propTypes = {
 };
 
 export default Login;
+
+// Please verify your email address by clicking the link you received in email.
+// Not verifying within 24 hours since registration will disable your account.
+// Click here to resend the verification email to duvtest.123@gmail.com.
+// If this is not your correct email address, please update it under User Settings.
+// If you need any assistance, please contact our support.

@@ -5,7 +5,7 @@ const EMAIL_CONTENT = {
     subject: '[D.U.V LIVE] Verify your Email',
     title: 'Verify Your Email',
     contentTop:
-      'You have successfully created your D.U.V Live account. Please click on the link below to complete your registration.',
+      'You have successfully created your D.U.V Live account. To complete your registration, you need to confirm that we got your email address right.',
     buttonText: 'Verify Email'
   },
   PASSWORD_RESET: {
@@ -16,6 +16,13 @@ const EMAIL_CONTENT = {
     contentBottom:
       "If you didn't request a password reset, let us know as soon as possible",
     buttonText: 'Reset Password'
+  },
+  CHANGE_PASSWORD: {
+    subject: '[D.U.V LIVE] Your password has been changed!',
+    title: 'Password Changed!',
+    contentTop: 'This email confirms that your password has been changed.',
+    contentBottom:
+      "If you didn't change your password, your account might have been compromised and we recommend that you reset your password as soon as possible."
   }
 };
 

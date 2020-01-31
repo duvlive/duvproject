@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { navigate } from '@reach/router';
 import Sidebar from 'components/common/layout/Sidebar';
 import LandingSection from 'components/common/layout/LandingSection';
+import { getToken } from 'utils/localStorage';
 
 const BackEndPage = ({ children, title, subtitle }) => {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -13,6 +15,14 @@ const BackEndPage = ({ children, title, subtitle }) => {
     document.body.classList.add('modal-open');
     setShowSidebar(true);
   };
+
+  // CHECK IF USER HAS PREVIOUSLY SIGNED IN
+  React.useEffect(() => {
+    if (!getToken()) {
+      navigate(`/login`);
+    }
+  }, []);
+
   return (
     <div>
       <Sidebar closeSidebar={closeSidebar} showSidebar={showSidebar} />

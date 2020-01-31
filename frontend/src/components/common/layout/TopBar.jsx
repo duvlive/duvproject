@@ -12,16 +12,25 @@ import {
   DropdownItem
 } from 'reactstrap';
 import { Link } from '@reach/router';
-import UserAvatar from 'assets/img/avatar/user.png';
-import EntertainerAvatar from 'assets/img/avatar/entertainer.jpg';
-import BandMemberAvatar from 'assets/img/avatar/band-member.png';
-import AdministratorAvatar from 'assets/img/avatar/administrator.png';
-import { Match } from '@reach/router';
+import { userTopMenu } from 'data/menu/user';
+import { entertainerTopMenu } from 'data/menu/entertainer';
+import { bandMemberTopMenu } from 'data/menu/band-member';
+import { administratorTopMenu } from 'data/menu/administrator';
 import LiveYourBestLife from '../utils/LiveYourBestLife';
-import { getCurrentUser } from 'utils/localStorage';
+import { USER_TYPES } from 'utils/constants';
+import { UserContext } from 'context/UserContext';
 import ProfileAvatar from 'assets/img/avatar/profile.png';
 
+const TOP_MENU = {
+  [USER_TYPES.user]: userTopMenu,
+  [USER_TYPES.entertainer]: entertainerTopMenu,
+  [USER_TYPES.admin]: administratorTopMenu,
+  [USER_TYPES.bandMember]: bandMemberTopMenu
+};
+
 const TopBar = ({ showSidebar }) => {
+  let { userState } = React.useContext(UserContext);
+  const menus = TOP_MENU[userState.type];
   return (
     <div className="topbar">
       <Navbar color="transparent" expand>
@@ -47,25 +56,8 @@ const TopBar = ({ showSidebar }) => {
                 <span className="dot" />
               </NavLink>
             </NavItem>
-            {/* User */}
-            <Match path="/entertainer/*">
-              {props => (props.match ? <EntertainerTopNavigation /> : null)}
-            </Match>
 
-            {/* Band Member */}
-            <Match path="/band-member/*">
-              {props => (props.match ? <BandMemberTopNavigation /> : null)}
-            </Match>
-
-            {/* Entertainer */}
-            <Match path="/user/*">
-              {props => (props.match ? <UserTopNavigation /> : null)}
-            </Match>
-
-            {/* Administrator */}
-            <Match path="/administrator/*">
-              {props => (props.match ? <AdministratorTopNavigation /> : null)}
-            </Match>
+            <TopBarNavigation menus={menus} />
           </Nav>
         </Collapse>
       </Navbar>
@@ -77,39 +69,33 @@ TopBar.propTypes = {
   showSidebar: PropTypes.func.isRequired
 };
 
-const UserTopNavigation = () => {
-  const currentUser = getCurrentUser();
-  const Avatar = currentUser ? ProfileAvatar : UserAvatar;
-  const userName = currentUser
-    ? currentUser.firstName + ' ' + currentUser.lastName
-    : 'Mariam Obi';
+const TopBarNavigation = ({ menus }) => {
+  let { userState } = React.useContext(UserContext);
+  const userName = userState.firstName + ' ' + userState.lastName;
+
+  const topMenu = menus.map(({ title, to }) => (
+    <DropdownItem key={title}>
+      <Link className="text-color" to={to}>
+        {title}
+      </Link>
+    </DropdownItem>
+  ));
+
   return (
     <UncontrolledDropdown inNavbar nav>
       <DropdownToggle caret nav>
-        <span className="d-none d-sm-inline">{userName} &nbsp;</span>
+        <span className="d-none d-sm-inline text-capitalize">
+          {userName} &nbsp;
+        </span>
         <img
-          alt="Mariam Obi"
+          alt={userName}
           className="rounded-circle img-responsive avatar--small"
-          src={Avatar}
-          title="Mariam Obi"
+          src={userState.profileImg || ProfileAvatar}
+          title={userName}
         />{' '}
       </DropdownToggle>
       <DropdownMenu right>
-        <DropdownItem>
-          <Link className="text-color" to="/user/auctions">
-            Auctions
-          </Link>
-        </DropdownItem>
-        <DropdownItem>
-          <Link className="text-color" to="/user/payments-history">
-            Payment History
-          </Link>
-        </DropdownItem>
-        <DropdownItem>
-          <Link className="text-color" to="/user/change-password">
-            Change Password
-          </Link>
-        </DropdownItem>
+        {topMenu}
         <DropdownItem divider />
         <DropdownItem>
           <Link className="text-color" to="/logout">
@@ -121,113 +107,8 @@ const UserTopNavigation = () => {
   );
 };
 
-const BandMemberTopNavigation = () => (
-  <UncontrolledDropdown inNavbar nav>
-    <DropdownToggle caret nav>
-      <span className="d-none d-sm-inline">High Soul </span>
-      <img
-        alt="High Soul"
-        className="rounded-circle img-responsive avatar--small"
-        src={BandMemberAvatar}
-        title="High Soul"
-      />{' '}
-    </DropdownToggle>
-    <DropdownMenu right>
-      <DropdownItem>
-        <Link className="text-color" to="/band-member/payments-history">
-          Payment History
-        </Link>
-      </DropdownItem>
-      <DropdownItem>
-        <Link className="text-color" to="/band-member/change-password">
-          Change Password
-        </Link>
-      </DropdownItem>
-      <DropdownItem divider />
-      <DropdownItem>
-        <Link className="text-color" to="/logout">
-          Logout
-        </Link>
-      </DropdownItem>
-    </DropdownMenu>
-  </UncontrolledDropdown>
-);
-
-const EntertainerTopNavigation = () => {
-  const currentUser = getCurrentUser();
-  const Avatar = currentUser ? ProfileAvatar : EntertainerAvatar;
-  const userName = currentUser
-    ? currentUser.firstName + ' ' + currentUser.lastName
-    : 'DJ Cuppy';
-
-  return (
-    <UncontrolledDropdown inNavbar nav>
-      <DropdownToggle caret nav>
-        <span className="d-none d-sm-inline">{userName} &nbsp;</span>
-        <img
-          alt="DJ Cuppy"
-          className="rounded-circle img-responsive avatar--small"
-          src={Avatar}
-          title="DJ Cuppy"
-        />{' '}
-      </DropdownToggle>
-      <DropdownMenu right>
-        <DropdownItem>
-          <Link className="text-color" to="/entertainer/bids">
-            My Bids
-          </Link>
-        </DropdownItem>
-        <DropdownItem>
-          <Link className="text-color" to="/entertainer/payments-history">
-            Payment History
-          </Link>
-        </DropdownItem>
-        <DropdownItem>
-          <Link className="text-color" to="/user/dashboard">
-            Login as User
-          </Link>
-        </DropdownItem>
-        <DropdownItem divider />
-        <DropdownItem>
-          <Link className="text-color" to="/logout">
-            Logout
-          </Link>
-        </DropdownItem>
-      </DropdownMenu>
-    </UncontrolledDropdown>
-  );
+TopBarNavigation.propTypes = {
+  menus: PropTypes.array.isRequired
 };
-
-const AdministratorTopNavigation = () => (
-  <UncontrolledDropdown inNavbar nav>
-    <DropdownToggle caret nav>
-      <span className="d-none d-sm-inline">U.V </span>
-      <img
-        alt="U.V"
-        className="rounded-circle img-responsive avatar--small"
-        src={AdministratorAvatar}
-        title="U.V"
-      />{' '}
-    </DropdownToggle>
-    <DropdownMenu right>
-      <DropdownItem>
-        <Link className="text-color" to="/entertainer/entertainer-payment">
-          Recent Entertainers' Payment
-        </Link>
-      </DropdownItem>
-      <DropdownItem>
-        <Link className="text-color" to="/user/dashboard">
-          Login as User
-        </Link>
-      </DropdownItem>
-      <DropdownItem divider />
-      <DropdownItem>
-        <Link className="text-color" to="/logout">
-          Logout
-        </Link>
-      </DropdownItem>
-    </DropdownMenu>
-  </UncontrolledDropdown>
-);
 
 export default TopBar;

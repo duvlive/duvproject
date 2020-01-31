@@ -1,4 +1,5 @@
-import React, { Fragment } from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 import Header from 'components/common/layout/Header';
 import Footer from 'components/common/layout/Footer';
 import { Formik, Form } from 'formik';
@@ -7,33 +8,26 @@ import Button from 'components/forms/Button';
 import { forgotPasswordSchema } from 'components/forms/schema/userSchema';
 import { Link } from '@reach/router';
 import { Col, Row } from 'reactstrap';
-import Text from 'components/common/utils/Text';
-import Quotes from 'data/quotes';
-import { randomItem } from 'utils/helpers';
+import AlertMessage from 'components/common/utils/AlertMessage';
+import Quotes from 'components/common/utils/Quotes';
 
 const ForgotPassword = () => (
-  <Fragment>
+  <>
     <section className="auth">
       <Header showRedLogo />
       <Content />
     </section>
     <Footer className="mt-0" />
-  </Fragment>
+  </>
 );
 
 const Content = () => {
-  const quote = randomItem(Quotes);
   return (
     <section>
       <div className="container-fluid">
         <Row>
           <Col className="d-none d-sm-block" sm={{ size: 6, offset: 1 }}>
-            <Text.VerticalAlign>
-              <div className="auth__quotes">
-                <h4 className="auth__quotes--text">{quote.text}</h4>
-                <p>- {quote.name}</p>
-              </div>
-            </Text.VerticalAlign>
+            <Quotes />
           </Col>
           <Col sm={{ size: 5 }}>
             <div className="auth__container">
@@ -41,7 +35,7 @@ const Content = () => {
                 <h5 className="header font-weight-normal mb-4">
                   Forgot Password
                 </h5>
-                <ForgotPassword.Form />
+                <ForgotPasswordForm />
               </section>
               <section className="auth__footer">
                 <div className="mt-4 text-center">
@@ -59,20 +53,40 @@ const Content = () => {
   );
 };
 
-ForgotPassword.Form = () => {
+const ForgotPasswordForm = () => {
+  const [message, setMessage] = useState(null);
   return (
     <Formik
       initialValues={{
         email: ''
       }}
       onSubmit={(values, actions) => {
-        console.log(values);
-        setTimeout(() => {
-          actions.setSubmitting(false);
-        }, 400);
+        // post to api
+        axios
+          .post('/api/v1/users/forgot-password', values)
+          .then(function(response) {
+            const { status, data } = response;
+            // handle success
+            console.log(status, data);
+            if (status === 200) {
+              setMessage({
+                type: 'success',
+                message: `A password reset link has been sent to your mail`
+              });
+              actions.resetForm();
+            }
+          })
+          .catch(function(error) {
+            console.log('error', error.response.data);
+            setMessage({
+              message: error.response.data.message
+            });
+          });
+        actions.setSubmitting(false);
       }}
       render={({ isSubmitting, handleSubmit }) => (
         <Form>
+          <AlertMessage {...message} />
           <Input label="Email" name="email" placeholder="Email Address" />
           <Button
             className="btn-danger btn-wide btn-transparent"
