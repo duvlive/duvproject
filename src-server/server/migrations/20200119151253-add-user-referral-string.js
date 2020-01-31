@@ -17,7 +17,8 @@ module.exports = {
         'firstTimeLogin',
         {
           type: Sequelize.BOOLEAN,
-          allowNull: true
+          allowNull: true,
+        	defaultValue: true
         },
         { transaction }
       );
@@ -33,6 +34,9 @@ module.exports = {
     const transaction = await queryInterface.sequelize.transaction();
     try {
       await queryInterface.removeColumn('Users', 'referral', {
+        transaction
+      });
+      await queryInterface.removeColumn('Users', 'firstTimeLogin', {
         transaction
       });
       await transaction.commit();

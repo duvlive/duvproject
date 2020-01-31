@@ -6,6 +6,7 @@ import {
   ContactController,
   IdentificationController,
   EventController,
+	ApproveCommentController,
 } from './controllers';
 import Authentication from './middleware/authentication';
 import passport from 'passport';
@@ -125,7 +126,7 @@ router
 router
   .route('/api/v1/approveEntertainer')
   .all(Authentication.verifyToken, Authentication.validateAdmin)
-  .put(EntertainerProfileController.approveEntertainerWithComment);
+  .put(ApproveCommentController.approveEntertainerWithComment);
 
 // Events routes
 router

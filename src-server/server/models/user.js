@@ -90,20 +90,15 @@ module.exports = (sequelize, DataTypes) => {
             link,
           })
             .then(() => {
-              const indentityInformation = () => ['EntertainerProfile', 'BankDetail', 'Identification']
+              const indentityInformation = () => ['EntertainerProfile', 'BankDetail', 'Identification', 'ApprovalComment']
                 .map((model) => models[model].create({ userId: user.id }))
               if (user.type === 2) {
                 return Promise.all(indentityInformation())
               }
               return Promise.resolve(null);
             })
-            .then(res => {
-              if (res) {
-                return user.setProfile(res);
-              }
-            })
             .catch(error => {
-              console.log(error)
+              console.log(error, 'errrooorr')
             });
         },
         beforeUpdate: user => {
