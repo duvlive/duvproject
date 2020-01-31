@@ -25,10 +25,7 @@ module.exports = function(sequelize, DataTypes) {
       classMethods: {
         associate: function(models) {
           // associations can be defined here
-          // models.Gallery.belongsTo(models.User);
-          Gallery.belongsTo(models.User, {
-            foreignKey: 'userId'
-          });
+          // Gallery.belongsTo(models.User);
         }
       }
     }

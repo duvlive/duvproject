@@ -12,6 +12,7 @@ import {
 } from './controllers';
 import Authentication from './middleware/authentication';
 import passport from 'passport';
+import GalleryController from './controllers/GalleryController';
 
 const router = Router();
 
@@ -156,5 +157,8 @@ router
   .post(EventController.updateUserEvent)
   .put(EventController.updateUserEvent)
   .get(EventController.getUserEvent);
+
+// gallery routes
+router.get('/api/v1/gallery/:userId', GalleryController.getEntertainerGallery);
 
 export default router;

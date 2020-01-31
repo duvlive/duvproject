@@ -12,12 +12,19 @@ let sequelize;
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable]);
 } else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
+  sequelize = new Sequelize(
+    config.database,
+    config.username,
+    config.password,
+    config
+  );
 }
 
 fs.readdirSync(__dirname)
   .filter(function(file) {
-    return file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js';
+    return (
+      file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js'
+    );
   })
   .forEach(function(file) {
     const model = sequelize['import'](path.join(__dirname, file));
@@ -34,7 +41,7 @@ db.User.hasOne(db.EntertainerProfile, { foreignKey: 'userId', as: 'profile' });
 db.User.hasOne(db.BankDetail, { foreignKey: 'userId', as: 'bankDetail' });
 db.User.hasOne(db.Identification, { foreignKey: 'userId',
   as: 'identification',
-  targetKey: 'identification',
+  targetKey: 'identification'
 });
 db.User.hasOne(db.ApprovalComment, { foreignKey: 'userId',
   as: 'approvalComment',
@@ -46,7 +53,13 @@ db.User.hasMany(db.Event, { foreignKey: 'userId', as: 'events' });
 db.User.hasMany(db.Contact, {
   foreignKey: 'userId',
   as: 'contacts',
-  targetKey: 'contacts',
+  targetKey: 'contacts'
+});
+db.User.hasMany(db.Gallery, {
+  foreignKey: 'userId',
+  as: 'galleries',
+  onDelete: 'CASCADE',
+  hooks: true
 });
 
 db.sequelize = sequelize;

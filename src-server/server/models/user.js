@@ -129,11 +129,12 @@ module.exports = (sequelize, DataTypes) => {
           // associations can be defined here
           // User.hasMany(User, {foreignKey: 'userId', as: 'bandMembers'});
           // User.hasOne(models.EntertainerProfile, {foreignKey: 'userId', as: 'profile'});
-          User.hasMany(models.Gallery, {
-            foreignKey: 'userId',
-            onDelete: 'CASCADE',
-            hooks: true
-          });
+          // console.log('models', models);
+          // User.hasMany(models.Gallery, {
+          //   foreignKey: 'userId',
+          //   onDelete: 'CASCADE',
+          //   hooks: true
+          // });
         }
       }
     }
