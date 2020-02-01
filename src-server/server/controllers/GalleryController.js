@@ -1,5 +1,5 @@
 require('dotenv').config();
-import { Gallery, User } from '../models';
+import { Gallery } from '../models';
 
 const cloudinary = require('cloudinary');
 const multer = require('multer');
@@ -15,7 +15,7 @@ const storage = cloudinaryStorage({
   cloudinary: cloudinary,
   folder: 'gallery',
   allowedFormats: ['jpg', 'png'],
-  transformation: [{ width: 256, height: 256, crop: 'limit' }]
+  transformation: [{ width: 1200, height: 800, crop: 'limit' }]
 });
 
 const MAX_IMG_SIZE = 1000000; //1MB
@@ -35,37 +35,32 @@ const GalleryController = {
     });
   },
 
+  /**
+   * save image
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
   saveImage(req, res) {
     // console.log(req.file); // to see what is returned to you
     if (req.file) {
-      const { userId } = req.decoded;
-      User.findOne({
-        where: { id: userId }
-      })
-        .then(user => {
-          if (!user) {
-            return res.status(404).send({
-              message: 'User not found'
-            });
-          }
+      const gallery = {};
+      gallery.userId = req.decoded.userId;
+      gallery.imageURL = req.file.url;
+      gallery.imageID = req.file.public_id;
 
-          // get upload image
-          const previousImageID = user.profileImageID;
-          const image = {};
-          image.url = req.file.url;
-          image.id = req.file.public_id;
-
-          // update profile image in database
-          return user
-            .update({ profileImageID: image.id, profileImageURL: image.url })
-            .then(() => {
-              // Delete previous image if present
-              previousImageID && cloudinary.uploader.destroy(previousImageID);
-              return res.json({ image });
-            });
+      return Gallery.create(gallery)
+        .then(gallery => {
+          return res.status(200).json({
+            message: 'Image has been successfully upload',
+            gallery
+          });
         })
         .catch(error => {
-          return res.status(500).json({ error: error.message });
+          const status = error.status || 500;
+          const errorMessage = error.message || error;
+          return res.status(status).json({ message: errorMessage });
         });
     } else {
       return res.status(412).json({ message: 'Image cannot be uploaded' });
@@ -78,15 +73,78 @@ const GalleryController = {
     })
       .then(result => res.json(result))
       .catch(error => res.status(412).json({ msg: error.message }));
+  },
 
-    // return User.findAll({
-    //   where: { id: req.params.userId },
-    //   include: [
-    //     { model: Gallery, as: 'galleries' } // load all pictures
-    //   ]
-    // })
-    //   .then(result => res.json(result))
-    //   .catch(error => res.status(412).json({ msg: error.message }));
+  /**
+   * approve imave
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  approveImage(req, res) {
+    const { id, approve } = req.params;
+    const approveImage = approve === 'approve';
+    const approval = {
+      value: approveImage,
+      type: approveImage ? 'approved' : 'disapproved'
+    };
+
+    Gallery.findOne({
+      where: { id }
+    })
+      .then(foundImage => {
+        if (!foundImage && !foundImage.imageURL) {
+          return res.status(404).json({ message: 'Image does not exist' });
+        }
+
+        return Gallery.update(
+          { approved: approval.value },
+          {
+            where: {
+              id
+            }
+          }
+        ).then(() =>
+          res.status(200).json({ message: `Image has been ${approval.type}` })
+        );
+      })
+      .catch(error => {
+        const errorMessage = error.message || error;
+        return res.status(412).json({ message: errorMessage });
+      });
+  },
+
+  /**
+   * @desc Deletes image
+   * @param {object} req - The request sent to the route
+   * @param {object} res - The response sent back
+   * @return {object} json response
+   */
+  deleteImage(req, res) {
+    const { id } = req.params;
+    return Gallery.findOne({ where: { id } })
+      .then(result => {
+        if (result) {
+          const { id, imageID } = result;
+          result
+            .destroy({ where: { id } })
+            .then(() => {
+              id && cloudinary.uploader.destroy(imageID);
+              return res.status(202).json({
+                msg: `Image has been successfully deleted`
+              });
+            })
+            .catch(error => {
+              res.status(412).json({ msg: error.message });
+            });
+        } else {
+          res.status(404).json({ msg: 'Image does not exist' });
+        }
+      })
+      .catch(error => {
+        res.status(412).json({ msg: error.message });
+      });
   }
 };
 
