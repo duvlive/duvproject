@@ -38,7 +38,7 @@ AlertMessage.Text = ({ type, message }) => {
 
 AlertMessage.Text.propTypes = {
   message: PropTypes.any,
-  type: ['success', 'error', 'primary']
+  type: PropTypes.oneOf(['success', 'error', 'primary'])
 };
 
 AlertMessage.Text.defaultProps = {

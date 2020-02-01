@@ -14,6 +14,10 @@ const DuvLiveModal = ({
   title
 }) => {
   const [modal, setModal] = useState(false);
+  const handleAction = () => {
+    actionFn();
+    // setModal(!modal);
+  };
   return (
     <Fragment>
       <span className={childrenClassName} onClick={() => setModal(!modal)}>
@@ -28,7 +32,10 @@ const DuvLiveModal = ({
         <ModalBody>{body}</ModalBody>
         <ModalFooter>
           {actionText && (
-            <Button color="btn btn-success btn-transparent" onClick={actionFn}>
+            <Button
+              color="btn btn-success btn-transparent"
+              onClick={handleAction}
+            >
               {actionText}
             </Button>
           )}

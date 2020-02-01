@@ -13,10 +13,14 @@ const UploadGallery = ({ afterSave }) => {
   const [loading, setLoading] = useState(false);
 
   const onChangeHandler = event => {
+    const file = event.target.files[0];
+    if (!file) {
+      return null;
+    }
+
     setLoading(true);
     setMessage(null);
-    const file = event.target.files[0];
-    console.log('file', file);
+
     if (file.size > MAX_IMG_SIZE) {
       setMessage(
         `'${

@@ -224,3 +224,20 @@
     height: 15rem;
   }
 }
+
+.delete-icon {
+  color: rgba($red, 0.2);
+  font-size: 2.2rem;
+  width: 4rem;
+  height: 4rem;
+  position: absolute;
+  right: 0;
+  top: 0;
+  cursor: pointer;
+  transition: all 0.4 ease-in;
+
+  &:hover {
+    color: rgba($red-400, 0.9);
+    text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3);
+  }
+}

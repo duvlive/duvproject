@@ -6,10 +6,36 @@ import Image from 'components/common/utils/Image';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import { UserContext } from 'context/UserContext';
 import UploadGallery from 'components/common/utils/UploadGallery';
+import DuvLiveModal from 'components/custom/Modal';
 
 const Gallery = () => {
   const [gallery, setGallery] = React.useState([]);
   const { userState } = React.useContext(UserContext);
+
+  const handleDelete = id => {
+    // console.log('******************');
+    // console.log(id);
+    // console.log(
+    //   'gallery.map(g => g.id !== id)',
+    //   gallery.filter(g => g.id !== id)
+    // );
+
+    axios
+      .delete(`/api/v1/gallery/delete/${id}`)
+      .then(function(response) {
+        const { status, data } = response;
+        // handle success
+        if (status === 202) {
+          console.log('data', data);
+          const currentImages = gallery.filter(g => g.id !== id);
+          console.log('currentImages', currentImages);
+          setGallery(currentImages);
+        }
+      })
+      .catch(function(error) {
+        setGallery([]);
+      });
+  };
 
   // Load Gallery
   React.useEffect(() => {
@@ -44,7 +70,9 @@ const Gallery = () => {
             <UploadGallery afterSave={addImageToGallery} />
             <div className="row">
               {gallery.map(({ imageURL, id }, index) => (
-                <Gallery.Card
+                <GalleryCard
+                  deleteImage={handleDelete}
+                  id={id}
                   key={id}
                   name={userState.firstName + index}
                   src={imageURL}
@@ -58,7 +86,7 @@ const Gallery = () => {
   );
 };
 
-Gallery.Card = ({ src, name }) => (
+const GalleryCard = ({ deleteImage, id, src, name }) => (
   <div className="card col-lg-3 col-md-4 col-6 gallery-card-image">
     <div className="d-block mb-5 h-100">
       <Image
@@ -68,19 +96,24 @@ Gallery.Card = ({ src, name }) => (
         rounded={false}
         src={src}
       />
-      <div className="card-img-overlay">
-        <h5 className="card-title">Do you want to delete this image?</h5>
-        <p className="card-text">
-          <button className="btn-primary">Yes</button>
-          <button className="btn-default">Yes</button>
-        </p>
-      </div>
-      <div className="position-absolute">Delete Image</div>
+      <DuvLiveModal
+        actionFn={() => deleteImage(id)}
+        actionText="Yes, Delete Image"
+        body="Are you sure you want to delete image"
+        closeModalText="Cancel"
+        title="Delete Image"
+      >
+        <div className="delete-icon">
+          <span className="icon icon-cancel-circled"></span>
+        </div>
+      </DuvLiveModal>
     </div>
   </div>
 );
 
-Gallery.Card.propTypes = {
+GalleryCard.propTypes = {
+  deleteImage: PropTypes.func.isRequired,
+  id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   src: PropTypes.string.isRequired
 };
