@@ -14,6 +14,7 @@ const AlertMessage = ({ type, message, lists }) => {
     )
   );
 };
+
 AlertMessage.propTypes = {
   lists: PropTypes.array,
   message: PropTypes.any,
@@ -25,4 +26,24 @@ AlertMessage.defaultProps = {
   message: null,
   type: COLOR_STYLE[0]
 };
+
+// AlertMessage.Text
+AlertMessage.Text = ({ type, message }) => {
+  return (
+    <div className="small pb-4">
+      {message && <div className={type}>{message && message}</div>}
+    </div>
+  );
+};
+
+AlertMessage.Text.propTypes = {
+  message: PropTypes.any,
+  type: ['success', 'error', 'primary']
+};
+
+AlertMessage.Text.defaultProps = {
+  message: null,
+  type: 'primary'
+};
+
 export default AlertMessage;

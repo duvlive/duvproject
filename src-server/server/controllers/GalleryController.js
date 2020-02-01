@@ -51,10 +51,10 @@ const GalleryController = {
       gallery.imageID = req.file.public_id;
 
       return Gallery.create(gallery)
-        .then(gallery => {
+        .then(details => {
           return res.status(200).json({
             message: 'Image has been successfully upload',
-            gallery
+            details
           });
         })
         .catch(error => {
@@ -69,7 +69,8 @@ const GalleryController = {
 
   getEntertainerGallery(req, res) {
     return Gallery.findAll({
-      where: { userId: req.params.userId }
+      where: { userId: req.params.userId },
+      order: [['updatedAt', 'DESC']]
     })
       .then(result => res.json(result))
       .catch(error => res.status(412).json({ msg: error.message }));

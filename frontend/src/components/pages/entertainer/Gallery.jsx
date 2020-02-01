@@ -1,46 +1,88 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Image1 from 'assets/img/gallery/DjCuppy1.jpg';
-import Image2 from 'assets/img/gallery/DjCuppy2.jpg';
-import Image3 from 'assets/img/gallery/DjCuppy3.jpg';
-import Image4 from 'assets/img/gallery/DjCuppy4.jpg';
-import Image5 from 'assets/img/gallery/DjCuppy5.jpg';
-import Image6 from 'assets/img/gallery/DjCuppy6.jpg';
+import axios from 'axios';
 import TopMessage from 'components/common/layout/TopMessage';
 import Image from 'components/common/utils/Image';
 import BackEndPage from 'components/common/layout/BackEndPage';
+import { UserContext } from 'context/UserContext';
+import UploadGallery from 'components/common/utils/UploadGallery';
 
-const Gallery = () => (
-  <BackEndPage title="Gallery">
-    <div className="main-app">
-      <TopMessage message="Gallery" />
+const Gallery = () => {
+  const [gallery, setGallery] = React.useState([]);
+  const { userState } = React.useContext(UserContext);
 
-      <section className="app-content">
-        <section className="gallery">
-          <div className="row">
-            <Gallery.Card image={Image1} name="image1" />
-            <Gallery.Card image={Image2} name="image2" />
-            <Gallery.Card image={Image3} name="image3" />
-            <Gallery.Card image={Image4} name="image4" />
-            <Gallery.Card image={Image5} name="image5" />
-            <Gallery.Card image={Image6} name="image6" />
-          </div>
+  // Load Gallery
+  React.useEffect(() => {
+    const { id } = userState;
+    id &&
+      axios
+        .get(`/api/v1/gallery/${id}`)
+        .then(function(response) {
+          const { status, data } = response;
+          // handle success
+          if (status === 200) {
+            console.log('data', data);
+            setGallery(data);
+          }
+        })
+        .catch(function(error) {
+          setGallery([]);
+        });
+  }, [userState]);
+
+  const addImageToGallery = image => {
+    setGallery([image, ...gallery]);
+  };
+
+  return (
+    <BackEndPage title="Gallery">
+      <div className="main-app">
+        <TopMessage message="Gallery" />
+
+        <section className="app-content">
+          <section className="gallery">
+            <UploadGallery afterSave={addImageToGallery} />
+            <div className="row">
+              {gallery.map(({ imageURL, id }, index) => (
+                <Gallery.Card
+                  key={id}
+                  name={userState.firstName + index}
+                  src={imageURL}
+                />
+              ))}
+            </div>
+          </section>
         </section>
-      </section>
-    </div>
-  </BackEndPage>
-);
+      </div>
+    </BackEndPage>
+  );
+};
 
-Gallery.Card = ({ image }) => (
-  <div className="col-lg-3 col-md-4 col-6">
+Gallery.Card = ({ src, name }) => (
+  <div className="card col-lg-3 col-md-4 col-6 gallery-card-image">
     <div className="d-block mb-5 h-100">
-      <Image bordered className="img-fluid" rounded={false} src={image} />
+      <Image
+        bordered
+        className="img-fluid"
+        name={name}
+        rounded={false}
+        src={src}
+      />
+      <div className="card-img-overlay">
+        <h5 className="card-title">Do you want to delete this image?</h5>
+        <p className="card-text">
+          <button className="btn-primary">Yes</button>
+          <button className="btn-default">Yes</button>
+        </p>
+      </div>
+      <div className="position-absolute">Delete Image</div>
     </div>
   </div>
 );
 
 Gallery.Card.propTypes = {
-  image: PropTypes.string.isRequired
+  name: PropTypes.string.isRequired,
+  src: PropTypes.string.isRequired
 };
 
 export default Gallery;
