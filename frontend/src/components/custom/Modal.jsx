@@ -28,7 +28,9 @@ const DuvLiveModal = ({
         isOpen={modal}
         toggle={() => setModal(!modal)}
       >
-        <ModalHeader toggle={() => setModal(!modal)}>{title}</ModalHeader>
+        {title && (
+          <ModalHeader toggle={() => setModal(!modal)}>{title}</ModalHeader>
+        )}
         <ModalBody>{body}</ModalBody>
         <ModalFooter>
           {actionText && (
@@ -59,7 +61,7 @@ DuvLiveModal.propTypes = {
   childrenClassName: PropTypes.string,
   className: PropTypes.string,
   closeModalText: PropTypes.string,
-  title: PropTypes.node.isRequired
+  title: PropTypes.node
 };
 
 DuvLiveModal.defaultProps = {
@@ -67,7 +69,8 @@ DuvLiveModal.defaultProps = {
   actionText: '',
   childrenClassName: '',
   className: '',
-  closeModalText: 'Close'
+  closeModalText: 'Close',
+  title: null
 };
 
 DuvLiveModal.ViewEntertainerProfile = ({ entertainer }) => (

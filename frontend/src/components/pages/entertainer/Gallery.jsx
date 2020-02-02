@@ -8,18 +8,34 @@ import { UserContext } from 'context/UserContext';
 import UploadGallery from 'components/common/utils/UploadGallery';
 import DuvLiveModal from 'components/custom/Modal';
 
+const approval = {
+  approved: {
+    color: 'success',
+    text: 'Approved'
+  },
+  rejected: {
+    color: 'danger',
+    text: 'Rejected'
+  },
+  pending: {
+    color: 'info',
+    text: 'Pending'
+  }
+};
+
+const getStatus = status => {
+  // need == to check for null
+  if (null == status) {
+    return 'pending';
+  }
+  return !!status ? 'approved' : 'rejected';
+};
+
 const Gallery = () => {
   const [gallery, setGallery] = React.useState([]);
   const { userState } = React.useContext(UserContext);
 
   const handleDelete = id => {
-    // console.log('******************');
-    // console.log(id);
-    // console.log(
-    //   'gallery.map(g => g.id !== id)',
-    //   gallery.filter(g => g.id !== id)
-    // );
-
     axios
       .delete(`/api/v1/gallery/delete/${id}`)
       .then(function(response) {
@@ -69,15 +85,24 @@ const Gallery = () => {
           <section className="gallery">
             <UploadGallery afterSave={addImageToGallery} />
             <div className="row">
-              {gallery.map(({ imageURL, id }, index) => (
+              {gallery.map(({ imageURL, id, approved }, index) => (
                 <GalleryCard
                   deleteImage={handleDelete}
                   id={id}
                   key={id}
                   name={userState.firstName + index}
                   src={imageURL}
+                  status={getStatus(approved)}
                 />
               ))}
+            </div>
+            <div className="row">
+              <div className="col-12 mt-5">
+                <p class="text-info">
+                  Note: Gallery images must be approved by an administrator
+                  before they are shown on your profile.
+                </p>
+              </div>
             </div>
           </section>
         </section>
@@ -86,20 +111,39 @@ const Gallery = () => {
   );
 };
 
-const GalleryCard = ({ deleteImage, id, src, name }) => (
-  <div className="card col-lg-3 col-md-4 col-6 gallery-card-image">
-    <div className="d-block mb-5 h-100">
-      <Image
-        bordered
-        className="img-fluid"
-        name={name}
-        rounded={false}
-        src={src}
-      />
+const GalleryCard = ({ deleteImage, id, src, name, status }) => {
+  const currentImage = (
+    <Image
+      bordered
+      className="img-fluid small"
+      name={name}
+      rounded={false}
+      src={src}
+    />
+  );
+  return (
+    <div className="card col-lg-3 col-md-4 col-6 gallery-card-image">
+      <DuvLiveModal
+        body={
+          <Image.Big
+            className="img-fluid"
+            name={name}
+            rounded={false}
+            src={src}
+          />
+        }
+      >
+        {currentImage}
+        <small
+          className={`badge badge-${approval[status].color} transparent-${approval[status].color}`}
+        >
+          {approval[status].text}
+        </small>
+      </DuvLiveModal>
       <DuvLiveModal
         actionFn={() => deleteImage(id)}
         actionText="Yes, Delete Image"
-        body="Are you sure you want to delete image"
+        body={currentImage}
         closeModalText="Cancel"
         title="Delete Image"
       >
@@ -108,14 +152,15 @@ const GalleryCard = ({ deleteImage, id, src, name }) => (
         </div>
       </DuvLiveModal>
     </div>
-  </div>
-);
+  );
+};
 
 GalleryCard.propTypes = {
   deleteImage: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
-  src: PropTypes.string.isRequired
+  src: PropTypes.string.isRequired,
+  status: PropTypes.any.isRequired
 };
 
 export default Gallery;
