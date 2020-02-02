@@ -12,6 +12,7 @@ import {
 } from './controllers';
 import Authentication from './middleware/authentication';
 import passport from 'passport';
+import GalleryController from './controllers/GalleryController';
 
 const router = Router();
 
@@ -157,4 +158,19 @@ router
   .put(EventController.updateUserEvent)
   .get(EventController.getUserEvent);
 
+// gallery routes
+router.get('/api/v1/gallery/:userId', GalleryController.getEntertainerGallery);
+router.post(
+  '/api/v1/gallery/save',
+  Authentication.verifyToken,
+  Authentication.isActiveUser,
+  Authentication.validateEntertainer,
+  GalleryController.uploadImage,
+  GalleryController.saveImage
+);
+router.put('/api/v1/gallery/:approve/:id', GalleryController.approveImage); //TODO: add administrator middleware
+
+router.delete('/api/v1/gallery/delete/:id', GalleryController.deleteImage);
+
+// when you validateUser, check if user is active, can be done in verify token
 export default router;

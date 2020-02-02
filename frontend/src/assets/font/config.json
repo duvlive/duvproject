@@ -293,6 +293,24 @@
       "css": "select",
       "code": 59422,
       "src": "entypo"
+    },
+    {
+      "uid": "3327862df439988139b61814143b7a42",
+      "css": "cancel-circled",
+      "code": 59423,
+      "src": "typicons"
+    },
+    {
+      "uid": "f48ae54adfb27d8ada53d0fd9e34ee10",
+      "css": "trash-empty",
+      "code": 59424,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "44fae3bfdd54754dc68ec50d37efea37",
+      "css": "pencil-squared",
+      "code": 61771,
+      "src": "fontawesome"
     }
   ]
 }

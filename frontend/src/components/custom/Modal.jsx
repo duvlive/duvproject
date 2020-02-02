@@ -14,6 +14,10 @@ const DuvLiveModal = ({
   title
 }) => {
   const [modal, setModal] = useState(false);
+  const handleAction = () => {
+    actionFn();
+    // setModal(!modal);
+  };
   return (
     <Fragment>
       <span className={childrenClassName} onClick={() => setModal(!modal)}>
@@ -24,11 +28,16 @@ const DuvLiveModal = ({
         isOpen={modal}
         toggle={() => setModal(!modal)}
       >
-        <ModalHeader toggle={() => setModal(!modal)}>{title}</ModalHeader>
+        {title && (
+          <ModalHeader toggle={() => setModal(!modal)}>{title}</ModalHeader>
+        )}
         <ModalBody>{body}</ModalBody>
         <ModalFooter>
           {actionText && (
-            <Button color="btn btn-success btn-transparent" onClick={actionFn}>
+            <Button
+              color="btn btn-success btn-transparent"
+              onClick={handleAction}
+            >
               {actionText}
             </Button>
           )}
@@ -52,7 +61,7 @@ DuvLiveModal.propTypes = {
   childrenClassName: PropTypes.string,
   className: PropTypes.string,
   closeModalText: PropTypes.string,
-  title: PropTypes.node.isRequired
+  title: PropTypes.node
 };
 
 DuvLiveModal.defaultProps = {
@@ -60,7 +69,8 @@ DuvLiveModal.defaultProps = {
   actionText: '',
   childrenClassName: '',
   className: '',
-  closeModalText: 'Close'
+  closeModalText: 'Close',
+  title: null
 };
 
 DuvLiveModal.ViewEntertainerProfile = ({ entertainer }) => (

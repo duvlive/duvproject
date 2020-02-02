@@ -7,7 +7,7 @@ const Image = ({ src, name, className, bordered, rounded }) => (
     alt={name}
     className={classNames(
       className,
-      'img-responsive',
+      'img-fluid',
       {
         'img-thumbnail': bordered
       },
@@ -37,7 +37,7 @@ Image.defaultProps = {
 Image.Big = ({ src, name, className }) => (
   <img
     alt={name}
-    className={classNames(className, 'img-responsive', 'img-big')}
+    className={classNames(className, 'img-fluid', 'img-big')}
     src={src}
     title={name}
   />
