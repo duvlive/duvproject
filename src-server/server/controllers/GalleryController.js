@@ -77,7 +77,7 @@ const GalleryController = {
   },
 
   /**
-   * approve imave
+   * approve image
    * @function
    * @param {object} req is req object
    * @param {object} res is res object
@@ -131,7 +131,7 @@ const GalleryController = {
           result
             .destroy({ where: { id } })
             .then(() => {
-              id && cloudinary.uploader.destroy(imageID);
+              imageID && cloudinary.uploader.destroy(imageID);
               return res.status(202).json({
                 msg: `Image has been successfully deleted`
               });
