@@ -12,6 +12,8 @@ import { range } from 'utils/helpers';
 import AutoComplete from 'components/forms/AutoComplete';
 import Button from 'components/forms/Button';
 import { entertainerDetailsSchema } from 'components/forms/schema/entertainerSchema';
+import UploadImage from 'components/common/utils/UploadImage';
+import { BUDGET } from 'utils/constants';
 
 const currentYear = new Date().getFullYear();
 
@@ -21,14 +23,14 @@ const RegisterAsEntertainer = () => {
       <div className="main-app">
         <TopMessage message="Edit Profile" />
         <section className="app-content">
-          <RegisterAsEntertainerForm />
+          <EntertainerInfoForm />
         </section>
       </div>
     </BackEndPage>
   );
 };
 
-const RegisterAsEntertainerForm = () => {
+export const EntertainerInfoForm = () => {
   return (
     <Formik
       initialValues={{
@@ -91,22 +93,24 @@ const PersonalInfoForm = () => (
         <div className="form-row">
           <Input
             formGroupClassName="col-md-6"
-            isValidMessage="Email address seems valid"
-            label="Email"
-            name="personal.email"
-            placeholder="Email Address"
+            isValidMessage="Phone number looks good"
+            label="Phone"
+            name="personal.phone"
+            placeholder="Phone"
           />
           <Input
             formGroupClassName="col-md-6"
             isValidMessage="Phone number looks good"
-            label="Phone"
-            name="personal.phone"
+            label="Phone2"
+            name="personal.phone2"
+            optional
             placeholder="Phone"
           />
         </div>
         <TextArea
           label="About"
           name="personal.about"
+          optional
           placeholder="Write some interesting facts about you."
           rows="8"
           type="textarea"
@@ -119,16 +123,30 @@ const PersonalInfoForm = () => (
 const EntertainerDetailsForm = () => (
   <div className="card card-custom card-black card-form ">
     <div className="card-body col-md-10">
-      <h4 className="card-title yellow">Your Details</h4>
+      <h4 className="card-title yellow">Entertainers Information</h4>
       <Form>
+        <section className="mb-5">
+          <UploadImage />
+        </section>
         <div className="form-row">
           <Input
             formGroupClassName="col-md-6"
             isValidMessage="Stage Name looks good"
             label="Stage Name"
-            name="entertainer.stage_name"
+            name="entertainer.stageName"
             placeholder="Stage Name"
           />
+          <Select
+            blankOption="Entertainer Type"
+            formGroupClassName="col-md-6"
+            label="Entertainer Type"
+            name="entertainer.type"
+            options={range(currentYear, currentYear - 20, -1).map(year => ({
+              label: year
+            }))}
+          />
+        </div>
+        <div className="form-row">
           <Input
             formGroupClassName="col-md-6"
             isValidMessage="Location looks good"
@@ -136,23 +154,50 @@ const EntertainerDetailsForm = () => (
             name="entertainer.location"
             placeholder="Location"
           />
+          <Input
+            formGroupClassName="col-md-6"
+            isValidMessage="City looks good"
+            label="City"
+            name="entertainer.city"
+            placeholder="City"
+          />
         </div>
         <div className="form-row">
           <Select
-            blankOption="Select Year"
+            blankOption="Choose your base charges"
             formGroupClassName="col-md-6"
-            label="Year you started"
-            name="entertainer.started_year"
-            options={range(currentYear, currentYear - 20, -1).map(year => ({
-              label: year
-            }))}
+            isValidMessage="looks good"
+            label="Lowest Budget (in Naira)"
+            name="entertainer.baseCharges"
+            options={BUDGET}
+            placeholder="Lowest Budget"
           />
+          <Select
+            blankOption="Choose your highest charges"
+            formGroupClassName="col-md-6"
+            isValidMessage="looks good"
+            label="Highest Charges (in Naira)"
+            name="entertainer.highestCharges"
+            options={BUDGET}
+            placeholder="Highest Budget"
+          />
+        </div>
+        <div className="form-row">
           <Select
             blankOption="Select Option"
             formGroupClassName="col-md-6"
             label="Willing to Travel"
-            name="entertainer.willing_to_travel"
+            name="entertainer.willingToTravel"
             options={[{ label: 'Yes' }, { label: 'No' }]}
+          />
+          <Select
+            blankOption="Year Started"
+            formGroupClassName="col-md-6"
+            label="Year you started"
+            name="entertainer.yearStarted"
+            options={range(currentYear, currentYear - 20, -1).map(year => ({
+              label: year
+            }))}
           />
         </div>
         <AutoComplete

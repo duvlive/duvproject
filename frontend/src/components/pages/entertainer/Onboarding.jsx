@@ -35,9 +35,12 @@ const Onboarding = () => {
       </Card>
       <Onboarding.List status={STATUS.COMPLETED} title="Entertainers Profile" />
       <div className="text-center">
-        <button className="btn btn-danger btn-lg btn-wide btn-transparent mt-5">
+        <Link
+          className="btn btn-danger btn-lg btn-wide btn-transparent mt-5"
+          to="/entertainer/account-setup"
+        >
           Continue Setup
-        </button>
+        </Link>
       </div>
     </>
   );

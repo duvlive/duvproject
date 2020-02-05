@@ -8,7 +8,7 @@ import { personalInfoObject } from 'components/forms/schema/userSchema';
 import { createSchema } from 'components/forms/schema/schema-helpers';
 import { setInitialValues } from 'components/forms/form-helper';
 import Button from 'components/forms/Button';
-import { entertainerDetailsSchema } from 'components/forms/schema/entertainerSchema';
+import { emergencyContactSchema } from 'components/forms/schema/entertainerSchema';
 
 const EmergencyContact = () => {
   return (
@@ -23,17 +23,12 @@ const EmergencyContact = () => {
   );
 };
 
-const EmergencyContactForm = () => {
+export const EmergencyContactForm = () => {
   return (
     <Formik
       initialValues={{
         //TODO
-        entertainer: setInitialValues(entertainerDetailsSchema, {
-          available_for: [
-            { id: 1, name: 'Birthdays' },
-            { id: 2, name: 'Weddings' }
-          ]
-        }),
+        entertainer: setInitialValues(emergencyContactSchema),
         personal: setInitialValues(personalInfoObject)
       }}
       onSubmit={(values, actions) => {
@@ -56,7 +51,7 @@ const EmergencyContactForm = () => {
         </>
       )}
       validationSchema={createSchema({
-        entertainer: createSchema(entertainerDetailsSchema),
+        entertainer: createSchema(emergencyContactSchema),
         personal: createSchema(personalInfoObject)
       })}
     />
@@ -73,14 +68,14 @@ const ProfessionalContactForm = () => (
             formGroupClassName="col-md-6"
             isValidMessage="First Name looks good"
             label="First Name"
-            name="personal.first_name"
+            name="firstName"
             placeholder="First Name"
           />
           <Input
             formGroupClassName="col-md-6"
             isValidMessage="Last Name looks good"
             label="Last Name"
-            name="personal.last_name"
+            name="lastName"
             placeholder="Last Name"
           />
         </div>
@@ -89,14 +84,14 @@ const ProfessionalContactForm = () => (
             formGroupClassName="col-md-6"
             isValidMessage="Email address seems valid"
             label="Email"
-            name="personal.email"
+            name="email"
             placeholder="Email Address"
           />
           <Input
             formGroupClassName="col-md-6"
             isValidMessage="Phone number looks good"
             label="Phone"
-            name="personal.phone"
+            name="phoneNumber"
             placeholder="Phone"
           />
         </div>
@@ -105,7 +100,7 @@ const ProfessionalContactForm = () => (
             formGroupClassName="col-md-6"
             isValidMessage="looks good"
             label="Relationship"
-            name="personal.relationship"
+            name="relationship"
             placeholder="Relationship"
           />
         </div>

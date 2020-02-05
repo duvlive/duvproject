@@ -68,7 +68,7 @@ const UploadImage = () => {
       <div className="upload-button text-center">
         <Image
           bordered
-          className="avatar--large mb-3"
+          className="avatar--large uploaded-image mb-3"
           name={userState.firstName + ' ' + userState.lastName}
           src={userState.profileImg || ProfileAvatar}
         />

@@ -10,6 +10,30 @@ export const stringValidation = (label, length = 2) =>
     .min(length, `${label} should be more than ${length} characters`)
     .required(`${label} is required`);
 
+export const email = yup
+  .string()
+  .label('Email')
+  .email('Seems like an invalid email address')
+  .required('Email is required');
+
+export const password = yup
+  .string()
+  .label('Password')
+  .required('Password is required');
+
+export const strongPassword = password.min(6, 'Seems a bit short...');
+
+export const confirmPassword = yup
+  .string()
+  .label('Confirm Password')
+  .required('Enter your password again')
+  .oneOf([yup.ref('password')], 'Passwords must match');
+
+export const phoneNumber = yup
+  .string()
+  .label('Phone')
+  .required('Phone is required');
+
 export const positiveNumberValidation = label =>
   yup
     .number()

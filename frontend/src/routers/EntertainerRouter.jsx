@@ -14,6 +14,7 @@ import EmergencyContacts from 'components/pages/entertainer/EmergencyContacts';
 import InviteFriends from 'components/pages/entertainer/InviteFriends';
 import Help from 'components/pages/user/Help';
 import Logout from 'components/pages/auth/Logout';
+import AccountSetup from 'components/pages/entertainer/AccountSetup';
 
 const EntertainerRouter = () => (
   <Router>
@@ -28,6 +29,7 @@ const EntertainerRouter = () => (
     <Badges path="/badges" />
     <BandMembers path="/band-members" />
     <EmergencyContacts path="/emergency-contacts" />
+    <AccountSetup path="/account-setup" />
     <InviteFriends path="/invite-friends" />
     <Help path="/help" />
     <Logout path="/logout" />

@@ -1,33 +1,16 @@
 import * as yup from 'yup';
 import { stringValidation, optionalValidation } from './schema-helpers';
-// import { entertainerDetailsObject } from './entertainerSchema';
+import {
+  email,
+  password,
+  strongPassword,
+  confirmPassword,
+  phoneNumber
+} from './schema-helpers';
+
 /////////////////////////
 // Fields
 ////////////////////////
-
-const email = yup
-  .string()
-  .label('Email')
-  .email('Seems like an invalid email address')
-  .required('Email is required');
-
-const password = yup
-  .string()
-  .label('Password')
-  .required('Password is required');
-
-const strongPassword = password.min(6, 'Seems a bit short...');
-
-const confirmPassword = yup
-  .string()
-  .label('Confirm Password')
-  .required('Enter your password again')
-  .oneOf([yup.ref('password')], 'Passwords must match');
-
-const phoneNumber = yup
-  .string()
-  .label('Phone')
-  .required('Phone is required');
 
 const agreement = yup
   .array()
