@@ -1,11 +1,12 @@
 import * as yup from 'yup';
-import { stringValidation, optionalValidation } from './schema-helpers';
+import { stringValidation } from './schema-helpers';
 import {
   email,
   password,
   strongPassword,
   confirmPassword,
-  phoneNumber
+  phoneNumber,
+  OptionalPhoneNumber
 } from './schema-helpers';
 
 /////////////////////////
@@ -50,9 +51,8 @@ const resetPasswordObject = {
 const personalInfoObject = {
   firstName: stringValidation('First Name'),
   lastName: stringValidation('Last Name'),
-  email,
   phoneNumber,
-  about: optionalValidation(stringValidation('About', 20))
+  phoneNumber2: OptionalPhoneNumber
 };
 
 /////////////////////////

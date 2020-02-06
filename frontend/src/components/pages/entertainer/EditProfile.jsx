@@ -2,18 +2,25 @@ import React from 'react';
 import TopMessage from 'components/common/layout/TopMessage';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import { Formik, Form } from 'formik';
+import axios from 'axios';
 import Input from 'components/forms/Input';
 import TextArea from 'components/forms/TextArea';
 import Select from 'components/forms/Select';
 import { personalInfoObject } from 'components/forms/schema/userSchema';
 import { createSchema } from 'components/forms/schema/schema-helpers';
-import { setInitialValues } from 'components/forms/form-helper';
-import { range } from 'utils/helpers';
+import {
+  setInitialValues,
+  DisplayFormikState
+} from 'components/forms/form-helper';
+import { range, selectEntertainerType } from 'utils/helpers';
 import AutoComplete from 'components/forms/AutoComplete';
 import Button from 'components/forms/Button';
 import { entertainerDetailsSchema } from 'components/forms/schema/entertainerSchema';
 import UploadImage from 'components/common/utils/UploadImage';
 import { BUDGET } from 'utils/constants';
+import AlertMessage from 'components/common/utils/AlertMessage';
+// import { UserContext } from 'context/UserContext';
+import { getToken } from 'utils/localStorage';
 
 const currentYear = new Date().getFullYear();
 
@@ -31,6 +38,8 @@ const RegisterAsEntertainer = () => {
 };
 
 export const EntertainerInfoForm = () => {
+  const [message, setMessage] = React.useState(null);
+  // const { userState, userDispatch } = React.useContext(UserContext);
   return (
     <Formik
       initialValues={{
@@ -43,21 +52,46 @@ export const EntertainerInfoForm = () => {
         personal: setInitialValues(personalInfoObject)
       }}
       onSubmit={(values, actions) => {
-        console.log(values);
-        setTimeout(() => {
-          actions.setSubmitting(false);
-        }, 400);
+        axios
+          .put('/api/v1/users/editUser', values, {
+            headers: { 'x-access-token': getToken() }
+          })
+          .then(function(response) {
+            const { status, data } = response;
+            console.log('status', status);
+            console.log('data', data);
+            // handle success
+            console.log(status, data);
+            if (status === 200) {
+              // userDispatch({
+              //   type: 'user-profile-update',
+              //   user: data
+              // });
+              setMessage({
+                type: 'success',
+                message: `Your profile has been successfully updated`
+              });
+              actions.setSubmitting(false);
+            }
+          })
+          .catch(function(error) {
+            console.log('error', error);
+            setMessage(error.response.data.message);
+            actions.setSubmitting(false);
+          });
       }}
       render={({ isSubmitting, handleSubmit, ...props }) => (
         <>
-          <PersonalInfoForm />
+          <AlertMessage {...message} />
           <EntertainerDetailsForm />
+          <PersonalInfoForm />
+          <DisplayFormikState {...props} />
           <Button
             className="btn-danger btn-lg btn-wide btn-transparent"
             loading={isSubmitting}
             onClick={handleSubmit}
           >
-            Edit Profile
+            Update Profile
           </Button>
         </>
       )}
@@ -79,14 +113,14 @@ const PersonalInfoForm = () => (
             formGroupClassName="col-md-6"
             isValidMessage="First Name looks good"
             label="First Name"
-            name="personal.first_name"
+            name="personal.firstName"
             placeholder="First Name"
           />
           <Input
             formGroupClassName="col-md-6"
             isValidMessage="Last Name looks good"
             label="Last Name"
-            name="personal.last_name"
+            name="personal.lastName"
             placeholder="Last Name"
           />
         </div>
@@ -95,26 +129,18 @@ const PersonalInfoForm = () => (
             formGroupClassName="col-md-6"
             isValidMessage="Phone number looks good"
             label="Phone"
-            name="personal.phone"
+            name="personal.phoneNumber"
             placeholder="Phone"
           />
           <Input
             formGroupClassName="col-md-6"
             isValidMessage="Phone number looks good"
             label="Phone2"
-            name="personal.phone2"
+            name="personal.phoneNumber2"
             optional
             placeholder="Phone"
           />
         </div>
-        <TextArea
-          label="About"
-          name="personal.about"
-          optional
-          placeholder="Write some interesting facts about you."
-          rows="8"
-          type="textarea"
-        />
       </Form>
     </div>
   </div>
@@ -141,9 +167,7 @@ const EntertainerDetailsForm = () => (
             formGroupClassName="col-md-6"
             label="Entertainer Type"
             name="entertainer.type"
-            options={range(currentYear, currentYear - 20, -1).map(year => ({
-              label: year
-            }))}
+            options={selectEntertainerType()}
           />
         </div>
         <div className="form-row">
@@ -167,26 +191,26 @@ const EntertainerDetailsForm = () => (
             blankOption="Choose your base charges"
             formGroupClassName="col-md-6"
             isValidMessage="looks good"
-            label="Lowest Budget (in Naira)"
+            label="Base Charges (in Naira)"
             name="entertainer.baseCharges"
             options={BUDGET}
-            placeholder="Lowest Budget"
+            placeholder="Base Charges"
           />
           <Select
             blankOption="Choose your highest charges"
             formGroupClassName="col-md-6"
             isValidMessage="looks good"
-            label="Highest Charges (in Naira)"
-            name="entertainer.highestCharges"
+            label="Preferred Charges (in Naira)"
+            name="entertainer.preferredCharges"
             options={BUDGET}
-            placeholder="Highest Budget"
+            placeholder="Preferred Charges"
           />
         </div>
         <div className="form-row">
           <Select
             blankOption="Select Option"
             formGroupClassName="col-md-6"
-            label="Willing to Travel"
+            label="Willing to Travel to other states for shows"
             name="entertainer.willingToTravel"
             options={[{ label: 'Yes' }, { label: 'No' }]}
           />
@@ -209,6 +233,14 @@ const EntertainerDetailsForm = () => (
             { id: 5, name: 'Weddings' },
             { id: 6, name: 'Aniversary' }
           ]}
+        />
+        <TextArea
+          label="About"
+          name="entertainer.about"
+          optional
+          placeholder="Write some interesting facts about you."
+          rows="8"
+          type="textarea"
         />
       </Form>
     </div>

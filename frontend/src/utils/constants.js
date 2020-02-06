@@ -16,6 +16,12 @@ export const USER_TYPES = {
   bandMember: 3
 };
 
+export const ENTERTAINER_TYPE = {
+  MC: 'MC',
+  DJ: 'DJ',
+  LB: 'LIVE BAND'
+};
+
 export const DASHBOARD_PAGE = {
   [USER_TYPES.user]: 'user',
   [USER_TYPES.entertainer]: 'entertainer',

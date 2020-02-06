@@ -14,12 +14,15 @@ import {
 // Schema
 ////////////////////////
 export const entertainerDetailsSchema = {
+  about: optionalValidation(stringValidation('About', 20)),
   stageName: stringValidation('Stage Name'),
   location: stringValidation('Location'),
   type: stringValidation('Entertainer Type'),
   lga: required('Local Government'),
   city: required('City'),
-  startedYear: positiveNumberValidation('Started Year'),
+  baseCharges: required('Base Charges'),
+  preferredCharges: required('Preferred Charges'),
+  yearStarted: positiveNumberValidation('Started Year'),
   willingToTravel: stringValidation('Willing to travel'),
   availableFor: autocompleteValidation('Available for')
 };

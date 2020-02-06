@@ -118,9 +118,12 @@ const UserController = {
         }
         const token = Authentication.generateToken(user);
         return res.status(200).json({
-            message: 'You are successfully Logged in',
-            user: {firstTimeLogin: user.firstTimeLogin, ...UserController.transformUser(user)},
-            token,
+          message: 'You are successfully Logged in',
+          user: {
+            firstTimeLogin: user.firstTimeLogin,
+            ...UserController.transformUser(user)
+          },
+          token
         });
       })
       .catch(error => {
@@ -218,6 +221,7 @@ const UserController = {
             firstTimeLogin: !user.firstTimeLogin,
             ...UserController.transformUser(user)
           },
+          entertainerProfile: user.profile,
           token
         });
       })

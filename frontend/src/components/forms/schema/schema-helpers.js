@@ -2,6 +2,14 @@ import * as yup from 'yup';
 
 export const required = label => yup.string().required(`${label} is required`);
 
+export const optionalValidation = validation =>
+  yup.lazy(value => {
+    if (value) {
+      return validation;
+    }
+    return yup.mixed().notRequired();
+  });
+
 export const stringValidation = (label, length = 2) =>
   yup
     .string()
@@ -33,6 +41,8 @@ export const phoneNumber = yup
   .string()
   .label('Phone')
   .required('Phone is required');
+
+export const OptionalPhoneNumber = optionalValidation(phoneNumber);
 
 export const positiveNumberValidation = label =>
   yup
@@ -68,14 +78,6 @@ export const urlValidation = label =>
     .label(label)
     .url('Must be a valid url')
     .required(`${label} is required`);
-
-export const optionalValidation = validation =>
-  yup.lazy(value => {
-    if (value) {
-      return validation;
-    }
-    return yup.mixed().notRequired();
-  });
 
 export const createSchema = object => {
   return yup.object().shape(object);
