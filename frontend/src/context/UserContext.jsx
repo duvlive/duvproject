@@ -10,7 +10,22 @@ const INITIAL_STATE = {
   type: 1,
   referral: '',
   profileImg: '',
-  isLoggedIn: false
+  isLoggedIn: false,
+  entertainerProfile: {
+    entertainerType: null,
+    approved: false,
+    about: '',
+    stageName: '',
+    location: '',
+    yearStarted: '',
+    willingToTravel: false,
+    eventType: null,
+    youTubeChannel: null,
+    city: '',
+    baseCharges: '',
+    preferredCharges: '',
+    availableFor: '[]'
+  }
 };
 
 // CONTEXT

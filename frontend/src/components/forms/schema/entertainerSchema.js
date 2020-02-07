@@ -2,7 +2,6 @@ import {
   required,
   stringValidation,
   autocompleteValidation,
-  positiveNumberValidation,
   optionalValidation,
   urlValidation,
   multiSelectValidation,
@@ -17,14 +16,13 @@ export const entertainerDetailsSchema = {
   about: optionalValidation(stringValidation('About', 20)),
   stageName: stringValidation('Stage Name'),
   location: stringValidation('Location'),
-  type: stringValidation('Entertainer Type'),
-  lga: required('Local Government'),
+  entertainerType: stringValidation('Entertainer Type'),
   city: required('City'),
   baseCharges: required('Base Charges'),
   preferredCharges: required('Preferred Charges'),
-  yearStarted: positiveNumberValidation('Started Year'),
+  yearStarted: required('Started Year'),
   willingToTravel: stringValidation('Willing to travel'),
-  availableFor: autocompleteValidation('Available for')
+  availableFor: optionalValidation(autocompleteValidation('Available for'))
 };
 
 export const bankDetailsSchema = {

@@ -30,7 +30,6 @@ router.get('/api/v1', (_, res) =>
 router.post(
   '/api/v1/upload-profile-image',
   Authentication.verifyToken,
-  Authentication.validateUser,
   Authentication.isActiveUser,
   ImageController.uploadImage,
   ImageController.saveImage

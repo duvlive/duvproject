@@ -19,7 +19,7 @@ export const USER_TYPES = {
 export const ENTERTAINER_TYPE = {
   MC: 'MC',
   DJ: 'DJ',
-  LB: 'LIVE BAND'
+  LiveBand: 'LIVE BAND'
 };
 
 export const DASHBOARD_PAGE = {

@@ -13,17 +13,21 @@ const UserController = {
    * @param {object} user
    * @return {object} returns newUser
    */
-  transformUser(user) {
-    return {
+  transformUser(user, updatedValues = {}) {
+    const transformedUser = {
       id: user.id,
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
+      firstTimeLogin: user.firstTimeLogin,
       phoneNumber: user.phoneNumber,
       type: user.type,
       referral: user.referral,
-      profileImg: user.profileImageURL
+      profileImg: user.profileImageURL,
+      entertainerProfile: user.profile
     };
+
+    return { ...transformedUser, ...updatedValues };
   },
 
   /**
@@ -77,8 +81,9 @@ const UserController = {
       .then(newUser => {
         return res.status(200).json({
           message: 'Signed up successfully',
-          user: UserController.transformUser(newUser),
-          token: Authentication.generateToken(newUser, true)
+          user: UserController.transformUser(newUser, {
+            token: Authentication.generateToken(newUser, true)
+          })
         });
       })
       .catch(error => {
@@ -119,11 +124,10 @@ const UserController = {
         const token = Authentication.generateToken(user);
         return res.status(200).json({
           message: 'You are successfully Logged in',
-          user: {
-            firstTimeLogin: user.firstTimeLogin,
-            ...UserController.transformUser(user)
-          },
-          token
+          user: UserController.transformUser(user, {
+            token,
+            firstTimeLogin: !user.firstTimeLogin
+          })
         });
       })
       .catch(error => {
@@ -217,12 +221,10 @@ const UserController = {
         const token = Authentication.generateToken(user);
         return res.status(200).json({
           message: 'You are successfully logged in',
-          user: {
-            firstTimeLogin: !user.firstTimeLogin,
-            ...UserController.transformUser(user)
-          },
-          entertainerProfile: user.profile,
-          token
+          user: UserController.transformUser(user, {
+            token,
+            firstTimeLogin: !user.firstTimeLogin
+          })
         });
       })
       .catch(error => {
@@ -415,7 +417,6 @@ const UserController = {
    * @return {undefined} returns undefined
    **/
   editEntertainer(req, res) {
-    const { userId } = req.decoded;
     const {
       phoneNumber,
       about,

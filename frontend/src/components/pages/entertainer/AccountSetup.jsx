@@ -10,7 +10,7 @@ import { setInitialValues } from 'components/forms/form-helper';
 import { range } from 'utils/helpers';
 import Button from 'components/forms/Button';
 import { entertainerDetailsSchema } from 'components/forms/schema/entertainerSchema';
-import { EntertainerInfoForm } from 'components/pages/entertainer/EditProfile';
+import { EntertainerDetailsForm } from 'components/pages/entertainer/EditProfile';
 import { EmergencyContactForm } from 'components/pages/entertainer/EmergencyContacts';
 import { BankDetailsForm } from 'components/pages/entertainer/BankDetails';
 
@@ -49,7 +49,7 @@ const RegisterAsEntertainerForm = () => {
       }}
       render={({ isSubmitting, handleSubmit, ...props }) => (
         <>
-          <EntertainerInfoForm />
+          <EntertainerDetailsForm />
           <BankDetailsForm />
           <EmergencyContactForm />
           <YoutubeChannelForm />

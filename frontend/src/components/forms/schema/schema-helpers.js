@@ -61,10 +61,10 @@ export const minDateValidation = (label, minDate) =>
     .date(`${label} must be a a valid date`)
     .min(minDate, `${label} must be greater than ${minDate}`);
 
-export const autocompleteValidation = label =>
+export const autocompleteValidation = (label, minSelection = 2) =>
   yup
     .array()
-    .min(3, 'must be more than 2')
+    .min(minSelection, `Kindly select ${minSelection} or more items`)
     .of(
       yup.object().shape({
         id: yup.number(),
