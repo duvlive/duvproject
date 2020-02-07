@@ -8,7 +8,8 @@ import {
   EventController,
   ApproveCommentController,
   EmailController,
-  ImageController
+  ImageController,
+  EventEntertainerController
 } from './controllers';
 import Authentication from './middleware/authentication';
 import passport from 'passport';
@@ -173,4 +174,18 @@ router.put('/api/v1/gallery/:approve/:id', GalleryController.approveImage); //TO
 router.delete('/api/v1/gallery/delete/:id', GalleryController.deleteImage);
 
 // when you validateUser, check if user is active, can be done in verify token
+
+
+// Events routes
+router
+  .route('/api/v1/eventEntertainer')
+  .all(
+    Authentication.verifyToken,
+    Authentication.validateUser,
+    Authentication.isActiveUser
+  )
+  .post(EventEntertainerController.updateEventEntertainer)
+  .put(EventEntertainerController.updateEventEntertainer)
+  .get(EventEntertainerController.getEventEntertainers);
+
 export default router;
