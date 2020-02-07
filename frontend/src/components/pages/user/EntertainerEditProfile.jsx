@@ -6,14 +6,12 @@ import Input from 'components/forms/Input';
 import TextArea from 'components/forms/TextArea';
 import Select from 'components/forms/Select';
 // import Button from 'components/forms/Button';
-import {
-  profileObject,
-  profileSchema
-} from 'components/forms/schema/userSchema';
+import { personalInfoObject } from 'components/forms/schema/userSchema';
 import { navigate } from '@reach/router';
 import { setInitialValues } from 'components/forms/form-helper';
 import { range } from 'utils/helpers';
 import AutoComplete from 'components/forms/AutoComplete';
+import { createSchema } from 'components/forms/schema/schema-helpers';
 
 const currentYear = new Date().getFullYear();
 
@@ -37,7 +35,7 @@ const RegisterAsEntertainer = () => {
 const RegisterAsEntertainerForm = () => {
   return (
     <Formik
-      initialValues={setInitialValues(profileObject)}
+      initialValues={setInitialValues(personalInfoObject)}
       onSubmit={(values, actions) => {
         console.log(values);
         setTimeout(() => {
@@ -55,7 +53,7 @@ const RegisterAsEntertainerForm = () => {
           <BankDetailsForm />
         </>
       )}
-      validationSchema={profileSchema}
+      validationSchema={createSchema(personalInfoObject)}
     />
   );
 };
@@ -157,7 +155,10 @@ const EntertainerDetailsForm = () => (
             { id: 5, name: 'Lemons' },
             { id: 6, name: 'Apricots', disabled: true }
           ]}
-          value={[{ id: 1, name: 'Apples' }, { id: 2, name: 'Pears' }]}
+          value={[
+            { id: 1, name: 'Apples' },
+            { id: 2, name: 'Pears' }
+          ]}
         />
       </Form>
     </div>

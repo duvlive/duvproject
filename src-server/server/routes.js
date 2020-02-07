@@ -85,7 +85,6 @@ router
   .route('/api/v1/users/editUser')
   .put(
     Authentication.verifyToken,
-    Authentication.validateUser,
     Authentication.isActiveUser,
     UserController.editUser
   );

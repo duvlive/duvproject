@@ -31,12 +31,6 @@ const registerObject = {
   agreement
 };
 
-const profileObject = {
-  firstName: stringValidation('First Name'),
-  lastName: stringValidation('Last Name'),
-  phoneNumber
-};
-
 const changePasswordObject = {
   oldPassword: strongPassword,
   password: strongPassword,
@@ -64,7 +58,6 @@ const loginSchema = yup.object().shape({
 });
 
 const registerSchema = yup.object().shape(registerObject);
-const profileSchema = yup.object().shape(profileObject);
 const forgotPasswordSchema = yup.object().shape({ email });
 
 export {
@@ -74,7 +67,5 @@ export {
   forgotPasswordSchema,
   changePasswordObject,
   resetPasswordObject,
-  profileObject,
-  profileSchema,
   personalInfoObject
 };

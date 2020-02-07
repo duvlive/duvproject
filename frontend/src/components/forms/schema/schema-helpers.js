@@ -40,6 +40,8 @@ export const confirmPassword = yup
 export const phoneNumber = yup
   .string()
   .label('Phone')
+  .min(11, `Only mobile is allowed. It should be 11 characters`)
+  .max(14, `Only mobile is allowed. It should be less than 14 characters`)
   .required('Phone is required');
 
 export const OptionalPhoneNumber = optionalValidation(phoneNumber);

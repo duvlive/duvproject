@@ -7,6 +7,7 @@ const INITIAL_STATE = {
   lastName: '',
   email: '',
   phoneNumber: '',
+  phoneNumber2: '',
   type: 1,
   referral: '',
   profileImg: '',
@@ -36,11 +37,13 @@ let reducer = (state, action) => {
   console.log('userState', state);
   console.log('userAction', action);
   switch (action.type) {
+    case 'no-token':
     case 'user-logout':
       return INITIAL_STATE;
     case 'user-info':
     case 'user-login':
     case 'user-profile-update':
+    case 'entertainer-profile-update':
       return { ...state, ...action.user, isLoggedIn: true };
     case 'user-profile-image':
       return { ...state, profileImg: action.link };

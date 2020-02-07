@@ -21,6 +21,7 @@ const UserController = {
       email: user.email,
       firstTimeLogin: user.firstTimeLogin,
       phoneNumber: user.phoneNumber,
+      phoneNumber2: user.phoneNumber2,
       type: user.type,
       referral: user.referral,
       profileImg: user.profileImageURL,
@@ -81,9 +82,8 @@ const UserController = {
       .then(newUser => {
         return res.status(200).json({
           message: 'Signed up successfully',
-          user: UserController.transformUser(newUser, {
-            token: Authentication.generateToken(newUser, true)
-          })
+          user: UserController.transformUser(newUser),
+          token: Authentication.generateToken(newUser, true)
         });
       })
       .catch(error => {
@@ -125,9 +125,9 @@ const UserController = {
         return res.status(200).json({
           message: 'You are successfully Logged in',
           user: UserController.transformUser(user, {
-            token,
             firstTimeLogin: !user.firstTimeLogin
-          })
+          }),
+          token
         });
       })
       .catch(error => {
@@ -222,9 +222,9 @@ const UserController = {
         return res.status(200).json({
           message: 'You are successfully logged in',
           user: UserController.transformUser(user, {
-            token,
             firstTimeLogin: !user.firstTimeLogin
-          })
+          }),
+          token
         });
       })
       .catch(error => {
@@ -386,7 +386,7 @@ const UserController = {
    * */
   editUser(req, res) {
     const { userId } = req.decoded;
-    const { firstName, lastName, phoneNumber } = req.body;
+    const { firstName, lastName, phoneNumber, phoneNumber2 } = req.body;
     User.findOne({
       where: { id: userId }
     })
@@ -401,7 +401,7 @@ const UserController = {
           });
         }
         return user
-          .update({ firstName, lastName, phoneNumber })
+          .update({ firstName, lastName, phoneNumber, phoneNumber2 })
           .then(() => res.status(200).json(UserController.transformUser(user)));
       })
       .catch(error => {

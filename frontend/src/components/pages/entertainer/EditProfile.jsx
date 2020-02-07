@@ -7,10 +7,7 @@ import Input from 'components/forms/Input';
 import TextArea from 'components/forms/TextArea';
 import Select from 'components/forms/Select';
 import { createSchema } from 'components/forms/schema/schema-helpers';
-import {
-  setInitialValues,
-  DisplayFormikState
-} from 'components/forms/form-helper';
+import { setInitialValues } from 'components/forms/form-helper';
 import { range, selectEntertainerType } from 'utils/helpers';
 import AutoComplete from 'components/forms/AutoComplete';
 import Button from 'components/forms/Button';
@@ -67,7 +64,7 @@ export const EntertainerDetailsForm = () => {
             console.log(status, data);
             if (status === 200) {
               userDispatch({
-                type: 'user-profile-update',
+                type: 'entertainer-profile-update',
                 user: data
               });
               setMessage({
@@ -196,7 +193,6 @@ export const EntertainerDetailsForm = () => {
                 rows="8"
                 type="textarea"
               />
-              <DisplayFormikState {...props} />
               <Button
                 className="btn-danger btn-lg btn-wide btn-transparent"
                 loading={isSubmitting}
@@ -212,48 +208,5 @@ export const EntertainerDetailsForm = () => {
     />
   );
 };
-
-// const PersonalInfoForm = () => (
-//   <div className="card card-custom card-black card-form ">
-//     <div className="card-body col-md-10">
-//       <h4 className="card-title yellow">Personal Information</h4>
-//       <Form>
-//         <div className="form-row">
-//           <Input
-//             formGroupClassName="col-md-6"
-//             isValidMessage="First Name looks good"
-//             label="First Name"
-//             name="personal.firstName"
-//             placeholder="First Name"
-//           />
-//           <Input
-//             formGroupClassName="col-md-6"
-//             isValidMessage="Last Name looks good"
-//             label="Last Name"
-//             name="personal.lastName"
-//             placeholder="Last Name"
-//           />
-//         </div>
-//         <div className="form-row">
-//           <Input
-//             formGroupClassName="col-md-6"
-//             isValidMessage="Phone number looks good"
-//             label="Phone"
-//             name="personal.phoneNumber"
-//             placeholder="Phone"
-//           />
-//           <Input
-//             formGroupClassName="col-md-6"
-//             isValidMessage="Phone number looks good"
-//             label="Phone2"
-//             name="personal.phoneNumber2"
-//             optional
-//             placeholder="Phone"
-//           />
-//         </div>
-//       </Form>
-//     </div>
-//   </div>
-// );
 
 export default RegisterAsEntertainer;
