@@ -56,6 +56,11 @@ export default [
         title: 'Emergency Contacts',
         to: '/entertainer/emergency-contacts',
         icon: 'guest'
+      },
+      {
+        title: 'Bank Details',
+        to: '/entertainer/bank-details',
+        icon: 'money'
       }
     ]
   },

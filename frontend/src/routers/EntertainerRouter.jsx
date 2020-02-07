@@ -15,6 +15,7 @@ import InviteFriends from 'components/pages/entertainer/InviteFriends';
 import Help from 'components/pages/user/Help';
 import Logout from 'components/pages/auth/Logout';
 import AccountSetup from 'components/pages/entertainer/AccountSetup';
+import BankDetails from 'components/pages/entertainer/BankDetails';
 
 const EntertainerRouter = () => (
   <Router>
@@ -29,6 +30,7 @@ const EntertainerRouter = () => (
     <Badges path="/badges" />
     <BandMembers path="/band-members" />
     <EmergencyContacts path="/emergency-contacts" />
+    <BankDetails path="/bank-details" />
     <AccountSetup path="/account-setup" />
     <InviteFriends path="/invite-friends" />
     <Help path="/help" />

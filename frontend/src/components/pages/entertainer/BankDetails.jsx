@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import TopMessage from 'components/common/layout/TopMessage';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import { Formik, Form } from 'formik';
@@ -6,13 +7,16 @@ import Input from 'components/forms/Input';
 import { createSchema } from 'components/forms/schema/schema-helpers';
 import { setInitialValues } from 'components/forms/form-helper';
 import Button from 'components/forms/Button';
+import { UserContext } from 'context/UserContext';
+import { getToken } from 'utils/localStorage';
 import { bankDetailsSchema } from 'components/forms/schema/entertainerSchema';
+import AlertMessage from 'components/common/utils/AlertMessage';
 
 const BankDetails = () => {
   return (
-    <BackEndPage title="Edit Profile">
+    <BackEndPage title="Bank Details">
       <div className="main-app">
-        <TopMessage message="Edit Profile" />
+        <TopMessage message="Bank Details" />
         <section className="app-content">
           <BankDetailsForm />
         </section>
@@ -22,36 +26,60 @@ const BankDetails = () => {
 };
 
 export const BankDetailsForm = () => {
+  const [message, setMessage] = React.useState(null);
+  const { userState, userDispatch } = React.useContext(UserContext);
   return (
     <Formik
-      initialValues={setInitialValues(bankDetailsSchema)}
+      enableReinitialize={true}
+      initialValues={setInitialValues(bankDetailsSchema, userState.bankDetail)}
       onSubmit={(values, actions) => {
-        console.log(values);
-        setTimeout(() => {
-          actions.setSubmitting(false);
-        }, 400);
+        axios
+          .put('/api/v1/bankDetail', values, {
+            headers: { 'x-access-token': getToken() }
+          })
+          .then(function(response) {
+            const { status, data } = response;
+            console.log('status', status);
+            console.log('data', data);
+            // handle success
+            console.log(status, data);
+            if (status === 200) {
+              userDispatch({
+                type: 'bank-account-update',
+                user: data
+              });
+              setMessage({
+                type: 'info',
+                message: `Your bank has been successfully submitted.`
+              });
+              actions.setSubmitting(false);
+            }
+          })
+          .catch(function(error) {
+            console.log('error', error);
+            setMessage(error.response.data.message);
+            actions.setSubmitting(false);
+          });
       }}
       render={({ isSubmitting, handleSubmit, ...props }) => (
         <div className="card card-custom card-black card-form ">
           <div className="card-body col-md-10">
-            <h4 className="card-title yellow">BAnk Details</h4>
+            <h4 className="card-title yellow">Bank Details</h4>
             <Form>
+              <AlertMessage {...message} />
               <Input
-                formGroupClassName="col-md-6"
                 isValidMessage="Account Name looks good"
                 label="Account Name"
                 name="accountName"
                 placeholder="Account Name"
               />
               <Input
-                formGroupClassName="col-md-6"
                 isValidMessage="Bank Name looks good"
                 label="Bank Name"
                 name="bankName"
                 placeholder="Bank Name"
               />
               <Input
-                formGroupClassName="col-md-6"
                 isValidMessage="Stage Name looks good"
                 label="Account Number"
                 name="accountNumber"
@@ -62,7 +90,7 @@ export const BankDetailsForm = () => {
                 loading={isSubmitting}
                 onClick={handleSubmit}
               >
-                Edit Profile
+                Update Bank Details
               </Button>
             </Form>
           </div>

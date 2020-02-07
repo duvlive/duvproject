@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { User, EntertainerProfile } from '../models';
+import { userAssociatedModels } from '../controllers/UserController';
 
 const authentication = {
   verifyToken(request, response, next) {
@@ -21,12 +22,7 @@ const authentication = {
         request.decoded = decoded;
         User.findOne({
           where: { id: request.decoded.userId },
-          include: [
-            {
-              model: EntertainerProfile,
-              as: 'profile'
-            }
-          ]
+          include: userAssociatedModels
         }).then(user => {
           if (!user) {
             return response.status(401).send({

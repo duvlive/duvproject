@@ -1,10 +1,21 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { User, EntertainerProfile } from '../models';
+import { User, EntertainerProfile, BankDetail } from '../models';
 import sendMail from '../MailSender';
 import Authentication from '../middleware/authentication';
 import { UserValidation, updateUser } from '../utils';
 import EMAIL_CONTENT from '../email-template/content';
+
+export const userAssociatedModels = [
+  {
+    model: EntertainerProfile,
+    as: 'profile'
+  },
+  {
+    model: BankDetail,
+    as: 'bankDetail'
+  }
+];
 
 const UserController = {
   /**
@@ -25,7 +36,8 @@ const UserController = {
       type: user.type,
       referral: user.referral,
       profileImg: user.profileImageURL,
-      entertainerProfile: user.profile
+      entertainerProfile: user.profile,
+      bankDetail: user.bankDetail
     };
 
     return { ...transformedUser, ...updatedValues };
@@ -104,12 +116,7 @@ const UserController = {
     const { lastName, firstName, email } = req.user;
     User.findOne({
       where: { email },
-      include: [
-        {
-          model: EntertainerProfile,
-          as: 'profile'
-        }
-      ]
+      include: userAssociatedModels
     })
       .then(usr => {
         if (!usr || usr.length === 0) {
@@ -190,12 +197,7 @@ const UserController = {
     }
     User.findOne({
       where: { email },
-      include: [
-        {
-          model: EntertainerProfile,
-          as: 'profile'
-        }
-      ]
+      include: userAssociatedModels
     })
       .then(user => {
         if (!user) {

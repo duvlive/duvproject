@@ -26,6 +26,11 @@ const INITIAL_STATE = {
     baseCharges: '',
     preferredCharges: '',
     availableFor: '[]'
+  },
+  bankDetail: {
+    accountName: '',
+    bankName: '',
+    accountNumber: ''
   }
 };
 

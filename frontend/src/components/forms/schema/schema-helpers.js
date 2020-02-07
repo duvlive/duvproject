@@ -81,6 +81,32 @@ export const urlValidation = label =>
     .url('Must be a valid url')
     .required(`${label} is required`);
 
+// export const lengthValidation = (label, length = 10) =>
+// yup.string().transform((_, originalValue) => {
+//   console.log('originalValue: ', originalValue);
+//   // return typeof originalValue === 'string' ? originalValue : null;
+// });
+// yup.lazy(value => {
+//   console.log('value: ', value);
+//   if (value !== undefined) {
+//     return yup.object().shape({
+//       otherData: yup.string().required()
+//     });
+//   }
+//   return yup.mixed().notRequired();
+// });
+// yup
+//   .string()
+//   .matches(/^[0-9]*$/, 'Must be a number')
+//   .length(length, `Must be exactly ${length} character`);
+// .number()
+// .label(label)
+// .test('len', `Must be exactly ${length} characters`, val => {
+//   console.log('val', val);
+//   console.log('val.length: ', val.length);
+//   return val.length === length;
+// });
+
 export const createSchema = object => {
   return yup.object().shape(object);
 };
