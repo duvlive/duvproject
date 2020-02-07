@@ -55,6 +55,11 @@ db.User.hasOne(db.ApprovalComment, {
   as: 'approvalComment',
   targetKey: 'approvalComment',
 });
+db.Event.hasOne(db.Auction, {
+  foreignKey: 'eventId',
+  as: 'auction',
+  targetKey: 'auction'
+});
 
 db.User.hasMany(db.User, {
   foreignKey: 'userId',

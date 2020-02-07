@@ -9,7 +9,8 @@ import {
   ApproveCommentController,
   EmailController,
   ImageController,
-  EventEntertainerController
+  EventEntertainerController,
+  AuctionController
 } from './controllers';
 import Authentication from './middleware/authentication';
 import passport from 'passport';
@@ -187,5 +188,17 @@ router
   .post(EventEntertainerController.updateEventEntertainer)
   .put(EventEntertainerController.updateEventEntertainer)
   .get(EventEntertainerController.getEventEntertainers);
+
+// Auction routes
+router
+  .route('/api/v1/auction')
+  .all(
+    Authentication.verifyToken,
+    Authentication.validateUser,
+    Authentication.isActiveUser
+  )
+  .post(AuctionController.updateEventAuction)
+  .put(AuctionController.updateEventAuction)
+  .get(AuctionController.getEventAuctions);
 
 export default router;
