@@ -6,7 +6,7 @@ import BackEndPage from 'components/common/layout/BackEndPage';
 // import Select from 'components/forms/Select';
 // import { range } from 'utils/helpers';
 import { EntertainerDetailsForm } from 'components/pages/entertainer/EditProfile';
-import { EmergencyContactForm } from 'components/pages/entertainer/EmergencyContacts';
+import { ProfessionalContactForm } from 'components/pages/entertainer/EmergencyContacts';
 import { BankDetailsForm } from 'components/pages/entertainer/BankDetails';
 
 // const currentYear = new Date().getFullYear();
@@ -19,7 +19,7 @@ const AccountSetup = () => {
         <section className="app-content">
           <EntertainerDetailsForm />
           <BankDetailsForm />
-          <EmergencyContactForm />
+          <ProfessionalContactForm />
           {/* <YoutubeChannelForm />
           <IdentificationForm /> */}
         </section>

@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { User, EntertainerProfile, BankDetail } from '../models';
+import { User, EntertainerProfile, BankDetail, Contact } from '../models';
 import sendMail from '../MailSender';
 import Authentication from '../middleware/authentication';
 import { UserValidation, updateUser } from '../utils';
@@ -14,6 +14,10 @@ export const userAssociatedModels = [
   {
     model: BankDetail,
     as: 'bankDetail'
+  },
+  {
+    model: Contact,
+    as: 'contacts'
   }
 ];
 
@@ -37,7 +41,8 @@ const UserController = {
       referral: user.referral,
       profileImg: user.profileImageURL,
       entertainerProfile: user.profile,
-      bankDetail: user.bankDetail
+      bankDetail: user.bankDetail,
+      contacts: user.contacts
     };
 
     return { ...transformedUser, ...updatedValues };

@@ -31,7 +31,25 @@ const INITIAL_STATE = {
     accountName: '',
     bankName: '',
     accountNumber: ''
-  }
+  },
+  contacts: [
+    {
+      firstName: '',
+      lastName: '',
+      email: '',
+      phoneNumber: '',
+      relationship: '',
+      type: 1
+    },
+    {
+      firstName: '',
+      lastName: '',
+      email: '',
+      phoneNumber: '',
+      relationship: '',
+      type: 2
+    }
+  ]
 };
 
 // CONTEXT
