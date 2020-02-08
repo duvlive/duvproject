@@ -13,7 +13,8 @@ import AutoComplete from 'components/forms/AutoComplete';
 import Button from 'components/forms/Button';
 import {
   entertainerDetailsSchema,
-  youtubeChannelSchema
+  youtubeChannelSchema,
+  identificationSchema
 } from 'components/forms/schema/entertainerSchema';
 import UploadImage from 'components/common/utils/UploadImage';
 import { BUDGET } from 'utils/constants';
@@ -22,6 +23,7 @@ import { UserContext } from 'context/UserContext';
 import { getToken } from 'utils/localStorage';
 import DynamicSelect from 'components/forms/DynamicSelect';
 import { getStates, getLgas } from 'data/naija-states-and-lgas';
+import DatePicker from 'components/forms/DatePicker';
 
 const currentYear = new Date().getFullYear();
 
@@ -32,7 +34,8 @@ const RegisterAsEntertainer = () => {
         <TopMessage message="Edit Profile" />
         <section className="app-content">
           <EntertainerDetailsForm />
-          <AddYoutubeChannelForm />
+          <YoutubeChannelForm />
+          <IdentificationForm />
         </section>
       </div>
     </BackEndPage>
@@ -209,7 +212,7 @@ export const EntertainerDetailsForm = () => {
   );
 };
 
-export const AddYoutubeChannelForm = () => {
+export const YoutubeChannelForm = () => {
   const [message, setMessage] = React.useState(null);
   const { userState, userDispatch } = React.useContext(UserContext);
   return (
@@ -272,6 +275,109 @@ export const AddYoutubeChannelForm = () => {
         </div>
       )}
       validationSchema={createSchema(youtubeChannelSchema)}
+    />
+  );
+};
+
+export const IdentificationForm = () => {
+  const [message, setMessage] = React.useState(null);
+  const { userState, userDispatch } = React.useContext(UserContext);
+
+  return (
+    <Formik
+      enableReinitialize={true}
+      initialValues={setInitialValues(identificationSchema, {
+        ...userState.identification
+      })}
+      onSubmit={(values, actions) => {
+        const payload = {
+          ...values,
+          expiryDate: values.expiryDate.date,
+          issueDate: values.issueDate.date
+        };
+        console.log('payload', payload);
+        axios
+          .put('/api/v1/identification', payload, {
+            headers: { 'x-access-token': getToken() }
+          })
+          .then(function(response) {
+            const { status, data } = response;
+            console.log('status', status);
+            console.log('data', data);
+            // handle success
+            console.log(status, data);
+            if (status === 200) {
+              userDispatch({
+                type: 'entertainer-identification',
+                user: data
+              });
+              setMessage({
+                type: 'success',
+                message: `Your identification has been successfully updated`
+              });
+              actions.setSubmitting(false);
+            }
+          })
+          .catch(function(error) {
+            console.log('error', error);
+            setMessage(error.response.data.message);
+            actions.setSubmitting(false);
+          });
+      }}
+      render={({ isSubmitting, handleSubmit, ...props }) => (
+        <div className="card card-custom card-black card-form ">
+          <div className="card-body col-md-10">
+            <h4 className="card-title yellow">Identification Form</h4>
+            <Form>
+              <AlertMessage {...message} />
+              <div className="form-row">
+                <Select
+                  blankOption="ID Type"
+                  formGroupClassName="col-md-6"
+                  label="ID Type"
+                  name="idType"
+                  options={[
+                    { label: 'International Passport' },
+                    { label: 'Driver Licence' },
+                    { label: 'National ID Card' }
+                  ]}
+                />
+                <Input
+                  formGroupClassName="col-md-6"
+                  isValidMessage="ID Number looks good"
+                  label="ID Number"
+                  name="idNumber"
+                  placeholder="ID Number"
+                />
+              </div>
+              <div className="form-row">
+                <DatePicker
+                  formGroupClassName="col-md-6"
+                  isValidMessage="Issue Date looks good"
+                  label="Issue Date"
+                  name="issueDate"
+                  placeholder="Issue Date"
+                />
+                <DatePicker
+                  formGroupClassName="col-md-6"
+                  isValidMessage="Expiry Date looks good"
+                  label="Expiry Date"
+                  name="expiryDate"
+                  placeholder="Expiry Date"
+                />
+              </div>
+              <Button
+                className="btn-danger btn-lg btn-wide btn-transparent"
+                loading={isSubmitting}
+                onClick={handleSubmit}
+              >
+                Update Identification
+              </Button>
+            </Form>
+          </div>
+        </div>
+      )}
+      validationSchema={createSchema(identificationSchema)}
     />
   );
 };

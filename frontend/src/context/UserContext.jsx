@@ -49,7 +49,13 @@ const INITIAL_STATE = {
       relationship: '',
       type: 2
     }
-  ]
+  ],
+  identification: {
+    idType: '',
+    idNumber: '',
+    issueDate: '',
+    expiryDate: ''
+  }
 };
 
 // CONTEXT

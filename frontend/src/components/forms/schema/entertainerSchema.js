@@ -62,9 +62,8 @@ export const emergencyContactSchema = {
 };
 
 export const identificationSchema = {
-  firstName: stringValidation('First Name'),
-  lastName: stringValidation('Last Name'),
-  phoneNumber,
-  email,
-  relationship: stringValidation('Relationship')
+  idType: required('ID Type'),
+  idNumber: stringValidation('ID Number'),
+  issueDate: required('Issue Date'),
+  expiryDate: required('Expiry Date')
 };
