@@ -49,6 +49,10 @@ export const videoSchema = {
   title: stringValidation('Title')
 };
 
+export const youtubeChannelSchema = {
+  youTubeChannel: urlValidation('Youtube Channel URL')
+};
+
 export const emergencyContactSchema = {
   firstName: stringValidation('First Name'),
   lastName: stringValidation('Last Name'),

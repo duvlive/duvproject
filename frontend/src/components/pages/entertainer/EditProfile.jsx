@@ -11,7 +11,10 @@ import { setInitialValues } from 'components/forms/form-helper';
 import { range, selectEntertainerType } from 'utils/helpers';
 import AutoComplete from 'components/forms/AutoComplete';
 import Button from 'components/forms/Button';
-import { entertainerDetailsSchema } from 'components/forms/schema/entertainerSchema';
+import {
+  entertainerDetailsSchema,
+  youtubeChannelSchema
+} from 'components/forms/schema/entertainerSchema';
 import UploadImage from 'components/common/utils/UploadImage';
 import { BUDGET } from 'utils/constants';
 import AlertMessage from 'components/common/utils/AlertMessage';
@@ -29,6 +32,7 @@ const RegisterAsEntertainer = () => {
         <TopMessage message="Edit Profile" />
         <section className="app-content">
           <EntertainerDetailsForm />
+          <AddYoutubeChannelForm />
         </section>
       </div>
     </BackEndPage>
@@ -38,10 +42,6 @@ const RegisterAsEntertainer = () => {
 export const EntertainerDetailsForm = () => {
   const [message, setMessage] = React.useState(null);
   const { userState, userDispatch } = React.useContext(UserContext);
-  console.log(
-    'userState.entertainerProfile.availableFor',
-    userState.entertainerProfile.availableFor
-  );
   return (
     <Formik
       enableReinitialize={true}
@@ -205,6 +205,73 @@ export const EntertainerDetailsForm = () => {
         </div>
       )}
       validationSchema={createSchema(entertainerDetailsSchema)}
+    />
+  );
+};
+
+export const AddYoutubeChannelForm = () => {
+  const [message, setMessage] = React.useState(null);
+  const { userState, userDispatch } = React.useContext(UserContext);
+  return (
+    <Formik
+      enableReinitialize={true}
+      initialValues={setInitialValues(youtubeChannelSchema, {
+        ...userState.entertainerProfile
+      })}
+      onSubmit={(values, actions) => {
+        axios
+          .put('/api/v1/users/updateEntertainerProfile', values, {
+            headers: { 'x-access-token': getToken() }
+          })
+          .then(function(response) {
+            const { status, data } = response;
+            console.log('status', status);
+            console.log('data', data);
+            // handle success
+            console.log(status, data);
+            if (status === 200) {
+              userDispatch({
+                type: 'entertainer-youtube-channel',
+                user: data
+              });
+              setMessage({
+                type: 'success',
+                message: `Your youtube channel has been successfully updated`
+              });
+              actions.setSubmitting(false);
+            }
+          })
+          .catch(function(error) {
+            console.log('error', error);
+            setMessage(error.response.data.message);
+            actions.setSubmitting(false);
+          });
+      }}
+      render={({ isSubmitting, handleSubmit }) => (
+        <div className="card card-custom card-black card-form ">
+          <div className="card-body col-md-10">
+            <h4 className="card-title yellow">YouTube Channel</h4>
+            <Form>
+              <AlertMessage {...message} />
+              <Input
+                isValidMessage="Youtube URL looks good"
+                label="Youtube Channel"
+                name="youTubeChannel"
+                placeholder="Youtube Channel URL"
+              />
+
+              <Button
+                className="btn-danger btn-lg btn-wide btn-transparent"
+                loading={isSubmitting}
+                onClick={handleSubmit}
+              >
+                Update Youtube Channel
+              </Button>
+            </Form>
+          </div>
+        </div>
+      )}
+      validationSchema={createSchema(youtubeChannelSchema)}
     />
   );
 };
