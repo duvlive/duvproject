@@ -37,19 +37,38 @@ Object.keys(db).forEach(function(modelName) {
   }
 });
 
-db.User.hasOne(db.EntertainerProfile, { foreignKey: 'userId', as: 'profile' });
-db.User.hasOne(db.BankDetail, { foreignKey: 'userId', as: 'bankDetail' });
-db.User.hasOne(db.Identification, { foreignKey: 'userId',
+db.User.hasOne(db.EntertainerProfile, {
+  foreignKey: 'userId',
+  as: 'profile'
+});
+db.User.hasOne(db.BankDetail, {
+  foreignKey: 'userId',
+  as: 'bankDetail'
+});
+db.User.hasOne(db.Identification, {
+  foreignKey: 'userId',
   as: 'identification',
   targetKey: 'identification'
 });
-db.User.hasOne(db.ApprovalComment, { foreignKey: 'userId',
+db.User.hasOne(db.ApprovalComment, {
+  foreignKey: 'userId',
   as: 'approvalComment',
   targetKey: 'approvalComment',
 });
+db.Event.hasOne(db.Auction, {
+  foreignKey: 'eventId',
+  as: 'auction',
+  targetKey: 'auction'
+});
 
-db.User.hasMany(db.User, { foreignKey: 'userId', as: 'bandMembers' });
-db.User.hasMany(db.Event, { foreignKey: 'userId', as: 'events' });
+db.User.hasMany(db.User, {
+  foreignKey: 'userId',
+  as: 'bandMembers'
+});
+db.User.hasMany(db.Event, {
+  foreignKey: 'userId',
+  as: 'events'
+});
 db.User.hasMany(db.Contact, {
   foreignKey: 'userId',
   as: 'contacts',
@@ -60,6 +79,12 @@ db.User.hasMany(db.Gallery, {
   as: 'galleries',
   onDelete: 'CASCADE',
   hooks: true
+});
+
+db.Event.hasMany(db.EventEntertainer, {
+  foreignKey: 'eventId',
+  as: 'entertainers',
+  targetKey: 'entertainers'
 });
 
 db.sequelize = sequelize;

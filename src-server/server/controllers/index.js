@@ -7,6 +7,8 @@ import EventController from './EventController';
 import ApproveCommentController from './ApproveCommentController';
 import EmailController from './EmailController';
 import ImageController from './ImageController';
+import EventEntertainerController from './EventEntertainerController';
+import AuctionController from './AuctionController';
 
 export {
   UserController,
@@ -17,5 +19,7 @@ export {
   EventController,
   ApproveCommentController,
   EmailController,
-  ImageController
+  ImageController,
+  EventEntertainerController,
+	AuctionController
 };
