@@ -197,7 +197,7 @@ export const EntertainerDetailsForm = () => {
                 type="textarea"
               />
               <Button
-                className="btn-danger btn-lg btn-wide btn-transparent"
+                className="btn-danger btn-wide btn-transparent"
                 loading={isSubmitting}
                 onClick={handleSubmit}
               >
@@ -264,7 +264,7 @@ export const YoutubeChannelForm = () => {
               />
 
               <Button
-                className="btn-danger btn-lg btn-wide btn-transparent"
+                className="btn-danger btn-wide btn-transparent"
                 loading={isSubmitting}
                 onClick={handleSubmit}
               >
@@ -367,7 +367,7 @@ export const IdentificationForm = () => {
                 />
               </div>
               <Button
-                className="btn-danger btn-lg btn-wide btn-transparent"
+                className="btn-danger btn-wide btn-transparent"
                 loading={isSubmitting}
                 onClick={handleSubmit}
               >

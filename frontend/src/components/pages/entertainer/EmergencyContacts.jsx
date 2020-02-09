@@ -181,7 +181,7 @@ export const ContactsForm = ({ type, name, textColor, initialValue }) => {
                 )}
               </div>
               <Button
-                className="btn-danger btn-lg btn-wide btn-transparent"
+                className="btn-danger btn-wide btn-transparent"
                 loading={isSubmitting}
                 onClick={handleSubmit}
               >

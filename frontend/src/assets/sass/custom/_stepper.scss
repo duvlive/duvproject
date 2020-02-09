@@ -1,0 +1,73 @@
+.stepper {
+  border: 1px solid $gray-800;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    list-style: none;
+    padding-left: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    width: 100%;
+    @include media-breakpoint-up(sm) {
+      flex-direction: row;
+    }
+  }
+
+  li,
+  li.active {
+    outline: none;
+    position: relative;
+    padding: 1rem 2rem;
+  }
+
+  li button {
+    text-decoration: none;
+    outline: none;
+    background: transparent;
+    border: none;
+  }
+
+  .title {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    .step-inner-circle {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      background: rgba($blue, 0.3);
+      position: relative;
+      outline: none;
+      color: $white;
+      font-size: 1rem;
+      span {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+    .step-text {
+      color: $text-color;
+      margin-left: 0.5rem;
+      font-size: 0.9rem;
+    }
+  }
+
+  li.active .step-inner-circle {
+    background: rgba(37, 180, 91, 0.2);
+    border: 1px solid #25b45b;
+    color: #25b45b;
+  }
+
+  li.done .step-inner-circle,
+  li.done.active .step-inner-circle {
+    background: #25b45b;
+    color: #fff;
+  }
+}

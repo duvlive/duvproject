@@ -15,6 +15,7 @@ const AccountSetup = () => {
       <div className="main-app">
         <TopMessage message="Account Setup" />
         <section className="app-content">
+          <Stepper />
           <EntertainerDetailsForm />
           <BankDetailsForm />
           <ProfessionalContactForm />
@@ -25,5 +26,44 @@ const AccountSetup = () => {
     </BackEndPage>
   );
 };
+
+const Stepper = () => (
+  <div className="stepper">
+    <ul role="tablist">
+      <li className="active done" role="tab">
+        <button>
+          <div className="title">
+            <span className="step-inner-circle">
+              <span className="icon icon-ok" />
+            </span>
+            <span className="step-text">Profile</span>
+          </div>
+        </button>
+      </li>
+
+      <li className="active" role="tab">
+        <button>
+          <div className="title">
+            <span className="step-inner-circle">
+              <span>1</span>
+            </span>
+            <span className="step-text">Bank Details</span>
+          </div>
+        </button>
+      </li>
+
+      <li role="tab">
+        <button>
+          <div className="title">
+            <span className="step-inner-circle">
+              <span>1</span>
+            </span>
+            <span className="step-text">Personal Information</span>
+          </div>
+        </button>
+      </li>
+    </ul>
+  </div>
+);
 
 export default AccountSetup;
