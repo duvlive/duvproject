@@ -80,6 +80,16 @@ db.User.hasMany(db.Gallery, {
   onDelete: 'CASCADE',
   hooks: true
 });
+db.User.hasMany(db.Application, {
+  foreignKey: 'userId',
+  as: 'applications',
+  targetKey: 'applications'
+});
+db.User.hasMany(db.Badge, {
+  foreignKey: 'userId',
+  as: 'badges',
+  targetKey: 'badges'
+});
 
 db.Event.hasMany(db.EventEntertainer, {
   foreignKey: 'eventId',

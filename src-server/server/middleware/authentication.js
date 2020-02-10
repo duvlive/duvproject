@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { User } from '../models';
+import constants from '../constant';
 
 const authentication = {
   verifyToken(request, response, next) {
@@ -60,7 +61,7 @@ const authentication = {
    * @returns {Object} response message
    */
   validateAdmin(request, response, next) {
-    return request.user.type === 3 ? next() : response.status(401).send({
+    return request.user.type === constants.USER_TYPES.admin ? next() : response.status(401).send({
       message: 'Not authorized to non-Admin'
     });
   },
@@ -73,7 +74,7 @@ const authentication = {
    * @returns {Object} response message
    */
   validateEntertainer(request, response, next) {
-    return request.user.type === 2 ? next() : response.status(401).send({
+    return request.user.type === constants.USER_TYPES.entertainer ? next() : response.status(401).send({
       message: 'Not authorized to non-entertainers'
     });
   },
@@ -86,7 +87,7 @@ const authentication = {
    * @returns {Object} response message
    */
   validateUser(request, response, next) {
-    return request.user.type === 1 ? next() : response.status(401).send({
+    return request.user.type === constants.USER_TYPES.regular ? next() : response.status(401).send({
       message: 'Not authorized to non-users'
     });
   },
