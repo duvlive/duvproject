@@ -53,7 +53,7 @@ db.User.hasOne(db.Identification, {
 db.User.hasOne(db.ApprovalComment, {
   foreignKey: 'userId',
   as: 'approvalComment',
-  targetKey: 'approvalComment',
+  targetKey: 'approvalComment'
 });
 db.Event.hasOne(db.Auction, {
   foreignKey: 'eventId',
@@ -77,6 +77,12 @@ db.User.hasMany(db.Contact, {
 db.User.hasMany(db.Gallery, {
   foreignKey: 'userId',
   as: 'galleries',
+  onDelete: 'CASCADE',
+  hooks: true
+});
+db.User.hasMany(db.Notification, {
+  foreignKey: 'userId',
+  as: 'notifications',
   onDelete: 'CASCADE',
   hooks: true
 });
