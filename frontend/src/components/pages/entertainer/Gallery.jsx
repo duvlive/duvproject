@@ -84,21 +84,22 @@ const Gallery = () => {
 
   // Load Gallery
   React.useEffect(() => {
-    const { id } = userState;
-    id &&
-      axios
-        .get(`/api/v1/gallery/${id}`)
-        .then(function(response) {
-          const { status, data } = response;
-          // handle success
-          if (status === 200) {
-            console.log('data', data);
-            setGallery(data);
-          }
-        })
-        .catch(function(error) {
-          setGallery([]);
-        });
+    // const { id } = userState;
+    // id &&
+    //   axios
+    //     .get(`/api/v1/gallery/${id}`)
+    //     .then(function(response) {
+    //       const { status, data } = response;
+    //       // handle success
+    //       if (status === 200) {
+    //         console.log('data', data);
+    //         setGallery(data);
+    //       }
+    //     })
+    //     .catch(function(error) {
+    //       setGallery([]);
+    //     });
+    userState.galleries && setGallery(userState.galleries);
   }, [userState]);
 
   const addImageToGallery = image => {

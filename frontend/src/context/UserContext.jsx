@@ -55,7 +55,15 @@ const INITIAL_STATE = {
     idNumber: '',
     issueDate: '',
     expiryDate: ''
-  }
+  },
+  approvalComment: {
+    entertainerProfile: 'YES',
+    bankAccount: null,
+    contact: null,
+    youTube: null,
+    identification: null
+  },
+  galleries: []
 };
 
 // CONTEXT

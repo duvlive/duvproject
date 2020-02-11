@@ -3,13 +3,15 @@ import TopMessage from 'components/common/layout/TopMessage';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import DashboardCard from 'components/common/utils/DashboardCard';
 import Onboarding from 'components/pages/entertainer/Onboarding';
+import { UserContext } from 'context/UserContext';
 
 const Dashboard = () => {
   const status = '!approved';
+
   let currentDashboard;
 
   if (status === 'approved') {
-    currentDashboard = <Dashboard.Items />;
+    currentDashboard = <DashboardItems />;
   } else {
     currentDashboard = <Onboarding />;
   }
@@ -21,10 +23,11 @@ const Dashboard = () => {
   );
 };
 
-Dashboard.Items = () => {
+const DashboardItems = () => {
+  let { userState } = React.useContext(UserContext);
   return (
     <>
-      <TopMessage message="Welcome back DJ Cuppy," />
+      <TopMessage message={`Welcome back ${userState.firstName},`} />
       <section className="app-content">
         <div className="row">
           <DashboardCard
