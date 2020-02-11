@@ -9,6 +9,14 @@ export const COLOR_STYLE = [
   'dark'
 ];
 
+export const ONBOARDING_STEPS = {
+  entertainerProfile: { title: 'Entertainer Profile' },
+  bankAccount: { title: 'Bank Account Details' },
+  contact: { title: 'Emergency Contact' },
+  youTube: { title: 'Youtube Channel' },
+  identification: { title: 'Valid Identification' }
+};
+
 export const USER_TYPES = {
   admin: 0,
   user: 1,

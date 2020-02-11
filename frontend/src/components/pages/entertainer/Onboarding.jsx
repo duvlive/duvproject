@@ -5,6 +5,7 @@ import Card from 'components/custom/Card';
 import classNames from 'classnames';
 import { Link } from '@reach/router';
 import { UserContext } from 'context/UserContext';
+import { ONBOARDING_STEPS } from 'utils/constants';
 
 const STATUS = {
   PENDING: 'pending',
@@ -58,14 +59,6 @@ const Onboarding = () => {
 
 const OnboardingList = () => {
   const { userState } = React.useContext(UserContext);
-
-  const ONBOARDING_STEPS = {
-    entertainerProfile: { title: 'Entertainer Profile' },
-    bankAccount: { title: 'Bank Account Details' },
-    contact: { title: 'Emergency Contact' },
-    youTube: { title: 'Youtube Channel' },
-    identification: { title: 'Valid Identification' }
-  };
 
   return Object.keys(ONBOARDING_STEPS).map((step, index) => (
     <Onboarding.Card
