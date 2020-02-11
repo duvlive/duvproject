@@ -16,7 +16,7 @@ const DuvLiveModal = ({
   const [modal, setModal] = useState(false);
   const handleAction = () => {
     actionFn();
-    // setModal(!modal);
+    setModal(!modal);
   };
   return (
     <Fragment>

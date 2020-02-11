@@ -76,8 +76,9 @@ let reducer = (state, action) => {
     case 'entertainer-profile-update':
     case 'entertainer-youtube-channel':
       return { ...state, ...action.user, isLoggedIn: true };
+    case 'update-user-profile-image':
     case 'user-profile-image':
-      return { ...state, profileImg: action.link };
+      return { ...state, profileImg: action.imageURL };
     default:
       return state;
   }

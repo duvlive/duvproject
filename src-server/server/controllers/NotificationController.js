@@ -8,17 +8,18 @@ const NotificationController = {
    * @param {object} res is res object
    * @return {object} returns res object
    */
-  createNotification({ title, description, type }) {
-    if (!title && !description && !type) {
+  createNotification({ title, description, type, userId = 1 }) {
+    if (!title && !description && !type && !userId) {
       return Promise.reject({
-        message: 'Notification must contain title, description and title'
+        message: 'Notification must contain title, description, type and userId'
       });
     }
 
     return Notification.create({
-      title,
       description,
-      type
+      title,
+      type,
+      userId
     });
   },
 

@@ -168,6 +168,11 @@ router.post(
   GalleryController.uploadImage,
   GalleryController.saveImage
 );
+router.put(
+  '/api/v1/gallery/set-as-profile',
+  Authentication.verifyToken,
+  GalleryController.setAsProfileImage
+);
 router.put('/api/v1/gallery/:approve/:id', GalleryController.approveImage); //TODO: add administrator middleware
 
 router.delete('/api/v1/gallery/delete/:id', GalleryController.deleteImage);

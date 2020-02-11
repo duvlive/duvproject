@@ -1,5 +1,5 @@
 require('dotenv').config();
-import { Gallery } from '../models';
+import { Gallery, User } from '../models';
 
 const cloudinary = require('cloudinary');
 const multer = require('multer');
@@ -114,6 +114,48 @@ const GalleryController = {
         const errorMessage = error.message || error;
         return res.status(412).json({ message: errorMessage });
       });
+  },
+
+  /**
+   * set as profile image
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  setAsProfileImage(req, res) {
+    const { profileImageURL } = req.body;
+    res.json({ profileImageURL });
+    if (profileImageURL) {
+      const { userId } = req.decoded;
+      User.findOne({
+        where: { id: userId }
+      })
+        .then(user => {
+          if (!user) {
+            return res.status(404).send({
+              message: 'User not found'
+            });
+          }
+          // update profile image in database
+          return user
+            .update({
+              profileImageID: 'GalleryImage',
+              profileImageURL
+            })
+            .then(user => {
+              return res.json({
+                message: 'Image has been successfully set as profile image',
+                user
+              });
+            });
+        })
+        .catch(error => {
+          return res.status(500).json({ error: error.message });
+        });
+    } else {
+      return res.status(412).json({ message: 'Gallery URL not found' });
+    }
   },
 
   /**

@@ -7,6 +7,7 @@ import BackEndPage from 'components/common/layout/BackEndPage';
 import { UserContext } from 'context/UserContext';
 import UploadGallery from 'components/common/utils/UploadGallery';
 import DuvLiveModal from 'components/custom/Modal';
+import { getToken } from 'utils/localStorage';
 
 const approval = {
   approved: {
@@ -24,7 +25,11 @@ const approval = {
 };
 
 const getStatus = status => {
-  // need == to check for null
+  /* == is used to check for null
+   * null -> pending
+   * true -> approved
+   * false -> rejected
+   */
   if (null == status) {
     return 'pending';
   }
@@ -33,7 +38,7 @@ const getStatus = status => {
 
 const Gallery = () => {
   const [gallery, setGallery] = React.useState([]);
-  const { userState } = React.useContext(UserContext);
+  const { userDispatch, userState } = React.useContext(UserContext);
 
   const handleDelete = id => {
     axios
@@ -49,6 +54,30 @@ const Gallery = () => {
         }
       })
       .catch(function(error) {
+        setGallery([]);
+      });
+  };
+
+  const setAsProfile = imageURL => {
+    const values = { profileImageURL: imageURL };
+    axios
+      .put(`/api/v1/gallery/set-as-profile`, values, {
+        headers: { 'x-access-token': getToken() }
+      })
+      .then(function(response) {
+        const { status, data } = response;
+        console.log('response', response);
+        // handle success
+        if (status === 200) {
+          console.log('data', data);
+          userDispatch({
+            type: 'update-user-profile-image',
+            imageURL: data.profileImageURL
+          });
+        }
+      })
+      .catch(function(error) {
+        console.log('error', error);
         setGallery([]);
       });
   };
@@ -76,6 +105,7 @@ const Gallery = () => {
     setGallery([image, ...gallery]);
   };
 
+  const isCurrentProfileImage = imageURL => userState.profileImg === imageURL;
   return (
     <BackEndPage title="Gallery">
       <div className="main-app">
@@ -89,21 +119,25 @@ const Gallery = () => {
                 <GalleryCard
                   deleteImage={handleDelete}
                   id={id}
+                  isCurrentProfileImage={isCurrentProfileImage(imageURL)}
                   key={id}
                   name={userState.firstName + index}
+                  setAsProfile={setAsProfile}
                   src={imageURL}
                   status={getStatus(approved)}
                 />
               ))}
             </div>
-            <div className="row">
-              <div className="col-12 mt-5">
-                <p class="text-info">
-                  Note: Gallery images must be approved by an administrator
-                  before they are shown on your profile.
-                </p>
+            {gallery && (
+              <div className="row">
+                <div className="col-12 mt-5">
+                  <p className="text-info">
+                    Note: Gallery images must be approved by an administrator
+                    before they are shown on your profile.
+                  </p>
+                </div>
               </div>
-            </div>
+            )}
           </section>
         </section>
       </div>
@@ -111,7 +145,15 @@ const Gallery = () => {
   );
 };
 
-const GalleryCard = ({ deleteImage, id, src, name, status }) => {
+const GalleryCard = ({
+  setAsProfile,
+  deleteImage,
+  id,
+  isCurrentProfileImage,
+  src,
+  name,
+  status
+}) => {
   const currentImage = (
     <Image
       bordered
@@ -121,16 +163,26 @@ const GalleryCard = ({ deleteImage, id, src, name, status }) => {
       src={src}
     />
   );
+
   return (
     <div className="card col-lg-3 col-md-4 col-6 gallery-card-image">
       <DuvLiveModal
+        actionFn={() => setAsProfile(src)}
+        actionText={
+          !isCurrentProfileImage && status === 'approved'
+            ? 'Set as Profile Image'
+            : null
+        }
         body={
-          <Image.Big
-            className="img-fluid"
-            name={name}
-            rounded={false}
-            src={src}
-          />
+          <>
+            {isCurrentProfileImage && <h2>Current Profile Image</h2>}
+            <Image.Big
+              className="img-fluid"
+              name={name}
+              rounded={false}
+              src={src}
+            />
+          </>
         }
       >
         {currentImage}
@@ -147,9 +199,15 @@ const GalleryCard = ({ deleteImage, id, src, name, status }) => {
         closeModalText="Cancel"
         title="Delete Image"
       >
-        <div className="delete-icon">
-          <span className="icon icon-cancel-circled"></span>
-        </div>
+        {isCurrentProfileImage ? (
+          <div className="profile-icon">
+            <span className="icon icon-user-circle"></span>
+          </div>
+        ) : (
+          <div className="delete-icon">
+            <span className="icon icon-cancel-circled"></span>
+          </div>
+        )}
       </DuvLiveModal>
     </div>
   );
@@ -158,7 +216,9 @@ const GalleryCard = ({ deleteImage, id, src, name, status }) => {
 GalleryCard.propTypes = {
   deleteImage: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,
+  isCurrentProfileImage: PropTypes.bool.isRequired,
   name: PropTypes.string.isRequired,
+  setAsProfile: PropTypes.func.isRequired,
   src: PropTypes.string.isRequired,
   status: PropTypes.any.isRequired
 };

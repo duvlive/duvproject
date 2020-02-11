@@ -5,7 +5,10 @@ import {
   EntertainerProfile,
   BankDetail,
   Contact,
-  Identification
+  Identification,
+  Notification,
+  ApprovalComment,
+  Gallery
 } from '../models';
 import sendMail from '../MailSender';
 import Authentication from '../middleware/authentication';
@@ -26,8 +29,20 @@ export const userAssociatedModels = [
     as: 'contacts'
   },
   {
+    model: Gallery,
+    as: 'galleries'
+  },
+  {
+    model: ApprovalComment,
+    as: 'approvalComment'
+  },
+  {
     model: Identification,
     as: 'identification'
+  },
+  {
+    model: Notification,
+    as: 'notifications'
   }
 ];
 
@@ -53,7 +68,10 @@ const UserController = {
       entertainerProfile: user.profile,
       bankDetail: user.bankDetail,
       contacts: user.contacts,
-      identification: user.identification
+      identification: user.identification,
+      notifications: user.notifications,
+      galleries: user.galleries,
+      approvalComment: user.approvalComment
     };
 
     return { ...transformedUser, ...updatedValues };
@@ -213,7 +231,12 @@ const UserController = {
     }
     User.findOne({
       where: { email },
-      include: userAssociatedModels
+      include: userAssociatedModels,
+      order: [
+        // ...we use the same syntax from the include
+        // in the beginning of the order array
+        [{ model: Notification, as: 'notifications' }, 'updatedAt', 'DESC']
+      ]
     })
       .then(user => {
         if (!user) {

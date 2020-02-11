@@ -50,7 +50,7 @@ const UploadImage = () => {
             console.log('data', data);
             userDispatch({
               type: 'user-profile-image',
-              link: data.image.url
+              imageURL: data.image.url
             });
             setLoading(false);
           }
