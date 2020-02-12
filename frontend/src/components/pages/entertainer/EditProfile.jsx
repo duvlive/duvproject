@@ -17,7 +17,7 @@ import {
   identificationSchema
 } from 'components/forms/schema/entertainerSchema';
 import UploadImage from 'components/common/utils/UploadImage';
-import { BUDGET } from 'utils/constants';
+import { BUDGET, ONBOARDING_STEPS } from 'utils/constants';
 import AlertMessage from 'components/common/utils/AlertMessage';
 import { UserContext } from 'context/UserContext';
 import { getToken } from 'utils/localStorage';
@@ -86,7 +86,9 @@ export const EntertainerDetailsForm = () => {
       render={({ isSubmitting, handleSubmit, ...props }) => (
         <div className="card card-custom card-black card-form ">
           <div className="card-body col-md-10">
-            <h4 className="card-title yellow">Entertainers Information</h4>
+            <h4 className="card-title yellow">
+              {ONBOARDING_STEPS.entertainerProfile.title}
+            </h4>
             <Form>
               <AlertMessage {...message} />
               <section className="mb-5">
@@ -228,8 +230,6 @@ export const YoutubeChannelForm = () => {
           })
           .then(function(response) {
             const { status, data } = response;
-            console.log('status', status);
-            console.log('data', data);
             // handle success
             console.log(status, data);
             if (status === 200) {
@@ -253,7 +253,9 @@ export const YoutubeChannelForm = () => {
       render={({ isSubmitting, handleSubmit }) => (
         <div className="card card-custom card-black card-form ">
           <div className="card-body col-md-10">
-            <h4 className="card-title yellow">YouTube Channel</h4>
+            <h4 className="card-title yellow">
+              {ONBOARDING_STEPS.youTube.title}
+            </h4>
             <Form>
               <AlertMessage {...message} />
               <Input
@@ -327,7 +329,9 @@ export const IdentificationForm = () => {
       render={({ isSubmitting, handleSubmit, ...props }) => (
         <div className="card card-custom card-black card-form ">
           <div className="card-body col-md-10">
-            <h4 className="card-title yellow">Identification Form</h4>
+            <h4 className="card-title yellow">
+              {ONBOARDING_STEPS.identification.title}
+            </h4>
             <Form>
               <AlertMessage {...message} />
               <div className="form-row">

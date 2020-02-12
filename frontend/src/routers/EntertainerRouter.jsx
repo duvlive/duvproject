@@ -32,6 +32,7 @@ const EntertainerRouter = () => (
     <EmergencyContacts path="/emergency-contacts" />
     <BankDetails path="/bank-details" />
     <AccountSetup path="/account-setup" />
+    <AccountSetup path="/account-setup/:stepFromURL" />
     <InviteFriends path="/invite-friends" />
     <Help path="/help" />
     <Logout path="/logout" />

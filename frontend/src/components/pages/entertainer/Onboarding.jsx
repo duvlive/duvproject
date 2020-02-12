@@ -77,7 +77,7 @@ Onboarding.Card = ({ title, status, number, link }) => {
   const pendingStep = status === STATUS.PENDING;
   const rejectedStep = status === STATUS.REJECTED;
   return (
-    <Link to={link}>
+    <Link to={`${link}/${number}`}>
       <Card
         className="onboarding__card offset-md-2 col-md-8 mb-0 rounded-0"
         color={approvedStep ? 'green' : rejectedStep ? 'red' : 'black'}
