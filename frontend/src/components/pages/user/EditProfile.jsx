@@ -29,7 +29,7 @@ const EditProfile = () => {
   );
 };
 
-const UserProfileForm = () => {
+export const UserProfileForm = () => {
   const [message, setMessage] = React.useState(null);
   const { userState, userDispatch } = React.useContext(UserContext);
 

@@ -10,12 +10,12 @@ import Gallery from 'components/pages/entertainer/Gallery';
 import Video from 'components/pages/entertainer/Video';
 import Badges from 'components/pages/entertainer/Badges';
 import BandMembers from 'components/pages/entertainer/BandMembers';
-import EmergencyContacts from 'components/pages/entertainer/EmergencyContacts';
+import EmergencyContacts from 'components/pages/entertainer/accountSetup/EmergencyContacts';
 import InviteFriends from 'components/pages/entertainer/InviteFriends';
 import Help from 'components/pages/user/Help';
 import Logout from 'components/pages/auth/Logout';
-import AccountSetup from 'components/pages/entertainer/AccountSetup';
-import BankDetails from 'components/pages/entertainer/BankDetails';
+import AccountSetup from 'components/pages/entertainer/accountSetup/AccountSetup';
+import BankDetails from 'components/pages/entertainer/accountSetup/BankDetails';
 
 const EntertainerRouter = () => (
   <Router>
