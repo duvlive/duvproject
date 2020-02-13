@@ -9,6 +9,8 @@ $rejected-text-color: rgba(lighten($red, 35), 0.6);
   border: 1px solid $gray-800;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
+  border-bottom: none;
+  overflow: scroll;
 
   ul {
     display: flex;
@@ -96,14 +98,11 @@ $rejected-text-color: rgba(lighten($red, 35), 0.6);
       opacity: 0.4;
     }
   }
+}
 
-  // li.active .step-inner-circle {
-  //   background: rgba($blue, 0.2);
-  //   border: 1px solid rgba($blue, 0.3);
-  // }
-
-  // li.done .step-inner-circle,
-  // li.done.active .step-inner-circle {
-  //   background: #25b45b;
-  // }
+.things-to-complete {
+  border: 1px solid $gray-800;
+  padding: 2rem 1.5rem 1rem;
+  margin-bottom: 2rem;
+  font-size: 0.85rem;
 }

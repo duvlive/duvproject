@@ -17,6 +17,26 @@ export const ONBOARDING_STEPS = {
   identification: { title: 'Valid Identification' }
 };
 
+export const STEPS_REQUIREMENT = {
+  entertainerProfile: ['Profile Image', 'Entertainers Information'],
+  bankAccount: [
+    'Bank Account details',
+    'Account Name must contain at least your stage name, first name or last name'
+  ],
+  contact: [
+    'Your Next of Kin OR',
+    'A Professional Contact (mentor, colleague etc)'
+  ],
+  youTube: [
+    'Your Youtube Channel',
+    'This must contain some of your previous performance'
+  ],
+  identification: [
+    'Valid Identification',
+    'International Passport or Drivers License or National ID Card'
+  ]
+};
+
 export const USER_TYPES = {
   admin: 0,
   user: 1,

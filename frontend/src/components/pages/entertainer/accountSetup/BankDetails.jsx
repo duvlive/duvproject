@@ -65,7 +65,7 @@ export const BankDetailsForm = () => {
       render={({ isSubmitting, handleSubmit, ...props }) => (
         <div className="card card-custom card-black card-form ">
           <div className="card-body col-md-10">
-            <h4 className="card-title yellow">
+            <h4 className="card-title text-blue">
               {ONBOARDING_STEPS.bankAccount.title}
             </h4>
             <Form>

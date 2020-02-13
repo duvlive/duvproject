@@ -12,7 +12,7 @@ import {
 } from 'components/pages/entertainer/accountSetup/EmergencyContacts';
 import { BankDetailsForm } from 'components/pages/entertainer/accountSetup/BankDetails';
 import { UserContext } from 'context/UserContext';
-import { ONBOARDING_STEPS } from 'utils/constants';
+import { ONBOARDING_STEPS, STEPS_REQUIREMENT } from 'utils/constants';
 
 const MIN_STEP = 1;
 const MAX_STEP = 5;
@@ -33,8 +33,8 @@ const AccountSetup = ({ stepFromURL }) => {
     <EntertainerDetailsForm />,
     <BankDetailsForm />,
     <>
-      <ProfessionalContactForm />
       <NextOfKinForm />
+      <ProfessionalContactForm />
     </>,
     <YoutubeChannelForm />,
     <IdentificationForm />
@@ -59,6 +59,7 @@ const AccountSetup = ({ stepFromURL }) => {
             currentStep={currentStep}
             setCurrentStep={handleCurrentStep}
           />
+          {<ToComplete currentStep={currentStep} />}
           {ALL_STEPS[currentStep]}
         </section>
         <StepperNavigation
@@ -191,11 +192,31 @@ StepperNavigation.propTypes = {
   moveToPreviousStep: PropTypes.func.isRequired
 };
 
+const ToComplete = ({ currentStep }) => {
+  const steps = Object.keys(STEPS_REQUIREMENT);
+  return (
+    <section className="things-to-complete">
+      <h6 className="text-white font-weight-normal">
+        Information needed to complete this step
+      </h6>
+      <ul>
+        {STEPS_REQUIREMENT[steps[currentStep - 1]].map(requirement => (
+          <li>{requirement}</li>
+        ))}
+      </ul>
+    </section>
+  );
+};
+
+ToComplete.propTypes = {
+  currentStep: PropTypes.number.isRequired,
+  name: PropTypes.string.isRequired
+};
 export default AccountSetup;
 
 // TODO:
 // 0. Consolidate Edit profile and account setup, remove unneccessary step (DONE)
-// 1. Add a to complete this section and other forms
+// 1. Add a to complete this section and other forms (DONE)
 // 2. Update backend to handle updates after approval. [Needs review instead of yes]
 // 3. backend in approval comment, check when everything has been approved and send notification and update approval in entetainers profiile
 // 4. Change sidebar for unapproved users
