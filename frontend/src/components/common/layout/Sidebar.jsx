@@ -6,7 +6,10 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import { Link } from '@reach/router';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import userSideMenu from 'data/menu/user';
-import entertainerSideMenu from 'data/menu/entertainer';
+import {
+  entertainerSideMenu,
+  unApprovedEntertainerSideMenu
+} from 'data/menu/entertainer';
 import bandMemberSideMenu from 'data/menu/band-member';
 import administratorSideMenu from 'data/menu/administrator';
 import classNames from 'classnames';
@@ -20,10 +23,14 @@ const SIDE_MENU = {
   [USER_TYPES.bandMember]: bandMemberSideMenu
 };
 
-const Sidebar = ({ showSidebar, closeSidebar }) => {
+const Sidebar = ({ showSidebar, closeSidebar, ...props }) => {
   const { userState } = React.useContext(UserContext);
   // TODO: sort out band members
-  const sideMenu = SIDE_MENU[userState.type];
+  let sideMenu = SIDE_MENU[userState.type];
+  if (userState.type === USER_TYPES.entertainer && !userState.approved) {
+    sideMenu = unApprovedEntertainerSideMenu;
+  }
+
   return (
     <>
       <div
@@ -95,7 +102,7 @@ Sidebar.Navigation = ({ menus, closeSidebar }) => {
       <h6 className="sidebar-menu__header">{name}</h6>
       {menus.map(({ title, to, icon }) => (
         <li key={title}>
-          <Link onClick={closeSidebar} to={to}>
+          <Link getProps={isActive} onClick={closeSidebar} to={to}>
             <i className={`icon icon-${icon}`} />
             {title}
           </Link>
@@ -109,6 +116,10 @@ Sidebar.Navigation = ({ menus, closeSidebar }) => {
 Sidebar.Navigation.propTypes = {
   closeSidebar: PropTypes.func.isRequired,
   menus: PropTypes.array.isRequired
+};
+
+const isActive = ({ isCurrent }) => {
+  return isCurrent ? { className: 'active' } : null;
 };
 
 export default Sidebar;

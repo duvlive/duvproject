@@ -142,6 +142,9 @@
         color: $red-300;
         // transform: translateX(0.15rem);
       }
+      &.active {
+        color: lighten($red-300, 40%);
+      }
     }
   }
 }
