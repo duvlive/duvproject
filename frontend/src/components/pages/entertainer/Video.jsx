@@ -98,7 +98,6 @@ const AddVideoForm = ({ saveVideo }) => {
     <Formik
       initialValues={setInitialValues(videoSchema)}
       onSubmit={(values, actions) => {
-        console.log('values', values);
         const { youtube_url, title } = values;
         const url = youtube_url;
         if (url !== undefined || url !== '') {

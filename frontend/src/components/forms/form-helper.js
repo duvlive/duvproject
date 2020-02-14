@@ -140,6 +140,5 @@ export const setInitialValues = (schema, initialValues = {}) => {
       values[key] = '';
     }
   });
-  console.log('values', values);
   return values;
 };

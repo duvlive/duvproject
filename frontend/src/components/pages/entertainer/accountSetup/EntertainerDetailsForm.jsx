@@ -39,10 +39,6 @@ const EntertainerDetailsForm = () => {
           })
           .then(function(response) {
             const { status, data } = response;
-            console.log('status', status);
-            console.log('data', data);
-            // handle success
-            console.log(status, data);
             if (status === 200) {
               userDispatch({
                 type: 'entertainer-profile-update',
@@ -56,7 +52,6 @@ const EntertainerDetailsForm = () => {
             }
           })
           .catch(function(error) {
-            console.log('error', error);
             setMessage(error.response.data.message);
             actions.setSubmitting(false);
           });

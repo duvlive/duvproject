@@ -20,7 +20,6 @@ const UploadImage = () => {
     setLoading(true);
     setMessage(null);
     const file = event.target.files[0];
-    console.log('file', file);
     if (file.size > MAX_IMG_SIZE) {
       setMessage(
         `'${
@@ -44,10 +43,7 @@ const UploadImage = () => {
         })
         .then(function(response) {
           const { status, data } = response;
-          // handle success
-          console.log(status, data);
           if (status === 200) {
-            console.log('data', data);
             userDispatch({
               type: 'user-profile-image',
               imageURL: data.image.url
@@ -56,7 +52,6 @@ const UploadImage = () => {
           }
         })
         .catch(function(error) {
-          console.log('error', error.response.data);
           setMessage(error.response.data.message);
           setLoading(false);
         });

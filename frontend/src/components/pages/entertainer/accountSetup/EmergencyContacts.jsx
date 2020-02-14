@@ -89,10 +89,6 @@ export const ContactsForm = ({ type, name, textColor, initialValue }) => {
         })
           .then(function(response) {
             const { status, data } = response;
-            console.log('status', status);
-            console.log('data', data);
-            // handle success
-            console.log(status, data);
             if (status === 200) {
               userDispatch({
                 type: 'user-contact-update',
@@ -106,7 +102,6 @@ export const ContactsForm = ({ type, name, textColor, initialValue }) => {
             }
           })
           .catch(function(error) {
-            console.log('error', error);
             setMessage(error.response.data.message);
             actions.setSubmitting(false);
           });

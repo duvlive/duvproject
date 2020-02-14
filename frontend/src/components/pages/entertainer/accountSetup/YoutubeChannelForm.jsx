@@ -27,8 +27,6 @@ export const YoutubeChannelForm = () => {
           })
           .then(function(response) {
             const { status, data } = response;
-            // handle success
-            console.log(status, data);
             if (status === 200) {
               userDispatch({
                 type: 'entertainer-youtube-channel',
@@ -42,7 +40,6 @@ export const YoutubeChannelForm = () => {
             }
           })
           .catch(function(error) {
-            console.log('error', error);
             setMessage(error.response.data.message);
             actions.setSubmitting(false);
           });

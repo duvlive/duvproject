@@ -44,8 +44,6 @@ const UploadGallery = ({ afterSave }) => {
         })
         .then(function(response) {
           const { status, data } = response;
-          // handle success
-          console.log(status, data);
           if (status === 200) {
             setLoading(false);
             afterSave(data.details);
@@ -53,7 +51,6 @@ const UploadGallery = ({ afterSave }) => {
           }
         })
         .catch(function(error) {
-          console.log('error', error.response.data);
           setMessage(error.response.data.message);
           setLoading(false);
         });

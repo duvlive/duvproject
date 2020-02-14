@@ -71,8 +71,6 @@ let UserContext = React.createContext();
 
 // REDUCERS
 let reducer = (state, action) => {
-  console.log('userState', state);
-  console.log('userAction', action);
   switch (action.type) {
     case 'no-token':
     case 'user-logout':
@@ -96,7 +94,6 @@ let reducer = (state, action) => {
 let UserContextProvider = props => {
   let [userState, userDispatch] = React.useReducer(reducer, INITIAL_STATE);
   let value = { userState, userDispatch };
-  console.log('userState for provider', userState);
 
   return (
     <UserContext.Provider value={value}>{props.children}</UserContext.Provider>

@@ -44,10 +44,6 @@ export const UserProfileForm = () => {
           })
           .then(function(response) {
             const { status, data } = response;
-            console.log('status', status);
-            console.log('data', data);
-            // handle success
-            console.log(status, data);
             if (status === 200) {
               userDispatch({
                 type: 'user-profile-update',
@@ -61,7 +57,6 @@ export const UserProfileForm = () => {
             }
           })
           .catch(function(error) {
-            console.log('error', error);
             setMessage(error.response.data.message);
             actions.setSubmitting(false);
           });

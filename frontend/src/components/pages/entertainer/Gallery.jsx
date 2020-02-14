@@ -44,12 +44,10 @@ const Gallery = () => {
     axios
       .delete(`/api/v1/gallery/delete/${id}`)
       .then(function(response) {
-        const { status, data } = response;
+        const { status } = response;
         // handle success
         if (status === 202) {
-          console.log('data', data);
           const currentImages = gallery.filter(g => g.id !== id);
-          console.log('currentImages', currentImages);
           setGallery(currentImages);
         }
       })
@@ -66,10 +64,7 @@ const Gallery = () => {
       })
       .then(function(response) {
         const { status, data } = response;
-        console.log('response', response);
-        // handle success
         if (status === 200) {
-          console.log('data', data);
           userDispatch({
             type: 'update-user-profile-image',
             imageURL: data.profileImageURL
@@ -77,7 +72,6 @@ const Gallery = () => {
         }
       })
       .catch(function(error) {
-        console.log('error', error);
         setGallery([]);
       });
   };
@@ -92,7 +86,6 @@ const Gallery = () => {
     //       const { status, data } = response;
     //       // handle success
     //       if (status === 200) {
-    //         console.log('data', data);
     //         setGallery(data);
     //       }
     //     })

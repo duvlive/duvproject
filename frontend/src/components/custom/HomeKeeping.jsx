@@ -19,9 +19,7 @@ export const HomeKeeping = ({ children, location }) => {
             userDispatch({ type: 'user-info', user: data });
           }
         })
-        .catch(function(error) {
-          console.log('error', error.response.data);
-        });
+        .catch(function(error) {});
     }
   }, [userDispatch, userState.isLoggedIn]);
 

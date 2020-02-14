@@ -27,7 +27,10 @@ const Sidebar = ({ showSidebar, closeSidebar, ...props }) => {
   const { userState } = React.useContext(UserContext);
   // TODO: sort out band members
   let sideMenu = SIDE_MENU[userState.type];
-  if (userState.type === USER_TYPES.entertainer && !userState.approved) {
+  if (
+    userState.type === USER_TYPES.entertainer &&
+    !userState.entertainerProfile.approved
+  ) {
     sideMenu = unApprovedEntertainerSideMenu;
   }
 

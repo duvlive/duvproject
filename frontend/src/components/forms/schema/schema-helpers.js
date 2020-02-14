@@ -83,11 +83,9 @@ export const urlValidation = label =>
 
 // export const lengthValidation = (label, length = 10) =>
 // yup.string().transform((_, originalValue) => {
-//   console.log('originalValue: ', originalValue);
 //   // return typeof originalValue === 'string' ? originalValue : null;
 // });
 // yup.lazy(value => {
-//   console.log('value: ', value);
 //   if (value !== undefined) {
 //     return yup.object().shape({
 //       otherData: yup.string().required()
@@ -102,8 +100,6 @@ export const urlValidation = label =>
 // .number()
 // .label(label)
 // .test('len', `Must be exactly ${length} characters`, val => {
-//   console.log('val', val);
-//   console.log('val.length: ', val.length);
 //   return val.length === length;
 // });
 

@@ -37,11 +37,7 @@ export const ChangePasswordForm = () => {
             headers: { 'x-access-token': getToken() }
           })
           .then(function(response) {
-            const { status, data } = response;
-            console.log('status', status);
-            console.log('data', data);
-            // handle success
-            console.log(status, data);
+            const { status } = response;
             if (status === 200) {
               setMessage({
                 type: 'success',
@@ -52,7 +48,6 @@ export const ChangePasswordForm = () => {
             }
           })
           .catch(function(error) {
-            console.log('error', error);
             setMessage(error.response.data.message);
             actions.setSubmitting(false);
           });

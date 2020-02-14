@@ -72,7 +72,6 @@ const OnboardingList = () => {
 };
 
 Onboarding.Card = ({ title, status, number, link }) => {
-  console.log('status', status);
   const approvedStep = status === STATUS.APPROVED;
   const pendingStep = status === STATUS.PENDING;
   const rejectedStep = status === STATUS.REJECTED;

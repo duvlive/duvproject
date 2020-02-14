@@ -67,7 +67,6 @@ const FilterEntertainerFields = () => (
   <Formik
     initialValues={{ entertainer: setInitialValues(addEntertainerSchema) }}
     onSubmit={(values, actions) => {
-      console.log(values);
       setTimeout(() => {
         actions.setSubmitting(false);
       }, 400);

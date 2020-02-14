@@ -29,17 +29,12 @@ const IdentificationForm = () => {
           expiryDate: values.expiryDate.date,
           issueDate: values.issueDate.date
         };
-        console.log('payload', payload);
         axios
           .put('/api/v1/identification', payload, {
             headers: { 'x-access-token': getToken() }
           })
           .then(function(response) {
             const { status, data } = response;
-            console.log('status', status);
-            console.log('data', data);
-            // handle success
-            console.log(status, data);
             if (status === 200) {
               userDispatch({
                 type: 'entertainer-identification',
@@ -53,7 +48,6 @@ const IdentificationForm = () => {
             }
           })
           .catch(function(error) {
-            console.log('error', error);
             setMessage(error.response.data.message);
             actions.setSubmitting(false);
           });

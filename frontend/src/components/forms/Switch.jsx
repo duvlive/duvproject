@@ -25,7 +25,6 @@ const Switch = ({
     <div className="switchSizeClassName">
       <Field name={name}>
         {({ field, form }) => {
-          console.log('field', field.value);
           return (
             <Switcher
               checked={field.value || value}

@@ -16,9 +16,6 @@ import { createSchema } from 'components/forms/schema/schema-helpers';
 const currentYear = new Date().getFullYear();
 
 const RegisterAsEntertainer = () => {
-  console.log('currentYear', currentYear);
-  const testing = range(currentYear, currentYear - 40, -1);
-  console.log('testing', testing);
   return (
     <BackEndPage title="Edit Profile">
       <div className="main-app">
@@ -37,7 +34,6 @@ const RegisterAsEntertainerForm = () => {
     <Formik
       initialValues={setInitialValues(personalInfoObject)}
       onSubmit={(values, actions) => {
-        console.log(values);
         setTimeout(() => {
           actions.setSubmitting(false);
           const { email, password } = values;

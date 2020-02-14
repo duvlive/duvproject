@@ -103,8 +103,6 @@ const StepperList = ({ currentStep, setCurrentStep }) => {
       userState.approvalComment[steps[index]] !== 'YES'
   }));
 
-  console.log('status', status);
-
   return (
     <div className="stepper">
       <ul role="tablist">
@@ -128,7 +126,6 @@ StepperList.propTypes = {
 };
 
 const Stepper = ({ number, onClick, status, title }) => {
-  console.log('Stpper status', status);
   return (
     <li
       className={classNames({
