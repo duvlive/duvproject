@@ -8,7 +8,8 @@ import {
   Identification,
   Notification,
   ApprovalComment,
-  Gallery
+  Gallery,
+  Video
 } from '../models';
 import sendMail from '../MailSender';
 import Authentication from '../middleware/authentication';
@@ -31,6 +32,10 @@ export const userAssociatedModels = [
   {
     model: Gallery,
     as: 'galleries'
+  },
+  {
+    model: Video,
+    as: 'videos'
   },
   {
     model: ApprovalComment,
@@ -71,6 +76,7 @@ const UserController = {
       identification: user.identification,
       notifications: user.notifications,
       galleries: user.galleries,
+      videos: user.videos,
       approvalComment: user.approvalComment
     };
 

@@ -216,12 +216,8 @@ ToComplete.propTypes = {
 export default AccountSetup;
 
 // TODO:
-// 0. Consolidate Edit profile and account setup, remove unneccessary step (DONE)
-// 1. Add a to complete this section and other forms (DONE)
 // 2. Update backend to handle updates after approval. [Needs review instead of yes]
 // 3. backend in approval comment, check when everything has been approved and send notification and update approval in entetainers profiile
-// 4. Change sidebar for unapproved users (DONE)
-// 5. Create videos table
 // 6. post to video endpoint
 // 7. account - create approve all endpoint
 // 8. Recommend a friend, api, facebook, twitter and linkedin

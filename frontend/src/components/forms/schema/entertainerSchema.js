@@ -45,7 +45,7 @@ export const addEntertainerSchema = {
 };
 
 export const videoSchema = {
-  youtube_url: urlValidation('Youtube URL'),
+  youtubeURL: urlValidation('Youtube URL'),
   title: stringValidation('Title')
 };
 

@@ -10,12 +10,12 @@ import {
   EmailController,
   ImageController,
   EventEntertainerController,
-  AuctionController
+  AuctionController,
+  GalleryController,
+  VideoController
 } from './controllers';
 import Authentication from './middleware/authentication';
 import passport from 'passport';
-import GalleryController from './controllers/GalleryController';
-
 const router = Router();
 
 // Email Template route
@@ -174,11 +174,21 @@ router.put(
   GalleryController.setAsProfileImage
 );
 router.put('/api/v1/gallery/:approve/:id', GalleryController.approveImage); //TODO: add administrator middleware
-
 router.delete('/api/v1/gallery/delete/:id', GalleryController.deleteImage);
 
-// when you validateUser, check if user is active, can be done in verify token
+// video routes
+router.get('/api/v1/video/:userId', VideoController.getEntertainerVideo);
+router.post(
+  '/api/v1/video/save',
+  Authentication.verifyToken,
+  Authentication.isActiveUser,
+  Authentication.validateEntertainer,
+  VideoController.saveVideo
+);
+router.put('/api/v1/video/:approve/:id', VideoController.approveVideo); //TODO: add administrator middleware
+router.delete('/api/v1/video/delete/:id', VideoController.deleteVideo);
 
+// when you validateUser, check if user is active, can be done in verify token
 
 // Events routes
 router

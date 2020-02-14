@@ -80,6 +80,12 @@ db.User.hasMany(db.Gallery, {
   onDelete: 'CASCADE',
   hooks: true
 });
+db.User.hasMany(db.Video, {
+  foreignKey: 'userId',
+  as: 'videos',
+  onDelete: 'CASCADE',
+  hooks: true
+});
 db.User.hasMany(db.Notification, {
   foreignKey: 'userId',
   as: 'notifications',

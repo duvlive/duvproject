@@ -80,7 +80,8 @@ Video.Modal = ({ youtubeId, title }) => (
       <img
         alt={title}
         className="img-fluid"
-        src={`https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`}
+        // src={`https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`}
+        src={`https://i1.ytimg.com/vi/${youtubeId}/0.jpg`}
       />
       <div className="card-img-overlay">
         <div className="card-img-overlay__content">
@@ -98,8 +99,8 @@ const AddVideoForm = ({ saveVideo }) => {
     <Formik
       initialValues={setInitialValues(videoSchema)}
       onSubmit={(values, actions) => {
-        const { youtube_url, title } = values;
-        const url = youtube_url;
+        const { youtubeURL, title } = values;
+        const url = youtubeURL;
         if (url !== undefined || url !== '') {
           // eslint-disable-next-line no-useless-escape
           var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/;
@@ -128,7 +129,7 @@ const AddVideoForm = ({ saveVideo }) => {
               <Input
                 isValidMessage="URL seems valid"
                 label="Youtube URL"
-                name="youtube_url"
+                name="youtubeURL"
                 placeholder="Paste your youtube video url here"
                 type="url"
               />

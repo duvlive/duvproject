@@ -71,6 +71,10 @@ let UserContext = React.createContext();
 
 // REDUCERS
 let reducer = (state, action) => {
+  if (process.env.NODE_ENV === 'development') {
+    console.info('%c[USER CONTEXT REDUCER] state', 'color: blue', state);
+    console.info('%c[USER CONTEXT REDUCER] action', 'color: green', action);
+  }
   switch (action.type) {
     case 'no-token':
     case 'user-logout':

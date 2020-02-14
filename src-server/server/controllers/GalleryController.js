@@ -72,7 +72,7 @@ const GalleryController = {
       where: { userId: req.params.userId },
       order: [['updatedAt', 'DESC']]
     })
-      .then(result => res.json(result))
+      .then(result => res.json({ images: result }))
       .catch(error => res.status(412).json({ msg: error.message }));
   },
 
