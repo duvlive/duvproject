@@ -97,12 +97,20 @@
       background: $success;
     }
   }
-
   h5 {
     color: $white;
     font-family: $headings-font-family;
     font-size: 0.85rem;
     font-weight: normal;
+    margin-bottom: 0;
+  }
+
+  small {
+    display: block;
+    font-size: 0.75rem;
+    color: $blue;
+    color: rgba($blue, 0.7);
+    margin-top: 0;
   }
 }
 

@@ -222,5 +222,4 @@ export default AccountSetup;
 // 8. Recommend a friend, api, facebook, twitter and linkedin
 // 9. Contact us
 // 10. Entertainers full page
-// 11. Switch to user - how do I persist this (use sidebar, check if current route is user route, check to user sidebar)
 // 12. Add a get started button that will create entertainer profile for user

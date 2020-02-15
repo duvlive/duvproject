@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import RedLogo from 'assets/img/logo/red-white.svg';
 import ProfileAvatar from 'assets/img/avatar/profile.png';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import { Link } from '@reach/router';
+import { Link, Match } from '@reach/router';
 import 'react-perfect-scrollbar/dist/css/styles.css';
-import userSideMenu from 'data/menu/user';
+import { userSideMenu, pseudoEntertainerUserSideMenu } from 'data/menu/user';
 import {
   entertainerSideMenu,
   unApprovedEntertainerSideMenu
@@ -16,6 +16,7 @@ import classNames from 'classnames';
 import { USER_TYPES } from 'utils/constants';
 import { UserContext } from 'context/UserContext';
 import { getUserTypeFromStore } from 'utils/localStorage';
+import { getProfileName } from 'utils/helpers';
 
 const SIDE_MENU = {
   [USER_TYPES.user]: userSideMenu,
@@ -26,14 +27,13 @@ const SIDE_MENU = {
 
 const Sidebar = ({ showSidebar, closeSidebar, ...props }) => {
   const { userState } = React.useContext(UserContext);
-  // TODO: sort out band members
-  let sideMenu = SIDE_MENU[userState.type || getUserTypeFromStore()];
-  if (
+  const currentUserType = userState.type || getUserTypeFromStore();
+  const UnapprovedEntertainer =
     userState.type === USER_TYPES.entertainer &&
-    !userState.entertainerProfile.approved
-  ) {
-    sideMenu = unApprovedEntertainerSideMenu;
-  }
+    !userState.entertainerProfile.approved;
+  const sideMenu = UnapprovedEntertainer
+    ? unApprovedEntertainerSideMenu
+    : SIDE_MENU[currentUserType];
 
   return (
     <>
@@ -63,8 +63,28 @@ const Sidebar = ({ showSidebar, closeSidebar, ...props }) => {
           </div>
         </div>
         <PerfectScrollbar style={{ height: 'calc(100% - 12rem)' }}>
-          <SidebarMenu />
-          <Sidebar.Navigation closeSidebar={closeSidebar} menus={sideMenu} />
+          <Match path="/user/:item">
+            {props =>
+              // eslint-disable-next-line react/prop-types
+              props.match ? (
+                <>
+                  <SidebarMenu showUserType={false} />
+                  <Sidebar.Navigation
+                    closeSidebar={closeSidebar}
+                    menus={pseudoEntertainerUserSideMenu}
+                  />
+                </>
+              ) : (
+                <>
+                  <SidebarMenu />
+                  <Sidebar.Navigation
+                    closeSidebar={closeSidebar}
+                    menus={sideMenu}
+                  />
+                </>
+              )
+            }
+          </Match>
           <div className="text-center d-block d-sm-none" onClick={closeSidebar}>
             Close Menu
           </div>
@@ -80,9 +100,15 @@ Sidebar.propTypes = {
   showSidebar: PropTypes.bool.isRequired
 };
 
-const SidebarMenu = () => {
+const SidebarMenu = ({ showUserType }) => {
   let { userState } = React.useContext(UserContext);
-  const userName = userState.firstName + ' ' + userState.lastName;
+  const userName = getProfileName({
+    firstName: userState.firstName,
+    lastName: userState.lastName,
+    stageName: userState.entertainerProfile.stageName
+  });
+  const userType =
+    userState.type !== 1 && Object.keys(USER_TYPES)[userState.type];
 
   return (
     <div className="user-box">
@@ -96,8 +122,17 @@ const SidebarMenu = () => {
         <div className="user-status offline" />
       </div>
       <h5 className="text-uppercase">{userName}</h5>
+      {showUserType && <small className="text-uppercase">{userType}</small>}
     </div>
   );
+};
+
+SidebarMenu.propTypes = {
+  showUserType: PropTypes.bool
+};
+
+SidebarMenu.defaultProps = {
+  showUserType: true
 };
 
 Sidebar.Navigation = ({ menus, closeSidebar }) => {

@@ -86,3 +86,6 @@ export const selectEntertainerType = () => {
   }
   return select;
 };
+
+export const getProfileName = ({ firstName, lastName, stageName }) =>
+  stageName || firstName + ' ' + lastName;
