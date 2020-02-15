@@ -16,7 +16,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      youtubeURL: {
+      youtubeID: {
         type: Sequelize.STRING,
         allowNull: false
       },

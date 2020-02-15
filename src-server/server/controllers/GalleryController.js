@@ -51,10 +51,10 @@ const GalleryController = {
       gallery.imageID = req.file.public_id;
 
       return Gallery.create(gallery)
-        .then(details => {
+        .then(image => {
           return res.status(200).json({
             message: 'Image has been successfully upload',
-            details
+            image
           });
         })
         .catch(error => {

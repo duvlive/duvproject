@@ -11,20 +11,20 @@ const VideoController = {
    */
   saveVideo(req, res) {
     const userId = req.decoded.userId;
-    const { title, youtubeURL } = req.body;
+    const { title, youtubeID } = req.body;
 
     const error = {
       ...validString(title),
-      ...validString(youtubeURL)
+      ...validString(youtubeID)
     };
     if (Object.keys(error).length > 1) {
       return res.status(400).json({ message: error.message.join('') });
     }
-    return Video.create({ title, youtubeURL, userId })
-      .then(details => {
+    return Video.create({ title, youtubeID, userId })
+      .then(video => {
         return res.status(200).json({
           message: 'Video has been successfully upload',
-          details
+          video
         });
       })
       .catch(error => {

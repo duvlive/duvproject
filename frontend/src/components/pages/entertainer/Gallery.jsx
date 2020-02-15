@@ -9,7 +9,7 @@ import UploadGallery from 'components/common/utils/UploadGallery';
 import DuvLiveModal from 'components/custom/Modal';
 import { getToken } from 'utils/localStorage';
 
-const approval = {
+export const approval = {
   approved: {
     color: 'success',
     text: 'Approved'
@@ -24,7 +24,7 @@ const approval = {
   }
 };
 
-const getStatus = status => {
+export const getStatus = status => {
   /* == is used to check for null
    * null -> pending
    * true -> approved

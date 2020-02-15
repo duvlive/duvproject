@@ -46,7 +46,7 @@ const UploadGallery = ({ afterSave }) => {
           const { status, data } = response;
           if (status === 200) {
             setLoading(false);
-            afterSave(data.details);
+            afterSave(data.image);
             setMessage('Image has been successfully uplaoded');
           }
         })

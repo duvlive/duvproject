@@ -244,6 +244,10 @@
   position: absolute;
   right: 1rem;
   top: 0;
+
+  &.right-0 {
+    right: 0;
+  }
 }
 
 .profile-icon {

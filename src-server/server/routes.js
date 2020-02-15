@@ -188,8 +188,6 @@ router.post(
 router.put('/api/v1/video/:approve/:id', VideoController.approveVideo); //TODO: add administrator middleware
 router.delete('/api/v1/video/delete/:id', VideoController.deleteVideo);
 
-// when you validateUser, check if user is active, can be done in verify token
-
 // Events routes
 router
   .route('/api/v1/eventEntertainer')
