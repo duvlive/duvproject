@@ -22,7 +22,7 @@ import PROFILE_10 from 'assets/img/entertainers/img/10.jpeg';
 export default [
   {
     id: 1,
-    stage_name: 'DJ Spinach',
+    stageName: 'DJ Spinach',
     slug: 'dj-spinach',
     type: 'DJ',
     years_of_experience: 2,
@@ -48,7 +48,7 @@ export default [
   },
   {
     id: 2,
-    stage_name: 'DJ Tantelke',
+    stageName: 'DJ Tantelke',
     slug: 'dj-tantelke',
     type: 'DJ',
     years_of_experience: 7,
@@ -73,7 +73,7 @@ export default [
   },
   {
     id: 3,
-    stage_name: 'DJ Shilabo',
+    stageName: 'DJ Shilabo',
     slug: 'dj-shilabo',
     type: 'DJ',
     years_of_experience: 4,
@@ -98,7 +98,7 @@ export default [
   },
   {
     id: 4,
-    stage_name: 'DJ Limit',
+    stageName: 'DJ Limit',
     slug: 'dj-limit',
     type: 'DJ',
     years_of_experience: 2,
@@ -123,7 +123,7 @@ export default [
   },
   {
     id: 5,
-    stage_name: 'DJ Enimoney',
+    stageName: 'DJ Enimoney',
     slug: 'dj-enimoney',
     type: 'DJ',
     years_of_experience: 8,
@@ -148,7 +148,7 @@ export default [
   },
   {
     id: 6,
-    stage_name: 'DJ Fira',
+    stageName: 'DJ Fira',
     slug: 'dj-fira',
     type: 'DJ',
     years_of_experience: 4,
@@ -173,7 +173,7 @@ export default [
   },
   {
     id: 7,
-    stage_name: 'DJ Winas',
+    stageName: 'DJ Winas',
     slug: 'dj-winas',
     type: 'DJ',
     years_of_experience: 5,
@@ -198,7 +198,7 @@ export default [
   },
   {
     id: 8,
-    stage_name: 'DJ Zebrah',
+    stageName: 'DJ Zebrah',
     slug: 'dj-zebrah',
     type: 'DJ',
     years_of_experience: 10,
@@ -223,7 +223,7 @@ export default [
   },
   {
     id: 9,
-    stage_name: 'DJ Osky',
+    stageName: 'DJ Osky',
     slug: 'dj-osky',
     type: 'DJ',
     years_of_experience: 2,
@@ -248,7 +248,7 @@ export default [
   },
   {
     id: 10,
-    stage_name: 'DJ Good Tyme',
+    stageName: 'DJ Good Tyme',
     slug: 'dj-good-tyme',
     type: 'DJ',
     years_of_experience: 1,

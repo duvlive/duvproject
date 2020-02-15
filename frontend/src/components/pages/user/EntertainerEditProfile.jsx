@@ -113,7 +113,7 @@ const EntertainerDetailsForm = () => (
             formGroupClassName="col-md-6"
             isValidMessage="Stage Name looks good"
             label="Stage Name"
-            name="stage_name"
+            name="stageName"
             placeholder="Stage Name"
           />
           <Input
@@ -171,19 +171,19 @@ const BankDetailsForm = () => (
             <Input
               isValidMessage="Stage Name looks good"
               label="Stage Name"
-              name="stage_name"
+              name="stageName"
               placeholder="Stage Name"
             />
             <Input
               isValidMessage="Stage Name looks good"
               label="Stage Name"
-              name="stage_name"
+              name="stageName"
               placeholder="Stage Name"
             />
             <Input
               isValidMessage="Stage Name looks good"
               label="Stage Name"
-              name="stage_name"
+              name="stageName"
               placeholder="Stage Name"
             />
           </div>

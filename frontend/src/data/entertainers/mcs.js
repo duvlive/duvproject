@@ -18,7 +18,7 @@ import PROFILE_18 from 'assets/img/entertainers/profile/18.jpeg';
 export default [
   {
     id: 11,
-    stage_name: 'MC Woro',
+    stageName: 'MC Woro',
     slug: 'mc-woro', // for seo purpose
     type: 'MC',
     years_of_experience: 2,
@@ -49,7 +49,7 @@ export default [
   },
   {
     id: 12,
-    stage_name: 'Ellyzhi',
+    stageName: 'Ellyzhi',
     slug: 'ellyzhi',
     type: 'MC',
     years_of_experience: 7,
@@ -74,7 +74,7 @@ export default [
   },
   {
     id: 13,
-    stage_name: 'High Def',
+    stageName: 'High Def',
     slug: 'high-def',
     type: 'MC',
     years_of_experience: 2,
@@ -99,7 +99,7 @@ export default [
   },
   {
     id: 14,
-    stage_name: 'Twister',
+    stageName: 'Twister',
     slug: 'twister',
     type: 'MC',
     years_of_experience: 8,
@@ -124,7 +124,7 @@ export default [
   },
   {
     id: 15,
-    stage_name: 'D Tribe Called Best',
+    stageName: 'D Tribe Called Best',
     slug: 'd-tribe-called-best',
     type: 'MC',
     years_of_experience: 4,
@@ -149,7 +149,7 @@ export default [
   },
   {
     id: 16,
-    stage_name: 'Burtis Flow',
+    stageName: 'Burtis Flow',
     slug: 'burtis-flow',
     type: 'MC',
     years_of_experience: 5,
@@ -174,7 +174,7 @@ export default [
   },
   {
     id: 17,
-    stage_name: 'Anoda Day',
+    stageName: 'Anoda Day',
     slug: 'anoda-day',
     type: 'MC',
     years_of_experience: 2,
@@ -199,7 +199,7 @@ export default [
   },
   {
     id: 18,
-    stage_name: 'World Best',
+    stageName: 'World Best',
     slug: 'world-best',
     type: 'MC',
     years_of_experience: 1,

@@ -79,7 +79,7 @@ DuvLiveModal.ViewEntertainerProfile = ({ entertainer }) => (
     title={
       <Image
         className="avatar--medium"
-        name={entertainer.stage_name}
+        name={entertainer.stageName}
         rounded={false}
         src={entertainer.img.profile}
       />

@@ -74,7 +74,7 @@ ViewEvent.EntertainersTable = ({ entertainers }) => (
           {entertainers.map(entertainer => (
             <ViewEvent.EntertainersRow
               entertainer={entertainer.entertainer}
-              key={entertainer.stage_name + entertainer.id}
+              key={entertainer.stageName + entertainer.id}
               payment={entertainer.payment}
             />
           ))}
@@ -89,11 +89,11 @@ ViewEvent.EntertainersRow = ({ entertainer, payment }) => (
     <td className="align-middle">
       <Image
         className="avatar--medium"
-        name={entertainer.stage_name}
+        name={entertainer.stageName}
         src={entertainer.img.profile}
       />
     </td>
-    <td className="align-middle">{entertainer.stage_name}</td>
+    <td className="align-middle">{entertainer.stageName}</td>
     <td className="align-middle text-yellow">{entertainer.type}</td>
     <td className="align-middle">{payment.amount}</td>
     <td className="align-middle">

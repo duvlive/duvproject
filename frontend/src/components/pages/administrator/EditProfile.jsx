@@ -125,7 +125,7 @@ const EntertainerDetailsForm = () => (
             formGroupClassName="col-md-6"
             isValidMessage="Stage Name looks good"
             label="Stage Name"
-            name="entertainer.stage_name"
+            name="entertainer.stageName"
             placeholder="Stage Name"
           />
           <Input

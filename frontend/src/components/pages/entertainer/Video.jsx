@@ -114,20 +114,38 @@ Video.DeleteVideoIcon.propTypes = {
   youtubeImage: PropTypes.any.isRequired
 };
 
+Video.YoutubeImage = ({ title, youtubeID }) => (
+  <img
+    alt={title}
+    className="img-fluid"
+    src={`https://i1.ytimg.com/vi/${youtubeID}/0.jpg`}
+  />
+);
+
+Video.YoutubeImage.propTypes = {
+  title: PropTypes.string.isRequired,
+  youtubeID: PropTypes.any.isRequired
+};
+
+Video.YoutubeOverlay = ({ title, youtubeID }) => (
+  <div className="card-img-overlay">
+    <div className="card-img-overlay__content">
+      <span className="icon icon-video"></span>
+    </div>
+  </div>
+);
+
+Video.YoutubeOverlay.propTypes = {
+  title: PropTypes.string.isRequired,
+  youtubeID: PropTypes.any.isRequired
+};
+
 Video.Modal = ({ youtubeID, status, title, id, deleteVideo }) => {
   const youtubeImage = (
-    <img
-      alt={title}
-      className="img-fluid"
-      src={`https://i1.ytimg.com/vi/${youtubeID}/0.jpg`}
-    />
+    <Video.YoutubeImage title={title} youtubeId={youtubeID} />
   );
   const youtubeOverlay = (
-    <div className="card-img-overlay">
-      <div className="card-img-overlay__content">
-        <span className="icon icon-video"></span>
-      </div>
-    </div>
+    <Video.YoutubeOverlay title={title} youtubeId={youtubeID} />
   );
   const approvalText = (
     <small
