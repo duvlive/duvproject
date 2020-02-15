@@ -9,7 +9,7 @@ import axios from 'axios';
 import { setInitialValues } from 'components/forms/form-helper';
 import UploadImage from 'components/common/utils/UploadImage';
 import { UserContext } from 'context/UserContext';
-import { getToken } from 'utils/localStorage';
+import { getTokenFromStore } from 'utils/localStorage';
 import AlertMessage from 'components/common/utils/AlertMessage';
 import { ChangePasswordForm } from 'components/pages/user/ChangePassword';
 import { createSchema } from 'components/forms/schema/schema-helpers';
@@ -40,7 +40,7 @@ export const UserProfileForm = () => {
       onSubmit={(values, actions) => {
         axios
           .put('/api/v1/users/editUser', values, {
-            headers: { 'x-access-token': getToken() }
+            headers: { 'x-access-token': getTokenFromStore() }
           })
           .then(function(response) {
             const { status, data } = response;

@@ -11,7 +11,7 @@ import { videoSchema } from 'components/forms/schema/entertainerSchema';
 import { createSchema } from 'components/forms/schema/schema-helpers';
 import { setInitialValues } from 'components/forms/form-helper';
 import { UserContext } from 'context/UserContext';
-import { getToken } from 'utils/localStorage';
+import { getTokenFromStore } from 'utils/localStorage';
 import { approval, getStatus } from 'components/pages/entertainer/Gallery';
 import AlertMessage from 'components/common/utils/AlertMessage';
 
@@ -184,7 +184,7 @@ const AddVideoForm = ({ afterSave, errorMessage }) => {
             const payload = { title, youtubeID: match[2] };
             axios
               .post('/api/v1/video/save', payload, {
-                headers: { 'x-access-token': getToken() }
+                headers: { 'x-access-token': getTokenFromStore() }
               })
               .then(function(response) {
                 const { status, data } = response;

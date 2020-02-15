@@ -10,7 +10,7 @@ import { createSchema } from 'components/forms/schema/schema-helpers';
 import { setInitialValues } from 'components/forms/form-helper';
 import Button from 'components/forms/Button';
 import { UserContext } from 'context/UserContext';
-import { getToken } from 'utils/localStorage';
+import { getTokenFromStore } from 'utils/localStorage';
 import { emergencyContactSchema } from 'components/forms/schema/entertainerSchema';
 import AlertMessage from 'components/common/utils/AlertMessage';
 
@@ -85,7 +85,7 @@ export const ContactsForm = ({ type, name, textColor, initialValue }) => {
           data: initialValue.id
             ? { ...values, contactId: initialValue.id }
             : { ...values, type },
-          headers: { 'x-access-token': getToken() }
+          headers: { 'x-access-token': getTokenFromStore() }
         })
           .then(function(response) {
             const { status, data } = response;

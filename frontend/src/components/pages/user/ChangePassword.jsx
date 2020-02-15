@@ -9,7 +9,7 @@ import Button from 'components/forms/Button';
 import { changePasswordObject } from 'components/forms/schema/userSchema';
 import { createSchema } from 'components/forms/schema/schema-helpers';
 import { setInitialValues } from 'components/forms/form-helper';
-import { getToken } from 'utils/localStorage';
+import { getTokenFromStore } from 'utils/localStorage';
 import AlertMessage from 'components/common/utils/AlertMessage';
 
 const ChangePassword = () => {
@@ -34,7 +34,7 @@ export const ChangePasswordForm = () => {
       onSubmit={(values, actions) => {
         axios
           .put('/api/v1/users/change-password', values, {
-            headers: { 'x-access-token': getToken() }
+            headers: { 'x-access-token': getTokenFromStore() }
           })
           .then(function(response) {
             const { status } = response;

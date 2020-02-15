@@ -8,7 +8,7 @@ import { createSchema } from 'components/forms/schema/schema-helpers';
 import { setInitialValues } from 'components/forms/form-helper';
 import Button from 'components/forms/Button';
 import { UserContext } from 'context/UserContext';
-import { getToken } from 'utils/localStorage';
+import { getTokenFromStore } from 'utils/localStorage';
 import { bankDetailsSchema } from 'components/forms/schema/entertainerSchema';
 import AlertMessage from 'components/common/utils/AlertMessage';
 import { ONBOARDING_STEPS } from 'utils/constants';
@@ -36,7 +36,7 @@ export const BankDetailsForm = () => {
       onSubmit={(values, actions) => {
         axios
           .put('/api/v1/bankDetail', values, {
-            headers: { 'x-access-token': getToken() }
+            headers: { 'x-access-token': getTokenFromStore() }
           })
           .then(function(response) {
             const { status, data } = response;

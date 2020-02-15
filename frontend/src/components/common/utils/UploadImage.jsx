@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import ProfileAvatar from 'assets/img/avatar/profile.png';
-import { getToken } from 'utils/localStorage';
+import { getTokenFromStore } from 'utils/localStorage';
 import { UserContext } from 'context/UserContext';
 import { Loading } from './PlayingMusicAnimation';
 import Image from './Image';
@@ -39,7 +39,7 @@ const UploadImage = () => {
 
       axios
         .post('/api/v1/upload-profile-image', data, {
-          headers: { 'x-access-token': getToken() }
+          headers: { 'x-access-token': getTokenFromStore() }
         })
         .then(function(response) {
           const { status, data } = response;

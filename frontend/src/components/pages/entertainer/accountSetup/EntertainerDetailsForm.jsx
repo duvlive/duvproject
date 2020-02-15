@@ -14,7 +14,7 @@ import UploadImage from 'components/common/utils/UploadImage';
 import { BUDGET, ONBOARDING_STEPS } from 'utils/constants';
 import AlertMessage from 'components/common/utils/AlertMessage';
 import { UserContext } from 'context/UserContext';
-import { getToken } from 'utils/localStorage';
+import { getTokenFromStore } from 'utils/localStorage';
 import DynamicSelect from 'components/forms/DynamicSelect';
 import { getStates, getLgas } from 'data/naija-states-and-lgas';
 
@@ -35,7 +35,7 @@ const EntertainerDetailsForm = () => {
         const payload = { ...values, availableFor };
         axios
           .put('/api/v1/users/updateEntertainerProfile', payload, {
-            headers: { 'x-access-token': getToken() }
+            headers: { 'x-access-token': getTokenFromStore() }
           })
           .then(function(response) {
             const { status, data } = response;

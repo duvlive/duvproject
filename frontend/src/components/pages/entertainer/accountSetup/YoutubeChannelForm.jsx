@@ -8,7 +8,7 @@ import Button from 'components/forms/Button';
 import { youtubeChannelSchema } from 'components/forms/schema/entertainerSchema';
 import AlertMessage from 'components/common/utils/AlertMessage';
 import { UserContext } from 'context/UserContext';
-import { getToken } from 'utils/localStorage';
+import { getTokenFromStore } from 'utils/localStorage';
 import { ONBOARDING_STEPS } from 'utils/constants';
 
 export const YoutubeChannelForm = () => {
@@ -23,7 +23,7 @@ export const YoutubeChannelForm = () => {
       onSubmit={(values, actions) => {
         axios
           .put('/api/v1/users/updateEntertainerProfile', values, {
-            headers: { 'x-access-token': getToken() }
+            headers: { 'x-access-token': getTokenFromStore() }
           })
           .then(function(response) {
             const { status, data } = response;

@@ -15,6 +15,7 @@ import administratorSideMenu from 'data/menu/administrator';
 import classNames from 'classnames';
 import { USER_TYPES } from 'utils/constants';
 import { UserContext } from 'context/UserContext';
+import { getUserTypeFromStore } from 'utils/localStorage';
 
 const SIDE_MENU = {
   [USER_TYPES.user]: userSideMenu,
@@ -26,7 +27,7 @@ const SIDE_MENU = {
 const Sidebar = ({ showSidebar, closeSidebar, ...props }) => {
   const { userState } = React.useContext(UserContext);
   // TODO: sort out band members
-  let sideMenu = SIDE_MENU[userState.type];
+  let sideMenu = SIDE_MENU[userState.type || getUserTypeFromStore()];
   if (
     userState.type === USER_TYPES.entertainer &&
     !userState.entertainerProfile.approved

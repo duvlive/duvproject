@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { navigate } from '@reach/router';
 import Sidebar from 'components/common/layout/Sidebar';
 import LandingSection from 'components/common/layout/LandingSection';
-import { getToken } from 'utils/localStorage';
+import { getTokenFromStore } from 'utils/localStorage';
 import { UserContext } from 'context/UserContext';
 
 const BackEndPage = ({ children, title, subtitle }) => {
@@ -20,7 +20,7 @@ const BackEndPage = ({ children, title, subtitle }) => {
 
   // CHECK IF USER HAS PREVIOUSLY SIGNED IN
   React.useEffect(() => {
-    if (!getToken()) {
+    if (!getTokenFromStore()) {
       userDispatch({
         type: 'no-token'
       });

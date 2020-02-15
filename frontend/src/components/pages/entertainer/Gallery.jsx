@@ -7,7 +7,7 @@ import BackEndPage from 'components/common/layout/BackEndPage';
 import { UserContext } from 'context/UserContext';
 import UploadGallery from 'components/common/utils/UploadGallery';
 import DuvLiveModal from 'components/custom/Modal';
-import { getToken } from 'utils/localStorage';
+import { getTokenFromStore } from 'utils/localStorage';
 
 export const approval = {
   approved: {
@@ -60,7 +60,7 @@ const Gallery = () => {
     const values = { profileImageURL: imageURL };
     axios
       .put(`/api/v1/gallery/set-as-profile`, values, {
-        headers: { 'x-access-token': getToken() }
+        headers: { 'x-access-token': getTokenFromStore() }
       })
       .then(function(response) {
         const { status, data } = response;

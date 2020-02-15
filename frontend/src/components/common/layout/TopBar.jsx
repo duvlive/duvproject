@@ -20,6 +20,7 @@ import LiveYourBestLife from '../utils/LiveYourBestLife';
 import { USER_TYPES } from 'utils/constants';
 import { UserContext } from 'context/UserContext';
 import ProfileAvatar from 'assets/img/avatar/profile.png';
+import { getUserTypeFromStore } from 'utils/localStorage';
 
 const TOP_MENU = {
   [USER_TYPES.user]: userTopMenu,
@@ -30,7 +31,7 @@ const TOP_MENU = {
 
 const TopBar = ({ showSidebar }) => {
   let { userState } = React.useContext(UserContext);
-  const menus = TOP_MENU[userState.type];
+  const menus = TOP_MENU[userState.type || getUserTypeFromStore()];
   return (
     <div className="topbar">
       <Navbar color="transparent" expand>

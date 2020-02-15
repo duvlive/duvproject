@@ -218,7 +218,6 @@ export default AccountSetup;
 // TODO:
 // 2. Update backend to handle updates after approval. [Needs review instead of yes]
 // 3. backend in approval comment, check when everything has been approved and send notification and update approval in entetainers profiile
-// 6. post to video endpoint
 // 7. account - create approve all endpoint
 // 8. Recommend a friend, api, facebook, twitter and linkedin
 // 9. Contact us

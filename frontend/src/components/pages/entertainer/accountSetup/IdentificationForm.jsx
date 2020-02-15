@@ -9,7 +9,7 @@ import Button from 'components/forms/Button';
 import { identificationSchema } from 'components/forms/schema/entertainerSchema';
 import AlertMessage from 'components/common/utils/AlertMessage';
 import { UserContext } from 'context/UserContext';
-import { getToken } from 'utils/localStorage';
+import { getTokenFromStore } from 'utils/localStorage';
 import DatePicker from 'components/forms/DatePicker';
 import { ONBOARDING_STEPS } from 'utils/constants';
 
@@ -31,7 +31,7 @@ const IdentificationForm = () => {
         };
         axios
           .put('/api/v1/identification', payload, {
-            headers: { 'x-access-token': getToken() }
+            headers: { 'x-access-token': getTokenFromStore() }
           })
           .then(function(response) {
             const { status, data } = response;

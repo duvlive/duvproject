@@ -8,7 +8,7 @@ const INITIAL_STATE = {
   email: '',
   phoneNumber: '',
   phoneNumber2: '',
-  type: 1,
+  type: null,
   referral: '',
   profileImg: '',
   isLoggedIn: false,
