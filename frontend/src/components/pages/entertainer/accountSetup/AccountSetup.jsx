@@ -91,7 +91,9 @@ const StepperList = ({ currentStep, setCurrentStep }) => {
   const done = [
     !!userState.entertainerProfile.stageName && !!userState.profileImg,
     !!userState.bankDetail.bankName,
-    !!userState.contacts[0].firstName || !!userState.contacts[1].firstName,
+    (userState.contacts.length > 0 &&
+      !!(userState.contacts[0] && userState.contacts[0].firstName)) ||
+      !!(userState.contacts[1] && userState.contacts[1].firstName),
     !!userState.entertainerProfile.youTubeChannel,
     !!userState.identification.idType
   ];
