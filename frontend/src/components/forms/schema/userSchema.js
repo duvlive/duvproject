@@ -1,33 +1,17 @@
 import * as yup from 'yup';
-import { stringValidation, optionalValidation } from './schema-helpers';
-// import { entertainerDetailsObject } from './entertainerSchema';
+import { stringValidation } from './schema-helpers';
+import {
+  email,
+  password,
+  strongPassword,
+  confirmPassword,
+  phoneNumber,
+  OptionalPhoneNumber
+} from './schema-helpers';
+
 /////////////////////////
 // Fields
 ////////////////////////
-
-const email = yup
-  .string()
-  .label('Email')
-  .email('Seems like an invalid email address')
-  .required('Email is required');
-
-const password = yup
-  .string()
-  .label('Password')
-  .required('Password is required');
-
-const strongPassword = password.min(6, 'Seems a bit short...');
-
-const confirmPassword = yup
-  .string()
-  .label('Confirm Password')
-  .required('Enter your password again')
-  .oneOf([yup.ref('password')], 'Passwords must match');
-
-const phoneNumber = yup
-  .string()
-  .label('Phone')
-  .required('Phone is required');
 
 const agreement = yup
   .array()
@@ -47,12 +31,6 @@ const registerObject = {
   agreement
 };
 
-const profileObject = {
-  firstName: stringValidation('First Name'),
-  lastName: stringValidation('Last Name'),
-  phoneNumber
-};
-
 const changePasswordObject = {
   oldPassword: strongPassword,
   password: strongPassword,
@@ -67,9 +45,8 @@ const resetPasswordObject = {
 const personalInfoObject = {
   firstName: stringValidation('First Name'),
   lastName: stringValidation('Last Name'),
-  email,
   phoneNumber,
-  about: optionalValidation(stringValidation('About', 20))
+  phoneNumber2: OptionalPhoneNumber
 };
 
 /////////////////////////
@@ -81,7 +58,6 @@ const loginSchema = yup.object().shape({
 });
 
 const registerSchema = yup.object().shape(registerObject);
-const profileSchema = yup.object().shape(profileObject);
 const forgotPasswordSchema = yup.object().shape({ email });
 
 export {
@@ -91,7 +67,5 @@ export {
   forgotPasswordSchema,
   changePasswordObject,
   resetPasswordObject,
-  profileObject,
-  profileSchema,
   personalInfoObject
 };

@@ -2,24 +2,33 @@ import {
   required,
   stringValidation,
   autocompleteValidation,
-  positiveNumberValidation,
   optionalValidation,
   urlValidation,
-  multiSelectValidation
+  multiSelectValidation,
+  email,
+  phoneNumber
 } from './schema-helpers';
 
 /////////////////////////
 // Schema
 ////////////////////////
 export const entertainerDetailsSchema = {
-  stage_name: stringValidation('Stage Name'),
+  about: optionalValidation(stringValidation('About', 20)),
+  stageName: stringValidation('Stage Name'),
   location: stringValidation('Location'),
-  type: stringValidation('Entertainer Type'),
-  lga: required('Local Government'),
+  entertainerType: stringValidation('Entertainer Type'),
   city: required('City'),
-  year_started: positiveNumberValidation('Started Year'),
-  willing_to_travel: stringValidation('Willing to travel'),
-  available_for: autocompleteValidation('Available for')
+  baseCharges: required('Base Charges'),
+  preferredCharges: required('Preferred Charges'),
+  yearStarted: required('Started Year'),
+  willingToTravel: stringValidation('Willing to travel'),
+  availableFor: optionalValidation(autocompleteValidation('Available for'))
+};
+
+export const bankDetailsSchema = {
+  accountName: stringValidation('Account Name'),
+  bankName: stringValidation('Bank Name'),
+  accountNumber: stringValidation('Account Number')
 };
 
 export const addEntertainerSchema = {
@@ -36,6 +45,25 @@ export const addEntertainerSchema = {
 };
 
 export const videoSchema = {
-  youtube_url: urlValidation('Youtube URL'),
+  youtubeID: urlValidation('Youtube URL'),
   title: stringValidation('Title')
+};
+
+export const youtubeChannelSchema = {
+  youTubeChannel: urlValidation('Youtube Channel URL')
+};
+
+export const emergencyContactSchema = {
+  firstName: stringValidation('First Name'),
+  lastName: stringValidation('Last Name'),
+  phoneNumber,
+  email,
+  relationship: stringValidation('Relationship')
+};
+
+export const identificationSchema = {
+  idType: required('ID Type'),
+  idNumber: stringValidation('ID Number'),
+  issueDate: required('Issue Date'),
+  expiryDate: required('Expiry Date')
 };

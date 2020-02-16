@@ -13,6 +13,7 @@
 @import 'custom/card';
 @import 'custom/upload-image';
 @import 'custom/video';
+@import 'custom/stepper';
 @import 'custom/react-datepicker';
 @import 'lib/forms';
 @import 'lib/buttons';
@@ -346,6 +347,10 @@ a:hover {
 }
 
 .onboarding {
+  &__card {
+    border-top-color: transparent !important;
+  }
+
   &__title {
     font-size: 1.5rem;
     font-weight: normal;
@@ -355,8 +360,7 @@ a:hover {
 
   &__instruction {
     margin-top: 1rem;
-    font-size: 1rem;
-    font-weight: light;
+    font-size: 0.9rem;
   }
 
   &__text {
@@ -368,17 +372,24 @@ a:hover {
     color: $text-color;
 
     .icon {
-      font-size: 2.5rem;
+      width: 2.5rem;
+      height: 2.5rem;
+      font-size: 0.95rem;
       position: absolute;
       right: 0;
       top: 0;
+      color: $white;
+      background: rgba($gray-600, 0.3);
+      border-radius: 50%;
+      text-align: center;
+      line-height: 2.5rem;
 
       &.completed {
-        color: $green-300;
+        background-color: rgba($green-300, 0.4);
       }
 
-      &.pending {
-        color: $gray-700;
+      &.rejected {
+        background-color: rgba($red-300, 0.5);
       }
     }
   }

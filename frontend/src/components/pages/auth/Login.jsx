@@ -13,7 +13,7 @@ import Button from 'components/forms/Button';
 import { loginSchema } from 'components/forms/schema/userSchema';
 import { navigate } from '@reach/router';
 import { DASHBOARD_PAGE } from 'utils/constants';
-import { storeToken } from 'utils/localStorage';
+import { storeToken, storeUserType } from 'utils/localStorage';
 import AlertMessage from 'components/common/utils/AlertMessage';
 import { UserContext } from 'context/UserContext';
 
@@ -134,6 +134,7 @@ const LoginForm = ({ token }) => {
             if (status === 200) {
               userDispatch({ type: 'user-login', user: data.user });
               storeToken(data.token);
+              storeUserType(data.user.type);
             }
           })
           .catch(function(error) {

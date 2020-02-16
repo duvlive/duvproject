@@ -16,6 +16,7 @@ import RedLogo from 'assets/img/logo/red-white.svg';
 import classNames from 'classnames';
 import { UserContext } from 'context/UserContext';
 import ProfileAvatar from 'assets/img/avatar/profile.png';
+import { getProfileName } from 'utils/helpers';
 
 const menus = [
   { name: 'Home', to: '/' },
@@ -66,7 +67,11 @@ Header.defaultProps = {
 const HeaderTopNav = () => {
   const { userState } = React.useContext(UserContext);
   const Avatar = userState.profileImg || ProfileAvatar;
-  const userName = userState.firstName + ' ' + userState.lastName;
+  const userName = getProfileName({
+    firstName: userState.firstName,
+    lastName: userState.lastName,
+    stageName: userState.entertainerProfile.stageName
+  });
 
   return (
     <section className="top-header">

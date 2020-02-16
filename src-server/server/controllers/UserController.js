@@ -1,10 +1,55 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { User, EntertainerProfile } from '../models';
+import {
+  User,
+  EntertainerProfile,
+  BankDetail,
+  Contact,
+  Identification,
+  Notification,
+  ApprovalComment,
+  Gallery,
+  Video
+} from '../models';
 import sendMail from '../MailSender';
 import Authentication from '../middleware/authentication';
 import { UserValidation, updateUser } from '../utils';
 import EMAIL_CONTENT from '../email-template/content';
+
+export const userAssociatedModels = [
+  {
+    model: EntertainerProfile,
+    as: 'profile'
+  },
+  {
+    model: BankDetail,
+    as: 'bankDetail'
+  },
+  {
+    model: Contact,
+    as: 'contacts'
+  },
+  {
+    model: Gallery,
+    as: 'galleries'
+  },
+  {
+    model: Video,
+    as: 'videos'
+  },
+  {
+    model: ApprovalComment,
+    as: 'approvalComment'
+  },
+  {
+    model: Identification,
+    as: 'identification'
+  },
+  {
+    model: Notification,
+    as: 'notifications'
+  }
+];
 
 const UserController = {
   /**
@@ -13,17 +58,29 @@ const UserController = {
    * @param {object} user
    * @return {object} returns newUser
    */
-  transformUser(user) {
-    return {
+  transformUser(user, updatedValues = {}) {
+    const transformedUser = {
       id: user.id,
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
+      firstTimeLogin: user.firstTimeLogin,
       phoneNumber: user.phoneNumber,
+      phoneNumber2: user.phoneNumber2,
       type: user.type,
       referral: user.referral,
-      profileImg: user.profileImageURL
+      profileImg: user.profileImageURL,
+      entertainerProfile: user.profile,
+      bankDetail: user.bankDetail,
+      contacts: user.contacts,
+      identification: user.identification,
+      notifications: user.notifications,
+      galleries: user.galleries,
+      videos: user.videos,
+      approvalComment: user.approvalComment
     };
+
+    return { ...transformedUser, ...updatedValues };
   },
 
   /**
@@ -99,12 +156,7 @@ const UserController = {
     const { lastName, firstName, email } = req.user;
     User.findOne({
       where: { email },
-      include: [
-        {
-          model: EntertainerProfile,
-          as: 'profile'
-        }
-      ]
+      include: userAssociatedModels
     })
       .then(usr => {
         if (!usr || usr.length === 0) {
@@ -118,9 +170,11 @@ const UserController = {
         }
         const token = Authentication.generateToken(user);
         return res.status(200).json({
-            message: 'You are successfully Logged in',
-            user: {firstTimeLogin: user.firstTimeLogin, ...UserController.transformUser(user)},
-            token,
+          message: 'You are successfully Logged in',
+          user: UserController.transformUser(user, {
+            firstTimeLogin: !user.firstTimeLogin
+          }),
+          token
         });
       })
       .catch(error => {
@@ -183,11 +237,11 @@ const UserController = {
     }
     User.findOne({
       where: { email },
-      include: [
-        {
-          model: EntertainerProfile,
-          as: 'profile'
-        }
+      include: userAssociatedModels,
+      order: [
+        // ...we use the same syntax from the include
+        // in the beginning of the order array
+        [{ model: Notification, as: 'notifications' }, 'updatedAt', 'DESC']
       ]
     })
       .then(user => {
@@ -214,10 +268,9 @@ const UserController = {
         const token = Authentication.generateToken(user);
         return res.status(200).json({
           message: 'You are successfully logged in',
-          user: {
-            firstTimeLogin: !user.firstTimeLogin,
-            ...UserController.transformUser(user)
-          },
+          user: UserController.transformUser(user, {
+            firstTimeLogin: !user.firstTimeLogin
+          }),
           token
         });
       })
@@ -380,7 +433,7 @@ const UserController = {
    * */
   editUser(req, res) {
     const { userId } = req.decoded;
-    const { firstName, lastName, phoneNumber } = req.body;
+    const { firstName, lastName, phoneNumber, phoneNumber2 } = req.body;
     User.findOne({
       where: { id: userId }
     })
@@ -395,7 +448,7 @@ const UserController = {
           });
         }
         return user
-          .update({ firstName, lastName, phoneNumber })
+          .update({ firstName, lastName, phoneNumber, phoneNumber2 })
           .then(() => res.status(200).json(UserController.transformUser(user)));
       })
       .catch(error => {
@@ -411,7 +464,6 @@ const UserController = {
    * @return {undefined} returns undefined
    **/
   editEntertainer(req, res) {
-    const { userId } = req.decoded;
     const {
       phoneNumber,
       about,

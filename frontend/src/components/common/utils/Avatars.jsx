@@ -5,8 +5,8 @@ const Avatars = ({ entertainers, others }) => (
   <ul className="avatars">
     {entertainers.map(entertainer => (
       <Avatars.Item
-        key={entertainer.stage_name}
-        name={entertainer.stage_name}
+        key={entertainer.stageName}
+        name={entertainer.stageName}
         src={entertainer.img.profile}
       />
     ))}

@@ -14,7 +14,7 @@ import PROFILE_24 from 'assets/img/entertainers/profile/24.jpeg';
 export default [
   {
     id: 19,
-    stage_name: 'Trusted Prowess',
+    stageName: 'Trusted Prowess',
     slug: 'trusted-prowess',
     type: 'Live Band',
     years_of_experience: 2,
@@ -39,7 +39,7 @@ export default [
   },
   {
     id: 20,
-    stage_name: 'High Soul',
+    stageName: 'High Soul',
     slug: 'high-soul',
     type: 'Live Band',
     years_of_experience: 7,
@@ -64,7 +64,7 @@ export default [
   },
   {
     id: 21,
-    stage_name: 'E Street Band',
+    stageName: 'E Street Band',
     slug: 'e-street-band',
     type: 'Live Band',
     years_of_experience: 2,
@@ -89,7 +89,7 @@ export default [
   },
   {
     id: 22,
-    stage_name: 'Rolling Master',
+    stageName: 'Rolling Master',
     slug: 'rolling-master',
     type: 'Live Band',
     years_of_experience: 8,
@@ -114,7 +114,7 @@ export default [
   },
   {
     id: 23,
-    stage_name: 'DON Shisha',
+    stageName: 'DON Shisha',
     slug: 'don-shisha',
     type: 'Live Band',
     years_of_experience: 4,
@@ -139,7 +139,7 @@ export default [
   },
   {
     id: 24,
-    stage_name: 'BackState Boyz',
+    stageName: 'BackState Boyz',
     slug: 'backstate-boyz',
     type: 'Live Band',
     years_of_experience: 5,

@@ -53,7 +53,7 @@ db.User.hasOne(db.Identification, {
 db.User.hasOne(db.ApprovalComment, {
   foreignKey: 'userId',
   as: 'approvalComment',
-  targetKey: 'approvalComment',
+  targetKey: 'approvalComment'
 });
 db.Event.hasOne(db.Auction, {
   foreignKey: 'eventId',
@@ -89,6 +89,18 @@ db.User.hasMany(db.Badge, {
   foreignKey: 'userId',
   as: 'badges',
   targetKey: 'badges'
+});
+db.User.hasMany(db.Video, {
+  foreignKey: 'userId',
+  as: 'videos',
+  onDelete: 'CASCADE',
+  hooks: true
+});
+db.User.hasMany(db.Notification, {
+  foreignKey: 'userId',
+  as: 'notifications',
+  onDelete: 'CASCADE',
+  hooks: true
 });
 
 db.Event.hasMany(db.EventEntertainer, {

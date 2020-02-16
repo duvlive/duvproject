@@ -4,16 +4,32 @@ import PropTypes from 'prop-types';
 import Card from 'components/custom/Card';
 import classNames from 'classnames';
 import { Link } from '@reach/router';
+import { UserContext } from 'context/UserContext';
+import { ONBOARDING_STEPS } from 'utils/constants';
 
 const STATUS = {
   PENDING: 'pending',
-  COMPLETED: 'completed'
+  APPROVED: 'approved',
+  REJECTED: 'rejected'
+};
+
+const getOnboardingStatus = status => {
+  /* == is used to check for null
+   * null -> pending
+   * true -> approved
+   * false -> rejected
+   */
+  if (null == status) {
+    return STATUS.PENDING;
+  }
+  return status === 'YES' ? STATUS.APPROVED : STATUS.REJECTED;
 };
 
 const Onboarding = () => {
+  let { userState } = React.useContext(UserContext);
   return (
     <>
-      <TopMessage message="Hello DJ Cuppy," />
+      <TopMessage message={`Welcome back ${userState.firstName},`} />
       <Card
         className="dashboard__card offset-md-2 col-md-8 mt-5 mb-0 rounded-0"
         color="blue"
@@ -22,63 +38,62 @@ const Onboarding = () => {
           You are just a few steps away
           <br /> from activating your account.
         </h4>
-      </Card>
-      <Card
-        className="dashboard__card offset-md-2 col-md-8 mb-0 rounded-0"
-        color="black"
-      >
         <p className="onboarding__instruction">
           Follow the 5 steps below to complete your account whenever you are
-          ready. <br />
-          Once completed, your account would be approved within 24 hours.
+          ready. Once completed, your account would be approved within 24 hours.
         </p>
       </Card>
-      <Onboarding.List status={STATUS.COMPLETED} title="Entertainers Profile" />
+
+      <OnboardingList />
       <div className="text-center">
-        <button className="btn btn-danger btn-lg btn-wide btn-transparent mt-5">
+        <Link
+          className="btn btn-danger btn-lg btn-wide btn-transparent mt-5"
+          to="/entertainer/account-setup"
+        >
           Continue Setup
-        </button>
+        </Link>
       </div>
     </>
   );
 };
 
-Onboarding.List = () => {
-  const onboardingTasks = [
-    {
-      title: 'Entertainers Profile',
-      status: STATUS.COMPLETED,
-      link: '/profile'
-    },
-    { title: 'Bank Account Details', status: STATUS.PENDING, link: '/profile' },
-    { title: 'Emergency Contact', status: STATUS.PENDING, link: '/profile' },
-    { title: 'Youtube Video', status: STATUS.PENDING, link: '/profile' },
-    { title: 'Valid Identification', status: STATUS.PENDING, link: '/profile' }
-  ];
+const OnboardingList = () => {
+  const { userState } = React.useContext(UserContext);
 
-  return onboardingTasks.map((task, index) => (
-    <Onboarding.Card key={index} number={index + 1} {...task} />
+  return Object.keys(ONBOARDING_STEPS).map((step, index) => (
+    <Onboarding.Card
+      key={index}
+      link="/entertainer/account-setup"
+      number={index + 1}
+      status={getOnboardingStatus(userState.approvalComment[step])}
+      title={ONBOARDING_STEPS[step].title}
+    />
   ));
 };
 
 Onboarding.Card = ({ title, status, number, link }) => {
-  const userHasCompletedTask = status === STATUS.COMPLETED;
+  const approvedStep = status === STATUS.APPROVED;
+  const pendingStep = status === STATUS.PENDING;
+  const rejectedStep = status === STATUS.REJECTED;
   return (
-    <Link to={link}>
+    <Link to={`${link}/${number}`}>
       <Card
-        className="dashboard__card offset-md-2 col-md-8 mb-0 rounded-0"
-        color={userHasCompletedTask ? 'green' : 'black'}
-        hover={!userHasCompletedTask}
+        className="onboarding__card offset-md-2 col-md-8 mb-0 rounded-0"
+        color={approvedStep ? 'green' : rejectedStep ? 'red' : 'black'}
+        hover={!approvedStep}
       >
         <h5 className="onboarding__text">
           <span
             className={classNames(
-              'icon',
+              'icon account-setup-icon',
               {
-                'icon-circle pending': !userHasCompletedTask
+                pending: pendingStep
               },
               {
-                'icon-ok-circled completed': userHasCompletedTask
+                'icon-cancel rejected': rejectedStep
+              },
+              {
+                'icon-ok completed': approvedStep
               }
             )}
           />

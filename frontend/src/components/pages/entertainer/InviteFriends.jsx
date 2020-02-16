@@ -42,7 +42,6 @@ const InviteFriendsForm = () => {
         personal: setInitialValues(personalInfoObject)
       }}
       onSubmit={(values, actions) => {
-        console.log(values);
         setTimeout(() => {
           actions.setSubmitting(false);
         }, 400);

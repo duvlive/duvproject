@@ -11,6 +11,8 @@ import EventEntertainerController from './EventEntertainerController';
 import AuctionController from './AuctionController';
 import ApplicationController from './ApplicationController';
 import BadgeController from './BadgeController';
+import GalleryController from './GalleryController';
+import VideoController from './VideoController';
 
 export {
   UserController,
@@ -25,5 +27,7 @@ export {
   EventEntertainerController,
 	AuctionController,
 	ApplicationController,
-	BadgeController
+	BadgeController,
+  GalleryController,
+  VideoController
 };

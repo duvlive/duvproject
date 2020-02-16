@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { getToken } from 'utils/localStorage';
+import { getTokenFromStore } from 'utils/localStorage';
 import { Loading } from './PlayingMusicAnimation';
 import AlertMessage from 'components/common/utils/AlertMessage';
 
@@ -40,20 +40,17 @@ const UploadGallery = ({ afterSave }) => {
 
       axios
         .post('/api/v1/gallery/save', data, {
-          headers: { 'x-access-token': getToken() }
+          headers: { 'x-access-token': getTokenFromStore() }
         })
         .then(function(response) {
           const { status, data } = response;
-          // handle success
-          console.log(status, data);
           if (status === 200) {
             setLoading(false);
-            afterSave(data.details);
+            afterSave(data.image);
             setMessage('Image has been successfully uplaoded');
           }
         })
         .catch(function(error) {
-          console.log('error', error.response.data);
           setMessage(error.response.data.message);
           setLoading(false);
         });

@@ -1,5 +1,5 @@
 require('dotenv').config();
-import { Gallery } from '../models';
+import { Gallery, User } from '../models';
 
 const cloudinary = require('cloudinary');
 const multer = require('multer');
@@ -51,10 +51,10 @@ const GalleryController = {
       gallery.imageID = req.file.public_id;
 
       return Gallery.create(gallery)
-        .then(details => {
+        .then(image => {
           return res.status(200).json({
             message: 'Image has been successfully upload',
-            details
+            image
           });
         })
         .catch(error => {
@@ -72,12 +72,12 @@ const GalleryController = {
       where: { userId: req.params.userId },
       order: [['updatedAt', 'DESC']]
     })
-      .then(result => res.json(result))
+      .then(result => res.json({ images: result }))
       .catch(error => res.status(412).json({ msg: error.message }));
   },
 
   /**
-   * approve imave
+   * approve image
    * @function
    * @param {object} req is req object
    * @param {object} res is res object
@@ -117,6 +117,48 @@ const GalleryController = {
   },
 
   /**
+   * set as profile image
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  setAsProfileImage(req, res) {
+    const { profileImageURL } = req.body;
+    res.json({ profileImageURL });
+    if (profileImageURL) {
+      const { userId } = req.decoded;
+      User.findOne({
+        where: { id: userId }
+      })
+        .then(user => {
+          if (!user) {
+            return res.status(404).send({
+              message: 'User not found'
+            });
+          }
+          // update profile image in database
+          return user
+            .update({
+              profileImageID: 'GalleryImage',
+              profileImageURL
+            })
+            .then(user => {
+              return res.json({
+                message: 'Image has been successfully set as profile image',
+                user
+              });
+            });
+        })
+        .catch(error => {
+          return res.status(500).json({ error: error.message });
+        });
+    } else {
+      return res.status(412).json({ message: 'Gallery URL not found' });
+    }
+  },
+
+  /**
    * @desc Deletes image
    * @param {object} req - The request sent to the route
    * @param {object} res - The response sent back
@@ -131,7 +173,7 @@ const GalleryController = {
           result
             .destroy({ where: { id } })
             .then(() => {
-              id && cloudinary.uploader.destroy(imageID);
+              imageID && cloudinary.uploader.destroy(imageID);
               return res.status(202).json({
                 msg: `Image has been successfully deleted`
               });

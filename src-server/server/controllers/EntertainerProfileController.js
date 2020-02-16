@@ -11,6 +11,10 @@ const EntertainerProfileController = {
   updateUserAndEntertainerProfile(req, res) {
     const {
       about,
+      city,
+      baseCharges,
+      preferredCharges,
+      availableFor,
       location,
       stageName,
       yearStarted,
@@ -21,6 +25,10 @@ const EntertainerProfileController = {
     } = req.body;
     const entertainerProfileData = {
       about,
+      city,
+      baseCharges,
+      preferredCharges,
+      availableFor,
       location,
       stageName,
       yearStarted,
@@ -34,10 +42,13 @@ const EntertainerProfileController = {
       .then(entertainerProfile => {
         return res
           .status(200)
-          .json({message: 'User profile update is succesful',  entertainerProfile,  });
+          .json({
+            message: 'User profile update is succesful',
+            entertainerProfile
+          });
       })
       .catch(error => {
-        return res.status(error.status || 400).json({ message: error.message});
+        return res.status(error.status || 400).json({ message: error.message });
       });
   }
 };

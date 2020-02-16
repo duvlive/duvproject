@@ -47,6 +47,24 @@ module.exports = function(sequelize, DataTypes) {
       youTubeChannel: {
         type: DataTypes.STRING,
         allowNull: true
+      },
+      city: {
+        type: DataTypes.STRING,
+        allowNull: true
+      },
+      baseCharges: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: '0'
+      },
+      preferredCharges: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: '0'
+      },
+      availableFor: {
+        type: DataTypes.TEXT,
+        allowNull: true
       }
     },
     {

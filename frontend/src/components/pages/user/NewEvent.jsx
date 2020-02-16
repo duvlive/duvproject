@@ -66,11 +66,9 @@ const NewEventForm = ({ currentHireType }) => {
     <Formik
       initialValues={initialValues}
       onSubmit={(values, actions) => {
-        console.log(values);
         setTimeout(() => {
           actions.setSubmitting(false);
           let urlToRedirect;
-          console.log('currentHireType', currentHireType);
           if (currentHireType === HIRE_ENTERTAINERS.search) {
             urlToRedirect = '/user/entertainer/search/1';
           } else if (currentHireType === HIRE_ENTERTAINERS.recommend) {

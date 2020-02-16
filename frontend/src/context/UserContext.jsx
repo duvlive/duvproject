@@ -7,10 +7,63 @@ const INITIAL_STATE = {
   lastName: '',
   email: '',
   phoneNumber: '',
-  type: 1,
+  phoneNumber2: '',
+  type: null,
   referral: '',
   profileImg: '',
-  isLoggedIn: false
+  isLoggedIn: false,
+  entertainerProfile: {
+    entertainerType: null,
+    approved: false,
+    about: '',
+    stageName: '',
+    location: '',
+    yearStarted: '',
+    willingToTravel: false,
+    eventType: null,
+    youTubeChannel: null,
+    city: '',
+    baseCharges: '',
+    preferredCharges: '',
+    availableFor: '[]'
+  },
+  bankDetail: {
+    accountName: '',
+    bankName: '',
+    accountNumber: ''
+  },
+  contacts: [
+    {
+      firstName: '',
+      lastName: '',
+      email: '',
+      phoneNumber: '',
+      relationship: '',
+      type: 1
+    },
+    {
+      firstName: '',
+      lastName: '',
+      email: '',
+      phoneNumber: '',
+      relationship: '',
+      type: 2
+    }
+  ],
+  identification: {
+    idType: '',
+    idNumber: '',
+    issueDate: '',
+    expiryDate: ''
+  },
+  approvalComment: {
+    entertainerProfile: null,
+    bankAccount: null,
+    contact: null,
+    youTube: null,
+    identification: null
+  },
+  galleries: []
 };
 
 // CONTEXT
@@ -18,17 +71,24 @@ let UserContext = React.createContext();
 
 // REDUCERS
 let reducer = (state, action) => {
-  console.log('userState', state);
-  console.log('userAction', action);
+  if (process.env.NODE_ENV === 'development') {
+    console.info('%c[USER CONTEXT STATE] state', 'color: blue', state);
+    console.info('%c[USER CONTEXT ACTION] action', 'color: green', action);
+  }
   switch (action.type) {
+    case 'no-token':
     case 'user-logout':
       return INITIAL_STATE;
     case 'user-info':
     case 'user-login':
     case 'user-profile-update':
+    case 'user-contact-update':
+    case 'entertainer-profile-update':
+    case 'entertainer-youtube-channel':
       return { ...state, ...action.user, isLoggedIn: true };
+    case 'update-user-profile-image':
     case 'user-profile-image':
-      return { ...state, profileImg: action.link };
+      return { ...state, profileImg: action.imageURL };
     default:
       return state;
   }
@@ -38,7 +98,6 @@ let reducer = (state, action) => {
 let UserContextProvider = props => {
   let [userState, userDispatch] = React.useReducer(reducer, INITIAL_STATE);
   let value = { userState, userDispatch };
-  console.log('userState for provider', userState);
 
   return (
     <UserContext.Provider value={value}>{props.children}</UserContext.Provider>

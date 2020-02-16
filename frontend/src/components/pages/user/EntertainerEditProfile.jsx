@@ -6,21 +6,16 @@ import Input from 'components/forms/Input';
 import TextArea from 'components/forms/TextArea';
 import Select from 'components/forms/Select';
 // import Button from 'components/forms/Button';
-import {
-  profileObject,
-  profileSchema
-} from 'components/forms/schema/userSchema';
+import { personalInfoObject } from 'components/forms/schema/userSchema';
 import { navigate } from '@reach/router';
 import { setInitialValues } from 'components/forms/form-helper';
 import { range } from 'utils/helpers';
 import AutoComplete from 'components/forms/AutoComplete';
+import { createSchema } from 'components/forms/schema/schema-helpers';
 
 const currentYear = new Date().getFullYear();
 
 const RegisterAsEntertainer = () => {
-  console.log('currentYear', currentYear);
-  const testing = range(currentYear, currentYear - 40, -1);
-  console.log('testing', testing);
   return (
     <BackEndPage title="Edit Profile">
       <div className="main-app">
@@ -37,9 +32,8 @@ const RegisterAsEntertainer = () => {
 const RegisterAsEntertainerForm = () => {
   return (
     <Formik
-      initialValues={setInitialValues(profileObject)}
+      initialValues={setInitialValues(personalInfoObject)}
       onSubmit={(values, actions) => {
-        console.log(values);
         setTimeout(() => {
           actions.setSubmitting(false);
           const { email, password } = values;
@@ -55,7 +49,7 @@ const RegisterAsEntertainerForm = () => {
           <BankDetailsForm />
         </>
       )}
-      validationSchema={profileSchema}
+      validationSchema={createSchema(personalInfoObject)}
     />
   );
 };
@@ -119,7 +113,7 @@ const EntertainerDetailsForm = () => (
             formGroupClassName="col-md-6"
             isValidMessage="Stage Name looks good"
             label="Stage Name"
-            name="stage_name"
+            name="stageName"
             placeholder="Stage Name"
           />
           <Input
@@ -157,7 +151,10 @@ const EntertainerDetailsForm = () => (
             { id: 5, name: 'Lemons' },
             { id: 6, name: 'Apricots', disabled: true }
           ]}
-          value={[{ id: 1, name: 'Apples' }, { id: 2, name: 'Pears' }]}
+          value={[
+            { id: 1, name: 'Apples' },
+            { id: 2, name: 'Pears' }
+          ]}
         />
       </Form>
     </div>
@@ -174,19 +171,19 @@ const BankDetailsForm = () => (
             <Input
               isValidMessage="Stage Name looks good"
               label="Stage Name"
-              name="stage_name"
+              name="stageName"
               placeholder="Stage Name"
             />
             <Input
               isValidMessage="Stage Name looks good"
               label="Stage Name"
-              name="stage_name"
+              name="stageName"
               placeholder="Stage Name"
             />
             <Input
               isValidMessage="Stage Name looks good"
               label="Stage Name"
-              name="stage_name"
+              name="stageName"
               placeholder="Stage Name"
             />
           </div>

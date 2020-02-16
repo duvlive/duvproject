@@ -1,53 +1,75 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 import TopMessage from 'components/common/layout/TopMessage';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import DuvLiveModal from 'components/custom/Modal';
-import { Alert } from 'reactstrap';
 import { Formik, Form } from 'formik';
 import Input from 'components/forms/Input';
 import Button from 'components/forms/Button';
 import { videoSchema } from 'components/forms/schema/entertainerSchema';
 import { createSchema } from 'components/forms/schema/schema-helpers';
 import { setInitialValues } from 'components/forms/form-helper';
+import { UserContext } from 'context/UserContext';
+import { getTokenFromStore } from 'utils/localStorage';
+import { approval, getStatus } from 'components/pages/entertainer/Gallery';
+import AlertMessage from 'components/common/utils/AlertMessage';
 
 const Video = () => {
-  const initial = [
-    {
-      id: 'LX0XMqjjzFA',
-      title: 'DJ Cuppy in the  mix'
-    },
-    {
-      id: 'sUNyzg8O6dk',
-      title: 'Cuppy Ft L.A.X - Currency (Official Video)'
-    },
-    {
-      id: 'XJteFC9jqVM',
-      title: 'Abena - DJ Cuppy'
-    },
-    {
-      id: 'osvde7xNQ0s',
-      title: 'Cuppy & Tekno - Green Light (Official Video)'
-    },
-    {
-      id: 'RxzyXOUSRQM',
-      title: 'Cuppy on a Mission'
-    }
-  ];
-  const [videos, setVideos] = useState(initial);
+  const [videos, setVideos] = useState([]);
+  const [message, setMessage] = useState({});
+  const { userState } = React.useContext(UserContext);
+
+  const handleDelete = id => {
+    axios
+      .delete(`/api/v1/video/delete/${id}`)
+      .then(function(response) {
+        const { status } = response;
+        // handle success
+        if (status === 202) {
+          const currentVideos = videos.filter(v => v.id !== id);
+          setVideos(currentVideos);
+          setMessage({
+            type: 'danger',
+            msg: 'Video has been successfully deleted'
+          });
+        }
+      })
+      .catch(function(error) {
+        setVideos([]);
+      });
+  };
+
+  // Load Videos
+  React.useEffect(() => {
+    userState.videos && setVideos(userState.videos);
+  }, [userState]);
+
   const handleSaveVideo = newVideo => setVideos([newVideo, ...videos]);
+
   return (
     <BackEndPage title="Videos">
       <div className="main-app">
         <TopMessage message="Add a New Video" />
-        <AddVideoForm saveVideo={handleSaveVideo} />
+        <AddVideoForm afterSave={handleSaveVideo} errorMessage={message} />
 
         <section className="app-content">
-          <section className="gallery">
-            <h3 className="main-app__title mb-3 mt-5">Uploaded Videos</h3>
+          <section className="videos">
+            {videos.length > 0 && (
+              <h3 className="main-app__title mb-3 mt-5">Uploaded Videos</h3>
+            )}
             <div className="row">
-              {videos.map(({ id, title }) => {
-                return <Video.Modal key={id} title={title} youtubeId={id} />;
+              {videos.map(({ id, youtubeID, title, approved }) => {
+                return (
+                  <Video.Modal
+                    deleteVideo={handleDelete}
+                    id={id}
+                    key={id}
+                    status={getStatus(approved)}
+                    title={title}
+                    youtubeID={youtubeID}
+                  />
+                );
               })}
             </div>
           </section>
@@ -57,94 +79,197 @@ const Video = () => {
   );
 };
 
-Video.Card = ({ youtubeId, title }) => (
+Video.ModalCard = ({ youtubeID, title }) => (
   <div className="embed-responsive embed-responsive-16by9">
     <iframe
       allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
       allowFullScreen
       frameBorder="0"
-      src={`https://www.youtube.com/embed/${youtubeId}`}
+      src={`https://www.youtube.com/embed/${youtubeID}`}
       title={title}
     ></iframe>
   </div>
 );
 
-Video.Modal = ({ youtubeId, title }) => (
-  <DuvLiveModal
-    body={<Video.Card title={title} youtubeId={youtubeId} />}
-    childrenClassName="d-block col-md-4 mb-4"
-    className="modal-full"
-    title={title}
-  >
-    <div className="card card__with-icon">
-      <img
-        alt={title}
-        className="img-fluid"
-        src={`https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`}
-      />
-      <div className="card-img-overlay">
-        <div className="card-img-overlay__content">
-          <span className="icon icon-video"></span>
-        </div>
+Video.DeleteVideoIcon = ({ youtubeImage, title, id, deleteVideo }) => {
+  return (
+    <DuvLiveModal
+      actionFn={() => deleteVideo(id)}
+      actionText="Yes, Delete Video"
+      body={youtubeImage}
+      closeModalText="Cancel"
+      title={`Delete Video (${title})`}
+    >
+      <div className="delete-icon right-0">
+        <span className="icon icon-cancel-circled"></span>
       </div>
-    </div>
-  </DuvLiveModal>
+    </DuvLiveModal>
+  );
+};
+
+Video.DeleteVideoIcon.propTypes = {
+  deleteVideo: PropTypes.func.isRequired,
+  id: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
+  youtubeImage: PropTypes.any.isRequired
+};
+
+Video.YoutubeImage = ({ title, youtubeID }) => (
+  <img
+    alt={title}
+    className="img-fluid"
+    src={`https://i1.ytimg.com/vi/${youtubeID}/0.jpg`}
+  />
 );
 
-const AddVideoForm = ({ saveVideo }) => {
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
+Video.YoutubeImage.propTypes = {
+  title: PropTypes.string.isRequired,
+  youtubeID: PropTypes.any.isRequired
+};
+
+Video.YoutubeOverlay = ({ title, youtubeID }) => (
+  <div className="card-img-overlay">
+    <div className="card-img-overlay__content">
+      <span className="icon icon-video"></span>
+    </div>
+  </div>
+);
+
+Video.YoutubeOverlay.propTypes = {
+  title: PropTypes.string.isRequired,
+  youtubeID: PropTypes.any.isRequired
+};
+
+Video.Modal = ({ youtubeID, status, title, id, deleteVideo }) => {
+  const youtubeImage = (
+    <Video.YoutubeImage title={title} youtubeId={youtubeID} />
+  );
+  const youtubeOverlay = (
+    <Video.YoutubeOverlay title={title} youtubeId={youtubeID} />
+  );
+  const approvalText = (
+    <small
+      className={`badge badge-${approval[status].color} transparent-${approval[status].color}`}
+    >
+      {approval[status].text}
+    </small>
+  );
+
+  return (
+    <section className="d-block col-md-4 mb-4">
+      <div className="card card__with-icon position-relative">
+        <DuvLiveModal
+          body={<Video.ModalCard title={title} youtubeID={youtubeID} />}
+          className="modal-full"
+          title={title}
+        >
+          {youtubeImage}
+          {youtubeOverlay}
+        </DuvLiveModal>
+        <Video.DeleteVideoIcon
+          deleteVideo={deleteVideo}
+          id={id}
+          title={title}
+          youtubeImage={youtubeImage}
+        />
+        {approvalText}
+      </div>
+    </section>
+  );
+};
+
+Video.Modal.propTypes = {
+  deleteVideo: PropTypes.func.isRequired,
+  id: PropTypes.number.isRequired,
+  status: PropTypes.any.isRequired,
+  title: PropTypes.string.isRequired,
+  youtubeID: PropTypes.string.isRequired
+};
+
+const AddVideoForm = ({ afterSave, errorMessage }) => {
+  const [message, setMessage] = useState({});
   return (
     <Formik
       initialValues={setInitialValues(videoSchema)}
       onSubmit={(values, actions) => {
-        console.log('values', values);
-        const { youtube_url, title } = values;
-        const url = youtube_url;
+        const { youtubeID, title } = values;
+        const url = youtubeID;
         if (url !== undefined || url !== '') {
           // eslint-disable-next-line no-useless-escape
           var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/;
           var match = url.match(regExp);
           if (match && match[2].length === 11) {
-            saveVideo({ title: title, id: match[2] });
-            setSuccess('Your video has been successfully added');
+            const payload = { title, youtubeID: match[2] };
+            axios
+              .post('/api/v1/video/save', payload, {
+                headers: { 'x-access-token': getTokenFromStore() }
+              })
+              .then(function(response) {
+                const { status, data } = response;
+                if (status === 200) {
+                  afterSave(data.video);
+                  setMessage({
+                    msg: 'Your video has been successfully added',
+                    type: 'success'
+                  });
+                  actions.resetForm();
+                  actions.setSubmitting(false);
+                }
+              })
+              .catch(function(error) {
+                setMessage(error.response.data.message);
+                actions.setSubmitting(false);
+              });
           } else {
-            // Do anything for not being valid
-            setError('Youtube link seems invalid. Please check and try again');
+            setMessage({
+              msg: 'Youtube link seems invalid. Please check and try again',
+              type: 'danger'
+            });
+            actions.setSubmitting(false);
           }
         }
-        actions.setSubmitting(false);
       }}
       render={({ isSubmitting, handleSubmit }) => (
-        <div className="card card-custom card-black card-form ">
-          <div className="card-body col-offset-md-2 col-md-8">
-            <h4 className="card-title">Add your Youtube videos here</h4>
-            <Form>
-              <Input
-                isValidMessage="Title seems good"
-                label="Title"
-                name="title"
-                placeholder="Enter Title for Video"
-              />
-              <Input
-                isValidMessage="URL seems valid"
-                label="Youtube URL"
-                name="youtube_url"
-                placeholder="Paste your youtube video url here"
-                type="url"
-              />
-              {success && <Alert color="success">{success}</Alert>}
-              {error && <Alert color="danger">{error}</Alert>}
-              <Button
-                className="btn-danger btn-wide btn-transparent mt-4"
-                loading={isSubmitting}
-                onClick={handleSubmit}
-              >
-                Add Video
-              </Button>
-            </Form>
+        <>
+          <div className="card card-custom card-black card-form ">
+            <div className="card-body">
+              <Form>
+                <div className="form-row">
+                  <Input
+                    formGroupClassName="col-md-6"
+                    isValidMessage="Title seems good"
+                    label="Title"
+                    name="title"
+                    placeholder="Enter Title for Video"
+                  />
+                  <Input
+                    formGroupClassName="col-md-6"
+                    isValidMessage="URL seems valid"
+                    label="Youtube URL"
+                    name="youtubeID"
+                    placeholder="Paste your youtube video url here"
+                    type="url"
+                  />
+                </div>
+                <Button
+                  className="btn-danger btn-wide btn-transparent mt-2"
+                  loading={isSubmitting}
+                  onClick={handleSubmit}
+                >
+                  Add Video
+                </Button>
+              </Form>
+            </div>
           </div>
-        </div>
+          <AlertMessage
+            message={
+              (message && message.msg) || (errorMessage && errorMessage.msg)
+            }
+            type={
+              (message && message.type) || (errorMessage && errorMessage.type)
+            }
+          />
+        </>
       )}
       validationSchema={createSchema(videoSchema)}
     />
@@ -152,17 +277,16 @@ const AddVideoForm = ({ saveVideo }) => {
 };
 
 AddVideoForm.propTypes = {
-  saveVideo: PropTypes.func.isRequired
+  afterSave: PropTypes.func.isRequired,
+  errorMessage: PropTypes.object
 };
 
-Video.Card.propTypes = {
-  title: PropTypes.string.isRequired,
-  youtubeId: PropTypes.string.isRequired
+Video.defaultProps = {
+  errorMessage: {}
 };
-
-Video.Modal.propTypes = {
+Video.ModalCard.propTypes = {
   title: PropTypes.string.isRequired,
-  youtubeId: PropTypes.string.isRequired
+  youtubeID: PropTypes.string.isRequired
 };
 
 export default Video;

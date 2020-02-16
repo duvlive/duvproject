@@ -1,6 +1,11 @@
 import jwt from 'jsonwebtoken';
 import { User } from '../models';
+<<<<<<< HEAD
 import constants from '../constant';
+=======
+import { userAssociatedModels } from '../controllers/UserController';
+import { USER_TYPES } from '../constant';
+>>>>>>> 27b46b392f9fd83336c070d76e4c1dd5078ed34e
 
 const authentication = {
   verifyToken(request, response, next) {
@@ -20,7 +25,10 @@ const authentication = {
           });
         }
         request.decoded = decoded;
-        User.findOne({ where: { id: request.decoded.userId } }).then((user) => {
+        User.findOne({
+          where: { id: request.decoded.userId },
+          include: userAssociatedModels
+        }).then(user => {
           if (!user) {
             return response.status(401).send({
               message: 'User not found'
@@ -61,9 +69,11 @@ const authentication = {
    * @returns {Object} response message
    */
   validateAdmin(request, response, next) {
-    return request.user.type === constants.USER_TYPES.admin ? next() : response.status(401).send({
-      message: 'Not authorized to non-Admin'
-    });
+    return request.user.type === USER_TYPES.ADMINISTRATOR
+      ? next()
+      : response.status(401).send({
+          message: 'Not authorized to non-Admin'
+        });
   },
 
   /**
@@ -74,9 +84,11 @@ const authentication = {
    * @returns {Object} response message
    */
   validateEntertainer(request, response, next) {
-    return request.user.type === constants.USER_TYPES.entertainer ? next() : response.status(401).send({
-      message: 'Not authorized to non-entertainers'
-    });
+    return request.user.type === USER_TYPES.ENTERTAINER
+      ? next()
+      : response.status(401).send({
+          message: 'Not authorized to non-entertainers'
+        });
   },
 
   /**
@@ -87,9 +99,11 @@ const authentication = {
    * @returns {Object} response message
    */
   validateUser(request, response, next) {
-    return request.user.type === constants.USER_TYPES.regular ? next() : response.status(401).send({
-      message: 'Not authorized to non-users'
-    });
+    return request.user.type === USER_TYPES.USER
+      ? next()
+      : response.status(401).send({
+          message: 'Not authorized to non-users'
+        });
   },
 
   /**
@@ -100,9 +114,11 @@ const authentication = {
    * @returns {Object} response message
    */
   isActiveUser(request, response, next) {
-    return request.user.isActive ? next() : response.status(403).send({
-      message: 'User needs to activate account'
-    });
+    return request.user.isActive
+      ? next()
+      : response.status(403).send({
+          message: 'User needs to activate account'
+        });
   }
 };
 export default authentication;

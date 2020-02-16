@@ -74,14 +74,10 @@ const ResetPasswordForm = ({ token }) => {
     <Formik
       initialValues={setInitialValues(resetPasswordObject)}
       onSubmit={(values, actions) => {
-        // post to api
-        console.log('values', values);
         axios
           .post('/api/v1/users/reset-password', values, { params: { token } })
           .then(function(response) {
-            const { status, data } = response;
-            // handle success
-            console.log(status, data);
+            const { status } = response;
             if (status === 200) {
               setMessage({
                 type: 'success',
@@ -91,7 +87,6 @@ const ResetPasswordForm = ({ token }) => {
             }
           })
           .catch(function(error) {
-            console.log('error', error.response.data);
             setMessage({
               message: error.response.data.message
             });

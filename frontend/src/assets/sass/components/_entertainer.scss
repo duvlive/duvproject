@@ -79,3 +79,52 @@
     }
   }
 }
+
+.entertainer-info {
+  background: $black;
+  background: linear-gradient(rgba($body-bg, 0.2), rgba($body-bg, 0.7)),
+    url('../img/bg/felebration.jpg');
+  background-position: center bottom;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  width: 100%;
+  padding: 8rem 0;
+
+  &.dj {
+    background: linear-gradient(rgba($body-bg, 0.85), rgba($body-bg, 0.95)),
+      url('../img/bg/entertainer-dj.jpg');
+  }
+
+  &.mc {
+    background: linear-gradient(rgba($body-bg, 0.85), rgba($body-bg, 0.95)),
+      url('../img/bg/entertainers-counter.jpg');
+  }
+
+  &__list {
+    height: 3rem;
+    margin-bottom: 2.5rem;
+
+    h6 {
+      color: #86939e;
+      font-weight: normal;
+      font-size: 0.7rem;
+    }
+
+    h3 {
+      font-weight: normal;
+      font-size: 1.4rem;
+    }
+
+    .star-rating {
+      margin-left: 0.1rem;
+      margin-top: -0.7rem;
+    }
+
+    .icon {
+      margin-left: -0.5rem;
+      font-size: 1.6rem;
+    }
+  }
+}
