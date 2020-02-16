@@ -70,7 +70,6 @@ const EntertainerDetailsForm = () => {
               <div className="form-row">
                 <Input
                   formGroupClassName="col-md-6"
-                  isValidMessage="Stage Name looks good"
                   label="Stage Name"
                   name="stageName"
                   placeholder="Stage Name"
@@ -87,7 +86,6 @@ const EntertainerDetailsForm = () => {
                 <Select
                   blankOption="Select Location"
                   formGroupClassName="col-md-6"
-                  isValidMessage="looks good"
                   label="Location"
                   name="location"
                   options={getStates()}
@@ -97,7 +95,6 @@ const EntertainerDetailsForm = () => {
                   blankOption="Select City"
                   dependentOn="location"
                   formGroupClassName="col-md-6"
-                  isValidMessage="looks good"
                   label="City"
                   name="city"
                   options={getLgas}
@@ -108,7 +105,6 @@ const EntertainerDetailsForm = () => {
                 <Select
                   blankOption="Choose your base charges"
                   formGroupClassName="col-md-6"
-                  isValidMessage="looks good"
                   label="Base Charges (in Naira)"
                   name="baseCharges"
                   options={BUDGET}
@@ -117,7 +113,6 @@ const EntertainerDetailsForm = () => {
                 <Select
                   blankOption="Choose your highest charges"
                   formGroupClassName="col-md-6"
-                  isValidMessage="looks good"
                   label="Preferred Charges (in Naira)"
                   name="preferredCharges"
                   options={BUDGET}

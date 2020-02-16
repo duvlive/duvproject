@@ -115,14 +115,12 @@ export const ContactsForm = ({ type, name, textColor, initialValue }) => {
               <div className="form-row">
                 <Input
                   formGroupClassName="col-md-6"
-                  isValidMessage="First Name looks good"
                   label="First Name"
                   name="firstName"
                   placeholder="First Name"
                 />
                 <Input
                   formGroupClassName="col-md-6"
-                  isValidMessage="Last Name looks good"
                   label="Last Name"
                   name="lastName"
                   placeholder="Last Name"
@@ -131,14 +129,12 @@ export const ContactsForm = ({ type, name, textColor, initialValue }) => {
               <div className="form-row">
                 <Input
                   formGroupClassName="col-md-6"
-                  isValidMessage="Email address seems valid"
                   label="Email"
                   name="email"
                   placeholder="Email Address"
                 />
                 <Input
                   formGroupClassName="col-md-6"
-                  isValidMessage="Phone number looks good"
                   label="Phone"
                   name="phoneNumber"
                   placeholder="Phone"
@@ -148,7 +144,6 @@ export const ContactsForm = ({ type, name, textColor, initialValue }) => {
                 {type === 1 ? (
                   <Input
                     formGroupClassName="col-md-6"
-                    isValidMessage="looks good"
                     label="Relationship"
                     name="relationship"
                     placeholder="Relationship"

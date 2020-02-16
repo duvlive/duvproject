@@ -66,19 +66,16 @@ export const BankDetailsForm = () => {
             <Form>
               <AlertMessage {...message} />
               <Input
-                isValidMessage="Account Name looks good"
                 label="Account Name"
                 name="accountName"
                 placeholder="Account Name"
               />
               <Input
-                isValidMessage="Bank Name looks good"
                 label="Bank Name"
                 name="bankName"
                 placeholder="Bank Name"
               />
               <Input
-                isValidMessage="Stage Name looks good"
                 label="Account Number"
                 name="accountNumber"
                 placeholder="Account Number"

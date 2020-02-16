@@ -6,11 +6,11 @@ import Onboarding from 'components/pages/entertainer/Onboarding';
 import { UserContext } from 'context/UserContext';
 
 const Dashboard = () => {
-  const status = '!approved';
+  const { userState } = React.useContext(UserContext);
 
   let currentDashboard;
 
-  if (status === 'approved') {
+  if (userState.entertainerProfile.approved) {
     currentDashboard = <DashboardItems />;
   } else {
     currentDashboard = <Onboarding />;
@@ -24,7 +24,7 @@ const Dashboard = () => {
 };
 
 const DashboardItems = () => {
-  let { userState } = React.useContext(UserContext);
+  const { userState } = React.useContext(UserContext);
   return (
     <>
       <TopMessage message={`Welcome back ${userState.firstName},`} />

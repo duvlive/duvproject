@@ -53,7 +53,6 @@ export const YoutubeChannelForm = () => {
             <Form>
               <AlertMessage {...message} />
               <Input
-                isValidMessage="Youtube URL looks good"
                 label="Youtube Channel"
                 name="youTubeChannel"
                 placeholder="Youtube Channel URL"

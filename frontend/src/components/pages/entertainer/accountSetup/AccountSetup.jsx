@@ -13,6 +13,7 @@ import {
 import { BankDetailsForm } from 'components/pages/entertainer/accountSetup/BankDetails';
 import { UserContext } from 'context/UserContext';
 import { ONBOARDING_STEPS, STEPS_REQUIREMENT } from 'utils/constants';
+import AlertMessage from 'components/common/utils/AlertMessage';
 
 const MIN_STEP = 1;
 const MAX_STEP = 5;
@@ -29,7 +30,7 @@ const AccountSetup = ({ stepFromURL }) => {
   );
 
   React.useEffect(() => {
-    setCurrentStep(stepFromURL);
+    setCurrentStep(parseInt(stepFromURL, 10));
   }, [stepFromURL]);
 
   const ALL_STEPS = [
@@ -194,14 +195,20 @@ StepperNavigation.propTypes = {
 };
 
 const ToComplete = ({ currentStep }) => {
+  let { userState } = React.useContext(UserContext);
   const steps = Object.keys(STEPS_REQUIREMENT);
+  const stepName = steps[currentStep - 1];
+  const message =
+    userState.approvalComment[stepName] !== 'YES' &&
+    userState.approvalComment[stepName];
   return (
     <section className="things-to-complete">
+      <AlertMessage message={message} />
       <h6 className="text-white font-weight-normal">
         Information needed to complete this step
       </h6>
       <ul>
-        {STEPS_REQUIREMENT[steps[currentStep - 1]].map((requirement, index) => (
+        {STEPS_REQUIREMENT[stepName].map((requirement, index) => (
           <li key={index}>{requirement}</li>
         ))}
       </ul>
@@ -217,8 +224,5 @@ export default AccountSetup;
 
 // TODO:
 // 2. Update backend to handle updates after approval. [Needs review instead of yes]
-// 3. backend in approval comment, check when everything has been approved and send notification and update approval in entetainers profiile
-// 7. account - create approve all endpoint
 // 8. Recommend a friend, api, facebook, twitter and linkedin
-// 9. Contact us
 // 12. Add a get started button that will create entertainer profile for user

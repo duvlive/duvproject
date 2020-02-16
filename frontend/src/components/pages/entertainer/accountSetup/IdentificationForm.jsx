@@ -10,7 +10,6 @@ import { identificationSchema } from 'components/forms/schema/entertainerSchema'
 import AlertMessage from 'components/common/utils/AlertMessage';
 import { UserContext } from 'context/UserContext';
 import { getTokenFromStore } from 'utils/localStorage';
-import DatePicker from 'components/forms/DatePicker';
 import { ONBOARDING_STEPS } from 'utils/constants';
 
 const IdentificationForm = () => {
@@ -74,23 +73,20 @@ const IdentificationForm = () => {
                 />
                 <Input
                   formGroupClassName="col-md-6"
-                  isValidMessage="ID Number looks good"
                   label="ID Number"
                   name="idNumber"
                   placeholder="ID Number"
                 />
               </div>
               <div className="form-row">
-                <DatePicker
+                <Input
                   formGroupClassName="col-md-6"
-                  isValidMessage="Issue Date looks good"
                   label="Issue Date"
                   name="issueDate"
                   placeholder="Issue Date"
                 />
-                <DatePicker
+                <Input
                   formGroupClassName="col-md-6"
-                  isValidMessage="Expiry Date looks good"
                   label="Expiry Date"
                   name="expiryDate"
                   placeholder="Expiry Date"

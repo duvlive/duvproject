@@ -57,7 +57,7 @@ const INITIAL_STATE = {
     expiryDate: ''
   },
   approvalComment: {
-    entertainerProfile: 'YES',
+    entertainerProfile: null,
     bankAccount: null,
     contact: null,
     youTube: null,
@@ -72,8 +72,8 @@ let UserContext = React.createContext();
 // REDUCERS
 let reducer = (state, action) => {
   if (process.env.NODE_ENV === 'development') {
-    console.info('%c[USER CONTEXT REDUCER] state', 'color: blue', state);
-    console.info('%c[USER CONTEXT REDUCER] action', 'color: green', action);
+    console.info('%c[USER CONTEXT STATE] state', 'color: blue', state);
+    console.info('%c[USER CONTEXT ACTION] action', 'color: green', action);
   }
   switch (action.type) {
     case 'no-token':
