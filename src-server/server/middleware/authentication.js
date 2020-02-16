@@ -1,11 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { User } from '../models';
-<<<<<<< HEAD
-import constants from '../constant';
-=======
 import { userAssociatedModels } from '../controllers/UserController';
 import { USER_TYPES } from '../constant';
->>>>>>> 27b46b392f9fd83336c070d76e4c1dd5078ed34e
 
 const authentication = {
   verifyToken(request, response, next) {

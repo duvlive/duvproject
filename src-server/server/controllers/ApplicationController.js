@@ -1,6 +1,6 @@
 import { Application } from '../models';
 import { validString } from '../utils';
-import constant from '../constant';
+import { USER_TYPES } from '../constant';
 
 const ApplicationController = {
   /**
@@ -55,7 +55,7 @@ const ApplicationController = {
       .getApplications({ where: { id } })
       .then(applications => {
         if (applications && applications.length > 0) {
-          if( req.user.type === constant.USER_TYPES.admin) {
+          if( req.user.type === USER_TYPES.ADMINISTRATOR) {
             return applications[0].update({
             status,
           });

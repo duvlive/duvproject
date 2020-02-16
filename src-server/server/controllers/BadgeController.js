@@ -1,6 +1,5 @@
 import { Badge } from '../models';
 import { validString } from '../utils';
-import constant from '../constant';
 
 const BadgeController = {
   /**
