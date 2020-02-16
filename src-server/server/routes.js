@@ -11,6 +11,8 @@ import {
   ImageController,
   EventEntertainerController,
   AuctionController,
+  ApplicationController,
+  BadgeController,
   GalleryController,
   VideoController
 } from './controllers';
@@ -211,5 +213,28 @@ router
   .post(AuctionController.updateEventAuction)
   .put(AuctionController.updateEventAuction)
   .get(AuctionController.getEventAuctions);
+
+// Application routes
+router
+  .route('/api/v1/application')
+  .all(
+    Authentication.verifyToken,
+    Authentication.validateEntertainer,
+    Authentication.isActiveUser
+  )
+  .post(ApplicationController.entertainerApplication)
+  .put(ApplicationController.entertainerApplication)
+  .get(ApplicationController.getEntertainerApplications);
+
+// Badge routes
+router
+  .route('/api/v1/badge')
+  .all(
+    Authentication.verifyToken,
+    Authentication.validateUser,
+    Authentication.isActiveUser
+  )
+  .post(BadgeController.userBadge)
+  .get(BadgeController.getUserBadges);
 
 export default router;
