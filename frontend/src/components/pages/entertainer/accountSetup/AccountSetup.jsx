@@ -221,5 +221,4 @@ export default AccountSetup;
 // 7. account - create approve all endpoint
 // 8. Recommend a friend, api, facebook, twitter and linkedin
 // 9. Contact us
-// 10. Entertainers full page
 // 12. Add a get started button that will create entertainer profile for user
