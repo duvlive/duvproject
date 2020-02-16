@@ -6,7 +6,6 @@ import SearchEntertainerFields from 'components/common/entertainers/SearchEntert
 import EntertainersSearchResult from 'components/common/entertainers/EntertainersSearchResult';
 
 const SearchEntertainer = ({ event_id }) => {
-  console.log('event_id', event_id);
   return (
     <BackEndPage title="Search Entertainer">
       <div className="main-app">

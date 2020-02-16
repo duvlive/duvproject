@@ -1,11 +1,18 @@
 .upload-button {
   label {
     width: auto;
+    display: inline-block;
+    max-width: 12rem;
   }
   // hide current file
   input[type='file'] {
     height: 0;
     overflow: hidden;
     width: 0;
+  }
+
+  .uploaded-image {
+    margin: auto;
+    display: block;
   }
 }

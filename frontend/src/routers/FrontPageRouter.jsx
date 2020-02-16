@@ -15,6 +15,7 @@ import SingleEvent from 'components/pages/frontend/SingleEvent';
 import ForgotPassword from 'components/pages/auth/ForgotPassword';
 import ResetPassword from 'components/pages/auth/ResetPassword';
 import ContextTest from 'components/pages/ContextTest';
+import ContactUs from 'components/pages/frontend/ContactUs';
 
 const FrontPageRouter = () => (
   <Router>
@@ -23,6 +24,7 @@ const FrontPageRouter = () => (
     <UpcomingEvents path="upcoming-events" />
     <HireEntertainers path="hire-entertainers" />
     <Help path="help" />
+    <ContactUs path="contact-us" />
     <TermsOfUse path="terms-of-use" />
     <PrivacyPolicy path="privacy-policy" />
     <Login path="login" />

@@ -30,7 +30,6 @@ const statesAndLga = [
       'Umuahia',
       'Umuahia North',
       'Umuahia South',
-      'Umuahia-North',
       'Umunneochi'
     ]
   },

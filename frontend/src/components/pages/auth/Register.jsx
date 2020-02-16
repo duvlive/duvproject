@@ -83,14 +83,10 @@ const RegisterForm = ({ type }) => {
       onSubmit={(values, actions) => {
         delete values.agreement;
         values.type = registrationType[type].id;
-
-        // post to api
         axios
           .post('/api/v1/users', values)
           .then(function(response) {
-            const { status, data } = response;
-            // handle success
-            console.log(status, data);
+            const { status } = response;
             if (status === 200) {
               setMessage({
                 type: 'success',
@@ -98,15 +94,8 @@ const RegisterForm = ({ type }) => {
               });
               actions.resetForm();
             }
-
-            // Save some information in the local storage
-
-            // build logged in navbar
-
-            // add navbar to website
           })
           .catch(function(error) {
-            console.log('error', error.response.data);
             setMessage({
               message: error.response.data.message,
               lists:

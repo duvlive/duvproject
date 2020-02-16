@@ -1,6 +1,7 @@
 import React from 'react';
 import TimeAgo from 'react-timeago';
 import { format, parse } from 'date-fns';
+import { ENTERTAINER_TYPE } from './constants';
 
 /**
  * Carousel Chunk
@@ -77,3 +78,14 @@ export const dashedLowerCase = text =>
     .toString()
     .replace(/\s+/g, '-')
     .toLowerCase();
+
+export const selectEntertainerType = () => {
+  const select = [];
+  for (const property in ENTERTAINER_TYPE) {
+    select.push({ value: property, label: ENTERTAINER_TYPE[property] });
+  }
+  return select;
+};
+
+export const getProfileName = ({ firstName, lastName, stageName }) =>
+  stageName || firstName + ' ' + lastName;

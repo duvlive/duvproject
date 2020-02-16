@@ -15,7 +15,7 @@ const IdentificationController = {
       ...validString(idType),
       ...validString(idNumber),
       ...validString(issueDate),
-      ...validString(expiryDate),
+      ...validString(expiryDate)
     };
     if (Object.keys(error).length > 1) {
       return res.status(400).json({ message: error.message.join('') });
@@ -27,14 +27,14 @@ const IdentificationController = {
         idNumber,
         issueDate,
         expiryDate,
-        userId: req.user.id,
+        userId: req.user.id
       },
       'Identification'
     )
       .then(newIdentification => {
         return res.status(200).json({
           message: 'Entertainer Identification updated succesfully',
-          identification: newIdentification,
+          identification: newIdentification
         });
       })
       .catch(error => {
@@ -53,7 +53,9 @@ const IdentificationController = {
   getIdentification(req, res) {
     req.user.getIdentification().then(identification => {
       if (!identification || identification.length === 0) {
-        return res.status(404).json({ message: 'Entertainer identification not found' });
+        return res
+          .status(404)
+          .json({ message: 'Entertainer identification not found' });
       }
       return res.status(200).json({ identification });
     });

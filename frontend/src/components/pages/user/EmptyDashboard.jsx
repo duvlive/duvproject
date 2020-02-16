@@ -80,7 +80,7 @@ EmptyDashboard.RecommendedTable = ({ entertainerList }) => (
             {entertainerList.map(entertainer => (
               <EmptyDashboard.RecommendedRow
                 entertainer={entertainer}
-                key={entertainer.stage_name + entertainer.id}
+                key={entertainer.stageName + entertainer.id}
               />
             ))}
           </tbody>
@@ -95,11 +95,11 @@ EmptyDashboard.RecommendedRow = ({ entertainer }) => (
     <td>
       <Image
         className="avatar--small"
-        name={entertainer.stage_name}
+        name={entertainer.stageName}
         src={entertainer.img.profile}
       />
     </td>
-    <td>{entertainer.stage_name}</td>
+    <td>{entertainer.stageName}</td>
     <td>
       <span className="text-yellow">{entertainer.type}</span>
     </td>

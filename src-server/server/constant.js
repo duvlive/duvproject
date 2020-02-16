@@ -1,7 +1,6 @@
-module.exports = {
-  USER_TYPES: {
-    1: 'regular',
-    2: 'entertainer',
-    3: 'admin'
-  }
+export const USER_TYPES = {
+  ADMINISTRATOR: 0,
+  USER: 1,
+  ENTERTAINER: 2,
+  BAND_MEMBER: 3
 };

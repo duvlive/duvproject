@@ -219,6 +219,7 @@
 
 .gallery-card-image {
   position: relative;
+  margin-bottom: 2rem;
   img.small {
     width: 100%;
     height: 15rem;
@@ -235,9 +236,8 @@
   }
 }
 
-.delete-icon {
-  color: rgba($white, 0.3);
-  background: rgba($black, 0.1);
+.delete-icon,
+.profile-icon {
   font-size: 2rem;
   width: 3rem;
   height: 3rem;
@@ -245,6 +245,20 @@
   position: absolute;
   right: 1rem;
   top: 0;
+
+  &.right-0 {
+    right: 0;
+  }
+}
+
+.profile-icon {
+  color: rgba($white, 0.8);
+  font-size: 1.5rem;
+}
+
+.delete-icon {
+  color: rgba($white, 0.3);
+  background: rgba($black, 0.1);
   cursor: pointer;
   transition: 0.3s ease-in;
 

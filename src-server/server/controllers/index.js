@@ -9,6 +9,8 @@ import EmailController from './EmailController';
 import ImageController from './ImageController';
 import EventEntertainerController from './EventEntertainerController';
 import AuctionController from './AuctionController';
+import GalleryController from './GalleryController';
+import VideoController from './VideoController';
 
 export {
   UserController,
@@ -21,5 +23,7 @@ export {
   EmailController,
   ImageController,
   EventEntertainerController,
-	AuctionController
+  AuctionController,
+  GalleryController,
+  VideoController
 };

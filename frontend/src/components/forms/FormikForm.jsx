@@ -25,7 +25,6 @@ import { DisplayFormikState, feedback } from './form-helper';
 //     password: '123456'
 //   }}
 //   onSubmit={(values, actions) => {
-//     console.log(values);
 //     setTimeout(() => {
 //       actions.setSubmitting(false);
 //     }, 400);
@@ -215,8 +214,8 @@ const FormikForm = () => {
                     <div className="mb-3 d-flex align-items-center justify-content-between">
                       <button
                         className="btn btn-primary text-uppercase"
-                        disabled={props.isSubmitting}
-                        onClick={props.handleSubmit}
+                        // disabled={props.isSubmitting}
+                        // onClick={props.handleSubmit}
                         type="button"
                       >
                         Sign In

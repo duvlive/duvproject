@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import ProfileAvatar from 'assets/img/avatar/profile.png';
-import { getToken } from 'utils/localStorage';
+import { getTokenFromStore } from 'utils/localStorage';
 import { UserContext } from 'context/UserContext';
 import { Loading } from './PlayingMusicAnimation';
 import Image from './Image';
@@ -20,7 +20,6 @@ const UploadImage = () => {
     setLoading(true);
     setMessage(null);
     const file = event.target.files[0];
-    console.log('file', file);
     if (file.size > MAX_IMG_SIZE) {
       setMessage(
         `'${
@@ -40,23 +39,19 @@ const UploadImage = () => {
 
       axios
         .post('/api/v1/upload-profile-image', data, {
-          headers: { 'x-access-token': getToken() }
+          headers: { 'x-access-token': getTokenFromStore() }
         })
         .then(function(response) {
           const { status, data } = response;
-          // handle success
-          console.log(status, data);
           if (status === 200) {
-            console.log('data', data);
             userDispatch({
               type: 'user-profile-image',
-              link: data.image.url
+              imageURL: data.image.url
             });
             setLoading(false);
           }
         })
         .catch(function(error) {
-          console.log('error', error.response.data);
           setMessage(error.response.data.message);
           setLoading(false);
         });
@@ -68,7 +63,7 @@ const UploadImage = () => {
       <div className="upload-button text-center">
         <Image
           bordered
-          className="avatar--large mb-3"
+          className="avatar--large uploaded-image mb-3"
           name={userState.firstName + ' ' + userState.lastName}
           src={userState.profileImg || ProfileAvatar}
         />

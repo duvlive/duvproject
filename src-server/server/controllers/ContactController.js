@@ -15,6 +15,7 @@ const ContactController = {
       lastName,
       email,
       phoneNumber,
+      type,
       relationship,
       contactId
     } = req.body;
@@ -29,12 +30,13 @@ const ContactController = {
     if (Object.keys(error).length > 1) {
       return res.status(400).json({ message: error.message.join('') });
     }
-    let newContact = {}
+    let newContact = {};
     if (!contactId) {
       return Contact.create({
         firstName,
         lastName,
         email,
+        type,
         phoneNumber,
         relationship,
         userId: req.user.id
@@ -44,18 +46,17 @@ const ContactController = {
           return req.user.addContact(contact);
         })
         .then(() => {
-          return res
-            .status(200)
-            .json({
-              message: 'Contact added successfully',
-              contact: newContact
-            })
+          return res.status(200).json({
+            message: 'Contact added successfully',
+            contact: newContact
+          });
         })
         .catch(error => {
-        const status = error.status || 500;
-        const errorMessage = (error.parent && error.parent.detail) || error.message || error;
-        return res.status(status).json({ message: errorMessage });        
-      });
+          const status = error.status || 500;
+          const errorMessage =
+            (error.parent && error.parent.detail) || error.message || error;
+          return res.status(status).json({ message: errorMessage });
+        });
     }
     return req.user
       .getContacts({ where: { id: contactId } })
