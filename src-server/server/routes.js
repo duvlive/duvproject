@@ -12,7 +12,7 @@ import {
   EventEntertainerController,
   AuctionController,
   ApplicationController,
-	BadgeController
+  BadgeController
 } from './controllers';
 import Authentication from './middleware/authentication';
 import passport from 'passport';
