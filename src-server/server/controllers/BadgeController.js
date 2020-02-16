@@ -25,8 +25,8 @@ const BadgeController = {
     }
     let newBadge = {}
       return Badge.create({
-				title,
-				icon,
+        title,
+        icon,
         userId: req.user.id
       })
         .then(badge => {

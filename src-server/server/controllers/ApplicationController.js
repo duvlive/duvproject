@@ -28,9 +28,9 @@ const ApplicationController = {
     let newApplication = {}
     if (!id) {
       return Application.create({
-				status,
-				askingPrice,
-				eventId,
+        status,
+        askingPrice,
+        eventId,
         userId: req.user.id
       })
         .then(application => {
@@ -55,13 +55,13 @@ const ApplicationController = {
       .getApplications({ where: { id } })
       .then(applications => {
         if (applications && applications.length > 0) {
-					if( req.user.type === constant.USER_TYPES.admin) {
-						return applications[0].update({
-						status,
+          if( req.user.type === constant.USER_TYPES.admin) {
+            return applications[0].update({
+            status,
           });
-					}
+          }
           return applications[0].update({
-						askingPrice,
+            askingPrice,
           });
         }
         throw `No Application with id ${id}`;
