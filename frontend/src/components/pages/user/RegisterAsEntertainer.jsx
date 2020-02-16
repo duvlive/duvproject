@@ -46,7 +46,6 @@ const RegisterAsEntertainerForm = () => {
         personal: setInitialValues(personalInfoObject)
       }}
       onSubmit={(values, actions) => {
-        console.log(values);
         setTimeout(() => {
           actions.setSubmitting(false);
         }, 400);
@@ -133,7 +132,7 @@ const EntertainerDetailsForm = () => (
             formGroupClassName="col-md-6"
             isValidMessage="Stage Name looks good"
             label="Stage Name"
-            name="entertainer.stage_name"
+            name="entertainer.stageName"
             placeholder="Stage Name"
           />
           <Select

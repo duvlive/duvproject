@@ -9,11 +9,45 @@ export const COLOR_STYLE = [
   'dark'
 ];
 
+export const ONBOARDING_STEPS = {
+  entertainerProfile: { title: 'Entertainer Profile' },
+  bankAccount: { title: 'Bank Account Details' },
+  contact: { title: 'Emergency Contact' },
+  youTube: { title: 'Youtube Channel' },
+  identification: { title: 'Valid Identification' }
+};
+
+export const STEPS_REQUIREMENT = {
+  entertainerProfile: ['Profile Image', 'Entertainers Information'],
+  bankAccount: [
+    'Bank Account details',
+    'Account Name must contain at least your stage name, first name or last name'
+  ],
+  contact: [
+    'Your Next of Kin OR',
+    'A Professional Contact (mentor, colleague etc)'
+  ],
+  youTube: [
+    'Your Youtube Channel',
+    'This must contain some of your previous performance'
+  ],
+  identification: [
+    'Valid Identification',
+    'International Passport or Drivers License or National ID Card'
+  ]
+};
+
 export const USER_TYPES = {
   admin: 0,
   user: 1,
   entertainer: 2,
   bandMember: 3
+};
+
+export const ENTERTAINER_TYPE = {
+  MC: 'MC',
+  DJ: 'DJ',
+  LiveBand: 'LIVE BAND'
 };
 
 export const DASHBOARD_PAGE = {

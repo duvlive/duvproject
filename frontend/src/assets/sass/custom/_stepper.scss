@@ -1,0 +1,108 @@
+$normal-circle-background: rgba($blue, 0.3);
+$normal-text-color: rgba(lighten($blue, 30), 0.7);
+$approved-circle-background: rgba($green-400, 0.3);
+$approved-text-color: rgba(lighten($green-300, 60), 0.5);
+$rejected-circle-background: rgba($red, 0.4);
+$rejected-text-color: rgba(lighten($red, 35), 0.6);
+
+.stepper {
+  border: 1px solid $gray-800;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom: none;
+  overflow: scroll;
+
+  ul {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    list-style: none;
+    padding-left: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    width: 100%;
+  }
+
+  li {
+    outline: none;
+    position: relative;
+    padding: 1rem;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  li button {
+    text-decoration: none;
+    outline: none;
+    background: transparent;
+    border: none;
+  }
+
+  .title {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    white-space: nowrap;
+
+    .step-inner-circle {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      background: $normal-circle-background;
+      position: relative;
+      outline: none;
+      color: $white;
+      font-size: 1rem;
+      span {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+    .step-text {
+      color: $normal-text-color;
+      margin-left: 0.5rem;
+      font-size: 0.7rem;
+      display: none;
+      @include media-breakpoint-up(sm) {
+        display: inline-block;
+      }
+    }
+  }
+
+  li.approved,
+  li.done {
+    .step-inner-circle {
+      background-color: $approved-circle-background;
+    }
+    .step-text {
+      color: $approved-text-color;
+    }
+  }
+
+  li.rejected {
+    .step-inner-circle {
+      background-color: $rejected-circle-background;
+    }
+    .step-text {
+      color: $rejected-text-color;
+    }
+  }
+
+  li.active {
+    .step-inner-circle,
+    .step-text {
+      opacity: 0.4;
+    }
+  }
+}
+
+.things-to-complete {
+  border: 1px solid $gray-800;
+  padding: 2rem 1.5rem 1rem;
+  margin-bottom: 2rem;
+  font-size: 0.85rem;
+}

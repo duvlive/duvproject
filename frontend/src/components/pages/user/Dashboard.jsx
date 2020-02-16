@@ -112,13 +112,13 @@ Dashboard.PendingReview = ({ entertainer }) => (
 
       <div className="text-center">
         <img
-          alt={entertainer.stage_name}
+          alt={entertainer.stageName}
           className="rounded-circle img-thumbnail img-responsive avatar--large"
           src={entertainer.img.profile}
-          title={entertainer.stage_name}
+          title={entertainer.stageName}
         />{' '}
         <h5 className="card-subtitle card-subtitle--2 mt-3 mb-0 white">
-          {entertainer.stage_name}
+          {entertainer.stageName}
         </h5>
         <p className="card-subtitle--3">Party DJ on 15th Apr., 2019</p>
         <button className="btn btn-danger btn-wide btn-transparent">
@@ -152,7 +152,7 @@ Dashboard.AuctionTable = ({ entertainerList }) => (
             {entertainerList.map(entertainer => (
               <Dashboard.AuctionRow
                 entertainer={entertainer}
-                key={entertainer.stage_name + entertainer.id}
+                key={entertainer.stageName + entertainer.id}
               />
             ))}
           </tbody>
@@ -176,11 +176,11 @@ Dashboard.AuctionRow = ({ entertainer }) => (
     <th scope="row">
       <Image
         className="avatar--small"
-        name={entertainer.stage_name}
+        name={entertainer.stageName}
         src={entertainer.img.profile}
       />
     </th>
-    <td>{entertainer.stage_name}</td>
+    <td>{entertainer.stageName}</td>
     <td>{entertainer.average_ratings}</td>
     <td className="text-red">N70,000</td>
     <td className="text-right">
@@ -203,7 +203,7 @@ Dashboard.RecommendedTable = ({ entertainerList }) => (
             {entertainerList.map(entertainer => (
               <Dashboard.RecommendedRow
                 entertainer={entertainer}
-                key={entertainer.stage_name + entertainer.id}
+                key={entertainer.stageName + entertainer.id}
               />
             ))}
           </tbody>
@@ -218,12 +218,12 @@ Dashboard.RecommendedRow = ({ entertainer }) => (
     <td>
       <Image
         className="avatar--small"
-        name={entertainer.stage_name}
+        name={entertainer.stageName}
         src={entertainer.img.profile}
       />
     </td>
     <td>
-      <span className="text-truncate--1">{entertainer.stage_name}</span>
+      <span className="text-truncate--1">{entertainer.stageName}</span>
     </td>
     <td>
       <span className="text-yellow small--3">{entertainer.type}</span>

@@ -24,7 +24,6 @@ const HowItWorks = () => {
           type={SLIDESHOW_TYPE.testimonials}
         />
       )}
-      <WhyUseDuvLive />
     </FrontEndPage>
   );
 };

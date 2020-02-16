@@ -1,16 +1,16 @@
 import React from 'react';
-import { getToken } from 'utils/localStorage';
+import { getTokenFromStore } from 'utils/localStorage';
 import axios from 'axios';
 import { UserContext } from 'context/UserContext';
 
 export const HomeKeeping = ({ children, location }) => {
   const { userState, userDispatch } = React.useContext(UserContext);
   React.useEffect(() => {
-    if (!userState.isLoggedIn && getToken()) {
+    if (!userState.isLoggedIn && getTokenFromStore()) {
       axios
         .get('/api/v1/who-am-i', {
           headers: {
-            'x-access-token': getToken()
+            'x-access-token': getTokenFromStore()
           }
         })
         .then(function(response) {
@@ -19,9 +19,7 @@ export const HomeKeeping = ({ children, location }) => {
             userDispatch({ type: 'user-info', user: data });
           }
         })
-        .catch(function(error) {
-          console.log('error', error.response.data);
-        });
+        .catch(function(error) {});
     }
   }, [userDispatch, userState.isLoggedIn]);
 

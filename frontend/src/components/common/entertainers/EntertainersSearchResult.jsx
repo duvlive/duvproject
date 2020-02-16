@@ -34,14 +34,14 @@ EntertainersSearchResult.Card = ({ price, entertainer, cardsPerRow }) => (
       <div className="card-body">
         <Image
           className="avatar--large"
-          name={entertainer.stage_name}
+          name={entertainer.stageName}
           src={entertainer.img.profile}
         />
         <div className="card-subtitle card-subtitle--3 mt-2 mb-0 gray">
-          {entertainer.stage_name}
+          {entertainer.stageName}
         </div>
         <Stars
-          name={entertainer.stage_name}
+          name={entertainer.stageName}
           rating={entertainer.ratings.average}
         />
         <h4 className="card-subtitle--1 white mt-4 mb-0">N{price}</h4>

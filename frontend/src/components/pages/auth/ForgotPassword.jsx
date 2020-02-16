@@ -65,9 +65,7 @@ const ForgotPasswordForm = () => {
         axios
           .post('/api/v1/users/forgot-password', values)
           .then(function(response) {
-            const { status, data } = response;
-            // handle success
-            console.log(status, data);
+            const { status } = response;
             if (status === 200) {
               setMessage({
                 type: 'success',
@@ -77,7 +75,6 @@ const ForgotPasswordForm = () => {
             }
           })
           .catch(function(error) {
-            console.log('error', error.response.data);
             setMessage({
               message: error.response.data.message
             });

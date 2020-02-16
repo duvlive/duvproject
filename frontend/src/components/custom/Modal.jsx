@@ -16,7 +16,7 @@ const DuvLiveModal = ({
   const [modal, setModal] = useState(false);
   const handleAction = () => {
     actionFn();
-    // setModal(!modal);
+    setModal(!modal);
   };
   return (
     <Fragment>
@@ -79,7 +79,7 @@ DuvLiveModal.ViewEntertainerProfile = ({ entertainer }) => (
     title={
       <Image
         className="avatar--medium"
-        name={entertainer.stage_name}
+        name={entertainer.stageName}
         rounded={false}
         src={entertainer.img.profile}
       />
