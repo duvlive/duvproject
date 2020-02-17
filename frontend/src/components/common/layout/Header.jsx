@@ -17,6 +17,7 @@ import classNames from 'classnames';
 import { UserContext } from 'context/UserContext';
 import ProfileAvatar from 'assets/img/avatar/profile.png';
 import { getProfileName } from 'utils/helpers';
+import { OUR_PHONE_NUMBER } from 'utils/constants';
 
 const menus = [
   { name: 'Home', to: '/' },
@@ -89,7 +90,7 @@ const HeaderTopNav = () => {
                     className="top-header__icon"
                     src={IconPhone}
                   />{' '}
-                  +2348 234 567 890
+                  {OUR_PHONE_NUMBER}
                 </Link>
               </li>
               <li className="list-inline-item d-none d-sm-inline">

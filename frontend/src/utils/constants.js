@@ -1,3 +1,4 @@
+export const OUR_PHONE_NUMBER = '+234 708 7821 561';
 export const COLOR_STYLE = [
   'primary',
   'secondary',
