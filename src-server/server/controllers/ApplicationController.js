@@ -11,12 +11,7 @@ const ApplicationController = {
    * @return {object} returns res object
    */
   entertainerApplication(req, res) {
-    const {
-      status,
-      askingPrice,
-      eventId,
-      id
-    } = req.body;
+    const { status, askingPrice, eventId, id } = req.body;
 
     const error = {
       ...validString(status),
@@ -25,7 +20,7 @@ const ApplicationController = {
     if (Object.keys(error).length > 1) {
       return res.status(400).json({ message: error.message.join('') });
     }
-    let newApplication = {}
+    let newApplication = {};
     if (!id) {
       return Application.create({
         status,
@@ -38,16 +33,15 @@ const ApplicationController = {
           return req.user.addApplication(application);
         })
         .then(() => {
-          return res
-            .status(200)
-            .json({
-              message: 'Application created successfully',
-              application: newApplication
-            })
+          return res.status(200).json({
+            message: 'Application created successfully',
+            application: newApplication
+          });
         })
         .catch(error => {
           const status = error.status || 500;
-          const errorMessage = (error.parent && error.parent.detail) || error.message || error;
+          const errorMessage =
+            (error.parent && error.parent.detail) || error.message || error;
           return res.status(status).json({ message: errorMessage });
         });
     }
@@ -55,13 +49,13 @@ const ApplicationController = {
       .getApplications({ where: { id } })
       .then(applications => {
         if (applications && applications.length > 0) {
-          if( req.user.type === USER_TYPES.ADMINISTRATOR) {
+          if (req.user.type === USER_TYPES.ADMINISTRATOR) {
             return applications[0].update({
-            status,
-          });
+              status
+            });
           }
           return applications[0].update({
-            askingPrice,
+            askingPrice
           });
         }
         throw `No Application with id ${id}`;

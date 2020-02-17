@@ -142,7 +142,7 @@ Video.YoutubeOverlay.propTypes = {
 
 Video.Modal = ({ youtubeID, status, title, id, deleteVideo }) => {
   const youtubeImage = (
-    <Video.YoutubeImage title={title} youtubeId={youtubeID} />
+    <Video.YoutubeImage title={title} youtubeID={youtubeID} />
   );
   const youtubeOverlay = (
     <Video.YoutubeOverlay title={title} youtubeId={youtubeID} />

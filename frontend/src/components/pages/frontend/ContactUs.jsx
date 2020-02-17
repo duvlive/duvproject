@@ -17,7 +17,7 @@ import { Link } from '@reach/router';
 const ContactUs = () => {
   return (
     <div className="contactus-section">
-      <FrontEndPage title="ContactUs">
+      <FrontEndPage title="Contact Us">
         <div className="container-fluid spacer">
           <Row>
             <Col sm={12}>

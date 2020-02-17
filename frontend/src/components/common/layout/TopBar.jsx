@@ -76,7 +76,10 @@ const TopBarNavigation = ({ menus }) => {
   const userName = getProfileName({
     firstName: userState.firstName,
     lastName: userState.lastName,
-    stageName: userState.entertainerProfile.stageName
+    stageName:
+      userState.entertainerProfile && userState.entertainerProfile.stageName
+        ? userState.entertainerProfile.stageName
+        : null
   });
 
   const topMenu = menus.map(({ title, to }) => (
