@@ -12,8 +12,8 @@ const EventTable = ({ event }) => (
 
           <span className="">Address</span>
           <address>
-            {event.address.street_line_1} <br />
-            {event.address.street_line_2} <br />
+            {event.address.streetLine1} <br />
+            {event.address.streetLine2} <br />
             {event.address.lga} <br />
             {event.address.landmark} <br />
             {event.address.location}
@@ -29,7 +29,7 @@ const EventTable = ({ event }) => (
                 </tr>
                 <tr>
                   <td>Event Date</td>
-                  <td className="text-right">{event.details.event_date}</td>
+                  <td className="text-right">{event.details.eventDate}</td>
                 </tr>
                 <tr>
                   <td>Location</td>
@@ -38,8 +38,8 @@ const EventTable = ({ event }) => (
                 <tr>
                   <td>Location</td>
                   <td className="text-right">
-                    {event.address.street_line_1} <br />
-                    {event.address.street_line_2}, {event.address.lga} <br />
+                    {event.address.streetLine1} <br />
+                    {event.address.streetLine2}, {event.address.lga} <br />
                     {event.address.landmark}, {event.address.location}
                   </td>
                 </tr>

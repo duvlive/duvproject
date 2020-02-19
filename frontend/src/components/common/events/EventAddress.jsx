@@ -13,13 +13,13 @@ const EventAddress = () => (
         <Input
           isValidMessage="looks good"
           label="Street Line 1"
-          name="address.street_line_1"
+          name="address.streetLine1"
           placeholder="Street Line 1"
         />
         <Input
           isValidMessage="looks good"
           label="Street Line 2"
-          name="address.street_line_2"
+          name="address.streetLine2"
           optional
           placeholder="Street Line 2"
         />

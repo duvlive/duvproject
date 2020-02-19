@@ -32,7 +32,7 @@ const SearchForEntertainer = () => (
           formGroupClassName="col-md-6"
           isValidMessage="looks good"
           label="Event Type"
-          name="entertainer.event_type"
+          name="entertainer.eventType"
           options={OCCASSION_TYPE}
           placeholder="Event Type"
         />

@@ -33,7 +33,6 @@ export const bankDetailsSchema = {
 
 export const addEntertainerSchema = {
   type: stringValidation('Entertainer Type'),
-  event_type: stringValidation('Event Type'),
   genre: multiSelectValidation('Genre'),
   language: multiSelectValidation('Language'),
   audience: stringValidation('audience'),

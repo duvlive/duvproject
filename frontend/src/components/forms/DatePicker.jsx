@@ -10,6 +10,7 @@ import {
 import Label from './Label';
 import ReactDatePicker from 'react-datepicker';
 import { getIn } from 'formik';
+import { parse } from 'date-fns';
 
 const DatePicker = ({
   name,
@@ -67,7 +68,7 @@ const DatePicker = ({
               placeholderText={placeholder}
               selected={
                 getIn(formik.values, name) !== ''
-                  ? getIn(formik.values, name).date
+                  ? parse(getIn(formik.values, name).date)
                   : null
               }
               showTimeSelect={showTimeSelect}

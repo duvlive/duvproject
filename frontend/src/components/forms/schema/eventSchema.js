@@ -9,16 +9,16 @@ import {
 // Schemas
 ////////////////////////
 export const eventDetailsSchema = {
-  type: required('Event Type'),
-  date: stringValidation('Event Date'),
-  start_time: required('Start Time'),
-  end_time: required('End Time'),
-  information: optionalValidation('Information', 20)
+  eventType: required('Event Type'),
+  eventDate: stringValidation('Event Date'),
+  startTime: required('Start Time'),
+  endTime: required('End Time'),
+  moreInformation: optionalValidation('Information', 20)
 };
 
 export const eventAddressSchema = {
-  street_line_1: stringValidation('Street Line 1'),
-  street_line_2: stringValidation('Street Line 2'),
+  streetLine1: stringValidation('Street Line 1'),
+  streetLine2: stringValidation('Street Line 2'),
   state: required('State'),
   lga: required('Local Government'),
   city: required('City'),

@@ -17,7 +17,7 @@ const ViewEvent = () => {
         <section className="app-content">
           <div className="row">
             <div className="col-sm-6">
-              <Card color="blue" title={event.details.event_type}>
+              <Card color="blue" title={event.details.eventType}>
                 <table className="table table-dark">
                   <tbody>
                     <tr>
@@ -28,7 +28,7 @@ const ViewEvent = () => {
                     </tr>
                     <tr>
                       <td className="text-red-100">Event Date</td>
-                      <td className="text-right">{event.details.event_date}</td>
+                      <td className="text-right">{event.details.eventDate}</td>
                     </tr>
                     <tr>
                       <td className="text-red-100">Location</td>
@@ -37,15 +37,15 @@ const ViewEvent = () => {
                     <tr>
                       <td className="text-red-100">Remaining Days</td>
                       <td className="text-right">
-                        {remainingDays(event.details.event_date)}
+                        {remainingDays(event.details.eventDate)}
                       </td>
                     </tr>
                     <tr>
                       <td className="text-red-100">Address</td>
                       <td className="text-right">
                         <address className="text-muted">
-                          {event.address.street_line_1} <br />
-                          {event.address.street_line_2}, {event.address.lga}{' '}
+                          {event.address.streetLine1} <br />
+                          {event.address.streetLine2}, {event.address.lga}{' '}
                           <br />
                           {event.address.landmark}, {event.address.location}
                         </address>

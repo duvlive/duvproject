@@ -111,7 +111,7 @@ const BackToHireEvents = () => (
 
 const getEventDateTime = event => {
   const eventDate = parse(event.start_date);
-  return format(eventDate, 'DD MMMM') + ' ' + event.start_time;
+  return format(eventDate, 'DD MMMM') + ' ' + event.startTime;
 };
 
 SingleEvent.Details = ({ title, details }) => (

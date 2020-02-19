@@ -16,7 +16,7 @@ const EventDetails = () => {
               formGroupClassName="col-md-6"
               isValidMessage="looks good"
               label="Event Type"
-              name="entertainer.event_type"
+              name="event.eventType"
               options={OCCASSION_TYPE}
               placeholder="Event Type"
             />
@@ -24,7 +24,7 @@ const EventDetails = () => {
               formGroupClassName="col-md-6"
               isValidMessage="looks good"
               label="Event Date"
-              name="event.date"
+              name="event.eventDate"
               placeholderText="Event Date"
             />
           </div>
@@ -34,7 +34,7 @@ const EventDetails = () => {
               formGroupClassName="col-md-6"
               isValidMessage="looks good"
               label="Start Time"
-              name="event.start_time"
+              name="event.startTime"
               placeholderText="Start Time"
               showTimeSelect
               showTimeSelectOnly
@@ -46,7 +46,7 @@ const EventDetails = () => {
               formGroupClassName="col-md-6"
               isValidMessage="looks good"
               label="End Time"
-              name="event.end_time"
+              name="event.endTime"
               placeholderText="End Time"
               showTimeSelect
               showTimeSelectOnly
@@ -56,7 +56,7 @@ const EventDetails = () => {
           </div>
           <TextArea
             label="More Information"
-            name="event.information"
+            name="event.moreInformation"
             optional
             placeholder="More information about your event"
             rows="8"
