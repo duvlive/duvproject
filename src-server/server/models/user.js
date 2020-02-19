@@ -102,7 +102,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         afterCreate: user => {
           const models = require('./');
-          const link = `${global.host}/activate/${user.activationToken}`;
+          const link = `${process.env.HOST}/activate/${user.activationToken}`;
           sendMail(EMAIL_CONTENT.ACTIVATE_YOUR_ACCOUNT, user, {
             link
           })
