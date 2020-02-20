@@ -377,6 +377,8 @@
                                     style="font-family: 'Roboto', Helvetica; font-weight: normal;">
                                     <!--<![endif]-->
                                     <%= (typeof contentTop !== "undefined") ? contentTop : '' %>
+                                    <%= (typeof userSubject !== "undefined") ? `${userSubject}: ${userMessage} ` : '' %>
+                                    <%= (typeof userEmail !== "undefined" || typeof fullName !== "undefined") ? `Email: ${userEmail}, Fullname: ${fullName}` : '' %>
                                     <!--[if !mso]><!--></span>
                                   <!--<![endif]-->
                                 </td>

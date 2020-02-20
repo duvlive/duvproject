@@ -23,6 +23,20 @@ const EMAIL_CONTENT = {
     contentTop: 'This email confirms that your password has been changed.',
     contentBottom:
       "If you didn't change your password, your account might have been compromised and we recommend that you reset your password as soon as possible."
+  },
+  FAQ: {
+    subject: '[D.U.V LIVE] FAQ',
+    title: 'FAQ'
+  },
+  CONTACT_US: {
+    subject: '[D.U.V LIVE] CONTACT US',
+    title: 'CONTACT US'
+  },
+  INVITE_FRIEND: {
+    subject: '[D.U.V LIVE] INVITE FRIEND',
+    title: 'INVITE FRIEND',
+    contentTop:  'You have been invited to join the D.U.V LIVE online platform that supports and promotes the best in live entertainment. Join now!',
+    buttonText: 'JOIN NOW'
   }
 };
 

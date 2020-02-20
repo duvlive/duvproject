@@ -13,7 +13,7 @@ import {
 } from '../models';
 import sendMail from '../MailSender';
 import Authentication from '../middleware/authentication';
-import { UserValidation, updateUser } from '../utils';
+import { UserValidation, updateUser, validString } from '../utils';
 import EMAIL_CONTENT from '../email-template/content';
 
 export const userAssociatedModels = [
@@ -288,7 +288,6 @@ const UserController = {
    */
   forgotPassword(req, res) {
     const { email } = req.body;
-    const host = req.headers.host;
     if (!email) {
       return res.status(400).json({ message: 'Email cannot be empty' });
     }
@@ -301,7 +300,7 @@ const UserController = {
           return res.status(404).json({ message: 'User not found' });
         } else {
           const resetToken = Authentication.generateToken(user);
-          const link = `${host}/reset-password/${resetToken}`;
+          const link = `${process.env.HOST}/reset-password/${resetToken}`;
           sendMail(EMAIL_CONTENT.PASSWORD_RESET, user, {
             link
           });
@@ -496,7 +495,109 @@ const UserController = {
         entertainerProfile: user[1]
       });
     });
-  }
+  },
+
+  /**
+   * faq mailer
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  faqMailer(req, res) {
+    const { userEmail, userSubject, userMessage } = req.body;
+    const errors = {
+      ...validString(userSubject),
+      ...validString(userMessage),
+      ...UserValidation.emailValidation(userEmail)
+    };
+
+    if (Object.keys(errors).length) {
+      return res
+        .status(400)
+        .json({ message: 'There are invalid fields in the form', errors });
+    }
+
+    try {
+      sendMail(EMAIL_CONTENT.FAQ, { email: 'info@duvlive.com' }, { userSubject, userMessage, userEmail });
+      return res
+        .status(200)
+        .json({ message: 'Your questions, complaints or suggestions has been successfully noted, the support will get back to you' });
+    }
+    catch(error) {
+      return res
+        .status(400)
+        .json({ message: 'Something went wrong', error });
+      }
+    },
+
+    /**
+     * contact us 
+     * @function
+     * @param {object} req is req object
+     * @param {object} res is res object
+     * @return {object} returns res object
+     */
+    contactUs(req, res) {
+      const { fullName, userEmail, userSubject, userMessage, phone } = req.body;
+      const errors = {
+        ...validString(userSubject),
+        ...validString(userMessage),
+        ...validString(fullName),
+        ...UserValidation.emailValidation(userEmail)
+      };
+  
+      if (Object.keys(errors).length) {
+        return res
+          .status(400)
+          .json({ message: 'There are invalid fields in the form', errors });
+      }
+  
+      try {
+        sendMail(EMAIL_CONTENT.CONTACT_US, { email: 'info@duvlive.com' }, { userEmail, userSubject, userMessage, phone, fullName });
+        return res
+          .status(200)
+          .json({ message: 'Thanks for contacting us' });
+      }
+      catch(error) {
+        return res
+          .status(400)
+          .json({ message: 'Something went wrong', error });
+        }
+    },
+
+    /**
+     * contact us 
+     * @function
+     * @param {object} req is req object
+     * @param {object} res is res object
+     * @return {object} returns res object
+     */
+    inviteFriend(req, res) {
+      const { email } = req.body;
+      const errors = {
+        ...UserValidation.emailValidation(email)
+      };
+  
+      if (Object.keys(errors).length) {
+        return res
+          .status(400)
+          .json({ message: 'There are invalid fields in the form', errors });
+      }
+  
+      try {
+        const link = `${process.env.HOST}`;
+        sendMail(EMAIL_CONTENT.INVITE_FRIEND, { email }, { link });
+        return res
+          .status(200)
+          .json({ message: 'Invite sent successfully' });
+      }
+      catch(error) {
+        return res
+          .status(400)
+          .json({ message: 'Something went wrong', error });
+        }
+    }
 };
 
 export default UserController;

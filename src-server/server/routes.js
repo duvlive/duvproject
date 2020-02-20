@@ -237,4 +237,19 @@ router
   .post(BadgeController.userBadge)
   .get(BadgeController.getUserBadges);
 
+router.post(
+  '/api/v1/inviteFriend',
+  Authentication.verifyToken,
+  UserController.inviteFriend
+);
+router.post(
+  '/api/v1/contactUs',
+  UserController.contactUs
+);
+
+router.post('/api/v1/faq',
+  UserController.faqMailer
+);
+
+
 export default router;
