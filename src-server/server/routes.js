@@ -191,7 +191,7 @@ router.post(
 router.put('/api/v1/video/:approve/:id', VideoController.approveVideo); //TODO: add administrator middleware
 router.delete('/api/v1/video/delete/:id', VideoController.deleteVideo);
 
-// Events routes
+// Add Entertainer to Events routes
 router
   .route('/api/v1/eventEntertainer')
   .all(

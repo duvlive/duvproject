@@ -18,8 +18,6 @@ const statesAndLga = [
       'Isuikwuato',
       'Nneochi',
       'Obi Ngwa',
-      'Obi Ngwa',
-      'Obioma Ngwa',
       'Obioma-Ngwa',
       'Ohafia',
       'Ohaozara',

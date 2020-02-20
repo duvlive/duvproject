@@ -74,15 +74,15 @@ export const HIRE_ENTERTAINERS = {
 export const SELECT_ENTERTAINERS_TYPE = [
   {
     label: 'DJ',
-    value: 'dj'
+    value: 'DJ'
   },
   {
     label: 'MC',
-    value: 'mc'
+    value: 'MC'
   },
   {
     label: 'Live Bands',
-    value: 'live-bands'
+    value: 'Liveband'
   }
 ];
 

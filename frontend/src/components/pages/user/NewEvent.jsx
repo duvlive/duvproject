@@ -10,7 +10,7 @@ import EventDetails from 'components/common/events/EventDetails';
 import EventAddress from 'components/common/events/EventAddress';
 import AddEntertainerDetails from 'components/common/entertainers/AddEntertainerDetails';
 import { HIRE_ENTERTAINERS } from 'utils/constants';
-import { navigate } from '@reach/router';
+// import { navigate } from '@reach/router';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import {
   eventDetailsSchema,
@@ -18,6 +18,10 @@ import {
 } from 'components/forms/schema/eventSchema';
 import { addEntertainerSchema } from 'components/forms/schema/entertainerSchema';
 import { createSchema } from 'components/forms/schema/schema-helpers';
+import axios from 'axios';
+import { getTokenFromStore } from 'utils/localStorage';
+import { UserContext } from 'context/UserContext';
+import AlertMessage from 'components/common/utils/AlertMessage';
 
 const NewEvent = ({ hire_type }) => {
   const validHireType = Object.keys(HIRE_ENTERTAINERS).includes(
@@ -61,26 +65,85 @@ const NewEventForm = ({ currentHireType }) => {
     address: createSchema(eventAddressSchema),
     entertainer: createSchema(addEntertainerSchema)
   };
+  const { userDispatch } = React.useContext(UserContext);
+  const [message, setMessage] = React.useState(null);
 
   return (
     <Formik
       initialValues={initialValues}
-      onSubmit={(values, actions) => {
-        setTimeout(() => {
-          actions.setSubmitting(false);
-          let urlToRedirect;
-          if (currentHireType === HIRE_ENTERTAINERS.search) {
-            urlToRedirect = '/user/entertainer/search/1';
-          } else if (currentHireType === HIRE_ENTERTAINERS.recommend) {
-            urlToRedirect = '/user/entertainer/recommended/1';
-          } else {
-            urlToRedirect = '/user/auctions';
+      onSubmit={({ event, address, entertainer }, actions) => {
+        const payload = {
+          entertainer: {
+            ...entertainer,
+            genre: JSON.stringify(entertainer.genre),
+            language: JSON.stringify(entertainer.language),
+            ageGroup: JSON.stringify(entertainer.ageGroup)
+          },
+          eventDetails: {
+            eventType: event.eventType,
+            eventDate: event.eventDate.date,
+            startTime: event.startTime.date,
+            endTime: event.endTime.date,
+            moreInformation: event.moreInformation,
+            ...address
           }
-          return navigate(urlToRedirect);
-        }, 400);
+        };
+        console.log('payload', payload);
+        axios
+          .post('/api/v1/events', payload.eventDetails, {
+            headers: { 'x-access-token': getTokenFromStore() }
+          })
+          .then(function(response) {
+            const { status, data } = response;
+            console.log('status, data', status, data);
+            if (status === 200) {
+              userDispatch({
+                type: 'add-new-event',
+                user: data
+              });
+
+              axios
+                .post(
+                  '/api/v1/eventEntertainer',
+                  { ...payload.entertainer, eventId: data.event.id },
+                  {
+                    headers: { 'x-access-token': getTokenFromStore() }
+                  }
+                )
+                .then(function(response) {
+                  const { status, data } = response;
+                  if (status === 200) {
+                    userDispatch({
+                      type: 'add-entertainer-to-event',
+                      user: data
+                    });
+                    setMessage({
+                      type: 'info',
+                      message: `Your Event has been successfully saved.`
+                    });
+                    actions.setSubmitting(false);
+                  }
+                })
+                .catch(function(error) {
+                  setMessage(error.response.data.message);
+                  actions.setSubmitting(false);
+                });
+
+              setMessage({
+                type: 'info',
+                message: `Your bank has been successfully submitted.`
+              });
+              actions.setSubmitting(false);
+            }
+          })
+          .catch(function(error) {
+            setMessage(error.response.data.message);
+            actions.setSubmitting(false);
+          });
       }}
       render={({ isSubmitting, handleSubmit, ...props }) => (
         <>
+          <AlertMessage {...message} />
           <EventDetails />
           <EventAddress />
           <AddEntertainerDetails />
