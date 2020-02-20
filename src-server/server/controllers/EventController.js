@@ -43,7 +43,7 @@ const EventController = {
     if (Object.keys(error).length > 1) {
       return res.status(400).json({ message: error.message.join('') });
     }
-    let newEvent = {}
+    let newEvent = {};
     if (!id) {
       return Event.create({
         eventType,
@@ -65,16 +65,15 @@ const EventController = {
           return req.user.addEvent(event);
         })
         .then(() => {
-          return res
-            .status(200)
-            .json({
-              message: 'Event created successfully',
-              event: newEvent
-            })
+          return res.status(200).json({
+            message: 'Event created successfully',
+            event: newEvent
+          });
         })
         .catch(error => {
           const status = error.status || 500;
-          const errorMessage = (error.parent && error.parent.detail) || error.message || error;
+          const errorMessage =
+            (error.parent && error.parent.detail) || error.message || error;
           return res.status(status).json({ message: errorMessage });
         });
     }

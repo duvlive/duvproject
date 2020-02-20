@@ -70,7 +70,7 @@ const SearchForEntertainer = () => (
           formGroupClassName="col-md-6"
           isValidMessage="looks good"
           label="Age Group"
-          name="entertainer.age_group"
+          name="entertainer.ageGroup"
           options={EVENT_AGE_GROUP}
           placeholder="Select the event's age group"
         />
@@ -90,7 +90,7 @@ const SearchForEntertainer = () => (
           formGroupClassName="col-md-6"
           isValidMessage="looks good"
           label="Highest Budget (in Naira)"
-          name="entertainer.highest_budget"
+          name="entertainer.highestBudget"
           options={BUDGET}
           placeholder="Highest Budget"
         />
@@ -108,7 +108,7 @@ const SearchForEntertainer = () => (
         <div className="col-md-6">
           <TextArea
             label="Special Requests"
-            name="entertainer.special_requests"
+            name="entertainer.specialRequest"
             placeholder="E.g 10 special songs, your favorite song e.t.c."
             rows="3"
           />

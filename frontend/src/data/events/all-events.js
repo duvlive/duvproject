@@ -20,11 +20,11 @@ export default [
     request: [
       {
         entertainer: 'DJ',
-        age_group: 'all',
+        ageGroup: 'all',
         genre: '',
         preferred_language: '',
         lowest_budget: '50,000',
-        highest_budget: '50,000',
+        highestBudget: '50,000',
         special_request: 'None',
         type: 'auction',
         closes: '2019-12-2'

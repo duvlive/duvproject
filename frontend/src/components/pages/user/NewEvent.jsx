@@ -53,7 +53,7 @@ const NewEventForm = ({ currentHireType }) => {
     event: setInitialValues(eventDetailsSchema),
     address: setInitialValues(eventAddressSchema),
     entertainer: setInitialValues(addEntertainerSchema, {
-      highest_budget: '1M+'
+      highestBudget: '1M+'
     })
   };
   const entertainersSchema = {

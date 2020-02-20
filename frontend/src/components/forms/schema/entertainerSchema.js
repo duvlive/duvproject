@@ -32,15 +32,15 @@ export const bankDetailsSchema = {
 };
 
 export const addEntertainerSchema = {
-  type: stringValidation('Entertainer Type'),
+  entertainerType: stringValidation('Entertainer Type'),
   genre: multiSelectValidation('Genre'),
   language: multiSelectValidation('Language'),
-  audience: stringValidation('audience'),
-  age_group: stringValidation('Age Group'),
-  base_budget: stringValidation('Lowest Budget'),
-  highest_budget: stringValidation('Highest Budget'),
-  place: stringValidation('Place of Event'),
-  special_events: optionalValidation(stringValidation('Special Events', 20))
+  expectedAudienceSize: stringValidation('Audience Size'),
+  ageGroup: stringValidation('Age Group'),
+  lowestBudget: stringValidation('Base Budget'),
+  highestBudget: stringValidation('Highest Budget'),
+  placeOfEvent: stringValidation('Place of Event'),
+  specialRequest: optionalValidation(stringValidation('Special Request', 20))
 };
 
 export const videoSchema = {

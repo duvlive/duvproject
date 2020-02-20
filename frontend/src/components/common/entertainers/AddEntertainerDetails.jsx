@@ -22,7 +22,7 @@ const AddEntertainerDetails = () => (
           formGroupClassName="col-md-6"
           isValidMessage="looks good"
           label="Entertainer Type"
-          name="entertainer.type"
+          name="entertainer.entertainerType"
           options={SELECT_ENTERTAINERS_TYPE}
           placeholder="Entertainer Type"
         />
@@ -31,7 +31,7 @@ const AddEntertainerDetails = () => (
           formGroupClassName="col-md-6"
           isValidMessage="looks good"
           label="Place of Event"
-          name="entertainer.place"
+          name="entertainer.placeOfEvent"
           options={PLACE_OF_EVENTS}
           placeholder="Place of Event"
         />
@@ -62,7 +62,7 @@ const AddEntertainerDetails = () => (
           formGroupClassName="col-md-6"
           isValidMessage="looks good"
           label="Expected Audience Size"
-          name="entertainer.audience"
+          name="entertainer.expectedAudienceSize"
           options={AUDIENCE_SIZE}
           placeholder="Expected Audience Size"
         />
@@ -70,7 +70,7 @@ const AddEntertainerDetails = () => (
           formGroupClassName="col-md-6"
           isValidMessage="looks good"
           label="Age Group"
-          name="entertainer.age_group"
+          name="entertainer.ageGroup"
           options={EVENT_AGE_GROUP}
           placeholder="Select the event's age group"
         />
@@ -80,8 +80,8 @@ const AddEntertainerDetails = () => (
           blankOption="Choose your base budget"
           formGroupClassName="col-md-6"
           isValidMessage="looks good"
-          label="Lowest Budget (in Naira)"
-          name="entertainer.base_budget"
+          label="Base Budget (in Naira)"
+          name="entertainer.lowestBudget"
           options={BUDGET}
           placeholder="Lowest Budget"
         />
@@ -90,7 +90,7 @@ const AddEntertainerDetails = () => (
           formGroupClassName="col-md-6"
           isValidMessage="looks good"
           label="Highest Budget (in Naira)"
-          name="entertainer.highest_budget"
+          name="entertainer.highestBudget"
           options={BUDGET}
           placeholder="Highest Budget"
         />
@@ -99,7 +99,7 @@ const AddEntertainerDetails = () => (
         <div className="col-md-12">
           <TextArea
             label="Special Requests"
-            name="entertainer.special_requests"
+            name="entertainer.specialRequest"
             optional
             placeholder="E.g 10 special songs, your favorite song e.t.c."
             rows="3"

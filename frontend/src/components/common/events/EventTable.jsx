@@ -56,7 +56,7 @@ const EventTable = ({ event }) => (
                   <td>Budget</td>
                   <td className="text-right">
                     N{event.request[0].lowest_budget} - N
-                    {event.request[0].highest_budget}
+                    {event.request[0].highestBudget}
                   </td>
                 </tr>
                 <tr>
