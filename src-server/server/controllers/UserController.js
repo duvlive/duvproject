@@ -1,14 +1,15 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import {
-  User,
-  EntertainerProfile,
+  ApprovalComment,
   BankDetail,
   Contact,
+  EntertainerProfile,
+  Event,
+  Gallery,
   Identification,
   Notification,
-  ApprovalComment,
-  Gallery,
+  User,
   Video
 } from '../models';
 import sendMail from '../MailSender';
@@ -48,6 +49,10 @@ export const userAssociatedModels = [
   {
     model: Notification,
     as: 'notifications'
+  },
+  {
+    model: Event,
+    as: 'events'
   }
 ];
 
@@ -77,7 +82,8 @@ const UserController = {
       notifications: user.notifications,
       galleries: user.galleries,
       videos: user.videos,
-      approvalComment: user.approvalComment
+      approvalComment: user.approvalComment,
+      events: user.events
     };
 
     return { ...transformedUser, ...updatedValues };

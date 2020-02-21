@@ -10,18 +10,18 @@ import {
 ////////////////////////
 export const eventDetailsSchema = {
   eventType: required('Event Type'),
-  eventDate: stringValidation('Event Date'),
+  eventDate: required('Event Date'),
   startTime: required('Start Time'),
   endTime: required('End Time'),
-  moreInformation: optionalValidation('Information', 20)
+  moreInformation: optionalValidation(stringValidation('More Information', 20))
 };
 
 export const eventAddressSchema = {
   streetLine1: stringValidation('Street Line 1'),
-  streetLine2: stringValidation('Street Line 2'),
+  streetLine2: optionalValidation(stringValidation('Street Line 2', 2)),
   state: required('State'),
   lga: required('Local Government'),
   city: required('City'),
-  landmark: optionalValidation('Landmark', 3),
-  description: optionalValidation('Description', 20)
+  landmark: optionalValidation(stringValidation('Landmark', 3)),
+  description: optionalValidation(stringValidation('Description', 10))
 };

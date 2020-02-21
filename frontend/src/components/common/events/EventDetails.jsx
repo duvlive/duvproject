@@ -14,7 +14,6 @@ const EventDetails = () => {
             <Select
               blankOption="Select Event Type"
               formGroupClassName="col-md-6"
-              isValidMessage="looks good"
               label="Event Type"
               name="event.eventType"
               options={OCCASSION_TYPE}
@@ -22,7 +21,6 @@ const EventDetails = () => {
             />
             <DatePicker
               formGroupClassName="col-md-6"
-              isValidMessage="looks good"
               label="Event Date"
               name="event.eventDate"
               placeholderText="Event Date"
@@ -32,7 +30,6 @@ const EventDetails = () => {
             <DatePicker
               dateFormat="h:mm aa"
               formGroupClassName="col-md-6"
-              isValidMessage="looks good"
               label="Start Time"
               name="event.startTime"
               placeholderText="Start Time"
@@ -44,7 +41,6 @@ const EventDetails = () => {
             <DatePicker
               dateFormat="h:mm aa"
               formGroupClassName="col-md-6"
-              isValidMessage="looks good"
               label="End Time"
               name="event.endTime"
               placeholderText="End Time"

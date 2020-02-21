@@ -17,6 +17,7 @@ import EditProfile from 'components/pages/user/EditProfile';
 import ChangePassword from 'components/pages/user/ChangePassword';
 import RegisterAsEntertainer from 'components/pages/user/RegisterAsEntertainer';
 import Approval from 'components/pages/user/Approval';
+import AddEntertainerToEvent from 'components/pages/user/AddEntertainerToEvent';
 
 const UserRouter = () => (
   <Router>
@@ -33,7 +34,7 @@ const UserRouter = () => (
     <NewEvent path="events/new" />
     <NewEvent path="events/new/:hire_type" />
     <ViewEvent path="events/:id" />
-    {/* <AddEntertainerToEvent path="events/:id/add-entertainer/:type" /> */}
+    <AddEntertainerToEvent path="events/:id/add-entertainer/:type" />
     <Bids path="/auction/bids" />
     <Approval path="/approval" />
     <EditProfile path="/edit-profile" />
