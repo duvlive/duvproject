@@ -161,6 +161,8 @@ router
   .put(EventController.updateUserEvent)
   .get(EventController.getUserEvent);
 
+router.get('/api/v1/events/:id', EventController.getOneEvent);
+
 // gallery routes
 router.get('/api/v1/gallery/:userId', GalleryController.getEntertainerGallery);
 router.post(

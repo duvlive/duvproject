@@ -109,6 +109,11 @@ db.Event.hasMany(db.EventEntertainer, {
   targetKey: 'entertainers'
 });
 
+db.Event.belongsTo(db.User, {
+  foreignKey: 'userId',
+  as: 'owner'
+});
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
