@@ -114,6 +114,11 @@ db.Event.belongsTo(db.User, {
   as: 'owner'
 });
 
+db.EventEntertainer.belongsTo(db.EntertainerProfile, {
+  foreignKey: 'hiredEntertainer',
+  as: 'entertainer'
+});
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 

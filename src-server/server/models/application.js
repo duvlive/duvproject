@@ -21,6 +21,28 @@ module.exports = function(sequelize, DataTypes) {
         type: DataTypes.STRING,
         allowNull: false
       },
+      applicationType: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        defaultValue: 'Bid',
+        validate: { isIn: [['Bid', 'Request', null]] }
+      },
+      expiryDate: {
+        type: DataTypes.DATE,
+        allowNull: true
+      },
+      approvedDate: {
+        type: DataTypes.DATE,
+        allowNull: true
+      },
+      rejectionReason: {
+        type: DataTypes.TEXT,
+        allowNull: true
+      },
+      rejectionDate: {
+        type: DataTypes.DATE,
+        allowNull: true
+      }
     },
     {
       classMethods: {

@@ -111,48 +111,60 @@ export const EVENT_AGE_GROUP = [
 
 export const OCCASSION_TYPE = [
   {
-    label: 'Wedding',
-    value: 'wedding'
-  },
-  {
-    label: 'Birthday Party',
-    value: 'birthday-party'
-  },
-  {
-    label: 'Corporate Event',
-    value: 'corporate-event'
-  },
-  {
-    label: 'Formal Event',
-    value: 'formal-event'
+    label: 'Aniversary',
+    value: 'Aniversary'
   },
   {
     label: 'Ball',
-    value: 'ball'
+    value: 'Ball'
   },
   {
-    label: 'Graduation Party',
-    value: 'graduation-party'
+    label: 'Birthday Party',
+    value: 'Birthday Party'
   },
   {
-    label: 'Summer Party',
-    value: 'summer-party'
+    label: 'Corporate Event',
+    value: 'Corporate Event'
   },
   {
-    label: 'Family Get-Together',
-    value: 'family-get-together'
+    label: 'Celebration',
+    value: 'Celebration'
   },
   {
     label: 'Engagement Party',
-    value: 'engagement-party'
+    value: 'Engagement Party'
+  },
+  {
+    label: 'Entertainment',
+    value: 'Entertainment'
+  },
+  {
+    label: 'Family Get-Together',
+    value: 'Family Get-Together'
+  },
+  {
+    label: 'Formal Event',
+    value: 'Formal Event'
+  },
+  {
+    label: 'Graduation Party',
+    value: 'Graduation Party'
   },
   {
     label: 'Naming Ceremony',
-    value: 'naming-ceremony'
+    value: 'Naming Ceremony'
   },
   {
     label: 'Party',
     value: 'party'
+  },
+  {
+    label: 'Summer Party',
+    value: 'Summer Party'
+  },
+  {
+    label: 'Wedding',
+    value: 'wedding'
   }
 ];
 export const AUDIENCE_SIZE = [

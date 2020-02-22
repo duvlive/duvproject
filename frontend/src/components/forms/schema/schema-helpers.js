@@ -111,10 +111,5 @@ export const multiSelectValidation = label =>
   yup
     .array()
     .label(label)
-    .min(1, 'Tip: you can select more than one state.')
-    .of(
-      yup.object().shape({
-        label: yup.string().required(),
-        value: yup.string().required()
-      })
-    );
+    .min(1, `Tip: you can select more than one ${label}.`)
+    .of(yup.string().required());

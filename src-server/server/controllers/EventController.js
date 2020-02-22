@@ -1,6 +1,6 @@
 import { Event } from '../models';
 import { validString } from '../utils';
-import { EventEntertainer, User } from '../models';
+import { EventEntertainer, User, EntertainerProfile } from '../models';
 
 const EventController = {
   /**
@@ -130,7 +130,7 @@ const EventController = {
         {
           model: EventEntertainer,
           as: 'entertainers',
-          include: [{ model: User, as: '' }]
+          include: [{ model: EntertainerProfile, as: 'entertainer' }]
         },
         {
           model: User,

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getShortDate } from 'utils/helpers';
+import { getShortDate } from 'utils/date-helpers';
 
 const EventTable = ({ event }) => (
   <div className="card card-custom card-blue">

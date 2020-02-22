@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getLongDate } from 'utils/helpers';
+import { getLongDate } from 'utils/date-helpers';
 
 const TopMessage = ({ message }) => (
   <section className="top_message">

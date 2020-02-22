@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import axios from 'axios';
 import {
   SELECT_ENTERTAINERS_TYPE,
@@ -23,7 +24,7 @@ import { getTokenFromStore } from 'utils/localStorage';
 import { createSchema } from 'components/forms/schema/schema-helpers';
 import AlertMessage from '../utils/AlertMessage';
 
-const AddEntertainerDetails = () => {
+const AddEntertainerDetails = ({ eventId }) => {
   const { userDispatch } = React.useContext(UserContext);
   const [message, setMessage] = React.useState(null);
   return (
@@ -36,7 +37,8 @@ const AddEntertainerDetails = () => {
           ...values,
           genre: JSON.stringify(values.genre),
           language: JSON.stringify(values.language),
-          ageGroup: JSON.stringify(values.ageGroup)
+          ageGroup: JSON.stringify(values.ageGroup),
+          eventId
         };
         axios
           .post('/api/v1/eventEntertainer', entertainerDetails, {
@@ -81,10 +83,14 @@ const AddEntertainerDetails = () => {
   );
 };
 
+AddEntertainerDetails.propTypes = {
+  eventId: PropTypes.string.isRequired
+};
+
 const AddEntertainerDetailsForm = () => (
   <div className="card card-custom card-black card-form">
     <div className="card-body col-md-10">
-      <h4 className="card-title blue">Entertainer Details</h4>
+      <h4 className="card-title blue">Add Entertainer</h4>
       <div className="form-row">
         <Select
           blankOption="Choose your preferred Entertainer Type"

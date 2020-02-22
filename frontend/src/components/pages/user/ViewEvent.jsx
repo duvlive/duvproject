@@ -1,7 +1,8 @@
 import React from 'react';
 import TopMessage from 'components/common/layout/TopMessage';
 import events from 'data/events/all-events';
-import { randomItem, remainingDays } from 'utils/helpers';
+import { randomItem } from 'utils/helpers';
+import { remainingDays } from 'utils/date-helpers';
 import Image from 'components/common/utils/Image';
 import Card from 'components/custom/Card';
 import DuvLiveModal from 'components/custom/Modal';
