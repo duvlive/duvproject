@@ -75,15 +75,24 @@ DuvLiveModal.defaultProps = {
 
 DuvLiveModal.ViewEntertainerProfile = ({ entertainer }) => (
   <DuvLiveModal
-    body={entertainer.summary}
-    title={
-      <Image
-        className="avatar--medium"
-        name={entertainer.stageName}
-        rounded={false}
-        src={entertainer.img.profile}
-      />
+    body={
+      <>
+        <Image
+          className="avatar--medium"
+          name={(entertainer && entertainer.stageName) || ''}
+          responsiveImage={false}
+          rounded={false}
+          src={
+            (entertainer &&
+              entertainer.personalDetails &&
+              entertainer.personalDetails.profileImageURL) ||
+            ''
+          }
+        />
+        {(entertainer && entertainer.about) || ''}
+      </>
     }
+    title={entertainer && entertainer.stageName}
   >
     <button className="btn btn-info btn-sm btn-transparent">
       View Profile

@@ -21,7 +21,9 @@ const EventEntertainerController = {
       highestBudget,
       specialRequest,
       eventId,
-      id
+      id,
+      auctionStartDate,
+      auctionEndDate
     } = req.body;
 
     const error = {
@@ -50,6 +52,8 @@ const EventEntertainerController = {
         highestBudget,
         specialRequest,
         eventId,
+        auctionStartDate,
+        auctionEndDate,
         userId: req.user.id
       })
         .then(() => {
@@ -61,17 +65,16 @@ const EventEntertainerController = {
             }
           });
         })
-        .then((event) => {
-          return res
-            .status(200)
-            .json({
-              message: 'Event Entertainer created successfully',
-              event: event[0],
-            })
+        .then(event => {
+          return res.status(200).json({
+            message: 'Event Entertainer created successfully',
+            event: event[0]
+          });
         })
         .catch(error => {
           const status = error.status || 500;
-          const errorMessage = (error.parent && error.parent.detail) || error.message || error;
+          const errorMessage =
+            (error.parent && error.parent.detail) || error.message || error;
           return res.status(status).json({ message: errorMessage });
         });
     }
@@ -121,17 +124,21 @@ const EventEntertainerController = {
    * @return {object} returns res object
    */
   getEventEntertainers(req, res) {
-    req.user.getEvents({
-      include: {
-        model: EventEntertainer,
-        as: 'entertainers'
-      }
-    }).then(events => {
-      if (!events || events.length === 0) {
-        return res.status(404).json({ message: 'Event Entertainers not found' });
-      }
-      return res.status(200).json({ events });
-    });
+    req.user
+      .getEvents({
+        include: {
+          model: EventEntertainer,
+          as: 'entertainers'
+        }
+      })
+      .then(events => {
+        if (!events || events.length === 0) {
+          return res
+            .status(404)
+            .json({ message: 'Event Entertainers not found' });
+        }
+        return res.status(200).json({ events });
+      });
   }
 };
 

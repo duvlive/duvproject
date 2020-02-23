@@ -131,6 +131,20 @@
       }
     }
   }
+
+  &.select-hire-type {
+    cursor: pointer;
+    opacity: 0.4;
+
+    h6 {
+      font-size: 0.8rem;
+    }
+
+    &.isActive {
+      border-width: 3px;
+      opacity: 1;
+    }
+  }
 }
 
 .dashboard__card {

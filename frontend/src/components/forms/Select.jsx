@@ -9,7 +9,7 @@ import {
   feedback
 } from 'components/forms/form-helper';
 import Humanize from 'humanize-plus';
-import { dashedLowerCase } from 'utils/helpers';
+// import { dashedLowerCase } from 'utils/helpers';
 import Label from './Label';
 
 const Select = ({
@@ -114,7 +114,8 @@ Select.propTypes = {
 Select.options = ({ options }) => {
   return options.map(({ label, value }) => {
     if (!(label || value)) return null;
-    const optionValue = value || dashedLowerCase(label);
+    // const optionValue = value || dashedLowerCase(label);
+    const optionValue = value || label;
     const optionLabel = label || Humanize.capitalize(value);
     return (
       <option key={optionValue} value={optionValue}>

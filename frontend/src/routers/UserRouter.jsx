@@ -17,7 +17,8 @@ import EditProfile from 'components/pages/user/EditProfile';
 import ChangePassword from 'components/pages/user/ChangePassword';
 import RegisterAsEntertainer from 'components/pages/user/RegisterAsEntertainer';
 import Approval from 'components/pages/user/Approval';
-import AddEntertainerToEvent from 'components/pages/user/AddEntertainerToEvent';
+// import AddEntertainerToEvent from 'components/pages/user/AddEntertainerToEvent';
+import AddEntertainerDetails from 'components/common/entertainers/AddEntertainerDetails';
 
 const UserRouter = () => (
   <Router>
@@ -33,7 +34,7 @@ const UserRouter = () => (
     <RecommendedEntertainers path="/entertainer/recommended/:event_id" />
     <NewEvent path="events/new" />
     <NewEvent path="events/new/:hire_type" />
-    <AddEntertainerToEvent path="events/:id/add-entertainer/:type" />
+    <AddEntertainerDetails path="events/:id/add-entertainer/:type" />
     <ViewEvent path="events/view/:id" />
     <Bids path="/auction/bids" />
     <Approval path="/approval" />

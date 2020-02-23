@@ -40,7 +40,9 @@ export const addEntertainerSchema = {
   lowestBudget: stringValidation('Base Budget'),
   highestBudget: stringValidation('Highest Budget'),
   placeOfEvent: stringValidation('Place of Event'),
-  specialRequest: optionalValidation(stringValidation('Special Request', 20))
+  specialRequest: optionalValidation(stringValidation('Special Request', 20)),
+  auctionStartDate: optionalValidation(required('Auction Start Date')),
+  auctionEndDate: optionalValidation(required('Auction End Date'))
 };
 
 export const videoSchema = {

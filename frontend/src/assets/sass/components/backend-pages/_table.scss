@@ -24,6 +24,24 @@ $duv-td-line-height: 1.8;
     background-color: rgba($admin-card-bg, 0.3) !important;
     padding: 5px;
 
+    // basically for headings
+    &.transparent {
+      background-color: transparent !important;
+      margin-bottom: 2rem;
+      padding: 0;
+      h4 {
+        margin-left: -1rem;
+        line-height: 1;
+        margin-bottom: 0;
+        margin-top: 1rem;
+        font-size: 1rem;
+      }
+
+      td {
+        padding: 0;
+      }
+    }
+
     th,
     td {
       padding-top: 1.2rem;

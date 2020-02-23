@@ -215,17 +215,19 @@ export const AUDIENCE_SIZE = [
 ];
 
 export const GENRE = [
-  { label: 'Local', value: 'local' },
-  { label: 'Pop', value: 'pop' },
-  { label: 'Hip-hop', value: 'hip-hop' },
-  { label: 'Rap', value: 'rap' },
-  { label: 'Variety', value: 'variety' },
-  { label: 'Country', value: 'country' },
-  { label: 'Golden Oldies', value: 'golden-oldies' },
-  { label: 'Rock', value: 'rock' },
-  { label: 'The Eighties', value: 'the-eighties' },
-  { label: 'Funk or Disco', value: 'funk' },
-  { label: 'Indian', value: 'indian' }
+  { label: 'Any', value: 'Any' },
+  { label: 'Local', value: 'Local' },
+  { label: 'Foreign', value: 'Foreign' },
+  { label: 'Pop', value: 'Pop' },
+  { label: 'Hip-hop', value: 'Hip Hop' },
+  { label: 'Rap', value: 'Rap' },
+  { label: 'Variety', value: 'Variety' },
+  { label: 'Country', value: 'Country' },
+  { label: 'Golden Oldies', value: 'Golden Oldies' },
+  { label: 'Rock', value: 'Rock' },
+  { label: 'The Eighties', value: 'The Eighties' },
+  { label: 'Funk or Disco', value: 'Funk' },
+  { label: 'Indian', value: 'Indian' }
 ];
 
 export const RATINGS = [
@@ -265,9 +267,9 @@ export const BUDGET = [
 ];
 
 export const LANGUAGE = [
-  { label: 'Any', value: 'any' },
-  { label: 'English', value: 'english' },
-  { label: 'Yoruba', value: 'yoruba' },
-  { label: 'Igbo', value: 'igbo' },
-  { label: 'Hausa', value: 'hausa' }
+  { label: 'Any', value: 'Any' },
+  { label: 'English', value: 'English' },
+  { label: 'Yoruba', value: 'Yoruba' },
+  { label: 'Igbo', value: 'Igbo' },
+  { label: 'Hausa', value: 'Hausa' }
 ];

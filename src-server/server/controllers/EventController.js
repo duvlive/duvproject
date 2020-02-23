@@ -130,7 +130,26 @@ const EventController = {
         {
           model: EventEntertainer,
           as: 'entertainers',
-          include: [{ model: EntertainerProfile, as: 'entertainer' }]
+          include: [
+            {
+              model: EntertainerProfile,
+              as: 'entertainer',
+              attributes: [
+                'id',
+                'stageName',
+                'entertainerType',
+                'location',
+                'about'
+              ],
+              include: [
+                {
+                  model: User,
+                  as: 'personalDetails',
+                  attributes: ['id', 'firstName', 'lastName', 'profileImageURL']
+                }
+              ]
+            }
+          ]
         },
         {
           model: User,
