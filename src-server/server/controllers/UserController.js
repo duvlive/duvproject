@@ -504,7 +504,7 @@ const UserController = {
    * @param {object} res is res object
    * @return {object} returns res object
    */
-  faqMailer(req, res) {
+  async faqMailer(req, res) {
     const { userEmail, userSubject, userMessage } = req.body;
     const errors = {
       ...validString(userSubject),
@@ -519,85 +519,81 @@ const UserController = {
     }
 
     try {
-      sendMail(EMAIL_CONTENT.FAQ, { email: 'info@duvlive.com' }, { userSubject, userMessage, userEmail });
-      return res
-        .status(200)
-        .json({ message: 'Your questions, complaints or suggestions has been successfully noted, the support will get back to you' });
+      await sendMail(
+        EMAIL_CONTENT.FAQ,
+        { email: 'info@duvlive.com' },
+        { userSubject, userMessage, userEmail }
+      );
+      return res.status(200).json({
+        message:
+          'Your questions, complaints or suggestions has been successfully noted, the support team will get back to you'
+      });
+    } catch (error) {
+      return res.status(400).json({ message: 'Something went wrong', error });
     }
-    catch(error) {
+  },
+
+  /**
+   * contact us
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  async contactUs(req, res) {
+    const { fullName, userEmail, userSubject, userMessage, phone } = req.body;
+    const errors = {
+      ...validString(userSubject),
+      ...validString(userMessage),
+      ...validString(fullName),
+      ...UserValidation.emailValidation(userEmail)
+    };
+
+    if (Object.keys(errors).length) {
       return res
         .status(400)
-        .json({ message: 'Something went wrong', error });
-      }
-    },
-
-    /**
-     * contact us 
-     * @function
-     * @param {object} req is req object
-     * @param {object} res is res object
-     * @return {object} returns res object
-     */
-    contactUs(req, res) {
-      const { fullName, userEmail, userSubject, userMessage, phone } = req.body;
-      const errors = {
-        ...validString(userSubject),
-        ...validString(userMessage),
-        ...validString(fullName),
-        ...UserValidation.emailValidation(userEmail)
-      };
-  
-      if (Object.keys(errors).length) {
-        return res
-          .status(400)
-          .json({ message: 'There are invalid fields in the form', errors });
-      }
-  
-      try {
-        sendMail(EMAIL_CONTENT.CONTACT_US, { email: 'info@duvlive.com' }, { userEmail, userSubject, userMessage, phone, fullName });
-        return res
-          .status(200)
-          .json({ message: 'Thanks for contacting us' });
-      }
-      catch(error) {
-        return res
-          .status(400)
-          .json({ message: 'Something went wrong', error });
-        }
-    },
-
-    /**
-     * contact us 
-     * @function
-     * @param {object} req is req object
-     * @param {object} res is res object
-     * @return {object} returns res object
-     */
-    inviteFriend(req, res) {
-      const { email } = req.body;
-      const errors = {
-        ...UserValidation.emailValidation(email)
-      };
-  
-      if (Object.keys(errors).length) {
-        return res
-          .status(400)
-          .json({ message: 'There are invalid fields in the form', errors });
-      }
-  
-      try {
-        const link = `${process.env.HOST}`;
-        sendMail(EMAIL_CONTENT.INVITE_FRIEND, { email }, { link });
-        return res
-          .status(200)
-          .json({ message: 'Invite sent successfully' });
-      }
-      catch(error) {
-        return res
-          .status(400)
-          .json({ message: 'Something went wrong', error });
-        }
+        .json({ message: 'There are invalid fields in the form', errors });
     }
+
+    try {
+      await sendMail(
+        EMAIL_CONTENT.CONTACT_US,
+        { email: 'info@duvlive.com' },
+        { userEmail, userSubject, userMessage, phone, fullName }
+      );
+      return res.status(200).json({ message: 'Thanks for contacting us' });
+    } catch (error) {
+      return res.status(400).json({ message: 'Something went wrong', error });
+    }
+  },
+
+  /**
+   * invite Friend
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  async inviteFriend(req, res) {
+    const { email } = req.body;
+    const errors = {
+      ...UserValidation.emailValidation(email)
+    };
+
+    if (Object.keys(errors).length) {
+      return res
+        .status(400)
+        .json({ message: 'There are invalid fields in the form', errors });
+    }
+
+    try {
+      const link = `${process.env.HOST}`;
+      await sendMail(EMAIL_CONTENT.INVITE_FRIEND, { email }, { link });
+      return res.status(200).json({ message: 'Invite sent successfully' });
+    } catch (error) {
+      return res.status(400).json({ message: 'Something went wrong', error });
+    }
+  }
 };
 
 export default UserController;
