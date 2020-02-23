@@ -122,7 +122,9 @@ const PaymentController = {
         if (customer.length === 0) {
           return res.status(404).json({ message: 'User does not exist' });
         }
-        return res.status(200).json({ message: 'Success', customer });
+        return res
+          .status(200)
+          .json({ message: 'Success', customer: customer[0] });
       })
       .catch(function(error) {
         const status = error.status || 500;
@@ -133,7 +135,7 @@ const PaymentController = {
 
   // get success transactions by user id
   getSuccessTransactionsByUserId(req, res) {
-    const { id } = req.params;
+    const { id } = req.query;
     axios
       .get(
         `${process.env.PAYSTACK_TRANSACT_ALL}?status=success&&customer=${id}`,
