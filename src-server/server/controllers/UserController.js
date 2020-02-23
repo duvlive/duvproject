@@ -6,6 +6,7 @@ import {
   Contact,
   EntertainerProfile,
   Event,
+  EventEntertainer,
   Gallery,
   Identification,
   Notification,
@@ -32,15 +33,24 @@ export const userAssociatedModels = [
   },
   {
     model: Gallery,
-    as: 'galleries'
+    as: 'galleries',
+    attributes: ['id', 'imageURL', 'imageID', 'approved']
   },
   {
     model: Video,
-    as: 'videos'
+    as: 'videos',
+    attributes: ['id', 'title', 'youtubeID', 'approved']
   },
   {
     model: ApprovalComment,
-    as: 'approvalComment'
+    as: 'approvalComment',
+    attributes: [
+      'entertainerProfile',
+      'bankAccount',
+      'contact',
+      'identification',
+      'youTube'
+    ]
   },
   {
     model: Identification,
@@ -52,7 +62,27 @@ export const userAssociatedModels = [
   },
   {
     model: Event,
-    as: 'events'
+    as: 'events',
+    include: [
+      {
+        model: EventEntertainer,
+        as: 'entertainers',
+        include: [
+          {
+            model: EntertainerProfile,
+            as: 'entertainer',
+            attributes: ['id', 'stageName', 'entertainerType', 'location'],
+            include: [
+              {
+                model: User,
+                as: 'personalDetails',
+                attributes: ['id', 'firstName', 'lastName', 'profileImageURL']
+              }
+            ]
+          }
+        ]
+      }
+    ]
   }
 ];
 

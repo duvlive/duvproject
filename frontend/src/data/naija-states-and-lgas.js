@@ -1064,5 +1064,5 @@ export const getLgas = currentState => {
   );
 
   if (!stateWithLga) return [];
-  return stateWithLga['lgas'].map(lga => ({ label: lga }));
+  return stateWithLga['lgas'].map(lga => ({ label: lga, value: lga }));
 };

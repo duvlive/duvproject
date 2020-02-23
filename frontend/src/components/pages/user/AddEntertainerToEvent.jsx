@@ -1,11 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import BackEndPage from 'components/common/layout/BackEndPage';
-import TopMessage from 'components/common/layout/TopMessage';
 import AddEntertainerDetails from 'components/common/entertainers/AddEntertainerDetails';
 import { getTokenFromStore } from 'utils/localStorage';
 import { getLongDate, getTime } from 'utils/date-helpers';
+import HireEntertainers from './HireEntertainers';
+import Card from 'components/custom/Card';
+import StepperPage from 'components/common/layout/StepperPage';
+// import { HIRE_ENTERTAINERS_TYPE } from 'utils/constants';
+// import { UserContext } from 'context/UserContext';
 
 const AddEntertainerToEvent = ({ id, type }) => {
   const [event, setEvent] = React.useState({});
@@ -23,6 +26,7 @@ const AddEntertainerToEvent = ({ id, type }) => {
           // handle success
           if (status === 200) {
             setEvent(data.event);
+            console.log('data.event: ', data.event);
           }
         })
         .catch(function(error) {
@@ -31,18 +35,22 @@ const AddEntertainerToEvent = ({ id, type }) => {
         });
   }, [id]);
 
-  return (
-    <BackEndPage title="New Events">
-      <div className="main-app">
-        <TopMessage message="Add Entertainer" />
+  const ALL_STEPS = [
+    null,
+    <HireEntertainersStep />,
+    <AddEntertainerDetails eventId={id} />,
+    <EventDetails event={event} />
+  ];
 
-        <section className="app-content">
-          <EventDetails event={event} />
-          <AddEntertainerDetails eventId={id} />
-          {/* Accordion, 1. select hire type, 2. Add Entertainer, 3. Review Details */}
-        </section>
-      </div>
-    </BackEndPage>
+  return (
+    // initialstep to change to 2 later
+    <StepperPage
+      allSteps={ALL_STEPS}
+      doneStatus={[true, false, false]}
+      initialStep={1} // maybe use this to move to other steps
+      pageSteps={ADD_ENTERTAINER_STEPS}
+      title="Add Entertainer"
+    />
   );
 };
 
@@ -62,13 +70,34 @@ const EventDetails = ({ event }) => {
   }
 
   return (
-    <>
-      <h1>- {event.eventType}</h1>
-      <div>{getLongDate(event.eventDate)}</div>
+    <section>
+      <h6>{event.eventType}</h6>
+      <div>Date - {getLongDate(event.eventDate)}</div>
       <div>
-        {getTime(event.startTime)} - {getTime(event.endTime)}{' '}
+        Time -{getTime(event.startTime)} - {getTime(event.endTime)}{' '}
       </div>
-    </>
+    </section>
   );
 };
+
+EventDetails.propTypes = {
+  event: PropTypes.shape({
+    eventType: PropTypes.string,
+    eventDate: PropTypes.string,
+    startTime: PropTypes.string,
+    endTime: PropTypes.string
+  })
+};
+
+const ADD_ENTERTAINER_STEPS = {
+  hireType: { title: 'Select Hire Type' },
+  addEntertainer: { title: 'Add Entertainer' },
+  review: { title: 'Review' }
+};
+
+const HireEntertainersStep = () => (
+  <Card className="col-12" title="Hire Entertainer">
+    <HireEntertainers.Cards />
+  </Card>
+);
 export default AddEntertainerToEvent;

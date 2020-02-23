@@ -45,6 +45,26 @@ export const USER_TYPES = {
   bandMember: 3
 };
 
+export const HIRE_ENTERTAINERS_TYPE = {
+  search: {
+    title: 'Search',
+    description:
+      'Search for your favorite Entertainer and select them for your event',
+    color: 'blue'
+  },
+  auction: {
+    title: 'Auction',
+    description:
+      'Select the best Entertainer for your Event based on bids from Entertainers',
+    color: 'red'
+  },
+  recommend: {
+    title: 'Recommend',
+    description: 'Lets suggest the best Entertainer for your event',
+    color: 'green'
+  }
+};
+
 export const ENTERTAINER_TYPE = {
   MC: 'MC',
   DJ: 'DJ',

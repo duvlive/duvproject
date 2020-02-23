@@ -3,13 +3,20 @@ import PropTypes from 'prop-types';
 
 const Avatars = ({ entertainers, others }) => (
   <ul className="avatars">
-    {entertainers.map(entertainer => (
-      <Avatars.Item
-        key={entertainer.stageName}
-        name={entertainer.stageName}
-        src={entertainer.img.profile}
-      />
-    ))}
+    {entertainers &&
+      entertainers.map(
+        entertainer =>
+          entertainer && (
+            <Avatars.Item
+              key={entertainer.stageName}
+              name={entertainer.stageName}
+              src={
+                entertainer.personalDetails.profileImageURL ||
+                entertainer.img.profile
+              }
+            />
+          )
+      )}
     {!!others && <Avatars.Others others={others} />}
   </ul>
 );
