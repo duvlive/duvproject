@@ -4,3 +4,10 @@ export const USER_TYPES = {
   ENTERTAINER: 2,
   BAND_MEMBER: 3
 };
+
+export const TRANSACTION_STATUSES = {
+  FAILED: 'failed',
+  SUCCESS: 'success',
+  ABANDONED: 'abandoned'
+};
+

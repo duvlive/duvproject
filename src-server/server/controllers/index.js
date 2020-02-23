@@ -13,6 +13,7 @@ import ApplicationController from './ApplicationController';
 import BadgeController from './BadgeController';
 import GalleryController from './GalleryController';
 import VideoController from './VideoController';
+import PaymentController from './PaymentController';
 
 export {
   UserController,
@@ -25,9 +26,10 @@ export {
   EmailController,
   ImageController,
   EventEntertainerController,
-	AuctionController,
-	ApplicationController,
-	BadgeController,
+  AuctionController,
+  ApplicationController,
+  BadgeController,
   GalleryController,
-  VideoController
+  VideoController,
+  PaymentController
 };
