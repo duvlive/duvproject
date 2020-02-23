@@ -243,40 +243,35 @@ router.post(
   Authentication.verifyToken,
   UserController.inviteFriend
 );
-router.post(
-  '/api/v1/contactUs',
-  UserController.contactUs
-);
+router.post('/api/v1/contactUs', UserController.contactUs);
 
-router.post('/api/v1/faq',
-  UserController.faqMailer
-);
+router.post('/api/v1/faq', UserController.faqMailer);
 
 // Payment route
-router.post('/api/v1/pay',
-Authentication.verifyToken,
-PaymentController.initializeTransaction
-)
+router.post(
+  '/api/v1/pay',
+  Authentication.verifyToken,
+  PaymentController.initializeTransaction
+);
 
-router.post('/api/v1/paystack/webhook',
-PaymentController.paystactEventHook
-)
+router.post('/api/v1/paystack/webhook', PaymentController.paystactEventHook);
 
-router.get('/api/v1/paystack/verify/:reference',
-PaymentController.verifyTransaction
-)
+router.get(
+  '/api/v1/paystack/verify/:reference',
+  PaymentController.verifyTransaction
+);
 
 router
   .route('/api/v1/payments')
   .all(Authentication.verifyToken, Authentication.validateAdmin)
   .get(PaymentController.getSuccessTransactions);
 
-  router
+router
   .route('/api/v1/myPayments')
   .all(Authentication.verifyToken, Authentication.validateUser)
   .get(PaymentController.getSuccessTransactionsByUserId);
 
-  router
+router
   .route('/api/v1/currentCustomer')
   .all(Authentication.verifyToken, Authentication.validateUser)
   .get(PaymentController.getPaystackCustomer);

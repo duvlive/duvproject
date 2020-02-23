@@ -26,9 +26,9 @@ export {
   EmailController,
   ImageController,
   EventEntertainerController,
-	AuctionController,
-	ApplicationController,
-	BadgeController,
+  AuctionController,
+  ApplicationController,
+  BadgeController,
   GalleryController,
   VideoController,
   PaymentController
