@@ -28,9 +28,11 @@ const SIDE_MENU = {
 const Sidebar = ({ showSidebar, closeSidebar, ...props }) => {
   const { userState } = React.useContext(UserContext);
   const currentUserType = userState.type || getUserTypeFromStore();
+
   const UnapprovedEntertainer =
-    userState.type === USER_TYPES.entertainer &&
+    currentUserType === USER_TYPES.entertainer &&
     !userState.entertainerProfile.approved;
+
   const sideMenu = UnapprovedEntertainer
     ? unApprovedEntertainerSideMenu
     : SIDE_MENU[currentUserType];
@@ -66,7 +68,7 @@ const Sidebar = ({ showSidebar, closeSidebar, ...props }) => {
           <Match path="/user/:item">
             {props =>
               // eslint-disable-next-line react/prop-types
-              props.match ? (
+              props.match && currentUserType !== USER_TYPES.user ? (
                 <>
                   <SidebarMenu showUserType={false} />
                   <Sidebar.Navigation

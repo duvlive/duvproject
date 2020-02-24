@@ -95,7 +95,7 @@ Events.Card = ({
           <span> {stageNames.join(', ') || hireTypes.join(', ')} &nbsp;</span>
         </td>
         <td className="text-right pr-5">
-          <Avatars entertainers={entertainersDetails} />
+          {false && <Avatars entertainers={entertainersDetails} />}
         </td>
         <td className="text-right">
           <Link
