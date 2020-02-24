@@ -89,7 +89,7 @@ const NewEventForm = ({ currentHireType }) => {
 
               const eventId = data.event.id;
               navigate(
-                `user/events/${eventId}/add-entertainer/${currentHireType.toLowerCase()}`
+                `/user/events/${eventId}/add-entertainer/${currentHireType.toLowerCase()}`
               );
               actions.setSubmitting(false);
             }

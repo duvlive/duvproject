@@ -42,7 +42,7 @@ module.exports = {
         'startTime',
         {
           type: Sequelize.STRING,
-          allowNull: false
+          allowNull: true
         },
         { transaction }
       );
@@ -51,7 +51,7 @@ module.exports = {
         'endTime',
         {
           type: Sequelize.STRING,
-          allowNull: false
+          allowNull: true
         },
         { transaction }
       );

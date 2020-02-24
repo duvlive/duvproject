@@ -21,7 +21,7 @@ module.exports = {
         'eventDate',
         {
           type: Sequelize.STRING,
-          allowNull: false
+          allowNull: true
         },
         { transaction }
       );

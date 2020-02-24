@@ -31,6 +31,7 @@ import TopMessage from '../layout/TopMessage';
 import { Row, Col } from 'reactstrap';
 import Card from 'components/custom/Card';
 import { getLongDate, getTime } from 'utils/date-helpers';
+import { navigate } from '@reach/router';
 
 const AddEntertainerDetails = ({ id, type }) => {
   const [event, setEvent] = React.useState({});
@@ -95,8 +96,8 @@ const AddEntertainerToEvent = ({ event, id, type }) => {
   if (isAuction) {
     initialValues = {
       ...initialValues,
-      auctionStartDate: { date: event.createdAt },
-      auctionEndDate: { date: event.eventDate }
+      auctionStartDate: { date: event.createdAt || Date.now() },
+      auctionEndDate: { date: event.eventDate || Date.now() }
     };
   }
   console.log('initialValues', initialValues);
@@ -130,10 +131,7 @@ const AddEntertainerToEvent = ({ event, id, type }) => {
                 type: 'add-entertainer-to-event',
                 user: data
               });
-              setMessage({
-                type: 'info',
-                message: `Your Event has been successfully saved.`
-              });
+              navigate('/user/events');
               actions.setSubmitting(false);
             }
           })
@@ -158,7 +156,7 @@ const AddEntertainerToEvent = ({ event, id, type }) => {
               Hire Entertainer
             </button>
           </div>
-          <DisplayFormikState {...props} showAll />
+          <DisplayFormikState hide {...props} showAll />
         </>
       )}
       validationSchema={createSchema(addEntertainerSchema)}

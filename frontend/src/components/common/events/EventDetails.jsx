@@ -55,7 +55,7 @@ const EventDetails = () => {
             name="event.moreInformation"
             optional
             placeholder="More information about your event"
-            rows="8"
+            rows="4"
           />
         </form>
       </div>

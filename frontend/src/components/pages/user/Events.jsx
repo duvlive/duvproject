@@ -15,7 +15,7 @@ const Events = () => {
   return (
     <BackEndPage title="My Events">
       <div className="main-app">
-        <TopMessage message="Upcoming Events" />
+        <TopMessage message="My Events" />
 
         <section className="app-content">
           <div className="table-responsive">
@@ -39,6 +39,7 @@ Events.CardList = ({ events }) =>
     : null;
 
 Events.Card = ({
+  id,
   eventType,
   eventDate,
   startTime,
@@ -51,6 +52,8 @@ Events.Card = ({
     (entertainers &&
       entertainers.map(({ entertainerType }) => entertainerType)) ||
     [];
+  const hireTypes =
+    (entertainers && entertainers.map(({ hireType }) => hireType)) || [];
   const entertainersDetails =
     (entertainers && entertainers.map(({ entertainer }) => entertainer)) || [];
 
@@ -60,7 +63,6 @@ Events.Card = ({
         entertainer => entertainer && entertainer.stageName
       )) ||
     [];
-  console.log('stageNames: ', stageNames);
   return (
     <>
       <tr className="transparent">
@@ -90,13 +92,16 @@ Events.Card = ({
           <span className="text-yellow">
             {entertainerTypes.join(', ')} &nbsp;
           </span>
-          <span> {stageNames.join(', ')} &nbsp;</span>
+          <span> {stageNames.join(', ') || hireTypes.join(', ')} &nbsp;</span>
         </td>
         <td className="text-right pr-5">
           <Avatars entertainers={entertainersDetails} />
         </td>
         <td className="text-right">
-          <Link className="btn btn-info btn-transparent" to="/user/events/1">
+          <Link
+            className="btn btn-info btn-transparent"
+            to={`/user/events/view/${id}`}
+          >
             View Event
           </Link>
         </td>
@@ -107,17 +112,19 @@ Events.Card = ({
 
 Events.Card.propTypes = {
   endTime: PropTypes.string,
-  entertainers: PropTypes.string,
+  entertainers: PropTypes.array,
   eventDate: PropTypes.string,
   eventType: PropTypes.string,
+  id: PropTypes.number,
   lga: PropTypes.string,
   startTime: PropTypes.string,
   state: PropTypes.string
 };
 
 Events.Card.defaultProps = {
+  id: '0',
   endTime: null,
-  entertainers: null,
+  entertainers: [],
   eventDate: null,
   eventType: null,
   lga: null,

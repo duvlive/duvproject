@@ -8,6 +8,7 @@ import Card from 'components/custom/Card';
 import DuvLiveModal from 'components/custom/Modal';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import { getTokenFromStore } from 'utils/localStorage';
+import { Link } from '@reach/router';
 
 const ViewEvent = ({ id }) => {
   const [event, setEvent] = React.useState({});
@@ -92,6 +93,14 @@ const ViewEvent = ({ id }) => {
               </Card>
             </div>
             <div className="col-sm-6">
+              <section className="text-right mb-4">
+                <Link
+                  className="btn btn-danger btn-transparent"
+                  to={`/user/events/${id}/add-entertainer/Auction`}
+                >
+                  Add Entertainer
+                </Link>
+              </section>
               <ViewEvent.EntertainersTable
                 entertainers={event.entertainers || []}
               />
@@ -113,16 +122,20 @@ ViewEvent.defaultProps = {
 
 ViewEvent.EntertainersTable = ({ entertainers }) => (
   <Card color="black">
-    <h5 className="sub-title text-muted blue">Hired Entertainers</h5>
+    <h5 className="sub-title text-muted blue">
+      {entertainers &&
+      entertainers.entertainer &&
+      entertainers.entertainer.length > 0
+        ? 'Hired Entertainers'
+        : 'You have no Entertainer'}
+    </h5>
     <div className="table-responsive">
       <table className="table table-dark">
         <tbody>
-          {entertainers.map(entertainer => (
+          {entertainers.map((entertainer, index) => (
             <ViewEvent.EntertainersRow
               entertainer={entertainer.entertainer}
-              key={
-                entertainer.entertainer.stageName + entertainer.entertainer.id
-              }
+              key={index}
             />
           ))}
         </tbody>
@@ -136,21 +149,26 @@ ViewEvent.EntertainersTable.propTypes = {
 };
 
 ViewEvent.EntertainersRow = ({ entertainer }) => {
-  console.log('entertainer', entertainer.personalDetails.profileImageURL);
+  if (!entertainer) {
+    return null;
+  }
+
   return (
     <tr>
       <td className="align-middle">
-        <Image
-          className="avatar--medium"
-          name={(entertainer && entertainer.stageName) || 'No name'}
-          responsiveImage={false}
-          src={
-            (entertainer &&
-              entertainer.personalDetails &&
-              entertainer.personalDetails.profileImageURL) ||
-            'No src'
-          }
-        />
+        {entertainer && (
+          <Image
+            className="avatar--medium"
+            name={(entertainer && entertainer.stageName) || 'No name'}
+            responsiveImage={false}
+            src={
+              (entertainer &&
+                entertainer.personalDetails &&
+                entertainer.personalDetails.profileImageURL) ||
+              'No src'
+            }
+          />
+        )}
       </td>
       <td className="align-middle">{entertainer && entertainer.stageName}</td>
       <td className="align-middle text-yellow">
@@ -165,7 +183,10 @@ ViewEvent.EntertainersRow = ({ entertainer }) => {
   );
 };
 ViewEvent.EntertainersRow.propTypes = {
-  entertainer: PropTypes.object.isRequired
+  entertainer: PropTypes.object
+};
+ViewEvent.EntertainersRow.defaultProps = {
+  entertainer: {}
 };
 
 export default ViewEvent;
