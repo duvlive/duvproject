@@ -73,11 +73,33 @@ const backToEntertainer = {
   icon: 'loop'
 };
 
+const backToBandMember = {
+  title: 'Switch to Band Member',
+  to: '/band-member/dashboard',
+  icon: 'loop'
+};
+
+const backToAdministrator = {
+  title: 'Switch to Admin',
+  to: '/admin/dashboard',
+  icon: 'loop'
+};
+
 export const userSideMenu = [navigation, others(registerAsEntertainer)];
 
 export const pseudoEntertainerUserSideMenu = [
   navigation,
   others(backToEntertainer)
+];
+
+export const pseudoBandMemberUserSideMenu = [
+  navigation,
+  others(backToBandMember)
+];
+
+export const pseudoAdminUserSideMenu = [
+  navigation,
+  others(backToAdministrator)
 ];
 
 export const userTopMenu = [

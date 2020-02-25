@@ -5,7 +5,12 @@ import ProfileAvatar from 'assets/img/avatar/profile.png';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { Link, Match } from '@reach/router';
 import 'react-perfect-scrollbar/dist/css/styles.css';
-import { userSideMenu, pseudoEntertainerUserSideMenu } from 'data/menu/user';
+import {
+  userSideMenu,
+  pseudoEntertainerUserSideMenu,
+  pseudoBandMemberUserSideMenu,
+  pseudoAdminUserSideMenu
+} from 'data/menu/user';
 import {
   entertainerSideMenu,
   unApprovedEntertainerSideMenu
@@ -23,6 +28,12 @@ const SIDE_MENU = {
   [USER_TYPES.entertainer]: entertainerSideMenu,
   [USER_TYPES.admin]: administratorSideMenu,
   [USER_TYPES.bandMember]: bandMemberSideMenu
+};
+
+const PSEUDO_SIDE_MENU = {
+  [USER_TYPES.entertainer]: pseudoEntertainerUserSideMenu,
+  [USER_TYPES.admin]: pseudoAdminUserSideMenu,
+  [USER_TYPES.bandMember]: pseudoBandMemberUserSideMenu
 };
 
 const Sidebar = ({ showSidebar, closeSidebar, ...props }) => {
@@ -73,7 +84,7 @@ const Sidebar = ({ showSidebar, closeSidebar, ...props }) => {
                   <SidebarMenu showUserType={false} />
                   <Sidebar.Navigation
                     closeSidebar={closeSidebar}
-                    menus={pseudoEntertainerUserSideMenu}
+                    menus={PSEUDO_SIDE_MENU[currentUserType]}
                   />
                 </>
               ) : (
