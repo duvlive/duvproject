@@ -228,3 +228,18 @@ export default AccountSetup;
 // 2. Update backend to handle updates after approval. [Needs review instead of yes]
 // 8. Recommend a friend, api, facebook, twitter and linkedin
 // 12. Add a get started button that will create entertainer profile for user
+
+// 1. Remove hire as entertaner selection page
+// 2. Create a better event view page
+// 3. Load all auctions
+// 4. Think of showing recommendation on user homepage and entertainer dashboard
+// 5. Finalize Load all events
+// 6. Validations for date events
+// a. Max auction date is 72 hours before,
+// b. paid event can only be cancelled 48 hours before
+// c. No entertainer after 48 hours, event is voided
+// d. User can change hire type mid way
+// e. User application for search and recommendation must be approved in 24 hours
+// f. Create a proper search page for user
+// g. create a proper recommendation page for user
+// h. think about payment integration
