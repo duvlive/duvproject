@@ -7,7 +7,7 @@ import Events from 'components/pages/user/Events';
 import Notifications from 'components/pages/user/Notifications';
 import UserHelp from 'components/pages/user/Help';
 import Payments from 'components/pages/user/Payments';
-import SelectEntertainer from 'components/pages/user/HireEntertainers';
+// import SelectEntertainer from 'components/pages/user/HireEntertainers';
 import SearchEntertainer from 'components/pages/user/SearchEntertainer';
 import RecommendedEntertainers from 'components/pages/user/RecommendedEntertainer';
 import NewEvent from 'components/pages/user/NewEvent';
@@ -28,12 +28,11 @@ const UserRouter = () => (
     <Notifications path="/notifications" />
     <UserHelp path="/help" />
     <Payments path="/payments-history" />
-    <SelectEntertainer path="/hire-entertainer" />
-    <SelectEntertainer path="/hire-entertainer/:event_id" />
+    {/* <SelectEntertainer path="/hire-entertainer/:event_id" /> */}
     <SearchEntertainer path="/entertainer/search/:event_id" />
     <RecommendedEntertainers path="/entertainer/recommended/:event_id" />
     <NewEvent path="events/new" />
-    <NewEvent path="events/new/:hire_type" />
+    <NewEvent path="/hire-entertainer" />
     <AddEntertainerDetails path="events/:id/add-entertainer/:type" />
     <ViewEvent path="events/view/:id" />
     <Bids path="/auction/bids" />
