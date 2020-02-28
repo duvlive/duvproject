@@ -1,6 +1,11 @@
 import { Event } from '../models';
 import { validString } from '../utils';
-import { EventEntertainer, User, EntertainerProfile } from '../models';
+import {
+  EventEntertainer,
+  User,
+  EntertainerProfile,
+  Application
+} from '../models';
 
 const EventController = {
   /**
@@ -184,6 +189,139 @@ const EventController = {
       }
       return res.status(200).json({ events });
     });
+  },
+
+  /**
+   * get User Auction
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  getUserAuctions(req, res) {
+    req.user
+      .getEvents({
+        include: [
+          {
+            where: { hireType: 'Auction' },
+            model: EventEntertainer,
+            as: 'entertainers',
+            include: [
+              {
+                model: EntertainerProfile,
+                as: 'entertainer',
+                attributes: [
+                  'id',
+                  'stageName',
+                  'entertainerType',
+                  'location',
+                  'about'
+                ],
+                include: [
+                  {
+                    model: User,
+                    as: 'personalDetails',
+                    attributes: [
+                      'id',
+                      'firstName',
+                      'lastName',
+                      'profileImageURL'
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            model: Application,
+            as: 'applications',
+            include: [
+              {
+                model: User,
+                as: 'user',
+                attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+                include: [
+                  {
+                    model: EntertainerProfile,
+                    as: 'profile',
+                    attributes: [
+                      'id',
+                      'stageName',
+                      'entertainerType',
+                      'location',
+                      'about'
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      })
+      .then(events => {
+        if (!events || events.length === 0) {
+          return res.status(404).json({ message: 'Event not found' });
+        }
+        return res.status(200).json({ events });
+      });
+  },
+
+  /**
+   * get Auction Details
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  getAuctionDetails(req, res) {
+    const eventId = req.params.id;
+    if (!eventId) {
+      return res.status(400).json({ message: 'Kindly provide an event id' });
+    }
+    Event.findOne({
+      where: { id: eventId },
+      include: [
+        {
+          model: EventEntertainer,
+          as: 'entertainers',
+          include: [
+            {
+              model: EntertainerProfile,
+              as: 'entertainer',
+              attributes: [
+                'id',
+                'stageName',
+                'entertainerType',
+                'location',
+                'about'
+              ],
+              include: [
+                {
+                  model: User,
+                  as: 'personalDetails',
+                  attributes: ['id', 'firstName', 'lastName', 'profileImageURL']
+                }
+              ]
+            }
+          ]
+        },
+        {
+          model: User,
+          as: 'owner',
+          attributes: ['id', 'firstName', 'lastName']
+        }
+      ]
+    })
+      .then(event => {
+        if (!event) {
+          return res.status(404).json({ message: 'Event not found' });
+        }
+
+        return res.json({ event });
+      })
+      .catch(error => {
+        return res.status(500).json({ message: error.message });
+      });
   }
 };
 

@@ -15,6 +15,9 @@ export const chunk = (array, size) => {
   return chunked_arr;
 };
 
+export const twoDigitNumber = number =>
+  number > 0 && number < 10 ? '0' + number : number;
+
 /**
  * Item Selection
  * @param {*} items

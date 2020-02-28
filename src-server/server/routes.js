@@ -163,6 +163,15 @@ router
 
 router.get('/api/v1/events/:id', EventController.getOneEvent);
 
+// Auctions
+router.get(
+  '/api/v1/auctions',
+  Authentication.verifyToken,
+  Authentication.validateUser,
+  Authentication.isActiveUser,
+  EventController.getUserAuctions
+);
+
 // gallery routes
 router.get('/api/v1/gallery/:userId', GalleryController.getEntertainerGallery);
 router.post(

@@ -109,6 +109,17 @@ db.Event.hasMany(db.EventEntertainer, {
   targetKey: 'entertainers'
 });
 
+db.Event.hasMany(db.Application, {
+  foreignKey: 'eventId',
+  as: 'applications',
+  targetKey: 'applications'
+});
+
+db.Application.belongsTo(db.User, {
+  foreignKey: 'userId',
+  as: 'user'
+});
+
 db.Event.belongsTo(db.User, {
   foreignKey: 'userId',
   as: 'owner'
