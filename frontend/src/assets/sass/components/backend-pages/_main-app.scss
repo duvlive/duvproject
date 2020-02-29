@@ -17,12 +17,16 @@
   }
 
   &__date {
-    color: $text-color;
+    color: rgba($text-color, 0.2);
     font-size: 0.8rem;
   }
 
   .app-content {
     margin-top: 2rem;
+  }
+
+  &__small {
+    font-size: 0.8rem;
   }
 }
 

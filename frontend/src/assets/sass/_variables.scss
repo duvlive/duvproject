@@ -108,6 +108,8 @@ $border-radius-sm: 0;
 
 $transition-base: all 0.4s ease-in-out;
 
+$hr-border-color: rgba($white, 0.1);
+
 // Typography
 //
 // Font, line-height, and color for body text, headings, and more.
@@ -376,3 +378,9 @@ $badge-padding-y: 0.3em;
 $badge-font-weight: $font-weight-normal;
 $badge-padding-x: 0.5em;
 $badge-border-radius: 0.1rem;
+
+// List group
+
+$list-group-color: $white;
+$list-group-bg: rgba($blue, 0.1);
+$list-group-border-color: rgba($blue, 0.2);
