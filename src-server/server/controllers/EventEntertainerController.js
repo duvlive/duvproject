@@ -1,4 +1,4 @@
-import { EventEntertainer } from '../models';
+import { EventEntertainer, Event, User } from '../models';
 import { validString } from '../utils';
 
 const EventEntertainerController = {
@@ -138,6 +138,55 @@ const EventEntertainerController = {
             .json({ message: 'Event Entertainers not found' });
         }
         return res.status(200).json({ events });
+      });
+  },
+
+  /**
+   * event one details
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  getOneEventEntertainer(req, res) {
+    const eventEntertainerId = req.params.id;
+    if (!eventEntertainerId) {
+      return res
+        .status(400)
+        .json({ message: 'Kindly provide an event entertainer info id' });
+    }
+    EventEntertainer.findOne({
+      where: { id: eventEntertainerId },
+      include: [
+        {
+          model: Event,
+          as: 'event',
+          include: [
+            {
+              model: User,
+              as: 'owner',
+              attributes: ['id', 'firstName', 'lastName', 'profileImageURL']
+            }
+          ]
+        }
+        // {
+        //   model: User,
+        //   as: 'owner',
+        //   attributes: ['id', 'firstName', 'lastName', 'profileImageURL']
+        // }
+      ]
+    })
+      .then(eventEntertainerInfo => {
+        if (!eventEntertainerInfo) {
+          return res
+            .status(404)
+            .json({ message: 'Event Entertainer Info not found' });
+        }
+
+        return res.json({ eventEntertainerInfo });
+      })
+      .catch(error => {
+        return res.status(500).json({ message: error.message });
       });
   }
 };

@@ -163,15 +163,6 @@ router
 
 router.get('/api/v1/events/:id', EventController.getOneEvent);
 
-// Auctions
-router.get(
-  '/api/v1/auctions',
-  Authentication.verifyToken,
-  Authentication.validateUser,
-  Authentication.isActiveUser,
-  EventController.getUserAuctions
-);
-
 // gallery routes
 router.get('/api/v1/gallery/:userId', GalleryController.getEntertainerGallery);
 router.post(
@@ -214,17 +205,48 @@ router
   .put(EventEntertainerController.updateEventEntertainer)
   .get(EventEntertainerController.getEventEntertainers);
 
-// Auction routes
-router
-  .route('/api/v1/auction')
-  .all(
-    Authentication.verifyToken,
-    Authentication.validateUser,
-    Authentication.isActiveUser
-  )
-  .post(AuctionController.updateEventAuction)
-  .put(AuctionController.updateEventAuction)
-  .get(AuctionController.getEventAuctions);
+router.get(
+  '/api/v1/eventEntertainer/:id',
+  EventEntertainerController.getOneEventEntertainer
+);
+
+// Auction routes - TODO: Remove Auction Table
+// router
+//   .route('/api/v1/auction')
+//   .all(
+//     Authentication.verifyToken,
+//     Authentication.validateUser,
+//     Authentication.isActiveUser
+//   )
+//   .post(AuctionController.updateEventAuction)
+//   .put(AuctionController.updateEventAuction)
+//   .get(AuctionController.getEventAuctions);
+
+// Auctions
+router.get(
+  '/api/v1/auctions',
+  Authentication.verifyToken,
+  Authentication.validateUser,
+  Authentication.isActiveUser,
+  EventController.getUserAuctions
+);
+
+router.get(
+  '/api/v1/available-auctions',
+  Authentication.verifyToken,
+  Authentication.isActiveUser,
+  Authentication.validateEntertainer,
+  EventController.getAvailableAuctions
+);
+
+// Bids
+router.get(
+  '/api/v1/events/:id/bids',
+  Authentication.verifyToken,
+  Authentication.validateUser,
+  Authentication.isActiveUser,
+  EventController.getEventBids
+);
 
 // Application routes
 router

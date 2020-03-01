@@ -1,3 +1,4 @@
+import Sequelize, { Op } from 'sequelize';
 import { Event } from '../models';
 import { validString } from '../utils';
 import {
@@ -159,7 +160,7 @@ const EventController = {
         {
           model: User,
           as: 'owner',
-          attributes: ['id', 'firstName', 'lastName']
+          attributes: ['id', 'firstName', 'lastName', 'profileImageURL']
         }
       ]
     })
@@ -267,6 +268,101 @@ const EventController = {
   },
 
   /**
+   * get Available Auctions
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  getAvailableAuctions(req, res) {
+    Event.findAll({
+      include: [
+        {
+          where: {
+            //"hireType" = 'Auction' AND
+            //"auctionStartDate" <= NOW() AND
+            // "entertainers"."auctionEndDate" >= NOW();
+            hireType: 'Auction',
+            auctionStartDate: { [Op.lte]: Sequelize.literal('NOW()') },
+            auctionEndDate: { [Op.gte]: Sequelize.literal('NOW()') },
+            entertainerType: {
+              [Op.eq]: req.user.profile.entertainerType
+            }
+          },
+          model: EventEntertainer,
+          as: 'entertainers'
+        },
+        {
+          model: User,
+          as: 'owner',
+          attributes: ['id', 'firstName', 'lastName', 'profileImageURL']
+        }
+      ]
+    }).then(events => {
+      if (!events || events.length === 0) {
+        return res.status(404).json({ message: 'Event not found' });
+      }
+      return res.status(200).json({ events });
+    });
+  },
+
+  /**
+   * get Event Bid
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  getEventBids(req, res) {
+    const eventId = req.params.id;
+    if (!eventId) {
+      return res.status(400).json({ message: 'Kindly provide an event id' });
+    }
+
+    req.user
+      .getEvents({
+        where: {
+          id: eventId
+        },
+        include: [
+          {
+            model: EventEntertainer,
+            as: 'entertainers'
+          },
+          {
+            model: Application,
+            as: 'applications',
+            include: [
+              {
+                model: User,
+                as: 'user',
+                attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+                include: [
+                  {
+                    model: EntertainerProfile,
+                    as: 'profile',
+                    attributes: [
+                      'id',
+                      'stageName',
+                      'entertainerType',
+                      'location',
+                      'about'
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      })
+      .then(events => {
+        if (!events || events.length === 0) {
+          return res.status(404).json({ message: 'Event not found' });
+        }
+        return res.status(200).json({ events });
+      });
+  },
+  /**
    * get Auction Details
    * @function
    * @param {object} req is req object
@@ -308,7 +404,7 @@ const EventController = {
         {
           model: User,
           as: 'owner',
-          attributes: ['id', 'firstName', 'lastName']
+          attributes: ['id', 'firstName', 'lastName', 'profileImageURL']
         }
       ]
     })

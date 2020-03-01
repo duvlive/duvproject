@@ -1,4 +1,5 @@
 import { ENTERTAINER_TYPE } from './constants';
+import Humanize from 'humanize-plus';
 
 /**
  * Carousel Chunk
@@ -15,8 +16,30 @@ export const chunk = (array, size) => {
   return chunked_arr;
 };
 
+export const commaNumber = value => {
+  const number = parseInt(value, 10);
+  return Humanize.intComma(number);
+};
+
+export const getBudgetRange = (minBudget, maxBudget) =>
+  `${commaNumber(minBudget)} - ${commaNumber(
+    Humanize.boundedNumber(maxBudget, 1000000)
+  )}`;
+
 export const twoDigitNumber = number =>
   number > 0 && number < 10 ? '0' + number : number;
+
+export const listJsonItems = (items, defaultValue) => {
+  try {
+    const parsedItems = JSON.parse(items);
+    if (!parsedItems) return defaultValue;
+    if (parsedItems.length <= 1) return parsedItems;
+    return parsedItems.join(', ');
+  } catch (error) {
+    console.log('error', error);
+    return defaultValue;
+  }
+};
 
 /**
  * Item Selection

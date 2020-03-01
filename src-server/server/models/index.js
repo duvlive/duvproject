@@ -130,6 +130,11 @@ db.EventEntertainer.belongsTo(db.EntertainerProfile, {
   as: 'entertainer'
 });
 
+db.EventEntertainer.belongsTo(db.Event, {
+  foreignKey: 'eventId',
+  as: 'event'
+});
+
 db.EntertainerProfile.belongsTo(db.User, {
   foreignKey: 'userId',
   as: 'personalDetails'

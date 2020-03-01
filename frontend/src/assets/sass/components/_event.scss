@@ -150,3 +150,8 @@
     cursor: pointer;
   }
 }
+
+.transparent .list-group-item {
+  background: transparent !important;
+  border-color: rgba($white, 0.1) !important;
+}

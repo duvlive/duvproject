@@ -113,19 +113,19 @@ export const EVENT_AGE_GROUP = [
   },
   {
     label: 'Children (Below 12 years)',
-    value: 'children'
+    value: 'Children (Below 12 years)'
   },
   {
-    label: 'Teen (12 - 17 years)',
-    value: 'teens'
+    label: 'Teens (12 - 17 years)',
+    value: 'Teens (12 - 17 years)'
   },
   {
     label: 'Adults (18 - 50 years)',
-    value: 'adults'
+    value: 'Adults (18 - 50 years)'
   },
   {
     label: '51 years old or over',
-    value: 'old-people'
+    value: 'Old People (51 years old or over)'
   }
 ];
 
@@ -190,27 +190,27 @@ export const OCCASSION_TYPE = [
 export const AUDIENCE_SIZE = [
   {
     label: 'Fewer than 20 guests',
-    value: '0-20'
+    value: '0 - 20 Guests'
   },
   {
     label: 'Between 20 and 50 guests',
-    value: '21-50'
+    value: '21-50 Guests'
   },
   {
     label: 'Between 51 and 100 guests',
-    value: '51-100'
+    value: '51 - 100 Guests'
   },
   {
     label: 'Between 101 and 250 guests',
-    value: '101-250'
+    value: '101 - 250 Guests'
   },
   {
     label: 'Between 251 and 1000 guests',
-    value: '251-1000'
+    value: '251 - 1000 Guests'
   },
   {
     label: 'Above 1000 guests',
-    value: '1000+'
+    value: '1,000+ Guests'
   }
 ];
 
@@ -253,17 +253,18 @@ export const PLACE_OF_EVENTS = [
 ];
 
 export const BUDGET = [
-  { label: '50 thousand naira', value: '50K' },
-  { label: '100 thousand naira', value: '100K' },
-  { label: '200 thousand naira', value: '200K' },
-  { label: '300 thousand naira', value: '300K' },
-  { label: '400 thousand naira', value: '400K' },
-  { label: '500 thousand naira', value: '500K' },
-  { label: '600 thousand naira', value: '600K' },
-  { label: '700 thousand naira', value: '700K' },
-  { label: '800 thousand naira', value: '800K' },
-  { label: '900 thousand naira', value: '900K' },
-  { label: 'Over 1 million naira ', value: '1M+' }
+  { label: '50 thousand naira', value: '50000' },
+  { label: '100 thousand naira', value: '100000' },
+  { label: '200 thousand naira', value: '200000' },
+  { label: '300 thousand naira', value: '300000' },
+  { label: '400 thousand naira', value: '400000' },
+  { label: '500 thousand naira', value: '500000' },
+  { label: '600 thousand naira', value: '600000' },
+  { label: '700 thousand naira', value: '700000' },
+  { label: '800 thousand naira', value: '800000' },
+  { label: '900 thousand naira', value: '900000' },
+  { label: '1 million naira ', value: '1000000' },
+  { label: 'Over 1 million naira ', value: '1000000000' }
 ];
 
 export const LANGUAGE = [

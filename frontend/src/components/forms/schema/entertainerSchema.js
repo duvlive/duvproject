@@ -1,3 +1,4 @@
+import * as yup from 'yup';
 import {
   required,
   stringValidation,
@@ -8,6 +9,7 @@ import {
   email,
   phoneNumber
 } from './schema-helpers';
+import { commaNumber } from 'utils/helpers';
 
 /////////////////////////
 // Schema
@@ -68,3 +70,20 @@ export const identificationSchema = {
   issueDate: required('Issue Date'),
   expiryDate: required('Expiry Date')
 };
+
+export const bidSchema = (minAuctionPrice = 0, maxAuctionPrice = 0) => ({
+  askingPrice: yup
+    .number()
+    .transform(value => (isNaN(value) ? undefined : value))
+    .required('Your bid must be a valid number')
+    .positive('Your bid must be a positive number')
+    .integer(`Your bid must be a number`)
+    .moreThan(
+      minAuctionPrice,
+      `Your bid must be more than ${commaNumber(minAuctionPrice)}`
+    )
+    .lessThan(
+      maxAuctionPrice,
+      `Your bid must be less than ${commaNumber(maxAuctionPrice)}`
+    )
+});
