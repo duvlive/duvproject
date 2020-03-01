@@ -120,6 +120,16 @@ db.Application.belongsTo(db.User, {
   as: 'user'
 });
 
+db.Application.belongsTo(db.Event, {
+  foreignKey: 'eventId',
+  as: 'event'
+});
+
+db.Application.belongsTo(db.EventEntertainer, {
+  foreignKey: 'eventEntertainerId',
+  as: 'eventEntertainerInfo'
+});
+
 db.Event.belongsTo(db.User, {
   foreignKey: 'userId',
   as: 'owner'

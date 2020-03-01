@@ -169,11 +169,6 @@ const EventEntertainerController = {
             }
           ]
         }
-        // {
-        //   model: User,
-        //   as: 'owner',
-        //   attributes: ['id', 'firstName', 'lastName', 'profileImageURL']
-        // }
       ]
     })
       .then(eventEntertainerInfo => {

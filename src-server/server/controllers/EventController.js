@@ -275,27 +275,29 @@ const EventController = {
    * @return {object} returns res object
    */
   getAvailableAuctions(req, res) {
-    Event.findAll({
+    EventEntertainer.findAll({
+      where: {
+        //"hireType" = 'Auction' AND
+        //"auctionStartDate" <= NOW() AND
+        // "entertainers"."auctionEndDate" >= NOW();
+        hireType: 'Auction',
+        auctionStartDate: { [Op.lte]: Sequelize.literal('NOW()') },
+        auctionEndDate: { [Op.gte]: Sequelize.literal('NOW()') },
+        entertainerType: {
+          [Op.eq]: req.user.profile.entertainerType
+        }
+      },
       include: [
         {
-          where: {
-            //"hireType" = 'Auction' AND
-            //"auctionStartDate" <= NOW() AND
-            // "entertainers"."auctionEndDate" >= NOW();
-            hireType: 'Auction',
-            auctionStartDate: { [Op.lte]: Sequelize.literal('NOW()') },
-            auctionEndDate: { [Op.gte]: Sequelize.literal('NOW()') },
-            entertainerType: {
-              [Op.eq]: req.user.profile.entertainerType
+          model: Event,
+          as: 'event',
+          include: [
+            {
+              model: User,
+              as: 'owner',
+              attributes: ['id', 'firstName', 'lastName', 'profileImageURL']
             }
-          },
-          model: EventEntertainer,
-          as: 'entertainers'
-        },
-        {
-          model: User,
-          as: 'owner',
-          attributes: ['id', 'firstName', 'lastName', 'profileImageURL']
+          ]
         }
       ]
     }).then(events => {

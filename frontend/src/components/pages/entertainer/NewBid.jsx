@@ -11,11 +11,12 @@ import { createSchema } from 'components/forms/schema/schema-helpers';
 import { bidSchema } from 'components/forms/schema/entertainerSchema';
 import ViewEvent from '../user/ViewEvent';
 import { getTokenFromStore } from 'utils/localStorage';
-import { getBudgetRange, commaNumber } from 'utils/helpers';
+import { getBudgetRange } from 'utils/helpers';
 import { remainingDays } from 'utils/date-helpers';
 
 const Bids = ({ eventEntertainerId }) => {
   const [eventEntertainer, setEventEntertainer] = React.useState({
+    id: eventEntertainerId,
     lowestBudget: 0,
     highestBudget: 0,
     event: { eventType: '', eventDate: '' }
@@ -102,7 +103,8 @@ const BidsForm = ({ eventEntertainer }) => {
             const payload = {
               status: 'Pending',
               askingPrice: values.askingPrice,
-              eventId: eventEntertainer.eventId
+              eventId: eventEntertainer.eventId,
+              eventEntertainerId: eventEntertainer.id
             };
             console.log('payload', payload);
             axios

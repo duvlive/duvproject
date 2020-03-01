@@ -5,7 +5,7 @@ import BackEndPage from 'components/common/layout/BackEndPage';
 const Bids = () => (
   <BackEndPage title="Bids">
     <div className="main-app">
-      <TopMessage message="Bids" />
+      <TopMessage message="Placed Bids" />
 
       <section className="app-content">
         <div className="table-responsive">

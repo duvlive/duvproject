@@ -35,7 +35,7 @@ const EntertainerRouter = () => {
   return (
     <Router>
       <Dashboard path="/dashboard" />
-      <Bids path="/bids" />
+      <Bids path="/available-auctions" />
       <NewBid path="/bid/:eventEntertainerId" />
       <Notifications path="/notifications" />
       <UpcomingEvents path="/events" />

@@ -11,6 +11,10 @@ module.exports = function(sequelize, DataTypes) {
         type: DataTypes.INTEGER,
         allowNull: false
       },
+      eventEntertainerId: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
       status: {
         type: DataTypes.STRING,
         allowNull: true,

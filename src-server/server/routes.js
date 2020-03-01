@@ -248,6 +248,14 @@ router.get(
   EventController.getEventBids
 );
 
+router.get(
+  '/api/v1/entertainer/bids',
+  Authentication.verifyToken,
+  Authentication.isActiveUser,
+  Authentication.validateEntertainer,
+  ApplicationController.getEntertainerBids
+);
+
 // Application routes
 router
   .route('/api/v1/application')

@@ -78,11 +78,11 @@ export const bidSchema = (minAuctionPrice = 0, maxAuctionPrice = 0) => ({
     .required('Your bid must be a valid number')
     .positive('Your bid must be a positive number')
     .integer(`Your bid must be a number`)
-    .moreThan(
+    .min(
       minAuctionPrice,
       `Your bid must be more than ${commaNumber(minAuctionPrice)}`
     )
-    .lessThan(
+    .max(
       maxAuctionPrice,
       `Your bid must be less than ${commaNumber(maxAuctionPrice)}`
     )
