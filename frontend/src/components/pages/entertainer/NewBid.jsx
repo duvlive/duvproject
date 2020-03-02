@@ -13,6 +13,7 @@ import ViewEvent from '../user/ViewEvent';
 import { getTokenFromStore } from 'utils/localStorage';
 import { getBudgetRange } from 'utils/helpers';
 import { remainingDays } from 'utils/date-helpers';
+import { navigate } from '@reach/router';
 
 const Bids = ({ eventEntertainerId }) => {
   const [eventEntertainer, setEventEntertainer] = React.useState({
@@ -31,6 +32,7 @@ const Bids = ({ eventEntertainerId }) => {
         })
         .then(function(response) {
           const { status, data } = response;
+          console.log('data', data);
           // handle success
           if (status === 200) {
             setEventEntertainer(data.eventEntertainerInfo);
@@ -113,11 +115,13 @@ const BidsForm = ({ eventEntertainer }) => {
               })
               .then(function(response) {
                 const { status, data } = response;
+                console.log('data', data);
                 if (status === 200) {
                   setMessage({
                     type: 'info',
                     message: `Your bid has been successfully submitted.`
                   });
+                  navigate('/entertainer/bids');
                   actions.setSubmitting(false);
                 }
               })

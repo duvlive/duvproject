@@ -1,10 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Formik } from 'formik';
-import {
-  setInitialValues,
-  DisplayFormikState
-} from 'components/forms/form-helper';
+import { setInitialValues } from 'components/forms/form-helper';
 import TopMessage from 'components/common/layout/TopMessage';
 import EventDetails from 'components/common/events/EventDetails';
 import EventAddress from 'components/common/events/EventAddress';
@@ -112,7 +109,6 @@ const NewEventForm = ({ currentHireType }) => {
               Add Event
             </button>
           </div>
-          <DisplayFormikState {...props} />
         </>
       )}
       validationSchema={createSchema(entertainersSchema)}

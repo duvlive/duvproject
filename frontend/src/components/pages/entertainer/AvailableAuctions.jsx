@@ -1,17 +1,18 @@
 import React from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
+import { Link } from '@reach/router';
 import TopMessage from 'components/common/layout/TopMessage';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import { getTokenFromStore } from 'utils/localStorage';
 import { twoDigitNumber } from 'utils/helpers';
 import { getShortDate } from 'utils/date-helpers';
 
-const Bids = () => {
-  const [bids, setBids] = React.useState([]);
+const Auctions = () => {
+  const [auctions, setAuctions] = React.useState([]);
   React.useEffect(() => {
     axios
-      .get('/api/v1/entertainer/bids', {
+      .get('/api/v1/available-auctions', {
         headers: {
           'x-access-token': getTokenFromStore()
         }
@@ -20,7 +21,7 @@ const Bids = () => {
         const { status, data } = response;
         // handle success
         if (status === 200) {
-          setBids(data.bids);
+          setAuctions(data.events);
         }
       })
       .catch(function(error) {
@@ -29,23 +30,23 @@ const Bids = () => {
       });
   }, []);
   return (
-    <BackEndPage title="Bids">
+    <BackEndPage title="Available Auctions">
       <div className="main-app">
-        <TopMessage message="Placed Bids" />
+        <TopMessage message="Available Auctions" />
 
         <section className="app-content">
           <div className="table-responsive">
             <table className="table table-dark table__no-border table__with-bg">
               <tbody>
-                {bids.map((bid, index) => (
-                  <BidsRow
-                    auctionEndDate={bid.eventEntertainerInfo.auctionEndDate}
-                    city={bid.event.city}
-                    eventType={bid.event.eventType}
+                {auctions.map((auction, index) => (
+                  <AuctionsRow
+                    auctionEndDate={auction.auctionEndDate}
+                    city={auction.event.city}
+                    eventType={auction.event.eventType}
+                    id={auction.id}
                     key={index}
                     number={index + 1}
-                    state={bid.event.state}
-                    status={bid.status}
+                    state={auction.event.state}
                   />
                 ))}
               </tbody>
@@ -59,13 +60,13 @@ const Bids = () => {
   );
 };
 
-const BidsRow = ({
+const AuctionsRow = ({
   auctionEndDate,
   city,
   eventType,
+  id,
   number,
-  state,
-  status
+  state
 }) => (
   <tr>
     <th className="table__number" scope="row">
@@ -85,12 +86,17 @@ const BidsRow = ({
       </span>
     </td>
     <td className="text-right">
-      <div className="btn btn-info btn-transparent">{status}</div>
+      <Link
+        className="btn btn-info btn-transparent"
+        to={`/entertainer/bid/${id}`}
+      >
+        Place Bid
+      </Link>
     </td>
   </tr>
 );
 
-BidsRow.propTypes = {
+AuctionsRow.propTypes = {
   auctionEndDate: PropTypes.any,
   city: PropTypes.string,
   eventType: PropTypes.string,
@@ -99,7 +105,7 @@ BidsRow.propTypes = {
   status: PropTypes.string
 };
 
-Bids.defaultProps = {
+Auctions.defaultProps = {
   auctionEndDate: '',
   city: '',
   eventType: '',
@@ -108,4 +114,4 @@ Bids.defaultProps = {
   status: 'Pending'
 };
 
-export default Bids;
+export default Auctions;

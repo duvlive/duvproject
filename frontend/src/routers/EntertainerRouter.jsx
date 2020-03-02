@@ -2,6 +2,7 @@ import React from 'react';
 import { Router, navigate } from '@reach/router';
 import Dashboard from 'components/pages/entertainer/Dashboard';
 import Bids from 'components/pages/entertainer/Bids';
+import AvailableAuctions from 'components/pages/entertainer/AvailableAuctions';
 import NewBid from 'components/pages/entertainer/NewBid';
 import Notifications from 'components/pages/entertainer/Notifications';
 import UpcomingEvents from 'components/pages/entertainer/UpcomingEvents';
@@ -35,7 +36,8 @@ const EntertainerRouter = () => {
   return (
     <Router>
       <Dashboard path="/dashboard" />
-      <Bids path="/available-auctions" />
+      <Bids path="/bids" />
+      <AvailableAuctions path="/available-auctions" />
       <NewBid path="/bid/:eventEntertainerId" />
       <Notifications path="/notifications" />
       <UpcomingEvents path="/events" />

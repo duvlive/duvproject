@@ -33,7 +33,7 @@ import Card from 'components/custom/Card';
 import { getLongDate, getTime } from 'utils/date-helpers';
 import { navigate } from '@reach/router';
 
-const AddEntertainerDetails = ({ id, type }) => {
+const AddEntertainerDetails = ({ id }) => {
   const [event, setEvent] = React.useState({});
   React.useEffect(() => {
     id &&
@@ -64,7 +64,7 @@ const AddEntertainerDetails = ({ id, type }) => {
         <EventDetails event={event} />
 
         <section className="app-content">
-          <AddEntertainerToEvent event={event} id={id} type={type} />
+          <AddEntertainerToEvent event={event} id={id} type="Auction" />
         </section>
       </div>
     </BackEndPage>
@@ -72,13 +72,11 @@ const AddEntertainerDetails = ({ id, type }) => {
 };
 
 AddEntertainerDetails.propTypes = {
-  id: PropTypes.string,
-  type: PropTypes.string
+  id: PropTypes.string
 };
 
 AddEntertainerDetails.defaultProps = {
-  id: null,
-  type: null
+  id: null
 };
 const AddEntertainerToEvent = ({ event, id, type }) => {
   const { userDispatch } = React.useContext(UserContext);

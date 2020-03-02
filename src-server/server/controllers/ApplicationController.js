@@ -121,11 +121,11 @@ const ApplicationController = {
           }
         ]
       })
-      .then(events => {
-        if (!events || events.length === 0) {
+      .then(bids => {
+        if (!bids || bids.length === 0) {
           return res.status(404).json({ message: 'Event not found' });
         }
-        return res.status(200).json({ events });
+        return res.status(200).json({ bids });
       });
   }
 };

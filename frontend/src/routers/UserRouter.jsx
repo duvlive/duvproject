@@ -33,7 +33,7 @@ const UserRouter = () => (
     <RecommendedEntertainers path="/entertainer/recommended/:event_id" />
     <NewEvent path="events/new" />
     <NewEvent path="/hire-entertainer" />
-    <AddEntertainerDetails path="events/:id/add-entertainer/:type" />
+    <AddEntertainerDetails path="events/:id/add-entertainer" />
     <ViewEvent path="events/view/:id" />
     <Bids path="/auction/bids" />
     <Approval path="/approval" />
