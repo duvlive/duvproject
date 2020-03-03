@@ -17,6 +17,7 @@ import axios from 'axios';
 import { getTokenFromStore } from 'utils/localStorage';
 import { UserContext } from 'context/UserContext';
 import AlertMessage from 'components/common/utils/AlertMessage';
+import { Link, Match } from '@reach/router';
 
 const NewEvent = ({ hire_type }) => {
   const validHireType = Object.keys(HIRE_ENTERTAINERS).includes(
@@ -32,6 +33,24 @@ const NewEvent = ({ hire_type }) => {
         <TopMessage message={message} />
 
         <section className="app-content">
+          <Match path="/user/hire-entertainer">
+            {props =>
+              // eslint-disable-next-line react/prop-types
+              props.match && (
+                <AlertMessage
+                  message={
+                    <span>
+                      Kindly enter the type of event you wish to{' '}
+                      <strong>Hire an Entertainer</strong> for. If you wish to
+                      add an entertainer to a previously created event,{' '}
+                      <Link to="/events/new">Click here</Link>
+                    </span>
+                  }
+                  type="info"
+                />
+              )
+            }
+          </Match>
           <NewEventForm currentHireType={currentHireType} />
         </section>
       </div>

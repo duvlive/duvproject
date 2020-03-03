@@ -229,10 +229,10 @@ export default AccountSetup;
 // 8. Recommend a friend, api, facebook, twitter and linkedin
 // 12. Add a get started button that will create entertainer profile for user
 
-// 0. Add message to hire-entertainers that you need to add new event b4 you can add entertaineras
-// 1. Remove hire as entertaner selection page
-// 2. Create a better event view page
-// 3. Load all auctions
+// 0. Add message to hire-entertainers that you need to add new event b4 you can add entertaineras (DONE)
+// 1. Remove hire as entertaner selection page (DONE)
+// 2. Create a better event view page (DONE)
+// 3. Load all auctions (DONE)
 // 4. Think of showing recommendation on user homepage and entertainer dashboard
 // 5. Finalize Load all events
 // 6. Validations for date events

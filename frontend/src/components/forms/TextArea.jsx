@@ -103,8 +103,9 @@ TextArea.propTypes = {
   label: PropTypes.string,
   labelClassName: PropTypes.string,
   labelLink: PropTypes.shape({
-    to: PropTypes.string.isRequired,
-    text: PropTypes.string.isRequired
+    to: PropTypes.string,
+    text: PropTypes.string,
+    onClick: PropTypes.func
   }),
   name: PropTypes.string.isRequired,
   optional: PropTypes.bool,
