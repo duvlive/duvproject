@@ -8,6 +8,7 @@ const AlertMessage = ({ type, message, lists }) => {
   return (
     message && (
       <Alert color={type}>
+        <AlertIcon type={type} />
         {message && message}
         {messageList && messageList.length > 0 && <ul>{messageList}</ul>}
       </Alert>
@@ -46,4 +47,25 @@ AlertMessage.Text.defaultProps = {
   type: 'primary'
 };
 
+const AlertIcon = ({ type }) => {
+  const ICON = {
+    success: 'ok-circled',
+    danger: 'cancel-circled',
+    info: 'help'
+  };
+  return (
+    (type && ICON[type] && (
+      <span class={`alert-icon icon icon-${ICON[type]}`} />
+    )) ||
+    null
+  );
+};
+
+AlertIcon.propTypes = {
+  type: PropTypes.oneOf(['success', 'danger', 'info'])
+};
+
+AlertIcon.defaultProps = {
+  type: 'primary'
+};
 export default AlertMessage;

@@ -31,7 +31,7 @@ import TopMessage from '../layout/TopMessage';
 import { Row, Col } from 'reactstrap';
 import Card from 'components/custom/Card';
 import { getLongDate, getTime } from 'utils/date-helpers';
-import { navigate } from '@reach/router';
+import { navigate, Match } from '@reach/router';
 
 const AddEntertainerDetails = ({ id }) => {
   const [event, setEvent] = React.useState({});
@@ -64,6 +64,17 @@ const AddEntertainerDetails = ({ id }) => {
         <EventDetails event={event} />
 
         <section className="app-content">
+          <Match path="/user/events/:id/add-entertainer/new-event">
+            {props =>
+              // eslint-disable-next-line react/prop-types
+              props.match && (
+                <AlertMessage
+                  message="Your Event has been successfully saved."
+                  type="info"
+                />
+              )
+            }
+          </Match>
           <AddEntertainerToEvent event={event} id={id} type="Auction" />
         </section>
       </div>
@@ -310,23 +321,29 @@ HireEntertainersCardList.defaultProps = {
   type: null
 };
 
-const HireEntertainersCard = ({ color, title, type, onClick }) => (
-  <Col
-    md={{ size: 4, offset: 0 }}
-    onClick={() => onClick(title)}
-    sm={{ size: 6, offset: 0 }}
-  >
-    <Card
-      className={classNames('select-hire-type', {
-        isActive: type && type.toLowerCase() === title.toLowerCase()
-      })}
-      color={color}
-      hover
+const HireEntertainersCard = ({ color, title, type, onClick }) => {
+  const isActive = type && type.toLowerCase() === title.toLowerCase();
+  return (
+    <Col
+      md={{ size: 4, offset: 0 }}
+      onClick={() => onClick(title)}
+      sm={{ size: 6, offset: 0 }}
     >
-      <h6 className="text-center mb-0">{title}</h6>
-    </Card>
-  </Col>
-);
+      <Card
+        className={classNames('select-hire-type', {
+          isActive: isActive
+        })}
+        color={color}
+        hover
+      >
+        <h6 className="text-center mb-0">
+          {isActive && <span className="icon icon-dot-circled text-white" />}
+          {title}
+        </h6>
+      </Card>
+    </Col>
+  );
+};
 
 HireEntertainersCard.propTypes = {
   color: PropTypes.string.isRequired,

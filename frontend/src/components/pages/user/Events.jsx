@@ -15,7 +15,7 @@ const Events = () => {
   return (
     <BackEndPage title="My Events">
       <div className="main-app">
-        <TopMessage message="My Events" />
+        <TopMessage message="Upcoming Events" />
 
         <section className="app-content">
           <div className="table-responsive">
@@ -98,6 +98,13 @@ Events.Card = ({
           {false && <Avatars entertainers={entertainersDetails} />}
         </td>
         <td className="text-right">
+          <Link
+            className="btn btn-danger btn-transparent"
+            to={`/user/events/${id}/add-entertainer`}
+          >
+            Add Entertainer
+          </Link>
+          &nbsp; &nbsp; &nbsp;
           <Link
             className="btn btn-info btn-transparent"
             to={`/user/events/view/${id}`}

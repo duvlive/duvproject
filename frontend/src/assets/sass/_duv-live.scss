@@ -405,3 +405,50 @@ a:hover {
 .cursor-pointer {
   cursor: pointer !important;
 }
+
+.alert {
+  font-size: 0.85rem;
+  border-radius: 2px;
+  padding: 0.75rem 1rem;
+}
+
+.alert-primary {
+  color: rgba($white, 0.4);
+  background-color: rgba($red, 0.08);
+  border-color: rgba($red, 0.2);
+}
+
+.alert-success {
+  color: rgba(lighten($green-300, 60), 0.4);
+  background-color: rgba($green-300, 0.08);
+  border-color: rgba($green-300, 0.2);
+
+  .alert-icon {
+    color: $green-300;
+  }
+}
+
+.alert-info {
+  color: rgba(lighten($blue, 40), 0.4);
+  background-color: rgba($blue, 0.1);
+  border-color: rgba($blue, 0.2);
+  .alert-icon {
+    color: rgba($blue, 0.5);
+  }
+}
+
+.alert-danger,
+.alert-error {
+  color: rgba(lighten($red, 40), 0.4);
+  background-color: rgba($red, 0.08);
+  border-color: rgba($red, 0.2);
+  .alert-icon {
+    color: rgba($red, 0.5);
+  }
+}
+
+.alert-icon {
+  font-size: 1.2rem;
+  display: inline-block;
+  margin-right: 0.3rem;
+}

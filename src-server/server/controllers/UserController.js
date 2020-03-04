@@ -1,3 +1,4 @@
+import Sequelize, { Op } from 'sequelize';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import {
@@ -61,6 +62,9 @@ export const userAssociatedModels = [
     as: 'notifications'
   },
   {
+    where: {
+      eventDate: { [Op.gte]: Sequelize.literal('NOW()') }
+    },
     model: Event,
     as: 'events',
     include: [
@@ -277,7 +281,8 @@ const UserController = {
       order: [
         // ...we use the same syntax from the include
         // in the beginning of the order array
-        [{ model: Notification, as: 'notifications' }, 'updatedAt', 'DESC']
+        [{ model: Notification, as: 'notifications' }, 'updatedAt', 'DESC'],
+        [{ model: Event, as: 'events' }, 'eventDate', 'DESC']
       ]
     })
       .then(user => {

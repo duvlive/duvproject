@@ -142,7 +142,20 @@
 
     &.isActive {
       border-width: 3px;
+      border-color: transparent;
       opacity: 1;
+
+      &.card-red {
+        background: rgba($red, 0.3);
+      }
+
+      &.card-blue {
+        background: rgba($blue, 0.3);
+      }
+
+      &.card-green {
+        background: rgba($green, 0.3);
+      }
     }
   }
 }

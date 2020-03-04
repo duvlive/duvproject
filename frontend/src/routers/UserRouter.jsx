@@ -34,6 +34,7 @@ const UserRouter = () => (
     <NewEvent path="events/new" />
     <NewEvent path="/hire-entertainer" />
     <AddEntertainerDetails path="events/:id/add-entertainer" />
+    <AddEntertainerDetails path="events/:id/add-entertainer/new-event" />
     <ViewEvent path="events/view/:id" />
     <Bids path="/auction/bids" />
     <Approval path="/approval" />

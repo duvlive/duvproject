@@ -1,11 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Formik } from 'formik';
 import { setInitialValues } from 'components/forms/form-helper';
 import TopMessage from 'components/common/layout/TopMessage';
 import EventDetails from 'components/common/events/EventDetails';
 import EventAddress from 'components/common/events/EventAddress';
-import { HIRE_ENTERTAINERS } from 'utils/constants';
 import { navigate } from '@reach/router';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import {
@@ -19,18 +17,11 @@ import { UserContext } from 'context/UserContext';
 import AlertMessage from 'components/common/utils/AlertMessage';
 import { Link, Match } from '@reach/router';
 
-const NewEvent = ({ hire_type }) => {
-  const validHireType = Object.keys(HIRE_ENTERTAINERS).includes(
-    hire_type.toLowerCase()
-  );
-  const currentHireType = validHireType ? HIRE_ENTERTAINERS[hire_type] : '';
-  const message = validHireType
-    ? `Hire an Entertainer (${currentHireType})`
-    : 'Enter a New Event';
+const NewEvent = () => {
   return (
     <BackEndPage title="New Events">
       <div className="main-app">
-        <TopMessage message={message} />
+        <TopMessage message="Enter a New Event" />
 
         <section className="app-content">
           <Match path="/user/hire-entertainer">
@@ -41,9 +32,9 @@ const NewEvent = ({ hire_type }) => {
                   message={
                     <span>
                       Kindly enter the type of event you wish to{' '}
-                      <strong>Hire an Entertainer</strong> for. If you wish to
-                      add an entertainer to a previously created event,{' '}
-                      <Link to="/events/new">Click here</Link>
+                      <strong>Hire an Entertainer</strong> for. To add an
+                      entertainer to a previously created event,{' '}
+                      <Link to="/user/events">Click here</Link>
                     </span>
                   }
                   type="info"
@@ -51,22 +42,14 @@ const NewEvent = ({ hire_type }) => {
               )
             }
           </Match>
-          <NewEventForm currentHireType={currentHireType} />
+          <NewEventForm />
         </section>
       </div>
     </BackEndPage>
   );
 };
 
-NewEvent.propTypes = {
-  hire_type: PropTypes.string
-};
-
-NewEvent.defaultProps = {
-  hire_type: ''
-};
-
-const NewEventForm = ({ currentHireType }) => {
+const NewEventForm = () => {
   const initialValues = {
     event: setInitialValues(eventDetailsSchema),
     address: setInitialValues(eventAddressSchema)
@@ -100,13 +83,11 @@ const NewEventForm = ({ currentHireType }) => {
             if (status === 200) {
               userDispatch({
                 type: 'add-new-event',
-                user: data
+                event: data.event
               });
 
               const eventId = data.event.id;
-              navigate(
-                `/user/events/${eventId}/add-entertainer/${currentHireType.toLowerCase()}`
-              );
+              navigate(`/user/events/${eventId}/add-entertainer/new-event`);
               actions.setSubmitting(false);
             }
           })
@@ -133,10 +114,6 @@ const NewEventForm = ({ currentHireType }) => {
       validationSchema={createSchema(entertainersSchema)}
     />
   );
-};
-
-NewEventForm.propTypes = {
-  currentHireType: PropTypes.string.isRequired
 };
 
 export default NewEvent;

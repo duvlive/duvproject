@@ -4,6 +4,7 @@ export const COLOR_STYLE = [
   'secondary',
   'success',
   'danger',
+  'error',
   'warning',
   'info',
   'light',
