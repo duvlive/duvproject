@@ -106,7 +106,7 @@ const NewEventForm = () => {
               className="btn btn-transparent btn-primary text-right btn-lg"
               onClick={handleSubmit}
             >
-              Add Event
+              Save Event
             </button>
           </div>
         </>

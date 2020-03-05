@@ -62,9 +62,6 @@ export const userAssociatedModels = [
     as: 'notifications'
   },
   {
-    where: {
-      eventDate: { [Op.gte]: Sequelize.literal('NOW()') }
-    },
     model: Event,
     as: 'events',
     include: [

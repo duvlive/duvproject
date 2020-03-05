@@ -337,7 +337,7 @@ const HireEntertainersCard = ({ color, title, type, onClick }) => {
         hover
       >
         <h6 className="text-center mb-0">
-          {isActive && <span className="icon icon-dot-circled text-white" />}
+          {/* {isActive && <span className="icon icon-ok text-white" />} */}
           {title}
         </h6>
       </Card>

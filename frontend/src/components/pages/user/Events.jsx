@@ -7,23 +7,60 @@ import Timeago from 'react-timeago';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import { UserContext } from 'context/UserContext';
 import { getEventDate, getTime } from 'utils/date-helpers';
+import { parse } from 'date-fns';
 
 const Events = () => {
   const { userState } = React.useContext(UserContext);
+  const [showPastEvents, setShowPastEvents] = React.useState(false);
   const events = userState && userState.events;
-  console.log('events', events);
+  // Sort event according - Today, Upcoming and Past
+  const allEvents = events.reduce(
+    (result, event) => {
+      if (parse(event.eventDate).toDateString() === new Date().toDateString()) {
+        result.today.push(event);
+      } else if (parse(event.eventDate) > Date.now()) {
+        result.upcoming.push(event);
+      } else {
+        result.past.push(event);
+      }
+      return result;
+    },
+    { today: [], upcoming: [], past: [] }
+  );
+  const togglePastEvents = () => setShowPastEvents(!showPastEvents);
   return (
     <BackEndPage title="My Events">
       <div className="main-app">
-        <TopMessage message="Upcoming Events" />
+        <TopMessage message="All Events" />
 
         <section className="app-content">
           <div className="table-responsive">
             <table className="table table-dark table__no-border table__with-bg">
               <tbody>
-                <Events.CardList events={events} />
+                <Events.CardList
+                  events={allEvents.today}
+                  title="Today's Event"
+                />
+                <Events.CardList
+                  events={allEvents.upcoming}
+                  title="Upcoming Events"
+                />
+                {showPastEvents && (
+                  <Events.CardList
+                    events={allEvents.past}
+                    title="Past Events"
+                  />
+                )}
               </tbody>
             </table>
+            {!showPastEvents && (
+              <button
+                className="btn btn-warning btn-lg btn-wide btn-transparent"
+                onClick={togglePastEvents}
+              >
+                View Past Events
+              </button>
+            )}
             <br />
             <br />
           </div>
@@ -33,10 +70,37 @@ const Events = () => {
   );
 };
 
-Events.CardList = ({ events }) =>
-  events
-    ? events.map((event, index) => <Events.Card key={index} {...event} />)
-    : null;
+Events.CardList = ({ events, title }) => {
+  if (!events) return null;
+
+  const eventCard = events.map((event, index) => (
+    <Events.Card key={index} {...event} />
+  ));
+  return (
+    <>
+      <tr className="transparent">
+        <td colSpan="5">
+          <h3 className={`event-title`}>{title}</h3>
+        </td>
+      </tr>
+      {eventCard}
+      <tr className="transparent">
+        <td colSpan="5">
+          <div className={`event-spacer`} />
+        </td>
+      </tr>
+    </>
+  );
+};
+
+Events.CardList.propTypes = {
+  events: PropTypes.array,
+  title: PropTypes.string.isRequired
+};
+
+Events.CardList.defaultProps = {
+  events: []
+};
 
 Events.Card = ({
   id,

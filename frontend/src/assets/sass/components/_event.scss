@@ -155,3 +155,18 @@
   background: transparent !important;
   border-color: rgba($white, 0.1) !important;
 }
+
+.event-title {
+  color: $white;
+  margin-left: -1rem;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  margin-top: 1rem;
+}
+
+.event-spacer {
+  margin-bottom: 5rem;
+  tr:last-child & {
+    margin-bottom: 0;
+  }
+}
