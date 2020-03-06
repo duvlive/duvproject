@@ -30,10 +30,12 @@ import BackEndPage from '../layout/BackEndPage';
 import TopMessage from '../layout/TopMessage';
 import { Row, Col } from 'reactstrap';
 import Card from 'components/custom/Card';
-import { getLongDate, getTime } from 'utils/date-helpers';
+import { getLongDate, getTime, subtractDays } from 'utils/date-helpers';
 import { navigate, Match } from '@reach/router';
 
 const AddEntertainerDetails = ({ id }) => {
+  let auctionIsDisabled = false;
+  let type = 'Auction';
   const [event, setEvent] = React.useState({});
   React.useEffect(() => {
     id &&
@@ -57,6 +59,11 @@ const AddEntertainerDetails = ({ id }) => {
           // navigate to all events
         });
   }, [id]);
+
+  if (event && Date.now() > subtractDays(event.eventDate, 4)) {
+    auctionIsDisabled = true;
+    type = 'Recommend';
+  }
   return (
     <BackEndPage title="Add Entertainer">
       <div className="main-app">
@@ -75,7 +82,12 @@ const AddEntertainerDetails = ({ id }) => {
               )
             }
           </Match>
-          <AddEntertainerToEvent event={event} id={id} type="Auction" />
+          <AddEntertainerToEvent
+            auctionIsDisabled={auctionIsDisabled}
+            event={event}
+            id={id}
+            type={type}
+          />
         </section>
       </div>
     </BackEndPage>
@@ -89,14 +101,14 @@ AddEntertainerDetails.propTypes = {
 AddEntertainerDetails.defaultProps = {
   id: null
 };
-const AddEntertainerToEvent = ({ event, id, type }) => {
+const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
   const { userDispatch } = React.useContext(UserContext);
   const [message, setMessage] = React.useState(null);
   const [hireType, setHireType] = React.useState(type);
   const handleTypeClick = selectedType => setHireType(selectedType);
   let initialValues = {
-    lowestBudget: '50K',
-    highestBudget: '1M+'
+    lowestBudget: BUDGET[0].value,
+    highestBudget: BUDGET[10].value
   };
   const isAuction =
     hireType.toLowerCase() ===
@@ -105,10 +117,14 @@ const AddEntertainerToEvent = ({ event, id, type }) => {
   if (isAuction) {
     initialValues = {
       ...initialValues,
-      auctionStartDate: { date: event.createdAt || Date.now() },
-      auctionEndDate: { date: event.eventDate || Date.now() }
+      auctionStartDate: { date: Date.now() },
+      auctionEndDate: {
+        date: subtractDays(event.eventDate, 3) || Date.now()
+      }
     };
   }
+  console.log('Date.now() ', Date.now());
+  console.log('event.eventDate', event.eventDate);
   console.log('initialValues', initialValues);
 
   return (
@@ -140,7 +156,7 @@ const AddEntertainerToEvent = ({ event, id, type }) => {
                 type: 'add-entertainer-to-event',
                 user: data
               });
-              navigate('/user/events');
+              navigate(`/user/events/view/${id}`);
               actions.setSubmitting(false);
             }
           })
@@ -153,6 +169,7 @@ const AddEntertainerToEvent = ({ event, id, type }) => {
         <>
           <AlertMessage {...message} />
           <AddEntertainerDetailsForm
+            auctionIsDisabled={auctionIsDisabled}
             onClick={handleTypeClick}
             type={hireType}
           />
@@ -174,16 +191,21 @@ const AddEntertainerToEvent = ({ event, id, type }) => {
 };
 
 AddEntertainerToEvent.propTypes = {
+  auctionIsDisabled: PropTypes.bool.isRequired,
   event: PropTypes.object.isRequired,
   id: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired
 };
 
-const AddEntertainerDetailsForm = ({ type, onClick }) => (
+const AddEntertainerDetailsForm = ({ auctionIsDisabled, type, onClick }) => (
   <div className="card card-custom card-black card-form">
     <div className="card-body col-md-10">
       <h4 className="card-title blue">Add Entertainer</h4>
-      <HireEntertainersCardList onClick={onClick} type={type} />
+      <HireEntertainersCardList
+        auctionIsDisabled={auctionIsDisabled}
+        onClick={onClick}
+        type={type}
+      />
       <div className="form-row">
         <Select
           blankOption="Choose your preferred Entertainer Type"
@@ -238,22 +260,23 @@ const AddEntertainerDetailsForm = ({ type, onClick }) => (
         />
       </div>
       {type.toLowerCase() ===
-        HIRE_ENTERTAINERS_TYPE.auction.title.toLowerCase() && (
-        <div className="form-row">
-          <DatePicker
-            formGroupClassName="col-md-6"
-            label="Auction Start Date"
-            name="auctionStartDate"
-            placeholderText="Event Date"
-          />
-          <DatePicker
-            formGroupClassName="col-md-6"
-            label="Auction End Date"
-            name="auctionEndDate"
-            placeholderText="Event Date"
-          />
-        </div>
-      )}
+        HIRE_ENTERTAINERS_TYPE.auction.title.toLowerCase() &&
+        !auctionIsDisabled && (
+          <div className="form-row">
+            <DatePicker
+              formGroupClassName="col-md-6"
+              label="Auction Start Date"
+              name="auctionStartDate"
+              placeholderText="Event Date"
+            />
+            <DatePicker
+              formGroupClassName="col-md-6"
+              label="Auction End Date"
+              name="auctionEndDate"
+              placeholderText="Event Date"
+            />
+          </div>
+        )}
       <div className="form-row">
         <Select
           blankOption="Choose your base budget"
@@ -288,6 +311,7 @@ const AddEntertainerDetailsForm = ({ type, onClick }) => (
 );
 
 AddEntertainerDetailsForm.propTypes = {
+  auctionIsDisabled: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,
   type: PropTypes.string
 };
@@ -295,24 +319,38 @@ AddEntertainerDetailsForm.propTypes = {
 AddEntertainerDetailsForm.defaultProps = {
   type: null
 };
-const HireEntertainersCardList = ({ type, onClick }) => (
-  <Row className="row-eq-height mb-5">
-    <label className="col-sm-12" htmlFor="">
-      Select Hire Type
-    </label>
-    {Object.keys(HIRE_ENTERTAINERS_TYPE).map(hireType => (
-      <HireEntertainersCard
-        color={HIRE_ENTERTAINERS_TYPE[hireType].color}
-        key={HIRE_ENTERTAINERS_TYPE[hireType].title}
-        onClick={onClick}
-        title={HIRE_ENTERTAINERS_TYPE[hireType].title}
-        type={type}
-      />
-    ))}
-  </Row>
-);
+const HireEntertainersCardList = ({ auctionIsDisabled, type, onClick }) => {
+  return (
+    <Row className="row-eq-height mb-5">
+      <label className="col-sm-12" htmlFor="">
+        Select Hire Type
+      </label>
+      {Object.keys(HIRE_ENTERTAINERS_TYPE).map(hireType => {
+        const title = HIRE_ENTERTAINERS_TYPE[hireType].title;
+        const isActive = type && type.toLowerCase() === title.toLowerCase();
+        return (
+          <HireEntertainersCard
+            color={HIRE_ENTERTAINERS_TYPE[hireType].color}
+            isActive={isActive}
+            key={title}
+            onClick={onClick}
+            title={title}
+          />
+        );
+      })}
+      <div className="col-12">
+        <div className="text-muted">
+          {HIRE_ENTERTAINERS_TYPE[type.toLowerCase()].description}
+        </div>
+
+        {auctionIsDisabled}
+      </div>
+    </Row>
+  );
+};
 
 HireEntertainersCardList.propTypes = {
+  auctionIsDisabled: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,
   type: PropTypes.string
 };
@@ -321,8 +359,7 @@ HireEntertainersCardList.defaultProps = {
   type: null
 };
 
-const HireEntertainersCard = ({ color, title, type, onClick }) => {
-  const isActive = type && type.toLowerCase() === title.toLowerCase();
+const HireEntertainersCard = ({ color, title, isActive, onClick }) => {
   return (
     <Col
       md={{ size: 4, offset: 0 }}
@@ -347,13 +384,9 @@ const HireEntertainersCard = ({ color, title, type, onClick }) => {
 
 HireEntertainersCard.propTypes = {
   color: PropTypes.string.isRequired,
+  isActive: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired,
-  type: PropTypes.string
-};
-
-HireEntertainersCard.defaultProps = {
-  type: null
+  title: PropTypes.string.isRequired
 };
 
 const EventDetails = ({ event }) => {

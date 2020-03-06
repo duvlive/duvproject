@@ -7,7 +7,8 @@ import {
   urlValidation,
   multiSelectValidation,
   email,
-  phoneNumber
+  phoneNumber,
+  positiveNumberValidation
 } from './schema-helpers';
 import { commaNumber } from 'utils/helpers';
 
@@ -39,8 +40,11 @@ export const addEntertainerSchema = {
   language: multiSelectValidation('Language'),
   expectedAudienceSize: stringValidation('Audience Size'),
   ageGroup: stringValidation('Age Group'),
-  lowestBudget: stringValidation('Base Budget'),
-  highestBudget: stringValidation('Highest Budget'),
+  lowestBudget: positiveNumberValidation('Base Budget', 'budget'),
+  highestBudget: positiveNumberValidation('Highest Budget', 'budget').moreThan(
+    yup.ref('lowestBudget'),
+    'Highest Budget should be greater or equal to Base Budget'
+  ),
   placeOfEvent: stringValidation('Place of Event'),
   specialRequest: optionalValidation(stringValidation('Special Request', 20)),
   auctionStartDate: optionalValidation(required('Auction Start Date')),
@@ -72,12 +76,7 @@ export const identificationSchema = {
 };
 
 export const bidSchema = (minAuctionPrice = 0, maxAuctionPrice = 0) => ({
-  askingPrice: yup
-    .number()
-    .transform(value => (isNaN(value) ? undefined : value))
-    .required('Your bid must be a valid number')
-    .positive('Your bid must be a positive number')
-    .integer(`Your bid must be a number`)
+  askingPrice: positiveNumberValidation('Your Bid')
     .min(
       minAuctionPrice,
       `Your bid must be more than ${commaNumber(minAuctionPrice)}`

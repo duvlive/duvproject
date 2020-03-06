@@ -32,14 +32,14 @@ AlertMessage.defaultProps = {
 AlertMessage.Text = ({ type, message }) => {
   return (
     <div className="small pb-4">
-      {message && <div className={type}>{message && message}</div>}
+      {message && <div className={`text-${type}`}>{message && message}</div>}
     </div>
   );
 };
 
 AlertMessage.Text.propTypes = {
   message: PropTypes.any,
-  type: PropTypes.oneOf(['success', 'error', 'primary'])
+  type: PropTypes.oneOf(['success', 'error', 'primary', 'info'])
 };
 
 AlertMessage.Text.defaultProps = {
@@ -55,7 +55,7 @@ const AlertIcon = ({ type }) => {
   };
   return (
     (type && ICON[type] && (
-      <span class={`alert-icon icon icon-${ICON[type]}`} />
+      <span className={`alert-icon icon icon-${ICON[type]}`} />
     )) ||
     null
   );

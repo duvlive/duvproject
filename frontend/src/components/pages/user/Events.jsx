@@ -8,13 +8,14 @@ import BackEndPage from 'components/common/layout/BackEndPage';
 import { UserContext } from 'context/UserContext';
 import { getEventDate, getTime } from 'utils/date-helpers';
 import { parse } from 'date-fns';
+import NoContent from 'components/common/utils/NoContent';
 
 const Events = () => {
   const { userState } = React.useContext(UserContext);
-  const [showPastEvents, setShowPastEvents] = React.useState(false);
   const events = userState && userState.events;
+  const [showPastEvents, setShowPastEvents] = React.useState(false);
   // Sort event according - Today, Upcoming and Past
-  const allEvents = events.reduce(
+  let allEvents = events.reduce(
     (result, event) => {
       if (parse(event.eventDate).toDateString() === new Date().toDateString()) {
         result.today.push(event);
@@ -28,42 +29,55 @@ const Events = () => {
     { today: [], upcoming: [], past: [] }
   );
   const togglePastEvents = () => setShowPastEvents(!showPastEvents);
+
+  const hasActiveEvents =
+    allEvents.today.length > 0 || allEvents.upcoming.length > 0;
+
   return (
     <BackEndPage title="My Events">
       <div className="main-app">
         <TopMessage message="All Events" />
 
         <section className="app-content">
-          <div className="table-responsive">
-            <table className="table table-dark table__no-border table__with-bg">
-              <tbody>
-                <Events.CardList
-                  events={allEvents.today}
-                  title="Today's Event"
-                />
-                <Events.CardList
-                  events={allEvents.upcoming}
-                  title="Upcoming Events"
-                />
-                {showPastEvents && (
+          {events.length > 0 ? (
+            <div className="table-responsive">
+              <table className="table table-dark table__no-border table__with-bg">
+                <tbody>
                   <Events.CardList
-                    events={allEvents.past}
-                    title="Past Events"
+                    events={allEvents.today}
+                    title="Today's Event"
                   />
-                )}
-              </tbody>
-            </table>
-            {!showPastEvents && (
-              <button
-                className="btn btn-warning btn-lg btn-wide btn-transparent"
-                onClick={togglePastEvents}
-              >
-                View Past Events
-              </button>
-            )}
-            <br />
-            <br />
-          </div>
+                  <Events.CardList
+                    events={allEvents.upcoming}
+                    title="Upcoming Events"
+                  />
+                  {(showPastEvents || !hasActiveEvents) && (
+                    <Events.CardList
+                      events={allEvents.past}
+                      title="Past Events"
+                    />
+                  )}
+                </tbody>
+              </table>
+              {!showPastEvents && hasActiveEvents && allEvents.past.length > 0 && (
+                <button
+                  className="btn btn-warning btn-lg btn-wide btn-transparent"
+                  onClick={togglePastEvents}
+                >
+                  View Past Events
+                </button>
+              )}
+              <br />
+              <br />
+            </div>
+          ) : (
+            <NoContent
+              isButton
+              linkText="Add a New Event"
+              linkTo="/user/events/new"
+              text="No Event Found"
+            />
+          )}
         </section>
       </div>
     </BackEndPage>
@@ -71,7 +85,7 @@ const Events = () => {
 };
 
 Events.CardList = ({ events, title }) => {
-  if (!events) return null;
+  if (events.length === 0) return null;
 
   const eventCard = events.map((event, index) => (
     <Events.Card key={index} {...event} />

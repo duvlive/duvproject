@@ -254,18 +254,18 @@ export const PLACE_OF_EVENTS = [
 ];
 
 export const BUDGET = [
-  { label: '50 thousand naira', value: '50000' },
-  { label: '100 thousand naira', value: '100000' },
-  { label: '200 thousand naira', value: '200000' },
-  { label: '300 thousand naira', value: '300000' },
-  { label: '400 thousand naira', value: '400000' },
-  { label: '500 thousand naira', value: '500000' },
-  { label: '600 thousand naira', value: '600000' },
-  { label: '700 thousand naira', value: '700000' },
-  { label: '800 thousand naira', value: '800000' },
-  { label: '900 thousand naira', value: '900000' },
-  { label: '1 million naira ', value: '1000000' },
-  { label: 'Over 1 million naira ', value: '1000000000' }
+  { label: '50 Thousand Naira', value: '50000' },
+  { label: '100 Thousand Naira', value: '100000' },
+  { label: '200 Thousand Naira', value: '200000' },
+  { label: '300 Thousand Naira', value: '300000' },
+  { label: '400 Thousand Naira', value: '400000' },
+  { label: '500 Thousand Naira', value: '500000' },
+  { label: '600 Thousand Naira', value: '600000' },
+  { label: '700 Thousand Naira', value: '700000' },
+  { label: '800 Thousand Naira', value: '800000' },
+  { label: '900 Thousand Naira', value: '900000' },
+  { label: '1 Million Naira ', value: '1000000' },
+  { label: 'Over 1 Million Naira ', value: '1000000000' }
 ];
 
 export const LANGUAGE = [

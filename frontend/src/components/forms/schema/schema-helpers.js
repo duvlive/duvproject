@@ -46,11 +46,13 @@ export const phoneNumber = yup
 
 export const OptionalPhoneNumber = optionalValidation(phoneNumber);
 
-export const positiveNumberValidation = label =>
+export const positiveNumberValidation = (label, type = 'number') =>
   yup
     .number()
-    .positive(`${label} must be a positive number`)
-    .integer(`${label} must be a number`);
+    .transform(value => (isNaN(value) ? undefined : value))
+    .required(`${label} must be a valid ${type}`)
+    .positive(`${label} must be a positive ${type}`)
+    .integer(`${label} must be a ${type}`);
 
 export const yearValidation = label =>
   yup

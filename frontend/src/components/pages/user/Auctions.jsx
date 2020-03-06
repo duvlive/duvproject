@@ -10,6 +10,7 @@ import BackEndPage from 'components/common/layout/BackEndPage';
 import { getTokenFromStore } from 'utils/localStorage';
 import Humanize from 'humanize-plus';
 import { getShortDate } from 'utils/date-helpers';
+import NoContent from 'components/common/utils/NoContent';
 
 const Auctions = () => {
   const [auctions, setAuctions] = React.useState([]);
@@ -41,7 +42,23 @@ const Auctions = () => {
         <TopMessage message="Auctions" />
 
         <section className="app-content">
-          <AuctionsTable auctions={auctions} />
+          {auctions.length > 0 ? (
+            <AuctionsTable auctions={auctions} />
+          ) : (
+            <NoContent
+              isButton
+              linkText="Add a New Event"
+              linkTo="/user/events/new"
+              text={
+                <>
+                  No Auction Found.
+                  <div className="small  mt-3">
+                    You can create a new Auction after adding a new Event
+                  </div>
+                </>
+              }
+            />
+          )}
         </section>
       </div>
     </BackEndPage>

@@ -31,8 +31,11 @@
 
 $text-colors: (
   'red': $danger,
+  'error': $red-100,
+  'danger': $danger,
   'green': $green,
   'blue': $blue,
+  'info': $blue-100,
   'yellow': $yellow,
   'white': $white,
   'gray': $text-color,
