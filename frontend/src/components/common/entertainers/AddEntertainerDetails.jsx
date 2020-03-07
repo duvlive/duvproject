@@ -32,6 +32,7 @@ import { Row, Col } from 'reactstrap';
 import Card from 'components/custom/Card';
 import { getLongDate, getTime, subtractDays } from 'utils/date-helpers';
 import { navigate, Match } from '@reach/router';
+import { addDays } from 'date-fns';
 
 const AddEntertainerDetails = ({ id }) => {
   let auctionIsDisabled = false;
@@ -64,31 +65,38 @@ const AddEntertainerDetails = ({ id }) => {
     auctionIsDisabled = true;
     type = 'Recommend';
   }
+  const eventIsTooClose =
+    event && Date.now() >= subtractDays(event.eventDate, 3);
+
   return (
     <BackEndPage title="Add Entertainer">
       <div className="main-app">
         <TopMessage message={event.eventType || ''} />
         <EventDetails event={event} />
 
-        <section className="app-content">
-          <Match path="/user/events/:id/add-entertainer/new-event">
-            {props =>
-              // eslint-disable-next-line react/prop-types
-              props.match && (
-                <AlertMessage
-                  message="Your Event has been successfully saved."
-                  type="info"
-                />
-              )
-            }
-          </Match>
-          <AddEntertainerToEvent
-            auctionIsDisabled={auctionIsDisabled}
-            event={event}
-            id={id}
-            type={type}
-          />
-        </section>
+        {eventIsTooClose ? (
+          <NoEntertainer />
+        ) : (
+          <section className="app-content">
+            <Match path="/user/events/:id/add-entertainer/new-event">
+              {props =>
+                // eslint-disable-next-line react/prop-types
+                props.match && (
+                  <AlertMessage
+                    message="Your Event has been successfully saved."
+                    type="success"
+                  />
+                )
+              }
+            </Match>
+            <AddEntertainerToEvent
+              auctionIsDisabled={auctionIsDisabled}
+              event={event}
+              id={id}
+              type={type}
+            />
+          </section>
+        )}
       </div>
     </BackEndPage>
   );
@@ -119,7 +127,7 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
       ...initialValues,
       auctionStartDate: { date: Date.now() },
       auctionEndDate: {
-        date: subtractDays(event.eventDate, 3) || Date.now()
+        date: subtractDays(event.eventDate, 4) || Date.now()
       }
     };
   }
@@ -170,6 +178,7 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
           <AlertMessage {...message} />
           <AddEntertainerDetailsForm
             auctionIsDisabled={auctionIsDisabled}
+            eventDate={event.eventDate}
             onClick={handleTypeClick}
             type={hireType}
           />
@@ -197,7 +206,12 @@ AddEntertainerToEvent.propTypes = {
   type: PropTypes.string.isRequired
 };
 
-const AddEntertainerDetailsForm = ({ auctionIsDisabled, type, onClick }) => (
+const AddEntertainerDetailsForm = ({
+  auctionIsDisabled,
+  eventDate,
+  type,
+  onClick
+}) => (
   <div className="card card-custom card-black card-form">
     <div className="card-body col-md-10">
       <h4 className="card-title blue">Add Entertainer</h4>
@@ -266,12 +280,16 @@ const AddEntertainerDetailsForm = ({ auctionIsDisabled, type, onClick }) => (
             <DatePicker
               formGroupClassName="col-md-6"
               label="Auction Start Date"
+              maxDate={subtractDays(eventDate, 5)}
+              minDate={new Date()}
               name="auctionStartDate"
               placeholderText="Event Date"
             />
             <DatePicker
               formGroupClassName="col-md-6"
               label="Auction End Date"
+              maxDate={subtractDays(eventDate, 4)}
+              minDate={addDays(new Date(), 1)}
               name="auctionEndDate"
               placeholderText="Event Date"
             />
@@ -312,6 +330,7 @@ const AddEntertainerDetailsForm = ({ auctionIsDisabled, type, onClick }) => (
 
 AddEntertainerDetailsForm.propTypes = {
   auctionIsDisabled: PropTypes.bool.isRequired,
+  eventDate: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
   type: PropTypes.string
 };
@@ -413,4 +432,12 @@ EventDetails.propTypes = {
   })
 };
 
+const NoEntertainer = () => (
+  <section className="app-content">
+    <AlertMessage message="No enough time to plan for event" type="error" />
+    <h4 className="text-blue font-weight-normal mt-4">
+      You cannot add any Entertainer to Events less than 3 days
+    </h4>
+  </section>
+);
 export default AddEntertainerDetails;

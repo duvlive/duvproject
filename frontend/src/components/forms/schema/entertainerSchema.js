@@ -8,9 +8,11 @@ import {
   multiSelectValidation,
   email,
   phoneNumber,
-  positiveNumberValidation
+  positiveNumberValidation,
+  requiredDate
 } from './schema-helpers';
 import { commaNumber } from 'utils/helpers';
+import { isAfter } from 'date-fns';
 
 /////////////////////////
 // Schema
@@ -47,8 +49,17 @@ export const addEntertainerSchema = {
   ),
   placeOfEvent: stringValidation('Place of Event'),
   specialRequest: optionalValidation(stringValidation('Special Request', 20)),
-  auctionStartDate: optionalValidation(required('Auction Start Date')),
-  auctionEndDate: optionalValidation(required('Auction End Date'))
+  auctionStartDate: optionalValidation(requiredDate('Auction Start Date')),
+  auctionEndDate: optionalValidation(
+    requiredDate('Auction End Date').test(
+      'is-greater',
+      'End Date should be greater than Start Date',
+      function(value) {
+        const { auctionStartDate } = this.parent;
+        return isAfter(value.date, auctionStartDate.date);
+      }
+    )
+  )
 };
 
 export const videoSchema = {

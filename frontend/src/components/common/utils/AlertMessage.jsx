@@ -50,6 +50,7 @@ AlertMessage.Text.defaultProps = {
 const AlertIcon = ({ type }) => {
   const ICON = {
     success: 'ok-circled',
+    error: 'cancel-circled',
     danger: 'cancel-circled',
     info: 'help'
   };
