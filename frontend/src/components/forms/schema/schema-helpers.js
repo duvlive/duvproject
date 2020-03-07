@@ -54,6 +54,14 @@ export const positiveNumberValidation = (label, type = 'number') =>
     .positive(`${label} must be a positive ${type}`)
     .integer(`${label} must be a ${type}`);
 
+export const requiredDate = label =>
+  yup
+    .object()
+    .transform(value => value || { date: undefined })
+    .shape({
+      date: yup.date().required(`${label} is required`)
+    });
+
 export const yearValidation = label =>
   yup
     .number(`${label} must be a number`)

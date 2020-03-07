@@ -63,9 +63,10 @@ export const FeedbackMessage = ({
     feebackOptions
   );
   const message = getIn(formik.errors, name) || validMessage;
-
   return className && message ? (
-    <div className={className}>{message}</div>
+    <div className={className}>
+      {typeof message === 'object' ? message.date : message}
+    </div>
   ) : (
     helpText && <HelpText name={name} text={helpText} />
   );

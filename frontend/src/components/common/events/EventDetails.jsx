@@ -4,6 +4,7 @@ import Input from 'components/forms/Input';
 import Select from 'components/forms/Select';
 import TextArea from 'components/forms/TextArea';
 import DatePicker from 'components/forms/DatePicker';
+import { addDays } from 'date-fns';
 
 const EventDetails = () => {
   const [displayForm, setDisplayForm] = React.useState({ eventType: false });
@@ -48,8 +49,9 @@ const EventDetails = () => {
             <DatePicker
               formGroupClassName="col-md-6"
               label="Event Date"
+              minDate={addDays(new Date(), 4)}
               name="event.eventDate"
-              placeholderText="Event Date"
+              placeholder="Event Date"
             />
           </div>
           <div className="form-row">
@@ -58,22 +60,20 @@ const EventDetails = () => {
               formGroupClassName="col-md-6"
               label="Start Time"
               name="event.startTime"
-              placeholderText="Start Time"
+              placeholder="Approx. Start Time"
               showTimeSelect
               showTimeSelectOnly
               timeCaption="Start Time"
-              timeIntervals={30}
             />
             <DatePicker
               dateFormat="h:mm aa"
               formGroupClassName="col-md-6"
               label="End Time"
               name="event.endTime"
-              placeholderText="End Time"
+              placeholder="Approx. End Time"
               showTimeSelect
               showTimeSelectOnly
               timeCaption="End Time"
-              timeIntervals={30}
             />
           </div>
           <TextArea

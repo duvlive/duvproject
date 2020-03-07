@@ -30,7 +30,8 @@ const DatePicker = ({
   timeCaption,
   timeIntervals,
   tooltipText,
-  tooltipPosition
+  tooltipPosition,
+  ...props
 }) => (
   <div className={classNames('form-group', formGroupClassName)}>
     <div>
@@ -46,6 +47,7 @@ const DatePicker = ({
         {({ form }) => {
           return (
             <ReactDatePicker
+              {...props}
               autoComplete="off"
               className={classNames(
                 'form-control',
@@ -125,7 +127,7 @@ DatePicker.defaultProps = {
   showTimeSelect: false,
   showTimeSelectOnly: false,
   timeCaption: null,
-  timeIntervals: null,
+  timeIntervals: 60,
   tooltipText: null,
   tooltipPosition: 'right'
 };
