@@ -21,10 +21,14 @@ export const commaNumber = value => {
   return Humanize.intComma(number);
 };
 
-export const getBudgetRange = (minBudget, maxBudget) =>
-  `${commaNumber(minBudget)} - ${commaNumber(
-    Humanize.boundedNumber(maxBudget, 1000000)
+export const getBudgetRange = (minBudget, maxBudget) => {
+  const MAX_BUDGET_OUTPUT = 1000000;
+  const suffix = maxBudget > MAX_BUDGET_OUTPUT ? '+' : '';
+  const range = `${commaNumber(minBudget)} - ${commaNumber(
+    Humanize.boundedNumber(maxBudget, MAX_BUDGET_OUTPUT)
   )}`;
+  return range + suffix;
+};
 
 export const twoDigitNumber = number =>
   number > 0 && number < 10 ? '0' + number : number;

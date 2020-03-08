@@ -11,6 +11,7 @@ import BackEndPage from 'components/common/layout/BackEndPage';
 import { getTokenFromStore } from 'utils/localStorage';
 import { Link } from '@reach/router';
 import { listJsonItems, getBudgetRange } from 'utils/helpers';
+import { subDays } from 'date-fns';
 
 const defaultEvent = {
   userId: 0,
@@ -235,7 +236,7 @@ ViewEvent.EventDetailsCard.propTypes = {
   transparent: PropTypes.bool
 };
 
-ViewEvent.EventDetailsCard.propTypes = {
+ViewEvent.EventDetailsCard.defaultProps = {
   event: {},
   transparent: false
 };
@@ -246,7 +247,6 @@ ViewEvent.EventEntertainerDetailsCard = ({ eventEntertainer }) => {
     ...defaultEventEntertainer,
     ...eventEntertainer
   };
-  console.log('sanitizedEntertainer: ', sanitizedEntertainer);
   const isAuction = sanitizedEntertainer.hireType === 'Auction';
 
   return (
@@ -270,7 +270,7 @@ ViewEvent.EventEntertainerDetailsCard = ({ eventEntertainer }) => {
             Auction Closes
           </small>
           <h5 className="event-list-label">
-            {remainingDays(sanitizedEntertainer.auctionEndDate)}
+            {remainingDays(subDays(sanitizedEntertainer.auctionEndDate, 4))}
           </h5>
         </li>
       )}

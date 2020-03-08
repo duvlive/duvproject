@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TopMessage from 'components/common/layout/TopMessage';
 import BackEndPage from 'components/common/layout/BackEndPage';
-import Input from 'components/forms/Input';
+// import Input from 'components/forms/Input';
 import { Formik, Form } from 'formik';
 import axios from 'axios';
 import Button from 'components/forms/Button';
@@ -14,8 +14,11 @@ import { getTokenFromStore } from 'utils/localStorage';
 import { getBudgetRange } from 'utils/helpers';
 import { remainingDays } from 'utils/date-helpers';
 import { navigate } from '@reach/router';
+import { DisplayFormikState } from 'components/forms/form-helper';
+import InputFormat from 'components/forms/InputFormat';
+import Input from 'components/forms/Input';
 
-const Bids = ({ eventEntertainerId }) => {
+const NewBid = ({ eventEntertainerId }) => {
   const [eventEntertainer, setEventEntertainer] = React.useState({
     id: eventEntertainerId,
     lowestBudget: 0,
@@ -78,11 +81,11 @@ const Bids = ({ eventEntertainerId }) => {
   );
 };
 
-Bids.propTypes = {
+NewBid.propTypes = {
   eventEntertainerId: PropTypes.string
 };
 
-Bids.defaultProps = {
+NewBid.defaultProps = {
   eventEntertainerId: null
 };
 
@@ -135,7 +138,7 @@ const BidsForm = ({ eventEntertainer }) => {
             <>
               <Form>
                 <AlertMessage {...message} />
-                <Input
+                <InputFormat
                   label="Asking Price"
                   name="askingPrice"
                   placeholder="Your Bid"
@@ -167,4 +170,4 @@ BidsForm.propTypes = {
   eventEntertainer: PropTypes.object.isRequired
 };
 
-export default Bids;
+export default NewBid;

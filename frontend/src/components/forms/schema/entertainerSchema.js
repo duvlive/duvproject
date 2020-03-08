@@ -86,14 +86,17 @@ export const identificationSchema = {
   expiryDate: required('Expiry Date')
 };
 
-export const bidSchema = (minAuctionPrice = 0, maxAuctionPrice = 0) => ({
-  askingPrice: positiveNumberValidation('Your Bid')
-    .min(
-      minAuctionPrice,
-      `Your bid must be more than ${commaNumber(minAuctionPrice)}`
-    )
-    .max(
-      maxAuctionPrice,
-      `Your bid must be less than ${commaNumber(maxAuctionPrice)}`
-    )
-});
+export const bidSchema = (minAuctionPrice = 0, maxAuctionPrice = 0) => {
+  console.log('maxAuctionPRice', commaNumber(maxAuctionPrice));
+  return {
+    askingPrice: positiveNumberValidation('Your Bid')
+      .min(
+        minAuctionPrice,
+        `Your bid must be more than ${commaNumber(minAuctionPrice)}`
+      )
+      .max(
+        maxAuctionPrice,
+        `Your bid must be less than ${commaNumber(maxAuctionPrice)}`
+      )
+  };
+};
