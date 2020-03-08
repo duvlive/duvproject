@@ -11,12 +11,10 @@ import { createSchema } from 'components/forms/schema/schema-helpers';
 import { bidSchema } from 'components/forms/schema/entertainerSchema';
 import ViewEvent from '../user/ViewEvent';
 import { getTokenFromStore } from 'utils/localStorage';
-import { getBudgetRange } from 'utils/helpers';
+import { getBudgetRange, moneyFormat } from 'utils/helpers';
 import { remainingDays } from 'utils/date-helpers';
 import { navigate } from '@reach/router';
-import { DisplayFormikState } from 'components/forms/form-helper';
 import InputFormat from 'components/forms/InputFormat';
-import Input from 'components/forms/Input';
 
 const NewBid = ({ eventEntertainerId }) => {
   const [eventEntertainer, setEventEntertainer] = React.useState({
@@ -134,26 +132,38 @@ const BidsForm = ({ eventEntertainer }) => {
               });
             actions.setSubmitting(false);
           }}
-          render={({ isSubmitting, handleSubmit, ...props }) => (
-            <>
-              <Form>
-                <AlertMessage {...message} />
-                <InputFormat
-                  label="Asking Price"
-                  name="askingPrice"
-                  placeholder="Your Bid"
-                  type="number"
-                />
-                <Button
-                  className="btn-danger btn-wide btn-transparent"
-                  loading={isSubmitting}
-                  onClick={handleSubmit}
-                >
-                  Place Bid
-                </Button>
-              </Form>
-            </>
-          )}
+          render={({ isSubmitting, handleSubmit, ...props }) => {
+            const askingPrice = parseInt(props.values.askingPrice, 10) || 0;
+            const showCalculator =
+              askingPrice !== 0 &&
+              askingPrice >= parseInt(eventEntertainer.lowestBudget, 10) &&
+              askingPrice <= parseInt(eventEntertainer.highestBudget, 10);
+
+            return (
+              <>
+                <Form>
+                  <AlertMessage {...message} />
+                  <InputFormat
+                    label="Asking Price"
+                    name="askingPrice"
+                    placeholder="Your Bid"
+                    type="number"
+                  />
+
+                  {showCalculator && (
+                    <PriceCalculator askingPrice={askingPrice} />
+                  )}
+                  <Button
+                    className="btn-danger btn-wide btn-transparent"
+                    loading={isSubmitting}
+                    onClick={handleSubmit}
+                  >
+                    Place Bid
+                  </Button>
+                </Form>
+              </>
+            );
+          }}
           validationSchema={createSchema(
             bidSchema(
               eventEntertainer.lowestBudget,
@@ -167,7 +177,79 @@ const BidsForm = ({ eventEntertainer }) => {
 };
 
 BidsForm.propTypes = {
-  eventEntertainer: PropTypes.object.isRequired
+  eventEntertainer: PropTypes.object.isRequired,
+  values: PropTypes.object
 };
 
+NewBid.defaultProps = {
+  values: {}
+};
+const PriceCalculator = ({ askingPrice }) => {
+  const [showBreakdown, setShowBreakdown] = React.useState(false);
+  const commission = 0.1 * askingPrice;
+  const vat = 0.075 * commission;
+  const handling = 0.02 * askingPrice + 40;
+  const amountToPay = askingPrice - (commission + vat + handling);
+  const entertainerFee = amountToPay > 0 ? amountToPay : 0;
+  return (
+    <>
+      <h4 className="mb-4">You will be paid {moneyFormat(entertainerFee)} </h4>
+
+      {showBreakdown ? (
+        <div className="card card-custom">
+          <div className="card-body">
+            <h5 className="card-title text-yellow">Breakdown</h5>
+            <div className="table-responsive">
+              <table className="table table-dark">
+                <tbody>
+                  <tr>
+                    <td>Your Bid</td>
+                    <td className="text-right">{moneyFormat(askingPrice)}</td>
+                  </tr>
+                  <tr>
+                    <td>Commission (10%)</td>
+                    <td className="text-negative text-right">
+                      - {moneyFormat(commission)}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      VAT (7.5%)
+                      <small className="small--3 d-block text-muted">
+                        From commision
+                      </small>
+                    </td>
+                    <td className="text-negative text-right">
+                      - {moneyFormat(vat)}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Handling (2% + N40)</td>
+                    <td className="text-negative text-right">
+                      - {moneyFormat(handling)}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>You will be paid</td>
+                    <td className="text-white text-right">
+                      <h3>{moneyFormat(entertainerFee)}</h3>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="text-link mb-4" onClick={() => setShowBreakdown(true)}>
+          See Breakdown
+        </div>
+      )}
+    </>
+  );
+};
+
+PriceCalculator.propTypes = {
+  askingPrice: PropTypes.number.isRequired
+};
 export default NewBid;

@@ -63,8 +63,6 @@ export const FeedbackMessage = ({
     feebackOptions
   );
   const message = getIn(formik.errors, name) || validMessage;
-  console.log('className', className);
-  console.log('message', message);
   return className && message ? (
     <div className={className}>
       {typeof message === 'object' ? message.date : message}
