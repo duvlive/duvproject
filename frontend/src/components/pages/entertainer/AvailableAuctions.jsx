@@ -7,6 +7,7 @@ import BackEndPage from 'components/common/layout/BackEndPage';
 import { getTokenFromStore } from 'utils/localStorage';
 import { twoDigitNumber } from 'utils/helpers';
 import { getShortDate } from 'utils/date-helpers';
+import NoContent from 'components/common/utils/NoContent';
 
 const Auctions = () => {
   const [auctions, setAuctions] = React.useState([]);
@@ -19,6 +20,7 @@ const Auctions = () => {
       })
       .then(function(response) {
         const { status, data } = response;
+        console.log('data', data);
         // handle success
         if (status === 200) {
           setAuctions(data.events);
@@ -35,25 +37,34 @@ const Auctions = () => {
         <TopMessage message="Available Auctions" />
 
         <section className="app-content">
-          <div className="table-responsive">
-            <table className="table table-dark table__no-border table__with-bg">
-              <tbody>
-                {auctions.map((auction, index) => (
-                  <AuctionsRow
-                    auctionEndDate={auction.auctionEndDate}
-                    city={auction.event.city}
-                    eventType={auction.event.eventType}
-                    id={auction.id}
-                    key={index}
-                    number={index + 1}
-                    state={auction.event.state}
-                  />
-                ))}
-              </tbody>
-            </table>
-            <br />
-            <br />
-          </div>
+          {auctions.length > 0 ? (
+            <div className="table-responsive">
+              <table className="table table-dark table__no-border table__with-bg">
+                <tbody>
+                  {auctions.map((auction, index) => (
+                    <AuctionsRow
+                      auctionEndDate={auction.auctionEndDate}
+                      city={auction.event.city}
+                      eventType={auction.event.eventType}
+                      id={auction.id}
+                      key={index}
+                      number={index + 1}
+                      state={auction.event.state}
+                    />
+                  ))}
+                </tbody>
+              </table>
+              <br />
+              <br />
+            </div>
+          ) : (
+            <NoContent
+              isButton
+              linkText="Add a New Event"
+              linkTo="/user/events/new"
+              text={<>No Available Auction Found.</>}
+            />
+          )}
         </section>
       </div>
     </BackEndPage>
@@ -100,6 +111,7 @@ AuctionsRow.propTypes = {
   auctionEndDate: PropTypes.any,
   city: PropTypes.string,
   eventType: PropTypes.string,
+  id: PropTypes.number.isRequired,
   number: PropTypes.number,
   state: PropTypes.string,
   status: PropTypes.string

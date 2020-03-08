@@ -41,20 +41,24 @@ db.User.hasOne(db.EntertainerProfile, {
   foreignKey: 'userId',
   as: 'profile'
 });
+
 db.User.hasOne(db.BankDetail, {
   foreignKey: 'userId',
   as: 'bankDetail'
 });
+
 db.User.hasOne(db.Identification, {
   foreignKey: 'userId',
   as: 'identification',
   targetKey: 'identification'
 });
+
 db.User.hasOne(db.ApprovalComment, {
   foreignKey: 'userId',
   as: 'approvalComment',
   targetKey: 'approvalComment'
 });
+
 db.Event.hasOne(db.Auction, {
   foreignKey: 'eventId',
   as: 'auction',
@@ -130,6 +134,11 @@ db.Application.belongsTo(db.EventEntertainer, {
   as: 'eventEntertainerInfo'
 });
 
+db.EventEntertainer.hasMany(db.Application, {
+  foreignKey: 'eventEntertainerId',
+  as: 'applications'
+});
+
 db.Event.belongsTo(db.User, {
   foreignKey: 'userId',
   as: 'owner'
@@ -138,6 +147,11 @@ db.Event.belongsTo(db.User, {
 db.EventEntertainer.belongsTo(db.EntertainerProfile, {
   foreignKey: 'hiredEntertainer',
   as: 'entertainer'
+});
+
+db.EventEntertainer.belongsTo(db.User, {
+  foreignKey: 'userId',
+  as: 'user'
 });
 
 db.EventEntertainer.belongsTo(db.Event, {

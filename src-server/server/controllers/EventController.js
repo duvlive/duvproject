@@ -280,12 +280,14 @@ const EventController = {
         //"hireType" = 'Auction' AND
         //"auctionStartDate" <= NOW() AND
         // "entertainers"."auctionEndDate" >= NOW();
+
         hireType: 'Auction',
         auctionStartDate: { [Op.lte]: Sequelize.literal('NOW()') },
         auctionEndDate: { [Op.gte]: Sequelize.literal('NOW()') },
         entertainerType: {
           [Op.eq]: req.user.profile.entertainerType
-        }
+        },
+        [Op.and]: Sequelize.literal('applications.id is null')
       },
       include: [
         {
@@ -298,6 +300,12 @@ const EventController = {
               attributes: ['id', 'firstName', 'lastName', 'profileImageURL']
             }
           ]
+        },
+        {
+          model: Application,
+          as: 'applications',
+          where: { userId: req.user.id },
+          required: false
         }
       ]
     }).then(events => {
