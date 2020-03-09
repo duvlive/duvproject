@@ -232,7 +232,7 @@ const PriceCalculator = ({ askingPrice }) => {
                   <tr>
                     <td>You will be paid</td>
                     <td className="text-white text-right">
-                      <h3>{moneyFormat(entertainerFee)}</h3>
+                      <h6>{moneyFormat(entertainerFee)}</h6>
                     </td>
                   </tr>
                 </tbody>
