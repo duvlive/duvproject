@@ -4,13 +4,20 @@ import Input from 'components/forms/Input';
 import Select from 'components/forms/Select';
 import TextArea from 'components/forms/TextArea';
 import DatePicker from 'components/forms/DatePicker';
+import Humanize from 'humanize-plus';
 import { addDays } from 'date-fns';
 
+const getEventDuration = () =>
+  [...Array(24).keys()].map(index => ({
+    label: `${index + 1} ${Humanize.pluralize(index + 1, 'hour')}`,
+    value: `${index + 1} hours`
+  }));
+
 const EventDetails = () => {
+  const EVENT_DURATION = getEventDuration();
   const [displayForm, setDisplayForm] = React.useState({ eventType: false });
   const toggleForm = value => {
     console.log('value', value);
-    console.log('displayForm[value]: ', displayForm[value]);
     setDisplayForm({ [value]: !displayForm[value] });
   };
   return (
@@ -29,7 +36,7 @@ const EventDetails = () => {
                   to: ''
                 }}
                 name="event.eventType"
-                placeholder="Event Type"
+                placeholder="Type your Event Type"
               />
             ) : (
               <Select
@@ -43,7 +50,6 @@ const EventDetails = () => {
                 }}
                 name="event.eventType"
                 options={OCCASSION_TYPE}
-                placeholder="Event Type"
               />
             )}
             <DatePicker
@@ -55,6 +61,13 @@ const EventDetails = () => {
             />
           </div>
           <div className="form-row">
+            <Select
+              blankOption="Select Duration"
+              formGroupClassName="col-md-6"
+              label="Duration of Event (Approx.)"
+              name="event.eventDuration"
+              options={EVENT_DURATION}
+            />
             <DatePicker
               dateFormat="h:mm aa"
               formGroupClassName="col-md-6"
@@ -64,16 +77,6 @@ const EventDetails = () => {
               showTimeSelect
               showTimeSelectOnly
               timeCaption="Start Time"
-            />
-            <DatePicker
-              dateFormat="h:mm aa"
-              formGroupClassName="col-md-6"
-              label="End Time"
-              name="event.endTime"
-              placeholder="Approx. End Time"
-              showTimeSelect
-              showTimeSelectOnly
-              timeCaption="End Time"
             />
           </div>
           <TextArea

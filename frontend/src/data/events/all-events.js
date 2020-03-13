@@ -7,7 +7,7 @@ export default [
       eventType: 'Wedding Anniversary',
       eventDate: '2019-08-19',
       startTime: '9:00AM',
-      endTime: '3:00PM',
+      eventDuration: '3:00PM',
       information: 'I want to enjoy this party with my love'
     },
     address: {

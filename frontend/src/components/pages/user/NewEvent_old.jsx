@@ -83,7 +83,7 @@ const NewEventForm = ({ currentHireType }) => {
             eventType: event.eventType,
             eventDate: event.eventDate.date,
             startTime: event.startTime.date,
-            endTime: event.endTime.date,
+            eventDuration: event.eventDuration.date,
             moreInformation: event.moreInformation,
             ...address
           }

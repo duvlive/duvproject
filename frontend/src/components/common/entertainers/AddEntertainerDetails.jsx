@@ -30,7 +30,12 @@ import BackEndPage from '../layout/BackEndPage';
 import TopMessage from '../layout/TopMessage';
 import { Row, Col } from 'reactstrap';
 import Card from 'components/custom/Card';
-import { getLongDate, getTime, subtractDays } from 'utils/date-helpers';
+import {
+  getLongDate,
+  getTime,
+  subtractDays,
+  getTimeOfDay
+} from 'utils/date-helpers';
 import { navigate, Match } from '@reach/router';
 import { addDays } from 'date-fns';
 
@@ -417,7 +422,8 @@ const EventDetails = ({ event }) => {
     <section>
       <small>
         {getLongDate(event.eventDate)} &nbsp;&nbsp;|&nbsp;&nbsp;
-        {getTime(event.startTime)} - {getTime(event.endTime)}{' '}
+        {getTime(event.startTime)} in the {getTimeOfDay(event.startTime)} -{' '}
+        {event.eventDuration}{' '}
       </small>
     </section>
   );
@@ -428,7 +434,7 @@ EventDetails.propTypes = {
     eventType: PropTypes.string,
     eventDate: PropTypes.string,
     startTime: PropTypes.string,
-    endTime: PropTypes.string
+    eventDuration: PropTypes.string
   })
 };
 

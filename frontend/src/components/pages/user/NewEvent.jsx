@@ -69,7 +69,7 @@ const NewEventForm = () => {
           eventType: event.eventType,
           eventDate: event.eventDate.date,
           startTime: event.startTime.date,
-          endTime: event.endTime.date,
+          eventDuration: event.eventDuration,
           moreInformation: event.moreInformation,
           ...address
         };

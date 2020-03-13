@@ -22,7 +22,7 @@ module.exports = function(sequelize, DataTypes) {
         type: DataTypes.STRING,
         allowNull: false
       },
-      endTime: {
+      eventDuration: {
         type: DataTypes.STRING,
         allowNull: false
       },
@@ -32,31 +32,31 @@ module.exports = function(sequelize, DataTypes) {
       },
       streetLine1: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: false
       },
       streetLine2: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING
       },
       state: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: false
       },
       lga: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: false
       },
       city: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: false
       },
       landmark: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: false
       },
       description: {
         type: DataTypes.TEXT,
-        allowNull: false,
-      },
+        allowNull: false
+      }
     },
     {
       classMethods: {

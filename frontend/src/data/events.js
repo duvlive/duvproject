@@ -59,7 +59,7 @@ const events = [
     title: 'Lagos Fashion Show',
     slug: 'lagos-fashion-show',
     startTime: '9:00AM',
-    endTime: '4:00PM',
+    eventDuration: '4:00PM',
     organizer: 'Home 4 Africa',
     venue: 'Federal Palace Hotel & Casino, Lagos, LA'
   },
@@ -74,7 +74,7 @@ const events = [
     title: 'Fashions Finest Africa EPIC Show',
     slug: 'fashion-finest-africa-epic-show',
     startTime: '3:00PM',
-    endTime: '7:00PM',
+    eventDuration: '7:00PM',
     organizer: 'IFE',
     venue:
       '131, Obafemi Awolowo way,<br /> Allen Round About (PRESKEN hotel Ikeja)<br /> Ikeja, LA 100271'
@@ -90,7 +90,7 @@ const events = [
     title: 'Kulture Fest - Lagos',
     slug: 'kulture-fest--lagos',
     startTime: '12:00PM',
-    endTime: null,
+    eventDuration: null,
     organizer: 'La Vida Brand Exhibition',
     venue: 'Lagos Island<br />er Corporation Rd <br />Lagos, LA'
   },
@@ -105,7 +105,7 @@ const events = [
     title: 'Takwa Bay Beach Hangout',
     slug: 'takwa-bay-beach-hangout',
     startTime: '10:00AM',
-    endTime: null,
+    eventDuration: null,
     organizer: 'Kingsword Singles',
     venue: 'Tarkwa Bay <br />Lagos, LA'
   },
@@ -119,7 +119,7 @@ const events = [
     title: 'Lagos Fashion Hangout',
     slug: 'lagos-fashion-hangout',
     startTime: '9:00AM',
-    endTime: '5:00PM',
+    eventDuration: '5:00PM',
     organizer: null,
     venue: 'Ligali Ayorinde Street<br /> Lagos, LA'
   },
@@ -133,7 +133,7 @@ const events = [
     title: 'Celebration Submit',
     slug: 'celebration-submit',
     startTime: '9:00AM',
-    endTime: '4:00PM',
+    eventDuration: '4:00PM',
     organizer: 'Helping Souls',
     venue: 'Harbour Point, Lagos, Lagos'
   },
@@ -147,7 +147,7 @@ const events = [
     title: 'EPIC Celebration 2019',
     slug: 'epic-celebration-2019',
     startTime: '9:00AM',
-    endTime: '5:00PM',
+    eventDuration: '5:00PM',
     organizer: 'Helping Souls',
     venue: 'Eko Hotels & Suites, Lagos, LA'
   },
@@ -161,7 +161,7 @@ const events = [
     title: 'AFRICA YOUTH AND TALENT SUMMIT 2019, LAGOS-NIGERIA',
     slug: 'africa-youth-and-talent-summit-2019-lagos--nigeria',
     startTime: '8:00AM',
-    endTime: '4:00PM',
+    eventDuration: '4:00PM',
     organizer: 'AYTS NETWORKS',
     venue: `D'Podium International Event Centre<br />31b Aromire Avenue<br />Off Adeniyi Jones <br />Ikeja, Lagos, Lagos 234`
   },
@@ -176,7 +176,7 @@ const events = [
     title: '2019 National Business Conference',
     slug: '2019-national-business-conference',
     startTime: '8:00AM',
-    endTime: '4:00PM',
+    eventDuration: '4:00PM',
     organizer: 'BNI NIGERIA',
     venue: `Eko Hotels & Suites<br /> 1415 Adetokunbo Ademola Street<br /> VICTORIA ISLAND<br /> Lagos, LA`
   }

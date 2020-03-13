@@ -254,6 +254,7 @@ export const PLACE_OF_EVENTS = [
 ];
 
 export const BUDGET = [
+  { label: 'Less than 50 Thousand Naira', value: '0' },
   { label: '50 Thousand Naira', value: '50000' },
   { label: '100 Thousand Naira', value: '100000' },
   { label: '200 Thousand Naira', value: '200000' },

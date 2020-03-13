@@ -18,7 +18,7 @@ const defaultEvent = {
   eventType: null,
   eventDate: Date.now(),
   startTime: Date.now(),
-  endTime: Date.now(),
+  eventDuration: null,
   moreInformation: null,
   streetLine1: null,
   streetLine2: null,
@@ -191,8 +191,7 @@ ViewEvent.EventDetailsCard = ({ event, transparent }) => {
           Time
         </small>
         <h5 className="event-list-label">
-          {getTime(sanitizedEvent.startTime)} -{' '}
-          {getTime(sanitizedEvent.endTime)}
+          {getTime(sanitizedEvent.startTime)} - {sanitizedEvent.eventDuration}
         </h5>
       </li>
       <li className="list-group-item">
@@ -226,7 +225,7 @@ ViewEvent.EventDetailsCard.propTypes = {
     eventDate: PropTypes.string,
     eventType: PropTypes.string,
     startTime: PropTypes.string,
-    endTime: PropTypes.string,
+    eventDuration: PropTypes.string,
     streetLine1: PropTypes.string,
     streetLine2: PropTypes.string,
     lga: PropTypes.string,

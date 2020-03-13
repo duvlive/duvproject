@@ -74,7 +74,7 @@ const EventDetails = ({ event }) => {
       <h6>{event.eventType}</h6>
       <div>Date - {getLongDate(event.eventDate)}</div>
       <div>
-        Time -{getTime(event.startTime)} - {getTime(event.endTime)}{' '}
+        Time -{getTime(event.startTime)} - {event.eventDuration}{' '}
       </div>
     </section>
   );
@@ -85,7 +85,7 @@ EventDetails.propTypes = {
     eventType: PropTypes.string,
     eventDate: PropTypes.string,
     startTime: PropTypes.string,
-    endTime: PropTypes.string
+    eventDuration: PropTypes.string
   })
 };
 

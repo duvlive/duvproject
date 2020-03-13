@@ -121,7 +121,7 @@ Events.Card = ({
   eventType,
   eventDate,
   startTime,
-  endTime,
+  eventDuration,
   lga,
   state,
   entertainers
@@ -156,7 +156,7 @@ Events.Card = ({
             {getEventDate(eventDate)}
           </span>
           <span className="small--3 text-gray">
-            {getTime(startTime)} - {getTime(endTime)}
+            {getTime(startTime)} - {eventDuration}
           </span>
         </td>
         <td>
@@ -196,7 +196,7 @@ Events.Card = ({
 };
 
 Events.Card.propTypes = {
-  endTime: PropTypes.string,
+  eventDuration: PropTypes.string,
   entertainers: PropTypes.array,
   eventDate: PropTypes.string,
   eventType: PropTypes.string,
@@ -208,7 +208,7 @@ Events.Card.propTypes = {
 
 Events.Card.defaultProps = {
   id: '0',
-  endTime: null,
+  eventDuration: null,
   entertainers: [],
   eventDate: null,
   eventType: null,
