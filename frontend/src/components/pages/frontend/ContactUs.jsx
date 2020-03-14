@@ -13,6 +13,7 @@ import TextArea from 'components/forms/TextArea';
 import { contactUsSchema } from 'components/forms/schema/frontPageSchema';
 import { createSchema } from 'components/forms/schema/schema-helpers';
 import { Link } from '@reach/router';
+import { OUR_PHONE_NUMBER } from 'utils/constants';
 
 const ContactUs = () => {
   return (
@@ -107,7 +108,9 @@ export const ContactUsForm = () => {
 export const ContactUsInfo = () => (
   <>
     <h4 className="text-muted font-weight-normal mb-3">GENERAL ENQUIRIES</h4>
-    <h2 className="text-white title font-weight-normal mb-2">080-1238-4567</h2>
+    <h2 className="text-white title font-weight-normal mb-2">
+      {OUR_PHONE_NUMBER}
+    </h2>
     <a href="mailto:info@duvlive.com">info@duvlive.com</a>
     <p className="mt-4">
       DUV LIVE is an online platform that supports and promotes the best in live

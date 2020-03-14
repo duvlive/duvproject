@@ -47,7 +47,7 @@ const FilterEntertainerFieldsForm = () => (
     <Select
       blankOption="Choose your highest budget"
       label="Highest Budget (in Naira)"
-      name="entertainer.highest_budget"
+      name="entertainer.highestBudget"
       optional
       options={BUDGET}
       placeholder="Highest Budget"

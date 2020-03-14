@@ -2,12 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-const Image = ({ src, name, className, bordered, rounded }) => (
+const Image = ({
+  src,
+  name,
+  className,
+  bordered,
+  responsiveImage,
+  rounded
+}) => (
   <img
     alt={name}
     className={classNames(
       className,
-      'img-fluid',
+      {
+        'img-fluid': responsiveImage
+      },
       {
         'img-thumbnail': bordered
       },
@@ -24,6 +33,7 @@ Image.propTypes = {
   bordered: PropTypes.bool,
   className: PropTypes.string,
   name: PropTypes.string.isRequired,
+  responsiveImage: PropTypes.bool,
   rounded: PropTypes.bool,
   src: PropTypes.string.isRequired
 };
@@ -31,6 +41,7 @@ Image.propTypes = {
 Image.defaultProps = {
   bordered: false,
   className: '',
+  responsiveImage: true,
   rounded: true
 };
 

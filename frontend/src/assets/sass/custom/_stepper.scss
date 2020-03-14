@@ -100,7 +100,8 @@ $rejected-text-color: rgba(lighten($red, 35), 0.6);
   }
 }
 
-.things-to-complete {
+.things-to-complete,
+.stepper-info {
   border: 1px solid $gray-800;
   padding: 2rem 1.5rem 1rem;
   margin-bottom: 2rem;

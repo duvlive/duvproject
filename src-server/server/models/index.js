@@ -41,20 +41,24 @@ db.User.hasOne(db.EntertainerProfile, {
   foreignKey: 'userId',
   as: 'profile'
 });
+
 db.User.hasOne(db.BankDetail, {
   foreignKey: 'userId',
   as: 'bankDetail'
 });
+
 db.User.hasOne(db.Identification, {
   foreignKey: 'userId',
   as: 'identification',
   targetKey: 'identification'
 });
+
 db.User.hasOne(db.ApprovalComment, {
   foreignKey: 'userId',
   as: 'approvalComment',
   targetKey: 'approvalComment'
 });
+
 db.Event.hasOne(db.Auction, {
   foreignKey: 'eventId',
   as: 'auction',
@@ -107,6 +111,57 @@ db.Event.hasMany(db.EventEntertainer, {
   foreignKey: 'eventId',
   as: 'entertainers',
   targetKey: 'entertainers'
+});
+
+db.Event.hasMany(db.Application, {
+  foreignKey: 'eventId',
+  as: 'applications',
+  targetKey: 'applications'
+});
+
+db.Application.belongsTo(db.User, {
+  foreignKey: 'userId',
+  as: 'user'
+});
+
+db.Application.belongsTo(db.Event, {
+  foreignKey: 'eventId',
+  as: 'event'
+});
+
+db.Application.belongsTo(db.EventEntertainer, {
+  foreignKey: 'eventEntertainerId',
+  as: 'eventEntertainerInfo'
+});
+
+db.EventEntertainer.hasMany(db.Application, {
+  foreignKey: 'eventEntertainerId',
+  as: 'applications'
+});
+
+db.Event.belongsTo(db.User, {
+  foreignKey: 'userId',
+  as: 'owner'
+});
+
+db.EventEntertainer.belongsTo(db.EntertainerProfile, {
+  foreignKey: 'hiredEntertainer',
+  as: 'entertainer'
+});
+
+db.EventEntertainer.belongsTo(db.User, {
+  foreignKey: 'userId',
+  as: 'user'
+});
+
+db.EventEntertainer.belongsTo(db.Event, {
+  foreignKey: 'eventId',
+  as: 'event'
+});
+
+db.EntertainerProfile.belongsTo(db.User, {
+  foreignKey: 'userId',
+  as: 'personalDetails'
 });
 
 db.sequelize = sequelize;

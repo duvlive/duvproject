@@ -1,65 +1,90 @@
 import React from 'react';
 import { OCCASSION_TYPE } from 'utils/constants';
+import Input from 'components/forms/Input';
 import Select from 'components/forms/Select';
 import TextArea from 'components/forms/TextArea';
 import DatePicker from 'components/forms/DatePicker';
+import Humanize from 'humanize-plus';
+import { addDays } from 'date-fns';
+
+const getEventDuration = () =>
+  [...Array(24).keys()].map(index => ({
+    label: `${index + 1} ${Humanize.pluralize(index + 1, 'hour')}`,
+    value: `${index + 1} hours`
+  }));
 
 const EventDetails = () => {
+  const EVENT_DURATION = getEventDuration();
+  const [displayForm, setDisplayForm] = React.useState({ eventType: false });
+  const toggleForm = value => {
+    console.log('value', value);
+    setDisplayForm({ [value]: !displayForm[value] });
+  };
   return (
     <div className="card card-custom card-black card-form ">
       <div className="card-body col-md-10">
         <h4 className="card-title yellow">Event Details</h4>
         <form>
           <div className="form-row">
-            <Select
-              blankOption="Select Event Type"
-              formGroupClassName="col-md-6"
-              isValidMessage="looks good"
-              label="Event Type"
-              name="entertainer.event_type"
-              options={OCCASSION_TYPE}
-              placeholder="Event Type"
-            />
+            {displayForm.eventType ? (
+              <Input
+                formGroupClassName="col-md-6"
+                label="Event Type"
+                labelLink={{
+                  onClick: () => toggleForm('eventType'),
+                  text: 'Select Event Type',
+                  to: ''
+                }}
+                name="event.eventType"
+                placeholder="Type your Event Type"
+              />
+            ) : (
+              <Select
+                blankOption="Select Event Type"
+                formGroupClassName="col-md-6"
+                label="Event Type"
+                labelLink={{
+                  onClick: () => toggleForm('eventType'),
+                  text: 'Type Manually',
+                  to: ''
+                }}
+                name="event.eventType"
+                options={OCCASSION_TYPE}
+              />
+            )}
             <DatePicker
               formGroupClassName="col-md-6"
-              isValidMessage="looks good"
               label="Event Date"
-              name="event.date"
-              placeholderText="Event Date"
+              minDate={addDays(new Date(), 4)}
+              name="event.eventDate"
+              placeholder="Event Date"
             />
           </div>
           <div className="form-row">
-            <DatePicker
-              dateFormat="h:mm aa"
+            <Select
+              blankOption="Select Duration"
               formGroupClassName="col-md-6"
-              isValidMessage="looks good"
-              label="Start Time"
-              name="event.start_time"
-              placeholderText="Start Time"
-              showTimeSelect
-              showTimeSelectOnly
-              timeCaption="Start Time"
-              timeIntervals={30}
+              label="Duration of Event (Approx.)"
+              name="event.eventDuration"
+              options={EVENT_DURATION}
             />
             <DatePicker
               dateFormat="h:mm aa"
               formGroupClassName="col-md-6"
-              isValidMessage="looks good"
-              label="End Time"
-              name="event.end_time"
-              placeholderText="End Time"
+              label="Start Time"
+              name="event.startTime"
+              placeholder="Approx. Start Time"
               showTimeSelect
               showTimeSelectOnly
-              timeCaption="End Time"
-              timeIntervals={30}
+              timeCaption="Start Time"
             />
           </div>
           <TextArea
             label="More Information"
-            name="event.information"
+            name="event.moreInformation"
             optional
             placeholder="More information about your event"
-            rows="8"
+            rows="4"
           />
         </form>
       </div>

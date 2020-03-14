@@ -18,8 +18,6 @@ const statesAndLga = [
       'Isuikwuato',
       'Nneochi',
       'Obi Ngwa',
-      'Obi Ngwa',
-      'Obioma Ngwa',
       'Obioma-Ngwa',
       'Ohafia',
       'Ohaozara',
@@ -1066,5 +1064,5 @@ export const getLgas = currentState => {
   );
 
   if (!stateWithLga) return [];
-  return stateWithLga['lgas'].map(lga => ({ label: lga }));
+  return stateWithLga['lgas'].map(lga => ({ label: lga, value: lga }));
 };

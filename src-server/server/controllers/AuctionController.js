@@ -10,13 +10,7 @@ const EventEntertainerController = {
    * @return {object} returns res object
    */
   updateEventAuction(req, res) {
-    const {
-      startTime,
-      endTime,
-      minimumAmount,
-      eventId,
-      id
-    } = req.body;
+    const { startTime, eventDuration, minimumAmount, eventId, id } = req.body;
 
     const error = {
       ...validString(minimumAmount)
@@ -27,7 +21,7 @@ const EventEntertainerController = {
     if (!id) {
       return Auction.create({
         startTime,
-        endTime,
+        eventDuration,
         minimumAmount,
         eventId,
         userId: req.user.id
@@ -41,17 +35,16 @@ const EventEntertainerController = {
             }
           });
         })
-        .then((event) => {
-          return res
-            .status(200)
-            .json({
-              message: 'Auction created successfully',
-              event: event[0],
-            })
+        .then(event => {
+          return res.status(200).json({
+            message: 'Auction created successfully',
+            event: event[0]
+          });
         })
         .catch(error => {
           const status = error.status || 500;
-          const errorMessage = (error.parent && error.parent.detail) || error.message || error;
+          const errorMessage =
+            (error.parent && error.parent.detail) || error.message || error;
           return res.status(status).json({ message: errorMessage });
         });
     }
@@ -67,8 +60,8 @@ const EventEntertainerController = {
         if (event && event.length > 0) {
           return event[0].auction.update({
             startTime,
-            endTime,
-            minimumAmount,
+            eventDuration,
+            minimumAmount
           });
         }
         throw `No Event with id ${id}`;
@@ -94,17 +87,19 @@ const EventEntertainerController = {
    * @return {object} returns res object
    */
   getEventAuctions(req, res) {
-    req.user.getEvents({
-      include: {
-        model: Auction,
-        as: 'auction'
-      }
-    }).then(events => {
-      if (!events || events.length === 0) {
-        return res.status(404).json({ message: 'Event Auctions not found' });
-      }
-      return res.status(200).json({ events });
-    });
+    req.user
+      .getEvents({
+        include: {
+          model: Auction,
+          as: 'auction'
+        }
+      })
+      .then(events => {
+        if (!events || events.length === 0) {
+          return res.status(404).json({ message: 'Event Auctions not found' });
+        }
+        return res.status(200).json({ events });
+      });
   }
 };
 

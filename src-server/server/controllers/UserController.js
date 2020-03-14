@@ -1,20 +1,29 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import {
-  User,
-  EntertainerProfile,
+  ApprovalComment,
   BankDetail,
   Contact,
+  EntertainerProfile,
+  Event,
+  EventEntertainer,
+  Gallery,
   Identification,
   Notification,
-  ApprovalComment,
-  Gallery,
+  User,
   Video
 } from '../models';
 import sendMail from '../MailSender';
 import Authentication from '../middleware/authentication';
 import { UserValidation, updateUser, validString } from '../utils';
 import EMAIL_CONTENT from '../email-template/content';
+
+export const userAssociatedOrder = [
+  // ...we use the same syntax from the include
+  // in the beginning of the order array
+  [{ model: Notification, as: 'notifications' }, 'updatedAt', 'DESC'],
+  [{ model: Event, as: 'events' }, 'eventDate', 'ASC']
+];
 
 export const userAssociatedModels = [
   {
@@ -31,15 +40,24 @@ export const userAssociatedModels = [
   },
   {
     model: Gallery,
-    as: 'galleries'
+    as: 'galleries',
+    attributes: ['id', 'imageURL', 'imageID', 'approved']
   },
   {
     model: Video,
-    as: 'videos'
+    as: 'videos',
+    attributes: ['id', 'title', 'youtubeID', 'approved']
   },
   {
     model: ApprovalComment,
-    as: 'approvalComment'
+    as: 'approvalComment',
+    attributes: [
+      'entertainerProfile',
+      'bankAccount',
+      'contact',
+      'identification',
+      'youTube'
+    ]
   },
   {
     model: Identification,
@@ -48,6 +66,30 @@ export const userAssociatedModels = [
   {
     model: Notification,
     as: 'notifications'
+  },
+  {
+    model: Event,
+    as: 'events',
+    include: [
+      {
+        model: EventEntertainer,
+        as: 'entertainers',
+        include: [
+          {
+            model: EntertainerProfile,
+            as: 'entertainer',
+            attributes: ['id', 'stageName', 'entertainerType', 'location'],
+            include: [
+              {
+                model: User,
+                as: 'personalDetails',
+                attributes: ['id', 'firstName', 'lastName', 'profileImageURL']
+              }
+            ]
+          }
+        ]
+      }
+    ]
   }
 ];
 
@@ -77,7 +119,8 @@ const UserController = {
       notifications: user.notifications,
       galleries: user.galleries,
       videos: user.videos,
-      approvalComment: user.approvalComment
+      approvalComment: user.approvalComment,
+      events: user.events
     };
 
     return { ...transformedUser, ...updatedValues };
@@ -156,7 +199,8 @@ const UserController = {
     const { lastName, firstName, email } = req.user;
     User.findOne({
       where: { email },
-      include: userAssociatedModels
+      include: userAssociatedModels,
+      order: userAssociatedOrder
     })
       .then(usr => {
         if (!usr || usr.length === 0) {
@@ -238,11 +282,7 @@ const UserController = {
     User.findOne({
       where: { email },
       include: userAssociatedModels,
-      order: [
-        // ...we use the same syntax from the include
-        // in the beginning of the order array
-        [{ model: Notification, as: 'notifications' }, 'updatedAt', 'DESC']
-      ]
+      order: userAssociatedOrder
     })
       .then(user => {
         if (!user) {

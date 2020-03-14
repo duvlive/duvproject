@@ -1,7 +1,5 @@
-import React from 'react';
-import TimeAgo from 'react-timeago';
-import { format, parse } from 'date-fns';
 import { ENTERTAINER_TYPE } from './constants';
+import Humanize from 'humanize-plus';
 
 /**
  * Carousel Chunk
@@ -16,6 +14,37 @@ export const chunk = (array, size) => {
     index += size;
   }
   return chunked_arr;
+};
+
+export const commaNumber = value => {
+  const number = parseInt(value, 10);
+  return Humanize.intComma(number);
+};
+
+export const moneyFormat = value => Humanize.formatNumber(value, 2);
+
+export const getBudgetRange = (minBudget, maxBudget) => {
+  const MAX_BUDGET_OUTPUT = 1000000;
+  const suffix = maxBudget > MAX_BUDGET_OUTPUT ? '+' : '';
+  const range = `${commaNumber(minBudget)} - ${commaNumber(
+    Humanize.boundedNumber(maxBudget, MAX_BUDGET_OUTPUT)
+  )}`;
+  return range + suffix;
+};
+
+export const twoDigitNumber = number =>
+  number > 0 && number < 10 ? '0' + number : number;
+
+export const listJsonItems = (items, defaultValue) => {
+  try {
+    const parsedItems = JSON.parse(items);
+    if (!parsedItems) return defaultValue;
+    if (parsedItems.length <= 1) return parsedItems;
+    return parsedItems.join(', ');
+  } catch (error) {
+    console.log('error', error);
+    return defaultValue;
+  }
 };
 
 /**
@@ -53,13 +82,6 @@ export const getOtherSlugs = (items, slug) =>
 export const getRelatedEntertainers = (items, slug, type) =>
   items.filter(item => item.slug !== slug && item.type === type);
 
-/**
- * Date and Time
- * @param {*} date
- */
-export const getShortDate = date => format(parse(date), 'ddd, MMM D YYYY');
-export const getLongDate = date => format(parse(date), 'dddd, Do MMMM YYYY');
-export const remainingDays = date => <TimeAgo date={date} />;
 export const range = (start, stop, step = 1) => {
   const len = Math.floor((stop - start) / step) + 1;
   return Array(len)
@@ -89,3 +111,13 @@ export const selectEntertainerType = () => {
 
 export const getProfileName = ({ firstName, lastName, stageName }) =>
   stageName || firstName + ' ' + lastName;
+
+export const countOccurences = arr => {
+  const items = arr.reduce((acc, val) => {
+    acc[val] = acc[val] === undefined ? 1 : (acc[val] += 1);
+    return acc;
+  }, {});
+  return Object.keys(items).map(
+    name => items[name] + ' ' + Humanize.pluralize(items[name], name)
+  );
+};

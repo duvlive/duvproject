@@ -46,11 +46,21 @@ export const phoneNumber = yup
 
 export const OptionalPhoneNumber = optionalValidation(phoneNumber);
 
-export const positiveNumberValidation = label =>
+export const positiveNumberValidation = (label, type = 'number') =>
   yup
     .number()
-    .positive(`${label} must be a positive number`)
-    .integer(`${label} must be a number`);
+    .transform(value => (isNaN(value) ? undefined : value))
+    .required(`${label} must be a valid ${type}`)
+    .positive(`${label} must be a positive ${type}`)
+    .integer(`${label} must be a ${type}`);
+
+export const requiredDate = label =>
+  yup
+    .object()
+    .transform(value => value || { date: undefined })
+    .shape({
+      date: yup.date().required(`${label} is required`)
+    });
 
 export const yearValidation = label =>
   yup
@@ -111,10 +121,5 @@ export const multiSelectValidation = label =>
   yup
     .array()
     .label(label)
-    .min(1, 'Tip: you can select more than one state.')
-    .of(
-      yup.object().shape({
-        label: yup.string().required(),
-        value: yup.string().required()
-      })
-    );
+    .min(1, `Tip: you can select more than one ${label}.`)
+    .of(yup.string().required());

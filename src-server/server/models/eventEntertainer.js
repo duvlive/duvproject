@@ -19,17 +19,17 @@ module.exports = function(sequelize, DataTypes) {
       },
       placeOfEvent: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: false
       },
       genre: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING
       },
       language: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING
       },
       expectedAudienceSize: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: false
       },
       ageGroup: {
         type: DataTypes.STRING,
@@ -44,7 +44,29 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: false
       },
       specialRequest: {
-        type: DataTypes.TEXT,
+        type: DataTypes.TEXT
+      },
+      auctionStartDate: {
+        type: DataTypes.DATE,
+        allowNull: true
+      },
+      auctionEndDate: {
+        type: DataTypes.DATE,
+        allowNull: true
+      },
+      hireType: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        defaultValue: 'Auction',
+        validate: { isIn: [['Search', 'Auction', 'Recommendation', null]] }
+      },
+      hiredDate: {
+        type: DataTypes.DATE,
+        allowNull: true
+      },
+      hiredEntertainer: {
+        type: DataTypes.INTEGER,
+        allowNull: true
       }
     },
     {

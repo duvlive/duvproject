@@ -63,7 +63,8 @@ const INITIAL_STATE = {
     youTube: null,
     identification: null
   },
-  galleries: []
+  galleries: [],
+  events: []
 };
 
 // CONTEXT
@@ -89,6 +90,9 @@ let reducer = (state, action) => {
     case 'update-user-profile-image':
     case 'user-profile-image':
       return { ...state, profileImg: action.imageURL };
+
+    case 'add-new-event':
+      return { ...state, events: [action.event, ...state.events] };
     default:
       return state;
   }

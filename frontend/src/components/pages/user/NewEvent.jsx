@@ -1,107 +1,119 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Formik } from 'formik';
-import {
-  setInitialValues
-  // DisplayFormikState
-} from 'components/forms/form-helper';
+import { setInitialValues } from 'components/forms/form-helper';
 import TopMessage from 'components/common/layout/TopMessage';
 import EventDetails from 'components/common/events/EventDetails';
 import EventAddress from 'components/common/events/EventAddress';
-import AddEntertainerDetails from 'components/common/entertainers/AddEntertainerDetails';
-import { HIRE_ENTERTAINERS } from 'utils/constants';
 import { navigate } from '@reach/router';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import {
   eventDetailsSchema,
   eventAddressSchema
 } from 'components/forms/schema/eventSchema';
-import { addEntertainerSchema } from 'components/forms/schema/entertainerSchema';
 import { createSchema } from 'components/forms/schema/schema-helpers';
+import axios from 'axios';
+import { getTokenFromStore } from 'utils/localStorage';
+import { UserContext } from 'context/UserContext';
+import AlertMessage from 'components/common/utils/AlertMessage';
+import { Link, Match } from '@reach/router';
 
-const NewEvent = ({ hire_type }) => {
-  const validHireType = Object.keys(HIRE_ENTERTAINERS).includes(
-    hire_type.toLowerCase()
-  );
-  const currentHireType = validHireType ? HIRE_ENTERTAINERS[hire_type] : '';
-  const message = validHireType
-    ? `Hire an Entertainer (${currentHireType})`
-    : 'Enter a New Event';
+const NewEvent = () => {
   return (
     <BackEndPage title="New Events">
       <div className="main-app">
-        <TopMessage message={message} />
+        <TopMessage message="Enter a New Event" />
 
         <section className="app-content">
-          <NewEventForm currentHireType={currentHireType} />
+          <Match path="/user/hire-entertainer">
+            {props =>
+              // eslint-disable-next-line react/prop-types
+              props.match && (
+                <AlertMessage
+                  message={
+                    <span>
+                      Kindly enter the type of event you wish to{' '}
+                      <strong>Hire an Entertainer</strong> for. To add an
+                      entertainer to a previously created event,{' '}
+                      <Link to="/user/events">Click here</Link>
+                    </span>
+                  }
+                  type="info"
+                />
+              )
+            }
+          </Match>
+          <NewEventForm />
         </section>
       </div>
     </BackEndPage>
   );
 };
 
-NewEvent.propTypes = {
-  hire_type: PropTypes.string
-};
-
-NewEvent.defaultProps = {
-  hire_type: ''
-};
-
-const NewEventForm = ({ currentHireType }) => {
+const NewEventForm = () => {
   const initialValues = {
     event: setInitialValues(eventDetailsSchema),
-    address: setInitialValues(eventAddressSchema),
-    entertainer: setInitialValues(addEntertainerSchema, {
-      highest_budget: '1M+'
-    })
+    address: setInitialValues(eventAddressSchema)
   };
   const entertainersSchema = {
     event: createSchema(eventDetailsSchema),
-    address: createSchema(eventAddressSchema),
-    entertainer: createSchema(addEntertainerSchema)
+    address: createSchema(eventAddressSchema)
   };
+  const { userDispatch } = React.useContext(UserContext);
+  const [message, setMessage] = React.useState(null);
 
   return (
     <Formik
       initialValues={initialValues}
-      onSubmit={(values, actions) => {
-        setTimeout(() => {
-          actions.setSubmitting(false);
-          let urlToRedirect;
-          if (currentHireType === HIRE_ENTERTAINERS.search) {
-            urlToRedirect = '/user/entertainer/search/1';
-          } else if (currentHireType === HIRE_ENTERTAINERS.recommend) {
-            urlToRedirect = '/user/entertainer/recommended/1';
-          } else {
-            urlToRedirect = '/user/auctions';
-          }
-          return navigate(urlToRedirect);
-        }, 400);
+      onSubmit={({ event, address }, actions) => {
+        const payload = {
+          eventType: event.eventType,
+          eventDate: event.eventDate.date,
+          startTime: event.startTime.date,
+          eventDuration: event.eventDuration,
+          moreInformation: event.moreInformation,
+          ...address
+        };
+        axios
+          .post('/api/v1/events', payload, {
+            headers: { 'x-access-token': getTokenFromStore() }
+          })
+          .then(function(response) {
+            const { status, data } = response;
+            console.log('status, data', status, data);
+            if (status === 200) {
+              userDispatch({
+                type: 'add-new-event',
+                event: data.event
+              });
+
+              const eventId = data.event.id;
+              navigate(`/user/events/${eventId}/add-entertainer/new-event`);
+              actions.setSubmitting(false);
+            }
+          })
+          .catch(function(error) {
+            setMessage(error.response.data.message);
+            actions.setSubmitting(false);
+          });
       }}
       render={({ isSubmitting, handleSubmit, ...props }) => (
         <>
+          <AlertMessage {...message} />
           <EventDetails />
           <EventAddress />
-          <AddEntertainerDetails />
           <div className="mt-5">
             <button
               className="btn btn-transparent btn-primary text-right btn-lg"
               onClick={handleSubmit}
             >
-              Start {currentHireType}
+              Save Event
             </button>
           </div>
-          {/* <DisplayFormikState {...props} /> */}
         </>
       )}
-      validationSchema={entertainersSchema && createSchema({})}
+      validationSchema={createSchema(entertainersSchema)}
     />
   );
-};
-
-NewEventForm.propTypes = {
-  currentHireType: PropTypes.string.isRequired
 };
 
 export default NewEvent;

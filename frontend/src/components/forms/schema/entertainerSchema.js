@@ -1,3 +1,4 @@
+import * as yup from 'yup';
 import {
   required,
   stringValidation,
@@ -6,8 +7,12 @@ import {
   urlValidation,
   multiSelectValidation,
   email,
-  phoneNumber
+  phoneNumber,
+  positiveNumberValidation,
+  requiredDate
 } from './schema-helpers';
+import { commaNumber } from 'utils/helpers';
+import { isAfter } from 'date-fns';
 
 /////////////////////////
 // Schema
@@ -32,16 +37,29 @@ export const bankDetailsSchema = {
 };
 
 export const addEntertainerSchema = {
-  type: stringValidation('Entertainer Type'),
-  event_type: stringValidation('Event Type'),
+  entertainerType: stringValidation('Entertainer Type'),
   genre: multiSelectValidation('Genre'),
   language: multiSelectValidation('Language'),
-  audience: stringValidation('audience'),
-  age_group: stringValidation('Age Group'),
-  base_budget: stringValidation('Lowest Budget'),
-  highest_budget: stringValidation('Highest Budget'),
-  place: stringValidation('Place of Event'),
-  special_events: optionalValidation(stringValidation('Special Events', 20))
+  expectedAudienceSize: stringValidation('Audience Size'),
+  ageGroup: stringValidation('Age Group'),
+  lowestBudget: positiveNumberValidation('Base Budget', 'budget'),
+  highestBudget: positiveNumberValidation('Highest Budget', 'budget').moreThan(
+    yup.ref('lowestBudget'),
+    'Highest Budget should be greater or equal to Base Budget'
+  ),
+  placeOfEvent: stringValidation('Place of Event'),
+  specialRequest: optionalValidation(stringValidation('Special Request', 20)),
+  auctionStartDate: optionalValidation(requiredDate('Auction Start Date')),
+  auctionEndDate: optionalValidation(
+    requiredDate('Auction End Date').test(
+      'is-greater',
+      'End Date should be greater than Start Date',
+      function(value) {
+        const { auctionStartDate } = this.parent;
+        return isAfter(value.date, auctionStartDate.date);
+      }
+    )
+  )
 };
 
 export const videoSchema = {
@@ -66,4 +84,19 @@ export const identificationSchema = {
   idNumber: stringValidation('ID Number'),
   issueDate: required('Issue Date'),
   expiryDate: required('Expiry Date')
+};
+
+export const bidSchema = (minAuctionPrice = 0, maxAuctionPrice = 0) => {
+  console.log('maxAuctionPRice', commaNumber(maxAuctionPrice));
+  return {
+    askingPrice: positiveNumberValidation('Your Bid')
+      .min(
+        minAuctionPrice,
+        `Your bid must be more than ${commaNumber(minAuctionPrice)}`
+      )
+      .max(
+        maxAuctionPrice,
+        `Your bid must be less than ${commaNumber(maxAuctionPrice)}`
+      )
+  };
 };

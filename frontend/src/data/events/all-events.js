@@ -4,15 +4,15 @@ import { randomItem } from 'utils/helpers';
 export default [
   {
     details: {
-      event_type: 'Wedding Anniversary',
-      event_date: '2019-08-19',
-      start_time: '9:00AM',
-      end_time: '3:00PM',
+      eventType: 'Wedding Anniversary',
+      eventDate: '2019-08-19',
+      startTime: '9:00AM',
+      eventDuration: '3:00PM',
       information: 'I want to enjoy this party with my love'
     },
     address: {
-      street_line_1: 'D Podium International Event Centre',
-      street_line_2: '116, Gbadamosi Street, Lagos',
+      streetLine1: 'D Podium International Event Centre',
+      streetLine2: '116, Gbadamosi Street, Lagos',
       lga: 'Alimosho',
       landmark: 'Lagos New Secretariat',
       location: 'Lagos, Nigeria'
@@ -20,11 +20,11 @@ export default [
     request: [
       {
         entertainer: 'DJ',
-        age_group: 'all',
+        ageGroup: 'all',
         genre: '',
         preferred_language: '',
         lowest_budget: '50,000',
-        highest_budget: '50,000',
+        highestBudget: '50,000',
         special_request: 'None',
         type: 'auction',
         closes: '2019-12-2'

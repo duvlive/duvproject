@@ -117,3 +117,56 @@
     font-size: 0.8rem;
   }
 }
+
+.remaining-time {
+  font-size: 0.8rem;
+  color: $text-muted;
+  margin-top: 0.3rem;
+  display: block;
+  margin-left: -0.3rem;
+}
+
+.small-text__with-icon {
+  color: rgba(lighten($red-100, 5), 0.5);
+  font-size: 0.7rem;
+  display: block;
+  margin-top: 0.4rem;
+}
+
+.event-list-label {
+  font-size: 1rem;
+  color: darken($white, 10);
+  font-weight: normal;
+  line-height: 1.8;
+  margin-bottom: 1rem;
+  margin-top: 0.3rem;
+}
+
+.cancel-event__text {
+  color: rgba($white, 0.2);
+  transition: all 0.4s ease-in-out;
+  &:hover {
+    color: $danger;
+    cursor: pointer;
+  }
+}
+
+.transparent .list-group-item {
+  background: transparent !important;
+  border-color: rgba($white, 0.1) !important;
+}
+
+.event-title {
+  color: $white;
+  margin-left: -1rem;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  margin-top: 1rem;
+}
+
+.event-spacer {
+  margin-bottom: 5rem;
+  tr:last-child & {
+    margin-bottom: 0;
+  }
+}

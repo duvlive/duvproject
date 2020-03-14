@@ -43,7 +43,12 @@ const navigation = {
       icon: 'gauge'
     },
     {
-      title: 'Bids',
+      title: 'Available Auctions',
+      to: '/entertainer/available-auctions',
+      icon: 'auction'
+    },
+    {
+      title: 'My Bids',
       to: '/entertainer/bids',
       icon: 'bid'
     },

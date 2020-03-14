@@ -31,8 +31,11 @@
 
 $text-colors: (
   'red': $danger,
+  'error': $red-100,
+  'danger': $danger,
   'green': $green,
   'blue': $blue,
+  'info': $blue-100,
   'yellow': $yellow,
   'white': $white,
   'gray': $text-color,
@@ -77,7 +80,8 @@ $sub-title: (
 $small: (
   '1': 0.9rem,
   '2': 0.8rem,
-  '3': 0.7rem
+  '3': 0.7rem,
+  '4': 0.6rem
 );
 
 @each $number, $size in $small {
@@ -104,5 +108,19 @@ label {
     margin-left: auto;
     float: right;
     color: $text-muted;
+  }
+}
+
+.text-negative {
+  color: rgba($red-100, 0.7);
+}
+
+.text-link {
+  color: $red-100;
+  cursor: pointer;
+  text-decoration: underline;
+
+  &:hover {
+    color: $red;
   }
 }

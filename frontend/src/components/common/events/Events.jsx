@@ -9,7 +9,7 @@ const Events = ({
   location,
   slug,
   start_date,
-  start_time,
+  startTime,
   ticket,
   title
 }) => {
@@ -29,7 +29,7 @@ const Events = ({
             <div className="event-card__datetime">
               <span className="event-card__weekday">{weekDay},</span>
               <span className="event-card__date"> {fullDate},</span>
-              <span className="event-card__time">{start_time}</span>
+              <span className="event-card__time">{startTime}</span>
             </div>
             <div className="event-card__info">
               <h6 className="event-card__title text-truncate">{title}</h6>
@@ -48,7 +48,7 @@ Events.propTypes = {
   location: PropTypes.string.isRequired,
   slug: PropTypes.string.isRequired,
   start_date: PropTypes.string.isRequired,
-  start_time: PropTypes.string.isRequired,
+  startTime: PropTypes.string.isRequired,
   ticket: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired
 };

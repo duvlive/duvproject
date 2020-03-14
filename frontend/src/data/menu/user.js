@@ -25,10 +25,15 @@ const navigation = {
       title: 'Hire Entertainers',
       to: '/user/hire-entertainer',
       icon: 'hire-entertainers'
+    },
+    {
+      title: 'Payments History',
+      to: '/user/payments-history',
+      icon: 'credit-card'
     }
   ]
 };
-const others = {
+const others = entertainerMenu => ({
   name: 'Others',
   menus: [
     {
@@ -36,16 +41,13 @@ const others = {
       to: '/user/edit-profile',
       icon: 'user-circle'
     },
+
     {
-      title: 'Payments History',
-      to: '/user/payments-history',
-      icon: 'credit-card'
+      title: 'Invite Friends',
+      to: '/entertainer/invite-friends',
+      icon: 'invite-friend'
     },
-    {
-      title: 'Register as Entertainer',
-      to: '/user/register-as-entertainer',
-      icon: 'paper-plane'
-    },
+    { ...entertainerMenu },
     {
       title: 'Help',
       to: '/user/help',
@@ -57,6 +59,12 @@ const others = {
       icon: 'logout'
     }
   ]
+});
+
+const registerAsEntertainer = {
+  title: 'Register as Entertainer',
+  to: '/user/register-as-entertainer',
+  icon: 'paper-plane'
 };
 
 const backToEntertainer = {
@@ -65,12 +73,34 @@ const backToEntertainer = {
   icon: 'loop'
 };
 
-export const userSideMenu = [navigation, others];
+const backToBandMember = {
+  title: 'Switch to Band Member',
+  to: '/band-member/dashboard',
+  icon: 'loop'
+};
 
-let entertainerOthers = { ...others };
-entertainerOthers.menus[2] = backToEntertainer;
+const backToAdministrator = {
+  title: 'Switch to Admin',
+  to: '/admin/dashboard',
+  icon: 'loop'
+};
 
-export const pseudoEntertainerUserSideMenu = [navigation, entertainerOthers];
+export const userSideMenu = [navigation, others(registerAsEntertainer)];
+
+export const pseudoEntertainerUserSideMenu = [
+  navigation,
+  others(backToEntertainer)
+];
+
+export const pseudoBandMemberUserSideMenu = [
+  navigation,
+  others(backToBandMember)
+];
+
+export const pseudoAdminUserSideMenu = [
+  navigation,
+  others(backToAdministrator)
+];
 
 export const userTopMenu = [
   {

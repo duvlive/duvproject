@@ -10,6 +10,7 @@ import {
 import Label from './Label';
 import ReactDatePicker from 'react-datepicker';
 import { getIn } from 'formik';
+import { parse } from 'date-fns';
 
 const DatePicker = ({
   name,
@@ -29,7 +30,8 @@ const DatePicker = ({
   timeCaption,
   timeIntervals,
   tooltipText,
-  tooltipPosition
+  tooltipPosition,
+  ...props
 }) => (
   <div className={classNames('form-group', formGroupClassName)}>
     <div>
@@ -45,6 +47,7 @@ const DatePicker = ({
         {({ form }) => {
           return (
             <ReactDatePicker
+              {...props}
               autoComplete="off"
               className={classNames(
                 'form-control',
@@ -67,7 +70,7 @@ const DatePicker = ({
               placeholderText={placeholder}
               selected={
                 getIn(formik.values, name) !== ''
-                  ? getIn(formik.values, name).date
+                  ? parse(getIn(formik.values, name).date)
                   : null
               }
               showTimeSelect={showTimeSelect}
@@ -124,7 +127,7 @@ DatePicker.defaultProps = {
   showTimeSelect: false,
   showTimeSelectOnly: false,
   timeCaption: null,
-  timeIntervals: null,
+  timeIntervals: 60,
   tooltipText: null,
   tooltipPosition: 'right'
 };

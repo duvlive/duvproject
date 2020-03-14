@@ -11,15 +11,13 @@ const EventAddress = () => (
       <h4 className="card-title blue">Event Address</h4>
       <form>
         <Input
-          isValidMessage="looks good"
           label="Street Line 1"
-          name="address.street_line_1"
+          name="address.streetLine1"
           placeholder="Street Line 1"
         />
         <Input
-          isValidMessage="looks good"
           label="Street Line 2"
-          name="address.street_line_2"
+          name="address.streetLine2"
           optional
           placeholder="Street Line 2"
         />
@@ -27,7 +25,6 @@ const EventAddress = () => (
           <Select
             blankOption="Select State"
             formGroupClassName="col-md-6"
-            isValidMessage="looks good"
             label="State"
             name="address.state"
             options={getStates()}
@@ -37,7 +34,6 @@ const EventAddress = () => (
             blankOption="Select Local Government"
             dependentOn="address.state"
             formGroupClassName="col-md-6"
-            isValidMessage="looks good"
             label="LGA"
             name="address.lga"
             options={getLgas}
@@ -47,14 +43,12 @@ const EventAddress = () => (
         <div className="form-row">
           <Input
             formGroupClassName="col-md-6"
-            isValidMessage="looks good"
             label="City"
             name="address.city"
             placeholder="City"
           />
           <Input
             formGroupClassName="col-md-6"
-            isValidMessage="looks good"
             label="Landmark"
             name="address.landmark"
             optional

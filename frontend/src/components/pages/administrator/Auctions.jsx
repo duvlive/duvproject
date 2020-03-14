@@ -34,7 +34,9 @@ const Auctions = () => (
                   <span>DJs</span>
                 </td>
                 <td>
-                  <Avatars entertainers={getItems(djLists, 3)} others={14} />
+                  {false && (
+                    <Avatars entertainers={getItems(djLists, 3)} others={14} />
+                  )}
                 </td>
                 <td>
                   <span className="text-yellow">Bidding closes on </span>
@@ -67,7 +69,9 @@ const Auctions = () => (
                   <span>MCs</span>
                 </td>
                 <td>
-                  <Avatars entertainers={getItems(mcLists, 3)} others={12} />
+                  {false && (
+                    <Avatars entertainers={getItems(mcLists, 3)} others={12} />
+                  )}
                 </td>
                 <td>
                   <span className="text-yellow">Bidding closes on </span>

@@ -9,7 +9,7 @@ import {
   feedback
 } from 'components/forms/form-helper';
 import Humanize from 'humanize-plus';
-import { dashedLowerCase } from 'utils/helpers';
+// import { dashedLowerCase } from 'utils/helpers';
 import Label from './Label';
 
 const Select = ({
@@ -21,6 +21,7 @@ const Select = ({
   inputSizeClassName,
   isValidMessage,
   label,
+  labelLink,
   labelClassName,
   name,
   optional,
@@ -36,6 +37,7 @@ const Select = ({
     >
       <Label
         className={labelClassName}
+        labelLink={labelLink}
         name={name}
         optional={optional}
         text={label}
@@ -84,6 +86,7 @@ Select.defaultProps = {
   inputSizeClassName: null,
   isValidMessage: '',
   label: null,
+  labelLink: null,
   labelClassName: null,
   name: null,
   optional: false,
@@ -103,6 +106,11 @@ Select.propTypes = {
   isValidMessage: PropTypes.string,
   label: PropTypes.string,
   labelClassName: PropTypes.number,
+  labelLink: PropTypes.shape({
+    to: PropTypes.string,
+    text: PropTypes.string,
+    onClick: PropTypes.func
+  }),
   name: PropTypes.string,
   optional: PropTypes.bool,
   options: PropTypes.array.isRequired,
@@ -114,7 +122,8 @@ Select.propTypes = {
 Select.options = ({ options }) => {
   return options.map(({ label, value }) => {
     if (!(label || value)) return null;
-    const optionValue = value || dashedLowerCase(label);
+    // const optionValue = value || dashedLowerCase(label);
+    const optionValue = value || label;
     const optionLabel = label || Humanize.capitalize(value);
     return (
       <option key={optionValue} value={optionValue}>

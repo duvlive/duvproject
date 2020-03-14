@@ -1,103 +1,111 @@
 import React from 'react';
+import axios from 'axios';
+import PropTypes from 'prop-types';
 import TopMessage from 'components/common/layout/TopMessage';
 import BackEndPage from 'components/common/layout/BackEndPage';
+import { getTokenFromStore } from 'utils/localStorage';
+import { twoDigitNumber } from 'utils/helpers';
+import { getShortDate } from 'utils/date-helpers';
 
-const Bids = () => (
-  <BackEndPage title="Bids">
-    <div className="main-app">
-      <TopMessage message="Bids" />
+const Bids = () => {
+  const [bids, setBids] = React.useState([]);
+  React.useEffect(() => {
+    axios
+      .get('/api/v1/entertainer/bids', {
+        headers: {
+          'x-access-token': getTokenFromStore()
+        }
+      })
+      .then(function(response) {
+        const { status, data } = response;
+        // handle success
+        if (status === 200) {
+          setBids(data.bids);
+        }
+      })
+      .catch(function(error) {
+        console.log(error.response.data.message);
+        // navigate to all events
+      });
+  }, []);
+  return (
+    <BackEndPage title="Bids">
+      <div className="main-app">
+        <TopMessage message="Placed Bids" />
 
-      <section className="app-content">
-        <div className="table-responsive">
-          <table className="table table-dark table__no-border table__with-bg">
-            <tbody>
-              <tr>
-                <th className="table__number" scope="row">
-                  01
-                </th>
-                <td>
-                  <div className="table__title text-white">
-                    Wedding Ceremony
-                  </div>
-                  <span>
-                    <i className="icon icon-location" />
-                    Yaba, Lagos state
-                  </span>
-                </td>
-                <td>
-                  <span className="text-red">17 applications</span>
-                  <span>DJs</span>
-                </td>
-                <td>
-                  <span className="text-yellow">Bidding closes on </span>
-                  <span>
-                    <i className="icon icon-clock" /> Sun, April 17, 2019
-                  </span>
-                </td>
-                <td className="text-right">
-                  <div className="btn btn-success btn-transparent">
-                    Approved
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <th className="table__number" scope="row">
-                  02
-                </th>
-                <td>
-                  <div className="table__title text-white">Birthday Party</div>
-                  <span>
-                    <i className="icon icon-location" />
-                    Yaba, Lagos state
-                  </span>
-                </td>
-                <td>
-                  <span className="text-green">15 applications</span>
-                  <span>DJs</span>
-                </td>
-                <td>
-                  <span className="text-yellow">Bidding closes on </span>
-                  <span>
-                    <i className="icon icon-clock" /> Sun, April 17, 2019
-                  </span>
-                </td>
-                <td className="text-right">
-                  <div className="btn btn-info btn-transparent">Pending</div>
-                </td>
-              </tr>
-              <tr>
-                <th className="table__number" scope="row">
-                  02
-                </th>
-                <td>
-                  <div className="table__title text-white">Birthday Party</div>
-                  <span>
-                    <i className="icon icon-location" />
-                    Yaba, Lagos state
-                  </span>
-                </td>
-                <td>
-                  <span className="text-green">15 applications</span>
-                  <span>DJs</span>
-                </td>
-                <td>
-                  <span className="text-yellow">Bidding closes on </span>
-                  <span>
-                    <i className="icon icon-clock" /> Sun, April 17, 2019
-                  </span>
-                </td>
-                <td className="text-right">
-                  <div className="btn btn-danger btn-transparent">Rejected</div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <br />
-          <br />
-        </div>
-      </section>
-    </div>
-  </BackEndPage>
+        <section className="app-content">
+          <div className="table-responsive">
+            <table className="table table-dark table__no-border table__with-bg">
+              <tbody>
+                {bids.map((bid, index) => (
+                  <BidsRow
+                    auctionEndDate={bid.eventEntertainerInfo.auctionEndDate}
+                    city={bid.event.city}
+                    eventType={bid.event.eventType}
+                    key={index}
+                    number={index + 1}
+                    state={bid.event.state}
+                    status={bid.status}
+                  />
+                ))}
+              </tbody>
+            </table>
+            <br />
+            <br />
+          </div>
+        </section>
+      </div>
+    </BackEndPage>
+  );
+};
+
+const BidsRow = ({
+  auctionEndDate,
+  city,
+  eventType,
+  number,
+  state,
+  status
+}) => (
+  <tr>
+    <th className="table__number" scope="row">
+      {twoDigitNumber(number)}
+    </th>
+    <td>
+      <div className="table__title text-white">{eventType}</div>
+      <span>
+        <i className="icon icon-location" />
+        {city}, {state} state
+      </span>
+    </td>
+    <td>
+      <span className="text-yellow">Bidding closes on </span>
+      <span>
+        <i className="icon icon-clock" /> {getShortDate(auctionEndDate)}
+      </span>
+    </td>
+    <td className="text-right">
+      <div className="btn btn-info btn-transparent">{status}</div>
+    </td>
+  </tr>
 );
+
+BidsRow.propTypes = {
+  auctionEndDate: PropTypes.any,
+  city: PropTypes.string,
+  eventType: PropTypes.string,
+  number: PropTypes.number,
+  state: PropTypes.string,
+  status: PropTypes.string
+};
+
+Bids.defaultProps = {
+  auctionEndDate: '',
+  city: '',
+  eventType: '',
+  number: 0,
+  state: '',
+  status: 'Pending'
+};
 
 export default Bids;

@@ -40,7 +40,7 @@ const Events = () => (
                   <span>DJ Cuppy, High Soul</span>
                 </td>
                 <td className="text-right pr-5">
-                  <Avatars entertainers={getItems(djLists, 2)} />
+                  {/* <Avatars entertainers={getItems(djLists, 2)} /> */}
                 </td>
                 <td className="text-right">
                   <Link
@@ -73,7 +73,7 @@ const Events = () => (
                   <span>DJ Cuppy, High Soul</span>
                 </td>
                 <td className="text-right pr-5">
-                  <Avatars entertainers={getItems(djLists, 2)} />
+                  {false && <Avatars entertainers={getItems(djLists, 2)} />}
                 </td>
                 <td className="text-right">
                   <Link
@@ -106,7 +106,7 @@ const Events = () => (
                   <span>DJ Cuppy, High Soul</span>
                 </td>
                 <td className="text-right pr-5">
-                  <Avatars entertainers={getItems(djLists, 2)} />
+                  {false && <Avatars entertainers={getItems(djLists, 2)} />}
                 </td>
                 <td className="text-right">
                   <Link

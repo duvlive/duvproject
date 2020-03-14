@@ -27,7 +27,7 @@ NoContent.propTypes = {
   isButton: PropTypes.bool,
   linkText: PropTypes.string,
   linkTo: PropTypes.string,
-  text: PropTypes.string.isRequired
+  text: PropTypes.any.isRequired
 };
 
 NoContent.defaultProps = {

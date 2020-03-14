@@ -11,28 +11,42 @@ const Label = ({
   tooltipPosition,
   tooltipText,
   labelLink
-}) => (
-  <label className={className} htmlFor={name}>
-    {text}{' '}
-    {optional ? (
-      <em className="optional">(optional)</em>
-    ) : (
-      <small className="text-white">*</small>
-    )}
-    <Tooltip name={name} position={tooltipPosition} text={tooltipText} />
-    {labelLink && (
-      <Link className="float-right" to={labelLink.to}>
-        {labelLink.text}
-      </Link>
-    )}
-  </label>
-);
+}) => {
+  const sanitizedLabelLink = { to: null, text: null, ...labelLink };
+  return (
+    <label className={className} htmlFor={name}>
+      {text}{' '}
+      {optional ? (
+        <em className="optional">(optional)</em>
+      ) : (
+        <small className="text-white">*</small>
+      )}
+      <Tooltip name={name} position={tooltipPosition} text={tooltipText} />
+      {/* Label Link is a Link */}
+      {sanitizedLabelLink.to && sanitizedLabelLink.text && (
+        <Link className="float-right" to={sanitizedLabelLink.to}>
+          {sanitizedLabelLink.text}
+        </Link>
+      )}
+      {/* Label Link calls a function */}
+      {!sanitizedLabelLink.to && sanitizedLabelLink.text && (
+        <div
+          className="float-right text-muted cursor-pointer"
+          onClick={sanitizedLabelLink.onClick}
+        >
+          {sanitizedLabelLink.text}
+        </div>
+      )}
+    </label>
+  );
+};
 
 Label.propTypes = {
   className: PropTypes.string,
   labelLink: PropTypes.shape({
-    to: PropTypes.string.isRequired,
-    text: PropTypes.string.isRequired
+    to: PropTypes.string,
+    text: PropTypes.string.isRequired,
+    onClick: PropTypes.func
   }),
   name: PropTypes.string,
   optional: PropTypes.bool,
@@ -42,7 +56,11 @@ Label.propTypes = {
 };
 Label.defaultProps = {
   className: null,
-  labelLink: null,
+  labelLink: {
+    to: '',
+    text: '',
+    onClick: () => {}
+  },
   name: null,
   optional: false,
   text: null,
