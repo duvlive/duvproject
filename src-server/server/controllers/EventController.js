@@ -277,10 +277,6 @@ const EventController = {
   getAvailableAuctions(req, res) {
     EventEntertainer.findAll({
       where: {
-        //"hireType" = 'Auction' AND
-        //"auctionStartDate" <= NOW() AND
-        // "entertainers"."auctionEndDate" >= NOW();
-
         hireType: 'Auction',
         auctionStartDate: { [Op.lte]: Sequelize.literal('NOW()') },
         auctionEndDate: { [Op.gte]: Sequelize.literal('NOW()') },

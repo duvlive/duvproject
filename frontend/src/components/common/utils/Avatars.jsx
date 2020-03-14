@@ -1,6 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+// [
+//  {
+// stageName,
+// personalDetails.profileImageURL,
+//   }
+// ]
+
 const Avatars = ({ entertainers, others }) => (
   <ul className="avatars">
     {entertainers &&

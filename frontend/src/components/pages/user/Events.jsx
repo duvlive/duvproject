@@ -6,9 +6,11 @@ import { Link } from '@reach/router';
 import Timeago from 'react-timeago';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import { UserContext } from 'context/UserContext';
-import { getEventDate, getTime } from 'utils/date-helpers';
+import { getEventDate, getTime, getTimeOfDay } from 'utils/date-helpers';
 import { parse } from 'date-fns';
 import NoContent from 'components/common/utils/NoContent';
+import { countOccurences } from 'utils/helpers';
+import { userCanAddEntertainer } from 'utils/event-helpers';
 
 const Events = () => {
   const { userState } = React.useContext(UserContext);
@@ -130,17 +132,29 @@ Events.Card = ({
     (entertainers &&
       entertainers.map(({ entertainerType }) => entertainerType)) ||
     [];
+  console.log('count Occurences: ', countOccurences(entertainerTypes));
+
   const hireTypes =
     (entertainers && entertainers.map(({ hireType }) => hireType)) || [];
+  console.log('hireTypes', false && hireTypes);
+
   const entertainersDetails =
-    (entertainers && entertainers.map(({ entertainer }) => entertainer)) || [];
+    entertainers && entertainers.filter(({ entertainer }) => !!entertainer);
 
   const stageNames =
     (entertainersDetails &&
       entertainersDetails.map(
-        entertainer => entertainer && entertainer.stageName
+        event => event.entertainer && event.entertainer.stageName
       )) ||
     [];
+
+  const entertainersAvatars =
+    (entertainersDetails &&
+      entertainersDetails.map(event => event.entertainer)) ||
+    [];
+
+  const hiredEntertainers =
+    stageNames.length > 0 ? stageNames.join(', ') : 'No Hired Entertainer';
   return (
     <>
       <tr className="transparent">
@@ -156,7 +170,7 @@ Events.Card = ({
             {getEventDate(eventDate)}
           </span>
           <span className="small--3 text-gray">
-            {getTime(startTime)} - {eventDuration}
+            {getTime(startTime)} ({getTimeOfDay(startTime)})
           </span>
         </td>
         <td>
@@ -168,20 +182,25 @@ Events.Card = ({
         </td>
         <td>
           <span className="text-yellow">
-            {entertainerTypes.join(', ')} &nbsp;
+            {entertainerTypes.length > 0
+              ? countOccurences(entertainerTypes).join(', ')
+              : 'No entertainer in review'}{' '}
+            &nbsp;
           </span>
-          <span> {stageNames.join(', ') || hireTypes.join(', ')} &nbsp;</span>
+          <span className="small--2">{hiredEntertainers} &nbsp;</span>
         </td>
         <td className="text-right pr-5">
-          {false && <Avatars entertainers={entertainersDetails} />}
+          <Avatars entertainers={entertainersAvatars} />
         </td>
         <td className="text-right">
-          <Link
-            className="btn btn-danger btn-transparent"
-            to={`/user/events/${id}/add-entertainer`}
-          >
-            Add Entertainer
-          </Link>
+          {userCanAddEntertainer(eventDate) && (
+            <Link
+              className="btn btn-danger btn-transparent"
+              to={`/user/events/${id}/add-entertainer`}
+            >
+              Add Entertainer
+            </Link>
+          )}
           &nbsp; &nbsp; &nbsp;
           <Link
             className="btn btn-info btn-transparent"
@@ -196,9 +215,9 @@ Events.Card = ({
 };
 
 Events.Card.propTypes = {
-  eventDuration: PropTypes.string,
   entertainers: PropTypes.array,
   eventDate: PropTypes.string,
+  eventDuration: PropTypes.string,
   eventType: PropTypes.string,
   id: PropTypes.number,
   lga: PropTypes.string,

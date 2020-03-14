@@ -1,4 +1,3 @@
-import Sequelize, { Op } from 'sequelize';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import {
@@ -18,6 +17,13 @@ import sendMail from '../MailSender';
 import Authentication from '../middleware/authentication';
 import { UserValidation, updateUser, validString } from '../utils';
 import EMAIL_CONTENT from '../email-template/content';
+
+export const userAssociatedOrder = [
+  // ...we use the same syntax from the include
+  // in the beginning of the order array
+  [{ model: Notification, as: 'notifications' }, 'updatedAt', 'DESC'],
+  [{ model: Event, as: 'events' }, 'eventDate', 'ASC']
+];
 
 export const userAssociatedModels = [
   {
@@ -193,7 +199,8 @@ const UserController = {
     const { lastName, firstName, email } = req.user;
     User.findOne({
       where: { email },
-      include: userAssociatedModels
+      include: userAssociatedModels,
+      order: userAssociatedOrder
     })
       .then(usr => {
         if (!usr || usr.length === 0) {
@@ -275,12 +282,7 @@ const UserController = {
     User.findOne({
       where: { email },
       include: userAssociatedModels,
-      order: [
-        // ...we use the same syntax from the include
-        // in the beginning of the order array
-        [{ model: Notification, as: 'notifications' }, 'updatedAt', 'DESC'],
-        [{ model: Event, as: 'events' }, 'eventDate', 'DESC']
-      ]
+      order: userAssociatedOrder
     })
       .then(user => {
         if (!user) {

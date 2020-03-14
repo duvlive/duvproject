@@ -5,7 +5,6 @@ import {
   stringValidation,
   optionalValidation
 } from './schema-helpers';
-import { isAfter } from 'date-fns';
 
 /////////////////////////
 // Schemas

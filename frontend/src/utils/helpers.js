@@ -111,3 +111,13 @@ export const selectEntertainerType = () => {
 
 export const getProfileName = ({ firstName, lastName, stageName }) =>
   stageName || firstName + ' ' + lastName;
+
+export const countOccurences = arr => {
+  const items = arr.reduce((acc, val) => {
+    acc[val] = acc[val] === undefined ? 1 : (acc[val] += 1);
+    return acc;
+  }, {});
+  return Object.keys(items).map(
+    name => items[name] + ' ' + Humanize.pluralize(items[name], name)
+  );
+};

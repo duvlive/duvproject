@@ -30,14 +30,15 @@ import BackEndPage from '../layout/BackEndPage';
 import TopMessage from '../layout/TopMessage';
 import { Row, Col } from 'reactstrap';
 import Card from 'components/custom/Card';
-import {
-  getLongDate,
-  getTime,
-  subtractDays,
-  getTimeOfDay
-} from 'utils/date-helpers';
+import { getLongDate, getTime, getTimeOfDay } from 'utils/date-helpers';
 import { navigate, Match } from '@reach/router';
 import { addDays } from 'date-fns';
+import {
+  auctionIsVoid,
+  userCanAddEntertainer,
+  maxAuctionDate,
+  minAuctionDate
+} from 'utils/event-helpers';
 
 const AddEntertainerDetails = ({ id }) => {
   let auctionIsDisabled = false;
@@ -66,12 +67,10 @@ const AddEntertainerDetails = ({ id }) => {
         });
   }, [id]);
 
-  if (event && Date.now() > subtractDays(event.eventDate, 4)) {
+  if (event && auctionIsVoid(event.eventDate)) {
     auctionIsDisabled = true;
     type = 'Recommend';
   }
-  const eventIsTooClose =
-    event && Date.now() >= subtractDays(event.eventDate, 3);
 
   return (
     <BackEndPage title="Add Entertainer">
@@ -79,7 +78,7 @@ const AddEntertainerDetails = ({ id }) => {
         <TopMessage message={event.eventType || ''} />
         <EventDetails event={event} />
 
-        {eventIsTooClose ? (
+        {!userCanAddEntertainer(event.eventDate) ? (
           <NoEntertainer />
         ) : (
           <section className="app-content">
@@ -132,7 +131,7 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
       ...initialValues,
       auctionStartDate: { date: Date.now() },
       auctionEndDate: {
-        date: subtractDays(event.eventDate, 4) || Date.now()
+        date: maxAuctionDate(event.eventDate) || Date.now()
       }
     };
   }
@@ -285,7 +284,7 @@ const AddEntertainerDetailsForm = ({
             <DatePicker
               formGroupClassName="col-md-6"
               label="Auction Start Date"
-              maxDate={subtractDays(eventDate, 5)}
+              maxDate={minAuctionDate(eventDate)}
               minDate={new Date()}
               name="auctionStartDate"
               placeholderText="Event Date"
@@ -293,7 +292,7 @@ const AddEntertainerDetailsForm = ({
             <DatePicker
               formGroupClassName="col-md-6"
               label="Auction End Date"
-              maxDate={subtractDays(eventDate, 4)}
+              maxDate={maxAuctionDate(eventDate)}
               minDate={addDays(new Date(), 1)}
               name="auctionEndDate"
               placeholderText="Event Date"
