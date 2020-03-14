@@ -10,12 +10,12 @@ import {
   EmailController,
   ImageController,
   EventEntertainerController,
-  AuctionController,
   ApplicationController,
   BadgeController,
   GalleryController,
   VideoController,
-  PaymentController
+  PaymentController,
+  CommissionController
 } from './controllers';
 import Authentication from './middleware/authentication';
 import passport from 'passport';
@@ -329,5 +329,17 @@ router
 router
   .route('/api/v1/entertainers/total')
   .get(EntertainerProfileController.getTotalEntertainers);
+
+// Commission routes
+router
+  .route('/api/v1/commissions')
+  .all(Authentication.verifyToken, Authentication.validateAdmin)
+  .post(CommissionController.updateCommission)
+  .put(CommissionController.updateCommission);
+
+router.get(
+  '/api/v1/currentCommission',
+  CommissionController.getDefaultCommission
+);
 
 export default router;

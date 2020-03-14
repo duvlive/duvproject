@@ -11,10 +11,11 @@ import { createSchema } from 'components/forms/schema/schema-helpers';
 import { bidSchema } from 'components/forms/schema/entertainerSchema';
 import ViewEvent from '../user/ViewEvent';
 import { getTokenFromStore } from 'utils/localStorage';
-import { getBudgetRange, moneyFormat } from 'utils/helpers';
+import { getBudgetRange, moneyFormat, getPercentage } from 'utils/helpers';
 import { remainingDays } from 'utils/date-helpers';
 import { navigate } from '@reach/router';
 import InputFormat from 'components/forms/InputFormat';
+import { VAT, DEFAULT_COMMISSION } from 'utils/constants';
 
 const NewBid = ({ eventEntertainerId }) => {
   const [eventEntertainer, setEventEntertainer] = React.useState({
@@ -23,6 +24,7 @@ const NewBid = ({ eventEntertainerId }) => {
     highestBudget: 0,
     event: { eventType: '', eventDate: '' }
   });
+
   React.useEffect(() => {
     eventEntertainerId &&
       axios
@@ -44,6 +46,7 @@ const NewBid = ({ eventEntertainerId }) => {
           // navigate to all events
         });
   }, [eventEntertainerId]);
+
   return (
     <BackEndPage title="New Bid">
       <div className="main-app">
@@ -89,6 +92,24 @@ NewBid.defaultProps = {
 
 const BidsForm = ({ eventEntertainer }) => {
   const [message, setMessage] = React.useState(null);
+
+  const [commission, setCommission] = React.useState(DEFAULT_COMMISSION);
+  React.useEffect(() => {
+    axios
+      .get('/api/v1/currentCommission')
+      .then(function(response) {
+        const { status, data } = response;
+        console.log('status,data', status, data);
+        // handle success
+        if (status === 200) {
+          setCommission(data.commission);
+          console.log('data.commission: ', data.commission);
+        }
+      })
+      .catch(function(error) {
+        console.log(error.response.data.message);
+      });
+  }, []);
   return (
     <div className="card card-custom card-black card-form">
       <div className="card-body col-md-10">
@@ -151,7 +172,10 @@ const BidsForm = ({ eventEntertainer }) => {
                   />
 
                   {showCalculator && (
-                    <PriceCalculator askingPrice={askingPrice} />
+                    <PriceCalculator
+                      askingPrice={askingPrice}
+                      commission={commission}
+                    />
                   )}
                   <Button
                     className="btn-danger btn-wide btn-transparent"
@@ -184,12 +208,15 @@ BidsForm.propTypes = {
 NewBid.defaultProps = {
   values: {}
 };
-const PriceCalculator = ({ askingPrice }) => {
+const PriceCalculator = ({ askingPrice, commission }) => {
   const [showBreakdown, setShowBreakdown] = React.useState(false);
-  const commission = 0.1 * askingPrice;
-  const vat = 0.075 * commission;
-  const handling = 0.02 * askingPrice + 40;
-  const amountToPay = askingPrice - (commission + vat + handling);
+
+  const { bidsCommission, handlingPercent, handlingPlus } = commission;
+  const calcCommission = getPercentage(bidsCommission) * askingPrice;
+  const calcVat = getPercentage(VAT) * calcCommission;
+  const handling =
+    getPercentage(handlingPercent) * askingPrice + parseInt(handlingPlus, 10);
+  const amountToPay = askingPrice - (calcCommission + calcVat + handling);
   const entertainerFee = amountToPay > 0 ? amountToPay : 0;
   return (
     <>
@@ -207,24 +234,26 @@ const PriceCalculator = ({ askingPrice }) => {
                     <td className="text-right">{moneyFormat(askingPrice)}</td>
                   </tr>
                   <tr>
-                    <td>Commission (10%)</td>
+                    <td>Commission ({bidsCommission}%)</td>
                     <td className="text-negative text-right">
-                      - {moneyFormat(commission)}
+                      - {moneyFormat(calcCommission)}
                     </td>
                   </tr>
                   <tr>
                     <td>
-                      VAT (7.5%)
+                      VAT ({VAT}%)
                       <small className="small--3 d-block text-muted">
                         From commision
                       </small>
                     </td>
                     <td className="text-negative text-right">
-                      - {moneyFormat(vat)}
+                      - {moneyFormat(calcVat)}
                     </td>
                   </tr>
                   <tr>
-                    <td>Handling (2% + N40)</td>
+                    <td>
+                      Handling ({handlingPercent}% + N{handlingPlus})
+                    </td>
                     <td className="text-negative text-right">
                       - {moneyFormat(handling)}
                     </td>
@@ -250,6 +279,7 @@ const PriceCalculator = ({ askingPrice }) => {
 };
 
 PriceCalculator.propTypes = {
-  askingPrice: PropTypes.number.isRequired
+  askingPrice: PropTypes.number.isRequired,
+  commission: PropTypes.object.isRequired
 };
 export default NewBid;

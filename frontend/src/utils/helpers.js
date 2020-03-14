@@ -35,7 +35,7 @@ export const getBudgetRange = (minBudget, maxBudget) => {
 export const twoDigitNumber = number =>
   number > 0 && number < 10 ? '0' + number : number;
 
-export const listJsonItems = (items, defaultValue) => {
+export const listJsonItems = (items, defaultValue = null) => {
   try {
     const parsedItems = JSON.parse(items);
     if (!parsedItems) return defaultValue;
@@ -121,3 +121,5 @@ export const countOccurences = arr => {
     name => items[name] + ' ' + Humanize.pluralize(items[name], name)
   );
 };
+
+export const getPercentage = value => parseFloat(value) / 100;

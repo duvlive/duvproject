@@ -1,4 +1,5 @@
 import * as yup from 'yup';
+import { parse } from 'date-fns';
 
 export const required = label => yup.string().required(`${label} is required`);
 
@@ -57,7 +58,10 @@ export const positiveNumberValidation = (label, type = 'number') =>
 export const requiredDate = label =>
   yup
     .object()
-    .transform(value => value || { date: undefined })
+    .transform(
+      value =>
+        (value.date && { date: parse(value.date) }) || { date: undefined }
+    )
     .shape({
       date: yup.date().required(`${label} is required`)
     });

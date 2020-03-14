@@ -21,5 +21,10 @@ export const subtractDays = (date, numOfDays) =>
   getElapsedTime(subDays(date, numOfDays));
 export const getTimeOfDay = date => {
   const hour = getHours(date);
-  return (hour < 12 && 'Morning') || (hour < 16 && 'Afternoon') || (hour < 19 && 'Evening') || 'Night';
+  return (
+    (hour < 12 && 'Morning') ||
+    (hour < 16 && 'Afternoon') ||
+    (hour < 19 && 'Evening') ||
+    'Night'
+  );
 };

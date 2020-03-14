@@ -120,7 +120,7 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
   const handleTypeClick = selectedType => setHireType(selectedType);
   let initialValues = {
     lowestBudget: BUDGET[0].value,
-    highestBudget: BUDGET[10].value
+    highestBudget: BUDGET[11].value
   };
   const isAuction =
     hireType.toLowerCase() ===
@@ -138,7 +138,7 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
   console.log('Date.now() ', Date.now());
   console.log('event.eventDate', event.eventDate);
   console.log('initialValues', initialValues);
-
+  console.log('minAuctionDate(eventDate): ', minAuctionDate(event.eventDate));
   return (
     <Formik
       enableReinitialize={true}
@@ -195,7 +195,7 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
               Hire Entertainer
             </button>
           </div>
-          <DisplayFormikState hide {...props} showAll />
+          <DisplayFormikState {...props} showAll />
         </>
       )}
       validationSchema={createSchema(addEntertainerSchema)}
@@ -284,7 +284,7 @@ const AddEntertainerDetailsForm = ({
             <DatePicker
               formGroupClassName="col-md-6"
               label="Auction Start Date"
-              maxDate={minAuctionDate(eventDate)}
+              // maxDate={minAuctionDate(eventDate)}
               minDate={new Date()}
               name="auctionStartDate"
               placeholderText="Event Date"
@@ -292,7 +292,7 @@ const AddEntertainerDetailsForm = ({
             <DatePicker
               formGroupClassName="col-md-6"
               label="Auction End Date"
-              maxDate={maxAuctionDate(eventDate)}
+              // maxDate={maxAuctionDate(eventDate)}
               minDate={addDays(new Date(), 1)}
               name="auctionEndDate"
               placeholderText="Event Date"

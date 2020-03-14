@@ -14,6 +14,5 @@ export const eventIsVoid = eventDate =>
   Date.now() >= subtractDays(eventDate, 2);
 
 export const eventhasExpired = eventDate => Date.now() > eventDate;
-
 export const maxAuctionDate = eventDate => subtractDays(eventDate, 4);
 export const minAuctionDate = eventDate => subtractDays(eventDate, 5);

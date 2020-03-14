@@ -14,6 +14,7 @@ import BadgeController from './BadgeController';
 import GalleryController from './GalleryController';
 import VideoController from './VideoController';
 import PaymentController from './PaymentController';
+import CommissionController from './CommissionController';
 
 export {
   UserController,
@@ -31,5 +32,6 @@ export {
   BadgeController,
   GalleryController,
   VideoController,
-  PaymentController
+  PaymentController,
+  CommissionController
 };

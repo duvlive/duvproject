@@ -12,6 +12,7 @@ import { getTokenFromStore } from 'utils/localStorage';
 import { Link } from '@reach/router';
 import { listJsonItems, getBudgetRange } from 'utils/helpers';
 import { subDays } from 'date-fns';
+import { userCanAddEntertainer } from 'utils/event-helpers';
 
 const defaultEvent = {
   userId: 0,
@@ -116,14 +117,16 @@ const ViewEvent = ({ id }) => {
           <section className="row">
             <div className="col-sm-6">
               <ViewEvent.EntertainersTable
-                entertainers={event.entertainers || []}
+                eventEntertainers={event.entertainers || []}
               />
-              <Link
-                className="btn btn-danger btn-transparent"
-                to={`/user/events/${id}/add-entertainer/Auction`}
-              >
-                Add Entertainer
-              </Link>
+              {userCanAddEntertainer() && (
+                <Link
+                  className="btn btn-danger btn-transparent"
+                  to={`/user/events/${id}/add-entertainer/Auction`}
+                >
+                  Add Entertainer
+                </Link>
+              )}
             </div>
             <div className="col-sm-6">
               <ViewEvent.EventDetailsCard event={event} />
@@ -188,11 +191,18 @@ ViewEvent.EventDetailsCard = ({ event, transparent }) => {
       <li className="list-group-item">
         <small className="small-text__with-icon">
           <i className="icon icon-clock"></i>
-          Time
+          Start Time
         </small>
         <h5 className="event-list-label">
-          {getTime(sanitizedEvent.startTime)} - {sanitizedEvent.eventDuration}
+          {getTime(sanitizedEvent.startTime)}
         </h5>
+      </li>
+      <li className="list-group-item">
+        <small className="small-text__with-icon">
+          <i className="icon icon-clock"></i>
+          Duration
+        </small>
+        <h5 className="event-list-label">{sanitizedEvent.eventDuration}</h5>
       </li>
       <li className="list-group-item">
         <small className="small-text__with-icon">
@@ -241,11 +251,11 @@ ViewEvent.EventDetailsCard.defaultProps = {
 };
 
 ViewEvent.EventEntertainerDetailsCard = ({ eventEntertainer }) => {
-  console.log('eventEntertainer: ', eventEntertainer);
   const sanitizedEntertainer = {
     ...defaultEventEntertainer,
     ...eventEntertainer
   };
+  console.log('sanitizedEntertainer: ', sanitizedEntertainer);
   const isAuction = sanitizedEntertainer.hireType === 'Auction';
 
   return (
@@ -335,32 +345,36 @@ ViewEvent.EventEntertainerDetailsCard.propTypes = {
   eventEntertainer: PropTypes.object.isRequired
 };
 
-ViewEvent.EntertainersTable = ({ entertainers }) => (
-  <Card color="black">
-    <h5 className="sub-title text-muted blue">
-      {entertainers &&
-      entertainers.entertainer &&
-      entertainers.entertainer.length > 0
-        ? 'Hired Entertainers'
-        : 'You have no Entertainer'}
-    </h5>
-    <div className="table-responsive">
-      <table className="table table-dark">
-        <tbody>
-          {entertainers.map((entertainer, index) => (
-            <ViewEvent.EntertainersRow
-              entertainer={entertainer.entertainer}
-              key={index}
-            />
-          ))}
-        </tbody>
-      </table>
-    </div>
-  </Card>
-);
+ViewEvent.EntertainersTable = ({ eventEntertainers }) => {
+  console.log('entertainers', eventEntertainers);
+  const entertainers = eventEntertainers.filter(
+    eventEntertainer => !!eventEntertainer.entertainer
+  );
+  return (
+    <Card color="black">
+      <h5 className="sub-title text-muted blue">
+        {entertainers.length > 0
+          ? 'Hired Entertainers'
+          : 'You have no Entertainer'}
+      </h5>
+      <div className="table-responsive">
+        <table className="table table-dark">
+          <tbody>
+            {eventEntertainers.map((event, index) => (
+              <ViewEvent.EntertainersRow
+                entertainer={event.entertainer}
+                key={index}
+              />
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </Card>
+  );
+};
 
 ViewEvent.EntertainersTable.propTypes = {
-  entertainers: PropTypes.array.isRequired
+  eventEntertainers: PropTypes.array.isRequired
 };
 
 ViewEvent.EntertainersRow = ({ entertainer }) => {
