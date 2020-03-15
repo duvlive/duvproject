@@ -7,7 +7,7 @@ import Timeago from 'react-timeago';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import { UserContext } from 'context/UserContext';
 import { getEventDate, getTime, getTimeOfDay } from 'utils/date-helpers';
-import { parse } from 'date-fns';
+import { groupEvents } from 'utils/event-helpers';
 import NoContent from 'components/common/utils/NoContent';
 import { countOccurences } from 'utils/helpers';
 import { userCanAddEntertainer } from 'utils/event-helpers';
@@ -17,19 +17,8 @@ const Events = () => {
   const events = userState && userState.events;
   const [showPastEvents, setShowPastEvents] = React.useState(false);
   // Sort event according - Today, Upcoming and Past
-  let allEvents = events.reduce(
-    (result, event) => {
-      if (parse(event.eventDate).toDateString() === new Date().toDateString()) {
-        result.today.push(event);
-      } else if (parse(event.eventDate) > Date.now()) {
-        result.upcoming.push(event);
-      } else {
-        result.past.push(event);
-      }
-      return result;
-    },
-    { today: [], upcoming: [], past: [] }
-  );
+  let allEvents = groupEvents(events);
+
   const togglePastEvents = () => setShowPastEvents(!showPastEvents);
 
   const hasActiveEvents =

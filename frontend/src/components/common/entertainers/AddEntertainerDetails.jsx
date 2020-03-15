@@ -37,7 +37,8 @@ import {
   auctionIsVoid,
   userCanAddEntertainer,
   maxAuctionDate,
-  minAuctionDate
+  minAuctionDate,
+  eventHasExpired
 } from 'utils/event-helpers';
 
 const AddEntertainerDetails = ({ id }) => {
@@ -72,6 +73,12 @@ const AddEntertainerDetails = ({ id }) => {
     type = 'Recommend';
   }
 
+  console.log('event.eventDate', event.eventDate);
+  console.log(
+    'eventHasExpired(event.eventDate)',
+    eventHasExpired(event.eventDate)
+  );
+
   return (
     <BackEndPage title="Add Entertainer">
       <div className="main-app">
@@ -79,7 +86,11 @@ const AddEntertainerDetails = ({ id }) => {
         <EventDetails event={event} />
 
         {!userCanAddEntertainer(event.eventDate) ? (
-          <NoEntertainer />
+          eventHasExpired(event.eventDate) ? (
+            <ExpiredEvent />
+          ) : (
+            <NoEntertainer />
+          )
         ) : (
           <section className="app-content">
             <Match path="/user/events/:id/add-entertainer/new-event">
@@ -135,10 +146,7 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
       }
     };
   }
-  console.log('Date.now() ', Date.now());
-  console.log('event.eventDate', event.eventDate);
-  console.log('initialValues', initialValues);
-  console.log('minAuctionDate(eventDate): ', minAuctionDate(event.eventDate));
+
   return (
     <Formik
       enableReinitialize={true}
@@ -154,8 +162,6 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
           eventId: id,
           hireType
         };
-
-        console.log('entertainerDetails: ', entertainerDetails);
 
         axios
           .post('/api/v1/eventEntertainer', entertainerDetails, {
@@ -195,7 +201,7 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
               Hire Entertainer
             </button>
           </div>
-          <DisplayFormikState {...props} showAll />
+          <DisplayFormikState hide {...props} showAll />
         </>
       )}
       validationSchema={createSchema(addEntertainerSchema)}
@@ -284,7 +290,7 @@ const AddEntertainerDetailsForm = ({
             <DatePicker
               formGroupClassName="col-md-6"
               label="Auction Start Date"
-              // maxDate={minAuctionDate(eventDate)}
+              maxDate={minAuctionDate(eventDate)}
               minDate={new Date()}
               name="auctionStartDate"
               placeholderText="Event Date"
@@ -292,7 +298,7 @@ const AddEntertainerDetailsForm = ({
             <DatePicker
               formGroupClassName="col-md-6"
               label="Auction End Date"
-              // maxDate={maxAuctionDate(eventDate)}
+              maxDate={maxAuctionDate(eventDate)}
               minDate={addDays(new Date(), 1)}
               name="auctionEndDate"
               placeholderText="Event Date"
@@ -439,10 +445,20 @@ EventDetails.propTypes = {
 
 const NoEntertainer = () => (
   <section className="app-content">
-    <AlertMessage message="No enough time to plan for event" type="error" />
+    <AlertMessage message="No enough time to plan for event" type="info" />
     <h4 className="text-blue font-weight-normal mt-4">
       You cannot add any Entertainer to Events less than 3 days
     </h4>
   </section>
 );
+
+const ExpiredEvent = () => (
+  <section className="app-content">
+    <AlertMessage message="Event date has passed" type="error" />
+    <h5 className="text-red font-weight-normal mt-4">
+      You cannot add any Entertainer to an Expired Event
+    </h5>
+  </section>
+);
+
 export default AddEntertainerDetails;

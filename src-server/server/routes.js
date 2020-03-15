@@ -161,6 +161,13 @@ router
   .put(EventController.updateUserEvent)
   .get(EventController.getUserEvent);
 
+router.get(
+  '/api/v1/events/entertainers',
+  Authentication.verifyToken,
+  Authentication.isActiveUser,
+  Authentication.validateEntertainer,
+  EventController.getEntertainerEvents
+);
 router.get('/api/v1/events/:id', EventController.getOneEvent);
 
 // gallery routes

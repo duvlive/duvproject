@@ -12,7 +12,11 @@ import { getTokenFromStore } from 'utils/localStorage';
 import { Link } from '@reach/router';
 import { listJsonItems, getBudgetRange } from 'utils/helpers';
 import { subDays } from 'date-fns';
-import { userCanAddEntertainer } from 'utils/event-helpers';
+import {
+  userCanAddEntertainer,
+  eventHasExpired,
+  eventIsVoid
+} from 'utils/event-helpers';
 
 const defaultEvent = {
   userId: 0,
@@ -71,18 +75,6 @@ const ViewEvent = ({ id }) => {
           // navigate to all events
         });
   }, [id]);
-  // const entertainersDetails =
-  //   (event &&
-  //     event.entertainers &&
-  //     event.entertainers.map(({ entertainer }) => entertainer)) ||
-  //   [];
-
-  // const stageNames =
-  //   (entertainersDetails &&
-  //     entertainersDetails.map(
-  //       entertainer => entertainer && entertainer.stageName
-  //     )) ||
-  //   [];
 
   return (
     <BackEndPage title="View Event">
@@ -112,10 +104,25 @@ const ViewEvent = ({ id }) => {
               </section>
             </div>
           </section>
-
           {/* Event Details and Entertainers */}
-          <section className="row">
+          <aside className="row">
             <div className="col-sm-6">
+              {eventHasExpired(event.eventDate) && (
+                <Card color="red">
+                  <h5 className="sub-title text-muted blue">
+                    Event Date has passed.
+                  </h5>
+                </Card>
+              )}
+              {!eventHasExpired(event.eventDate) &&
+                eventIsVoid(event.eventDate) && (
+                  <Card color="blue">
+                    <h5 className="sub-title text-muted blue">
+                      Event can no longer be edited.
+                    </h5>
+                  </Card>
+                )}
+
               <ViewEvent.EntertainersTable
                 eventEntertainers={event.entertainers || []}
               />
@@ -134,7 +141,7 @@ const ViewEvent = ({ id }) => {
                 <i className="icon icon-cancel"></i> Cancel Event
               </div>
             </div>
-          </section>
+          </aside>
         </section>
       </div>
     </BackEndPage>

@@ -313,6 +313,46 @@ const EventController = {
   },
 
   /**
+   * get Entertainer Event
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  getEntertainerEvents(req, res) {
+    const userId = req.user.id;
+    EntertainerProfile.findOne({
+      where: {
+        userId
+      }
+    }).then(entertainer => {
+      EventEntertainer.findAll({
+        where: {
+          hiredEntertainer: entertainer.id
+        },
+        include: [
+          {
+            model: Event,
+            as: 'event',
+            include: [
+              {
+                model: User,
+                as: 'owner',
+                attributes: ['id', 'firstName', 'lastName', 'profileImageURL']
+              }
+            ]
+          }
+        ]
+      }).then(events => {
+        if (!events || events.length === 0) {
+          return res.status(404).json({ message: 'Event not found' });
+        }
+        return res.status(200).json({ events });
+      });
+    });
+  },
+
+  /**
    * get Event Bid
    * @function
    * @param {object} req is req object
