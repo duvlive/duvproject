@@ -196,7 +196,7 @@ const UserController = {
    * @return {object} returns res object
    */
   socialLogin(req, res) {
-    const { lastName, firstName, email } = req.user;
+    const { lastName, firstName, email, picture } = req.user;
     User.findOne({
       where: { email },
       include: userAssociatedModels,
@@ -205,10 +205,10 @@ const UserController = {
       .then(usr => {
         if (!usr || usr.length === 0) {
           return res.status(200).json({
-            user: { lastName, firstName, email }
+            user: { lastName, firstName, email, picture }
           });
         }
-        const user = user.dataValues;
+        const user = usr.dataValues;
         if (user.firstTimeLogin) {
           user.update({ firstTimeLogin: false });
         }
@@ -315,6 +315,7 @@ const UserController = {
         });
       })
       .catch(error => {
+        console.log({ error });
         return res.status(500).json({ message: error.message });
       });
   },
