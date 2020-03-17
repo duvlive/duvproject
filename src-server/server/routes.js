@@ -317,4 +317,17 @@ router
   .all(Authentication.verifyToken, Authentication.validateUser)
   .get(PaymentController.getPaystackCustomer);
 
+// Public APIS
+router
+  .route('/api/v1/entertainers')
+  .get(EntertainerProfileController.getEntertainers);
+
+router
+  .route('/api/v1/entertainer/:stageName')
+  .get(EntertainerProfileController.getEntertainerByStageName);
+
+router
+  .route('/api/v1/entertainers/total')
+  .get(EntertainerProfileController.getTotalEntertainers);
+
 export default router;

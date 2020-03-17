@@ -26,15 +26,18 @@ passport.use(
       clientID: process.env.FACEBOOK_APP_ID,
       clientSecret: process.env.FACEBOOK_APP_SECRET,
       callbackURL: `${process.env.HOST}${process.env.FACEBOOK_CALLBACK}`,
-      profileFields: ['emails', 'name']
+      profileFields: ['emails', 'name', 'picture.type(large)']
     },
     function(accessToken, refreshToken, profile, done) {
       const {
         last_name: lastName,
         first_name: firstName,
-        email
+        email,
+        picture: {
+          data: { url }
+        }
       } = profile._json;
-      done(null, { firstName, lastName, email });
+      done(null, { firstName, lastName, email, picture: url });
     }
   )
 );
@@ -51,9 +54,10 @@ passport.use(
       const {
         email,
         family_name: lastName,
-        given_name: firstName
+        given_name: firstName,
+        picture: picture
       } = profile._json;
-      done(null, { firstName, lastName, email });
+      done(null, { firstName, lastName, email, picture });
     }
   )
 );
