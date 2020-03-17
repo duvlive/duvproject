@@ -1,4 +1,20 @@
 import { updateUser } from '../utils';
+import { User, EntertainerProfile } from '../models';
+import { USER_TYPES } from '../constant';
+
+export const userAssociatedModels = [
+  {
+    model: EntertainerProfile,
+    as: 'profile'
+  }
+];
+
+export const entertainerProfileAssociatedModels = [
+  {
+    model: User,
+    as: 'personalDetails'
+  }
+];
 
 const EntertainerProfileController = {
   /**
@@ -40,15 +56,115 @@ const EntertainerProfileController = {
 
     updateUser(req.user, entertainerProfileData, 'Profile')
       .then(entertainerProfile => {
-        return res
-          .status(200)
-          .json({
-            message: 'User profile update is succesful',
-            entertainerProfile
-          });
+        return res.status(200).json({
+          message: 'User profile update is succesful',
+          entertainerProfile
+        });
       })
       .catch(error => {
         return res.status(error.status || 400).json({ message: error.message });
+      });
+  },
+
+  transformEntertainers(entertainer, updatedValues = {}) {
+    const transformEntertainer = {
+      id: entertainer.id,
+      firstName: entertainer.firstName,
+      lastName: entertainer.lastName,
+      type: entertainer.type,
+      profileImg: entertainer.profileImageURL,
+      stageName: entertainer.profile.stageName,
+      entertainerType: entertainer.profile.entertainerType
+    };
+
+    return { ...transformEntertainer, ...updatedValues };
+  },
+
+  getEntertainers(req, res) {
+    User.findAll({
+      where: { type: USER_TYPES.ENTERTAINER },
+      include: userAssociatedModels
+    })
+      .then(entertainers => {
+        return res.status(200).json({
+          message: 'Entertainers List',
+          entertainers: entertainers.map(entertainer =>
+            EntertainerProfileController.transformEntertainers(entertainer)
+          )
+        });
+      })
+      .catch(error => {
+        console.log(error);
+        const status = error.status || 500;
+        const errorMessage = error.message || error;
+        return res.status(status).json({ message: errorMessage });
+      });
+  },
+
+  transformEntertainer(entertainer, updatedValues = {}) {
+    const transformEntertainer = {
+      id: entertainer.personalDetails.id,
+      firstName: entertainer.personalDetails.firstName,
+      lastName: entertainer.personalDetails.lastName,
+      type: entertainer.personalDetails.type,
+      about: entertainer.about,
+      profileImg: entertainer.personalDetails.profileImageURL,
+      stageName: entertainer.stageName,
+      entertainerType: entertainer.entertainerType
+    };
+
+    return { ...transformEntertainer, ...updatedValues };
+  },
+
+  getEntertainerByStageName(req, res) {
+    const { stageName } = req.params;
+    EntertainerProfile.findOne({
+      where: { stageName },
+      include: entertainerProfileAssociatedModels
+    })
+      .then(entertainer => {
+        return res.status(200).json({
+          message: 'Entertainer detail',
+          entertainer: EntertainerProfileController.transformEntertainer(
+            entertainer
+          )
+        });
+      })
+      .catch(error => {
+        console.log(error);
+        const status = error.status || 500;
+        const errorMessage = error.message || error;
+        return res.status(status).json({ message: errorMessage });
+      });
+  },
+
+  getTotalEntertainers(req, res) {
+    EntertainerProfile.findAll()
+      .then(entertainers => {
+        return res.status(200).json({
+          message: 'Total Entertainers',
+          entertainers: entertainers.reduce(
+            (acc, entertainer) => {
+              if (entertainer.entertainerType === 'MC') {
+                acc['MC'] += 1;
+              }
+              if (entertainer.entertainerType === 'DJ') {
+                acc['DJ'] += 1;
+              }
+              if (entertainer.entertainerType === 'Liveband') {
+                acc['LIveband'] += 1;
+              }
+              return acc;
+            },
+            { MC: 0, DJ: 0, LIveband: 0 }
+          )
+        });
+      })
+      .catch(error => {
+        console.log(error);
+        const status = error.status || 500;
+        const errorMessage = error.message || error;
+        return res.status(status).json({ message: errorMessage });
       });
   }
 };
