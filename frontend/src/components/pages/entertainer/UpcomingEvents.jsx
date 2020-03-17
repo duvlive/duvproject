@@ -59,9 +59,9 @@ const Events = () => {
     allEvents.today.length > 0 || allEvents.upcoming.length > 0;
 
   return (
-    <BackEndPage title="My Events">
+    <BackEndPage title="Upcoming Events">
       <div className="main-app">
-        <TopMessage message="All Events" />
+        <TopMessage message="Upcoming Events" />
 
         <section className="app-content">
           {events.length > 0 ? (
@@ -96,12 +96,7 @@ const Events = () => {
               <br />
             </div>
           ) : (
-            <NoContent
-              isButton
-              linkText="Add a New Event"
-              linkTo="/user/events/new"
-              text="No Event Found"
-            />
+            <NoContent text="You have no upcoming events." />
           )}
         </section>
       </div>

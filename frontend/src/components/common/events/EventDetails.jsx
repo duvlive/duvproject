@@ -61,13 +61,6 @@ const EventDetails = () => {
             />
           </div>
           <div className="form-row">
-            <Select
-              blankOption="Select Duration"
-              formGroupClassName="col-md-6"
-              label="Duration of Event (Approx.)"
-              name="event.eventDuration"
-              options={EVENT_DURATION}
-            />
             <DatePicker
               dateFormat="h:mm aa"
               formGroupClassName="col-md-6"
@@ -77,6 +70,13 @@ const EventDetails = () => {
               showTimeSelect
               showTimeSelectOnly
               timeCaption="Start Time"
+            />
+            <Select
+              blankOption="Select Duration"
+              formGroupClassName="col-md-6"
+              label="Duration of Event (Approx.)"
+              name="event.eventDuration"
+              options={EVENT_DURATION}
             />
           </div>
           <TextArea

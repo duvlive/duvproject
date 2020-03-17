@@ -58,12 +58,7 @@ const Auctions = () => {
               <br />
             </div>
           ) : (
-            <NoContent
-              isButton
-              linkText="Add a New Event"
-              linkTo="/user/events/new"
-              text={<>No Available Auction Found.</>}
-            />
+            <NoContent isButton text={<>No Available Auction Found.</>} />
           )}
         </section>
       </div>

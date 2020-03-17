@@ -5,7 +5,8 @@ import {
   parse,
   getTime as getElapsedTime,
   subDays,
-  getHours
+  getHours,
+  differenceInCalendarDays
 } from 'date-fns';
 
 /**
@@ -28,3 +29,5 @@ export const getTimeOfDay = date => {
     'Night'
   );
 };
+export const getNumberOfDaysToEvent = eventDate =>
+  differenceInCalendarDays(eventDate, Date.now()) + ' days';

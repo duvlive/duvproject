@@ -124,3 +124,7 @@ label {
     color: $red;
   }
 }
+
+.text-muted-light {
+  color: lighten($text-muted, 12);
+}

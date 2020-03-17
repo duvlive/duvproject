@@ -5,7 +5,7 @@ import { Link } from '@reach/router';
 
 const NoContent = ({ text, linkText, linkTo, isButton, className }) => (
   <section className={classNames(className, 'no-content text-center')}>
-    <h4 className="text-muted subtitle--3 pt-3">{text}</h4>
+    <h4 className="text-muted-light subtitle--3 pt-3">{text}</h4>
     {linkText && linkTo && (
       <Link
         className={classNames(

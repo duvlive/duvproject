@@ -3,7 +3,13 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import classNames from 'classnames';
 import TopMessage from 'components/common/layout/TopMessage';
-import { remainingDays, getShortDate, getTime } from 'utils/date-helpers';
+import {
+  remainingDays,
+  getShortDate,
+  getTime,
+  getTimeOfDay,
+  getNumberOfDaysToEvent
+} from 'utils/date-helpers';
 import Image from 'components/common/utils/Image';
 import Card from 'components/custom/Card';
 import DuvLiveModal from 'components/custom/Modal';
@@ -11,7 +17,6 @@ import BackEndPage from 'components/common/layout/BackEndPage';
 import { getTokenFromStore } from 'utils/localStorage';
 import { Link } from '@reach/router';
 import { listJsonItems, getBudgetRange } from 'utils/helpers';
-import { subDays } from 'date-fns';
 import {
   userCanAddEntertainer,
   eventHasExpired,
@@ -201,7 +206,8 @@ ViewEvent.EventDetailsCard = ({ event, transparent }) => {
           Start Time
         </small>
         <h5 className="event-list-label">
-          {getTime(sanitizedEvent.startTime)}
+          {getTime(sanitizedEvent.startTime)} (
+          {getTimeOfDay(sanitizedEvent.startTime)})
         </h5>
       </li>
       <li className="list-group-item">
@@ -286,7 +292,7 @@ ViewEvent.EventEntertainerDetailsCard = ({ eventEntertainer }) => {
             Auction Closes
           </small>
           <h5 className="event-list-label">
-            {remainingDays(subDays(sanitizedEntertainer.auctionEndDate, 4))}
+            {getNumberOfDaysToEvent(sanitizedEntertainer.auctionEndDate)}
           </h5>
         </li>
       )}
