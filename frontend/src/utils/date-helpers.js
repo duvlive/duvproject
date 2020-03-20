@@ -5,7 +5,8 @@ import {
   parse,
   getTime as getElapsedTime,
   subDays,
-  getHours
+  getHours,
+  differenceInCalendarDays
 } from 'date-fns';
 
 /**
@@ -21,5 +22,12 @@ export const subtractDays = (date, numOfDays) =>
   getElapsedTime(subDays(date, numOfDays));
 export const getTimeOfDay = date => {
   const hour = getHours(date);
-  return (hour < 12 && 'Morning') || (hour < 16 && 'Afternoon') || (hour < 19 && 'Evening') || 'Night';
+  return (
+    (hour < 12 && 'Morning') ||
+    (hour < 16 && 'Afternoon') ||
+    (hour < 19 && 'Evening') ||
+    'Night'
+  );
 };
+export const getNumberOfDaysToEvent = eventDate =>
+  differenceInCalendarDays(eventDate, Date.now()) + ' days';

@@ -63,7 +63,7 @@ const AlertIcon = ({ type }) => {
 };
 
 AlertIcon.propTypes = {
-  type: PropTypes.oneOf(['success', 'danger', 'info'])
+  type: PropTypes.oneOf(['success', 'danger', 'info', 'error'])
 };
 
 AlertIcon.defaultProps = {

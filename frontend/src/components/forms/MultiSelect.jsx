@@ -76,10 +76,12 @@ const MultiSelect = ({
                 name={name}
                 onBlur={field.onBlur}
                 onChange={option => {
-                  form.setFieldValue(
-                    name,
-                    option.map(item => item.value)
-                  );
+                  option
+                    ? form.setFieldValue(
+                        name,
+                        option.map(item => item.value)
+                      )
+                    : form.setFieldValue(name, []);
                 }}
                 options={options}
                 placeholder={placeholder}

@@ -3,7 +3,13 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import classNames from 'classnames';
 import TopMessage from 'components/common/layout/TopMessage';
-import { remainingDays, getShortDate, getTime } from 'utils/date-helpers';
+import {
+  remainingDays,
+  getShortDate,
+  getTime,
+  getTimeOfDay,
+  getNumberOfDaysToEvent
+} from 'utils/date-helpers';
 import Image from 'components/common/utils/Image';
 import Card from 'components/custom/Card';
 import DuvLiveModal from 'components/custom/Modal';
@@ -11,7 +17,11 @@ import BackEndPage from 'components/common/layout/BackEndPage';
 import { getTokenFromStore } from 'utils/localStorage';
 import { Link } from '@reach/router';
 import { listJsonItems, getBudgetRange } from 'utils/helpers';
-import { subDays } from 'date-fns';
+import {
+  userCanAddEntertainer,
+  eventHasExpired,
+  eventIsVoid
+} from 'utils/event-helpers';
 
 const defaultEvent = {
   userId: 0,
@@ -70,18 +80,6 @@ const ViewEvent = ({ id }) => {
           // navigate to all events
         });
   }, [id]);
-  // const entertainersDetails =
-  //   (event &&
-  //     event.entertainers &&
-  //     event.entertainers.map(({ entertainer }) => entertainer)) ||
-  //   [];
-
-  // const stageNames =
-  //   (entertainersDetails &&
-  //     entertainersDetails.map(
-  //       entertainer => entertainer && entertainer.stageName
-  //     )) ||
-  //   [];
 
   return (
     <BackEndPage title="View Event">
@@ -111,19 +109,36 @@ const ViewEvent = ({ id }) => {
               </section>
             </div>
           </section>
-
           {/* Event Details and Entertainers */}
-          <section className="row">
+          <aside className="row">
             <div className="col-sm-6">
+              {eventHasExpired(event.eventDate) && (
+                <Card color="red">
+                  <h5 className="sub-title text-muted blue">
+                    Event Date has passed.
+                  </h5>
+                </Card>
+              )}
+              {!eventHasExpired(event.eventDate) &&
+                eventIsVoid(event.eventDate) && (
+                  <Card color="blue">
+                    <h5 className="sub-title text-muted blue">
+                      Event can no longer be edited.
+                    </h5>
+                  </Card>
+                )}
+
               <ViewEvent.EntertainersTable
-                entertainers={event.entertainers || []}
+                eventEntertainers={event.entertainers || []}
               />
-              <Link
-                className="btn btn-danger btn-transparent"
-                to={`/user/events/${id}/add-entertainer/Auction`}
-              >
-                Add Entertainer
-              </Link>
+              {userCanAddEntertainer() && (
+                <Link
+                  className="btn btn-danger btn-transparent"
+                  to={`/user/events/${id}/add-entertainer/Auction`}
+                >
+                  Add Entertainer
+                </Link>
+              )}
             </div>
             <div className="col-sm-6">
               <ViewEvent.EventDetailsCard event={event} />
@@ -131,7 +146,7 @@ const ViewEvent = ({ id }) => {
                 <i className="icon icon-cancel"></i> Cancel Event
               </div>
             </div>
-          </section>
+          </aside>
         </section>
       </div>
     </BackEndPage>
@@ -188,11 +203,19 @@ ViewEvent.EventDetailsCard = ({ event, transparent }) => {
       <li className="list-group-item">
         <small className="small-text__with-icon">
           <i className="icon icon-clock"></i>
-          Time
+          Start Time
         </small>
         <h5 className="event-list-label">
-          {getTime(sanitizedEvent.startTime)} - {sanitizedEvent.eventDuration}
+          {getTime(sanitizedEvent.startTime)} (
+          {getTimeOfDay(sanitizedEvent.startTime)})
         </h5>
+      </li>
+      <li className="list-group-item">
+        <small className="small-text__with-icon">
+          <i className="icon icon-clock"></i>
+          Duration
+        </small>
+        <h5 className="event-list-label">{sanitizedEvent.eventDuration}</h5>
       </li>
       <li className="list-group-item">
         <small className="small-text__with-icon">
@@ -241,11 +264,11 @@ ViewEvent.EventDetailsCard.defaultProps = {
 };
 
 ViewEvent.EventEntertainerDetailsCard = ({ eventEntertainer }) => {
-  console.log('eventEntertainer: ', eventEntertainer);
   const sanitizedEntertainer = {
     ...defaultEventEntertainer,
     ...eventEntertainer
   };
+  console.log('sanitizedEntertainer: ', sanitizedEntertainer);
   const isAuction = sanitizedEntertainer.hireType === 'Auction';
 
   return (
@@ -269,7 +292,7 @@ ViewEvent.EventEntertainerDetailsCard = ({ eventEntertainer }) => {
             Auction Closes
           </small>
           <h5 className="event-list-label">
-            {remainingDays(subDays(sanitizedEntertainer.auctionEndDate, 4))}
+            {getNumberOfDaysToEvent(sanitizedEntertainer.auctionEndDate)}
           </h5>
         </li>
       )}
@@ -335,32 +358,36 @@ ViewEvent.EventEntertainerDetailsCard.propTypes = {
   eventEntertainer: PropTypes.object.isRequired
 };
 
-ViewEvent.EntertainersTable = ({ entertainers }) => (
-  <Card color="black">
-    <h5 className="sub-title text-muted blue">
-      {entertainers &&
-      entertainers.entertainer &&
-      entertainers.entertainer.length > 0
-        ? 'Hired Entertainers'
-        : 'You have no Entertainer'}
-    </h5>
-    <div className="table-responsive">
-      <table className="table table-dark">
-        <tbody>
-          {entertainers.map((entertainer, index) => (
-            <ViewEvent.EntertainersRow
-              entertainer={entertainer.entertainer}
-              key={index}
-            />
-          ))}
-        </tbody>
-      </table>
-    </div>
-  </Card>
-);
+ViewEvent.EntertainersTable = ({ eventEntertainers }) => {
+  console.log('entertainers', eventEntertainers);
+  const entertainers = eventEntertainers.filter(
+    eventEntertainer => !!eventEntertainer.entertainer
+  );
+  return (
+    <Card color="black">
+      <h5 className="sub-title text-muted blue">
+        {entertainers.length > 0
+          ? 'Hired Entertainers'
+          : 'You have no Entertainer'}
+      </h5>
+      <div className="table-responsive">
+        <table className="table table-dark">
+          <tbody>
+            {eventEntertainers.map((event, index) => (
+              <ViewEvent.EntertainersRow
+                entertainer={event.entertainer}
+                key={index}
+              />
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </Card>
+  );
+};
 
 ViewEvent.EntertainersTable.propTypes = {
-  entertainers: PropTypes.array.isRequired
+  eventEntertainers: PropTypes.array.isRequired
 };
 
 ViewEvent.EntertainersRow = ({ entertainer }) => {

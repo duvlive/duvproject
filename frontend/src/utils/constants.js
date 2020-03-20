@@ -1,4 +1,6 @@
 export const OUR_PHONE_NUMBER = '+234 708 7821 561';
+export const VAT = '7.5';
+
 export const COLOR_STYLE = [
   'primary',
   'secondary',
@@ -254,7 +256,7 @@ export const PLACE_OF_EVENTS = [
 ];
 
 export const BUDGET = [
-  { label: 'Less than 50 Thousand Naira', value: '0' },
+  { label: 'Less than 50 Thousand Naira', value: '10000' },
   { label: '50 Thousand Naira', value: '50000' },
   { label: '100 Thousand Naira', value: '100000' },
   { label: '200 Thousand Naira', value: '200000' },
@@ -276,3 +278,12 @@ export const LANGUAGE = [
   { label: 'Igbo', value: 'Igbo' },
   { label: 'Hausa', value: 'Hausa' }
 ];
+
+export const DEFAULT_COMMISSION = {
+  title: 'Default Commission',
+  recommendationsCommission: '15',
+  directHireCommission: '6',
+  bidsCommission: '10',
+  handlingPercent: '2',
+  handlingPlus: '40'
+};

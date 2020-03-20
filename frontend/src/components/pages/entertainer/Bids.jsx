@@ -4,8 +4,9 @@ import PropTypes from 'prop-types';
 import TopMessage from 'components/common/layout/TopMessage';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import { getTokenFromStore } from 'utils/localStorage';
-import { twoDigitNumber } from 'utils/helpers';
+import { twoDigitNumber, commaNumber } from 'utils/helpers';
 import { getShortDate } from 'utils/date-helpers';
+import NoContent from 'components/common/utils/NoContent';
 
 const Bids = () => {
   const [bids, setBids] = React.useState([]);
@@ -37,17 +38,27 @@ const Bids = () => {
           <div className="table-responsive">
             <table className="table table-dark table__no-border table__with-bg">
               <tbody>
-                {bids.map((bid, index) => (
-                  <BidsRow
-                    auctionEndDate={bid.eventEntertainerInfo.auctionEndDate}
-                    city={bid.event.city}
-                    eventType={bid.event.eventType}
-                    key={index}
-                    number={index + 1}
-                    state={bid.event.state}
-                    status={bid.status}
+                {bids.length > 0 ? (
+                  bids.map((bid, index) => (
+                    <BidsRow
+                      askingPrice={bid.askingPrice}
+                      auctionEndDate={bid.eventEntertainerInfo.auctionEndDate}
+                      city={bid.event.city}
+                      eventType={bid.event.eventType}
+                      key={index}
+                      number={index + 1}
+                      state={bid.event.state}
+                      status={bid.status}
+                    />
+                  ))
+                ) : (
+                  <NoContent
+                    isButton
+                    linkText="Available Auctions"
+                    linkTo="/entertainer/available-auctions"
+                    text="No Bid Found. You can check available auctions here"
                   />
-                ))}
+                )}
               </tbody>
             </table>
             <br />
@@ -60,6 +71,7 @@ const Bids = () => {
 };
 
 const BidsRow = ({
+  askingPrice,
   auctionEndDate,
   city,
   eventType,
@@ -84,6 +96,10 @@ const BidsRow = ({
         <i className="icon icon-clock" /> {getShortDate(auctionEndDate)}
       </span>
     </td>
+    <td>
+      <span className="text-red">Asking Price</span>
+      <span>NGN {commaNumber(askingPrice)}</span>
+    </td>
     <td className="text-right">
       <div className="btn btn-info btn-transparent">{status}</div>
     </td>
@@ -91,6 +107,7 @@ const BidsRow = ({
 );
 
 BidsRow.propTypes = {
+  askingPrice: PropTypes.string,
   auctionEndDate: PropTypes.any,
   city: PropTypes.string,
   eventType: PropTypes.string,
@@ -100,6 +117,7 @@ BidsRow.propTypes = {
 };
 
 Bids.defaultProps = {
+  askingPrice: '',
   auctionEndDate: '',
   city: '',
   eventType: '',
