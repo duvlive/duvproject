@@ -79,10 +79,14 @@ $duv-td-line-height: 1.8;
     line-height: $duv-td-line-height;
   }
 
-  span {
+  span:not(.duvlive-modal) {
     font-size: 0.8rem;
     display: block;
     line-height: $duv-td-line-height;
+  }
+
+  .td-btn {
+    width: 9rem;
   }
 
   .circle {
