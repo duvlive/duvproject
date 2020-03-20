@@ -26,8 +26,8 @@ const Auctions = () => {
         console.log('status,data', status, data);
         // handle success
         if (status === 200) {
-          setAuctions(data.events);
-          console.log('Auctions: ', data.events);
+          setAuctions(data.auctions);
+          console.log('Auctions: ', data.auctions);
         }
       })
       .catch(function(error) {
@@ -71,13 +71,14 @@ const AuctionsTable = ({ auctions }) => (
       <tbody>
         {auctions.map((auction, index) => (
           <AuctionsRow
-            auctionEndDate={auction.entertainers[0].auctionEndDate}
-            city={auction.city}
-            entertainerType={auction.entertainers[0].entertainerType}
-            eventType={auction.eventType}
+            auctionEndDate={auction.auctionEndDate}
+            city={auction.event.city}
+            entertainerType={auction.entertainerType}
+            eventType={auction.event.eventType}
+            id={auction.id}
             key={index}
             number={index + 1}
-            state={auction.state}
+            state={auction.event.state}
             totalApplications={auction.applications.length || 0}
           />
         ))}
@@ -94,6 +95,7 @@ const AuctionsRow = ({
   number,
   eventType,
   city,
+  id,
   state,
   totalApplications,
   auctionEndDate,
@@ -127,9 +129,14 @@ const AuctionsRow = ({
       </span>
     </td>
     <td className="text-right">
-      <Link className="btn btn-info btn-transparent" to="/user/auction/bids">
-        View Bids
-      </Link>
+      {totalApplications !== 0 && (
+        <Link
+          className="btn btn-info btn-transparent"
+          to={`/user/auction/bids/${id}`}
+        >
+          View Bids
+        </Link>
+      )}
     </td>
   </tr>
 );
@@ -137,8 +144,10 @@ const AuctionsRow = ({
 AuctionsRow.propTypes = {
   auctionEndDate: PropTypes.any,
   city: PropTypes.string,
+  entertainerType: PropTypes.string,
   entertainers: PropTypes.string,
   eventType: PropTypes.string,
+  id: PropTypes.string,
   number: PropTypes.number,
   state: PropTypes.string,
   totalApplications: PropTypes.number
@@ -147,8 +156,10 @@ AuctionsRow.propTypes = {
 Auctions.defaultProps = {
   auctionEndDate: '',
   city: '',
+  entertainerType: '',
   entertainers: '',
   eventType: '',
+  id: '',
   number: 0,
   state: '',
   totalApplications: 0

@@ -248,7 +248,7 @@ router.get(
 
 // Bids
 router.get(
-  '/api/v1/events/:id/bids',
+  '/api/v1/auctions/bids/:id',
   Authentication.verifyToken,
   Authentication.validateUser,
   Authentication.isActiveUser,

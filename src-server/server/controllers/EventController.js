@@ -199,75 +199,117 @@ const EventController = {
    * @param {object} res is res object
    * @return {object} returns res object
    */
+  // getUserAuctions(req, res) {
+  //   req.user
+  //     .getEvents({
+  //       include: [
+  //         {
+  //           where: {
+  //             hireType: 'Auction',
+  //             hiredEntertainer: null
+  //           },
+  //           model: EventEntertainer,
+  //           as: 'entertainers',
+  //           include: [
+  //             {
+  //               model: EntertainerProfile,
+  //               as: 'entertainer',
+  //               attributes: [
+  //                 'id',
+  //                 'stageName',
+  //                 'entertainerType',
+  //                 'location',
+  //                 'about'
+  //               ],
+  //               include: [
+  //                 {
+  //                   model: User,
+  //                   as: 'personalDetails',
+  //                   attributes: [
+  //                     'id',
+  //                     'firstName',
+  //                     'lastName',
+  //                     'profileImageURL'
+  //                   ]
+  //                 }
+  //               ]
+  //             }
+  //           ]
+  //         },
+  //         {
+  //           model: Application,
+  //           as: 'applications',
+  //           include: [
+  //             {
+  //               model: User,
+  //               as: 'user',
+  //               attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+  //               include: [
+  //                 {
+  //                   model: EntertainerProfile,
+  //                   as: 'profile',
+  //                   attributes: [
+  //                     'id',
+  //                     'stageName',
+  //                     'entertainerType',
+  //                     'location',
+  //                     'about'
+  //                   ]
+  //                 }
+  //               ]
+  //             }
+  //           ]
+  //         }
+  //       ]
+  //     })
+  //     .then(events => {
+  //       if (!events || events.length === 0) {
+  //         return res.status(404).json({ message: 'Event not found' });
+  //       }
+  //       return res.status(200).json({ events });
+  //     });
+  // },
+
   getUserAuctions(req, res) {
-    req.user
-      .getEvents({
-        include: [
-          {
-            where: {
-              hireType: 'Auction',
-              hiredEntertainer: null
-            },
-            model: EventEntertainer,
-            as: 'entertainers',
-            include: [
-              {
-                model: EntertainerProfile,
-                as: 'entertainer',
-                attributes: [
-                  'id',
-                  'stageName',
-                  'entertainerType',
-                  'location',
-                  'about'
-                ],
-                include: [
-                  {
-                    model: User,
-                    as: 'personalDetails',
-                    attributes: [
-                      'id',
-                      'firstName',
-                      'lastName',
-                      'profileImageURL'
-                    ]
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            model: Application,
-            as: 'applications',
-            include: [
-              {
-                model: User,
-                as: 'user',
-                attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
-                include: [
-                  {
-                    model: EntertainerProfile,
-                    as: 'profile',
-                    attributes: [
-                      'id',
-                      'stageName',
-                      'entertainerType',
-                      'location',
-                      'about'
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      })
-      .then(events => {
-        if (!events || events.length === 0) {
-          return res.status(404).json({ message: 'Event not found' });
+    EventEntertainer.findAll({
+      where: {
+        hireType: 'Auction',
+        userId: req.user.id
+      },
+      include: [
+        {
+          model: Event,
+          as: 'event'
+        },
+        {
+          model: EntertainerProfile,
+          as: 'entertainer',
+          attributes: [
+            'id',
+            'stageName',
+            'entertainerType',
+            'location',
+            'about'
+          ],
+          include: [
+            {
+              model: User,
+              as: 'personalDetails',
+              attributes: ['id', 'firstName', 'lastName', 'profileImageURL']
+            }
+          ]
+        },
+        {
+          model: Application,
+          as: 'applications'
         }
-        return res.status(200).json({ events });
-      });
+      ]
+    }).then(auctions => {
+      if (!auctions || auctions.length === 0) {
+        return res.status(404).json({ message: 'Auction not found' });
+      }
+      return res.status(200).json({ auctions });
+    });
   },
 
   /**
@@ -286,7 +328,7 @@ const EventController = {
         entertainerType: {
           [Op.eq]: req.user.profile.entertainerType
         },
-        [Op.and]: Sequelize.literal('applications.id is null')
+        [Op.and]: Sequelize.literal('applications.id is null') // auction should only be shown if user has not applied
       },
       include: [
         {
@@ -356,60 +398,66 @@ const EventController = {
   },
 
   /**
-   * get Event Bid
+   * get Event Bids (for user)
    * @function
    * @param {object} req is req object
    * @param {object} res is res object
    * @return {object} returns res object
    */
   getEventBids(req, res) {
-    const eventId = req.params.id;
-    if (!eventId) {
-      return res.status(400).json({ message: 'Kindly provide an event id' });
+    const eventEntertainerId = req.params.id;
+    if (!eventEntertainerId) {
+      return res
+        .status(400)
+        .json({ message: 'Kindly provide an event entertainer id' });
     }
-
-    req.user
-      .getEvents({
-        where: {
-          id: eventId
+    EventEntertainer.findOne({
+      where: {
+        id: eventEntertainerId,
+        userId: req.user.id
+      },
+      include: [
+        {
+          model: Event,
+          as: 'event'
         },
-        include: [
-          {
-            model: EventEntertainer,
-            as: 'entertainers'
-          },
-          {
-            model: Application,
-            as: 'applications',
-            include: [
-              {
-                model: User,
-                as: 'user',
-                attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
-                include: [
-                  {
-                    model: EntertainerProfile,
-                    as: 'profile',
-                    attributes: [
-                      'id',
-                      'stageName',
-                      'entertainerType',
-                      'location',
-                      'about'
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      })
-      .then(events => {
-        if (!events || events.length === 0) {
-          return res.status(404).json({ message: 'Event not found' });
+        {
+          model: Application,
+          as: 'applications',
+          include: [
+            {
+              model: User,
+              as: 'user',
+              attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+              include: [
+                {
+                  model: EntertainerProfile,
+                  as: 'profile',
+                  attributes: [
+                    'id',
+                    'stageName',
+                    'entertainerType',
+                    'location',
+                    'about'
+                  ]
+                }
+              ]
+            }
+          ]
         }
-        return res.status(200).json({ events });
-      });
+      ]
+    }).then(eventEntertainer => {
+      if (!eventEntertainer) {
+        return res.status(404).json({ message: 'Event Entertainer not found' });
+      }
+
+      if (eventEntertainer.hiredEntertainer) {
+        return res
+          .status(400)
+          .json({ message: 'An entertainer has already been hired' });
+      }
+      return res.status(200).json({ eventEntertainer });
+    });
   },
   /**
    * get Auction Details

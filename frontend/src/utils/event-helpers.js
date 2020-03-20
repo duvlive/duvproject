@@ -34,3 +34,36 @@ export const groupEvents = events =>
     },
     { today: [], upcoming: [], past: [] }
   );
+
+export const defaultEvent = {
+  userId: 0,
+  eventType: null,
+  eventDate: Date.now(),
+  startTime: Date.now(),
+  eventDuration: null,
+  moreInformation: null,
+  streetLine1: null,
+  streetLine2: null,
+  state: null,
+  lga: null,
+  city: null,
+  landmark: null,
+  description: null
+};
+
+export const defaultEventEntertainer = {
+  entertainerType: null,
+  placeOfEvent: null,
+  genre: null,
+  language: null,
+  expectedAudienceSize: null,
+  ageGroup: null,
+  lowestBudget: null,
+  highestBudget: null,
+  specialRequest: null,
+  auctionStartDate: null,
+  auctionEndDate: null,
+  hireType: 'Auction',
+  hiredDate: null,
+  hiredEntertainer: null
+};

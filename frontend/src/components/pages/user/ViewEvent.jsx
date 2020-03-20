@@ -19,42 +19,11 @@ import { listJsonItems, getBudgetRange } from 'utils/helpers';
 import {
   userCanAddEntertainer,
   eventIsVoid,
-  eventHasExpired
+  eventHasExpired,
+  defaultEvent,
+  defaultEventEntertainer
 } from 'utils/event-helpers';
 import AlertMessage from 'components/common/utils/AlertMessage';
-
-const defaultEvent = {
-  userId: 0,
-  eventType: null,
-  eventDate: Date.now(),
-  startTime: Date.now(),
-  eventDuration: null,
-  moreInformation: null,
-  streetLine1: null,
-  streetLine2: null,
-  state: null,
-  lga: null,
-  city: null,
-  landmark: null,
-  description: null
-};
-
-const defaultEventEntertainer = {
-  entertainerType: null,
-  placeOfEvent: null,
-  genre: null,
-  language: null,
-  expectedAudienceSize: null,
-  ageGroup: null,
-  lowestBudget: null,
-  highestBudget: null,
-  specialRequest: null,
-  auctionStartDate: null,
-  auctionEndDate: null,
-  hireType: 'Auction',
-  hiredDate: null,
-  hiredEntertainer: null
-};
 
 const ViewEvent = ({ id }) => {
   const [event, setEvent] = React.useState({});
@@ -75,7 +44,7 @@ const ViewEvent = ({ id }) => {
         })
         .catch(function(error) {
           // console.log(error.response.data.message);
-          // navigate to all events
+          // TODO: navigate to all events
         });
   }, [id]);
 

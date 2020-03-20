@@ -28,7 +28,6 @@ const UserRouter = () => (
     <Notifications path="/notifications" />
     <UserHelp path="/help" />
     <Payments path="/payments-history" />
-    {/* <SelectEntertainer path="/hire-entertainer/:event_id" /> */}
     <SearchEntertainer path="/entertainer/search/:event_id" />
     <RecommendedEntertainers path="/entertainer/recommended/:event_id" />
     <NewEvent path="events/new" />
@@ -36,7 +35,7 @@ const UserRouter = () => (
     <AddEntertainerDetails path="events/:id/add-entertainer" />
     <AddEntertainerDetails path="events/:id/add-entertainer/new-event" />
     <ViewEvent path="events/view/:id" />
-    <Bids path="/auction/bids" />
+    <Bids path="/auction/bids/:eventEntertainerId" />
     <Approval path="/approval" />
     <EditProfile path="/edit-profile" />
     <ChangePassword path="/change-password" />
