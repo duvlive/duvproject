@@ -118,32 +118,24 @@ Events.Card = ({
   entertainers
 }) => {
   const entertainerTypes =
-    (entertainers &&
-      entertainers.map(({ entertainerType }) => entertainerType)) ||
-    [];
-  console.log('count Occurences: ', countOccurences(entertainerTypes));
-
-  const hireTypes =
-    (entertainers && entertainers.map(({ hireType }) => hireType)) || [];
-  console.log('hireTypes', false && hireTypes);
-
-  const entertainersDetails =
-    entertainers && entertainers.filter(({ entertainer }) => !!entertainer);
-
-  const stageNames =
-    (entertainersDetails &&
-      entertainersDetails.map(
-        event => event.entertainer && event.entertainer.stageName
-      )) ||
-    [];
+    entertainers &&
+    entertainers.reduce(
+      (acc, currentEntertainer) => {
+        !!currentEntertainer.entertainer
+          ? acc.hired.push(currentEntertainer.entertainerType)
+          : acc.review.push(currentEntertainer.entertainerType);
+        return acc;
+      },
+      { hired: [], review: [] }
+    );
 
   const entertainersAvatars =
-    (entertainersDetails &&
-      entertainersDetails.map(event => event.entertainer)) ||
+    (entertainers &&
+      entertainers
+        .filter(({ entertainer }) => !!entertainer)
+        .map(event => event.entertainer)) ||
     [];
 
-  const hiredEntertainers =
-    stageNames.length > 0 ? stageNames.join(', ') : 'No Hired Entertainer';
   return (
     <>
       <tr className="transparent">
@@ -171,12 +163,24 @@ Events.Card = ({
         </td>
         <td>
           <span className="text-yellow">
-            {entertainerTypes.length > 0
-              ? countOccurences(entertainerTypes).join(', ')
-              : 'No entertainer in review'}{' '}
+            {entertainerTypes.review.length > 0 ? (
+              <>
+                {countOccurences(entertainerTypes.review).join(', ')} in review
+              </>
+            ) : (
+              'No entertainer in review'
+            )}{' '}
             &nbsp;
           </span>
-          <span className="small--2">{hiredEntertainers} &nbsp;</span>
+          <span className="small--2">
+            {' '}
+            {entertainersAvatars.length > 0 ? (
+              <>{countOccurences(entertainerTypes.hired).join(', ')} Hired</>
+            ) : (
+              'No Hired Entertainers'
+            )}
+            &nbsp;
+          </span>
         </td>
         <td className="text-right pr-5">
           <Avatars entertainers={entertainersAvatars} />

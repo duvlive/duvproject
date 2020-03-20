@@ -204,7 +204,10 @@ const EventController = {
       .getEvents({
         include: [
           {
-            where: { hireType: 'Auction' },
+            where: {
+              hireType: 'Auction',
+              hiredEntertainer: null
+            },
             model: EventEntertainer,
             as: 'entertainers',
             include: [
