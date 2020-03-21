@@ -1,5 +1,5 @@
 import { subtractDays } from './date-helpers';
-import { parse, distanceInWordsToNow } from 'date-fns';
+import { parse, distanceInWordsToNow, isPast } from 'date-fns';
 
 /**
  * Event Helpers
@@ -14,7 +14,7 @@ export const userCanAddEntertainer = eventDate =>
 export const eventIsVoid = eventDate =>
   Date.now() >= subtractDays(eventDate, 2);
 
-export const eventHasExpired = eventDate => Date.now() > parse(eventDate);
+export const eventHasExpired = eventDate => isPast(eventDate);
 export const maxAuctionDate = eventDate => subtractDays(eventDate, 4);
 export const minAuctionDate = eventDate => subtractDays(eventDate, 5);
 
@@ -34,3 +34,36 @@ export const groupEvents = events =>
     },
     { today: [], upcoming: [], past: [] }
   );
+
+export const defaultEvent = {
+  userId: 0,
+  eventType: null,
+  eventDate: Date.now(),
+  startTime: Date.now(),
+  eventDuration: null,
+  moreInformation: null,
+  streetLine1: null,
+  streetLine2: null,
+  state: null,
+  lga: null,
+  city: null,
+  landmark: null,
+  description: null
+};
+
+export const defaultEventEntertainer = {
+  entertainerType: null,
+  placeOfEvent: null,
+  genre: null,
+  language: null,
+  expectedAudienceSize: null,
+  ageGroup: null,
+  lowestBudget: null,
+  highestBudget: null,
+  specialRequest: null,
+  auctionStartDate: null,
+  auctionEndDate: null,
+  hireType: 'Auction',
+  hiredDate: null,
+  hiredEntertainer: null
+};

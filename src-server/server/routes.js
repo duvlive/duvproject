@@ -248,7 +248,7 @@ router.get(
 
 // Bids
 router.get(
-  '/api/v1/events/:id/bids',
+  '/api/v1/auctions/bids/:id',
   Authentication.verifyToken,
   Authentication.validateUser,
   Authentication.isActiveUser,
@@ -274,6 +274,13 @@ router
   .post(ApplicationController.entertainerApplication)
   .put(ApplicationController.entertainerApplication)
   .get(ApplicationController.getEntertainerApplications);
+
+router.post(
+  '/api/v1/applications/approve/:applicationId',
+  Authentication.verifyToken,
+  Authentication.isActiveUser,
+  ApplicationController.approveAuctionsApplication
+);
 
 // Badge routes
 router

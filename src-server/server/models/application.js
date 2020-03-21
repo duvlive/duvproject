@@ -46,6 +46,16 @@ module.exports = function(sequelize, DataTypes) {
       rejectionDate: {
         type: DataTypes.DATE,
         allowNull: true
+      },
+      commissionId: { type: DataTypes.INTEGER, allowNull: true },
+      paid: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+      },
+      paidOn: {
+        type: DataTypes.DATE,
+        allowNull: true
       }
     },
     {

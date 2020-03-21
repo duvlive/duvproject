@@ -67,7 +67,7 @@ DuvLiveModal.propTypes = {
 DuvLiveModal.defaultProps = {
   actionFn: () => {},
   actionText: '',
-  childrenClassName: '',
+  childrenClassName: 'duvlive-modal',
   className: '',
   closeModalText: 'Close',
   title: null
