@@ -275,6 +275,13 @@ router
   .put(ApplicationController.entertainerApplication)
   .get(ApplicationController.getEntertainerApplications);
 
+router.post(
+  '/api/v1/applications/approve/:applicationId',
+  Authentication.verifyToken,
+  Authentication.isActiveUser,
+  ApplicationController.approveAuctionsApplication
+);
+
 // Badge routes
 router
   .route('/api/v1/badge')

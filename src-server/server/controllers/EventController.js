@@ -203,7 +203,8 @@ const EventController = {
     EventEntertainer.findAll({
       where: {
         hireType: 'Auction',
-        userId: req.user.id
+        userId: req.user.id,
+        hiredEntertainer: null // shown auctions with no hired Entertainer
       },
       include: [
         {
@@ -257,7 +258,7 @@ const EventController = {
         entertainerType: {
           [Op.eq]: req.user.profile.entertainerType
         },
-        [Op.and]: Sequelize.literal('applications.id is null') // auction should only be shown if user has not applied
+        [Op.and]: Sequelize.literal('applications.id is null') // only auctions without applications should be shown
       },
       include: [
         {

@@ -147,7 +147,7 @@ AuctionsRow.propTypes = {
   entertainerType: PropTypes.string,
   entertainers: PropTypes.string,
   eventType: PropTypes.string,
-  id: PropTypes.string,
+  id: PropTypes.any,
   number: PropTypes.number,
   state: PropTypes.string,
   totalApplications: PropTypes.number

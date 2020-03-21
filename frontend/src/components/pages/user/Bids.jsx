@@ -32,8 +32,8 @@ const Bids = ({ eventEntertainerId }) => {
         })
         .catch(function(error) {
           // console.log(error.response.data.message);
-          // navigate to all events
-          navigate('/user/auctions');
+          // navigate to all events: TODO
+          // navigate('/user/auctions');
         });
   }, [eventEntertainerId]);
 
@@ -124,7 +124,6 @@ const BidsApplicationsTable = ({ applications }) => {
       }
       return null;
     });
-    console.log('sorted', sorted);
     setAllApplications(sorted);
     setSort(type);
   };
@@ -152,7 +151,7 @@ const BidsApplicationsTable = ({ applications }) => {
                 {sortButton('Newest', 'newest')}
                 {sortButton('Lowest Price', 'lowest')}
                 {sortButton('Highest Price', 'highest')}
-                {sortButton('Ratings', 'ratings')}
+                {/* {sortButton('Ratings', 'ratings')} */}
               </nav>
             </td>
           </tr>
@@ -191,6 +190,30 @@ Bids.ApplicationsTableRow = ({ application, number }) => {
     about: application.user.profile.about
   };
 
+  const approveApplication = () => {
+    axios
+      .post(
+        `/api/v1/applications/approve/${application.id}`,
+        {},
+        {
+          headers: {
+            'x-access-token': getTokenFromStore()
+          }
+        }
+      )
+      .then(function(response) {
+        const { status } = response;
+        // handle success
+        if (status === 200) {
+          navigate('/user/auctions');
+        }
+      })
+      .catch(function(error) {
+        console.log(error.response.data.message);
+        // TODO: ADD ERROR ALERT HERE
+      });
+  };
+
   return (
     <tr>
       <th className="table__number" scope="row">
@@ -223,9 +246,17 @@ Bids.ApplicationsTableRow = ({ application, number }) => {
         {application.user.profile.location}
       </td>
       <td className="align-middle text-right td-btn">
-        <button className="btn btn-danger btn-sm btn-transparent">
-          Approve
-        </button>
+        <DuvLiveModal
+          actionFn={approveApplication}
+          actionText="Approve Bid"
+          body={<h1>Approval Body</h1>} // TODO: ADD BODY HERE
+          closeModalText="Cancel"
+          title="Delete Image"
+        >
+          <button className="btn btn-success btn-sm btn-transparent">
+            Approve
+          </button>
+        </DuvLiveModal>
       </td>
       <td className="align-middle text-right td-btn">
         {entertainer && (
