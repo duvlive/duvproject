@@ -14,7 +14,8 @@ import {
  * @param {*} date
  */
 export const getEventDate = date => format(parse(date), 'MMM. D (ddd)');
-export const getShortDate = date => format(parse(date), 'ddd, MMM D YYYY');
+export const getShortDate = date => format(parse(date), 'ddd, MMM D, YYYY');
+export const getTinyDate = date => format(parse(date), 'MMM D, YYYY');
 export const getLongDate = date => format(parse(date), 'dddd, Do MMMM YYYY');
 export const getTime = date => format(parse(date), 'h:mm A');
 export const remainingDays = date => <TimeAgo date={date} />;

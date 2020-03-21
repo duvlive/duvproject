@@ -106,3 +106,18 @@ button:focus {
 .btn-warning.btn-transparent {
   color: $white;
 }
+
+.table .nav.nav-pills {
+  margin-left: -1rem;
+}
+
+.nav-sort .nav-link {
+  font-size: 0.75rem;
+  &.active {
+    background-color: transparent;
+    color: $red-300;
+  }
+  &.nav-text {
+    padding-left: 0;
+  }
+}
