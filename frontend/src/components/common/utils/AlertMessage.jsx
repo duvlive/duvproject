@@ -52,7 +52,8 @@ const AlertIcon = ({ type }) => {
     success: 'ok-circled',
     error: 'cancel-circled',
     danger: 'cancel-circled',
-    info: 'help'
+    info: 'help',
+    warning: 'notification'
   };
   return (
     (type && ICON[type] && (

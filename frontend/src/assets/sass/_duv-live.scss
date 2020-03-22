@@ -448,6 +448,15 @@ a:hover {
   }
 }
 
+.alert-warning {
+  color: rgba(lighten($warning, 40), 0.4);
+  background-color: rgba($warning, 0.08);
+  border-color: rgba($warning, 0.2);
+  .alert-icon {
+    color: rgba($warning, 0.5);
+  }
+}
+
 .alert-icon {
   display: inline-block;
   margin-right: 0.3rem;

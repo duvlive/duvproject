@@ -27,7 +27,6 @@ const EmergencyContactForm = () => {
   return (
     <Formik
       initialValues={{
-        //TODO
         entertainer: setInitialValues(entertainerDetailsSchema, {
           available_for: [
             { id: 1, name: 'Birthdays' },

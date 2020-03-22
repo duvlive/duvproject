@@ -117,9 +117,3 @@ TextArea.propTypes = {
 };
 
 export default connect(TextArea);
-
-// TODO:
-// - Create label component
-// - Use name for label if not given
-// - Add all label properties into options, tooltip and other related stuffs
-// - Seems better to use label as placeholder too

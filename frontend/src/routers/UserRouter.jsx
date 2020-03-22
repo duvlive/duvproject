@@ -24,6 +24,7 @@ const UserRouter = () => (
   <Router>
     <Dashboard path="/dashboard" />
     <Auctions path="/auctions" />
+    <Auctions path="/auctions/status/:message" />
     <Events path="/events" />
     <Notifications path="/notifications" />
     <UserHelp path="/help" />

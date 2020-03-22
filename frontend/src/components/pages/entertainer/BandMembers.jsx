@@ -42,7 +42,6 @@ const BandMembers = () => (
               />
             </tbody>
           </table>
-          {/* //TODO: ADD NEW BAND MEMBER */}
           <br />
           <br />
         </div>
