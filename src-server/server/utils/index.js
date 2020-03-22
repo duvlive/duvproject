@@ -10,4 +10,7 @@ const validString = data => {
   return {};
 };
 
+export const moneyFormat = number =>
+  number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+
 export { updateUser, UserValidation, validString };

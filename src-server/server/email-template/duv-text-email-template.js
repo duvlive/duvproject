@@ -16,8 +16,8 @@ const textEmailTemplate = ({
     link && buttonText
       ? `${buttonText} [${link}] \n\n or copy this url and view in a web browser ${link}`
       : '';
-  content += contentTop || '';
-  content += contentBottom ? '\n\n' + contentBottom : '';
+  content += (contentTop && contentTop.replace('<br>', '\n')) || '';
+  content += contentBottom ? '\n\n' + contentBottom.replace('<br>', '\n') : '';
 
   // Generate the text format
   // Note: The text is formatted as it should appear on the device
@@ -27,7 +27,7 @@ ${separator}
 
 ${greetings},
 
-${content}
+${content.replace(/<[^>]+>/g, '')}
 
 ${button}
 

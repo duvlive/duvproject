@@ -334,7 +334,8 @@
                                   <!--[if !mso]><!--><span
                                     style="font-family: 'Roboto', Helvetica; font-weight: normal;">
                                     <!--<![endif]-->
-                                    <%= (typeof firstName !== "undefined") ? `Hello ${firstName}` : 'Hello' %>,
+                                    <!-- Use FirstName with Greetings if available -->
+                                    <%= (typeof firstName !== "undefined") ? (typeof greeting !== "undefined") ? `${greeting} ${firstName}` : `Hello ${firstName}` : 'Hello' %>,
                                     <!--[if !mso]><!--></span>
                                   <!--<![endif]-->
                                 </td>
@@ -376,7 +377,7 @@
                                   <!--[if !mso]><!--><span
                                     style="font-family: 'Roboto', Helvetica; font-weight: normal;">
                                     <!--<![endif]-->
-                                    <%= (typeof contentTop !== "undefined") ? contentTop : '' %>
+                                    <%- (typeof contentTop !== "undefined") ? contentTop : '' %>
                                     <!--[if !mso]><!--></span>
                                   <!--<![endif]-->
                                 </td>
@@ -387,8 +388,9 @@
                                   <!--[if !mso]><!--><span
                                     style="font-family: 'Roboto', Helvetica; font-weight: normal;">
                                     <!-[endif]-->
-                                    <%= (typeof userSubject !== "undefined") ? `${userSubject}: ${userMessage}` : '' %>
-                                    <!--[if !mso]><!--></span>
+                                      <%= (typeof userSubject !== "undefined") ? `${userSubject}: ${userMessage}` : '' %>
+                                      <!--[if !mso]><!-->
+                                  </span>
                                   <!--<![endif]-->
                                 </td>
                               </tr>
@@ -403,264 +405,37 @@
                                   <!--<![endif]-->
                                 </td>
                               </tr>
-                            </tr>
-                            <tr>
-                              <td valign="middle" width="100%"
-                                style="text-align: left; font-family: Helvetica, Arial, sans-serif; font-size: 14px; color: rgb(63, 67, 69); line-height: 24px; font-weight: normal;">
-                                <!--[if !mso]><!--><span
-                                  style="font-family: 'Roboto', Helvetica; font-weight: normal;">
-                                  <!--<![endif]-->
-                                  <%= (typeof fullName !== "undefined") ? `Fullname: ${fullName}` : '' %>
-                                  <!--[if !mso]><!--></span>
-                                <!--<![endif]-->
-                              </td>
-                            </tr>
-                            <tr>
-                              <td valign="middle" width="100%"
-                                style="text-align: left; font-family: Helvetica, Arial, sans-serif; font-size: 14px; color: rgb(63, 67, 69); line-height: 24px; font-weight: normal;">
-                                <!--[if !mso]><!--><span
-                                  style="font-family: 'Roboto', Helvetica; font-weight: normal;">
-                                  <!--<![endif]-->
-                                  <%= (typeof phone !== "undefined") ? `Phone: ${phone}` : '' %>
-                                  <!--[if !mso]><!--></span>
-                                <!--<![endif]-->
-                              </td>
-                            </tr>
-                            </table>
-                          </td>
                         </tr>
-                      </table>
-                      <!-- /.Paragraph -->
-                      <!-- /.Content -->
-
-                      <!-- Content Bottom -->
-                      <% if (typeof contentBottom !== "undefined") { %>
-                      <!-- Spacer -->
-                      <table width="352" border="0" cellpadding="0" cellspacing="0" align="center" class="mobile"
-                        bgcolor="#ffffff" object="drag-module-small" style="background-color: rgb(255, 255, 255);">
                         <tr>
-                          <td width="352" valign="middle">
-                            <table width="300" border="0" cellpadding="0" cellspacing="0" align="center"
-                              style="text-align: center; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"
-                              class="fullCenter">
-                              <tr>
-                                <td width="100%" height="20"></td>
-                              </tr>
-                            </table>
+                          <td valign="middle" width="100%"
+                            style="text-align: left; font-family: Helvetica, Arial, sans-serif; font-size: 14px; color: rgb(63, 67, 69); line-height: 24px; font-weight: normal;">
+                            <!--[if !mso]><!--><span style="font-family: 'Roboto', Helvetica; font-weight: normal;">
+                              <!--<![endif]-->
+                              <%= (typeof fullName !== "undefined") ? `Fullname: ${fullName}` : '' %>
+                              <!--[if !mso]><!--></span>
+                            <!--<![endif]-->
                           </td>
                         </tr>
-                      </table>
-                      <!-- /.Spacer -->
-                      <!-- Start Paragraph -->
-                      <table width="352" border="0" cellpadding="0" cellspacing="0" align="center" class="mobile"
-                        bgcolor="#ffffff" object="drag-module-small" style="background-color: rgb(255, 255, 255);">
                         <tr>
-                          <td width="352" valign="middle" align="center">
-                            <table width="300" border="0" cellpadding="0" cellspacing="0" align="center"
-                              style="text-align: center; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"
-                              class="fullCenter">
-                              <tr>
-                                <td valign="middle" width="100%"
-                                  style="text-align: left; font-family: Helvetica, Arial, sans-serif; font-size: 14px; color: rgb(63, 67, 69); line-height: 24px; font-weight: normal;">
-                                  <!--[if !mso]><!--><span
-                                    style="font-family: 'Roboto', Helvetica; font-weight: normal;">
-                                    <!--<![endif]-->
-                                    <%= contentBottom %>
-                                    <!--[if !mso]><!--></span>
-                                  <!--<![endif]-->
-                                </td>
-                              </tr>
-                            </table>
+                          <td valign="middle" width="100%"
+                            style="text-align: left; font-family: Helvetica, Arial, sans-serif; font-size: 14px; color: rgb(63, 67, 69); line-height: 24px; font-weight: normal;">
+                            <!--[if !mso]><!--><span style="font-family: 'Roboto', Helvetica; font-weight: normal;">
+                              <!--<![endif]-->
+                              <%= (typeof phone !== "undefined") ? `Phone: ${phone}` : '' %>
+                              <!--[if !mso]><!--></span>
+                            <!--<![endif]-->
                           </td>
                         </tr>
                       </table>
-                      <!-- /.Paragraph -->
-                      <!-- /.Content -->
-                      <% } %>
-                      <!-- /.Content Bottom -->
-
-                      <% if ((typeof link !== "undefined") && (typeof buttonText !== "undefined")) { %>
-                      <!-- Spacer -->
-                      <table width="352" border="0" cellpadding="0" cellspacing="0" align="center">
-                        <tr>
-                          <td width="352" valign="middle">
-                            <table width="300" border="0" cellpadding="0" cellspacing="0" align="center"
-                              style="text-align: center; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"
-                              class="fullCenter">
-                              <tr>
-                                <td width="100%" height="40"></td>
-                              </tr>
-                            </table>
-                          </td>
-                        </tr>
-                      </table>
-                      <!-- /.Spacer -->
-                      <!-- START LINK -->
-                      <table width="352" border="0" cellpadding="0" cellspacing="0" align="center" class="mobile"
-                        bgcolor="#ffffff" object="drag-module-small" style="background-color: rgb(255, 255, 255);">
-                        <tr>
-                          <td width="352" valign="middle" align="center">
-
-                            <table width="300" border="0" cellpadding="0" cellspacing="0" align="center"
-                              style="text-align: center; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"
-                              class="fullCenter">
-                              <!----------------- Button Center ----------------->
-                              <tr>
-                                <td align="center">
-                                  <table border="0" cellpadding="0" cellspacing="0" align="center">
-                                    <tr>
-                                      <td align="center" height="35" bgcolor="#ff0000"
-                                        style="padding-top: 10px; padding-bottom: 10px; padding-left: 30px; padding-right: 30px; font-weight: bold; font-family: Helvetica, Arial, sans-serif; color: rgb(255, 255, 255); text-transform: uppercase; background-color: rgb(254, 70, 70);">
-                                        <!--[if !mso]><!--><span
-                                          style="font-family: 'Roboto', Helvetica; font-weight: normal;">
-                                          <!--<![endif]-->
-                                          <a href="<%= (typeof link !== "undefined") ? link : '' %>"
-                                            style="color: rgb(255, 255, 255); font-size: 14px; text-decoration: none; line-height: 35px; width: 100%;">
-                                            <%= (typeof buttonText !== "undefined") ? buttonText : '' %>
-                                          </a>
-                                          <!--[if !mso]><!--></span>
-                                        <!--<![endif]-->
-                                      </td>
-                                    </tr>
-                                  </table>
-                                </td>
-                              </tr>
-                              <!----------------- End Button Center ----------------->
-                            </table>
-                          </td>
-                        </tr>
-                      </table>
-
-                      <!-- Spacer -->
-                      <table width="352" border="0" cellpadding="0" cellspacing="0" align="center">
-                        <tr>
-                          <td width="352" valign="middle">
-                            <table width="300" border="0" cellpadding="0" cellspacing="0" align="center"
-                              style="text-align: center; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"
-                              class="fullCenter">
-                              <tr>
-                                <td width="100%" height="15"></td>
-                              </tr>
-                            </table>
-                          </td>
-                        </tr>
-                      </table>
-                      <!-- /.Spacer -->
-
-                      <!-- Start Paragraph -->
-                      <table width="352" border="0" cellpadding="0" cellspacing="0" align="center" class="mobile"
-                        bgcolor="#ffffff" object="drag-module-small" style="background-color: rgb(255, 255, 255);">
-                        <tr>
-                          <td width="352" valign="middle" align="center">
-                            <table width="300" border="0" cellpadding="0" cellspacing="0" align="center"
-                              style="text-align: center; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"
-                              class="fullCenter">
-                              <tr>
-                                <td valign="middle" width="100%"
-                                  style="text-align: center; font-family: Helvetica, Arial, sans-serif; font-size: 13px; color: rgb(63, 67, 69); line-height: 24px; font-weight: normal;">
-                                  <!--[if !mso]><!--><span
-                                    style="font-family: 'Roboto', Helvetica; font-weight: normal;">
-                                    <!--<![endif]-->
-                                    <p
-                                      style="word-break: normal; border-collapse : collapse !important; width: 300px; max-width: 300px; overflow-wrap: break-word !important;
-                                      word-wrap: break-word !important;  word-break: break-all !important; word-break: break-word !important">
-                                      or copy this url and view in a web browser (<%= link %>)</p>
-                                    <!--[if !mso]><!-->
-                                  </span>
-                                  <!--<![endif]-->
-                                </td>
-                              </tr>
-                            </table>
-                          </td>
-                        </tr>
-                      </table>
-                      <!-- /.LINK -->
-
-                      <!-- Spacer -->
-                      <table width="352" border="0" cellpadding="0" cellspacing="0" align="center" class="mobile"
-                        bgcolor="#ffffff" object="drag-module-small" style="background-color: rgb(255, 255, 255);">
-                        <tr>
-                          <td width="352" valign="middle">
-                            <table width="300" border="0" cellpadding="0" cellspacing="0" align="center"
-                              style="text-align: center; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"
-                              class="fullCenter">
-                              <tr>
-                                <td width="100%" height="20"></td>
-                              </tr>
-                            </table>
-                          </td>
-                        </tr>
-                      </table>
-                      <!-- /.Spacer -->
-                      <!-- End Link -->
-                      <% } %>
-
-                      <!-- Spacer -->
-                      <table width="352" border="0" cellpadding="0" cellspacing="0" align="center">
-                        <tr>
-                          <td width="352" valign="middle">
-                            <table width="300" border="0" cellpadding="0" cellspacing="0" align="center"
-                              style="text-align: center; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"
-                              class="fullCenter">
-                              <tr>
-                                <td width="100%" height="30"></td>
-                              </tr>
-                            </table>
-                          </td>
-                        </tr>
-                      </table>
-                      <!-- /.Spacer -->
-
-                      <!-- Content -->
-
-                      <!-- Start Paragraph -->
-                      <table width="352" border="0" cellpadding="0" cellspacing="0" align="center">
-                        <tr>
-                          <td width="352" valign="middle" align="center">
-                            <table width="300" border="0" cellpadding="0" cellspacing="0" align="center"
-                              style="text-align: center; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"
-                              class="fullCenter">
-                              <tr>
-                                <td valign="middle" width="100%"
-                                  style="text-align: left; font-family: Helvetica, Arial, sans-serif; font-size: 14px; color: rgb(63, 67, 69); line-height: 24px; font-weight: bold;">
-                                  <!--[if !mso]><!--><span style="font-family: 'Roboto', Helvetica; font-weight: bold;">
-                                    <!--<![endif]-->Thank you,<br />
-                                    <strong>D.U.V LIVE TEAM</strong>
-                                    <!--[if !mso]><!--></span>
-                                  <!--<![endif]-->
-                                </td>
-                              </tr>
-                            </table>
-                          </td>
-                        </tr>
-                      </table>
-                      <!-- /.Paragraph -->
-
-                      <table width="352" border="0" cellpadding="0" cellspacing="0" align="center" class="mobile"
-                        bgcolor="#ffffff" object="drag-module-small" style="background-color: rgb(255, 255, 255);">
-                        <tr>
-                          <td width="352" valign="middle">
-                            <table width="300" border="0" cellpadding="0" cellspacing="0" align="center"
-                              style="text-align: center; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"
-                              class="fullCenter">
-                              <tr>
-                                <td width="100%" height="20"></td>
-                              </tr>
-                            </table>
-                          </td>
-                        </tr>
-                      </table>
-                      <!-- /.Content -->
-
-                    </div>
                   </td>
                 </tr>
               </table>
+              <!-- /.Paragraph -->
+              <!-- /.Content -->
 
-
-              <!-- Content -->
-
-              <!-- WHITE BREAK 60PX -->
+              <!-- Content Bottom -->
+              <% if (typeof contentBottom !== "undefined") { %>
+              <!-- Spacer -->
               <table width="352" border="0" cellpadding="0" cellspacing="0" align="center" class="mobile"
                 bgcolor="#ffffff" object="drag-module-small" style="background-color: rgb(255, 255, 255);">
                 <tr>
@@ -669,15 +444,14 @@
                       style="text-align: center; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"
                       class="fullCenter">
                       <tr>
-                        <td width="100%" height="60"></td>
+                        <td width="100%" height="20"></td>
                       </tr>
                     </table>
                   </td>
                 </tr>
               </table>
-              <!-- /.WHITE BREAK 60PX -->
-
-              <!-- Start Footer -->
+              <!-- /.Spacer -->
+              <!-- Start Paragraph -->
               <table width="352" border="0" cellpadding="0" cellspacing="0" align="center" class="mobile"
                 bgcolor="#ffffff" object="drag-module-small" style="background-color: rgb(255, 255, 255);">
                 <tr>
@@ -687,10 +461,10 @@
                       class="fullCenter">
                       <tr>
                         <td valign="middle" width="100%"
-                          style="text-align: center; font-family: Helvetica, Arial, sans-serif; font-size: 11px; color: rgb(63, 67, 69); line-height: 24px; font-weight: normal;">
+                          style="text-align: left; font-family: Helvetica, Arial, sans-serif; font-size: 14px; color: rgb(63, 67, 69); line-height: 24px; font-weight: normal;">
                           <!--[if !mso]><!--><span style="font-family: 'Roboto', Helvetica; font-weight: normal;">
-                            <!--<![endif]-->Any questions? <a href="#" style="color: #bb0000;">Contact us</a> or check
-                            our <a href="#" style="color: #bb0000;">FAQ Page</a>
+                            <!--<![endif]-->
+                            <%- contentBottom %>
                             <!--[if !mso]><!--></span>
                           <!--<![endif]-->
                         </td>
@@ -699,7 +473,165 @@
                   </td>
                 </tr>
               </table>
-              <!-- /.Footer -->
+              <!-- /.Paragraph -->
+              <!-- /.Content -->
+              <% } %>
+              <!-- /.Content Bottom -->
+
+              <% if ((typeof link !== "undefined") && (typeof buttonText !== "undefined")) { %>
+              <!-- Spacer -->
+              <table width="352" border="0" cellpadding="0" cellspacing="0" align="center">
+                <tr>
+                  <td width="352" valign="middle">
+                    <table width="300" border="0" cellpadding="0" cellspacing="0" align="center"
+                      style="text-align: center; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"
+                      class="fullCenter">
+                      <tr>
+                        <td width="100%" height="40"></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+              <!-- /.Spacer -->
+              <!-- START LINK -->
+              <table width="352" border="0" cellpadding="0" cellspacing="0" align="center" class="mobile"
+                bgcolor="#ffffff" object="drag-module-small" style="background-color: rgb(255, 255, 255);">
+                <tr>
+                  <td width="352" valign="middle" align="center">
+
+                    <table width="300" border="0" cellpadding="0" cellspacing="0" align="center"
+                      style="text-align: center; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"
+                      class="fullCenter">
+                      <!----------------- Button Center ----------------->
+                      <tr>
+                        <td align="center">
+                          <table border="0" cellpadding="0" cellspacing="0" align="center">
+                            <tr>
+                              <td align="center" height="35" bgcolor="#ff0000"
+                                style="padding-top: 10px; padding-bottom: 10px; padding-left: 30px; padding-right: 30px; font-weight: bold; font-family: Helvetica, Arial, sans-serif; color: rgb(255, 255, 255); text-transform: uppercase; background-color: rgb(254, 70, 70);">
+                                <!--[if !mso]><!--><span style="font-family: 'Roboto', Helvetica; font-weight: normal;">
+                                  <!--<![endif]-->
+                                  <a href="<%= (typeof link !== "undefined") ? link : '' %>"
+                                    style="color: rgb(255, 255, 255); font-size: 14px; text-decoration: none; line-height: 35px; width: 100%;">
+                                    <%= (typeof buttonText !== "undefined") ? buttonText : '' %>
+                                  </a>
+                                  <!--[if !mso]><!--></span>
+                                <!--<![endif]-->
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                      <!----------------- End Button Center ----------------->
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Spacer -->
+              <table width="352" border="0" cellpadding="0" cellspacing="0" align="center">
+                <tr>
+                  <td width="352" valign="middle">
+                    <table width="300" border="0" cellpadding="0" cellspacing="0" align="center"
+                      style="text-align: center; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"
+                      class="fullCenter">
+                      <tr>
+                        <td width="100%" height="15"></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+              <!-- /.Spacer -->
+
+              <!-- Start Paragraph -->
+              <table width="352" border="0" cellpadding="0" cellspacing="0" align="center" class="mobile"
+                bgcolor="#ffffff" object="drag-module-small" style="background-color: rgb(255, 255, 255);">
+                <tr>
+                  <td width="352" valign="middle" align="center">
+                    <table width="300" border="0" cellpadding="0" cellspacing="0" align="center"
+                      style="text-align: center; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"
+                      class="fullCenter">
+                      <tr>
+                        <td valign="middle" width="100%"
+                          style="text-align: center; font-family: Helvetica, Arial, sans-serif; font-size: 13px; color: rgb(63, 67, 69); line-height: 24px; font-weight: normal;">
+                          <!--[if !mso]><!--><span style="font-family: 'Roboto', Helvetica; font-weight: normal;">
+                            <!--<![endif]-->
+                            <p
+                              style="word-break: normal; border-collapse : collapse !important; width: 300px; max-width: 300px; overflow-wrap: break-word !important;
+                                      word-wrap: break-word !important;  word-break: break-all !important; word-break: break-word !important">
+                              or copy this url and view in a web browser (<%= link %>)</p>
+                            <!--[if !mso]><!-->
+                          </span>
+                          <!--<![endif]-->
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+              <!-- /.LINK -->
+
+              <!-- Spacer -->
+              <table width="352" border="0" cellpadding="0" cellspacing="0" align="center" class="mobile"
+                bgcolor="#ffffff" object="drag-module-small" style="background-color: rgb(255, 255, 255);">
+                <tr>
+                  <td width="352" valign="middle">
+                    <table width="300" border="0" cellpadding="0" cellspacing="0" align="center"
+                      style="text-align: center; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"
+                      class="fullCenter">
+                      <tr>
+                        <td width="100%" height="20"></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+              <!-- /.Spacer -->
+              <!-- End Link -->
+              <% } %>
+
+              <!-- Spacer -->
+              <table width="352" border="0" cellpadding="0" cellspacing="0" align="center">
+                <tr>
+                  <td width="352" valign="middle">
+                    <table width="300" border="0" cellpadding="0" cellspacing="0" align="center"
+                      style="text-align: center; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"
+                      class="fullCenter">
+                      <tr>
+                        <td width="100%" height="30"></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+              <!-- /.Spacer -->
+
+              <!-- Content -->
+
+              <!-- Start Paragraph -->
+              <table width="352" border="0" cellpadding="0" cellspacing="0" align="center">
+                <tr>
+                  <td width="352" valign="middle" align="center">
+                    <table width="300" border="0" cellpadding="0" cellspacing="0" align="center"
+                      style="text-align: center; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"
+                      class="fullCenter">
+                      <tr>
+                        <td valign="middle" width="100%"
+                          style="text-align: left; font-family: Helvetica, Arial, sans-serif; font-size: 14px; color: rgb(63, 67, 69); line-height: 24px; font-weight: bold;">
+                          <!--[if !mso]><!--><span style="font-family: 'Roboto', Helvetica; font-weight: bold;">
+                            <!--<![endif]-->Thank you,<br />
+                            <strong>D.U.V LIVE TEAM</strong>
+                            <!--[if !mso]><!--></span>
+                          <!--<![endif]-->
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+              <!-- /.Paragraph -->
 
               <table width="352" border="0" cellpadding="0" cellspacing="0" align="center" class="mobile"
                 bgcolor="#ffffff" object="drag-module-small" style="background-color: rgb(255, 255, 255);">
@@ -716,45 +648,110 @@
                 </tr>
               </table>
               <!-- /.Content -->
+
+              </div>
             </td>
-            <td align="center" width="20" valign="middle"></td>
           </tr>
         </table>
 
-        <!-- Spacer -->
-        <table width="352" border="0" cellpadding="0" cellspacing="0" align="center">
+
+        <!-- Content -->
+
+        <!-- WHITE BREAK 60PX -->
+        <table width="352" border="0" cellpadding="0" cellspacing="0" align="center" class="mobile" bgcolor="#ffffff"
+          object="drag-module-small" style="background-color: rgb(255, 255, 255);">
           <tr>
             <td width="352" valign="middle">
               <table width="300" border="0" cellpadding="0" cellspacing="0" align="center"
                 style="text-align: center; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"
                 class="fullCenter">
                 <tr>
-                  <td width="100%" height="30"></td>
+                  <td width="100%" height="60"></td>
                 </tr>
               </table>
             </td>
           </tr>
         </table>
-        <!-- /.Spacer -->
+        <!-- /.WHITE BREAK 60PX -->
 
-        <!-- Spacer -->
-        <table width="352" border="0" cellpadding="0" cellspacing="0" align="center">
+        <!-- Start Footer -->
+        <table width="352" border="0" cellpadding="0" cellspacing="0" align="center" class="mobile" bgcolor="#ffffff"
+          object="drag-module-small" style="background-color: rgb(255, 255, 255);">
+          <tr>
+            <td width="352" valign="middle" align="center">
+              <table width="300" border="0" cellpadding="0" cellspacing="0" align="center"
+                style="text-align: center; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"
+                class="fullCenter">
+                <tr>
+                  <td valign="middle" width="100%"
+                    style="text-align: center; font-family: Helvetica, Arial, sans-serif; font-size: 11px; color: rgb(63, 67, 69); line-height: 24px; font-weight: normal;">
+                    <!--[if !mso]><!--><span style="font-family: 'Roboto', Helvetica; font-weight: normal;">
+                      <!--<![endif]-->Any questions? <a href="#" style="color: #bb0000;">Contact us</a> or check
+                      our <a href="#" style="color: #bb0000;">FAQ Page</a>
+                      <!--[if !mso]><!--></span>
+                    <!--<![endif]-->
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+        <!-- /.Footer -->
+
+        <table width="352" border="0" cellpadding="0" cellspacing="0" align="center" class="mobile" bgcolor="#ffffff"
+          object="drag-module-small" style="background-color: rgb(255, 255, 255);">
           <tr>
             <td width="352" valign="middle">
               <table width="300" border="0" cellpadding="0" cellspacing="0" align="center"
                 style="text-align: center; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"
                 class="fullCenter">
                 <tr>
-                  <td width="100%" height="30"></td>
+                  <td width="100%" height="20"></td>
                 </tr>
               </table>
             </td>
           </tr>
         </table>
-        <!-- /.Spacer -->
-        </div>
+        <!-- /.Content -->
+      </td>
+      <td align="center" width="20" valign="middle"></td>
+    </tr>
+  </table>
+
+  <!-- Spacer -->
+  <table width="352" border="0" cellpadding="0" cellspacing="0" align="center">
+    <tr>
+      <td width="352" valign="middle">
+        <table width="300" border="0" cellpadding="0" cellspacing="0" align="center"
+          style="text-align: center; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"
+          class="fullCenter">
+          <tr>
+            <td width="100%" height="30"></td>
+          </tr>
+        </table>
       </td>
     </tr>
+  </table>
+  <!-- /.Spacer -->
+
+  <!-- Spacer -->
+  <table width="352" border="0" cellpadding="0" cellspacing="0" align="center">
+    <tr>
+      <td width="352" valign="middle">
+        <table width="300" border="0" cellpadding="0" cellspacing="0" align="center"
+          style="text-align: center; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"
+          class="fullCenter">
+          <tr>
+            <td width="100%" height="30"></td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+  <!-- /.Spacer -->
+  </div>
+  </td>
+  </tr>
   </table><!-- End Notification 5 -->
   </div>
 </body>
