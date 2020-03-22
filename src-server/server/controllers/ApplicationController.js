@@ -6,8 +6,10 @@ import {
   User,
   EntertainerProfile
 } from '../models';
-import { validString } from '../utils';
+import sendMail from '../MailSender';
+import { validString, moneyFormat } from '../utils';
 import { USER_TYPES } from '../constant';
+import EMAIL_CONTENT from '../email-template/content';
 
 const ApplicationController = {
   /**
@@ -181,22 +183,21 @@ const ApplicationController = {
       .then(application => {
         const currentDate = Date.now();
         // for email
-        const EMAIL_PARAMETERS = {
+        const EMAIL_PARAMS = {
+          askingPrice: moneyFormat(application.askingPrice),
           entertainerName: application.user.profile.stageName,
           entertainerEmail: application.user.email,
           eventType: application.eventEntertainerInfo.event.eventType,
           eventPlace: application.eventEntertainerInfo.placeOfEvent,
           eventDate: application.eventEntertainerInfo.event.eventDate,
           eventStart: application.eventEntertainerInfo.event.startTime,
-          eventDuration: application.eventEntertainerInfo.event.startDuration,
+          eventDuration: application.eventEntertainerInfo.event.eventDuration,
           eventStreetLine1: application.eventEntertainerInfo.event.streetLine1,
           eventStreetLine2: application.eventEntertainerInfo.event.streetLine2,
           eventState: application.eventEntertainerInfo.event.state,
           eventLga: application.eventEntertainerInfo.event.lga,
           eventCity: application.eventEntertainerInfo.event.city
         };
-
-        console.log('EMAIL PARAMETERS', EMAIL_PARAMETERS);
 
         if (!application) {
           return res.status(404).json({ message: 'Application not found' });
@@ -261,7 +262,8 @@ const ApplicationController = {
                 }
               }
             ).then(() => {
-              // TODO: Send Email Here
+              // Send Email to approved entertainer
+              sendAuctionMail(EMAIL_PARAMS);
               res.json({
                 message:
                   'Entertainer Application has been successfully approved'
@@ -275,6 +277,34 @@ const ApplicationController = {
         return res.status(412).json({ message: errorMessage });
       });
   }
+};
+
+const sendAuctionMail = params => {
+  // Build Email
+  const contentTop = `Congratulations!!! Your bid of  NGN ${params.askingPrice} has been approved. Once payment has been made, then your application has been confirmed. You can find the details of the event below.`;
+  const contentBottom = `
+    <strong>Event:</strong> ${params.eventType} <br>
+    <strong>Place:</strong> ${params.eventPlace} <br>
+    <strong>Date:</strong> ${params.eventDate} <br>
+    <strong>Start Time:</strong> ${params.eventStart} <br>
+    <strong>Duration:</strong> ${params.eventDuration} <br>
+    <strong>Street Line 1:</strong> ${params.eventStreetLine1} <br>
+    <strong>Street Line 2:</strong> ${params.eventStreetLine2} <br>
+    <strong>State:</strong> ${params.eventState} <br>
+    <strong>LGA:</strong> ${params.eventLga} <br>
+    <strong>City:</strong> ${params.eventCity} <br>
+  `;
+  sendMail(
+    EMAIL_CONTENT.APPROVED_BID,
+    { email: params.entertainerEmail },
+    {
+      firstName: params.entertainerName,
+      title: `Your Bid of NGN ${params.askingPrice} has been approved`,
+      link: '#',
+      contentTop,
+      contentBottom
+    }
+  );
 };
 
 export default ApplicationController;
