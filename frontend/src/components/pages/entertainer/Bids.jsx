@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import TopMessage from 'components/common/layout/TopMessage';
 import BackEndPage from 'components/common/layout/BackEndPage';
@@ -79,7 +80,12 @@ const BidsRow = ({
   state,
   status
 }) => (
-  <tr>
+  <tr
+    className={classNames({
+      'tr-success': status === 'Approved',
+      'tr-error': status === 'Rejected'
+    })}
+  >
     <th className="table__number" scope="row">
       {twoDigitNumber(number)}
     </th>
@@ -100,8 +106,12 @@ const BidsRow = ({
       <span className="text-red">Asking Price</span>
       <span>NGN {commaNumber(askingPrice)}</span>
     </td>
+    <td>
+      <span className="text-muted small--2">Status</span>
+      <span>{status === 'Rejected' ? 'Closed' : status}</span>
+    </td>
     <td className="text-right">
-      <div className="btn btn-info btn-transparent">{status}</div>
+      <div className="btn btn-info btn-transparent">View Bid</div>
     </td>
   </tr>
 );

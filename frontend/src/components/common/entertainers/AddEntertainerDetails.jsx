@@ -272,7 +272,7 @@ const AddEntertainerDetailsForm = ({
           name="genre"
           optional
           options={GENRE}
-          placeholder="Genre"
+          placeholder="Preferred Genre"
         />
         <MultiSelect
           formGroupClassName="col-md-6"

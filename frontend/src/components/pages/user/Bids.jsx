@@ -19,7 +19,7 @@ import {
 import AlertMessage from 'components/common/utils/AlertMessage';
 import Image from 'components/common/utils/Image';
 import DuvLiveModal from 'components/custom/Modal';
-import { moneyFormat, twoDigitNumber } from 'utils/helpers';
+import { moneyFormat, twoDigitNumber, getBudgetRange } from 'utils/helpers';
 import Stars from 'components/common/utils/Stars';
 
 const Bids = ({ eventEntertainerId }) => {
@@ -46,8 +46,11 @@ const Bids = ({ eventEntertainerId }) => {
 
   if (!eventEntertainer.event) {
     console.log('eventEntertainer.eventDate', eventEntertainer.eventDate);
-    return <h1>nothing is here</h1>;
+    return null;
+    // TODO
   }
+
+  console.log('eventEntertainer', eventEntertainer);
 
   const eventDate = eventEntertainer.event.eventDate;
   return (
@@ -60,11 +63,20 @@ const Bids = ({ eventEntertainerId }) => {
             <div className="col-sm-12">
               <h3 className="main-app__title">
                 {eventEntertainer.event.eventType} <br />{' '}
-                <small className="main-app__small remaining-time">
-                  <i className="icon icon-calendar"></i>
-                  {getLongDate(eventDate)}
-                </small>
               </h3>
+
+              <h6 className="text-white small">
+                Budget:{' '}
+                {getBudgetRange(
+                  eventEntertainer.lowestBudget,
+                  eventEntertainer.highestBudget
+                )}{' '}
+              </h6>
+
+              <small className="main-app__small remaining-time">
+                <i className="icon icon-calendar"></i>
+                {getLongDate(eventDate)}
+              </small>
             </div>
           </section>
 
@@ -208,12 +220,6 @@ Bids.ApplicationsTableRow = ({ application, number }) => {
   if (!application && !application.user && !application.user.profile) {
     return null;
   }
-  // build entertainer for modal
-  const entertainer = {
-    stageName: application.user.profile.stageName,
-    profileImageURL: application.user.profileImageURL,
-    about: application.user.profile.about
-  };
 
   const approveApplication = () => {
     axios
@@ -230,7 +236,7 @@ Bids.ApplicationsTableRow = ({ application, number }) => {
         const { status } = response;
         // handle success
         if (status === 200) {
-          navigate('/user/auctions/status/success');
+          navigate(`/user/events/view/${application.eventId}/success`);
         }
       })
       .catch(function(error) {
@@ -280,6 +286,9 @@ Bids.ApplicationsTableRow = ({ application, number }) => {
         </h4>
         <Stars name={application.user.profile.stageName} rating={4.5} />
         <small>{application.user.profile.location}</small>
+        <div className="small--2 text-muted">
+          {application.user.profile.about}
+        </div>
       </div>
     </>
   );

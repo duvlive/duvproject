@@ -14,7 +14,7 @@ import Image from 'components/common/utils/Image';
 import DuvLiveModal from 'components/custom/Modal';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import { getTokenFromStore } from 'utils/localStorage';
-import { Link } from '@reach/router';
+import { Link, Match } from '@reach/router';
 import { listJsonItems, getBudgetRange } from 'utils/helpers';
 import {
   userCanAddEntertainer,
@@ -68,6 +68,21 @@ const ViewEvent = ({ id }) => {
               </h3>
             </div>
           </section>
+
+          <Match path={`/user/events/view/${id}/success`}>
+            {props =>
+              // eslint-disable-next-line react/prop-types
+              props.match && (
+                <div className="mt-3 mb-4">
+                  <AlertMessage
+                    message="Your Auction has been successfully approved"
+                    type="success"
+                  />
+                </div>
+              )
+            }
+          </Match>
+
           {/* Event Details and Entertainers */}
           <aside className="row">
             <div className="col-md-8">
@@ -369,8 +384,8 @@ ViewEvent.EntertainersTable = ({ eventEntertainers }) => {
             <thead>
               <tr className="transparent">
                 <td colSpan="5">
-                  <h3 className="event-title text-blue">
-                    Entertainers (In Review)
+                  <h3 className="event-title text-white">
+                    Entertainer Requests (In View)
                   </h3>
                 </td>
               </tr>

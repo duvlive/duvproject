@@ -164,9 +164,7 @@ Events.Card = ({
         <td>
           <span className="text-yellow">
             {entertainerTypes.review.length > 0 ? (
-              <>
-                {countOccurences(entertainerTypes.review).join(', ')} in review
-              </>
+              <>{countOccurences(entertainerTypes.review).join(', ')} needed</>
             ) : (
               'No entertainer in review'
             )}{' '}
