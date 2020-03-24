@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import TopMessage from 'components/common/layout/TopMessage';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import { getTokenFromStore } from 'utils/localStorage';
-import { twoDigitNumber, commaNumber } from 'utils/helpers';
+import { twoDigitNumber, commaNumber, getNairaSymbol } from 'utils/helpers';
 import { getShortDate } from 'utils/date-helpers';
 import NoContent from 'components/common/utils/NoContent';
 
@@ -104,7 +104,10 @@ const BidsRow = ({
     </td>
     <td>
       <span className="text-red">Asking Price</span>
-      <span>NGN {commaNumber(askingPrice)}</span>
+      <span>
+        {getNairaSymbol()}
+        {commaNumber(askingPrice)}
+      </span>
     </td>
     <td>
       <span className="text-muted small--2">Status</span>

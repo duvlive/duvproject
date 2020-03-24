@@ -7,7 +7,6 @@ import Timeago from 'react-timeago';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import { getEventDate, getTime, getTimeOfDay } from 'utils/date-helpers';
 import NoContent from 'components/common/utils/NoContent';
-import { userCanAddEntertainer } from 'utils/event-helpers';
 import { getTokenFromStore } from 'utils/localStorage';
 import { parse } from 'date-fns';
 

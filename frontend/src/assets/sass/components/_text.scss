@@ -128,3 +128,11 @@ label {
 .text-muted-light {
   color: lighten($text-muted, 12);
 }
+
+.text-font {
+  font-family: $text-font !important;
+}
+
+.header-font {
+  font-family: $headings-font !important;
+}

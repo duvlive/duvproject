@@ -4,7 +4,8 @@ import {
   Event,
   EventEntertainer,
   User,
-  EntertainerProfile
+  EntertainerProfile,
+  Commission
 } from '../models';
 import sendMail from '../MailSender';
 import { validString, moneyFormat } from '../utils';
@@ -135,6 +136,60 @@ const ApplicationController = {
           return res.status(404).json({ message: 'Event not found' });
         }
         return res.status(200).json({ bids });
+      });
+  },
+
+  /**
+   * Get application for valid entertainer only
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+
+  getOneApplication(req, res) {
+    const id = req.params.id;
+    const userId = req.user.id;
+
+    if (!id) {
+      return res.status(404).json({
+        message: 'Application Id needed to approve application'
+      });
+    }
+
+    Application.findOne({
+      where: { id, userId },
+      include: [
+        {
+          model: EventEntertainer,
+          as: 'eventEntertainerInfo',
+          include: {
+            model: Event,
+            as: 'event',
+            include: [
+              {
+                model: User,
+                as: 'owner',
+                attributes: ['id', 'firstName', 'lastName']
+              }
+            ]
+          }
+        },
+        {
+          model: Commission,
+          as: 'commission'
+        }
+      ]
+    })
+      .then(application => {
+        if (!application) {
+          return res.status(404).json({ message: 'Application not found' });
+        }
+        return res.json({ application });
+      })
+      .catch(error => {
+        const errorMessage = error.message || error;
+        return res.status(412).json({ message: errorMessage });
       });
   },
 
