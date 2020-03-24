@@ -42,6 +42,14 @@ $duv-td-line-height: 1.8;
       }
     }
 
+    &.tr-success {
+      background-color: rgba(darken($green-200, 10), 0.05) !important;
+    }
+
+    &.tr-error {
+      background-color: rgba(darken($red-200, 15), 0.09) !important;
+    }
+
     th,
     td {
       padding-top: 1.2rem;

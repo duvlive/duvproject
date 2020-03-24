@@ -5,12 +5,21 @@ import axios from 'axios';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import { navigate } from '@reach/router';
 import { getTokenFromStore } from 'utils/localStorage';
-import { remainingDays } from 'utils/date-helpers';
-import { eventIsVoid, eventHasExpired } from 'utils/event-helpers';
+import {
+  getNumberOfDaysToEvent,
+  getLongDate,
+  subtractDays
+} from 'utils/date-helpers';
+import {
+  userCanAddEntertainer,
+  eventHasExpired,
+  eventIsVoid,
+  auctionIsVoid
+} from 'utils/event-helpers';
 import AlertMessage from 'components/common/utils/AlertMessage';
 import Image from 'components/common/utils/Image';
 import DuvLiveModal from 'components/custom/Modal';
-import { moneyFormat, twoDigitNumber } from 'utils/helpers';
+import { moneyFormat, twoDigitNumber, getBudgetRange } from 'utils/helpers';
 import Stars from 'components/common/utils/Stars';
 
 const Bids = ({ eventEntertainerId }) => {
@@ -31,64 +40,91 @@ const Bids = ({ eventEntertainerId }) => {
           }
         })
         .catch(function(error) {
-          // console.log(error.response.data.message);
-          // navigate to all events: TODO
-          // navigate('/user/auctions');
+          navigate('/user/auctions/status/error');
         });
   }, [eventEntertainerId]);
 
   if (!eventEntertainer.event) {
     console.log('eventEntertainer.eventDate', eventEntertainer.eventDate);
-    return <h1>nothing is here</h1>;
+    return null;
+    // TODO
   }
 
+  console.log('eventEntertainer', eventEntertainer);
+
+  const eventDate = eventEntertainer.event.eventDate;
   return (
     <BackEndPage title="All Bids">
       <div className="main-app">
         <TopMessage />
         <section className="app-content">
           {/* Event Name and Event Status */}
-          <section className="row">
+          <section className="row mb-3">
             <div className="col-sm-12">
               <h3 className="main-app__title">
                 {eventEntertainer.event.eventType} <br />{' '}
-                <small className="main-app__small remaining-time">
-                  <i className="icon icon-hourglass"></i>
-                  {!eventHasExpired(eventEntertainer.event.eventDate) && (
-                    <>{remainingDays(eventEntertainer.event.eventDate)}</>
-                  )}
-                </small>
               </h3>
+
+              <h6 className="text-white small">
+                Budget:{' '}
+                {getBudgetRange(
+                  eventEntertainer.lowestBudget,
+                  eventEntertainer.highestBudget
+                )}{' '}
+              </h6>
+
+              <small className="main-app__small remaining-time">
+                <i className="icon icon-calendar"></i>
+                {getLongDate(eventDate)}
+              </small>
             </div>
           </section>
 
           {/* Event Details and Entertainers */}
           <aside className="row">
             <div className="col-md-12">
-              {/* TODO: DAY AUCTION WILL EXPIRE, NO MORE BIDS, TIPS ON SELECTING YOUR BEST PRICE  */}
-              {eventHasExpired(eventEntertainer.event.eventDate) && (
-                <AlertMessage message="Event Date has passed" type="error" />
+              {eventHasExpired(eventDate) && (
+                <AlertMessage
+                  message="Event has expired. Bids can no longer be approved."
+                  type="error"
+                />
               )}
-              {!eventHasExpired(eventEntertainer.event.eventDate) &&
-                eventIsVoid(eventEntertainer.event.eventDate) && (
-                  <AlertMessage
-                    message="Event can no longer be edited."
-                    type="info"
-                  />
-                )}
 
-              <BidsApplicationsTable
-                applications={eventEntertainer.applications || []}
-              />
-            </div>
-            {/* <div className="col-md-4">
-              <ViewEvent.EventDetailsCard event={eventEntertainer.event} />
-              {!eventHasExpired(eventEntertainer.event.eventDate) && (
-                <div className="text-right cancel-event__text mt-3 mb-5">
-                  <i className="icon icon-cancel"></i> Cancel Event
-                </div>
+              {!eventHasExpired(eventDate) && eventIsVoid(eventDate) && (
+                <AlertMessage
+                  message="Bids can no longer be approved 48 hours before event"
+                  type="error"
+                />
               )}
-            </div> */}
+
+              {userCanAddEntertainer(eventDate) && auctionIsVoid(eventDate) && (
+                <AlertMessage
+                  message="Your event is closing soon within 1 day, select your entertainer now"
+                  type="warning"
+                />
+              )}
+
+              {!auctionIsVoid(eventDate) && (
+                <AlertMessage
+                  message={
+                    <>
+                      This auction will close on{' '}
+                      {getLongDate(subtractDays(eventDate, 4))} - &nbsp;
+                      <span className="text-white">
+                        {getNumberOfDaysToEvent(eventDate)} remaining
+                      </span>
+                    </>
+                  }
+                  type="info"
+                />
+              )}
+
+              {userCanAddEntertainer(eventDate) && (
+                <BidsApplicationsTable
+                  applications={eventEntertainer.applications || []}
+                />
+              )}
+            </div>
           </aside>
         </section>
       </div>
@@ -180,15 +216,10 @@ BidsApplicationsTable.propTypes = {
 };
 
 Bids.ApplicationsTableRow = ({ application, number }) => {
+  console.log('application', application);
   if (!application && !application.user && !application.user.profile) {
     return null;
   }
-  // build entertainer for modal
-  const entertainer = {
-    stageName: application.user.profile.stageName,
-    profileImageURL: application.user.profileImageURL,
-    about: application.user.profile.about
-  };
 
   const approveApplication = () => {
     axios
@@ -205,7 +236,7 @@ Bids.ApplicationsTableRow = ({ application, number }) => {
         const { status } = response;
         // handle success
         if (status === 200) {
-          navigate('/user/auctions');
+          navigate(`/user/events/view/${application.eventId}/success`);
         }
       })
       .catch(function(error) {
@@ -213,6 +244,54 @@ Bids.ApplicationsTableRow = ({ application, number }) => {
         // TODO: ADD ERROR ALERT HERE
       });
   };
+
+  const approveBidModalBody = () => (
+    <>
+      <div className="text-center">
+        <Image
+          className="avatar--large"
+          name={application.user.profile.stageName || 'No name'}
+          responsiveImage={false}
+          src={application.user.profileImageURL || 'No src'}
+        />
+        <h4 className="font-weight-normal mt-3">
+          {application.user.profile.stageName}
+        </h4>
+        <h5 className="text-yellow mt-3 mb-4">
+          &#8358; {moneyFormat(application.askingPrice)}
+        </h5>
+      </div>
+      <div className="small--2">
+        <h6 className="text-white">Note</h6>
+        Approving this bid will inform the entertainer that they have won the
+        bid and should be prepared to perform in this event. However, their
+        attendance can only be confirmed by paying the assigned bid at lease 2
+        days (48 hours) before the event date, else the contract will be
+        terminated.
+      </div>
+    </>
+  );
+
+  const ViewEntertainerProfileModal = () => (
+    <>
+      <div className="text-center">
+        <Image
+          className="avatar--large"
+          name={application.user.profile.stageName || 'No name'}
+          responsiveImage={false}
+          src={application.user.profileImageURL || 'No src'}
+        />
+        <h4 className="font-weight-normal mt-3">
+          {application.user.profile.stageName}
+        </h4>
+        <Stars name={application.user.profile.stageName} rating={4.5} />
+        <small>{application.user.profile.location}</small>
+        <div className="small--2 text-muted">
+          {application.user.profile.about}
+        </div>
+      </div>
+    </>
+  );
 
   return (
     <tr>
@@ -249,9 +328,9 @@ Bids.ApplicationsTableRow = ({ application, number }) => {
         <DuvLiveModal
           actionFn={approveApplication}
           actionText="Approve Bid"
-          body={<h1>Approval Body</h1>} // TODO: ADD BODY HERE
+          body={approveBidModalBody()}
           closeModalText="Cancel"
-          title="Delete Image"
+          title="Approve Bid"
         >
           <button className="btn btn-success btn-sm btn-transparent">
             Approve
@@ -259,9 +338,14 @@ Bids.ApplicationsTableRow = ({ application, number }) => {
         </DuvLiveModal>
       </td>
       <td className="align-middle text-right td-btn">
-        {entertainer && (
-          <DuvLiveModal.ViewEntertainerProfile entertainer={entertainer} />
-        )}
+        <DuvLiveModal
+          body={ViewEntertainerProfileModal()}
+          title={application.user.profile.stageName}
+        >
+          <button className="btn btn-info btn-sm btn-transparent">
+            View Profile
+          </button>
+        </DuvLiveModal>
       </td>
     </tr>
   );

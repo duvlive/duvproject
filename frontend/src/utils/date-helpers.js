@@ -31,5 +31,5 @@ export const getTimeOfDay = date => {
   );
 };
 export const getNumberOfDaysToEvent = eventDate =>
-  eventDate > Date.now() &&
+  parse(eventDate) > Date.now() &&
   differenceInCalendarDays(eventDate, Date.now()) + ' days';

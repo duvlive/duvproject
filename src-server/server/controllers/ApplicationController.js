@@ -182,6 +182,7 @@ const ApplicationController = {
     })
       .then(application => {
         const currentDate = Date.now();
+        const eventEntertainerId = application.eventEntertainerId;
         // for email
         const EMAIL_PARAMS = {
           askingPrice: moneyFormat(application.askingPrice),
@@ -203,7 +204,7 @@ const ApplicationController = {
           return res.status(404).json({ message: 'Application not found' });
         }
 
-        // application has already been approved
+        // application has previously been approved
         if (application.status === 'Approved') {
           return res.status(400).json({
             message: 'This application has already been approved'
@@ -244,7 +245,7 @@ const ApplicationController = {
             },
             {
               where: {
-                id
+                id: eventEntertainerId
               }
             }
           ).then(() =>

@@ -26,7 +26,7 @@ export const moneyFormat = value => Humanize.formatNumber(value, 2);
 export const getBudgetRange = (minBudget, maxBudget) => {
   const MAX_BUDGET_OUTPUT = 1000000;
   const suffix = maxBudget > MAX_BUDGET_OUTPUT ? '+' : '';
-  const range = `${commaNumber(minBudget)} - ${commaNumber(
+  const range = `₦${commaNumber(minBudget)} - ₦${commaNumber(
     Humanize.boundedNumber(maxBudget, MAX_BUDGET_OUTPUT)
   )}`;
   return range + suffix;

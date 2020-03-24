@@ -52,8 +52,6 @@ Video.Card = ({ src, title }) => (
   </div>
 );
 
-//TODO: WORK ON REWRITE THE URL TO EMBEDDED FORMAT
-
 Video.Card.propTypes = {
   src: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired

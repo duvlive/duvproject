@@ -24,17 +24,19 @@ const UserRouter = () => (
   <Router>
     <Dashboard path="/dashboard" />
     <Auctions path="/auctions" />
+    <Auctions path="/auctions/status/:message" />
     <Events path="/events" />
     <Notifications path="/notifications" />
     <UserHelp path="/help" />
     <Payments path="/payments-history" />
     <SearchEntertainer path="/entertainer/search/:event_id" />
     <RecommendedEntertainers path="/entertainer/recommended/:event_id" />
-    <NewEvent path="events/new" />
+    <NewEvent path="/events/new" />
     <NewEvent path="/hire-entertainer" />
     <AddEntertainerDetails path="events/:id/add-entertainer" />
     <AddEntertainerDetails path="events/:id/add-entertainer/new-event" />
     <ViewEvent path="events/view/:id" />
+    <ViewEvent path="events/view/:id/:message" />
     <Bids path="/auction/bids/:eventEntertainerId" />
     <Approval path="/approval" />
     <EditProfile path="/edit-profile" />

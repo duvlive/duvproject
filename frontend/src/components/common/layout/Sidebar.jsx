@@ -152,19 +152,21 @@ SidebarMenu.defaultProps = {
 };
 
 Sidebar.Navigation = ({ menus, closeSidebar }) => {
-  const sideMenu = menus.map(({ name, menus }) => (
-    <ul className="sidebar-menu" key={name}>
-      <h6 className="sidebar-menu__header">{name}</h6>
-      {menus.map(({ title, to, icon }) => (
-        <li key={title}>
-          <Link getProps={isActive} onClick={closeSidebar} to={to}>
-            <i className={`icon icon-${icon}`} />
-            {title}
-          </Link>
-        </li>
-      ))}
-    </ul>
-  ));
+  const sideMenu =
+    menus &&
+    menus.map(({ name, menus }) => (
+      <ul className="sidebar-menu" key={name}>
+        <h6 className="sidebar-menu__header">{name}</h6>
+        {menus.map(({ title, to, icon }) => (
+          <li key={title}>
+            <Link getProps={isActive} onClick={closeSidebar} to={to}>
+              <i className={`icon icon-${icon}`} />
+              {title}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    ));
   return <div>{sideMenu}</div>;
 };
 

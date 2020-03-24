@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import TopMessage from 'components/common/layout/TopMessage';
 import Avatars from 'components/common/utils/Avatars';
-import { Link } from '@reach/router';
+import AlertMessage from 'components/common/utils/AlertMessage';
+import { Link, Match } from '@reach/router';
 import { getItems, twoDigitNumber } from 'utils/helpers';
 import djLists from 'data/entertainers/djs';
 import BackEndPage from 'components/common/layout/BackEndPage';
@@ -42,6 +43,28 @@ const Auctions = () => {
         <TopMessage message="Auctions" />
 
         <section className="app-content">
+          <Match path="/user/auctions/status/success">
+            {props =>
+              // eslint-disable-next-line react/prop-types
+              props.match && (
+                <AlertMessage
+                  message="Your Auction has been successfully approved"
+                  type="success"
+                />
+              )
+            }
+          </Match>
+          <Match path="/user/auctions/status/error">
+            {props =>
+              // eslint-disable-next-line react/prop-types
+              props.match && (
+                <AlertMessage
+                  message="The selected auction cannot be found or has already been approved."
+                  type="error"
+                />
+              )
+            }
+          </Match>
           {auctions.length > 0 ? (
             <AuctionsTable auctions={auctions} />
           ) : (
