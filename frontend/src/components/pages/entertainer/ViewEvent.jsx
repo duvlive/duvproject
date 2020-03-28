@@ -22,6 +22,7 @@ import {
 
 const ViewEvent = ({ eventEntertainerId }) => {
   const [eventEntertainer, setEventEntertainer] = React.useState({});
+  let loading = false;
   React.useEffect(() => {
     eventEntertainerId &&
       axios
@@ -44,55 +45,56 @@ const ViewEvent = ({ eventEntertainerId }) => {
         });
   }, [eventEntertainerId]);
 
-  console.log('event', eventEntertainer);
   if (!eventEntertainer.event) {
-    return <h1>Still Loading</h1>;
+    loading = true;
   }
 
   return (
-    <BackEndPage title="View Event">
+    <BackEndPage loading={loading} title="View Event">
       <div className="main-app">
         <TopMessage />
 
-        <section className="app-content">
-          {/* Event Name and Event Status */}
-          <section className="row">
-            <div className="col-sm-12">
-              <h3 className="main-app__title">
-                {eventEntertainer.event.eventType} <br />{' '}
-                <small className="main-app__small remaining-time">
-                  <i className="icon icon-hourglass"></i>
-                  {!eventHasExpired(eventEntertainer.event.eventDate) && (
-                    <>{remainingDays(eventEntertainer.event.eventDate)}</>
-                  )}
-                </small>
-              </h3>
-            </div>
-          </section>
+        {!loading && (
+          <section className="app-content">
+            {/* Event Name and Event Status */}
+            <section className="row">
+              <div className="col-sm-12">
+                <h3 className="main-app__title">
+                  {eventEntertainer.event.eventType} <br />{' '}
+                  <small className="main-app__small remaining-time">
+                    <i className="icon icon-hourglass"></i>
+                    {!eventHasExpired(eventEntertainer.event.eventDate) && (
+                      <>{remainingDays(eventEntertainer.event.eventDate)}</>
+                    )}
+                  </small>
+                </h3>
+              </div>
+            </section>
 
-          {/* Event Details and Entertainers */}
-          <aside className="row">
-            <div className="col-md-6">
-              <h3 className="main-app__title mt-5 small--1 text-blue">
-                Event Details
-              </h3>
-              <ul class="list-group transparent">
-                <ViewEvent.OwnerDetailsCard
-                  owner={eventEntertainer.event.owner}
+            {/* Event Details and Entertainers */}
+            <aside className="row">
+              <div className="col-md-6">
+                <h3 className="main-app__title mt-5 small--1 text-blue">
+                  Event Details
+                </h3>
+                <ul class="list-group transparent">
+                  <ViewEvent.OwnerDetailsCard
+                    owner={eventEntertainer.event.owner}
+                  />
+                  <ViewEvent.EventDetailsCard event={eventEntertainer.event} />
+                </ul>
+              </div>
+              <div className="col-md-6">
+                <h3 className="main-app__title mt-5 small--1 text-yellow">
+                  Event Requirements
+                </h3>
+                <ViewEvent.EventEntertainerDetailsCard
+                  eventEntertainer={eventEntertainer}
                 />
-                <ViewEvent.EventDetailsCard event={eventEntertainer.event} />
-              </ul>
-            </div>
-            <div className="col-md-6">
-              <h3 className="main-app__title mt-5 small--1 text-yellow">
-                Event Requirements
-              </h3>
-              <ViewEvent.EventEntertainerDetailsCard
-                eventEntertainer={eventEntertainer}
-              />
-            </div>
-          </aside>
-        </section>
+              </div>
+            </aside>
+          </section>
+        )}
       </div>
     </BackEndPage>
   );

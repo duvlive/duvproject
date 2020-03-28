@@ -461,3 +461,23 @@ a:hover {
   display: inline-block;
   margin-right: 0.3rem;
 }
+
+.loading-screen {
+  margin-top: 10rem;
+}
+
+@keyframes bounce {
+  0% {
+    transform: scale(0.5);
+    opacity: 0.2;
+  }
+  100% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+}
+.animated-logo {
+  animation: bounce 0.8s;
+  animation-direction: alternate;
+  animation-iteration-count: infinite;
+}
