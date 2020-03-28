@@ -42,7 +42,7 @@ const ViewBid = ({ applicationId }) => {
   const eventEntertainer = application.eventEntertainerInfo;
 
   return (
-    <BackEndPage title="New Bid">
+    <BackEndPage title="Placed Bid">
       <div className="main-app">
         <TopMessage />
 

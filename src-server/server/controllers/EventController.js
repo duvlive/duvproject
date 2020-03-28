@@ -288,6 +288,65 @@ const EventController = {
   },
 
   /**
+   * get One Event for Entertainer
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  getOneEntertainerEvent(req, res) {
+    const userId = req.user.id;
+    const id = req.params.id;
+    EntertainerProfile.findOne({
+      where: {
+        userId
+      }
+    })
+      .then(entertainer => {
+        EventEntertainer.findOne({
+          where: {
+            id,
+            hiredEntertainer: entertainer.id
+          },
+          include: [
+            {
+              model: Event,
+              as: 'event',
+              include: [
+                {
+                  model: User,
+                  as: 'owner',
+                  attributes: [
+                    'id',
+                    'firstName',
+                    'lastName',
+                    'phoneNumber',
+                    'phoneNumber2',
+                    'profileImageURL'
+                  ]
+                }
+              ]
+            }
+          ]
+        })
+          .then(event => {
+            if (!event) {
+              return res.status(404).json({ message: 'Event not found' });
+            }
+            return res.status(200).json({ event });
+          })
+          .catch(error => {
+            const errorMessage = error.message || error;
+            return res.status(412).json({ message: errorMessage });
+          });
+      })
+      .catch(error => {
+        const errorMessage = error.message || error;
+        return res.status(412).json({ message: errorMessage });
+      });
+  },
+
+  /**
    * get Entertainer Event
    * @function
    * @param {object} req is req object
@@ -320,7 +379,7 @@ const EventController = {
         ]
       }).then(events => {
         if (!events || events.length === 0) {
-          return res.status(404).json({ message: 'Event not found' });
+          return res.status(404).json({ message: 'Events not found' });
         }
         return res.status(200).json({ events });
       });

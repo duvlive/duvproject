@@ -170,6 +170,15 @@ router.get(
 );
 router.get('/api/v1/events/:id', EventController.getOneEvent);
 
+// one event for entertainer
+router.get(
+  '/api/v1/entertainer/events/:id',
+  Authentication.verifyToken,
+  Authentication.isActiveUser,
+  Authentication.validateEntertainer,
+  EventController.getOneEntertainerEvent
+);
+
 // gallery routes
 router.get('/api/v1/gallery/:userId', GalleryController.getEntertainerGallery);
 router.post(

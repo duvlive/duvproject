@@ -8,6 +8,7 @@ import { getTokenFromStore } from 'utils/localStorage';
 import { twoDigitNumber, commaNumber, getNairaSymbol } from 'utils/helpers';
 import { getShortDate } from 'utils/date-helpers';
 import NoContent from 'components/common/utils/NoContent';
+import { Link } from '@reach/router';
 
 const Bids = () => {
   const [bids, setBids] = React.useState([]);
@@ -30,6 +31,7 @@ const Bids = () => {
         // navigate to all events
       });
   }, []);
+  console.log('bids', bids);
   return (
     <BackEndPage title="Bids">
       <div className="main-app">
@@ -46,6 +48,7 @@ const Bids = () => {
                       auctionEndDate={bid.eventEntertainerInfo.auctionEndDate}
                       city={bid.event.city}
                       eventType={bid.event.eventType}
+                      id={bid.id}
                       key={index}
                       number={index + 1}
                       state={bid.event.state}
@@ -72,6 +75,7 @@ const Bids = () => {
 };
 
 const BidsRow = ({
+  id,
   askingPrice,
   auctionEndDate,
   city,
@@ -114,7 +118,12 @@ const BidsRow = ({
       <span>{status === 'Rejected' ? 'Closed' : status}</span>
     </td>
     <td className="text-right">
-      <div className="btn btn-info btn-transparent">View Bid</div>
+      <Link
+        className="btn btn-info btn-transparent"
+        to={`/entertainer/bid/view/${id}`}
+      >
+        View Bid
+      </Link>
     </td>
   </tr>
 );
@@ -124,6 +133,7 @@ BidsRow.propTypes = {
   auctionEndDate: PropTypes.any,
   city: PropTypes.string,
   eventType: PropTypes.string,
+  id: PropTypes.string,
   number: PropTypes.number,
   state: PropTypes.string,
   status: PropTypes.string
@@ -134,6 +144,7 @@ Bids.defaultProps = {
   auctionEndDate: '',
   city: '',
   eventType: '',
+  id: '',
   number: 0,
   state: '',
   status: 'Pending'

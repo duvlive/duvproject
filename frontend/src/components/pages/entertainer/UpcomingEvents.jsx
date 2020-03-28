@@ -39,7 +39,8 @@ const Events = () => {
   console.log('events', events);
   // Sort event according - Today, Upcoming and Past
   let allEvents = events.reduce(
-    (result, { event }) => {
+    (result, { id, event }) => {
+      event.id = id; // use the evententertainer id here
       if (parse(event.eventDate).toDateString() === new Date().toDateString()) {
         result.today.push(event);
       } else if (parse(event.eventDate) > Date.now()) {
@@ -181,7 +182,7 @@ Events.Card = ({
           {/* TODO: Create view events for entertainer */}
           <Link
             className="btn btn-info btn-transparent"
-            to={`/user/events/view/${id}`}
+            to={`/entertainer/events/view/${id}`}
           >
             View Event
           </Link>
