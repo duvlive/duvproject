@@ -19,7 +19,16 @@ const PaymentController = {
         `${process.env.PAYSTACK_TRANSACT_INIT}`,
         {
           amount: amount * 100,
-          email
+          email,
+          metadata: {
+            custom_fields: [
+              {
+                display_name: 'Event Entertainer',
+                variable_name: 'Event Entertainer',
+                value: 1
+              }
+            ]
+          }
         },
         {
           headers: {
@@ -150,6 +159,52 @@ const PaymentController = {
         return res
           .status(200)
           .json({ message: 'success', payments: response.data.data });
+      })
+      .catch(function(error) {
+        const status = error.status || 500;
+        const errorMessage = error.message || error;
+        return res.status(status).json({ message: errorMessage });
+      });
+  },
+
+  getAllUserPayments(req, res) {
+    const { email } = req.user;
+    axios
+      .get(`${process.env.PAYSTACK_CUSTOMER_ALL}`, {
+        headers: {
+          authorization: `Bearer ${process.env.PAYSTACK_TEST_SECRET}`,
+          'content-type': 'application/json'
+        }
+      })
+      .then(function(response) {
+        const customer = response.data.data.filter(
+          customer => customer.email === email
+        );
+        if (customer.length === 0) {
+          return res.status(404).json({ message: 'User does not exist' });
+        }
+
+        const id = customer[0].id;
+        axios
+          .get(
+            `${process.env.PAYSTACK_TRANSACT_ALL}?status=success&&customer=${id}`,
+            {
+              headers: {
+                authorization: `Bearer ${process.env.PAYSTACK_TEST_SECRET}`,
+                'content-type': 'application/json'
+              }
+            }
+          )
+          .then(function(response) {
+            return res
+              .status(200)
+              .json({ message: 'success', payments: response.data.data });
+          })
+          .catch(function(error) {
+            const status = error.status || 500;
+            const errorMessage = error.message || error;
+            return res.status(status).json({ message: errorMessage });
+          });
       })
       .catch(function(error) {
         const status = error.status || 500;
