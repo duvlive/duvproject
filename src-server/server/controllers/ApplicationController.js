@@ -261,7 +261,8 @@ const ApplicationController = {
 
         // application has previously been approved
         if (application.status === 'Approved') {
-          return res.status(400).json({
+          return res.status(200).json({
+            application,
             message: 'This application has already been approved'
           });
         }
@@ -278,7 +279,7 @@ const ApplicationController = {
           application.eventEntertainerInfo.hireType === 'Auction' &&
           application.eventEntertainerInfo.userId !== req.user.id
         ) {
-          return res.status(400).json({
+          return res.status(401).json({
             message: 'Only event owners can approve a bid application'
           });
         }
@@ -321,6 +322,7 @@ const ApplicationController = {
               // Send Email to approved entertainer
               sendAuctionMail(EMAIL_PARAMS);
               res.json({
+                application,
                 message:
                   'Entertainer Application has been successfully approved'
               });

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import objectPath from 'object-path';
 import axios from 'axios';
 import * as queryString from 'query-string';
 import BackEndPage from 'components/common/layout/BackEndPage';
@@ -7,12 +8,15 @@ import BackEndPage from 'components/common/layout/BackEndPage';
 import DUVLiveLogo from 'assets/img/logo/red-black.svg';
 import { getTinyDate } from 'utils/date-helpers';
 import { moneyFormat } from 'utils/helpers';
+import { getTokenFromStore } from 'utils/localStorage';
 
 const ViewPayments = props => {
   let loading = false;
   const queryParams = queryString.parse(props.location.search);
   const { reference } = queryParams;
   const [paymentInfo, setPaymentInfo] = React.useState([]);
+  const [application, setApplication] = React.useState(null);
+
   React.useEffect(() => {
     axios
       .get(`/api/v1/paystack/verify/${reference}`)
@@ -20,7 +24,29 @@ const ViewPayments = props => {
         const { status, data } = response;
         // handle success
         if (status === 200) {
-          setPaymentInfo(data.payment);
+          axios
+            .post(
+              `/api/v1/applications/approve/${data.payment.metadata.custom_fields[0].value}`,
+              {},
+              {
+                headers: {
+                  'x-access-token': getTokenFromStore()
+                }
+              }
+            )
+            .then(function(response) {
+              const { status } = response;
+              console.log('data', data);
+              // handle success
+              if (status === 200) {
+                setPaymentInfo(data.payment);
+                setApplication(response.data.application);
+              }
+            })
+            .catch(function(error) {
+              console.log(error.response.data.message);
+              // TODO: navigate to all events
+            });
         }
       })
       .catch(function(error) {
@@ -30,11 +56,27 @@ const ViewPayments = props => {
   }, [reference]);
 
   console.log('payments', paymentInfo);
+  console.log('application', application);
   console.log('reference', reference);
 
-  if (!paymentInfo.customer) {
+  // if (
+  //   !paymentInfo.customer &&
+  //   !application.
+  // ) {
+  //   loading = true;
+  // }
+
+  if (
+    !objectPath.get(paymentInfo, 'customer', null) ||
+    !objectPath.get(application, 'eventEntertainerInfo.event.eventType', null)
+  ) {
     loading = true;
+    console.log(
+      'objectPath.get(paymentInfo, null)',
+      objectPath.get(paymentInfo, 'customer', null)
+    );
   }
+
   return (
     <BackEndPage loading={loading} title="Payment Receipt">
       {!loading && (
@@ -118,7 +160,34 @@ const ViewPayments = props => {
                         <tbody>
                           <tr className="tr-content">
                             <td>
-                              <p className="mt-5">Event Details here</p>
+                              <p className="mt-5">
+                                Payment to{' '}
+                                <strong>
+                                  {application.user.profile.stageName} (
+                                  {
+                                    application.eventEntertainerInfo
+                                      .entertainerType
+                                  }
+                                  )
+                                </strong>
+                              </p>
+
+                              <p>
+                                Event Name:{' '}
+                                {
+                                  application.eventEntertainerInfo.event
+                                    .eventType
+                                }
+                                <br />
+                                Duration:{' '}
+                                {
+                                  application.eventEntertainerInfo.event
+                                    .eventDuration
+                                }
+                                <br />
+                                Place of Event:{' '}
+                                {application.eventEntertainerInfo.placeOfEvent}
+                              </p>
                             </td>
                             <td className="text-right text-amount strong">
                               {paymentInfo.currency}{' '}
