@@ -74,7 +74,7 @@ Payments.Card = ({ color, payment }) => (
     <div className={`card card-custom card-tiles card-${color} card__no-hover`}>
       <div className="card-body">
         <h4 className="subtitle--2 white mb-0">
-          {payment.currency} {moneyFormat(payment.amount)}
+          {payment.currency} {moneyFormat(payment.amount / 100)}
         </h4>
         <div className="small--1 text-gray">
           Paid on {getShortDate(payment.paid_at)}
