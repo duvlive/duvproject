@@ -1,16 +1,14 @@
 import React from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
-import UserAvatar from 'assets/img/avatar/user.png';
 import TopMessage from 'components/common/layout/TopMessage';
-import Image from 'components/common/utils/Image';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import { getTokenFromStore } from 'utils/localStorage';
 import { getShortDate } from 'utils/date-helpers';
 import { moneyFormat } from 'utils/helpers';
 
 const Payments = () => {
-  let loading;
+  let loading = false;
   const [payments, setPayments] = React.useState([]);
   React.useEffect(() => {
     axios
@@ -38,7 +36,7 @@ const Payments = () => {
     loading = true;
   }
   return (
-    <BackEndPage loading={true} title="Payments History">
+    <BackEndPage loading={loading} title="Payments History">
       <div className="main-app">
         <TopMessage message="Payments History" />
 

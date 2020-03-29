@@ -19,6 +19,7 @@ const PaymentController = {
         `${process.env.PAYSTACK_TRANSACT_INIT}`,
         {
           amount: amount * 100,
+          callback_url: `http://localhost:3000/user/payments/view`,
           email,
           metadata: {
             custom_fields: [
