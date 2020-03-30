@@ -65,7 +65,9 @@ passport.use(
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(router);
+// app.use(router);
+
+router(app);
 // set the view engine to ejs
 app.set('view engine', 'ejs');
 

@@ -51,7 +51,10 @@ const EntertainerProfileController = {
       willingToTravel,
       eventType,
       entertainerType,
-      youTubeChannel
+      youTubeChannel,
+      slug: stageName
+        ? `${stageName}-${req.user.dataValues.id}`
+        : `${req.user.dataValues.id}`
     };
 
     updateUser(req.user, entertainerProfileData, 'Profile')
@@ -74,13 +77,15 @@ const EntertainerProfileController = {
       type: entertainer.type,
       profileImg: entertainer.profileImageURL,
       stageName: entertainer.profile.stageName,
-      entertainerType: entertainer.profile.entertainerType
+      entertainerType: entertainer.profile.entertainerType,
+      slug: entertainer.profile.slug
     };
 
     return { ...transformEntertainer, ...updatedValues };
   },
 
   getEntertainers(req, res) {
+    console.log('I got here hahaha yyy');
     User.findAll({
       where: { type: USER_TYPES.ENTERTAINER },
       include: userAssociatedModels
@@ -110,16 +115,17 @@ const EntertainerProfileController = {
       about: entertainer.about,
       profileImg: entertainer.personalDetails.profileImageURL,
       stageName: entertainer.stageName,
-      entertainerType: entertainer.entertainerType
+      entertainerType: entertainer.entertainerType,
+      slug: entertainer.slug
     };
 
     return { ...transformEntertainer, ...updatedValues };
   },
 
-  getEntertainerByStageName(req, res) {
-    const { stageName } = req.params;
+  getEntertainerBySlug(req, res) {
+    const { slug } = req.params;
     EntertainerProfile.findOne({
-      where: { stageName },
+      where: { slug },
       include: entertainerProfileAssociatedModels
     })
       .then(entertainer => {
@@ -146,17 +152,17 @@ const EntertainerProfileController = {
           entertainers: entertainers.reduce(
             (acc, entertainer) => {
               if (entertainer.entertainerType === 'MC') {
-                acc['MC'] += 1;
+                acc['mc'] += 1;
               }
               if (entertainer.entertainerType === 'DJ') {
-                acc['DJ'] += 1;
+                acc['dj'] += 1;
               }
               if (entertainer.entertainerType === 'Liveband') {
-                acc['LIveband'] += 1;
+                acc['liveband'] += 1;
               }
               return acc;
             },
-            { MC: 0, DJ: 0, LIveband: 0 }
+            { mc: 0, dj: 0, liveband: 0 }
           )
         });
       })

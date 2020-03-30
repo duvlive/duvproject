@@ -88,9 +88,13 @@ module.exports = {
       await queryInterface.removeColumn('EntertainerProfiles', 'yearStarted', {
         transaction
       });
-      await queryInterface.removeColumn('EntertainerProfiles', 'willingToTravel', {
-        transaction
-      });
+      await queryInterface.removeColumn(
+        'EntertainerProfiles',
+        'willingToTravel',
+        {
+          transaction
+        }
+      );
       await queryInterface.removeColumn('EntertainerProfiles', 'eventType', {
         transaction
       });
