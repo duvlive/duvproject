@@ -4,7 +4,8 @@ import {
   Event,
   EventEntertainer,
   User,
-  EntertainerProfile
+  EntertainerProfile,
+  Commission
 } from '../models';
 import sendMail from '../MailSender';
 import { validString, moneyFormat } from '../utils';
@@ -139,6 +140,60 @@ const ApplicationController = {
   },
 
   /**
+   * Get application for valid entertainer only
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+
+  getOneApplication(req, res) {
+    const id = req.params.id;
+    const userId = req.user.id;
+
+    if (!id) {
+      return res.status(404).json({
+        message: 'Application Id needed to approve application'
+      });
+    }
+
+    Application.findOne({
+      where: { id, userId },
+      include: [
+        {
+          model: EventEntertainer,
+          as: 'eventEntertainerInfo',
+          include: {
+            model: Event,
+            as: 'event',
+            include: [
+              {
+                model: User,
+                as: 'owner',
+                attributes: ['id', 'firstName', 'lastName']
+              }
+            ]
+          }
+        },
+        {
+          model: Commission,
+          as: 'commission'
+        }
+      ]
+    })
+      .then(application => {
+        if (!application) {
+          return res.status(404).json({ message: 'Application not found' });
+        }
+        return res.json({ application });
+      })
+      .catch(error => {
+        const errorMessage = error.message || error;
+        return res.status(412).json({ message: errorMessage });
+      });
+  },
+
+  /**
    * Approve Application
    * @function
    * @param {object} req is req object
@@ -206,7 +261,8 @@ const ApplicationController = {
 
         // application has previously been approved
         if (application.status === 'Approved') {
-          return res.status(400).json({
+          return res.status(200).json({
+            application,
             message: 'This application has already been approved'
           });
         }
@@ -223,7 +279,7 @@ const ApplicationController = {
           application.eventEntertainerInfo.hireType === 'Auction' &&
           application.eventEntertainerInfo.userId !== req.user.id
         ) {
-          return res.status(400).json({
+          return res.status(401).json({
             message: 'Only event owners can approve a bid application'
           });
         }
@@ -266,6 +322,7 @@ const ApplicationController = {
               // Send Email to approved entertainer
               sendAuctionMail(EMAIL_PARAMS);
               res.json({
+                application,
                 message:
                   'Entertainer Application has been successfully approved'
               });

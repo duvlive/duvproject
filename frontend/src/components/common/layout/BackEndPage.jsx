@@ -38,6 +38,7 @@ const BackEndPage = ({ children, title, subtitle }) => {
           subtitle={subtitle}
           title={title}
         />
+
         {children}
       </div>
     </div>
@@ -46,11 +47,13 @@ const BackEndPage = ({ children, title, subtitle }) => {
 
 BackEndPage.propTypes = {
   children: PropTypes.node.isRequired,
+  loading: PropTypes.bool,
   subtitle: PropTypes.string,
   title: PropTypes.string.isRequired
 };
 
 BackEndPage.defaultProps = {
+  loading: false,
   subtitle: null
 };
 

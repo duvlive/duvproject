@@ -68,8 +68,8 @@ const ForgotPasswordForm = () => {
             const { status } = response;
             if (status === 200) {
               setMessage({
-                type: 'success',
-                message: `A password reset link has been sent to your mail`
+                type: 'warning',
+                message: `A password reset link has been sent to your mail. If you don't receive an email, and it's not in your spam folder this could mean you signed up with a different address.`
               });
               actions.resetForm();
             }

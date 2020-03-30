@@ -7,7 +7,6 @@ import Timeago from 'react-timeago';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import { getEventDate, getTime, getTimeOfDay } from 'utils/date-helpers';
 import NoContent from 'components/common/utils/NoContent';
-import { userCanAddEntertainer } from 'utils/event-helpers';
 import { getTokenFromStore } from 'utils/localStorage';
 import { parse } from 'date-fns';
 
@@ -40,7 +39,8 @@ const Events = () => {
   console.log('events', events);
   // Sort event according - Today, Upcoming and Past
   let allEvents = events.reduce(
-    (result, { event }) => {
+    (result, { id, event }) => {
+      event.id = id; // use the evententertainer id here
       if (parse(event.eventDate).toDateString() === new Date().toDateString()) {
         result.today.push(event);
       } else if (parse(event.eventDate) > Date.now()) {
@@ -182,7 +182,7 @@ Events.Card = ({
           {/* TODO: Create view events for entertainer */}
           <Link
             className="btn btn-info btn-transparent"
-            to={`/user/events/view/${id}`}
+            to={`/entertainer/events/view/${id}`}
           >
             View Event
           </Link>

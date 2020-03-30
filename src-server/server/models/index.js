@@ -134,6 +134,11 @@ db.Application.belongsTo(db.EventEntertainer, {
   as: 'eventEntertainerInfo'
 });
 
+db.Application.belongsTo(db.Commission, {
+  foreignKey: 'commissionId',
+  as: 'commission'
+});
+
 db.EventEntertainer.hasMany(db.Application, {
   foreignKey: 'eventEntertainerId',
   as: 'applications'

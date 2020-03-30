@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TopMessage from 'components/common/layout/TopMessage';
 import BackEndPage from 'components/common/layout/BackEndPage';
-// import Input from 'components/forms/Input';
 import { Formik, Form } from 'formik';
 import axios from 'axios';
 import Button from 'components/forms/Button';
@@ -11,7 +10,12 @@ import { createSchema } from 'components/forms/schema/schema-helpers';
 import { bidSchema } from 'components/forms/schema/entertainerSchema';
 import ViewEvent from '../user/ViewEvent';
 import { getTokenFromStore } from 'utils/localStorage';
-import { getBudgetRange, moneyFormat, getPercentage } from 'utils/helpers';
+import {
+  getBudgetRange,
+  moneyFormat,
+  getPercentage,
+  getNairaSymbol
+} from 'utils/helpers';
 import { remainingDays } from 'utils/date-helpers';
 import { navigate } from '@reach/router';
 import InputFormat from 'components/forms/InputFormat';
@@ -205,10 +209,10 @@ BidsForm.propTypes = {
   values: PropTypes.object
 };
 
-NewBid.defaultProps = {
+BidsForm.defaultProps = {
   values: {}
 };
-const PriceCalculator = ({ askingPrice, commission }) => {
+export const PriceCalculator = ({ askingPrice, commission }) => {
   const [showBreakdown, setShowBreakdown] = React.useState(false);
 
   const { bidsCommission, handlingPercent, handlingPlus } = commission;
@@ -220,7 +224,10 @@ const PriceCalculator = ({ askingPrice, commission }) => {
   const entertainerFee = amountToPay > 0 ? amountToPay : 0;
   return (
     <>
-      <h4 className="mb-4">You will be paid {moneyFormat(entertainerFee)} </h4>
+      <h4 className="mb-4 text-font">
+        You will be paid {getNairaSymbol()}
+        {moneyFormat(entertainerFee)}{' '}
+      </h4>
 
       {showBreakdown ? (
         <div className="card card-custom">
@@ -231,7 +238,10 @@ const PriceCalculator = ({ askingPrice, commission }) => {
                 <tbody>
                   <tr>
                     <td>Your Bid</td>
-                    <td className="text-right">{moneyFormat(askingPrice)}</td>
+                    <td className="text-right">
+                      {getNairaSymbol()}
+                      {moneyFormat(askingPrice)}
+                    </td>
                   </tr>
                   <tr>
                     <td>Commission ({bidsCommission}%)</td>
@@ -261,7 +271,10 @@ const PriceCalculator = ({ askingPrice, commission }) => {
                   <tr>
                     <td>You will be paid</td>
                     <td className="text-white text-right">
-                      <h6>{moneyFormat(entertainerFee)}</h6>
+                      <h6>
+                        {getNairaSymbol()}
+                        {moneyFormat(entertainerFee)}
+                      </h6>
                     </td>
                   </tr>
                 </tbody>

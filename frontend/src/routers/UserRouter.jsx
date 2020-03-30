@@ -7,6 +7,7 @@ import Events from 'components/pages/user/Events';
 import Notifications from 'components/pages/user/Notifications';
 import UserHelp from 'components/pages/user/Help';
 import Payments from 'components/pages/user/Payments';
+import ViewPayments from 'components/pages/user/ViewPayments';
 // import SelectEntertainer from 'components/pages/user/HireEntertainers';
 import SearchEntertainer from 'components/pages/user/SearchEntertainer';
 import RecommendedEntertainers from 'components/pages/user/RecommendedEntertainer';
@@ -29,6 +30,7 @@ const UserRouter = () => (
     <Notifications path="/notifications" />
     <UserHelp path="/help" />
     <Payments path="/payments-history" />
+    <ViewPayments path="/payments/view" />
     <SearchEntertainer path="/entertainer/search/:event_id" />
     <RecommendedEntertainers path="/entertainer/recommended/:event_id" />
     <NewEvent path="/events/new" />
@@ -47,3 +49,5 @@ const UserRouter = () => (
 );
 
 export default UserRouter;
+
+// https://duvlive.herokuapp.com/?trxref=dilqpr8eth&reference=dilqpr8eth
