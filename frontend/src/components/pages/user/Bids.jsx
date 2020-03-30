@@ -195,7 +195,7 @@ const BidsApplicationsTable = ({ applications }) => {
 
         <tbody>
           {allApplications.map((application, index) => (
-            <Bids.ApplicationsTableRow
+            <BidsApplicationsTableRow
               application={application}
               key={index}
               number={index + 1}
@@ -215,7 +215,7 @@ BidsApplicationsTable.propTypes = {
   applications: PropTypes.array.isRequired
 };
 
-Bids.ApplicationsTableRow = ({ application, number }) => {
+const BidsApplicationsTableRow = ({ application, number }) => {
   console.log('application', application);
   if (!application && !application.user && !application.user.profile) {
     return null;
@@ -224,8 +224,11 @@ Bids.ApplicationsTableRow = ({ application, number }) => {
   const approveApplication = () => {
     axios
       .post(
-        `/api/v1/applications/approve/${application.id}`,
-        {},
+        `/api/v1/pay`,
+        {
+          amount: application.askingPrice,
+          applicationId: application.id
+        },
         {
           headers: {
             'x-access-token': getTokenFromStore()
@@ -233,10 +236,10 @@ Bids.ApplicationsTableRow = ({ application, number }) => {
         }
       )
       .then(function(response) {
-        const { status } = response;
+        const { status, data } = response;
         // handle success
         if (status === 200) {
-          navigate(`/user/events/view/${application.eventId}/success`);
+          window.location.href = data.payment.authorization_url;
         }
       })
       .catch(function(error) {
@@ -350,11 +353,11 @@ Bids.ApplicationsTableRow = ({ application, number }) => {
     </tr>
   );
 };
-Bids.ApplicationsTableRow.propTypes = {
+BidsApplicationsTableRow.propTypes = {
   application: PropTypes.object,
   number: PropTypes.number.isRequired
 };
-Bids.ApplicationsTableRow.defaultProps = {
+BidsApplicationsTableRow.defaultProps = {
   application: {}
 };
 

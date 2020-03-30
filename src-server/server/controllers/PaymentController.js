@@ -4,14 +4,13 @@ import { validString } from '../utils';
 
 const PaymentController = {
   initializeTransaction(req, res) {
-    const { amount } = req.body;
+    const { amount, applicationId } = req.body;
     const { email } = req.user;
 
-    const error = {
-      ...validString(amount)
-    };
-    if (Object.keys(error).length > 1) {
-      return res.status(400).json({ message: error.message.join('') });
+    if (!amount || !applicationId) {
+      return res
+        .status(400)
+        .json({ message: 'Application ID and Amount needed to process' });
     }
 
     axios
@@ -24,9 +23,9 @@ const PaymentController = {
           metadata: {
             custom_fields: [
               {
-                display_name: 'Event Entertainer',
-                variable_name: 'Event Entertainer',
-                value: 1
+                display_name: 'Application ID',
+                variable_name: 'Application ID',
+                value: applicationId
               }
             ]
           }
@@ -39,9 +38,11 @@ const PaymentController = {
         }
       )
       .then(function(response) {
-        return res
-          .status(200)
-          .json({ message: 'success', payment: response.data.data });
+        return res.status(200).json({
+          message: 'success',
+          payment: response.data.data,
+          site: 'https://google.com'
+        });
       })
       .catch(function(error) {
         const status = error.status || 500;

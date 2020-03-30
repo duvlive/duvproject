@@ -5,9 +5,8 @@ import Sidebar from 'components/common/layout/Sidebar';
 import LandingSection from 'components/common/layout/LandingSection';
 import { getTokenFromStore } from 'utils/localStorage';
 import { UserContext } from 'context/UserContext';
-import LoadingScreen from './LoadingScreen';
 
-const BackEndPage = ({ children, title, loading, subtitle }) => {
+const BackEndPage = ({ children, title, subtitle }) => {
   let { userDispatch } = React.useContext(UserContext);
   const [showSidebar, setShowSidebar] = useState(false);
   const closeSidebar = () => {
@@ -40,7 +39,7 @@ const BackEndPage = ({ children, title, loading, subtitle }) => {
           title={title}
         />
 
-        {loading ? <LoadingScreen /> : children}
+        {children}
       </div>
     </div>
   );

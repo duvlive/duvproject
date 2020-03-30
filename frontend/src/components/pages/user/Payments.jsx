@@ -6,11 +6,14 @@ import BackEndPage from 'components/common/layout/BackEndPage';
 import { getTokenFromStore } from 'utils/localStorage';
 import { getShortDate } from 'utils/date-helpers';
 import { moneyFormat } from 'utils/helpers';
+import { Link } from '@reach/router';
+import LoadingScreen from 'components/common/layout/LoadingScreen';
 
 const Payments = () => {
-  let loading = false;
+  const [loading, setLoading] = React.useState(true);
   const [payments, setPayments] = React.useState([]);
   React.useEffect(() => {
+    setLoading(true);
     axios
       .get('/api/v1/user/payments', {
         headers: {
@@ -23,33 +26,28 @@ const Payments = () => {
         if (status === 200) {
           setPayments(data.payments);
         }
+        setLoading(false);
       })
       .catch(function(error) {
         console.log(error.response.data.message);
         // navigate to all events
+        setLoading(false);
       });
   }, []);
 
   console.log('payments', payments);
 
-  if (!payments) {
-    loading = true;
-  }
   return (
-    <BackEndPage loading={loading} title="Payments History">
+    <BackEndPage title="Payments History">
       <div className="main-app">
         <TopMessage message="Payments History" />
 
         <section className="app-content">
           <section className="payments">
-            {/* <h4 className="main-app__subtitle">June 2019</h4> */}
             <div className="row">
-              <Payments.CardLists payments={payments} />
-              {/* <Payments.Card color="blue" />
-              <Payments.Card color="red" />
-              <Payments.Card color="green" />
-              <Payments.Card color="black" />
-              <Payments.Card color="yellow" /> */}
+              <LoadingScreen loading={loading} text="Loading Payments History">
+                <Payments.CardLists payments={payments} />
+              </LoadingScreen>
             </div>
           </section>
         </section>
@@ -71,39 +69,44 @@ Payments.CardLists.propTypes = {
 
 Payments.Card = ({ color, payment }) => (
   <div className="col-sm-4">
-    <div className={`card card-custom card-tiles card-${color} card__no-hover`}>
-      <div className="card-body">
-        <h4 className="subtitle--2 white mb-0">
-          {payment.currency} {moneyFormat(payment.amount / 100)}
-        </h4>
-        <div className="small--1 text-gray">
-          Paid on {getShortDate(payment.paid_at)}
-        </div>
-      </div>
-      <div className="spacer--tiles--3" />
-      <div className="card-footer">
-        <div className="row">
-          <div className="col-8">
-            <h5 className="subtitle--3 mt-2 mb-0 gray">
-              {payment.authorization.bank}
-            </h5>
-            <div className="small--3 text-gray">
-              {payment.authorization.card_type}
-            </div>
-          </div>
-          <div className="col-4">
-            <div className="text-muted text-right h1">
-              <span className="icon icon-credit-card"></span>
-            </div>
+    <Link to={`/user/payments/view?reference=${payment.reference}`}>
+      <div
+        className={`card card-custom card-tiles card-${color} card__no-hover`}
+      >
+        <div className="card-body">
+          <h4 className="subtitle--2 white mb-0">
+            {payment.currency} {moneyFormat(payment.amount / 100)}
+          </h4>
+          <div className="small--1 text-gray">
+            Paid on {getShortDate(payment.paid_at)}
           </div>
         </div>
+        <div className="spacer--tiles--3" />
+        <div className="card-footer">
+          <div className="row">
+            <div className="col-8">
+              <h5 className="subtitle--3 mt-2 mb-0 gray">
+                {payment.authorization.bank}
+              </h5>
+              <div className="small--3 text-gray">
+                {payment.authorization.card_type}
+              </div>
+            </div>
+            <div className="col-4">
+              <div className="text-muted text-right h1">
+                <span className="icon icon-credit-card"></span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </Link>
   </div>
 );
 
 Payments.Card.propTypes = {
-  color: PropTypes.string.isRequired
+  color: PropTypes.string.isRequired,
+  payment: PropTypes.object.isRequired
 };
 
 export default Payments;

@@ -463,7 +463,14 @@ a:hover {
 }
 
 .loading-screen {
-  margin-top: 10rem;
+  margin-top: 3rem;
+
+  .loading-text {
+    margin-top: 2rem;
+    font-size: 1.2rem;
+    font-weight: normal;
+    color: rgba($white, 0.5);
+  }
 }
 
 .duv-live-invoice {
@@ -513,11 +520,11 @@ a:hover {
 @keyframes bounce {
   0% {
     transform: scale(0.5);
-    opacity: 0.2;
+    opacity: 0.3;
   }
   100% {
     transform: scale(0.8);
-    opacity: 0.5;
+    opacity: 0.6;
   }
 }
 .animated-logo {
