@@ -1,3 +1,4 @@
+import React from 'react';
 import { ENTERTAINER_TYPE } from './constants';
 import Humanize from 'humanize-plus';
 
@@ -123,3 +124,4 @@ export const countOccurences = arr => {
 };
 
 export const getPercentage = value => parseFloat(value) / 100;
+export const getNairaSymbol = () => <>&#8358;</>;

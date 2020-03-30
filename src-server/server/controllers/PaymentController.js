@@ -4,14 +4,13 @@ import { validString } from '../utils';
 
 const PaymentController = {
   initializeTransaction(req, res) {
-    const { amount } = req.body;
+    const { amount, applicationId } = req.body;
     const { email } = req.user;
 
-    const error = {
-      ...validString(amount)
-    };
-    if (Object.keys(error).length > 1) {
-      return res.status(400).json({ message: error.message.join('') });
+    if (!amount || !applicationId) {
+      return res
+        .status(400)
+        .json({ message: 'Application ID and Amount needed to process' });
     }
 
     axios
@@ -19,7 +18,17 @@ const PaymentController = {
         `${process.env.PAYSTACK_TRANSACT_INIT}`,
         {
           amount: amount * 100,
-          email
+          callback_url: `http://localhost:3000/user/payments/view`,
+          email,
+          metadata: {
+            custom_fields: [
+              {
+                display_name: 'Application ID',
+                variable_name: 'Application ID',
+                value: applicationId
+              }
+            ]
+          }
         },
         {
           headers: {
@@ -29,9 +38,11 @@ const PaymentController = {
         }
       )
       .then(function(response) {
-        return res
-          .status(200)
-          .json({ message: 'success', payment: response.data.data });
+        return res.status(200).json({
+          message: 'success',
+          payment: response.data.data,
+          site: 'https://google.com'
+        });
       })
       .catch(function(error) {
         const status = error.status || 500;
@@ -150,6 +161,52 @@ const PaymentController = {
         return res
           .status(200)
           .json({ message: 'success', payments: response.data.data });
+      })
+      .catch(function(error) {
+        const status = error.status || 500;
+        const errorMessage = error.message || error;
+        return res.status(status).json({ message: errorMessage });
+      });
+  },
+
+  getAllUserPayments(req, res) {
+    const { email } = req.user;
+    axios
+      .get(`${process.env.PAYSTACK_CUSTOMER_ALL}`, {
+        headers: {
+          authorization: `Bearer ${process.env.PAYSTACK_TEST_SECRET}`,
+          'content-type': 'application/json'
+        }
+      })
+      .then(function(response) {
+        const customer = response.data.data.filter(
+          customer => customer.email === email
+        );
+        if (customer.length === 0) {
+          return res.status(404).json({ message: 'User does not exist' });
+        }
+
+        const id = customer[0].id;
+        axios
+          .get(
+            `${process.env.PAYSTACK_TRANSACT_ALL}?status=success&&customer=${id}`,
+            {
+              headers: {
+                authorization: `Bearer ${process.env.PAYSTACK_TEST_SECRET}`,
+                'content-type': 'application/json'
+              }
+            }
+          )
+          .then(function(response) {
+            return res
+              .status(200)
+              .json({ message: 'success', payments: response.data.data });
+          })
+          .catch(function(error) {
+            const status = error.status || 500;
+            const errorMessage = error.message || error;
+            return res.status(status).json({ message: errorMessage });
+          });
       })
       .catch(function(error) {
         const status = error.status || 500;

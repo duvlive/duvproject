@@ -170,6 +170,15 @@ router.get(
 );
 router.get('/api/v1/events/:id', EventController.getOneEvent);
 
+// one event for entertainer
+router.get(
+  '/api/v1/entertainer/events/:id',
+  Authentication.verifyToken,
+  Authentication.isActiveUser,
+  Authentication.validateEntertainer,
+  EventController.getOneEntertainerEvent
+);
+
 // gallery routes
 router.get('/api/v1/gallery/:userId', GalleryController.getEntertainerGallery);
 router.post(
@@ -282,6 +291,14 @@ router.post(
   ApplicationController.approveAuctionsApplication
 );
 
+router.get(
+  '/api/v1/applications/:id',
+  Authentication.verifyToken,
+  Authentication.isActiveUser,
+  Authentication.validateEntertainer,
+  ApplicationController.getOneApplication
+);
+
 // Badge routes
 router
   .route('/api/v1/badge')
@@ -330,6 +347,13 @@ router
   .route('/api/v1/currentCustomer')
   .all(Authentication.verifyToken, Authentication.validateUser)
   .get(PaymentController.getPaystackCustomer);
+
+router.get(
+  '/api/v1/user/payments',
+  Authentication.verifyToken,
+  Authentication.validateUser,
+  PaymentController.getAllUserPayments
+);
 
 // Public APIS
 router
