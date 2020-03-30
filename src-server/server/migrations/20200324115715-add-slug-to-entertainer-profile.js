@@ -12,7 +12,6 @@ module.exports = {
         { transaction }
       );
 
-      console.log('I am here');
       await transaction.commit();
     } catch (err) {
       console.log(err);
