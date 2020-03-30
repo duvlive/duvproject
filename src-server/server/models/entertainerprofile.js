@@ -65,6 +65,10 @@ module.exports = function(sequelize, DataTypes) {
       availableFor: {
         type: DataTypes.TEXT,
         allowNull: true
+      },
+      slug: {
+        type: DataTypes.TEXT,
+        allowNull: true
       }
     },
     {
