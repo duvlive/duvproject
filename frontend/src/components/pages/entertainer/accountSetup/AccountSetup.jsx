@@ -229,7 +229,9 @@ export default AccountSetup;
 // 8. Recommend a friend, api, facebook, twitter and linkedin
 // 12. Add a get started button that will create entertainer profile for user
 // e. User application for search and recommendation must be approved in 24 hours
-
 // f. Create a proper search page for user
 // g. create a proper recommendation page for user
-// h. think about payment integration
+// update lastViewed when notification page is view
+// add notification to approval (admin approval, profile approval, new review)
+// Add filter to auctions (Pendng Approved, Closed)
+// Add sample entertainer to DB
