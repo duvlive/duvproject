@@ -29,6 +29,13 @@ const paymentRoutes = router => {
     .route('/api/v1/currentCustomer')
     .all(Authentication.verifyToken, Authentication.validateUser)
     .get(PaymentController.getPaystackCustomer);
+
+  router.get(
+    '/api/v1/user/payments',
+    Authentication.verifyToken,
+    Authentication.validateUser,
+    PaymentController.getAllUserPayments
+  );
 };
 
 export default paymentRoutes;

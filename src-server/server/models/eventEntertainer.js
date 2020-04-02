@@ -58,7 +58,7 @@ module.exports = function(sequelize, DataTypes) {
         type: DataTypes.STRING,
         allowNull: true,
         defaultValue: 'Auction',
-        validate: { isIn: [['Search', 'Auction', 'Recommendation', null]] }
+        validate: { isIn: [['Search', 'Auction', 'Recommendation', null]] } // null to be used for freestyle
       },
       hiredDate: {
         type: DataTypes.DATE,

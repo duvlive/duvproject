@@ -1,20 +1,51 @@
 import React from 'react';
+import { Formik, Form } from 'formik';
+import Input from 'components/forms/Input';
+import axios from 'axios';
+import Button from 'components/forms/Button';
+import AlertMessage from 'components/common/utils/AlertMessage';
+import { feedback } from 'components/forms/form-helper';
 
 const SearchEntertainerFields = () => {
+  const [message, setMessage] = React.useState(null);
   return (
-    <div className="card card-custom card-black card-form col-sm-12 p-3">
-      <div className="input-group mb-3">
-        <input
-          aria-describedby="basic-addon3"
-          className="form-control col-sm-6"
-          id="basic-url"
-          placeholder="Entertainers Name or Stage Name"
-          type="text"
-        />
-        <div className="input-group-append">
-          <button className="btn btn-primary">Search</button>
-        </div>
-      </div>
+    <div className="card card-custom card-black card-form col-sm-3">
+      <Formik
+        initialValues={{
+          email: '',
+          password: ''
+        }}
+        onSubmit={(values, actions) => {
+          // post to api
+          axios
+            .post('/api/v1/users/login', values)
+            .then(function(response) {
+              const { status, data } = response;
+              if (status === 200) {
+              }
+            })
+            .catch(function(error) {
+              setMessage({
+                message: error.response.data.message
+              });
+            });
+          actions.setSubmitting(false);
+        }}
+        render={({ isSubmitting, handleSubmit }) => (
+          <Form>
+            <AlertMessage {...message} />
+            <Input
+              label="Stage Name"
+              name="stage_name"
+              placeholder="Stage Name"
+              showFeedback={feedback.NONE}
+            />
+            <Button loading={isSubmitting} onClick={handleSubmit}>
+              Search
+            </Button>
+          </Form>
+        )}
+      />
     </div>
   );
 };
