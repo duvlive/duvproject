@@ -43,3 +43,48 @@
   height: auto;
   padding: 0.75rem 0.5rem 0.5rem;
 }
+
+.accordion--inner {
+  border-radius: 0.25rem;
+  transition: all 0.25s;
+  position: relative;
+}
+
+.accordion__container {
+  background-color: rgba(65, 74, 76, 0.3) !important;
+  margin-bottom: 3px;
+  border-radius: 2px;
+
+  .accordion__collapse {
+    max-height: 0;
+    opacity: 0;
+    transition: all 0.3s ease;
+    overflow: hidden;
+
+    &.show {
+      opacity: 1;
+      max-height: 40rem;
+    }
+  }
+
+  .accordion__title {
+    font-size: 1rem;
+    font-weight: normal;
+    padding: 0.75rem;
+    color: #585963 !important;
+    margin-bottom: 0;
+    position: relative;
+    cursor: pointer;
+
+    .accordion__icon {
+      font-size: 1rem;
+      display: block;
+      float: right;
+    }
+  }
+
+  .accordion__content {
+    padding: 0.5rem 1rem;
+    border-top: 1px solid gray;
+  }
+}
