@@ -144,6 +144,27 @@ const EntertainerProfileController = {
       });
   },
 
+  searchForEntertainer(req, res) {
+    const { entertainerType, searchTerm } = req.params;
+    EntertainerProfile.findOne({
+      where: { entertainerType, searchTerm },
+      include: entertainerProfileAssociatedModels
+    })
+      .then(entertainer => {
+        return res.status(200).json({
+          message: 'Entertainer detail',
+          entertainer: EntertainerProfileController.transformEntertainer(
+            entertainer
+          )
+        });
+      })
+      .catch(error => {
+        const status = error.status || 500;
+        const errorMessage = error.message || error;
+        return res.status(status).json({ message: errorMessage });
+      });
+  },
+
   getTotalEntertainers(req, res) {
     EntertainerProfile.findAll()
       .then(entertainers => {
