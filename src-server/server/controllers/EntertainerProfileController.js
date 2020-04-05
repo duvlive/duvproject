@@ -1,19 +1,20 @@
+import Sequelize, { Op } from 'sequelize';
 import { updateUser } from '../utils';
-import { User, EntertainerProfile } from '../models';
+import { User, EntertainerProfile, Gallery, Video } from '../models';
 import { USER_TYPES } from '../constant';
 
 export const userAssociatedModels = [
   {
     model: EntertainerProfile,
-    as: 'profile'
-  }
+    as: 'profile',
+  },
 ];
 
 export const entertainerProfileAssociatedModels = [
   {
     model: User,
-    as: 'personalDetails'
-  }
+    as: 'personalDetails',
+  },
 ];
 
 const EntertainerProfileController = {
@@ -37,7 +38,7 @@ const EntertainerProfileController = {
       willingToTravel,
       eventType,
       entertainerType,
-      youTubeChannel
+      youTubeChannel,
     } = req.body;
     const entertainerProfileData = {
       about,
@@ -54,17 +55,17 @@ const EntertainerProfileController = {
       youTubeChannel,
       slug: stageName
         ? `${stageName}-${req.user.dataValues.id}`
-        : `${req.user.dataValues.id}`
+        : `${req.user.dataValues.id}`,
     };
 
     updateUser(req.user, entertainerProfileData, 'Profile')
-      .then(entertainerProfile => {
+      .then((entertainerProfile) => {
         return res.status(200).json({
           message: 'User profile update is succesful',
-          entertainerProfile
+          entertainerProfile,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         return res.status(error.status || 400).json({ message: error.message });
       });
   },
@@ -78,28 +79,26 @@ const EntertainerProfileController = {
       profileImg: entertainer.profileImageURL,
       stageName: entertainer.profile.stageName,
       entertainerType: entertainer.profile.entertainerType,
-      slug: entertainer.profile.slug
+      slug: entertainer.profile.slug,
     };
 
     return { ...transformEntertainer, ...updatedValues };
   },
 
   getEntertainers(req, res) {
-    console.log('I got here hahaha yyy');
     User.findAll({
       where: { type: USER_TYPES.ENTERTAINER },
-      include: userAssociatedModels
+      include: userAssociatedModels,
     })
-      .then(entertainers => {
+      .then((entertainers) => {
         return res.status(200).json({
           message: 'Entertainers List',
-          entertainers: entertainers.map(entertainer =>
+          entertainers: entertainers.map((entertainer) =>
             EntertainerProfileController.transformEntertainers(entertainer)
-          )
+          ),
         });
       })
-      .catch(error => {
-        console.log(error);
+      .catch((error) => {
         const status = error.status || 500;
         const errorMessage = error.message || error;
         return res.status(status).json({ message: errorMessage });
@@ -116,7 +115,7 @@ const EntertainerProfileController = {
       profileImg: entertainer.personalDetails.profileImageURL,
       stageName: entertainer.stageName,
       entertainerType: entertainer.entertainerType,
-      slug: entertainer.slug
+      slug: entertainer.slug,
     };
 
     return { ...transformEntertainer, ...updatedValues };
@@ -124,20 +123,57 @@ const EntertainerProfileController = {
 
   getEntertainerBySlug(req, res) {
     const { slug } = req.params;
-    EntertainerProfile.findOne({
-      where: { slug },
-      include: entertainerProfileAssociatedModels
+    User.findOne({
+      attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+      include: [
+        {
+          model: EntertainerProfile,
+          as: 'profile',
+          where: { slug },
+        },
+        {
+          model: Gallery,
+          as: 'galleries',
+          attributes: ['id', 'imageURL', 'imageID', 'approved'],
+          required: false,
+        },
+        {
+          model: Video,
+          as: 'videos',
+          attributes: ['id', 'title', 'youtubeID', 'approved'],
+          required: false,
+        },
+      ],
     })
-      .then(entertainer => {
-        return res.status(200).json({
-          message: 'Entertainer detail',
-          entertainer: EntertainerProfileController.transformEntertainer(
-            entertainer
-          )
+      .then((entertainer) => {
+        User.findAll({
+          order: [Sequelize.fn('RANDOM')],
+          limit: 3,
+          include: [
+            {
+              where: {
+                [Op.and]: [
+                  { entertainerType: entertainer.profile.entertainerType },
+                  {
+                    slug: { [Op.ne]: slug },
+                  },
+                ],
+              },
+              model: EntertainerProfile,
+              as: 'profile',
+            },
+          ],
+        }).then((otherEntertainers) => {
+          return res.status(200).json({
+            message: 'Entertainer detail',
+            entertainer,
+            otherEntertainers: otherEntertainers.map((entertainer) =>
+              EntertainerProfileController.transformEntertainers(entertainer)
+            ),
+          });
         });
       })
-      .catch(error => {
-        console.log(error);
+      .catch((error) => {
         const status = error.status || 500;
         const errorMessage = error.message || error;
         return res.status(status).json({ message: errorMessage });
@@ -148,17 +184,17 @@ const EntertainerProfileController = {
     const { entertainerType, searchTerm } = req.params;
     EntertainerProfile.findOne({
       where: { entertainerType, searchTerm },
-      include: entertainerProfileAssociatedModels
+      include: entertainerProfileAssociatedModels,
     })
-      .then(entertainer => {
+      .then((entertainer) => {
         return res.status(200).json({
           message: 'Entertainer detail',
           entertainer: EntertainerProfileController.transformEntertainer(
             entertainer
-          )
+          ),
         });
       })
-      .catch(error => {
+      .catch((error) => {
         const status = error.status || 500;
         const errorMessage = error.message || error;
         return res.status(status).json({ message: errorMessage });
@@ -167,7 +203,7 @@ const EntertainerProfileController = {
 
   getTotalEntertainers(req, res) {
     EntertainerProfile.findAll()
-      .then(entertainers => {
+      .then((entertainers) => {
         return res.status(200).json({
           message: 'Total Entertainers',
           entertainers: entertainers.reduce(
@@ -184,16 +220,16 @@ const EntertainerProfileController = {
               return acc;
             },
             { mc: 0, dj: 0, liveband: 0 }
-          )
+          ),
         });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
         const status = error.status || 500;
         const errorMessage = error.message || error;
         return res.status(status).json({ message: errorMessage });
       });
-  }
+  },
 };
 
 export default EntertainerProfileController;

@@ -77,7 +77,7 @@ module.exports = new Factory()
     const entertainerType = ENTERTAINER_TYPE[id % 3];
     const typeInFull = TYPE_IN_FULL[id % 3];
     const stageName = STAGE_NAME[id % 18];
-    return `${entertainerType} ${stageName} is a professional ${typeInFull}. ${lorem.generateParagraphs(5).replace(/\n/g, '<br />')}`;
+    return `${entertainerType} ${stageName} is a professional ${typeInFull}. ${lorem.generateParagraphs(1)}`;
   })
   .attrs({
     location: function () {

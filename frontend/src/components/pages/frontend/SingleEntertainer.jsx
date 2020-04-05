@@ -1,54 +1,83 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 import { Row, Col } from 'reactstrap';
 import FrontEndPage from 'components/common/layout/FrontEndPage';
 import Entertainers from 'components/common/entertainers/Entertainers';
-import entertainerLists from 'data/entertainers.js';
-import { getSlug, getRelatedEntertainers } from 'utils/helpers';
 import Stars from 'components/common/utils/Stars';
 import AwardCard from 'components/common/utils/AwardCard';
 import Image from 'components/common/utils/Image';
 import Video from 'components/pages/entertainer/Video';
-
-import DjCuppy1 from 'assets/img/gallery/DjCuppy1.jpg';
-import DjCuppy2 from 'assets/img/gallery/DjCuppy2.jpg';
-import DjCuppy3 from 'assets/img/gallery/DjCuppy3.jpg';
-import DjCuppy4 from 'assets/img/gallery/DjCuppy4.jpg';
-import DjCuppy5 from 'assets/img/gallery/DjCuppy5.jpg';
-import DjCuppy6 from 'assets/img/gallery/DjCuppy6.jpg';
 import DuvLiveModal from 'components/custom/Modal';
 import { getTokenFromStore } from 'utils/localStorage';
+import LoadingScreen from 'components/common/layout/LoadingScreen';
+import { commaNumber } from 'utils/helpers';
+import { getYear } from 'utils/date-helpers';
 
 const SingleEntertainer = ({ slug }) => {
-  const entertainer = getSlug(entertainerLists, slug);
-  const otherEntertainers = getRelatedEntertainers(
-    entertainerLists,
-    slug,
-    entertainer.type
-  );
+  const [entertainer, setEntertainer] = React.useState({
+    profile: { stageName: slug },
+  });
+  const [otherEntertainers, setOtherEntertainers] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+  React.useEffect(() => {
+    slug &&
+      axios.get(`/api/v1/entertainer/${slug}`).then(function (response) {
+        const { status, data } = response;
+        // handle success
+        if (status === 200) {
+          setEntertainer(data.entertainer);
+          setOtherEntertainers(data.otherEntertainers);
+          console.log('data.entertainer: ', data.entertainer);
+          setLoading(false);
+        }
+      });
+  }, [slug]);
+
   return (
-    <FrontEndPage subtitle="Hire Entertainers" title={entertainer.stageName}>
-      <EntertainerSection entertainer={entertainer} />
-      {getTokenFromStore() && (
-        <>
-          <EntertainerSectionInfo entertainer={entertainer} />
-          <UpcomingEvents />
-          <Awards />
-          <Gallery />
-          <Videos />
-        </>
+    <FrontEndPage
+      subtitle="Hire Entertainers"
+      title={entertainer.profile.stageName}
+    >
+      {loading ? (
+        <LoadingScreen loading={loading} text={`Loading ${slug} information`} />
+      ) : (
+        <LoadEntertainerInfo
+          entertainer={entertainer}
+          otherEntertainers={otherEntertainers}
+        />
       )}
-      <OtherEntertainersSection entertainers={otherEntertainers.slice(0, 3)} />
     </FrontEndPage>
   );
 };
 
 SingleEntertainer.propTypes = {
-  slug: PropTypes.string
+  slug: PropTypes.string,
 };
 
 SingleEntertainer.defaultProps = {
-  slug: null
+  slug: null,
+};
+
+const LoadEntertainerInfo = ({ entertainer, otherEntertainers }) => (
+  <>
+    <EntertainerSection entertainer={entertainer} />
+    {getTokenFromStore() && (
+      <>
+        <EntertainerSectionInfo entertainer={entertainer} />
+        {false && <UpcomingEvents />}
+        <Awards entertainer={entertainer.awards || []} />
+        <Gallery entertainer={entertainer.galleries} />
+        <Videos entertainer={entertainer.videos} />
+      </>
+    )}
+    <OtherEntertainersSection entertainers={otherEntertainers} />
+  </>
+);
+
+LoadEntertainerInfo.propTypes = {
+  entertainer: PropTypes.object.isRequired,
+  otherEntertainers: PropTypes.array.isRequired,
 };
 
 const EntertainerSection = ({ entertainer }) => (
@@ -59,25 +88,27 @@ const EntertainerSection = ({ entertainer }) => (
           <img
             alt={entertainer.stageName}
             className="img-fluid img-thumbnail img-entertainer"
-            src={entertainer.img.profile}
+            src={entertainer.profileImageURL}
           />
         </Col>
         <Col sm="9">
           <section className="entertainer__summary">
             <h2 className="entertainer__summary--title">
-              {entertainer.stageName}
+              {entertainer.profile.stageName}
             </h2>
-            <div className="text-danger">{entertainer.type}</div>
+            <div className="text-danger">
+              {entertainer.profile.entertainerType}
+            </div>
             <section className="entertainer__summary--content">
               <div className="row">
-                <div className="col-sm-9">{entertainer.summary}</div>
+                <div className="col-sm-9">{entertainer.profile.about}</div>
               </div>
             </section>
             <button
               className="btn btn-danger btn-transparent btn-lg"
               type="submit"
             >
-              Hire {entertainer.stageName}
+              Hire {entertainer.profile.stageName}
             </button>
           </section>
         </Col>
@@ -87,12 +118,12 @@ const EntertainerSection = ({ entertainer }) => (
 );
 
 EntertainerSection.propTypes = {
-  entertainer: PropTypes.object.isRequired
+  entertainer: PropTypes.object.isRequired,
 };
 
 const EntertainerSectionInfo = ({ entertainer }) => (
   <section
-    className={`entertainer-info ${entertainer.type.toLowerCase()} mt-5`}
+    className={`entertainer-info ${entertainer.profile.entertainerType.toLowerCase()} mt-5`}
   >
     <div className="container-fluid">
       <Row>
@@ -100,37 +131,39 @@ const EntertainerSectionInfo = ({ entertainer }) => (
           Information
         </h4>
         <Col sm="4">
-          <InfoList title="Stage Name">{entertainer.stageName}</InfoList>
-          <InfoList title="Speciality"> {entertainer.type} </InfoList>
+          <InfoList title="Stage Name">
+            {entertainer.profile.stageName}
+          </InfoList>
+          <InfoList title="Speciality">
+            {entertainer.profile.entertainerType}
+          </InfoList>
           <InfoList title="Years of Experience">
-            {entertainer.years_of_experience} years
+            {parseInt(getYear(Date.now()), 10) -
+              parseInt(entertainer.profile.yearStarted, 10)}{' '}
+            years
           </InfoList>
-          <InfoList title="Total Shows">
+          {/* <InfoList title="Total Shows">
             {entertainer.total_shows} Shows
-          </InfoList>
+          </InfoList> */}
         </Col>
         <Col sm="4">
-          <InfoList title="Member Since">{entertainer.registered}</InfoList>
-          <InfoList title="Location"> {entertainer.location}</InfoList>
-          <InfoList title="Average Charges">50,000 - 150,000</InfoList>
+          <InfoList title="Member Since">
+            {getYear(entertainer.profile.createdAt)}
+          </InfoList>
+          <InfoList title="Location"> {entertainer.profile.location}</InfoList>
+          <InfoList title="Average Charges">
+            {commaNumber(entertainer.profile.baseCharges)} -{' '}
+            {commaNumber(entertainer.profile.preferredCharges)}
+          </InfoList>
           <InfoList title="Willing to Travel for Shows">
-            {entertainer.willing_to_travel}
+            {entertainer.profile.willing_to_travel ? 'YES' : 'NO'}
           </InfoList>
         </Col>
         <Col sm="4">
-          <InfoStar
-            rating={entertainer.ratings.professionalism}
-            title="Professionalism"
-          />
-          <InfoStar
-            rating={entertainer.ratings.accomodating}
-            title="Accommodating"
-          />
-          <InfoStar
-            rating={entertainer.ratings.overall_talent}
-            title="Overall Talent"
-          />
-          <InfoStar rating={entertainer.ratings.recommend} title="Recommend" />
+          <InfoStar rating={4.5} title="Professionalism" />
+          <InfoStar rating={4.5} title="Accommodating" />
+          <InfoStar rating={4.5} title="Overall Talent" />
+          <InfoStar rating={4} title="Recommend" />
         </Col>
       </Row>
     </div>
@@ -138,7 +171,7 @@ const EntertainerSectionInfo = ({ entertainer }) => (
 );
 
 EntertainerSectionInfo.propTypes = {
-  entertainer: PropTypes.object.isRequired
+  entertainer: PropTypes.object.isRequired,
 };
 
 const UpcomingEvents = ({ events }) => {
@@ -188,7 +221,7 @@ const UpcomingEvent = ({ event }) => (
 );
 
 EntertainerSectionInfo.propTypes = {
-  entertainer: PropTypes.object.isRequired
+  entertainer: PropTypes.object.isRequired,
 };
 
 const InfoList = ({ title, children }) => (
@@ -199,11 +232,11 @@ const InfoList = ({ title, children }) => (
 );
 InfoList.propTypes = {
   children: PropTypes.any,
-  title: PropTypes.string.isRequired
+  title: PropTypes.string.isRequired,
 };
 
 InfoList.defaultProps = {
-  children: null
+  children: null,
 };
 
 const InfoStar = ({ title, rating }) => (
@@ -215,7 +248,7 @@ const InfoStar = ({ title, rating }) => (
 
 InfoStar.propTypes = {
   rating: PropTypes.number.isRequired,
-  title: PropTypes.string.isRequired
+  title: PropTypes.string.isRequired,
 };
 
 const Awards = ({ awards }) => {
@@ -226,7 +259,7 @@ const Awards = ({ awards }) => {
           <h4 className="text-uppercase col-12 font-weight-normal mb-3">
             Awards
           </h4>
-          <AwardCard
+          {/* <AwardCard
             color="yellow"
             date="Sun, April 17, 2019"
             title="Completed 20 Events"
@@ -240,7 +273,7 @@ const Awards = ({ awards }) => {
             color="red"
             date="Sun, April 17, 2019"
             title="Completed over 10 Events"
-          />
+          /> */}
           <AwardCard
             color="blue"
             date="Sun, April 17, 2019"
@@ -260,12 +293,7 @@ const Gallery = () => {
           <h4 className="text-uppercase col-12 font-weight-normal mb-3">
             Gallery
           </h4>
-          <GalleryImage name="gallery" src={DjCuppy1} />
-          <GalleryImage name="gallery" src={DjCuppy2} />
-          <GalleryImage name="gallery" src={DjCuppy3} />
-          <GalleryImage name="gallery" src={DjCuppy4} />
-          <GalleryImage name="gallery" src={DjCuppy5} />
-          <GalleryImage name="gallery" src={DjCuppy6} />
+          {/* <GalleryImage name="gallery" src={DjCuppy1} /> */}
         </div>
       </div>
     </section>
@@ -305,8 +333,8 @@ const Videos = () => {
           <h4 className="text-uppercase col-12 font-weight-normal mb-3">
             Videos
           </h4>
-          <YoutubeVideo title="Gelato" youtubeID="5ILiIQdUDV8" />
-          <YoutubeVideo title="gallery" youtubeID="O4yp_KbkVLE" />
+          {/* <YoutubeVideo title="Gelato" youtubeID="5ILiIQdUDV8" />
+          <YoutubeVideo title="gallery" youtubeID="O4yp_KbkVLE" /> */}
         </div>
       </div>
     </section>
@@ -330,7 +358,7 @@ const YoutubeVideo = ({ title, youtubeID }) => (
 
 YoutubeVideo.propTypes = {
   title: PropTypes.string.isRequired,
-  youtubeID: PropTypes.any.isRequired
+  youtubeID: PropTypes.any.isRequired,
 };
 
 const OtherEntertainersSection = ({ entertainers }) => (
@@ -340,14 +368,14 @@ const OtherEntertainersSection = ({ entertainers }) => (
         RELATED <span>ENTERTAINERS</span>
       </h2>
       <Row className="pt-5">
-        <Entertainers.List lists={entertainers} />
+        <Entertainers.List lists={entertainers || []} />
       </Row>
     </div>
   </section>
 );
 
 OtherEntertainersSection.propTypes = {
-  entertainers: PropTypes.array.isRequired
+  entertainers: PropTypes.array.isRequired,
 };
 
 export default SingleEntertainer;
