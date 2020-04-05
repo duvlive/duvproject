@@ -8,7 +8,7 @@ import {
   getShortDate,
   getTime,
   getTimeOfDay,
-  getNumberOfDaysToEvent
+  getNumberOfDaysToEvent,
 } from 'utils/date-helpers';
 import Image from 'components/common/utils/Image';
 import DuvLiveModal from 'components/custom/Modal';
@@ -21,30 +21,34 @@ import {
   eventIsVoid,
   eventHasExpired,
   defaultEvent,
-  defaultEventEntertainer
+  defaultEventEntertainer,
 } from 'utils/event-helpers';
 import AlertMessage from 'components/common/utils/AlertMessage';
+import LoadingScreen from 'components/common/layout/LoadingScreen';
 
 const ViewEvent = ({ id }) => {
   const [event, setEvent] = React.useState({});
+  const [loading, setLoading] = React.useState(true);
   React.useEffect(() => {
     id &&
       axios
         .get(`/api/v1/events/${id}`, {
           headers: {
-            'x-access-token': getTokenFromStore()
-          }
+            'x-access-token': getTokenFromStore(),
+          },
         })
-        .then(function(response) {
+        .then(function (response) {
           const { status, data } = response;
           // handle success
           if (status === 200) {
             setEvent(data.event);
+            setLoading(false);
           }
         })
-        .catch(function(error) {
+        .catch(function (error) {
           // console.log(error.response.data.message);
           // TODO: navigate to all events
+          setLoading(false);
         });
   }, [id]);
 
@@ -70,7 +74,7 @@ const ViewEvent = ({ id }) => {
           </section>
 
           <Match path={`/user/events/view/${id}/success`}>
-            {props =>
+            {(props) =>
               // eslint-disable-next-line react/prop-types
               props.match && (
                 <div className="mt-3 mb-4">
@@ -83,41 +87,50 @@ const ViewEvent = ({ id }) => {
             }
           </Match>
 
-          {/* Event Details and Entertainers */}
-          <aside className="row">
-            <div className="col-md-8">
-              {eventHasExpired(event.eventDate) && (
-                <AlertMessage message="Event Date has passed" type="error" />
-              )}
-              {!eventHasExpired(event.eventDate) &&
-                eventIsVoid(event.eventDate) && (
-                  <AlertMessage
-                    message="Event can no longer be edited."
-                    type="info"
-                  />
-                )}
+          {loading ? (
+            <LoadingScreen loading={loading} text="Loading Event Details" />
+          ) : (
+            <>
+              {/* Event Details and Entertainers */}
+              <aside className="row">
+                <div className="col-md-8">
+                  {eventHasExpired(event.eventDate) && (
+                    <AlertMessage
+                      message="Event Date has passed"
+                      type="error"
+                    />
+                  )}
+                  {!eventHasExpired(event.eventDate) &&
+                    eventIsVoid(event.eventDate) && (
+                      <AlertMessage
+                        message="Event can no longer be edited."
+                        type="info"
+                      />
+                    )}
 
-              <ViewEvent.EntertainersTable
-                eventEntertainers={event.entertainers || []}
-              />
-              {userCanAddEntertainer() && (
-                <Link
-                  className="btn btn-danger btn-transparent"
-                  to={`/user/events/${id}/add-entertainer/Auction`}
-                >
-                  Add Entertainer
-                </Link>
-              )}
-            </div>
-            <div className="col-md-4">
-              <ViewEvent.EventDetailsCard event={event} />
-              {!eventHasExpired(event.eventDate) && (
-                <div className="text-right cancel-event__text mt-3 mb-5">
-                  <i className="icon icon-cancel"></i> Cancel Event
+                  <ViewEvent.EntertainersTable
+                    eventEntertainers={event.entertainers || []}
+                  />
+                  {userCanAddEntertainer() && (
+                    <Link
+                      className="btn btn-danger btn-transparent"
+                      to={`/user/events/${id}/add-entertainer/Auction`}
+                    >
+                      Add Entertainer
+                    </Link>
+                  )}
                 </div>
-              )}
-            </div>
-          </aside>
+                <div className="col-md-4">
+                  <ViewEvent.EventDetailsCard event={event} />
+                  {!eventHasExpired(event.eventDate) && (
+                    <div className="text-right cancel-event__text mt-3 mb-5">
+                      <i className="icon icon-cancel"></i> Cancel Event
+                    </div>
+                  )}
+                </div>
+              </aside>
+            </>
+          )}
         </section>
       </div>
     </BackEndPage>
@@ -125,11 +138,11 @@ const ViewEvent = ({ id }) => {
 };
 
 ViewEvent.propTypes = {
-  id: PropTypes.string
+  id: PropTypes.string,
 };
 
 ViewEvent.defaultProps = {
-  id: null
+  id: null,
 };
 
 ViewEvent.EventTitle = ({ event }) => {
@@ -149,12 +162,12 @@ ViewEvent.EventTitle = ({ event }) => {
 ViewEvent.EventTitle.propTypes = {
   event: PropTypes.shape({
     eventDate: PropTypes.string,
-    eventType: PropTypes.string
-  })
+    eventType: PropTypes.string,
+  }),
 };
 
 ViewEvent.EventTitle.propTypes = {
-  event: {}
+  event: {},
 };
 
 ViewEvent.EventDetailsCard = ({ event, showAddress, transparent }) => {
@@ -237,22 +250,22 @@ ViewEvent.EventDetailsCard.propTypes = {
     streetLine2: PropTypes.string,
     lga: PropTypes.string,
     landmark: PropTypes.string,
-    location: PropTypes.string
+    location: PropTypes.string,
   }),
   showAddress: PropTypes.bool,
-  transparent: PropTypes.bool
+  transparent: PropTypes.bool,
 };
 
 ViewEvent.EventDetailsCard.defaultProps = {
   event: {},
   showAddress: true,
-  transparent: false
+  transparent: false,
 };
 
 ViewEvent.EventEntertainerDetailsCard = ({ eventEntertainer }) => {
   const sanitizedEntertainer = {
     ...defaultEventEntertainer,
-    ...eventEntertainer
+    ...eventEntertainer,
   };
   const isAuction = sanitizedEntertainer.hireType === 'Auction';
 
@@ -340,15 +353,15 @@ ViewEvent.EventEntertainerDetailsCard = ({ eventEntertainer }) => {
 };
 
 ViewEvent.EventEntertainerDetailsCard.propTypes = {
-  eventEntertainer: PropTypes.object.isRequired
+  eventEntertainer: PropTypes.object.isRequired,
 };
 
 ViewEvent.EntertainersTable = ({ eventEntertainers }) => {
   const hiredEntertainers = eventEntertainers.filter(
-    eventEntertainer => !!eventEntertainer.entertainer
+    (eventEntertainer) => !!eventEntertainer.entertainer
   );
   const pendingEntertainers = eventEntertainers.filter(
-    eventEntertainer => !eventEntertainer.entertainer
+    (eventEntertainer) => !eventEntertainer.entertainer
   );
 
   return eventEntertainers.length > 0 ? (
@@ -411,7 +424,7 @@ ViewEvent.EntertainersTable = ({ eventEntertainers }) => {
 };
 
 ViewEvent.EntertainersTable.propTypes = {
-  eventEntertainers: PropTypes.array.isRequired
+  eventEntertainers: PropTypes.array.isRequired,
 };
 
 ViewEvent.HireEntertainersRow = ({ entertainer }) => {
@@ -456,10 +469,10 @@ ViewEvent.HireEntertainersRow = ({ entertainer }) => {
   );
 };
 ViewEvent.HireEntertainersRow.propTypes = {
-  entertainer: PropTypes.object
+  entertainer: PropTypes.object,
 };
 ViewEvent.HireEntertainersRow.defaultProps = {
-  entertainer: {}
+  entertainer: {},
 };
 
 ViewEvent.PendingEntertainersRow = ({ eventEntertainer }) => {
@@ -488,18 +501,22 @@ ViewEvent.PendingEntertainersRow = ({ eventEntertainer }) => {
         </span>
       </td>
       <td className="align-middle text-right td-btn">
-        <button className="btn btn-info btn-sm btn-transparent">
+        {/* TODO Add for other types e.g search and recommendation  */}
+        <Link
+          className="btn btn-info btn-sm btn-transparent"
+          to={`/user/auction/bids/${eventEntertainer.id}`}
+        >
           View Details
-        </button>
+        </Link>
       </td>
     </tr>
   );
 };
 ViewEvent.PendingEntertainersRow.propTypes = {
-  eventEntertainer: PropTypes.object
+  eventEntertainer: PropTypes.object,
 };
 ViewEvent.PendingEntertainersRow.defaultProps = {
-  eventEntertainer: {}
+  eventEntertainer: {},
 };
 
 export default ViewEvent;

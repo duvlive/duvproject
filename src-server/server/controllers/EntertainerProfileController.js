@@ -1,7 +1,15 @@
 import Sequelize, { Op } from 'sequelize';
 import { updateUser } from '../utils';
-import { User, EntertainerProfile, Gallery, Video } from '../models';
+import {
+  User,
+  EntertainerProfile,
+  Gallery,
+  Video,
+  EventEntertainer,
+  Application,
+} from '../models';
 import { USER_TYPES } from '../constant';
+import { getAll } from '../utils/modelHelper';
 
 export const userAssociatedModels = [
   {
@@ -180,25 +188,129 @@ const EntertainerProfileController = {
       });
   },
 
-  searchForEntertainer(req, res) {
-    const { entertainerType, searchTerm } = req.params;
-    EntertainerProfile.findOne({
-      where: { entertainerType, searchTerm },
-      include: entertainerProfileAssociatedModels,
-    })
-      .then((entertainer) => {
-        return res.status(200).json({
-          message: 'Entertainer detail',
-          entertainer: EntertainerProfileController.transformEntertainer(
-            entertainer
-          ),
-        });
-      })
-      .catch((error) => {
-        const status = error.status || 500;
-        const errorMessage = error.message || error;
-        return res.status(status).json({ message: errorMessage });
+  async searchForEntertainer(req, res) {
+    const name = req.query.name;
+    if (name) {
+      if (name.length <= 2) {
+        return res
+          .status(412)
+          .send({ msg: 'Your search term must exceed 2 characters' });
+      }
+    }
+
+    // const userQuery = {
+    //   [Op.or]: [
+    //     { firstName: { [Op.iLike]: `%${name}%` } },
+    //     { lastName: { [Op.iLike]: `%${name}%` } },
+    //   ],
+    // };
+
+    const entertainerQuery = {
+      stageName: { [Op.iLike]: `%${name}%` },
+    };
+
+    const include = [
+      {
+        model: EntertainerProfile,
+        as: 'profile',
+        where: entertainerQuery,
+      },
+    ];
+
+    try {
+      const { result, pagination } = await getAll(User, {
+        // where: userQuery,
+        include,
+        limit: 6,
       });
+      const entertainers = result.reduce((acc, user) => {
+        const entertainer = {
+          profileImageURL: user.profileImageURL,
+          stageName: user.profile.stageName,
+          about: user.profile.about,
+          location: user.profile.location,
+          yearnStarted: user.profile.yearnStarted,
+          willingToTravel: user.profile.willingToTravel,
+          baseCharges: user.profile.baseCharges,
+          preferredCharges: user.profile.preferredCharges,
+          slug: user.profile.slug,
+          availableFor: user.profile.availableFor,
+        };
+        return [...acc, entertainer];
+      }, []);
+      return res.status(200).json({ entertainers, pagination });
+    } catch (error) {
+      const status = error.status || 500;
+      const errorMessage = error.message || error;
+      return res.status(status).json({ message: errorMessage });
+    }
+  },
+
+  /**
+   * search for entertainer from event
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  async searchForEntertainersFromEvents(req, res) {
+    const eventEntertainerId = req.params.eventEntertainerId;
+    try {
+      const eventEntertainer = await EventEntertainer.findOne({
+        where: { id: eventEntertainerId },
+      });
+      EventEntertainer.findAll({
+        where: {
+          userId: req.user.id,
+          entertainerType: eventEntertainer.entertainerType,
+        },
+        include: [
+          {
+            model: Application,
+            as: 'applications',
+            include: [
+              {
+                model: User,
+                as: 'user',
+                attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+                include: [
+                  {
+                    model: EntertainerProfile,
+                    as: 'profile',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      }).then((events) => {
+        if (!events || events.length === 0) {
+          return res
+            .status(404)
+            .json({ message: 'No previous entertainer found' });
+        }
+        const entertainers = events.reduce((acc, event) => {
+          const entertainer = event.applications.map(({ user }) => ({
+            profileImageURL: user.profileImageURL,
+            stageName: user.profile.stageName,
+            about: user.profile.about,
+            location: user.profile.location,
+            yearnStarted: user.profile.yearnStarted,
+            willingToTravel: user.profile.willingToTravel,
+            baseCharges: user.profile.baseCharges,
+            preferredCharges: user.profile.preferredCharges,
+            slug: user.profile.slug,
+            availableFor: user.profile.availableFor,
+          }));
+          return [...acc, ...entertainer];
+        }, []);
+        return res.status(200).json({ entertainers });
+      });
+    } catch (error) {
+      const status = error.status || 500;
+      const errorMessage = error.message || error;
+      return res.status(status).json({ message: errorMessage });
+    }
   },
 
   getTotalEntertainers(req, res) {

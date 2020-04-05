@@ -21,17 +21,17 @@ if (config.use_env_variable) {
 }
 
 fs.readdirSync(__dirname)
-  .filter(function(file) {
+  .filter(function (file) {
     return (
       file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js'
     );
   })
-  .forEach(function(file) {
+  .forEach(function (file) {
     const model = sequelize['import'](path.join(__dirname, file));
     db[model.name] = model;
   });
 
-Object.keys(db).forEach(function(modelName) {
+Object.keys(db).forEach(function (modelName) {
   if (db[modelName].associate) {
     db[modelName].associate(db);
   }
@@ -39,134 +39,134 @@ Object.keys(db).forEach(function(modelName) {
 
 db.User.hasOne(db.EntertainerProfile, {
   foreignKey: 'userId',
-  as: 'profile'
+  as: 'profile',
 });
 
 db.User.hasOne(db.BankDetail, {
   foreignKey: 'userId',
-  as: 'bankDetail'
+  as: 'bankDetail',
 });
 
 db.User.hasOne(db.Identification, {
   foreignKey: 'userId',
   as: 'identification',
-  targetKey: 'identification'
+  targetKey: 'identification',
 });
 
 db.User.hasOne(db.ApprovalComment, {
   foreignKey: 'userId',
   as: 'approvalComment',
-  targetKey: 'approvalComment'
+  targetKey: 'approvalComment',
 });
 
 db.Event.hasOne(db.Auction, {
   foreignKey: 'eventId',
   as: 'auction',
-  targetKey: 'auction'
+  targetKey: 'auction',
 });
 
 db.User.hasMany(db.User, {
   foreignKey: 'userId',
-  as: 'bandMembers'
+  as: 'bandMembers',
 });
 db.User.hasMany(db.Event, {
   foreignKey: 'userId',
-  as: 'events'
+  as: 'events',
 });
 db.User.hasMany(db.Contact, {
   foreignKey: 'userId',
   as: 'contacts',
-  targetKey: 'contacts'
+  targetKey: 'contacts',
 });
 db.User.hasMany(db.Gallery, {
   foreignKey: 'userId',
   as: 'galleries',
   onDelete: 'CASCADE',
-  hooks: true
+  hooks: true,
 });
 db.User.hasMany(db.Application, {
   foreignKey: 'userId',
   as: 'applications',
-  targetKey: 'applications'
+  targetKey: 'applications',
 });
 db.User.hasMany(db.Badge, {
   foreignKey: 'userId',
   as: 'badges',
-  targetKey: 'badges'
+  targetKey: 'badges',
 });
 db.User.hasMany(db.Video, {
   foreignKey: 'userId',
   as: 'videos',
   onDelete: 'CASCADE',
-  hooks: true
+  hooks: true,
 });
 db.User.hasMany(db.Notification, {
   foreignKey: 'userId',
   as: 'notifications',
   onDelete: 'CASCADE',
-  hooks: true
+  hooks: true,
 });
 
 db.Event.hasMany(db.EventEntertainer, {
   foreignKey: 'eventId',
   as: 'entertainers',
-  targetKey: 'entertainers'
+  targetKey: 'entertainers',
 });
 
 db.Event.hasMany(db.Application, {
   foreignKey: 'eventId',
   as: 'applications',
-  targetKey: 'applications'
+  targetKey: 'applications',
 });
 
 db.Application.belongsTo(db.User, {
   foreignKey: 'userId',
-  as: 'user'
+  as: 'user',
 });
 
 db.Application.belongsTo(db.Event, {
   foreignKey: 'eventId',
-  as: 'event'
+  as: 'event',
 });
 
 db.Application.belongsTo(db.EventEntertainer, {
   foreignKey: 'eventEntertainerId',
-  as: 'eventEntertainerInfo'
+  as: 'eventEntertainerInfo',
 });
 
 db.Application.belongsTo(db.Commission, {
   foreignKey: 'commissionId',
-  as: 'commission'
+  as: 'commission',
 });
 
 db.EventEntertainer.hasMany(db.Application, {
   foreignKey: 'eventEntertainerId',
-  as: 'applications'
+  as: 'applications',
 });
 
 db.Event.belongsTo(db.User, {
   foreignKey: 'userId',
-  as: 'owner'
+  as: 'owner',
 });
 
 db.EventEntertainer.belongsTo(db.EntertainerProfile, {
   foreignKey: 'hiredEntertainer',
-  as: 'entertainer'
+  as: 'entertainer',
 });
 
 db.EventEntertainer.belongsTo(db.User, {
   foreignKey: 'userId',
-  as: 'user'
+  as: 'user',
 });
 
 db.EventEntertainer.belongsTo(db.Event, {
   foreignKey: 'eventId',
-  as: 'event'
+  as: 'event',
 });
 
 db.EntertainerProfile.belongsTo(db.User, {
   foreignKey: 'userId',
-  as: 'personalDetails'
+  as: 'personalDetails',
 });
 
 db.sequelize = sequelize;

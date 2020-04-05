@@ -9,7 +9,7 @@ import {
   email,
   phoneNumber,
   positiveNumberValidation,
-  requiredDate
+  requiredDate,
 } from './schema-helpers';
 import { commaNumber } from 'utils/helpers';
 import { isAfter } from 'date-fns';
@@ -27,13 +27,13 @@ export const entertainerDetailsSchema = {
   preferredCharges: required('Preferred Charges'),
   yearStarted: required('Started Year'),
   willingToTravel: stringValidation('Willing to travel'),
-  availableFor: optionalValidation(autocompleteValidation('Available for'))
+  availableFor: optionalValidation(autocompleteValidation('Available for')),
 };
 
 export const bankDetailsSchema = {
   accountName: stringValidation('Account Name'),
   bankName: stringValidation('Bank Name'),
-  accountNumber: stringValidation('Account Number')
+  accountNumber: stringValidation('Account Number'),
 };
 
 export const addEntertainerSchema = {
@@ -54,21 +54,21 @@ export const addEntertainerSchema = {
     requiredDate('Auction End Date').test(
       'is-greater',
       'End Date should be greater than Start Date',
-      function(value) {
+      function (value) {
         const { auctionStartDate } = this.parent;
         return isAfter(value.date, auctionStartDate.date);
       }
     )
-  )
+  ),
 };
 
 export const videoSchema = {
   youtubeID: urlValidation('Youtube URL'),
-  title: stringValidation('Title')
+  title: stringValidation('Title'),
 };
 
 export const youtubeChannelSchema = {
-  youTubeChannel: urlValidation('Youtube Channel URL')
+  youTubeChannel: urlValidation('Youtube Channel URL'),
 };
 
 export const emergencyContactSchema = {
@@ -76,18 +76,17 @@ export const emergencyContactSchema = {
   lastName: stringValidation('Last Name'),
   phoneNumber,
   email,
-  relationship: stringValidation('Relationship')
+  relationship: stringValidation('Relationship'),
 };
 
 export const identificationSchema = {
   idType: required('ID Type'),
   idNumber: stringValidation('ID Number'),
   issueDate: required('Issue Date'),
-  expiryDate: required('Expiry Date')
+  expiryDate: required('Expiry Date'),
 };
 
 export const bidSchema = (minAuctionPrice = 0, maxAuctionPrice = 0) => {
-  console.log('maxAuctionPRice', commaNumber(maxAuctionPrice));
   return {
     askingPrice: positiveNumberValidation('Your Bid')
       .min(
@@ -97,6 +96,6 @@ export const bidSchema = (minAuctionPrice = 0, maxAuctionPrice = 0) => {
       .max(
         maxAuctionPrice,
         `Your bid must be less than ${commaNumber(maxAuctionPrice)}`
-      )
+      ),
   };
 };

@@ -140,6 +140,10 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
     hireType.toLowerCase() ===
     HIRE_ENTERTAINERS_TYPE.auction.title.toLowerCase();
 
+  const isSearch =
+    hireType.toLowerCase() ===
+    HIRE_ENTERTAINERS_TYPE.search.title.toLowerCase();
+
   if (isAuction) {
     initialValues = {
       ...initialValues,
@@ -177,8 +181,13 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
                 type: 'add-entertainer-to-event',
                 user: data,
               });
-              navigate(`/user/events/view/${id}`);
               actions.setSubmitting(false);
+              if (isAuction) {
+                navigate(`/user/events/view/${id}`);
+              }
+              if (isSearch) {
+                navigate(`/user/entertainer/search/${id}`);
+              }
             }
           })
           .catch(function (error) {

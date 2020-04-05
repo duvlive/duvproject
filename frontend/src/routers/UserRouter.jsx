@@ -8,7 +8,6 @@ import Notifications from 'components/pages/user/Notifications';
 import UserHelp from 'components/pages/user/Help';
 import Payments from 'components/pages/user/Payments';
 import ViewPayments from 'components/pages/user/ViewPayments';
-// import SelectEntertainer from 'components/pages/user/HireEntertainers';
 import SearchEntertainer from 'components/pages/user/SearchEntertainer';
 import RecommendedEntertainers from 'components/pages/user/RecommendedEntertainer';
 import NewEvent from 'components/pages/user/NewEvent';
@@ -18,7 +17,6 @@ import EditProfile from 'components/pages/user/EditProfile';
 import ChangePassword from 'components/pages/user/ChangePassword';
 import RegisterAsEntertainer from 'components/pages/user/RegisterAsEntertainer';
 import Approval from 'components/pages/user/Approval';
-// import AddEntertainerToEvent from 'components/pages/user/AddEntertainerToEvent';
 import AddEntertainerToEvent from 'components/pages/user/AddEntertainerToEvent';
 
 const UserRouter = () => (
@@ -31,8 +29,8 @@ const UserRouter = () => (
     <UserHelp path="/help" />
     <Payments path="/payments-history" />
     <ViewPayments path="/payments/view" />
-    <SearchEntertainer path="/entertainer/search/:event_id" />
-    <RecommendedEntertainers path="/entertainer/recommended/:event_id" />
+    <SearchEntertainer path="/entertainer/search/:eventEntertainerId" />
+    <RecommendedEntertainers path="/entertainer/recommended/:eventEntertainerId" />
     <NewEvent path="/events/new" />
     <NewEvent path="/hire-entertainer" />
     <AddEntertainerToEvent path="events/:id/add-entertainer" />

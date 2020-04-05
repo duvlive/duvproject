@@ -23,19 +23,17 @@ const EventEntertainerController = {
       eventId,
       id,
       auctionStartDate,
-      auctionEndDate
+      auctionEndDate,
     } = req.body;
 
     const error = {
       ...validString(entertainerType),
       ...validString(placeOfEvent),
-      ...validString(genre),
       ...validString(language),
       ...validString(expectedAudienceSize),
-      ...validString(ageGroup),
       ...validString(lowestBudget),
       ...validString(highestBudget),
-      ...validString(specialRequest)
+      ...validString(specialRequest),
     };
     if (Object.keys(error).length > 1) {
       return res.status(400).json({ message: error.message.join('') });
@@ -54,24 +52,24 @@ const EventEntertainerController = {
         eventId,
         auctionStartDate,
         auctionEndDate,
-        userId: req.user.id
+        userId: req.user.id,
       })
         .then(() => {
           return req.user.getEvents({
             where: { id: eventId },
             include: {
               model: EventEntertainer,
-              as: 'entertainers'
-            }
+              as: 'entertainers',
+            },
           });
         })
-        .then(event => {
+        .then((event) => {
           return res.status(200).json({
             message: 'Event Entertainer created successfully',
-            event: event[0]
+            event: event[0],
           });
         })
-        .catch(error => {
+        .catch((error) => {
           const status = error.status || 500;
           const errorMessage =
             (error.parent && error.parent.detail) || error.message || error;
@@ -84,10 +82,10 @@ const EventEntertainerController = {
         include: {
           model: EventEntertainer,
           as: 'entertainers',
-          where: { id }
-        }
+          where: { id },
+        },
       })
-      .then(event => {
+      .then((event) => {
         if (event && event.length > 0) {
           return event[0].entertainers[0].update({
             entertainerType,
@@ -98,18 +96,18 @@ const EventEntertainerController = {
             ageGroup,
             lowestBudget,
             highestBudget,
-            specialRequest
+            specialRequest,
           });
         }
         throw `No Event with id ${id}`;
       })
-      .then(event => {
+      .then((event) => {
         return res.status(200).json({
           message: 'Event Entertainer updated successfully',
-          event
+          event,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         const status = error.status || 500;
         const errorMessage = error.message || error;
         return res.status(status).json({ message: errorMessage });
@@ -128,10 +126,10 @@ const EventEntertainerController = {
       .getEvents({
         include: {
           model: EventEntertainer,
-          as: 'entertainers'
-        }
+          as: 'entertainers',
+        },
       })
-      .then(events => {
+      .then((events) => {
         if (!events || events.length === 0) {
           return res
             .status(404)
@@ -165,13 +163,13 @@ const EventEntertainerController = {
             {
               model: User,
               as: 'owner',
-              attributes: ['id', 'firstName', 'lastName', 'profileImageURL']
-            }
-          ]
-        }
-      ]
+              attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+            },
+          ],
+        },
+      ],
     })
-      .then(eventEntertainerInfo => {
+      .then((eventEntertainerInfo) => {
         if (!eventEntertainerInfo) {
           return res
             .status(404)
@@ -180,10 +178,10 @@ const EventEntertainerController = {
 
         return res.json({ eventEntertainerInfo });
       })
-      .catch(error => {
+      .catch((error) => {
         return res.status(500).json({ message: error.message });
       });
-  }
+  },
 };
 
 export default EventEntertainerController;
