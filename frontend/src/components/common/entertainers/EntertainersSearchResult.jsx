@@ -8,7 +8,7 @@ import { twoDigitNumber, commaNumber } from 'utils/helpers';
 import { Link } from '@reach/router';
 
 const EntertainersSearchResult = ({ entertainers, isSearchForm }) => (
-  <section className="entertainerssearchresult col-md-9">
+  <section className="entertainerssearchresult">
     <div className="pl-3">
       <h4 className="main-app__subtitle">
         {entertainers.length}{' '}

@@ -17,7 +17,7 @@ export const stringValidation = (label, length = 2) =>
     .string()
     .trim()
     .label(label)
-    .min(length + 1, `${label} should be more than ${length} characters`)
+    .min(length, `${label} should be more than ${length - 1} characters`)
     .required(`${label} is required`);
 
 export const email = yup

@@ -38,6 +38,7 @@ export const bankDetailsSchema = {
 
 export const addEntertainerSchema = {
   entertainerType: stringValidation('Entertainer Type'),
+  stageName: stringValidation('Stage Name'),
   genre: multiSelectValidation('Genre'),
   language: multiSelectValidation('Language'),
   expectedAudienceSize: stringValidation('Audience Size'),
@@ -45,7 +46,7 @@ export const addEntertainerSchema = {
   lowestBudget: positiveNumberValidation('Base Budget', 'budget'),
   highestBudget: positiveNumberValidation('Highest Budget', 'budget').moreThan(
     yup.ref('lowestBudget'),
-    'Highest Budget should be greater or equal to Base Budget'
+    'Highest Budget should be greater than the Base Budget'
   ),
   placeOfEvent: stringValidation('Place of Event'),
   specialRequest: optionalValidation(stringValidation('Special Request', 20)),

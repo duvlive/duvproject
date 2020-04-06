@@ -6,7 +6,7 @@ import FilterEntertainerFields from 'components/common/entertainers/FilterEntert
 import EntertainersSearchResult from 'components/common/entertainers/EntertainersSearchResult';
 import { Row } from 'reactstrap';
 
-const SearchEntertainer = ({ eventType }) => {
+const SearchEntertainer = ({ eventEntertainerId }) => {
   return (
     <BackEndPage title="Recommend Entertainer">
       <div className="main-app">
@@ -15,7 +15,7 @@ const SearchEntertainer = ({ eventType }) => {
         <section className="app-content">
           <Row>
             <FilterEntertainerFields />
-            <EntertainersSearchResult />
+            <EntertainersSearchResult entertainers={[]} isSearchForm={true} />
           </Row>
         </section>
       </div>
@@ -24,11 +24,11 @@ const SearchEntertainer = ({ eventType }) => {
 };
 
 SearchEntertainer.propTypes = {
-  eventType: PropTypes.string
+  eventEntertainerId: PropTypes.string,
 };
 
 SearchEntertainer.defaultProps = {
-  eventType: ''
+  eventEntertainerId: '',
 };
 
 export default SearchEntertainer;

@@ -16,110 +16,129 @@ import {
   stringValidation,
 } from 'components/forms/schema/schema-helpers';
 
-const SearchEntertainer = ({ eventEntertainerId }) => {
-  const [message, setMessage] = React.useState(null);
-  const [isSearchForm, setIsSearchForm] = React.useState(false);
-  const [loading, setLoading] = React.useState(true);
-  const [entertainers, setEntertainers] = React.useState([]);
+export const SearchEntertainer = ({ eventEntertainerId }) => (
+  <BackEndPage title="Search Entertainer">
+    <div className="main-app">
+      <TopMessage message="Search Entertainer" />
 
-  React.useEffect(() => {
-    eventEntertainerId &&
-      axios
-        .get(`/api/v1/entertainers/search/pastEvents/${eventEntertainerId}`, {
-          headers: {
-            'x-access-token': getTokenFromStore(),
-          },
-        })
-        .then(function (response) {
-          const { status, data } = response;
-          // handle success
-          if (status === 200) {
-            setEntertainers(data.entertainers);
-            console.log(data.entertainers);
-            setLoading(false);
-          }
-        });
-  }, [eventEntertainerId]);
-
-  return (
-    <BackEndPage title="Search Entertainer">
-      <div className="main-app">
-        <TopMessage message="Search Entertainer" />
-
-        <section className="app-content">
-          <div className="row">
-            {' '}
-            <div className="col-sm-3">
-              <Formik
-                initialValues={{
-                  stageName: '',
-                }}
-                onSubmit={({ stageName }, actions) => {
-                  setLoading(true);
-                  // post to api
-                  axios
-                    .get(`/api/v1/entertainers/search?name=${stageName}`, {
-                      headers: {
-                        'x-access-token': getTokenFromStore(),
-                      },
-                    })
-                    .then(function (response) {
-                      const { status, data } = response;
-                      if (status === 200) {
-                        console.log('data', data);
-                        setEntertainers(data.entertainers);
-                        setIsSearchForm(true);
-                      }
-                      setLoading(false);
-                    })
-                    .catch(function (error) {
-                      setMessage({
-                        message: error.response.data.message,
-                      });
-                      setLoading(false);
-                    });
-                  actions.setSubmitting(false);
-                }}
-                render={({ isSubmitting, handleSubmit }) => (
-                  <Form className="card card-custom card-black card-form ">
-                    <AlertMessage {...message} />
-                    <Input
-                      label="Stage Name"
-                      name="stageName"
-                      placeholder="Stage Name"
-                      showFeedback={feedback.NONE}
-                    />
-                    <Button loading={isSubmitting} onClick={handleSubmit}>
-                      Search
-                    </Button>
-                  </Form>
-                )}
-                validationSchema={createSchema({
-                  stageName: stringValidation('Stage Name', 2),
-                })}
-              />
-            </div>
-            {loading ? (
-              <LoadingScreen loading={loading} text="Loading Entertainers" />
-            ) : (
-              <EntertainersSearchResult
-                entertainers={entertainers}
-                isSearchForm={isSearchForm}
-              />
-            )}
-          </div>
-        </section>
-      </div>
-    </BackEndPage>
-  );
-};
+      <section className="app-content">
+        <SearchEntertainerForm eventEntertainerId={eventEntertainerId} />
+      </section>
+    </div>
+  </BackEndPage>
+);
 
 SearchEntertainer.defaultProps = {
   eventEntertainerId: '0',
 };
 
 SearchEntertainer.propTypes = {
-  eventEntertainerId: PropTypes.string.isRequired,
+  eventEntertainerId: PropTypes.string,
+};
+
+export const SearchEntertainerForm = ({ eventEntertainerId }) => {
+  const [message, setMessage] = React.useState(null);
+  const [isSearchForm, setIsSearchForm] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+  const [entertainers, setEntertainers] = React.useState([]);
+
+  // React.useEffect(() => {
+  //   eventEntertainerId &&
+  //     axios
+  //       .get(`/api/v1/entertainers/search/pastEvents/${eventEntertainerId}`, {
+  //         headers: {
+  //           'x-access-token': getTokenFromStore(),
+  //         },
+  //       })
+  //       .then(function (response) {
+  //         const { status, data } = response;
+  //         // handle success
+  //         if (status === 200) {
+  //           setEntertainers(data.entertainers);
+  //           console.log(data.entertainers);
+  //           setLoading(false);
+  //         }
+  //       });
+  // }, [eventEntertainerId]);
+
+  return (
+    <div>
+      <Formik
+        initialValues={{
+          stageName: '',
+        }}
+        onSubmit={({ stageName }, actions) => {
+          setLoading(true);
+          // post to api
+          axios
+            .get(`/api/v1/entertainers/search?name=${stageName}`, {
+              headers: {
+                'x-access-token': getTokenFromStore(),
+              },
+            })
+            .then(function (response) {
+              const { status, data } = response;
+              if (status === 200) {
+                console.log('data', data);
+                setEntertainers(data.entertainers);
+                setIsSearchForm(true);
+              }
+              setLoading(false);
+            })
+            .catch(function (error) {
+              setMessage({
+                message: error.response.data.message,
+              });
+              setLoading(false);
+            });
+          actions.setSubmitting(false);
+        }}
+        render={({ isSubmitting, handleSubmit }) => (
+          <Form className="card card-custom card-black card-form ">
+            <AlertMessage {...message} />
+            <div className="form-row">
+              <Input
+                formGroupClassName="col-md-6"
+                label="Stage Name"
+                name="stageName"
+                placeholder="Stage Name"
+                showFeedback={feedback.NONE}
+              />
+              <div className="form-group col-md-3">
+                <label htmlFor="search"></label>
+                <Button
+                  loading={isSubmitting}
+                  name="search"
+                  onClick={handleSubmit}
+                >
+                  Search
+                </Button>
+              </div>
+            </div>
+          </Form>
+        )}
+        validationSchema={createSchema({
+          stageName: stringValidation('Stage Name', 2),
+        })}
+      />
+      {loading ? (
+        <LoadingScreen loading={loading} text="Loading Entertainers" />
+      ) : (
+        <EntertainersSearchResult
+          entertainers={entertainers}
+          isSearchForm={isSearchForm}
+        />
+      )}
+    </div>
+  );
+};
+
+SearchEntertainerForm.defaultProps = {
+  eventEntertainerId: '0',
+};
+
+SearchEntertainerForm.propTypes = {
+  eventEntertainerId: PropTypes.string,
 };
 
 export default SearchEntertainer;

@@ -41,6 +41,7 @@ import {
   eventHasExpired,
 } from 'utils/event-helpers';
 import LoadingScreen from 'components/common/layout/LoadingScreen';
+import { SearchEntertainerForm } from 'components/pages/user/SearchEntertainer';
 
 const AddEntertainerDetails = ({ id }) => {
   let auctionIsDisabled = false;
@@ -134,7 +135,7 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
   const handleTypeClick = (selectedType) => setHireType(selectedType);
   let initialValues = {
     lowestBudget: BUDGET[0].value,
-    highestBudget: BUDGET[11].value,
+    highestBudget: BUDGET[BUDGET.length - 2].value,
   };
   const isAuction =
     hireType.toLowerCase() ===
@@ -143,6 +144,10 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
   const isSearch =
     hireType.toLowerCase() ===
     HIRE_ENTERTAINERS_TYPE.search.title.toLowerCase();
+
+  const isRecommend =
+    hireType.toLowerCase() ===
+    HIRE_ENTERTAINERS_TYPE.recommend.title.toLowerCase();
 
   if (isAuction) {
     initialValues = {
@@ -153,6 +158,13 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
       },
     };
   }
+
+  let entertainerSchema = addEntertainerSchema;
+  if (!isSearch) {
+    delete entertainerSchema.stageName;
+  }
+
+  console.log('addEntertainerSchema', addEntertainerSchema);
 
   return (
     <Formik
@@ -188,6 +200,9 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
               if (isSearch) {
                 navigate(`/user/entertainer/search/${id}`);
               }
+              if (isRecommend) {
+                navigate(`/user/entertainer/recommended/${id}`);
+              }
             }
           })
           .catch(function (error) {
@@ -201,6 +216,7 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
           <AddEntertainerDetailsForm
             auctionIsDisabled={auctionIsDisabled}
             eventDate={event.eventDate}
+            isSearch={isSearch}
             onClick={handleTypeClick}
             type={hireType}
           />
@@ -216,7 +232,7 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
           <DisplayFormikState hide {...props} showAll />
         </>
       )}
-      validationSchema={createSchema(addEntertainerSchema)}
+      validationSchema={createSchema(entertainerSchema)}
     />
   );
 };
@@ -230,129 +246,148 @@ AddEntertainerToEvent.propTypes = {
 
 const AddEntertainerDetailsForm = ({
   auctionIsDisabled,
+  isSearch,
   eventDate,
   type,
   onClick,
-}) => (
-  <div className="card card-custom card-black card-form">
-    <div className="card-body col-md-10">
-      <h4 className="card-title blue">Add Entertainer</h4>
-      <HireEntertainersCardList
-        auctionIsDisabled={auctionIsDisabled}
-        onClick={onClick}
-        type={type}
-      />
-      <div className="form-row">
-        <Select
-          blankOption="Choose your preferred Entertainer Type"
-          formGroupClassName="col-md-6"
-          label="Entertainer Type"
-          name="entertainerType"
-          options={SELECT_ENTERTAINERS_TYPE}
-          placeholder="Entertainer Type"
+}) => {
+  const [showMore, setShowMore] = React.useState(true);
+  return (
+    <div className="card card-custom card-black card-form">
+      <div className="card-body col-md-10">
+        <h4 className="card-title blue">Add Entertainer</h4>
+        <HireEntertainersCardList
+          auctionIsDisabled={auctionIsDisabled}
+          onClick={onClick}
+          type={type}
         />
-        <Select
-          blankOption="Choose a place of event"
-          formGroupClassName="col-md-6"
-          label="Place of Event"
-          name="placeOfEvent"
-          options={PLACE_OF_EVENTS}
-          placeholder="Place of Event"
-        />
-      </div>
-      <div className="form-row">
-        <Select
-          blankOption="Select an audience size"
-          formGroupClassName="col-md-6"
-          label="Expected Audience Size"
-          name="expectedAudienceSize"
-          options={AUDIENCE_SIZE}
-          placeholder="Expected Audience Size"
-        />
-        <MultiSelect
-          formGroupClassName="col-md-6"
-          label="Age Group"
-          name="ageGroup"
-          options={EVENT_AGE_GROUP}
-          placeholder="Select the event's age group"
-        />
-      </div>
-      <div className="form-row">
-        <MultiSelect
-          formGroupClassName="col-md-6"
-          label="Genre"
-          name="genre"
-          optional
-          options={GENRE}
-          placeholder="Preferred Genre"
-        />
-        <MultiSelect
-          formGroupClassName="col-md-6"
-          label="Language"
-          name="language"
-          optional
-          options={LANGUAGE}
-          placeholder="Preferred Language"
-        />
-      </div>
-      {type.toLowerCase() ===
-        HIRE_ENTERTAINERS_TYPE.auction.title.toLowerCase() &&
-        !auctionIsDisabled && (
-          <div className="form-row">
-            <DatePicker
-              formGroupClassName="col-md-6"
-              label="Auction Start Date"
-              maxDate={minAuctionDate(eventDate)}
-              minDate={new Date()}
-              name="auctionStartDate"
-              placeholderText="Event Date"
-            />
-            <DatePicker
-              formGroupClassName="col-md-6"
-              label="Auction End Date"
-              maxDate={maxAuctionDate(eventDate)}
-              minDate={addDays(new Date(), 1)}
-              name="auctionEndDate"
-              placeholderText="Event Date"
-            />
-          </div>
-        )}
-      <div className="form-row">
-        <Select
-          blankOption="Choose your base budget"
-          formGroupClassName="col-md-6"
-          label="Base Budget (in Naira)"
-          name="lowestBudget"
-          options={BUDGET}
-          placeholder="Lowest Budget"
-        />
-        <Select
-          blankOption="Choose your highest budget"
-          formGroupClassName="col-md-6"
-          label="Highest Budget (in Naira)"
-          name="highestBudget"
-          options={BUDGET}
-          placeholder="Highest Budget"
-        />
-      </div>
-      <div className="form-row">
-        <div className="col-md-12">
-          <TextArea
-            label="Special Requests"
-            name="specialRequest"
-            optional
-            placeholder="E.g 10 special songs, your favorite song e.t.c."
-            rows="3"
+        {isSearch && <SearchEntertainerForm eventEntertainerId="0" />}
+        <div className="form-row">
+          <Select
+            blankOption="Choose your preferred Entertainer Type"
+            formGroupClassName="col-md-6"
+            label="Entertainer Type"
+            name="entertainerType"
+            options={SELECT_ENTERTAINERS_TYPE}
+            placeholder="Entertainer Type"
+          />
+          <Select
+            blankOption="Choose a place of event"
+            formGroupClassName="col-md-6"
+            label="Type of Event"
+            name="placeOfEvent"
+            options={PLACE_OF_EVENTS}
+            placeholder="Type of Event"
           />
         </div>
+        <div className="form-row">
+          <Select
+            blankOption="Select an audience size"
+            formGroupClassName="col-md-6"
+            label="Expected Audience Size"
+            name="expectedAudienceSize"
+            options={AUDIENCE_SIZE}
+            placeholder="Expected Audience Size"
+          />
+          <MultiSelect
+            formGroupClassName="col-md-6"
+            label="Age Group"
+            name="ageGroup"
+            options={EVENT_AGE_GROUP}
+            placeholder="Select the event's age group"
+          />
+        </div>
+
+        {showMore && (
+          <>
+            <div className="form-row">
+              <MultiSelect
+                formGroupClassName="col-md-6"
+                label="Genre"
+                name="genre"
+                optional
+                options={GENRE}
+                placeholder="Preferred Genre"
+              />
+              <MultiSelect
+                formGroupClassName="col-md-6"
+                label="Language"
+                name="language"
+                optional
+                options={LANGUAGE}
+                placeholder="Preferred Language"
+              />
+            </div>
+            {type.toLowerCase() ===
+              HIRE_ENTERTAINERS_TYPE.auction.title.toLowerCase() &&
+              !auctionIsDisabled && (
+                <>
+                  <div className="form-row">
+                    <DatePicker
+                      formGroupClassName="col-md-6"
+                      label="Auction Start Date"
+                      maxDate={minAuctionDate(eventDate)}
+                      minDate={new Date()}
+                      name="auctionStartDate"
+                      placeholderText="Event Date"
+                    />
+                    <DatePicker
+                      formGroupClassName="col-md-6"
+                      label="Auction End Date"
+                      maxDate={maxAuctionDate(eventDate)}
+                      minDate={addDays(new Date(), 1)}
+                      name="auctionEndDate"
+                      placeholderText="Event Date"
+                    />
+                  </div>
+                  <div className="form-row">
+                    <Select
+                      blankOption="Choose your base budget"
+                      formGroupClassName="col-md-6"
+                      label="Base Budget (in Naira)"
+                      name="lowestBudget"
+                      options={BUDGET}
+                      placeholder="Lowest Budget"
+                    />
+                    <Select
+                      blankOption="Choose your highest budget"
+                      formGroupClassName="col-md-6"
+                      label="Highest Budget (in Naira)"
+                      name="highestBudget"
+                      options={BUDGET}
+                      placeholder="Highest Budget"
+                    />
+                  </div>
+                </>
+              )}
+            <div className="form-row">
+              <div className="col-md-12">
+                <TextArea
+                  label="Special Requests"
+                  name="specialRequest"
+                  optional
+                  placeholder="E.g 10 special songs, your favorite song e.t.c."
+                  rows="3"
+                />
+              </div>
+            </div>
+          </>
+        )}
+
+        {!showMore && (
+          <p className="text-link small" onClick={() => setShowMore(!showMore)}>
+            {showMore ? 'Show Less' : 'Show More'}...
+          </p>
+        )}
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 AddEntertainerDetailsForm.propTypes = {
   auctionIsDisabled: PropTypes.bool.isRequired,
   eventDate: PropTypes.string.isRequired,
+  isSearch: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,
   type: PropTypes.string,
 };
