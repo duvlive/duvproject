@@ -293,7 +293,12 @@ const Gallery = () => {
           <h4 className="text-uppercase col-12 font-weight-normal mb-3">
             Gallery
           </h4>
-          {/* <GalleryImage name="gallery" src={DjCuppy1} /> */}
+          {false && (
+            <GalleryImage
+              name="gallery"
+              src={'https://placeholder.com/kitten'}
+            />
+          )}
         </div>
       </div>
     </section>

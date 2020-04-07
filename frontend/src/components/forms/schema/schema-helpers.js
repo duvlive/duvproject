@@ -1,5 +1,6 @@
 import * as yup from 'yup';
 import { parse } from 'date-fns';
+import { moneyFormatInNaira } from 'utils/helpers';
 
 export const required = (label) =>
   yup.string().required(`${label} is required`);
@@ -55,6 +56,16 @@ export const positiveNumberValidation = (label, type = 'number') =>
     .required(`${label} must be a valid ${type}`)
     .positive(`${label} must be a positive ${type}`)
     .integer(`${label} must be a ${type}`);
+
+export const moneyRange = (label, type = 'number', min, max) =>
+  yup
+    .number()
+    .transform((value) => (isNaN(value) ? undefined : value))
+    .required(`${label} must be a valid ${type}`)
+    .positive(`${label} must be a positive ${type}`)
+    .integer(`${label} must be a ${type}`)
+    .min(min, `${label} must be greater than ${moneyFormatInNaira(min)}`);
+// .max(max, `${label} must be lesser than ${moneyFormatInNaira(max)}`);
 
 export const requiredDate = (label) =>
   yup

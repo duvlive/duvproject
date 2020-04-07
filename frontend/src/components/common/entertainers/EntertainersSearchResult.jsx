@@ -3,43 +3,47 @@ import PropTypes from 'prop-types';
 import Stars from 'components/common/utils/Stars';
 // import DuvLiveModal from 'components/custom/Modal';
 import Image from 'components/common/utils/Image';
-import Humanize from 'humanize-plus';
 import { twoDigitNumber, commaNumber } from 'utils/helpers';
-import { Link } from '@reach/router';
 
-const EntertainersSearchResult = ({ entertainers, isSearchForm }) => (
+const EntertainersSearchResult = ({
+  entertainers,
+  selectedSearchedEntertainer,
+  title,
+}) => (
   <section className="entertainerssearchresult">
-    <div className="pl-3">
-      <h4 className="main-app__subtitle">
-        {entertainers.length}{' '}
-        {isSearchForm
-          ? Humanize.pluralize(entertainers.length, 'entertainer')
-          : Humanize.pluralize(entertainers.length, 'past entertainer')}{' '}
-        found
-      </h4>
-      <div className="table-responsive">
-        <table className="table table-dark table__no-border table__with-bg">
-          <tbody>
-            {entertainers.map((entertainer, index) => (
-              <EntertainersSearchResult.Card
-                entertainer={entertainer}
-                key={index}
-                number={index + 1}
-              />
-            ))}
-          </tbody>
-        </table>
-      </div>
+    <h4 className="main-app__subtitle">{title}</h4>
+    <div className="table-responsive">
+      <table className="table table-dark table__no-border table__with-bg">
+        <tbody>
+          {entertainers.map((entertainer, index) => (
+            <EntertainersSearchResult.Card
+              entertainer={entertainer}
+              key={index}
+              number={index + 1}
+              selectedSearchedEntertainer={selectedSearchedEntertainer}
+            />
+          ))}
+        </tbody>
+      </table>
     </div>
   </section>
 );
 
-EntertainersSearchResult.propTypes = {
-  entertainers: PropTypes.array.isRequired,
-  isSearchForm: PropTypes.bool.isRequired,
+EntertainersSearchResult.defaultProps = {
+  title: null,
 };
 
-EntertainersSearchResult.Card = ({ entertainer, number }) => (
+EntertainersSearchResult.propTypes = {
+  entertainers: PropTypes.array.isRequired,
+  selectedSearchedEntertainer: PropTypes.func.isRequired,
+  title: PropTypes.string,
+};
+
+EntertainersSearchResult.Card = ({
+  entertainer,
+  number,
+  selectedSearchedEntertainer,
+}) => (
   <tr>
     <th className="table__number" scope="row">
       {twoDigitNumber(number)}
@@ -79,12 +83,12 @@ EntertainersSearchResult.Card = ({ entertainer, number }) => (
         Profile
       </a>
       &nbsp;&nbsp;
-      <Link
+      <button
         className="btn btn-success btn-sm btn-transparent"
-        to={`/user/auction/bids/${entertainer.id}`}
+        onClick={() => selectedSearchedEntertainer(entertainer)}
       >
-        Send Request
-      </Link>
+        Select
+      </button>
     </td>
   </tr>
 );
@@ -92,6 +96,7 @@ EntertainersSearchResult.Card = ({ entertainer, number }) => (
 EntertainersSearchResult.Card.propTypes = {
   entertainer: PropTypes.object.isRequired,
   number: PropTypes.number.isRequired,
+  selectedSearchedEntertainer: PropTypes.func.isRequired,
 };
 
 export default EntertainersSearchResult;

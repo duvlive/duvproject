@@ -9,10 +9,12 @@ import {
   email,
   phoneNumber,
   positiveNumberValidation,
+  moneyRange,
   requiredDate,
 } from './schema-helpers';
 import { commaNumber } from 'utils/helpers';
 import { isAfter } from 'date-fns';
+import { HIRE_ENTERTAINERS_TYPE } from 'utils/constants';
 
 /////////////////////////
 // Schema
@@ -36,31 +38,63 @@ export const bankDetailsSchema = {
   accountNumber: stringValidation('Account Number'),
 };
 
-export const addEntertainerSchema = {
-  entertainerType: stringValidation('Entertainer Type'),
-  stageName: stringValidation('Stage Name'),
-  genre: multiSelectValidation('Genre'),
-  language: multiSelectValidation('Language'),
-  expectedAudienceSize: stringValidation('Audience Size'),
-  ageGroup: stringValidation('Age Group'),
-  lowestBudget: positiveNumberValidation('Base Budget', 'budget'),
-  highestBudget: positiveNumberValidation('Highest Budget', 'budget').moreThan(
-    yup.ref('lowestBudget'),
-    'Highest Budget should be greater than the Base Budget'
-  ),
-  placeOfEvent: stringValidation('Place of Event'),
-  specialRequest: optionalValidation(stringValidation('Special Request', 20)),
-  auctionStartDate: optionalValidation(requiredDate('Auction Start Date')),
-  auctionEndDate: optionalValidation(
-    requiredDate('Auction End Date').test(
-      'is-greater',
-      'End Date should be greater than Start Date',
-      function (value) {
-        const { auctionStartDate } = this.parent;
-        return isAfter(value.date, auctionStartDate.date);
-      }
-    )
-  ),
+export const addEntertainerSchema = (type, entertainer) => {
+  const baseCharges =
+    entertainer && entertainer.baseCharges ? entertainer.baseCharges : 10000;
+  const preferredCharges =
+    entertainer && entertainer.preferredCharges
+      ? entertainer.preferredCharges
+      : 1000000;
+
+  let currentSchema = {
+    genre: multiSelectValidation('Genre'),
+    language: multiSelectValidation('Language'),
+    expectedAudienceSize: stringValidation('Audience Size'),
+    ageGroup: stringValidation('Age Group'),
+    placeOfEvent: stringValidation('Place of Event'),
+    specialRequest: optionalValidation(stringValidation('Special Request', 20)),
+  };
+
+  if (type === HIRE_ENTERTAINERS_TYPE.search.title.toLowerCase()) {
+    currentSchema.offer = moneyRange(
+      'Your Offer',
+      'offer',
+      baseCharges,
+      preferredCharges
+    );
+  } else {
+    currentSchema = {
+      ...currentSchema,
+      entertainerType: stringValidation('Entertainer Type'),
+      lowestBudget: positiveNumberValidation('Base Budget', 'budget'),
+      highestBudget: positiveNumberValidation(
+        'Highest Budget',
+        'budget'
+      ).moreThan(
+        yup.ref('lowestBudget'),
+        'Highest Budget should be greater than the Base Budget'
+      ),
+    };
+  }
+
+  if (type === HIRE_ENTERTAINERS_TYPE.auction.title.toLowerCase()) {
+    currentSchema = {
+      ...currentSchema,
+      auctionStartDate: optionalValidation(requiredDate('Auction Start Date')),
+      auctionEndDate: optionalValidation(
+        requiredDate('Auction End Date').test(
+          'is-greater',
+          'End Date should be greater than Start Date',
+          function (value) {
+            const { auctionStartDate } = this.parent;
+            return isAfter(value.date, auctionStartDate.date);
+          }
+        )
+      ),
+    };
+  }
+
+  return currentSchema;
 };
 
 export const videoSchema = {

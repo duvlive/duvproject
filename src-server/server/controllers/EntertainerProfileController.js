@@ -191,7 +191,7 @@ const EntertainerProfileController = {
   async searchForEntertainer(req, res) {
     const name = req.query.name;
     if (name) {
-      if (name.length <= 2) {
+      if (name.length < 2) {
         return res
           .status(412)
           .send({ msg: 'Your search term must exceed 2 characters' });

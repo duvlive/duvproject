@@ -42,6 +42,10 @@ import {
 } from 'utils/event-helpers';
 import LoadingScreen from 'components/common/layout/LoadingScreen';
 import { SearchEntertainerForm } from 'components/pages/user/SearchEntertainer';
+import Image from 'components/common/utils/Image';
+import { commaNumber } from 'utils/helpers';
+import Stars from 'components/common/utils/Stars';
+import InputFormat from 'components/forms/InputFormat';
 
 const AddEntertainerDetails = ({ id }) => {
   let auctionIsDisabled = false;
@@ -67,7 +71,6 @@ const AddEntertainerDetails = ({ id }) => {
           }
         })
         .catch(function (error) {
-          console.log(error.response.data.message);
           setLoading(false);
           // navigate to all events
         });
@@ -132,11 +135,14 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
   const { userDispatch } = React.useContext(UserContext);
   const [message, setMessage] = React.useState(null);
   const [hireType, setHireType] = React.useState(type);
-  const handleTypeClick = (selectedType) => setHireType(selectedType);
-  let initialValues = {
-    lowestBudget: BUDGET[0].value,
-    highestBudget: BUDGET[BUDGET.length - 2].value,
+  const [selectedEntertainer, setSelectedEntertainer] = React.useState(null);
+
+  const selectedSearchedEntertainer = (entertainer) => {
+    setSelectedEntertainer(entertainer);
   };
+  const handleTypeClick = (selectedType) => setHireType(selectedType);
+  let initialValues = {};
+
   const isAuction =
     hireType.toLowerCase() ===
     HIRE_ENTERTAINERS_TYPE.auction.title.toLowerCase();
@@ -149,27 +155,31 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
     hireType.toLowerCase() ===
     HIRE_ENTERTAINERS_TYPE.recommend.title.toLowerCase();
 
+  if (!isSearch) {
+    initialValues = {
+      ...initialValues,
+      lowestBudget: BUDGET[0].value,
+      highestBudget: BUDGET[BUDGET.length - 2].value,
+    };
+  }
+
   if (isAuction) {
     initialValues = {
       ...initialValues,
       auctionStartDate: { date: Date.now() },
       auctionEndDate: {
-        date: maxAuctionDate(event.eventDate) || Date.now(),
+        date: maxAuctionDate(event.eventDate || Date.now()),
       },
     };
   }
 
-  let entertainerSchema = addEntertainerSchema;
-  if (!isSearch) {
-    delete entertainerSchema.stageName;
-  }
-
-  console.log('addEntertainerSchema', addEntertainerSchema);
-
   return (
     <Formik
       enableReinitialize={true}
-      initialValues={setInitialValues(addEntertainerSchema, initialValues)}
+      initialValues={setInitialValues(
+        addEntertainerSchema(hireType.toLowerCase(), selectedEntertainer),
+        initialValues
+      )}
       onSubmit={(values, actions) => {
         const entertainerDetails = {
           ...values,
@@ -215,9 +225,11 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
           <AlertMessage {...message} />
           <AddEntertainerDetailsForm
             auctionIsDisabled={auctionIsDisabled}
+            currentlySelectedEntertainer={selectedEntertainer}
             eventDate={event.eventDate}
             isSearch={isSearch}
             onClick={handleTypeClick}
+            selectedSearchedEntertainer={selectedSearchedEntertainer}
             type={hireType}
           />
           <div className="mt-5">
@@ -232,7 +244,9 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
           <DisplayFormikState hide {...props} showAll />
         </>
       )}
-      validationSchema={createSchema(entertainerSchema)}
+      validationSchema={createSchema(
+        addEntertainerSchema(hireType.toLowerCase(), selectedEntertainer)
+      )}
     />
   );
 };
@@ -246,12 +260,14 @@ AddEntertainerToEvent.propTypes = {
 
 const AddEntertainerDetailsForm = ({
   auctionIsDisabled,
+  currentlySelectedEntertainer,
   isSearch,
   eventDate,
+  selectedSearchedEntertainer,
   type,
   onClick,
 }) => {
-  const [showMore, setShowMore] = React.useState(true);
+  const [showMore, setShowMore] = React.useState(false);
   return (
     <div className="card card-custom card-black card-form">
       <div className="card-body col-md-10">
@@ -261,123 +277,152 @@ const AddEntertainerDetailsForm = ({
           onClick={onClick}
           type={type}
         />
-        {isSearch && <SearchEntertainerForm eventEntertainerId="0" />}
-        <div className="form-row">
-          <Select
-            blankOption="Choose your preferred Entertainer Type"
-            formGroupClassName="col-md-6"
-            label="Entertainer Type"
-            name="entertainerType"
-            options={SELECT_ENTERTAINERS_TYPE}
-            placeholder="Entertainer Type"
+        {/* Show Search Form, when search is clicked */}
+        {isSearch && !currentlySelectedEntertainer ? (
+          <SearchEntertainerForm
+            eventEntertainerId="0"
+            selectedSearchedEntertainer={selectedSearchedEntertainer}
           />
-          <Select
-            blankOption="Choose a place of event"
-            formGroupClassName="col-md-6"
-            label="Type of Event"
-            name="placeOfEvent"
-            options={PLACE_OF_EVENTS}
-            placeholder="Type of Event"
-          />
-        </div>
-        <div className="form-row">
-          <Select
-            blankOption="Select an audience size"
-            formGroupClassName="col-md-6"
-            label="Expected Audience Size"
-            name="expectedAudienceSize"
-            options={AUDIENCE_SIZE}
-            placeholder="Expected Audience Size"
-          />
-          <MultiSelect
-            formGroupClassName="col-md-6"
-            label="Age Group"
-            name="ageGroup"
-            options={EVENT_AGE_GROUP}
-            placeholder="Select the event's age group"
-          />
-        </div>
-
-        {showMore && (
+        ) : (
+          // Show normal form otherwise
           <>
-            <div className="form-row">
-              <MultiSelect
-                formGroupClassName="col-md-6"
-                label="Genre"
-                name="genre"
-                optional
-                options={GENRE}
-                placeholder="Preferred Genre"
+            {isSearch && currentlySelectedEntertainer && (
+              <SelectedEntertainer
+                entertainer={currentlySelectedEntertainer}
+                selectedSearchedEntertainer={selectedSearchedEntertainer}
               />
-              <MultiSelect
-                formGroupClassName="col-md-6"
-                label="Language"
-                name="language"
-                optional
-                options={LANGUAGE}
-                placeholder="Preferred Language"
-              />
-            </div>
-            {type.toLowerCase() ===
-              HIRE_ENTERTAINERS_TYPE.auction.title.toLowerCase() &&
-              !auctionIsDisabled && (
-                <>
-                  <div className="form-row">
-                    <DatePicker
-                      formGroupClassName="col-md-6"
-                      label="Auction Start Date"
-                      maxDate={minAuctionDate(eventDate)}
-                      minDate={new Date()}
-                      name="auctionStartDate"
-                      placeholderText="Event Date"
-                    />
-                    <DatePicker
-                      formGroupClassName="col-md-6"
-                      label="Auction End Date"
-                      maxDate={maxAuctionDate(eventDate)}
-                      minDate={addDays(new Date(), 1)}
-                      name="auctionEndDate"
-                      placeholderText="Event Date"
-                    />
-                  </div>
-                  <div className="form-row">
-                    <Select
-                      blankOption="Choose your base budget"
-                      formGroupClassName="col-md-6"
-                      label="Base Budget (in Naira)"
-                      name="lowestBudget"
-                      options={BUDGET}
-                      placeholder="Lowest Budget"
-                    />
-                    <Select
-                      blankOption="Choose your highest budget"
-                      formGroupClassName="col-md-6"
-                      label="Highest Budget (in Naira)"
-                      name="highestBudget"
-                      options={BUDGET}
-                      placeholder="Highest Budget"
-                    />
-                  </div>
-                </>
-              )}
-            <div className="form-row">
-              <div className="col-md-12">
-                <TextArea
-                  label="Special Requests"
-                  name="specialRequest"
-                  optional
-                  placeholder="E.g 10 special songs, your favorite song e.t.c."
-                  rows="3"
-                />
-              </div>
-            </div>
-          </>
-        )}
+            )}
 
-        {!showMore && (
-          <p className="text-link small" onClick={() => setShowMore(!showMore)}>
-            {showMore ? 'Show Less' : 'Show More'}...
-          </p>
+            <div className="form-row">
+              {isSearch ? (
+                <InputFormat
+                  formGroupClassName="col-md-6"
+                  label="Your Offer"
+                  name="offer"
+                  placeholder="Enter the Amount you wish to pay"
+                />
+              ) : (
+                <Select
+                  blankOption="Choose your preferred Entertainer Type"
+                  formGroupClassName="col-md-6"
+                  label="Entertainer Type"
+                  name="entertainerType"
+                  options={SELECT_ENTERTAINERS_TYPE}
+                  placeholder="Entertainer Type"
+                />
+              )}
+              <Select
+                blankOption="Choose a place of event"
+                formGroupClassName="col-md-6"
+                label="Type of Event"
+                name="placeOfEvent"
+                options={PLACE_OF_EVENTS}
+                placeholder="Type of Event"
+              />
+            </div>
+            <div className="form-row">
+              <Select
+                blankOption="Select an audience size"
+                formGroupClassName="col-md-6"
+                label="Expected Audience Size"
+                name="expectedAudienceSize"
+                options={AUDIENCE_SIZE}
+                placeholder="Expected Audience Size"
+              />
+              <MultiSelect
+                formGroupClassName="col-md-6"
+                label="Age Group"
+                name="ageGroup"
+                options={EVENT_AGE_GROUP}
+                placeholder="Select the event's age group"
+              />
+            </div>
+
+            {showMore && (
+              <>
+                <div className="form-row">
+                  <MultiSelect
+                    formGroupClassName="col-md-6"
+                    label="Genre"
+                    name="genre"
+                    optional
+                    options={GENRE}
+                    placeholder="Preferred Genre"
+                  />
+                  <MultiSelect
+                    formGroupClassName="col-md-6"
+                    label="Language"
+                    name="language"
+                    optional
+                    options={LANGUAGE}
+                    placeholder="Preferred Language"
+                  />
+                </div>
+                {type.toLowerCase() ===
+                  HIRE_ENTERTAINERS_TYPE.auction.title.toLowerCase() &&
+                  !auctionIsDisabled && (
+                    <>
+                      <div className="form-row">
+                        <DatePicker
+                          formGroupClassName="col-md-6"
+                          label="Auction Start Date"
+                          maxDate={minAuctionDate(eventDate)}
+                          minDate={new Date()}
+                          name="auctionStartDate"
+                          placeholderText="Event Date"
+                        />
+                        <DatePicker
+                          formGroupClassName="col-md-6"
+                          label="Auction End Date"
+                          maxDate={maxAuctionDate(eventDate)}
+                          minDate={addDays(new Date(), 1)}
+                          name="auctionEndDate"
+                          placeholderText="Event Date"
+                        />
+                      </div>
+                    </>
+                  )}
+                <div className="form-row">
+                  <Select
+                    blankOption="Choose your base budget"
+                    formGroupClassName="col-md-6"
+                    label="Base Budget (in Naira)"
+                    name="lowestBudget"
+                    options={BUDGET}
+                    placeholder="Lowest Budget"
+                  />
+                  <Select
+                    blankOption="Choose your highest budget"
+                    formGroupClassName="col-md-6"
+                    label="Highest Budget (in Naira)"
+                    name="highestBudget"
+                    options={BUDGET}
+                    placeholder="Highest Budget"
+                  />
+                </div>
+                <div className="form-row">
+                  <div className="col-md-12">
+                    <TextArea
+                      label="Special Requests"
+                      name="specialRequest"
+                      optional
+                      placeholder="E.g 10 special songs, your favorite song e.t.c."
+                      rows="3"
+                    />
+                  </div>
+                </div>
+              </>
+            )}
+
+            {!showMore && (
+              <p
+                className="text-link small"
+                onClick={() => setShowMore(!showMore)}
+              >
+                {showMore ? 'Show less' : 'Show more options'}...
+              </p>
+            )}
+          </>
         )}
       </div>
     </div>
@@ -386,10 +431,16 @@ const AddEntertainerDetailsForm = ({
 
 AddEntertainerDetailsForm.propTypes = {
   auctionIsDisabled: PropTypes.bool.isRequired,
+  currentlySelectedEntertainer: PropTypes.object,
   eventDate: PropTypes.string.isRequired,
   isSearch: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,
+  selectedSearchedEntertainer: PropTypes.func.isRequired,
   type: PropTypes.string,
+};
+
+AddEntertainerDetailsForm.defaultProps = {
+  currentlySelectedEntertainer: null,
 };
 
 AddEntertainerDetailsForm.defaultProps = {
@@ -508,4 +559,59 @@ const ExpiredEvent = () => (
   </section>
 );
 
+const SelectedEntertainer = ({ entertainer, selectedSearchedEntertainer }) => (
+  <table className="table table-dark table__no-border table__with-bg">
+    <tbody>
+      <tr>
+        <td>
+          <Image
+            className="avatar--medium-small"
+            name={entertainer.stageName}
+            responsiveImage={false}
+            src={entertainer.profileImageURL}
+          />
+        </td>
+        <td>
+          <span className="text-muted small--4">Stage name</span>{' '}
+          {entertainer.stageName}
+        </td>
+        <td className="align-middle text-gray">
+          <span className="text-muted small--4">Location</span>{' '}
+          {entertainer.location}
+        </td>
+        <td>
+          <span className="text-muted small--4">Ratings</span>{' '}
+          <Stars name={entertainer.stageName} rating={4.5} />
+        </td>
+        <td>
+          <span className="text-muted small--4">Charges</span>{' '}
+          {commaNumber(entertainer.baseCharges)} -{' '}
+          {commaNumber(entertainer.preferredCharges)}
+        </td>
+        <td>
+          <a
+            className="btn btn-info btn-sm btn-transparent"
+            href={`/entertainers/${entertainer.slug}`}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            Profile
+          </a>{' '}
+          &nbsp;&nbsp;
+          <button
+            className="btn btn-danger btn-sm btn-transparent"
+            onClick={() => selectedSearchedEntertainer(null)}
+          >
+            Remove
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+);
+
+SelectedEntertainer.propTypes = {
+  entertainer: PropTypes.object.isRequired,
+  selectedSearchedEntertainer: PropTypes.func.isRequired,
+};
 export default AddEntertainerDetails;

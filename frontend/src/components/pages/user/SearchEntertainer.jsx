@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Formik, Form } from 'formik';
 import Input from 'components/forms/Input';
 import axios from 'axios';
+import Humanize from 'humanize-plus';
 import Button from 'components/forms/Button';
 import AlertMessage from 'components/common/utils/AlertMessage';
 import { feedback } from 'components/forms/form-helper';
@@ -36,9 +37,12 @@ SearchEntertainer.propTypes = {
   eventEntertainerId: PropTypes.string,
 };
 
-export const SearchEntertainerForm = ({ eventEntertainerId }) => {
+export const SearchEntertainerForm = ({
+  eventEntertainerId,
+  selectedSearchedEntertainer,
+}) => {
   const [message, setMessage] = React.useState(null);
-  const [isSearchForm, setIsSearchForm] = React.useState(false);
+  const [title, setTitle] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
   const [entertainers, setEntertainers] = React.useState([]);
 
@@ -79,9 +83,21 @@ export const SearchEntertainerForm = ({ eventEntertainerId }) => {
             .then(function (response) {
               const { status, data } = response;
               if (status === 200) {
-                console.log('data', data);
+                console.log('data', data.entertainers);
                 setEntertainers(data.entertainers);
-                setIsSearchForm(true);
+                const noOfEntertainers = data.entertainers.length;
+                if (noOfEntertainers > 0) {
+                  setTitle(
+                    `${noOfEntertainers} ${Humanize.pluralize(
+                      noOfEntertainers,
+                      'entertianer'
+                    )} found`
+                  );
+                } else {
+                  setTitle(
+                    `No entertainer with the Stage Name '${stageName}' found`
+                  );
+                }
               }
               setLoading(false);
             })
@@ -90,6 +106,7 @@ export const SearchEntertainerForm = ({ eventEntertainerId }) => {
                 message: error.response.data.message,
               });
               setLoading(false);
+              setTitle(null);
             });
           actions.setSubmitting(false);
         }}
@@ -126,7 +143,8 @@ export const SearchEntertainerForm = ({ eventEntertainerId }) => {
       ) : (
         <EntertainersSearchResult
           entertainers={entertainers}
-          isSearchForm={isSearchForm}
+          selectedSearchedEntertainer={selectedSearchedEntertainer}
+          title={title}
         />
       )}
     </div>
@@ -135,10 +153,12 @@ export const SearchEntertainerForm = ({ eventEntertainerId }) => {
 
 SearchEntertainerForm.defaultProps = {
   eventEntertainerId: '0',
+  selectedSearchedEntertainer: () => {},
 };
 
 SearchEntertainerForm.propTypes = {
   eventEntertainerId: PropTypes.string,
+  selectedSearchedEntertainer: PropTypes.func,
 };
 
 export default SearchEntertainer;

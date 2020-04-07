@@ -1,10 +1,10 @@
 import React from 'react';
-import { GENRE, LANGUAGE, BUDGET, RATINGS } from 'utils/constants';
+import { GENRE, LANGUAGE, BUDGET } from 'utils/constants';
 import Select from 'components/forms/Select';
 import MultiSelect from 'components/forms/MultiSelect';
 import { Formik } from 'formik';
 import {
-  setInitialValues
+  setInitialValues,
   // DisplayFormikState
 } from 'components/forms/form-helper';
 import { addEntertainerSchema } from 'components/forms/schema/entertainerSchema';
