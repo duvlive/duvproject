@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import {
   getValidityClass,
   FeedbackMessage,
-  feedback
+  feedback,
 } from 'components/forms/form-helper';
 import Label from './Label';
 import ReactDatePicker from 'react-datepicker';
@@ -45,6 +45,7 @@ const DatePicker = ({
       />
       <Field name={name}>
         {({ form }) => {
+          console.log('formik.values', formik.values);
           return (
             <ReactDatePicker
               {...props}
@@ -57,7 +58,7 @@ const DatePicker = ({
               dateFormat={dateFormat}
               id={name}
               name={name}
-              onChange={date => {
+              onChange={(date) => {
                 if (date) {
                   const dateTime = showTimeSelectOnly
                     ? date.toLocaleTimeString()
@@ -70,7 +71,11 @@ const DatePicker = ({
               placeholderText={placeholder}
               selected={
                 getIn(formik.values, name) !== ''
-                  ? parse(getIn(formik.values, name).date)
+                  ? parse(
+                      (getIn(formik.values, name) &&
+                        getIn(formik.values, name).date) ||
+                        new Date()
+                    )
                   : null
               }
               showTimeSelect={showTimeSelect}
@@ -110,7 +115,7 @@ DatePicker.propTypes = {
   timeCaption: PropTypes.string,
   timeIntervals: PropTypes.number,
   tooltipPosition: PropTypes.string,
-  tooltipText: PropTypes.string
+  tooltipText: PropTypes.string,
 };
 
 DatePicker.defaultProps = {
@@ -129,7 +134,7 @@ DatePicker.defaultProps = {
   timeCaption: null,
   timeIntervals: 60,
   tooltipText: null,
-  tooltipPosition: 'right'
+  tooltipPosition: 'right',
 };
 
 export default connect(DatePicker);

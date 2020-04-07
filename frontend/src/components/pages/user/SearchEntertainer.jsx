@@ -37,10 +37,7 @@ SearchEntertainer.propTypes = {
   eventEntertainerId: PropTypes.string,
 };
 
-export const SearchEntertainerForm = ({
-  eventEntertainerId,
-  selectedSearchedEntertainer,
-}) => {
+export const SearchEntertainerForm = ({ selectedSearchedEntertainer }) => {
   const [message, setMessage] = React.useState(null);
   const [title, setTitle] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
@@ -59,7 +56,7 @@ export const SearchEntertainerForm = ({
   //         // handle success
   //         if (status === 200) {
   //           setEntertainers(data.entertainers);
-  //           console.log(data.entertainers);
+  //
   //           setLoading(false);
   //         }
   //       });
@@ -83,7 +80,6 @@ export const SearchEntertainerForm = ({
             .then(function (response) {
               const { status, data } = response;
               if (status === 200) {
-                console.log('data', data.entertainers);
                 setEntertainers(data.entertainers);
                 const noOfEntertainers = data.entertainers.length;
                 if (noOfEntertainers > 0) {
@@ -152,12 +148,10 @@ export const SearchEntertainerForm = ({
 };
 
 SearchEntertainerForm.defaultProps = {
-  eventEntertainerId: '0',
   selectedSearchedEntertainer: () => {},
 };
 
 SearchEntertainerForm.propTypes = {
-  eventEntertainerId: PropTypes.string,
   selectedSearchedEntertainer: PropTypes.func,
 };
 

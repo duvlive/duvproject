@@ -97,6 +97,17 @@ export const addEntertainerSchema = (type, entertainer) => {
   return currentSchema;
 };
 
+export const recommendEntertainerSchema = {
+  genre: multiSelectValidation('Genre'),
+  language: multiSelectValidation('Language'),
+  location: optionalValidation(stringValidation('Location')),
+  lowestBudget: positiveNumberValidation('Base Budget', 'budget'),
+  highestBudget: positiveNumberValidation('Highest Budget', 'budget').moreThan(
+    yup.ref('lowestBudget'),
+    'Highest Budget should be greater than the Base Budget'
+  ),
+};
+
 export const videoSchema = {
   youtubeID: urlValidation('Youtube URL'),
   title: stringValidation('Title'),

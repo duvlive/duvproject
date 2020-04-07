@@ -11,25 +11,28 @@ import { addEntertainerSchema } from 'components/forms/schema/entertainerSchema'
 import { createSchema } from 'components/forms/schema/schema-helpers';
 import { getStates } from 'data/naija-states-and-lgas';
 // import { Accordion } from 'react-bootstrap';
-import Accordion from 'components/custom/Accordion';
+// import Accordion from 'components/custom/Accordion';
 
 const FilterEntertainerFieldsForm = () => (
-  // <Accordion atomic={true}>
+  // <div atomic={true}>
 
   <>
     <h3 className="mb-1 small">Clear Filters</h3>
-    <Accordion key="0" title="Location">
+
+    <div className="form-row">
       <Select
         blankOption="Location"
+        formGroupClassName="col-md-6"
         label="State"
         name="address.state"
         optional
         options={getStates()}
         placeholder="State"
       />
-    </Accordion>
-    <Accordion key="1" title="Music Type">
+    </div>
+    <div className="form-row">
       <MultiSelect
+        formGroupClassName="col-md-6"
         label="Genre"
         name="entertainer.genre"
         optional
@@ -37,16 +40,18 @@ const FilterEntertainerFieldsForm = () => (
         placeholder="Genre"
       />
       <MultiSelect
+        formGroupClassName="col-md-6"
         label="Language"
         name="entertainer.language"
         optional
         options={LANGUAGE}
         placeholder="Preferred Language"
       />
-    </Accordion>
-    <Accordion key="2" title="Budget">
+    </div>
+    <div className="form-row">
       <Select
         blankOption="Choose your lowest budget"
+        formGroupClassName="col-md-6"
         label="Lowest Budget (in Naira)"
         name="entertainer.lowest_budget"
         optional
@@ -55,13 +60,14 @@ const FilterEntertainerFieldsForm = () => (
       />
       <Select
         blankOption="Choose your highest budget"
+        formGroupClassName="col-md-6"
         label="Highest Budget (in Naira)"
         name="entertainer.highestBudget"
         optional
         options={BUDGET}
         placeholder="Highest Budget"
       />
-    </Accordion>
+    </div>
   </>
 );
 

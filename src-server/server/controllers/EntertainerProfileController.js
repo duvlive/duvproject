@@ -295,7 +295,7 @@ const EntertainerProfileController = {
             stageName: user.profile.stageName,
             about: user.profile.about,
             location: user.profile.location,
-            yearnStarted: user.profile.yearnStarted,
+            yearStarted: user.profile.yearStarted,
             willingToTravel: user.profile.willingToTravel,
             baseCharges: user.profile.baseCharges,
             preferredCharges: user.profile.preferredCharges,
@@ -306,6 +306,68 @@ const EntertainerProfileController = {
         }, []);
         return res.status(200).json({ entertainers });
       });
+    } catch (error) {
+      const status = error.status || 500;
+      const errorMessage = error.message || error;
+      return res.status(status).json({ message: errorMessage });
+    }
+  },
+
+  /**
+   * recommend entertainer from event
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  async recommendEntertainer(req, res) {
+    // const eventEntertainerId = req.params.eventEntertainerId;
+    // const entertainerQuery = {
+    //   stageName: { [Op.iLike]: `%${name}%` },
+    // };
+    try {
+      // const eventEntertainer = await EventEntertainer.findOne({
+      //   where: { id: eventEntertainerId },
+      // });
+
+      const entertainerQuery = {
+        stageName: { [Op.iLike]: `%wor%` },
+      };
+
+      const include = [
+        {
+          model: EntertainerProfile,
+          as: 'profile',
+          where: entertainerQuery,
+        },
+      ];
+
+      try {
+        const { result, pagination } = await getAll(User, {
+          include,
+          limit: 6,
+        });
+        const entertainers = result.reduce((acc, user) => {
+          const entertainer = {
+            profileImageURL: user.profileImageURL,
+            stageName: user.profile.stageName,
+            about: user.profile.about,
+            location: user.profile.location,
+            yearnStarted: user.profile.yearnStarted,
+            willingToTravel: user.profile.willingToTravel,
+            baseCharges: user.profile.baseCharges,
+            preferredCharges: user.profile.preferredCharges,
+            slug: user.profile.slug,
+            availableFor: user.profile.availableFor,
+          };
+          return [...acc, entertainer];
+        }, []);
+        return res.status(200).json({ entertainers, pagination });
+      } catch (error) {
+        const status = error.status || 500;
+        const errorMessage = error.message || error;
+        return res.status(status).json({ message: errorMessage });
+      }
     } catch (error) {
       const status = error.status || 500;
       const errorMessage = error.message || error;
@@ -336,7 +398,6 @@ const EntertainerProfileController = {
         });
       })
       .catch((error) => {
-        console.log(error);
         const status = error.status || 500;
         const errorMessage = error.message || error;
         return res.status(status).json({ message: errorMessage });
