@@ -70,6 +70,7 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.TEXT,
         allowNull: true,
       },
+      preferredLanguage: { type: DataTypes.TEXT, allowNull: true },
     },
     {
       classMethods: {

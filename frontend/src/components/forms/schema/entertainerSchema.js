@@ -55,7 +55,7 @@ export const addEntertainerSchema = (type, entertainer) => {
     specialRequest: optionalValidation(stringValidation('Special Request', 20)),
   };
 
-  if (type === HIRE_ENTERTAINERS_TYPE.search.title.toLowerCase()) {
+  if (type !== HIRE_ENTERTAINERS_TYPE.auction.title.toLowerCase()) {
     currentSchema.offer = moneyRange(
       'Your Offer',
       'offer',
@@ -74,12 +74,6 @@ export const addEntertainerSchema = (type, entertainer) => {
         yup.ref('lowestBudget'),
         'Highest Budget should be greater than the Base Budget'
       ),
-    };
-  }
-
-  if (type === HIRE_ENTERTAINERS_TYPE.auction.title.toLowerCase()) {
-    currentSchema = {
-      ...currentSchema,
       auctionStartDate: optionalValidation(requiredDate('Auction Start Date')),
       auctionEndDate: optionalValidation(
         requiredDate('Auction End Date').test(
@@ -99,7 +93,6 @@ export const addEntertainerSchema = (type, entertainer) => {
 
 export const recommendEntertainerSchema = {
   entertainerType: stringValidation('Entertainer Type'),
-  genre: multiSelectValidation('Genre'),
   language: multiSelectValidation('Language'),
   location: optionalValidation(stringValidation('Location')),
   lowestBudget: positiveNumberValidation('Base Budget', 'budget'),

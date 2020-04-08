@@ -4,13 +4,7 @@ import { Formik, Form } from 'formik';
 import axios from 'axios';
 import Humanize from 'humanize-plus';
 import AlertMessage from 'components/common/utils/AlertMessage';
-import {
-  GENRE,
-  LANGUAGE,
-  BUDGET,
-  SELECT_ENTERTAINERS_TYPE,
-  EVENT_AGE_GROUP,
-} from 'utils/constants';
+import { LANGUAGE, BUDGET, SELECT_ENTERTAINERS_TYPE } from 'utils/constants';
 import Button from 'components/forms/Button';
 import Select from 'components/forms/Select';
 import MultiSelect from 'components/forms/MultiSelect';
@@ -22,6 +16,8 @@ import { getTokenFromStore } from 'utils/localStorage';
 import { createSchema } from 'components/forms/schema/schema-helpers';
 import { recommendEntertainerSchema } from 'components/forms/schema/entertainerSchema';
 import { setInitialValues } from 'components/forms/form-helper';
+import { feedback } from 'components/forms/form-helper';
+import { getStates } from 'data/naija-states-and-lgas';
 
 export const RecommendedEntertainer = ({ eventEntertainerId }) => (
   <BackEndPage title="Search Entertainer">
@@ -42,7 +38,10 @@ RecommendedEntertainer.defaultProps = {
 RecommendedEntertainer.propTypes = {
   eventEntertainerId: PropTypes.string,
 };
-export const RecommendedEntertainerForm = ({ selectedSearchedEntertainer }) => {
+export const RecommendedEntertainerForm = ({
+  selectedSearchedEntertainer,
+  location,
+}) => {
   const [message, setMessage] = React.useState(null);
   const [title, setTitle] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
@@ -54,14 +53,24 @@ export const RecommendedEntertainerForm = ({ selectedSearchedEntertainer }) => {
         initialValues={setInitialValues(recommendEntertainerSchema, {
           lowestBudget: BUDGET[0].value,
           highestBudget: BUDGET[BUDGET.length - 2].value,
+          location,
         })}
-        onSubmit={({ stageName }, actions) => {
+        onSubmit={(
+          { entertainerType, language, location, lowestBudget, highestBudget },
+          actions
+        ) => {
           setLoading(true);
-          // post to api
           axios
             .get(`/api/v1/entertainers/recommend`, {
               headers: {
                 'x-access-token': getTokenFromStore(),
+              },
+              params: {
+                entertainerType,
+                language: JSON.stringify(language),
+                location,
+                lowestBudget,
+                highestBudget,
               },
             })
             .then(function (response) {
@@ -71,15 +80,13 @@ export const RecommendedEntertainerForm = ({ selectedSearchedEntertainer }) => {
                 const noOfEntertainers = data.entertainers.length;
                 if (noOfEntertainers > 0) {
                   setTitle(
-                    `${noOfEntertainers} ${Humanize.pluralize(
+                    `You have ${noOfEntertainers} ${Humanize.pluralize(
                       noOfEntertainers,
-                      'entertainer'
-                    )} found`
+                      'recommended entertainer'
+                    )}`
                   );
                 } else {
-                  setTitle(
-                    `No entertainer with the Stage Name '${stageName}' found`
-                  );
+                  setTitle('No recommendation found');
                 }
               }
               setLoading(false);
@@ -105,43 +112,7 @@ export const RecommendedEntertainerForm = ({ selectedSearchedEntertainer }) => {
                   name="entertainerType"
                   options={SELECT_ENTERTAINERS_TYPE}
                   placeholder="Entertainer Type"
-                />
-                <MultiSelect
-                  formGroupClassName="col-md-6"
-                  label="Genre"
-                  name="genre"
-                  optional
-                  options={GENRE}
-                  placeholder="Genre"
-                />
-              </div>
-              <div className="form-row">
-                <Select
-                  blankOption="Choose your lowest budget"
-                  formGroupClassName="col-md-6"
-                  label="Lowest Budget (in Naira)"
-                  name="lowestBudget"
-                  optional
-                  options={BUDGET}
-                  placeholder="Lowest Budget"
-                />
-                <Select
-                  blankOption="Choose your highest budget"
-                  formGroupClassName="col-md-6"
-                  label="Highest Budget (in Naira)"
-                  name="highestBudget"
-                  optional
-                  options={BUDGET}
-                  placeholder="Highest Budget"
-                />
-              </div>
-              <div className="form-row">
-                <MultiSelect
-                  formGroupClassName="col-md-6"
-                  label="Age Group"
-                  name="ageGroup"
-                  options={EVENT_AGE_GROUP}
-                  placeholder="Select the event's age group"
+                  showFeedback={feedback.ERROR}
                 />
                 <MultiSelect
                   formGroupClassName="col-md-6"
@@ -150,6 +121,39 @@ export const RecommendedEntertainerForm = ({ selectedSearchedEntertainer }) => {
                   optional
                   options={LANGUAGE}
                   placeholder="Preferred Language"
+                  showFeedback={feedback.ERROR}
+                />
+              </div>
+              <div className="form-row">
+                <Select
+                  formGroupClassName="col-md-6"
+                  label="Lowest Budget (in Naira)"
+                  name="lowestBudget"
+                  optional
+                  options={BUDGET}
+                  placeholder="Lowest Budget"
+                  showFeedback={feedback.ERROR}
+                />
+                <Select
+                  formGroupClassName="col-md-6"
+                  label="Highest Budget (in Naira)"
+                  name="highestBudget"
+                  optional
+                  options={BUDGET}
+                  placeholder="Highest Budget"
+                  showFeedback={feedback.ERROR}
+                />
+              </div>
+              <div className="form-row">
+                <Select
+                  blankOption="Select State"
+                  formGroupClassName="col-md-6"
+                  label="Location"
+                  name="location"
+                  optional
+                  options={getStates()}
+                  placeholder="State"
+                  showFeedback={feedback.ERROR}
                 />
               </div>
               <div className="form-group">
@@ -186,6 +190,7 @@ RecommendedEntertainerForm.defaultProps = {
 };
 
 RecommendedEntertainerForm.propTypes = {
+  location: PropTypes.string.isRequired,
   selectedSearchedEntertainer: PropTypes.func,
 };
 

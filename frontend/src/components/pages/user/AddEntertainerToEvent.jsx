@@ -33,7 +33,6 @@ import Stars from 'components/common/utils/Stars';
 import {
   SearchEntertainerDetailsForm,
   AuctionEntertainerDetailsForm,
-  RecommendEntertainerDetailsForm,
 } from 'components/pages/user/EntertainerDetailsForm';
 import { RecommendedEntertainerForm } from './RecommendedEntertainer';
 
@@ -212,6 +211,7 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
             auctionIsDisabled={auctionIsDisabled}
             currentlySelectedEntertainer={selectedEntertainer}
             eventDate={event.eventDate}
+            eventLocation={event.state}
             isSearch={isSearch}
             onClick={handleTypeClick}
             selectedSearchedEntertainer={selectedSearchedEntertainer}
@@ -254,6 +254,7 @@ const AddEntertainerDetailsForm = ({
   currentlySelectedEntertainer,
   isSearch,
   eventDate,
+  eventLocation,
   selectedSearchedEntertainer,
   type,
   onClick,
@@ -288,11 +289,12 @@ const AddEntertainerDetailsForm = ({
         {/* Show RecommendedEntertainer Form, when recommend is clicked */}
         {isRecommend && !hasSelectedEntertainer && (
           <RecommendedEntertainerForm
+            location={eventLocation}
             selectedSearchedEntertainer={selectedSearchedEntertainer}
           />
         )}
 
-        {/* show Selected Enteratainer if available  for Search */}
+        {/* show Selected Enteratainer if available for Search */}
         {!isAuction && hasSelectedEntertainer && (
           <>
             <h3
@@ -309,19 +311,13 @@ const AddEntertainerDetailsForm = ({
           </>
         )}
 
-        {(currentlySelectedEntertainer.entertainer || isAuction) && (
-          <>
-            {isSearch && hasSelectedEntertainer && (
-              <SearchEntertainerDetailsForm />
-            )}
-            {isAuction && (
-              <AuctionEntertainerDetailsForm eventDate={eventDate} />
-            )}
-            {isRecommend && hasSelectedEntertainer && (
-              <RecommendEntertainerDetailsForm />
-            )}
-          </>
+        {/* show Offer details for for search and recommend */}
+        {(isSearch || isRecommend) && hasSelectedEntertainer && (
+          <SearchEntertainerDetailsForm />
         )}
+
+        {/* show Auction form for auction */}
+        {isAuction && <AuctionEntertainerDetailsForm eventDate={eventDate} />}
       </div>
     </div>
   );
@@ -331,6 +327,7 @@ AddEntertainerDetailsForm.propTypes = {
   auctionIsDisabled: PropTypes.bool.isRequired,
   currentlySelectedEntertainer: PropTypes.object,
   eventDate: PropTypes.string.isRequired,
+  eventLocation: PropTypes.string.isRequired,
   isSearch: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,
   selectedSearchedEntertainer: PropTypes.func.isRequired,
@@ -492,7 +489,9 @@ const SelectedEntertainer = ({ entertainer, selectedSearchedEntertainer }) => (
           &nbsp;&nbsp;
           <button
             className="btn btn-danger btn-sm btn-transparent"
-            onClick={() => selectedSearchedEntertainer(null)}
+            onClick={() =>
+              selectedSearchedEntertainer({ entertainer: null, type: null })
+            }
           >
             Remove
           </button>

@@ -202,37 +202,3 @@ export const AuctionEntertainerDetailsForm = ({ eventDate }) => {
 AuctionEntertainerDetailsForm.propTypes = {
   eventDate: PropTypes.any.isRequired,
 };
-
-export const RecommendEntertainerDetailsForm = () => (
-  <>
-    <div className="form-row">
-      <Select
-        blankOption="Choose a place of event"
-        formGroupClassName="col-md-6"
-        label="Type of Event"
-        name="placeOfEvent"
-        options={PLACE_OF_EVENTS}
-        placeholder="Type of Event"
-      />
-      <Select
-        blankOption="Select an audience size"
-        formGroupClassName="col-md-6"
-        label="Expected Audience Size"
-        name="expectedAudienceSize"
-        options={AUDIENCE_SIZE}
-        placeholder="Expected Audience Size"
-      />
-    </div>
-    <div className="form-row">
-      <div className="col-md-12">
-        <TextArea
-          label="Special Requests"
-          name="specialRequest"
-          optional
-          placeholder="E.g 10 special songs, your favorite song e.t.c."
-          rows="3"
-        />
-      </div>
-    </div>
-  </>
-);

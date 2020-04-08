@@ -25,6 +25,23 @@ export const entertainerProfileAssociatedModels = [
   },
 ];
 
+const formatSearchEntertainers = (result) =>
+  result.reduce((acc, user) => {
+    const entertainer = {
+      profileImageURL: user.profileImageURL,
+      stageName: user.profile.stageName,
+      about: user.profile.about,
+      location: user.profile.location,
+      yearnStarted: user.profile.yearnStarted,
+      willingToTravel: user.profile.willingToTravel,
+      baseCharges: user.profile.baseCharges,
+      preferredCharges: user.profile.preferredCharges,
+      slug: user.profile.slug,
+      availableFor: user.profile.availableFor,
+    };
+    return [...acc, entertainer];
+  }, []);
+
 const EntertainerProfileController = {
   /**
    * update User And Entertainer Profile
@@ -223,22 +240,9 @@ const EntertainerProfileController = {
         include,
         limit: 6,
       });
-      const entertainers = result.reduce((acc, user) => {
-        const entertainer = {
-          profileImageURL: user.profileImageURL,
-          stageName: user.profile.stageName,
-          about: user.profile.about,
-          location: user.profile.location,
-          yearnStarted: user.profile.yearnStarted,
-          willingToTravel: user.profile.willingToTravel,
-          baseCharges: user.profile.baseCharges,
-          preferredCharges: user.profile.preferredCharges,
-          slug: user.profile.slug,
-          availableFor: user.profile.availableFor,
-        };
-        return [...acc, entertainer];
-      }, []);
-      return res.status(200).json({ entertainers, pagination });
+      return res
+        .status(200)
+        .json({ entertainers: formatSearchEntertainers(result), pagination });
     } catch (error) {
       const status = error.status || 500;
       const errorMessage = error.message || error;
@@ -321,18 +325,50 @@ const EntertainerProfileController = {
    * @return {object} returns res object
    */
   async recommendEntertainer(req, res) {
-    // const eventEntertainerId = req.params.eventEntertainerId;
-    // const entertainerQuery = {
-    //   stageName: { [Op.iLike]: `%${name}%` },
-    // };
-    try {
-      // const eventEntertainer = await EventEntertainer.findOne({
-      //   where: { id: eventEntertainerId },
-      // });
+    const {
+      entertainerType,
+      lowestBudget,
+      highestBudget,
+      language,
+      location,
+    } = req.query;
+    if (!entertainerType) {
+      return res.status(412).send({
+        msg:
+          'Entertainer type must be selected before a recommendation is made',
+      });
+    }
 
+    try {
       const entertainerQuery = {
-        stageName: { [Op.iLike]: `%wor%` },
+        entertainerType: { [Op.eq]: entertainerType },
       };
+
+      if (lowestBudget) {
+        entertainerQuery.baseCharges = { [Op.gte]: lowestBudget };
+      }
+
+      if (highestBudget) {
+        entertainerQuery.preferredCharges = { [Op.lte]: highestBudget };
+      }
+
+      if (language) {
+        const languages = JSON.parse(language);
+
+        let languageQuery = [];
+        for (const lang of languages) {
+          languageQuery.push({
+            [Op.substring]: lang,
+          });
+        }
+        entertainerQuery.preferredLanguage = {
+          [Op.and]: languageQuery,
+        };
+      }
+
+      if (location) {
+        entertainerQuery.location = { [Op.eq]: location };
+      }
 
       const include = [
         {
@@ -347,22 +383,9 @@ const EntertainerProfileController = {
           include,
           limit: 6,
         });
-        const entertainers = result.reduce((acc, user) => {
-          const entertainer = {
-            profileImageURL: user.profileImageURL,
-            stageName: user.profile.stageName,
-            about: user.profile.about,
-            location: user.profile.location,
-            yearnStarted: user.profile.yearnStarted,
-            willingToTravel: user.profile.willingToTravel,
-            baseCharges: user.profile.baseCharges,
-            preferredCharges: user.profile.preferredCharges,
-            slug: user.profile.slug,
-            availableFor: user.profile.availableFor,
-          };
-          return [...acc, entertainer];
-        }, []);
-        return res.status(200).json({ entertainers, pagination });
+        return res
+          .status(200)
+          .json({ entertainers: formatSearchEntertainers(result), pagination });
       } catch (error) {
         const status = error.status || 500;
         const errorMessage = error.message || error;

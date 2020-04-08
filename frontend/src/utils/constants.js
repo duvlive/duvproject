@@ -219,18 +219,28 @@ export const AUDIENCE_SIZE = [
 
 export const GENRE = [
   { label: 'Any', value: 'Any' },
-  { label: 'Local', value: 'Local' },
-  { label: 'Foreign', value: 'Foreign' },
-  { label: 'Pop', value: 'Pop' },
-  { label: 'Hip-hop', value: 'Hip Hop' },
-  { label: 'Rap', value: 'Rap' },
-  { label: 'Variety', value: 'Variety' },
+  { label: 'Blues', value: 'Blues' },
+  { label: 'Children', value: 'Children' },
+  { label: 'Classical', value: 'Classical' },
   { label: 'Country', value: 'Country' },
+  { label: 'Folk', value: 'Folk' },
+  { label: 'Foreign', value: 'Foreign' },
+  { label: 'Funk or Disco', value: 'Funk' },
   { label: 'Golden Oldies', value: 'Golden Oldies' },
+  { label: 'Hip-hop', value: 'Hip Hop' },
+  { label: 'Indian', value: 'Indian' },
+  { label: 'International', value: 'International' },
+  { label: 'Latin', value: 'Latin' },
+  { label: 'Local', value: 'Local' },
+  { label: 'Pop', value: 'Pop' },
+  { label: 'Pop/Rock', value: 'Pop/Rock' },
+  { label: 'R&B', value: 'R&B' },
+  { label: 'Rap', value: 'Rap' },
+  { label: 'Raggae', value: 'Raggae' },
+  { label: 'Religious', value: 'Religious' },
   { label: 'Rock', value: 'Rock' },
   { label: 'The Eighties', value: 'The Eighties' },
-  { label: 'Funk or Disco', value: 'Funk' },
-  { label: 'Indian', value: 'Indian' },
+  { label: 'Variety', value: 'Variety' },
 ];
 
 export const RATINGS = [
@@ -275,7 +285,6 @@ export const BUDGET = [
 ];
 
 export const LANGUAGE = [
-  { label: 'Any', value: 'Any' },
   { label: 'English', value: 'English' },
   { label: 'Yoruba', value: 'Yoruba' },
   { label: 'Igbo', value: 'Igbo' },

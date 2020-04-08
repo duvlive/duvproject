@@ -1,6 +1,6 @@
 const Factory = require('rosie').Factory;
-const ngfaker = require('ng-faker');
 const LoremIpsum = require('lorem-ipsum').LoremIpsum;
+const randomItem = (items) => items[Math.floor(Math.random() * items.length)];
 
 const lorem = new LoremIpsum({
   sentencesPerParagraph: {
@@ -20,8 +20,8 @@ const TYPE_IN_FULL = [
   'Liveband',
 ];
 const YEAR_STARTED = ['2015', '2016', '2017', '2018', '2019'];
-const BASE_CHARGES = [0, 50000, 100000, 200000, 300000];
-const PREFERRED_CHARGES = [50000, 200000, 400000, 500000, 10000000];
+const BASE_CHARGES = [0, 10000, 50000, 100000];
+const PREFERRED_CHARGES = [100000, 200000, 400000, 500000, 10000000];
 const STAGE_NAME = [
   'Woro',
   'Ellyzhi',
@@ -41,6 +41,15 @@ const STAGE_NAME = [
   'Winas',
   'Zebrah',
   'Osky',
+];
+
+const LOCATION = ['Lagos', 'Abuja', 'Rivers', 'Kano', 'Delta'];
+const PREFERRED_LANGUAGE = [
+  ['English'],
+  ['English', 'Yoruba'],
+  ['English', 'Igbo'],
+  ['English', 'Hausa'],
+  ['Yoruba'],
 ];
 
 function generateSlug(text) {
@@ -64,14 +73,20 @@ module.exports = new Factory()
   .sequence('yearStarted', function (id) {
     return YEAR_STARTED[id % 5];
   })
+  .attr('location', function () {
+    return randomItem(LOCATION);
+  })
   .sequence('baseCharges', function (id) {
-    return BASE_CHARGES[id % 5];
+    return BASE_CHARGES[id % 4];
   })
   .sequence('preferredCharges', function (id) {
     return PREFERRED_CHARGES[id % 5];
   })
   .sequence('yearStarted', function (id) {
     return YEAR_STARTED[id % 5];
+  })
+  .sequence('preferredLanguage', function (id) {
+    return JSON.stringify(PREFERRED_LANGUAGE[id % 5]);
   })
   .sequence('about', function (id) {
     const entertainerType = ENTERTAINER_TYPE[id % 3];
@@ -80,9 +95,6 @@ module.exports = new Factory()
     return `${entertainerType} ${stageName} is a professional ${typeInFull}. ${lorem.generateParagraphs(1)}`;
   })
   .attrs({
-    location: function () {
-      return ngfaker.address.state();
-    },
     approved: true,
     willingToTravel: true,
     youTubeChannel: 'https://youtube.com',
