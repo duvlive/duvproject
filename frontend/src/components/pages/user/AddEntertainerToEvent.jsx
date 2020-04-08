@@ -125,10 +125,13 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
   const { userDispatch } = React.useContext(UserContext);
   const [message, setMessage] = React.useState(null);
   const [hireType, setHireType] = React.useState(type);
-  const [selectedEntertainer, setSelectedEntertainer] = React.useState(null);
+  const [selectedEntertainer, setSelectedEntertainer] = React.useState({
+    entertainer: null,
+    type: '',
+  });
 
-  const selectedSearchedEntertainer = (entertainer) => {
-    setSelectedEntertainer(entertainer);
+  const selectedSearchedEntertainer = (entertainer, type) => {
+    setSelectedEntertainer({ entertainer, type });
   };
   const handleTypeClick = (selectedType) => setHireType(selectedType);
   let initialValues = {
@@ -156,7 +159,7 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
     <Formik
       enableReinitialize={true}
       initialValues={setInitialValues(
-        addEntertainerSchema(hireType.toLowerCase(), selectedEntertainer),
+        addEntertainerSchema(hireType.toLowerCase(), selectedEntertainer), // selected entertainer needed to lowest and highest budget
         initialValues
       )}
       onSubmit={(values, actions) => {
@@ -214,15 +217,21 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
             selectedSearchedEntertainer={selectedSearchedEntertainer}
             type={hireType}
           />
-          <div className="mt-5">
-            <button
-              className="btn btn-transparent btn-primary text-right btn-lg"
-              onClick={handleSubmit}
-              type="button"
-            >
-              Hire Entertainer
-            </button>
-          </div>
+
+          {/* show on auction or if entertainer is selected */}
+          {(isAuction ||
+            (selectedEntertainer.entertainer &&
+              selectedEntertainer.type === hireType.toLowerCase())) && (
+            <div className="mt-5">
+              <button
+                className="btn btn-transparent btn-primary text-right btn-lg"
+                onClick={handleSubmit}
+                type="button"
+              >
+                Hire Entertainer
+              </button>
+            </div>
+          )}
           <DisplayFormikState hide {...props} showAll />
         </>
       )}
@@ -255,6 +264,9 @@ const AddEntertainerDetailsForm = ({
     type.toLowerCase() === HIRE_ENTERTAINERS_TYPE.recommend.title.toLowerCase();
 
   console.log('eventDate', eventDate);
+  const hasSelectedEntertainer =
+    currentlySelectedEntertainer.entertainer &&
+    currentlySelectedEntertainer.type === type.toLowerCase();
 
   return (
     <div className="card card-custom card-black card-form">
@@ -265,35 +277,49 @@ const AddEntertainerDetailsForm = ({
           onClick={onClick}
           type={type}
         />
+
         {/* Show Search Form, when search is clicked */}
-        {isSearch && !currentlySelectedEntertainer && (
+        {isSearch && !hasSelectedEntertainer && (
           <SearchEntertainerForm
             selectedSearchedEntertainer={selectedSearchedEntertainer}
           />
         )}
 
         {/* Show RecommendedEntertainer Form, when recommend is clicked */}
-        {isRecommend && !currentlySelectedEntertainer && (
+        {isRecommend && !hasSelectedEntertainer && (
           <RecommendedEntertainerForm
             selectedSearchedEntertainer={selectedSearchedEntertainer}
           />
         )}
 
-        {/* show Selected Enteratainer if available  for Search and Recommendation */}
-        {currentlySelectedEntertainer && !isAuction && (
-          <SelectedEntertainer
-            entertainer={currentlySelectedEntertainer}
-            selectedSearchedEntertainer={selectedSearchedEntertainer}
-          />
+        {/* show Selected Enteratainer if available  for Search */}
+        {!isAuction && hasSelectedEntertainer && (
+          <>
+            <h3
+              className={`text-${
+                type.toLowerCase() === 'search' ? 'info' : 'success'
+              } h6`}
+            >
+              Selected Entertainer (from {type})
+            </h3>
+            <SelectedEntertainer
+              entertainer={currentlySelectedEntertainer.entertainer}
+              selectedSearchedEntertainer={selectedSearchedEntertainer}
+            />
+          </>
         )}
 
-        {(currentlySelectedEntertainer || isAuction) && (
+        {(currentlySelectedEntertainer.entertainer || isAuction) && (
           <>
-            {isSearch && <SearchEntertainerDetailsForm />}
+            {isSearch && hasSelectedEntertainer && (
+              <SearchEntertainerDetailsForm />
+            )}
             {isAuction && (
               <AuctionEntertainerDetailsForm eventDate={eventDate} />
             )}
-            {isRecommend && <RecommendEntertainerDetailsForm />}
+            {isRecommend && hasSelectedEntertainer && (
+              <RecommendEntertainerDetailsForm />
+            )}
           </>
         )}
       </div>

@@ -45,7 +45,6 @@ const DatePicker = ({
       />
       <Field name={name}>
         {({ form }) => {
-          console.log('formik.values', formik.values);
           return (
             <ReactDatePicker
               {...props}

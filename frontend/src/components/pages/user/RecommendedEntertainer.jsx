@@ -4,8 +4,13 @@ import { Formik, Form } from 'formik';
 import axios from 'axios';
 import Humanize from 'humanize-plus';
 import AlertMessage from 'components/common/utils/AlertMessage';
-import { getStates } from 'data/naija-states-and-lgas';
-import { GENRE, LANGUAGE, BUDGET } from 'utils/constants';
+import {
+  GENRE,
+  LANGUAGE,
+  BUDGET,
+  SELECT_ENTERTAINERS_TYPE,
+  EVENT_AGE_GROUP,
+} from 'utils/constants';
 import Button from 'components/forms/Button';
 import Select from 'components/forms/Select';
 import MultiSelect from 'components/forms/MultiSelect';
@@ -89,23 +94,18 @@ export const RecommendedEntertainerForm = ({ selectedSearchedEntertainer }) => {
           actions.setSubmitting(false);
         }}
         render={({ isSubmitting, handleSubmit }) => (
-          <Form className="card card-custom card-black card-form ">
+          <Form className="card card-custom card-black card-form p-4">
             <AlertMessage {...message} />
             <>
-              <h3 className="mb-1 small">Clear Filters</h3>
-
               <div className="form-row">
                 <Select
-                  blankOption="Location"
+                  blankOption="Choose your preferred Entertainer Type"
                   formGroupClassName="col-md-6"
-                  label="Location"
-                  name="location"
-                  optional
-                  options={getStates()}
-                  placeholder="State"
+                  label="Entertainer Type"
+                  name="entertainerType"
+                  options={SELECT_ENTERTAINERS_TYPE}
+                  placeholder="Entertainer Type"
                 />
-              </div>
-              <div className="form-row">
                 <MultiSelect
                   formGroupClassName="col-md-6"
                   label="Genre"
@@ -113,14 +113,6 @@ export const RecommendedEntertainerForm = ({ selectedSearchedEntertainer }) => {
                   optional
                   options={GENRE}
                   placeholder="Genre"
-                />
-                <MultiSelect
-                  formGroupClassName="col-md-6"
-                  label="Language"
-                  name="language"
-                  optional
-                  options={LANGUAGE}
-                  placeholder="Preferred Language"
                 />
               </div>
               <div className="form-row">
@@ -143,14 +135,30 @@ export const RecommendedEntertainerForm = ({ selectedSearchedEntertainer }) => {
                   placeholder="Highest Budget"
                 />
               </div>
-              <div className="form-group col-md-3">
-                <label htmlFor="search"></label>
+              <div className="form-row">
+                <MultiSelect
+                  formGroupClassName="col-md-6"
+                  label="Age Group"
+                  name="ageGroup"
+                  options={EVENT_AGE_GROUP}
+                  placeholder="Select the event's age group"
+                />
+                <MultiSelect
+                  formGroupClassName="col-md-6"
+                  label="Language"
+                  name="language"
+                  optional
+                  options={LANGUAGE}
+                  placeholder="Preferred Language"
+                />
+              </div>
+              <div className="form-group">
                 <Button
+                  color="success"
                   loading={isSubmitting}
-                  name="search"
                   onClick={handleSubmit}
                 >
-                  Search
+                  Recommend Entertainer
                 </Button>
               </div>
             </>
@@ -163,7 +171,9 @@ export const RecommendedEntertainerForm = ({ selectedSearchedEntertainer }) => {
       ) : (
         <EntertainersSearchResult
           entertainers={entertainers}
-          selectedSearchedEntertainer={selectedSearchedEntertainer}
+          selectedSearchedEntertainer={(entertainer) =>
+            selectedSearchedEntertainer(entertainer, 'recommend')
+          }
           title={title}
         />
       )}

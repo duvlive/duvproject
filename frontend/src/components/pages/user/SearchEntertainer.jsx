@@ -120,6 +120,7 @@ export const SearchEntertainerForm = ({ selectedSearchedEntertainer }) => {
               <div className="form-group col-md-3">
                 <label htmlFor="search"></label>
                 <Button
+                  color="info"
                   loading={isSubmitting}
                   name="search"
                   onClick={handleSubmit}
@@ -139,7 +140,9 @@ export const SearchEntertainerForm = ({ selectedSearchedEntertainer }) => {
       ) : (
         <EntertainersSearchResult
           entertainers={entertainers}
-          selectedSearchedEntertainer={selectedSearchedEntertainer}
+          selectedSearchedEntertainer={(entertainer) =>
+            selectedSearchedEntertainer(entertainer, 'search')
+          }
           title={title}
         />
       )}

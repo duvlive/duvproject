@@ -98,6 +98,7 @@ export const addEntertainerSchema = (type, entertainer) => {
 };
 
 export const recommendEntertainerSchema = {
+  entertainerType: stringValidation('Entertainer Type'),
   genre: multiSelectValidation('Genre'),
   language: multiSelectValidation('Language'),
   location: optionalValidation(stringValidation('Location')),
