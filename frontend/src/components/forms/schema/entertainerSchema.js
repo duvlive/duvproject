@@ -56,7 +56,7 @@ export const addEntertainerSchema = (type, entertainer) => {
   };
 
   if (type !== HIRE_ENTERTAINERS_TYPE.auction.title.toLowerCase()) {
-    currentSchema.offer = moneyRange(
+    currentSchema.askingPrice = moneyRange(
       'Your Offer',
       'offer',
       baseCharges,

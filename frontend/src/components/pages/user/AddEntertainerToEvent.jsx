@@ -51,11 +51,9 @@ const AddEntertainerDetails = ({ id }) => {
         })
         .then(function (response) {
           const { status, data } = response;
-          console.log('status,data', status, data);
           // handle success
           if (status === 200) {
             setEvent(data.event);
-            console.log('data.event: ', data.event);
             setLoading(false);
           }
         })
@@ -74,11 +72,11 @@ const AddEntertainerDetails = ({ id }) => {
     <BackEndPage title="Add Entertainer">
       <div className="main-app">
         <TopMessage message={event.eventType || ''} />
-        <EventDetails event={event} />
         {loading ? (
           <LoadingScreen loading={loading} text="Loading Event Details" />
         ) : (
           <>
+            <EventDetails event={event} />
             {!userCanAddEntertainer(event.eventDate) ? (
               eventHasExpired(event.eventDate) ? (
                 <ExpiredEvent />
@@ -122,7 +120,8 @@ AddEntertainerDetails.defaultProps = {
 };
 const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
   const { userDispatch } = React.useContext(UserContext);
-  const [message, setMessage] = React.useState(null);
+  const [loading, setLoading] = React.useState(false);
+  const [message, setMessage] = React.useState({ message: null });
   const [hireType, setHireType] = React.useState(type);
   const [selectedEntertainer, setSelectedEntertainer] = React.useState({
     entertainer: null,
@@ -160,8 +159,6 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
     initialValues.language = selectedEntertainer.language;
   }
 
-  console.log('initialValues', initialValues);
-
   return (
     <Formik
       enableReinitialize={true}
@@ -170,6 +167,7 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
         initialValues
       )}
       onSubmit={(values, actions) => {
+        setLoading(true);
         let entertainerDetails = {
           ...values,
           genre: JSON.stringify(values.genre),
@@ -183,68 +181,74 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
           entertainerDetails.auctionStartDate = values.auctionStartDate.date;
           entertainerDetails.auctionEndDate = values.auctionStartDate.date;
         } else {
-          entertainerDetails.offer = values.offer;
           entertainerDetails.entertainerId = selectedEntertainer.entertainer.id;
+          entertainerDetails.entertainerType =
+            selectedEntertainer.entertainer.entertainerType;
         }
         console.log('entertainerDetails', entertainerDetails);
 
-        // axios
-        //   .post('/api/v1/eventEntertainer', entertainerDetails, {
-        //     headers: { 'x-access-token': getTokenFromStore() },
-        //   })
-        //   .then(function (response) {
-        //     const { status, data } = response;
-        //     if (status === 200) {
-        //       userDispatch({
-        //         type: 'add-entertainer-to-event',
-        //         user: data,
-        //       });
-        //       actions.setSubmitting(false);
-        //       if (isAuction) {
-        //         navigate(`/user/events/view/${id}`);
-        //       }
-        //       if (isSearch) {
-        //         navigate(`/user/entertainer/search/${id}`);
-        //       }
-        //       if (isRecommend) {
-        //         navigate(`/user/entertainer/recommended/${id}`);
-        //       }
-        //     }
-        //   })
-        //   .catch(function (error) {
-        //     setMessage(error.response.data.message);
-        //     actions.setSubmitting(false);
-        //   });
+        axios
+          .post('/api/v1/eventEntertainer', entertainerDetails, {
+            headers: { 'x-access-token': getTokenFromStore() },
+          })
+          .then(function (response) {
+            const { status, data } = response;
+            console.log('response', response);
+            if (status === 200) {
+              userDispatch({
+                type: 'add-entertainer-to-event',
+                user: data,
+              });
+              actions.setSubmitting(false);
+
+              navigate(`/user/events/view/${id}`);
+            } else {
+              setMessage(data.message);
+            }
+            setLoading(false);
+          })
+          .catch(function (error) {
+            console.log('error', error.response);
+            setMessage({ message: error.response.data.message });
+            actions.setSubmitting(false);
+            setLoading(false);
+          });
       }}
       render={({ isSubmitting, handleSubmit, ...props }) => (
         <>
-          <AlertMessage {...message} />
-          <AddEntertainerDetailsForm
-            auctionIsDisabled={auctionIsDisabled}
-            currentlySelectedEntertainer={selectedEntertainer}
-            eventDate={event.eventDate}
-            eventLocation={event.state}
-            isSearch={isSearch}
-            onClick={handleTypeClick}
-            selectedSearchedEntertainer={selectedSearchedEntertainer}
-            type={hireType}
-          />
+          {loading ? (
+            <LoadingScreen loading={loading} text="Saving Event Details" />
+          ) : (
+            <>
+              <AddEntertainerDetailsForm
+                auctionIsDisabled={auctionIsDisabled}
+                currentlySelectedEntertainer={selectedEntertainer}
+                errorMessage={message}
+                eventDate={event.eventDate}
+                eventLocation={event.state}
+                isSearch={isSearch}
+                onClick={handleTypeClick}
+                selectedSearchedEntertainer={selectedSearchedEntertainer}
+                type={hireType}
+              />
 
-          {/* show on auction or if entertainer is selected */}
-          {(isAuction ||
-            (selectedEntertainer.entertainer &&
-              selectedEntertainer.type === hireType.toLowerCase())) && (
-            <div className="mt-5">
-              <button
-                className="btn btn-transparent btn-primary text-right btn-lg"
-                onClick={handleSubmit}
-                type="button"
-              >
-                Hire Entertainer
-              </button>
-            </div>
+              {/* show on auction or if entertainer is selected */}
+              {(isAuction ||
+                (selectedEntertainer.entertainer &&
+                  selectedEntertainer.type === hireType.toLowerCase())) && (
+                <div className="mt-5">
+                  <button
+                    className="btn btn-transparent btn-primary text-right btn-lg"
+                    onClick={handleSubmit}
+                    type="button"
+                  >
+                    Hire Entertainer
+                  </button>
+                </div>
+              )}
+              <DisplayFormikState hide {...props} showAll />
+            </>
           )}
-          <DisplayFormikState hide {...props} showAll />
         </>
       )}
       validationSchema={createSchema(
@@ -265,6 +269,7 @@ const AddEntertainerDetailsForm = ({
   auctionIsDisabled,
   currentlySelectedEntertainer,
   isSearch,
+  errorMessage,
   eventDate,
   eventLocation,
   selectedSearchedEntertainer,
@@ -276,7 +281,6 @@ const AddEntertainerDetailsForm = ({
   const isRecommend =
     type.toLowerCase() === HIRE_ENTERTAINERS_TYPE.recommend.title.toLowerCase();
 
-  console.log('eventDate', eventDate);
   const hasSelectedEntertainer =
     currentlySelectedEntertainer.entertainer &&
     currentlySelectedEntertainer.type === type.toLowerCase();
@@ -323,6 +327,8 @@ const AddEntertainerDetailsForm = ({
           </>
         )}
 
+        <AlertMessage {...errorMessage} />
+
         {/* show Offer details for for search and recommend */}
         {(isSearch || isRecommend) && hasSelectedEntertainer && (
           <SearchEntertainerDetailsForm />
@@ -338,6 +344,7 @@ const AddEntertainerDetailsForm = ({
 AddEntertainerDetailsForm.propTypes = {
   auctionIsDisabled: PropTypes.bool.isRequired,
   currentlySelectedEntertainer: PropTypes.object,
+  errorMessage: PropTypes.object.isRequired,
   eventDate: PropTypes.string.isRequired,
   eventLocation: PropTypes.string.isRequired,
   isSearch: PropTypes.bool.isRequired,

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Stars from 'components/common/utils/Stars';
 // import DuvLiveModal from 'components/custom/Modal';
 import Image from 'components/common/utils/Image';
-import { twoDigitNumber, commaNumber } from 'utils/helpers';
+import { commaNumber } from 'utils/helpers';
 
 const EntertainersSearchResult = ({
   entertainers,

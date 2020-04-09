@@ -57,8 +57,8 @@ const EventEntertainerController = {
       language,
       expectedAudienceSize,
       ageGroup,
-      lowestBudget,
-      highestBudget,
+      lowestBudget = '0',
+      highestBudget = '0',
       specialRequest,
       eventId,
       id,
@@ -71,11 +71,9 @@ const EventEntertainerController = {
     const error = {
       ...validString(entertainerType),
       ...validString(placeOfEvent),
-      ...validString(language),
       ...validString(expectedAudienceSize),
       ...validString(lowestBudget),
       ...validString(highestBudget),
-      ...validString(specialRequest),
     };
 
     if (Object.keys(error).length > 1) {
@@ -144,6 +142,7 @@ const EventEntertainerController = {
         entertainerType,
         placeOfEvent,
         genre,
+        hireType,
         language,
         expectedAudienceSize,
         ageGroup,

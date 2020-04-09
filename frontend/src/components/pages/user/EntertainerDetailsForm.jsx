@@ -23,7 +23,7 @@ export const SearchEntertainerDetailsForm = () => (
       <InputFormat
         formGroupClassName="col-md-6"
         label="Your Offer"
-        name="offer"
+        name="askingPrice"
         placeholder="Enter the Amount you wish to pay"
       />
       <Select
