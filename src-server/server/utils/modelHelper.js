@@ -14,6 +14,7 @@ export const getAll = async (Model, options) => {
   const offset = options.offset || 0;
   const limit = options.limit || 0;
   const where = options.where || {};
+  const order = options.order || [['updatedAt', 'DESC']];
   const include = options.include || null;
   /**
    * Calculate the pagination
@@ -31,7 +32,7 @@ export const getAll = async (Model, options) => {
         where,
         limit,
         offset,
-        order: [['updatedAt', 'DESC']],
+        order,
         include,
       });
       const total = data.count;

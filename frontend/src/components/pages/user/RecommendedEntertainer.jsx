@@ -44,6 +44,7 @@ export const RecommendedEntertainerForm = ({
 }) => {
   const [message, setMessage] = React.useState(null);
   const [title, setTitle] = React.useState(null);
+  const [languages, setLanguages] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
   const [entertainers, setEntertainers] = React.useState([]);
 
@@ -85,8 +86,10 @@ export const RecommendedEntertainerForm = ({
                       'recommended entertainer'
                     )}`
                   );
+                  setLanguages(language);
                 } else {
                   setTitle('No recommendation found');
+                  setLanguages(null);
                 }
               }
               setLoading(false);
@@ -176,7 +179,7 @@ export const RecommendedEntertainerForm = ({
         <EntertainersSearchResult
           entertainers={entertainers}
           selectedSearchedEntertainer={(entertainer) =>
-            selectedSearchedEntertainer(entertainer, 'recommend')
+            selectedSearchedEntertainer(entertainer, 'recommend', languages)
           }
           title={title}
         />

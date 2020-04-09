@@ -127,20 +127,13 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
   const [selectedEntertainer, setSelectedEntertainer] = React.useState({
     entertainer: null,
     type: '',
+    language: '',
   });
 
-  const selectedSearchedEntertainer = (entertainer, type) => {
-    setSelectedEntertainer({ entertainer, type });
+  const selectedSearchedEntertainer = (entertainer, type, language = null) => {
+    setSelectedEntertainer({ entertainer, type, language });
   };
   const handleTypeClick = (selectedType) => setHireType(selectedType);
-  let initialValues = {
-    lowestBudget: BUDGET[0].value,
-    highestBudget: BUDGET[BUDGET.length - 2].value,
-    auctionStartDate: { date: Date.now() },
-    auctionEndDate: {
-      date: maxAuctionDate(event.eventDate || Date.now()),
-    },
-  };
 
   const isAuction =
     hireType.toLowerCase() ===
@@ -153,6 +146,21 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
   const isRecommend =
     hireType.toLowerCase() ===
     HIRE_ENTERTAINERS_TYPE.recommend.title.toLowerCase();
+
+  let initialValues = {
+    lowestBudget: BUDGET[0].value,
+    highestBudget: BUDGET[BUDGET.length - 2].value,
+    auctionStartDate: { date: Date.now() },
+    auctionEndDate: {
+      date: maxAuctionDate(event.eventDate || Date.now()),
+    },
+  };
+
+  if (isRecommend) {
+    initialValues.language = selectedEntertainer.language;
+  }
+
+  console.log('initialValues', initialValues);
 
   return (
     <Formik
@@ -174,35 +182,39 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
         if (isAuction) {
           entertainerDetails.auctionStartDate = values.auctionStartDate.date;
           entertainerDetails.auctionEndDate = values.auctionStartDate.date;
+        } else {
+          entertainerDetails.offer = values.offer;
+          entertainerDetails.entertainerId = selectedEntertainer.entertainer.id;
         }
+        console.log('entertainerDetails', entertainerDetails);
 
-        axios
-          .post('/api/v1/eventEntertainer', entertainerDetails, {
-            headers: { 'x-access-token': getTokenFromStore() },
-          })
-          .then(function (response) {
-            const { status, data } = response;
-            if (status === 200) {
-              userDispatch({
-                type: 'add-entertainer-to-event',
-                user: data,
-              });
-              actions.setSubmitting(false);
-              if (isAuction) {
-                navigate(`/user/events/view/${id}`);
-              }
-              if (isSearch) {
-                navigate(`/user/entertainer/search/${id}`);
-              }
-              if (isRecommend) {
-                navigate(`/user/entertainer/recommended/${id}`);
-              }
-            }
-          })
-          .catch(function (error) {
-            setMessage(error.response.data.message);
-            actions.setSubmitting(false);
-          });
+        // axios
+        //   .post('/api/v1/eventEntertainer', entertainerDetails, {
+        //     headers: { 'x-access-token': getTokenFromStore() },
+        //   })
+        //   .then(function (response) {
+        //     const { status, data } = response;
+        //     if (status === 200) {
+        //       userDispatch({
+        //         type: 'add-entertainer-to-event',
+        //         user: data,
+        //       });
+        //       actions.setSubmitting(false);
+        //       if (isAuction) {
+        //         navigate(`/user/events/view/${id}`);
+        //       }
+        //       if (isSearch) {
+        //         navigate(`/user/entertainer/search/${id}`);
+        //       }
+        //       if (isRecommend) {
+        //         navigate(`/user/entertainer/recommended/${id}`);
+        //       }
+        //     }
+        //   })
+        //   .catch(function (error) {
+        //     setMessage(error.response.data.message);
+        //     actions.setSubmitting(false);
+        //   });
       }}
       render={({ isSubmitting, handleSubmit, ...props }) => (
         <>
@@ -463,6 +475,10 @@ const SelectedEntertainer = ({ entertainer, selectedSearchedEntertainer }) => (
         <td>
           <span className="text-muted small--4">Stage name</span>{' '}
           {entertainer.stageName}
+        </td>
+        <td>
+          <span className="text-muted small--4">Type</span>{' '}
+          {entertainer.entertainerType}
         </td>
         <td className="align-middle text-gray">
           <span className="text-muted small--4">Location</span>{' '}

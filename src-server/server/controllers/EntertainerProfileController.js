@@ -28,6 +28,8 @@ export const entertainerProfileAssociatedModels = [
 const formatSearchEntertainers = (result) =>
   result.reduce((acc, user) => {
     const entertainer = {
+      id: user.id,
+      entertainerType: user.profile.entertainerType,
       profileImageURL: user.profileImageURL,
       stageName: user.profile.stageName,
       about: user.profile.about,
@@ -239,6 +241,31 @@ const EntertainerProfileController = {
         // where: userQuery,
         include,
         limit: 6,
+      });
+      return res
+        .status(200)
+        .json({ entertainers: formatSearchEntertainers(result), pagination });
+    } catch (error) {
+      const status = error.status || 500;
+      const errorMessage = error.message || error;
+      return res.status(status).json({ message: errorMessage });
+    }
+  },
+
+  async getRandomRecommendation(req, res) {
+    const include = [
+      {
+        model: EntertainerProfile,
+        as: 'profile',
+      },
+    ];
+
+    try {
+      const { result, pagination } = await getAll(User, {
+        include,
+        limit: 2,
+        where: { type: { [Op.eq]: 2 } },
+        order: [Sequelize.fn('RANDOM')],
       });
       return res
         .status(200)

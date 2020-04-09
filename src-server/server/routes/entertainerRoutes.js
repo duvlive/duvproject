@@ -26,6 +26,13 @@ const entertainerRoutes = (router) => {
       Authentication.isActiveUser,
       EntertainerProfileController.recommendEntertainer
     );
+  router
+    .route('/api/v1/entertainers/recommend/random')
+    .get(
+      Authentication.verifyToken,
+      Authentication.isActiveUser,
+      EntertainerProfileController.getRandomRecommendation
+    );
 
   router
     .route('/api/v1/entertainers/search/pastEvents/:eventEntertainerId')

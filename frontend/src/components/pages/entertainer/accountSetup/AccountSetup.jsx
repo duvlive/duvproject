@@ -8,7 +8,7 @@ import IdentificationForm from 'components/pages/entertainer/accountSetup/Identi
 import EntertainerDetailsForm from 'components/pages/entertainer/accountSetup/EntertainerDetailsForm';
 import {
   ProfessionalContactForm,
-  NextOfKinForm
+  NextOfKinForm,
 } from 'components/pages/entertainer/accountSetup/EmergencyContacts';
 import { BankDetailsForm } from 'components/pages/entertainer/accountSetup/BankDetails';
 import { UserContext } from 'context/UserContext';
@@ -42,10 +42,10 @@ const AccountSetup = ({ stepFromURL }) => {
       <ProfessionalContactForm />
     </>,
     <YoutubeChannelForm />,
-    <IdentificationForm />
+    <IdentificationForm />,
   ];
 
-  const handleCurrentStep = step => setCurrentStep(step);
+  const handleCurrentStep = (step) => setCurrentStep(step);
   const moveToPreviousStep = () =>
     currentStep <= MIN_STEP
       ? setCurrentStep(1)
@@ -78,11 +78,11 @@ const AccountSetup = ({ stepFromURL }) => {
 };
 
 AccountSetup.defaultProps = {
-  stepFromURL: '1'
+  stepFromURL: '1',
 };
 
 AccountSetup.propTypes = {
-  stepFromURL: PropTypes.string
+  stepFromURL: PropTypes.string,
 };
 
 const StepperList = ({ currentStep, setCurrentStep }) => {
@@ -95,7 +95,7 @@ const StepperList = ({ currentStep, setCurrentStep }) => {
       !!(userState.contacts[0] && userState.contacts[0].firstName)) ||
       !!(userState.contacts[1] && userState.contacts[1].firstName),
     !!userState.entertainerProfile.youTubeChannel,
-    !!userState.identification.idType
+    !!userState.identification.idType,
   ];
   const status = steps.map((_, index) => ({
     active: currentStep === index + 1,
@@ -103,7 +103,7 @@ const StepperList = ({ currentStep, setCurrentStep }) => {
     done: done[index],
     rejected:
       userState.approvalComment[steps[index]] !== null &&
-      userState.approvalComment[steps[index]] !== 'YES'
+      userState.approvalComment[steps[index]] !== 'YES',
   }));
 
   return (
@@ -125,7 +125,7 @@ const StepperList = ({ currentStep, setCurrentStep }) => {
 };
 StepperList.propTypes = {
   currentStep: PropTypes.number.isRequired,
-  setCurrentStep: PropTypes.func.isRequired
+  setCurrentStep: PropTypes.func.isRequired,
 };
 
 const Stepper = ({ number, onClick, status, title }) => {
@@ -135,7 +135,7 @@ const Stepper = ({ number, onClick, status, title }) => {
         active: status.active,
         approved: status.approved,
         done: status.done,
-        rejected: status.rejected
+        rejected: status.rejected,
       })}
       onClick={onClick}
       role="tab"
@@ -158,13 +158,13 @@ Stepper.propTypes = {
   number: PropTypes.number.isRequired,
   onClick: PropTypes.func.isRequired,
   status: PropTypes.object.isRequired,
-  title: PropTypes.string.isRequired
+  title: PropTypes.string.isRequired,
 };
 
 const StepperNavigation = ({
   moveToPreviousStep,
   moveToNextStep,
-  currentStep
+  currentStep,
 }) => (
   <section className="row mt-3">
     <div className="col-6">
@@ -193,7 +193,7 @@ const StepperNavigation = ({
 StepperNavigation.propTypes = {
   currentStep: PropTypes.number.isRequired,
   moveToNextStep: PropTypes.func.isRequired,
-  moveToPreviousStep: PropTypes.func.isRequired
+  moveToPreviousStep: PropTypes.func.isRequired,
 };
 
 const ToComplete = ({ currentStep }) => {
@@ -219,7 +219,7 @@ const ToComplete = ({ currentStep }) => {
 };
 
 ToComplete.propTypes = {
-  currentStep: PropTypes.number.isRequired
+  currentStep: PropTypes.number.isRequired,
 };
 
 export default AccountSetup;
@@ -235,3 +235,14 @@ export default AccountSetup;
 // add notification to approval (admin approval, profile approval, new review)
 // Add filter to auctions (Pendng Approved, Closed)
 // Add sample entertainer to DB
+// submitting recommendation
+
+// user 1
+// 2 past events
+//  1 this week event
+// 2 future events
+// event 1 - 2 auctions - 5 / 4 bids
+// event 2 - recommendation / auction - 2 bids
+// event 3 - search / recommedation
+// event 4 - auction / search - 3 bids
+// event 5 - recommendation

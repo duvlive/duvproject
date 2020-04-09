@@ -45,9 +45,9 @@ EntertainersSearchResult.Card = ({
   selectedSearchedEntertainer,
 }) => (
   <tr>
-    <th className="table__number" scope="row">
+    {/* <th className="table__number" scope="row">
       {twoDigitNumber(number)}
-    </th>
+    </th> */}
     <td>
       <Image
         className="avatar--medium-small"
@@ -59,6 +59,10 @@ EntertainersSearchResult.Card = ({
     <td>
       <span className="text-muted small--4">Stage name</span>{' '}
       {entertainer.stageName}
+    </td>
+    <td>
+      <span className="text-muted small--4">Type</span>{' '}
+      {entertainer.entertainerType}
     </td>
     <td className="align-middle text-gray">
       <span className="text-muted small--4">Location</span>{' '}
