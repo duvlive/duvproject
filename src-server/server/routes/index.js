@@ -12,11 +12,13 @@ import identificationRoutes from './identificationRoutes';
 import imageRoutes from './imageRoutes';
 import otherRoutes from './otherRoutes';
 import paymentRoutes from './paymentRoute';
+import ratingRoutes from './ratingRoute';
+import reviewRoutes from './reviewRoutes';
 import userRoutes from './userRoutes';
 import videoRoutes from './videoRoutes';
 import welcomeRoute from './welcomeRoute';
 
-const routes = app => {
+const routes = (app) => {
   applicationRoutes(app);
   approveCommentRoutes(app);
   bankDetailsRoutes(app);
@@ -31,6 +33,8 @@ const routes = app => {
   imageRoutes(app);
   otherRoutes(app);
   paymentRoutes(app);
+  ratingRoutes(app);
+  reviewRoutes(app);
   userRoutes(app);
   videoRoutes(app);
   welcomeRoute(app);
