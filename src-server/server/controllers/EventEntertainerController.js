@@ -6,25 +6,26 @@ import {
   Event,
   User,
 } from '../models';
-import { validString } from '../utils';
+import { validString, getLongDate, getTime, moneyFormat } from '../utils';
 import EMAIL_CONTENT from '../email-template/content';
 
 import sendMail from '../MailSender';
 
 const sendRequestMail = ({ askingPrice, email, stageName, event }) => {
   // Build Email
-  const contentTop = `Congratulations!!! Your have a new event request  NGN ${askingPrice}. Please find event details below`;
+
+  const offer = moneyFormat(askingPrice);
+  const contentTop = `Congratulations!!! Your have a new event request  NGN ${offer}. Please find event details below`;
   const contentBottom = `
     <strong>Event:</strong> ${event.eventType} <br>
-    <strong>Place:</strong> ${event.eventPlace} <br>
-    <strong>Date:</strong> ${event.eventDate} <br>
-    <strong>Start Time:</strong> ${event.eventStart} <br>
+    <strong>Date:</strong> ${getLongDate(event.eventDate)} <br>
+    <strong>Start Time:</strong> ${getTime(event.startTime)} <br>
     <strong>Duration:</strong> ${event.eventDuration} <br>
-    <strong>Street Line 1:</strong> ${event.eventStreetLine1} <br>
-    <strong>Street Line 2:</strong> ${event.eventStreetLine2} <br>
-    <strong>State:</strong> ${event.eventState} <br>
-    <strong>LGA:</strong> ${event.eventLga} <br>
-    <strong>City:</strong> ${event.eventCity} <br>
+    <strong>Street Line 1:</strong> ${event.streetLine1} <br>
+    <strong>Street Line 2:</strong> ${event.streetLine2} <br>
+    <strong>State:</strong> ${event.state} <br>
+    <strong>LGA:</strong> ${event.lga} <br>
+    <strong>City:</strong> ${event.city} <br>
   `;
 
   sendMail(
@@ -32,7 +33,7 @@ const sendRequestMail = ({ askingPrice, email, stageName, event }) => {
     { email: email },
     {
       firstName: stageName,
-      title: `You have a request of NGN ${askingPrice}`,
+      title: `You have a request of NGN ${offer}`,
       link: '#',
       contentTop,
       contentBottom,
@@ -163,8 +164,8 @@ const EventEntertainerController = {
       })
         .then(async (eventEntertainer) => {
           // get the event details
-          const event = await req.user.getEvents({
-            where: { id: eventId },
+          const event = await Event.findOne({
+            where: { id: eventId, userId: req.user.id },
             include: {
               model: EventEntertainer,
               as: 'entertainers',
