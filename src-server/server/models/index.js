@@ -69,37 +69,44 @@ db.User.hasMany(db.User, {
   foreignKey: 'userId',
   as: 'bandMembers',
 });
+
 db.User.hasMany(db.Event, {
   foreignKey: 'userId',
   as: 'events',
 });
+
 db.User.hasMany(db.Contact, {
   foreignKey: 'userId',
   as: 'contacts',
   targetKey: 'contacts',
 });
+
 db.User.hasMany(db.Gallery, {
   foreignKey: 'userId',
   as: 'galleries',
   onDelete: 'CASCADE',
   hooks: true,
 });
+
 db.User.hasMany(db.Application, {
   foreignKey: 'userId',
   as: 'applications',
   targetKey: 'applications',
 });
+
 db.User.hasMany(db.Badge, {
   foreignKey: 'userId',
   as: 'badges',
   targetKey: 'badges',
 });
+
 db.User.hasMany(db.Video, {
   foreignKey: 'userId',
   as: 'videos',
   onDelete: 'CASCADE',
   hooks: true,
 });
+
 db.User.hasMany(db.Notification, {
   foreignKey: 'userId',
   as: 'notifications',
@@ -167,6 +174,56 @@ db.EventEntertainer.belongsTo(db.Event, {
 db.EntertainerProfile.belongsTo(db.User, {
   foreignKey: 'userId',
   as: 'personalDetails',
+});
+
+db.Rating.belongsTo(db.User, {
+  foreignKey: 'userId',
+  as: 'rater',
+});
+
+db.User.hasMany(db.Rating, {
+  foreignKey: 'userId',
+  as: 'ratings',
+});
+
+db.Review.belongsTo(db.Rating, {
+  foreignKey: 'ratingId',
+  as: 'rating',
+});
+
+db.Rating.hasMany(db.Review, {
+  foreignKey: 'ratingId',
+  as: 'reviews',
+});
+
+db.Review.belongsTo(db.User, {
+  foreignKey: 'userId',
+  as: 'reviewer',
+});
+
+db.User.hasMany(db.Review, {
+  foreignKey: 'userId',
+  as: 'reviews',
+});
+
+db.EntertainerProfile.hasMany(db.Review, {
+  foreignKey: 'entertainerId',
+  as: 'reviewed',
+});
+
+db.Review.belongsTo(db.EntertainerProfile, {
+  foreignKey: 'entertainerId',
+  as: 'entertainerDetail',
+});
+
+db.EntertainerProfile.hasMany(db.Rating, {
+  foreignKey: 'entertainerId',
+  as: 'ratings',
+});
+
+db.Rating.belongsTo(db.EntertainerProfile, {
+  foreignKey: 'entertainerId',
+  as: 'rated',
 });
 
 db.sequelize = sequelize;
