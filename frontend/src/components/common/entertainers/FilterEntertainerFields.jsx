@@ -1,66 +1,74 @@
 import React from 'react';
-import { GENRE, LANGUAGE, BUDGET, RATINGS } from 'utils/constants';
+import { GENRE, LANGUAGE, BUDGET } from 'utils/constants';
 import Select from 'components/forms/Select';
 import MultiSelect from 'components/forms/MultiSelect';
 import { Formik } from 'formik';
 import {
-  setInitialValues
+  setInitialValues,
   // DisplayFormikState
 } from 'components/forms/form-helper';
 import { addEntertainerSchema } from 'components/forms/schema/entertainerSchema';
 import { createSchema } from 'components/forms/schema/schema-helpers';
 import { getStates } from 'data/naija-states-and-lgas';
+// import { Accordion } from 'react-bootstrap';
+// import Accordion from 'components/custom/Accordion';
 
 const FilterEntertainerFieldsForm = () => (
-  <div>
-    {/* Location */}
-    <Select
-      blankOption="Location"
-      label="State"
-      name="address.state"
-      optional
-      options={getStates()}
-      placeholder="State"
-    />
-    <MultiSelect
-      label="Genre"
-      name="entertainer.genre"
-      optional
-      options={GENRE}
-      placeholder="Genre"
-    />
-    <MultiSelect
-      label="Language"
-      name="entertainer.language"
-      optional
-      options={LANGUAGE}
-      placeholder="Preferred Language"
-    />
-    <Select
-      blankOption="Choose your lowest budget"
-      label="Lowest Budget (in Naira)"
-      name="entertainer.lowest_budget"
-      optional
-      options={BUDGET}
-      placeholder="Lowest Budget"
-    />
-    <Select
-      blankOption="Choose your highest budget"
-      label="Highest Budget (in Naira)"
-      name="entertainer.highestBudget"
-      optional
-      options={BUDGET}
-      placeholder="Highest Budget"
-    />
-    <Select
-      blankOption="Choose your highest budget"
-      label="Ratings"
-      name="entertainer.ratings"
-      optional
-      options={RATINGS}
-      placeholder="Highest Budget"
-    />
-  </div>
+  // <div atomic={true}>
+
+  <>
+    <h3 className="mb-1 small">Clear Filters</h3>
+
+    <div className="form-row">
+      <Select
+        blankOption="Location"
+        formGroupClassName="col-md-6"
+        label="State"
+        name="address.state"
+        optional
+        options={getStates()}
+        placeholder="State"
+      />
+    </div>
+    <div className="form-row">
+      <MultiSelect
+        formGroupClassName="col-md-6"
+        label="Genre"
+        name="entertainer.genre"
+        optional
+        options={GENRE}
+        placeholder="Genre"
+      />
+      <MultiSelect
+        formGroupClassName="col-md-6"
+        label="Language"
+        name="entertainer.language"
+        optional
+        options={LANGUAGE}
+        placeholder="Preferred Language"
+      />
+    </div>
+    <div className="form-row">
+      <Select
+        blankOption="Choose your lowest budget"
+        formGroupClassName="col-md-6"
+        label="Lowest Budget (in Naira)"
+        name="entertainer.lowest_budget"
+        optional
+        options={BUDGET}
+        placeholder="Lowest Budget"
+      />
+      <Select
+        blankOption="Choose your highest budget"
+        formGroupClassName="col-md-6"
+        label="Highest Budget (in Naira)"
+        name="entertainer.highestBudget"
+        optional
+        options={BUDGET}
+        placeholder="Highest Budget"
+      />
+    </div>
+  </>
 );
 
 const FilterEntertainerFields = () => (
@@ -72,9 +80,9 @@ const FilterEntertainerFields = () => (
       }, 400);
     }}
     render={({ isSubmitting, handleSubmit, ...props }) => (
-      <section className="col-md-4">
+      <section className="col-md-3">
         <h4 className="main-app__subtitle">&nbsp;</h4>
-        <div className="card card-custom card-black card-form">
+        <div>
           <FilterEntertainerFieldsForm />
           <div className="mt-3 mb-5">
             <button

@@ -1,10 +1,12 @@
 import * as yup from 'yup';
 import { parse } from 'date-fns';
+import { moneyFormatInNaira } from 'utils/helpers';
 
-export const required = label => yup.string().required(`${label} is required`);
+export const required = (label) =>
+  yup.string().required(`${label} is required`);
 
-export const optionalValidation = validation =>
-  yup.lazy(value => {
+export const optionalValidation = (validation) =>
+  yup.lazy((value) => {
     if (value) {
       return validation;
     }
@@ -16,7 +18,7 @@ export const stringValidation = (label, length = 2) =>
     .string()
     .trim()
     .label(label)
-    .min(length, `${label} should be more than ${length} characters`)
+    .min(length, `${label} should be more than ${length - 1} characters`)
     .required(`${label} is required`);
 
 export const email = yup
@@ -50,23 +52,33 @@ export const OptionalPhoneNumber = optionalValidation(phoneNumber);
 export const positiveNumberValidation = (label, type = 'number') =>
   yup
     .number()
-    .transform(value => (isNaN(value) ? undefined : value))
+    .transform((value) => (isNaN(value) ? undefined : value))
     .required(`${label} must be a valid ${type}`)
     .positive(`${label} must be a positive ${type}`)
     .integer(`${label} must be a ${type}`);
 
-export const requiredDate = label =>
+export const moneyRange = (label, type = 'number', min, max) =>
+  yup
+    .number()
+    .transform((value) => (isNaN(value) ? undefined : value))
+    .required(`${label} must be a valid ${type}`)
+    .positive(`${label} must be a positive ${type}`)
+    .integer(`${label} must be a ${type}`)
+    .min(min, `${label} must be greater than ${moneyFormatInNaira(min)}`);
+// .max(max, `${label} must be lesser than ${moneyFormatInNaira(max)}`);
+
+export const requiredDate = (label) =>
   yup
     .object()
     .transform(
-      value =>
+      (value) =>
         (value.date && { date: parse(value.date) }) || { date: undefined }
     )
     .shape({
-      date: yup.date().required(`${label} is required`)
+      date: yup.date().required(`${label} is required`),
     });
 
-export const yearValidation = label =>
+export const yearValidation = (label) =>
   yup
     .number(`${label} must be a number`)
     .positive(`${label} must be a valid year`)
@@ -84,11 +96,11 @@ export const autocompleteValidation = (label, minSelection = 2) =>
     .of(
       yup.object().shape({
         id: yup.number(),
-        name: yup.string().required()
+        name: yup.string().required(),
       })
     );
 
-export const urlValidation = label =>
+export const urlValidation = (label) =>
   yup
     .string()
     .label(label)
@@ -117,11 +129,11 @@ export const urlValidation = label =>
 //   return val.length === length;
 // });
 
-export const createSchema = object => {
+export const createSchema = (object) => {
   return yup.object().shape(object);
 };
 
-export const multiSelectValidation = label =>
+export const multiSelectValidation = (label) =>
   yup
     .array()
     .label(label)

@@ -68,6 +68,7 @@ const MultiSelect = ({
               <Select
                 className={classNames(
                   'form-control',
+                  'form-control-multi-select',
                   inputClassName,
                   getValidityClass(formik, name, showFeedback)
                 )}

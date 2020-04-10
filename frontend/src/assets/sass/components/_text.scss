@@ -54,7 +54,7 @@ $text-colors: (
   'green-100': $green-100,
   'green-200': $green-200,
   'green-300': $green-300,
-  'green-400': $green-400
+  'green-400': $green-400,
 );
 
 @each $name, $code in $text-colors {
@@ -67,7 +67,7 @@ $sub-title: (
   '1': 1.8rem,
   '2': 1.5rem,
   '3': 1.2rem,
-  '4': 1rem
+  '4': 1rem,
 );
 
 @each $number, $size in $sub-title {
@@ -81,7 +81,7 @@ $small: (
   '1': 0.9rem,
   '2': 0.8rem,
   '3': 0.7rem,
-  '4': 0.6rem
+  '4': 0.6rem,
 );
 
 @each $number, $size in $small {
@@ -135,4 +135,14 @@ label {
 
 .header-font {
   font-family: $headings-font !important;
+}
+
+.text-link {
+  cursor: pointer;
+  color: lighten($red, 20);
+  transition: color 0.4 ease-out;
+
+  &:hover {
+    color: $red-300;
+  }
 }

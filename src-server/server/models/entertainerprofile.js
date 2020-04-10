@@ -1,5 +1,5 @@
 'use strict';
-module.exports = function(sequelize, DataTypes) {
+module.exports = function (sequelize, DataTypes) {
   var EntertainerProfile = sequelize.define(
     'EntertainerProfile',
     {
@@ -7,77 +7,78 @@ module.exports = function(sequelize, DataTypes) {
         type: DataTypes.STRING,
         allowNull: true,
         defaultValue: null,
-        validate: { isIn: [['MC', 'DJ', 'Liveband', null]] }
+        validate: { isIn: [['MC', 'DJ', 'Liveband', null]] },
       },
       userId: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
       },
       approved: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        defaultValue: false
+        defaultValue: false,
       },
       about: {
-        type: DataTypes.STRING,
-        allowNull: true
+        type: DataTypes.TEXT,
+        allowNull: true,
       },
       stageName: {
         type: DataTypes.STRING,
         allowNull: true,
-        unique: true
+        unique: true,
       },
       location: {
         type: DataTypes.STRING,
-        allowNull: true
+        allowNull: true,
       },
       yearStarted: {
         type: DataTypes.STRING,
-        allowNull: true
+        allowNull: true,
       },
       willingToTravel: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        defaultValue: false
+        defaultValue: false,
       },
       eventType: {
         type: DataTypes.STRING,
-        allowNull: true
+        allowNull: true,
       },
       youTubeChannel: {
         type: DataTypes.STRING,
-        allowNull: true
+        allowNull: true,
       },
       city: {
         type: DataTypes.STRING,
-        allowNull: true
+        allowNull: true,
       },
       baseCharges: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: '0'
+        defaultValue: 0,
       },
       preferredCharges: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: '0'
+        defaultValue: 0,
       },
       availableFor: {
         type: DataTypes.TEXT,
-        allowNull: true
+        allowNull: true,
       },
       slug: {
         type: DataTypes.TEXT,
-        allowNull: true
-      }
+        allowNull: true,
+      },
+      preferredLanguage: { type: DataTypes.TEXT, allowNull: true },
     },
     {
       classMethods: {
-        associate: function(models) {
+        associate: function (models) {
           // associations can be defined here
           // models.EntertainerProfile.belongsTo(models.User);
-        }
-      }
+        },
+      },
     }
   );
   return EntertainerProfile;

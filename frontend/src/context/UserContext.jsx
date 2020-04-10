@@ -25,12 +25,12 @@ const INITIAL_STATE = {
     city: '',
     baseCharges: '',
     preferredCharges: '',
-    availableFor: '[]'
+    availableFor: '[]',
   },
   bankDetail: {
     accountName: '',
     bankName: '',
-    accountNumber: ''
+    accountNumber: '',
   },
   contacts: [
     {
@@ -39,7 +39,7 @@ const INITIAL_STATE = {
       email: '',
       phoneNumber: '',
       relationship: '',
-      type: 1
+      type: 1,
     },
     {
       firstName: '',
@@ -47,24 +47,24 @@ const INITIAL_STATE = {
       email: '',
       phoneNumber: '',
       relationship: '',
-      type: 2
-    }
+      type: 2,
+    },
   ],
   identification: {
     idType: '',
     idNumber: '',
     issueDate: '',
-    expiryDate: ''
+    expiryDate: '',
   },
   approvalComment: {
     entertainerProfile: null,
     bankAccount: null,
     contact: null,
     youTube: null,
-    identification: null
+    identification: null,
   },
   galleries: [],
-  events: []
+  events: [],
 };
 
 // CONTEXT
@@ -92,6 +92,7 @@ let reducer = (state, action) => {
       return { ...state, profileImg: action.imageURL };
 
     case 'add-new-event':
+    case 'add-entertainer-to-event':
       return { ...state, events: [action.event, ...state.events] };
     default:
       return state;
@@ -99,7 +100,7 @@ let reducer = (state, action) => {
 };
 
 // PROVIDER
-let UserContextProvider = props => {
+let UserContextProvider = (props) => {
   let [userState, userDispatch] = React.useReducer(reducer, INITIAL_STATE);
   let value = { userState, userDispatch };
 
@@ -109,7 +110,7 @@ let UserContextProvider = props => {
 };
 
 UserContextProvider.propTypes = {
-  children: PropTypes.any.isRequired
+  children: PropTypes.any.isRequired,
 };
 
 // CONSUMER - ONLY USEFUL IN CLASSES

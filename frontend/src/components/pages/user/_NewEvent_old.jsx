@@ -3,18 +3,18 @@ import PropTypes from 'prop-types';
 import { Formik } from 'formik';
 import {
   setInitialValues,
-  DisplayFormikState
+  DisplayFormikState,
 } from 'components/forms/form-helper';
 import TopMessage from 'components/common/layout/TopMessage';
 import EventDetails from 'components/common/events/EventDetails';
 import EventAddress from 'components/common/events/EventAddress';
-import AddEntertainerDetails from 'components/common/entertainers/AddEntertainerDetails';
+import AddEntertainerDetails from 'components/pages/user/AddEntertainerToEvent';
 import { HIRE_ENTERTAINERS } from 'utils/constants';
 // import { navigate } from '@reach/router';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import {
   eventDetailsSchema,
-  eventAddressSchema
+  eventAddressSchema,
 } from 'components/forms/schema/eventSchema';
 import { addEntertainerSchema } from 'components/forms/schema/entertainerSchema';
 import { createSchema } from 'components/forms/schema/schema-helpers';
@@ -45,11 +45,11 @@ const NewEvent = ({ hire_type }) => {
 };
 
 NewEvent.propTypes = {
-  hire_type: PropTypes.string
+  hire_type: PropTypes.string,
 };
 
 NewEvent.defaultProps = {
-  hire_type: ''
+  hire_type: '',
 };
 
 const NewEventForm = ({ currentHireType }) => {
@@ -57,13 +57,13 @@ const NewEventForm = ({ currentHireType }) => {
     event: setInitialValues(eventDetailsSchema),
     address: setInitialValues(eventAddressSchema),
     entertainer: setInitialValues(addEntertainerSchema, {
-      highestBudget: '1M+'
-    })
+      highestBudget: '1M+',
+    }),
   };
   const entertainersSchema = {
     event: createSchema(eventDetailsSchema),
     address: createSchema(eventAddressSchema),
-    entertainer: createSchema(addEntertainerSchema)
+    entertainer: createSchema(addEntertainerSchema),
   };
   const { userDispatch } = React.useContext(UserContext);
   const [message, setMessage] = React.useState(null);
@@ -77,7 +77,7 @@ const NewEventForm = ({ currentHireType }) => {
             ...entertainer,
             genre: JSON.stringify(entertainer.genre),
             language: JSON.stringify(entertainer.language),
-            ageGroup: JSON.stringify(entertainer.ageGroup)
+            ageGroup: JSON.stringify(entertainer.ageGroup),
           },
           eventDetails: {
             eventType: event.eventType,
@@ -85,21 +85,21 @@ const NewEventForm = ({ currentHireType }) => {
             startTime: event.startTime.date,
             eventDuration: event.eventDuration.date,
             moreInformation: event.moreInformation,
-            ...address
-          }
+            ...address,
+          },
         };
         console.log('payload', payload);
         axios
           .post('/api/v1/events', payload.eventDetails, {
-            headers: { 'x-access-token': getTokenFromStore() }
+            headers: { 'x-access-token': getTokenFromStore() },
           })
-          .then(function(response) {
+          .then(function (response) {
             const { status, data } = response;
             console.log('status, data', status, data);
             if (status === 200) {
               userDispatch({
                 type: 'add-new-event',
-                user: data
+                user: data,
               });
 
               axios
@@ -107,36 +107,36 @@ const NewEventForm = ({ currentHireType }) => {
                   '/api/v1/eventEntertainer',
                   { ...payload.entertainer, eventId: data.event.id },
                   {
-                    headers: { 'x-access-token': getTokenFromStore() }
+                    headers: { 'x-access-token': getTokenFromStore() },
                   }
                 )
-                .then(function(response) {
+                .then(function (response) {
                   const { status, data } = response;
                   if (status === 200) {
                     userDispatch({
                       type: 'add-entertainer-to-event',
-                      user: data
+                      user: data,
                     });
                     setMessage({
                       type: 'info',
-                      message: `Your Event has been successfully saved.`
+                      message: `Your Event has been successfully saved.`,
                     });
                     actions.setSubmitting(false);
                   }
                 })
-                .catch(function(error) {
+                .catch(function (error) {
                   setMessage(error.response.data.message);
                   actions.setSubmitting(false);
                 });
 
               setMessage({
                 type: 'info',
-                message: `Your bank has been successfully submitted.`
+                message: `Your bank has been successfully submitted.`,
               });
               actions.setSubmitting(false);
             }
           })
-          .catch(function(error) {
+          .catch(function (error) {
             setMessage(error.response.data.message);
             actions.setSubmitting(false);
           });
@@ -164,7 +164,7 @@ const NewEventForm = ({ currentHireType }) => {
 };
 
 NewEventForm.propTypes = {
-  currentHireType: PropTypes.string.isRequired
+  currentHireType: PropTypes.string.isRequired,
 };
 
 export default NewEvent;

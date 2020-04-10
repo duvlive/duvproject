@@ -4,14 +4,14 @@ import ejs from 'ejs';
 import textEmailTemplate from './email-template/duv-text-email-template';
 
 const DUV_LIVE_NO_REPLY_EMAIL = 'DUV LIVE <no-reply@duvlive.com>';
-const emailLogo = `http:localhost:4000/email-logo.png`;
+const emailLogo = `https://duvlive.herokuapp.com/email-logo.png`;
 
 export function generateEmailTemplate(options) {
   return new Promise((resolve, reject) => {
     return ejs.renderFile(
       __dirname + '/email-template/duv-html-email-template.ejs',
       { ...options, emailLogo },
-      function(err, html) {
+      function (err, html) {
         if (err) {
           return reject(err);
         } else {
@@ -32,8 +32,8 @@ export default async function sendMail(content, user, additionalOptions = {}) {
     secure: !!process.env.EMAIL_SECURE || false,
     auth: {
       user: process.env.EMAIL_USER || process.env.MAIL_TRAP_USER,
-      pass: process.env.EMAIL_PASS || process.env.MAIL_TRAP_PASS
-    }
+      pass: process.env.EMAIL_PASS || process.env.MAIL_TRAP_PASS,
+    },
   });
   // ensure userEmail is always present
 
@@ -41,7 +41,7 @@ export default async function sendMail(content, user, additionalOptions = {}) {
   const options = {
     ...content,
     ...additionalOptions,
-    firstName: user.firstName
+    firstName: user.firstName,
   };
 
   const { html, text } = await generateEmailTemplate(options);
@@ -52,7 +52,7 @@ export default async function sendMail(content, user, additionalOptions = {}) {
     to: `${user.email}`, // list of receivers
     subject: `${options.subject}`, // Subject line
     text,
-    html
+    html,
   });
 
   // html: ejs.render( fs.readFileSync('e-mail.ejs', 'utf-8') , {mensagem: 'olá, funciona'})
