@@ -1,7 +1,7 @@
 import { EventController } from '../controllers';
 import Authentication from '../middleware/authentication';
 
-const eventRoutes = router => {
+const eventRoutes = (router) => {
   router
     .route('/api/v1/events')
     .all(
@@ -30,6 +30,15 @@ const eventRoutes = router => {
     Authentication.validateUser,
     Authentication.isActiveUser,
     EventController.getUserAuctions
+  );
+
+  // Requests
+  router.get(
+    '/api/v1/user/requests',
+    Authentication.verifyToken,
+    Authentication.validateUser,
+    Authentication.isActiveUser,
+    EventController.getUserRequests
   );
 
   router.get(

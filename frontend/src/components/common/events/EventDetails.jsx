@@ -8,15 +8,15 @@ import Humanize from 'humanize-plus';
 import { addDays } from 'date-fns';
 
 const getEventDuration = () =>
-  [...Array(24).keys()].map(index => ({
+  [...Array(24).keys()].map((index) => ({
     label: `${index + 1} ${Humanize.pluralize(index + 1, 'hour')}`,
-    value: `${index + 1} hours`
+    value: `${index + 1} hours`,
   }));
 
 const EventDetails = () => {
   const EVENT_DURATION = getEventDuration();
   const [displayForm, setDisplayForm] = React.useState({ eventType: false });
-  const toggleForm = value => {
+  const toggleForm = (value) => {
     console.log('value', value);
     setDisplayForm({ [value]: !displayForm[value] });
   };
@@ -33,7 +33,7 @@ const EventDetails = () => {
                 labelLink={{
                   onClick: () => toggleForm('eventType'),
                   text: 'Select Event Type',
-                  to: ''
+                  to: '',
                 }}
                 name="event.eventType"
                 placeholder="Type your Event Type"
@@ -46,7 +46,7 @@ const EventDetails = () => {
                 labelLink={{
                   onClick: () => toggleForm('eventType'),
                   text: 'Type Manually',
-                  to: ''
+                  to: '',
                 }}
                 name="event.eventType"
                 options={OCCASSION_TYPE}

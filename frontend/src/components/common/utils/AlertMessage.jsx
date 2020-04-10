@@ -4,7 +4,7 @@ import { Alert } from 'reactstrap';
 import { COLOR_STYLE } from 'utils/constants';
 
 const AlertMessage = ({ type, message, lists }) => {
-  const messageList = lists && lists.map(list => <li>{list}</li>);
+  const messageList = lists && lists.map((list) => <li>{list}</li>);
   return (
     message && (
       <Alert color={type}>
@@ -19,13 +19,13 @@ const AlertMessage = ({ type, message, lists }) => {
 AlertMessage.propTypes = {
   lists: PropTypes.array,
   message: PropTypes.any,
-  type: PropTypes.oneOf(COLOR_STYLE)
+  type: PropTypes.oneOf(COLOR_STYLE),
 };
 
 AlertMessage.defaultProps = {
   lists: [],
   message: null,
-  type: COLOR_STYLE[0]
+  type: COLOR_STYLE[0],
 };
 
 // AlertMessage.Text
@@ -39,21 +39,22 @@ AlertMessage.Text = ({ type, message }) => {
 
 AlertMessage.Text.propTypes = {
   message: PropTypes.any,
-  type: PropTypes.oneOf(['success', 'error', 'primary', 'info'])
+  type: PropTypes.oneOf(['success', 'error', 'primary', 'info']),
 };
 
 AlertMessage.Text.defaultProps = {
   message: null,
-  type: 'primary'
+  type: 'primary',
 };
 
 const AlertIcon = ({ type }) => {
   const ICON = {
     success: 'ok-circled',
     error: 'cancel-circled',
+    primary: 'cancel-circled',
     danger: 'cancel-circled',
     info: 'help',
-    warning: 'notification'
+    warning: 'notification',
   };
   return (
     (type && ICON[type] && (
@@ -64,10 +65,10 @@ const AlertIcon = ({ type }) => {
 };
 
 AlertIcon.propTypes = {
-  type: PropTypes.oneOf(['success', 'danger', 'info', 'error'])
+  type: PropTypes.oneOf(['success', 'primary', 'danger', 'info', 'error']),
 };
 
 AlertIcon.defaultProps = {
-  type: 'primary'
+  type: 'primary',
 };
 export default AlertMessage;

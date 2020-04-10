@@ -10,7 +10,7 @@ const Button = ({
   loadingText,
   children,
   onClick,
-  color
+  color,
 }) => (
   <button
     className={classNames('btn', `btn-${color}`, className)}
@@ -31,19 +31,19 @@ const Button = ({
 Button.propTypes = {
   children: PropTypes.any,
   className: PropTypes.string,
+  color: PropTypes.oneOf(COLOR_STYLE),
   loading: PropTypes.bool,
   loadingText: PropTypes.any,
   onClick: PropTypes.func,
-  color: PropTypes.oneOf(COLOR_STYLE)
 };
 
 Button.defaultProps = {
   children: 'Submit',
   className: 'btn-wide btn-transparent',
+  color: COLOR_STYLE[0],
   loading: false,
   loadingText: null,
   onClick: () => {},
-  color: COLOR_STYLE[0]
 };
 
 export default Button;

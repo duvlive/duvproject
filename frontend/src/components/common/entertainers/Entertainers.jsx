@@ -21,17 +21,17 @@ Entertainers.propTypes = {
   image: PropTypes.string.isRequired,
   slug: PropTypes.string.isRequired,
   stageName: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired
+  type: PropTypes.string.isRequired,
 };
 
 Entertainers.List = ({ lists }) =>
-  lists.map(({ stageName, img, type, slug }, index) => (
+  lists.map(({ stageName, profileImg, entertainerType, slug }, index) => (
     <Entertainers
-      image={img.full}
+      image={profileImg}
       key={slug}
       slug={slug}
       stageName={stageName}
-      type={type}
+      type={entertainerType}
     />
   ));
 

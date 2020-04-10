@@ -1,10 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import axios from 'axios';
 import { Row, Col } from 'reactstrap';
 import Header from 'components/common/layout/Header';
 import BorderedListItem from '../../custom/BorderedListItem';
 import Text from '../../common/utils/Text';
 import noGoSpoilYourPartyList from 'data/duvSteps.js';
-import entertainerLists from 'data/entertainers.js';
 import eventLists from 'data/events.js';
 import Footer from 'components/common/layout/Footer';
 import Slideshow from 'components/custom/Slideshow';
@@ -14,14 +15,27 @@ import { Link } from '@reach/router';
 import LiveYourBestLife from 'components/common/utils/LiveYourBestLife';
 import Quotes from 'components/common/utils/Quotes';
 import PlayingMusicAnimation from 'components/common/utils/PlayingMusicAnimation';
+import LoadingScreen from 'components/common/layout/LoadingScreen';
 
 const Home = () => {
+  const [entertainers, setEntertainers] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+  React.useEffect(() => {
+    axios.get(`/api/v1/entertainers`).then(function (response) {
+      const { status, data } = response;
+      // handle success
+      if (status === 200) {
+        setEntertainers(data.entertainers);
+        setLoading(false);
+      }
+    });
+  }, []);
   return (
     <div className="home">
       <LandingSection />
       <IntroSection />
       <LiveYourLifeSection />
-      <EntertainerSection />
+      <EntertainerSection entertainers={entertainers} loading={loading} />
       <EventSection />
       <Footer />
     </div>
@@ -115,26 +129,34 @@ const LiveYourLifeSection = () => {
   );
 };
 
-const EntertainerSection = () => (
+const EntertainerSection = ({ entertainers, loading }) => (
   <section className="entertainers spacer">
     <div className="container-fluid">
       <h2 className="header title-border">
         <span>ENTERTAINER</span>
       </h2>
       <Row className="pt-5">
-        {/* <Entertainers.List lists={entertainerLists} /> */}
-        <Slideshow
-          items={[
-            { list: entertainerLists.slice(0, 6), id: 1 },
-            { list: entertainerLists.slice(6, 12), id: 2 },
-            { list: entertainerLists.slice(12, 18), id: 3 }
-          ]}
-          type={SLIDESHOW_TYPE.entertainers}
-        />
+        {loading ? (
+          <LoadingScreen loading={loading} text="Loading Entertainers" />
+        ) : (
+          <Slideshow
+            items={[
+              { list: entertainers.slice(0, 6), id: 1 },
+              { list: entertainers.slice(6, 12), id: 2 },
+              { list: entertainers.slice(12, 18), id: 3 },
+            ]}
+            type={SLIDESHOW_TYPE.entertainers}
+          />
+        )}
       </Row>
     </div>
   </section>
 );
+
+EntertainerSection.propTypes = {
+  entertainers: PropTypes.array.isRequired,
+  loading: PropTypes.bool.isRequired,
+};
 
 const EventSection = () => (
   <section className="events spacer">
@@ -147,7 +169,7 @@ const EventSection = () => (
           items={[
             { list: eventLists.slice(0, 3), id: 1 },
             { list: eventLists.slice(3, 6), id: 2 },
-            { list: eventLists.slice(6, 9), id: 3 }
+            { list: eventLists.slice(6, 9), id: 3 },
           ]}
           type={SLIDESHOW_TYPE.events}
         />
@@ -158,13 +180,13 @@ const EventSection = () => (
 
 // https://www.internetrix.com.au/blog/how-to-use-youtube-video-as-your-webpage-background-2/
 const VideoSection = () => {
-  const onReady = event => {
+  const onReady = (event) => {
     // access to player in all event handlers via event.target
     // event.target.pauseVideo();
     event.target.mute();
     event.target.playVideo();
   };
-  const onStateChange = event => {
+  const onStateChange = (event) => {
     if (event && event.data === 1) {
       var videoHolder = document.getElementById('home-banner-box');
       if (videoHolder && videoHolder.id) {
@@ -188,8 +210,8 @@ const VideoSection = () => {
       fs: 0, // Hide the full screen button
       autohide: 0, // Hide video controls when playing
       rel: 0,
-      enablejsapi: 1
-    }
+      enablejsapi: 1,
+    },
   };
 
   return (

@@ -9,10 +9,12 @@ import {
   email,
   phoneNumber,
   positiveNumberValidation,
-  requiredDate
+  moneyRange,
+  requiredDate,
 } from './schema-helpers';
 import { commaNumber } from 'utils/helpers';
 import { isAfter } from 'date-fns';
+import { HIRE_ENTERTAINERS_TYPE } from 'utils/constants';
 
 /////////////////////////
 // Schema
@@ -27,48 +29,86 @@ export const entertainerDetailsSchema = {
   preferredCharges: required('Preferred Charges'),
   yearStarted: required('Started Year'),
   willingToTravel: stringValidation('Willing to travel'),
-  availableFor: optionalValidation(autocompleteValidation('Available for'))
+  availableFor: optionalValidation(autocompleteValidation('Available for')),
 };
 
 export const bankDetailsSchema = {
   accountName: stringValidation('Account Name'),
   bankName: stringValidation('Bank Name'),
-  accountNumber: stringValidation('Account Number')
+  accountNumber: stringValidation('Account Number'),
 };
 
-export const addEntertainerSchema = {
+export const addEntertainerSchema = (type, entertainer) => {
+  const baseCharges =
+    entertainer && entertainer.baseCharges ? entertainer.baseCharges : 10000;
+  const preferredCharges =
+    entertainer && entertainer.preferredCharges
+      ? entertainer.preferredCharges
+      : 1000000;
+
+  let currentSchema = {
+    genre: multiSelectValidation('Genre'),
+    language: multiSelectValidation('Language'),
+    expectedAudienceSize: stringValidation('Audience Size'),
+    ageGroup: stringValidation('Age Group'),
+    placeOfEvent: stringValidation('Place of Event'),
+    specialRequest: optionalValidation(stringValidation('Special Request', 20)),
+  };
+
+  if (type !== HIRE_ENTERTAINERS_TYPE.auction.title.toLowerCase()) {
+    currentSchema.askingPrice = moneyRange(
+      'Your Offer',
+      'offer',
+      baseCharges,
+      preferredCharges
+    );
+  } else {
+    currentSchema = {
+      ...currentSchema,
+      entertainerType: stringValidation('Entertainer Type'),
+      lowestBudget: positiveNumberValidation('Base Budget', 'budget'),
+      highestBudget: positiveNumberValidation(
+        'Highest Budget',
+        'budget'
+      ).moreThan(
+        yup.ref('lowestBudget'),
+        'Highest Budget should be greater than the Base Budget'
+      ),
+      auctionStartDate: optionalValidation(requiredDate('Auction Start Date')),
+      auctionEndDate: optionalValidation(
+        requiredDate('Auction End Date').test(
+          'is-greater',
+          'End Date should be greater than Start Date',
+          function (value) {
+            const { auctionStartDate } = this.parent;
+            return isAfter(value.date, auctionStartDate.date);
+          }
+        )
+      ),
+    };
+  }
+
+  return currentSchema;
+};
+
+export const recommendEntertainerSchema = {
   entertainerType: stringValidation('Entertainer Type'),
-  genre: multiSelectValidation('Genre'),
   language: multiSelectValidation('Language'),
-  expectedAudienceSize: stringValidation('Audience Size'),
-  ageGroup: stringValidation('Age Group'),
+  location: optionalValidation(stringValidation('Location')),
   lowestBudget: positiveNumberValidation('Base Budget', 'budget'),
   highestBudget: positiveNumberValidation('Highest Budget', 'budget').moreThan(
     yup.ref('lowestBudget'),
-    'Highest Budget should be greater or equal to Base Budget'
+    'Highest Budget should be greater than the Base Budget'
   ),
-  placeOfEvent: stringValidation('Place of Event'),
-  specialRequest: optionalValidation(stringValidation('Special Request', 20)),
-  auctionStartDate: optionalValidation(requiredDate('Auction Start Date')),
-  auctionEndDate: optionalValidation(
-    requiredDate('Auction End Date').test(
-      'is-greater',
-      'End Date should be greater than Start Date',
-      function(value) {
-        const { auctionStartDate } = this.parent;
-        return isAfter(value.date, auctionStartDate.date);
-      }
-    )
-  )
 };
 
 export const videoSchema = {
   youtubeID: urlValidation('Youtube URL'),
-  title: stringValidation('Title')
+  title: stringValidation('Title'),
 };
 
 export const youtubeChannelSchema = {
-  youTubeChannel: urlValidation('Youtube Channel URL')
+  youTubeChannel: urlValidation('Youtube Channel URL'),
 };
 
 export const emergencyContactSchema = {
@@ -76,18 +116,17 @@ export const emergencyContactSchema = {
   lastName: stringValidation('Last Name'),
   phoneNumber,
   email,
-  relationship: stringValidation('Relationship')
+  relationship: stringValidation('Relationship'),
 };
 
 export const identificationSchema = {
   idType: required('ID Type'),
   idNumber: stringValidation('ID Number'),
   issueDate: required('Issue Date'),
-  expiryDate: required('Expiry Date')
+  expiryDate: required('Expiry Date'),
 };
 
 export const bidSchema = (minAuctionPrice = 0, maxAuctionPrice = 0) => {
-  console.log('maxAuctionPRice', commaNumber(maxAuctionPrice));
   return {
     askingPrice: positiveNumberValidation('Your Bid')
       .min(
@@ -97,6 +136,6 @@ export const bidSchema = (minAuctionPrice = 0, maxAuctionPrice = 0) => {
       .max(
         maxAuctionPrice,
         `Your bid must be less than ${commaNumber(maxAuctionPrice)}`
-      )
+      ),
   };
 };

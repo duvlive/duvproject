@@ -9,6 +9,7 @@ const Dashboard = () => {
   const { userState } = React.useContext(UserContext);
 
   let currentDashboard;
+  console.log('userState', userState);
 
   if (userState.entertainerProfile.approved) {
     currentDashboard = <DashboardItems />;

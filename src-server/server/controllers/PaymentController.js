@@ -18,33 +18,33 @@ const PaymentController = {
         `${process.env.PAYSTACK_TRANSACT_INIT}`,
         {
           amount: amount * 100,
-          callback_url: `http://localhost:3000/user/payments/view`,
+          callback_url: `${process.env.HOST}/user/payments/view`,
           email,
           metadata: {
             custom_fields: [
               {
                 display_name: 'Application ID',
                 variable_name: 'Application ID',
-                value: applicationId
-              }
-            ]
-          }
+                value: applicationId,
+              },
+            ],
+          },
         },
         {
           headers: {
             authorization: `Bearer ${process.env.PAYSTACK_TEST_SECRET}`,
-            'content-type': 'application/json'
-          }
+            'content-type': 'application/json',
+          },
         }
       )
-      .then(function(response) {
+      .then(function (response) {
         return res.status(200).json({
           message: 'success',
           payment: response.data.data,
-          site: 'https://google.com'
+          site: 'https://google.com',
         });
       })
-      .catch(function(error) {
+      .catch(function (error) {
         const status = error.status || 500;
         const errorMessage = error.message || error;
         return res.status(status).json({ message: errorMessage });
@@ -70,7 +70,7 @@ const PaymentController = {
     const { reference } = req.params;
 
     const error = {
-      ...validString(reference)
+      ...validString(reference),
     };
     if (Object.keys(error).length > 1) {
       return res.status(400).json({ message: error.message.join('') });
@@ -80,15 +80,15 @@ const PaymentController = {
       .get(`${process.env.PAYSTACK_TRANSACT_VERIFY}/${reference}`, {
         headers: {
           authorization: `Bearer ${process.env.PAYSTACK_TEST_SECRET}`,
-          'content-type': 'application/json'
-        }
+          'content-type': 'application/json',
+        },
       })
-      .then(function(response) {
+      .then(function (response) {
         return res
           .status(200)
           .json({ message: 'success', payment: response.data.data });
       })
-      .catch(function(error) {
+      .catch(function (error) {
         const status = error.status || 500;
         const errorMessage = error.message || error;
         return res.status(status).json({ message: errorMessage });
@@ -101,15 +101,15 @@ const PaymentController = {
       .get(`${process.env.PAYSTACK_TRANSACT_ALL}?status=success`, {
         headers: {
           authorization: `Bearer ${process.env.PAYSTACK_TEST_SECRET}`,
-          'content-type': 'application/json'
-        }
+          'content-type': 'application/json',
+        },
       })
-      .then(function(response) {
+      .then(function (response) {
         return res
           .status(200)
           .json({ message: 'success', payments: response.data.data });
       })
-      .catch(function(error) {
+      .catch(function (error) {
         const status = error.status || 500;
         const errorMessage = error.message || error;
         return res.status(status).json({ message: errorMessage });
@@ -123,12 +123,12 @@ const PaymentController = {
       .get(`${process.env.PAYSTACK_CUSTOMER_ALL}`, {
         headers: {
           authorization: `Bearer ${process.env.PAYSTACK_TEST_SECRET}`,
-          'content-type': 'application/json'
-        }
+          'content-type': 'application/json',
+        },
       })
-      .then(function(response) {
+      .then(function (response) {
         const customer = response.data.data.filter(
-          customer => customer.email === email
+          (customer) => customer.email === email
         );
         if (customer.length === 0) {
           return res.status(404).json({ message: 'User does not exist' });
@@ -137,7 +137,7 @@ const PaymentController = {
           .status(200)
           .json({ message: 'Success', customer: customer[0] });
       })
-      .catch(function(error) {
+      .catch(function (error) {
         const status = error.status || 500;
         const errorMessage = error.message || error;
         return res.status(status).json({ message: errorMessage });
@@ -153,16 +153,16 @@ const PaymentController = {
         {
           headers: {
             authorization: `Bearer ${process.env.PAYSTACK_TEST_SECRET}`,
-            'content-type': 'application/json'
-          }
+            'content-type': 'application/json',
+          },
         }
       )
-      .then(function(response) {
+      .then(function (response) {
         return res
           .status(200)
           .json({ message: 'success', payments: response.data.data });
       })
-      .catch(function(error) {
+      .catch(function (error) {
         const status = error.status || 500;
         const errorMessage = error.message || error;
         return res.status(status).json({ message: errorMessage });
@@ -175,12 +175,12 @@ const PaymentController = {
       .get(`${process.env.PAYSTACK_CUSTOMER_ALL}`, {
         headers: {
           authorization: `Bearer ${process.env.PAYSTACK_TEST_SECRET}`,
-          'content-type': 'application/json'
-        }
+          'content-type': 'application/json',
+        },
       })
-      .then(function(response) {
+      .then(function (response) {
         const customer = response.data.data.filter(
-          customer => customer.email === email
+          (customer) => customer.email === email
         );
         if (customer.length === 0) {
           return res.status(404).json({ message: 'User does not exist' });
@@ -193,27 +193,27 @@ const PaymentController = {
             {
               headers: {
                 authorization: `Bearer ${process.env.PAYSTACK_TEST_SECRET}`,
-                'content-type': 'application/json'
-              }
+                'content-type': 'application/json',
+              },
             }
           )
-          .then(function(response) {
+          .then(function (response) {
             return res
               .status(200)
               .json({ message: 'success', payments: response.data.data });
           })
-          .catch(function(error) {
+          .catch(function (error) {
             const status = error.status || 500;
             const errorMessage = error.message || error;
             return res.status(status).json({ message: errorMessage });
           });
       })
-      .catch(function(error) {
+      .catch(function (error) {
         const status = error.status || 500;
         const errorMessage = error.message || error;
         return res.status(status).json({ message: errorMessage });
       });
-  }
+  },
 };
 
 export default PaymentController;

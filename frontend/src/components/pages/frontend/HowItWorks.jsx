@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 import { Row, Col, Card, CardImgOverlay } from 'reactstrap';
 import FrontEndPage from 'components/common/layout/FrontEndPage';
 import HowItWorksImage from 'assets/img/bg/how-it-works.jpg';
@@ -13,10 +14,21 @@ import { howItWorksSteps, otherWorksSteps } from 'data/duvSteps';
 import testimonialLists from 'data/testimonials';
 
 const HowItWorks = () => {
+  const [total, setTotal] = React.useState({ mc: 0, dj: 0, liveband: 0 });
+  React.useEffect(() => {
+    axios.get(`/api/v1/entertainers/total`).then(function (response) {
+      const { status, data } = response;
+      console.log('status,data', status, data);
+      // handle success
+      if (status === 200) {
+        setTotal(data.entertainers);
+      }
+    });
+  }, []);
   return (
     <FrontEndPage title="How it Works">
       <AboutUs />
-      <CounterSection />
+      <CounterSection total={total} />
       <WhyUseDuvLive />
       {false && (
         <Slideshow
@@ -82,19 +94,23 @@ const WhyUseDuvLive = () => (
   </section>
 );
 
-const CounterSection = () => (
+const CounterSection = ({ total }) => (
   <section className="pt-5">
     <Card className="entertainers-counter">
       <CardImgOverlay>
         <div className="container-fluid">
           <Row>
-            <EntertainersCounter.List />
+            <EntertainersCounter.List total={total} />
           </Row>
         </div>
       </CardImgOverlay>
     </Card>
   </section>
 );
+
+CounterSection.propTypes = {
+  total: PropTypes.object.isRequired,
+};
 
 const EntertainersCounter = ({ icon, name, number }) => (
   <Col className="entertainers-counter__content" sm={4}>
@@ -113,18 +129,22 @@ const EntertainersCounter = ({ icon, name, number }) => (
 EntertainersCounter.propTypes = {
   icon: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  number: PropTypes.number.isRequired
+  number: PropTypes.number.isRequired,
 };
 
-EntertainersCounter.List = () => {
+EntertainersCounter.List = ({ total }) => {
   const lists = [
-    { icon: 'headphones', name: 'DJs', number: 56 },
-    { icon: 'mic', name: 'MCs', number: 36 },
-    { icon: 'music', name: 'Live Bands', number: 20 }
+    { icon: 'headphones', name: 'DJs', number: total.dj },
+    { icon: 'mic', name: 'MCs', number: total.mc },
+    { icon: 'music', name: 'Live Bands', number: total.liveband },
   ];
-  return lists.map(props => (
+  return lists.map((props) => (
     <EntertainersCounter key={props.name} {...props} />
   ));
+};
+
+EntertainersCounter.List.propTypes = {
+  total: PropTypes.object.isRequired,
 };
 
 export default HowItWorks;
