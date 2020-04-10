@@ -3,6 +3,7 @@ import { Router } from '@reach/router';
 import Dashboard from 'components/pages/user/Dashboard';
 import EmptyDashboard from 'components/pages/user/EmptyDashboard';
 import Auctions from 'components/pages/user/Auctions';
+import Requests from 'components/pages/user/Requests';
 import Events from 'components/pages/user/Events';
 import Notifications from 'components/pages/user/Notifications';
 import UserHelp from 'components/pages/user/Help';
@@ -24,6 +25,7 @@ const UserRouter = () => (
     <Dashboard path="/dashboard" />
     <Auctions path="/auctions" />
     <Auctions path="/auctions/status/:message" />
+    <Requests path="/requests" />
     <Events path="/events" />
     <Notifications path="/notifications" />
     <UserHelp path="/help" />

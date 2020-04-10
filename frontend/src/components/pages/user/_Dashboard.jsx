@@ -1,65 +1,32 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import TopMessage from 'components/common/layout/TopMessage';
 import Image from 'components/common/utils/Image';
-import axios from 'axios';
+import { randomItem, getItems } from 'utils/helpers';
+import djLists from 'data/entertainers/djs';
+import mcLists from 'data/entertainers/mcs';
+import lbLists from 'data/entertainers/live-bands';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import { UserContext } from 'context/UserContext';
-import NoContent from 'components/common/utils/NoContent';
-import { getTokenFromStore } from 'utils/localStorage';
-import LoadingScreen from 'components/common/layout/LoadingScreen';
 
 const Dashboard = () => {
   let { userState } = React.useContext(UserContext);
-  const [entertainers, setEntertainers] = React.useState([]);
-  const [loading, setLoading] = React.useState(true);
-
-  React.useEffect(() => {
-    axios
-      .get(`/api/v1/entertainers/recommend/random`, {
-        headers: {
-          'x-access-token': getTokenFromStore(),
-        },
-      })
-      .then(function (response) {
-        const { status, data } = response;
-        // handle success
-        if (status === 200) {
-          setEntertainers(data.entertainers);
-          setLoading(false);
-        }
-      })
-      .catch(function (error) {
-        setLoading(false);
-      });
-  }, []);
 
   return (
     <BackEndPage title="Dashboard">
       <div className="main-app">
         <TopMessage message={`Welcome back ${userState.firstName},`} />
+
         <section className="app-content">
           <div className="row">
             <div className="col-sm-8">
-              <div className="card card-custom">
-                <div className="card-body">
-                  <h5 className="card-title text-green">Upcoming Events</h5>
-                  <NoContent
-                    isButton
-                    linkText="Add a New Event"
-                    linkTo="/user/events/new"
-                    text="You have no Upcoming Events"
-                  />
-                </div>
-              </div>
-              <Dashboard.AuctionTable />
+              <Dashboard.UpcomingEvents />
+              <Dashboard.AuctionTable entertainerList={getItems(djLists, 3)} />
             </div>
             <div className="col-sm-4">
               <Dashboard.RecommendedTable
-                entertainers={entertainers}
-                loading={loading}
+                entertainerList={[randomItem(lbLists), randomItem(mcLists)]}
               />
-              <Dashboard.PendingReview />
+              <Dashboard.PendingReview entertainer={djLists[7]} />
             </div>
           </div>
         </section>
@@ -132,60 +99,119 @@ Dashboard.UpcomingEvents = () => (
   </div>
 );
 
-Dashboard.PendingReview = () => (
+Dashboard.PendingReview = ({ entertainer }) => (
   <div className="card card-custom">
     <div className="card-body">
       <h5 className="card-title text-red header__with-border">
         Pending Review
       </h5>
-      <NoContent text="No pending Reviews." />
-    </div>
-  </div>
-);
+      <p className="card-text">
+        To serve you better, kindly help us improve our service and give other
+        users a better understanding about entertainers.
+      </p>
 
-Dashboard.AuctionTable = () => (
-  <div className="card card-custom">
-    <div className="card-body">
-      <h5 className="card-title text-blue">Auction (Recent Bids)</h5>
-      <NoContent
-        linkText="Learn how it works"
-        linkTo="/user/events/new"
-        text="You have no current Auctions."
-      />
-    </div>
-  </div>
-);
-
-Dashboard.RecommendedTable = ({ entertainers, loading }) => (
-  <div className="card card-custom">
-    <div className="card-body">
-      <h5 className="card-title text-blue">Recommended For You</h5>
-      <div className="table-responsive">
-        {loading ? (
-          <LoadingScreen loading={loading} />
-        ) : (
-          <table className="table table-dark">
-            <tbody>
-              <>
-                {entertainers.map((entertainer) => (
-                  <Dashboard.RecommendedRow
-                    entertainer={entertainer}
-                    key={entertainer.stageName}
-                  />
-                ))}
-              </>
-            </tbody>
-          </table>
-        )}
+      <div className="text-center">
+        <img
+          alt={entertainer.stageName}
+          className="rounded-circle img-thumbnail img-responsive avatar--large"
+          src={entertainer.img.profile}
+          title={entertainer.stageName}
+        />{' '}
+        <h5 className="card-subtitle card-subtitle--2 mt-3 mb-0 white">
+          {entertainer.stageName}
+        </h5>
+        <p className="card-subtitle--3">Party DJ on 15th Apr., 2019</p>
+        <button className="btn btn-danger btn-wide btn-transparent">
+          Rate Now
+        </button>
       </div>
     </div>
   </div>
 );
 
-Dashboard.RecommendedTable.propTypes = {
-  entertainers: PropTypes.array.isRequired,
-  loading: PropTypes.bool.isRequired,
-};
+Dashboard.AuctionTable = ({ entertainerList }) => (
+  <div className="card card-custom">
+    <div className="card-body">
+      <h5 className="card-title text-blue">
+        Auction (Recent Bids) <br />
+        <small className="small--2 text-gray">
+          Celebration Party for Wifey on{' '}
+          <span className="text-gray">Apr. 7, 2019</span>
+        </small>
+      </h5>
+      <div className="card-subtitle--3 text-gray mb-3">
+        Party DJ
+        <span className="float-right small--2 text-gray text-normal">
+          Closes on 17th Apr, 2019
+        </span>
+      </div>
+
+      <div className="table-responsive">
+        <table className="table table-dark">
+          <tbody>
+            {entertainerList.map((entertainer) => (
+              <Dashboard.AuctionRow
+                entertainer={entertainer}
+                key={entertainer.stageName + entertainer.id}
+              />
+            ))}
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colSpan="6">
+                <h5 className="main-app__subtitle mt-2 mb-0">
+                  Your Budget: N80,000
+                </h5>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+);
+
+Dashboard.AuctionRow = ({ entertainer }) => (
+  <tr>
+    <th scope="row">
+      <Image
+        className="avatar--small"
+        name={entertainer.stageName}
+        src={entertainer.img.profile}
+      />
+    </th>
+    <td>{entertainer.stageName}</td>
+    <td>{entertainer.average_ratings}</td>
+    <td className="text-red">N70,000</td>
+    <td className="text-right">
+      <span className="text-yellow">View Profile</span>
+    </td>
+    <td className="text-right">
+      {' '}
+      <span className="text-green">Approve</span>
+    </td>
+  </tr>
+);
+
+Dashboard.RecommendedTable = ({ entertainerList }) => (
+  <div className="card card-custom">
+    <div className="card-body">
+      <h5 className="card-title text-blue">Recommended For You</h5>
+      <div className="table-responsive">
+        <table className="table table-dark">
+          <tbody>
+            {entertainerList.map((entertainer) => (
+              <Dashboard.RecommendedRow
+                entertainer={entertainer}
+                key={entertainer.stageName + entertainer.id}
+              />
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+);
 
 Dashboard.RecommendedRow = ({ entertainer }) => (
   <tr>
@@ -193,25 +219,19 @@ Dashboard.RecommendedRow = ({ entertainer }) => (
       <Image
         className="avatar--small"
         name={entertainer.stageName}
-        src={entertainer.profileImageURL}
+        src={entertainer.img.profile}
       />
     </td>
     <td>
       <span className="text-truncate--1">{entertainer.stageName}</span>
     </td>
     <td>
-      <span className="text-yellow small--3">
-        {entertainer.entertainerType}
-      </span>
+      <span className="text-yellow small--3">{entertainer.type}</span>
     </td>
     <td>
-      <span className="small--3">{4.5}</span>
+      <span className="small--3">{entertainer.ratings.average}</span>
     </td>
   </tr>
 );
-
-Dashboard.RecommendedRow.propTypes = {
-  entertainer: PropTypes.object.isRequired,
-};
 
 export default Dashboard;

@@ -248,6 +248,52 @@ const EventController = {
   },
 
   /**
+   * get User Requests
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  getUserRequests(req, res) {
+    const userId = req.user.id;
+    Application.findAll({
+      where: {
+        applicationType: 'Request',
+      },
+      include: [
+        {
+          model: Event,
+          as: 'event',
+          where: {
+            userId,
+          },
+        },
+        {
+          model: EventEntertainer,
+          as: 'eventEntertainerInfo',
+        },
+        {
+          model: User,
+          as: 'user',
+          attributes: ['id', 'email'],
+          include: [
+            {
+              model: EntertainerProfile,
+              as: 'profile',
+              attributes: ['id', 'stageName', 'slug'],
+            },
+          ],
+        },
+      ],
+    }).then((requests) => {
+      if (!requests || requests.length === 0) {
+        return res.status(404).json({ message: 'No request found' });
+      }
+      return res.status(200).json({ requests });
+    });
+  },
+
+  /**
    * get Available Auctions
    * @function
    * @param {object} req is req object

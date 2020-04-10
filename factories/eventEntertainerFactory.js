@@ -1,6 +1,7 @@
 const Factory = require('rosie').Factory;
 const addDays = require('date-fns').addDays;
 const LoremIpsum = require('lorem-ipsum').LoremIpsum;
+const randomItem = (items) => items[Math.floor(Math.random() * items.length)];
 
 const ENTERTAINER_TYPE = ['MC', 'DJ', 'Liveband'];
 
@@ -54,8 +55,8 @@ const lorem = new LoremIpsum({
 
 module.exports = new Factory()
   .option('type', 0)
-  .sequence('entertainerType', function (id) {
-    return ENTERTAINER_TYPE[id % 3];
+  .attr('entertainerType', function () {
+    return randomItem(ENTERTAINER_TYPE);
   })
   .sequence('placeOfEvent', function (id) {
     return PLACE_OF_EVENTS[id % 5];
