@@ -81,7 +81,12 @@ const EventEntertainerController = {
     }
 
     // ensure valid hire type before saving
-    const VALID_HIRE_TYPES = ['Search', 'Auction', 'Recommend'];
+    const VALID_HIRE_TYPES = [
+      'Search',
+      'Recommend',
+      'Recommendation',
+      'Auction',
+    ];
     if (!VALID_HIRE_TYPES.includes(hireType)) {
       return res.status(400).json({
         message: `${hireType} is not a valid hire type. Hire type should be one of Search, Auction or Recommend`,
@@ -92,7 +97,9 @@ const EventEntertainerController = {
     // save new event entertainer details
     if (!id) {
       const hasApplicationRequest =
-        hireType === 'Search' || hireType === 'Recommend';
+        hireType === 'Search' ||
+        hireType === 'Recommend' ||
+        hireType === 'Recommendation';
 
       if (hasApplicationRequest) {
         // check if application should be available in the request
@@ -142,7 +149,7 @@ const EventEntertainerController = {
         entertainerType,
         placeOfEvent,
         genre,
-        hireType,
+        hireType: hireType === 'Recommend' ? 'Recommendation' : hireType,
         language,
         expectedAudienceSize,
         ageGroup,

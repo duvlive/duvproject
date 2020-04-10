@@ -1,9 +1,10 @@
 'use strict';
 const entertainerFactory = require('../../../factories/entertainerProfileFactory');
+const NUMBER = require('../seed.constants');
 
 module.exports = {
   up: async (queryInterface) => {
-    const userId = await queryInterface.sequelize.query(
+    const entertainer = await queryInterface.sequelize.query(
       'SELECT id FROM "Users" WHERE email = ? ',
       {
         replacements: ['entertainer1@gmail.com'],
@@ -11,9 +12,9 @@ module.exports = {
       }
     );
     const entertainers = entertainerFactory.buildList(
-      18,
+      NUMBER.ENTERTAINERS,
       {},
-      { offset: userId[0].id }
+      { offset: entertainer[0].id }
     );
     return queryInterface.bulkInsert('EntertainerProfiles', entertainers, {});
   },

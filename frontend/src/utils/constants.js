@@ -197,7 +197,7 @@ export const AUDIENCE_SIZE = [
   },
   {
     label: 'Between 20 and 50 guests',
-    value: '21-50 Guests',
+    value: '21 - 50 Guests',
   },
   {
     label: 'Between 51 and 100 guests',
@@ -240,7 +240,7 @@ export const GENRE = [
   { label: 'Religious', value: 'Religious' },
   { label: 'Rock', value: 'Rock' },
   { label: 'The Eighties', value: 'The Eighties' },
-  { label: 'Variety', value: 'Variety' },
+  { label: 'Variety', value: 'VarieOutdoorsty' },
 ];
 
 export const RATINGS = [
@@ -252,16 +252,22 @@ export const RATINGS = [
 ];
 
 export const PLACE_OF_EVENTS = [
-  { label: 'Village hall' },
-  { label: 'Conference Centry' },
-  { label: 'Concert Hall' },
+  { label: 'Outside a House' },
   { label: 'Outdoors' },
-  { label: 'Country' },
+  { label: 'In a House' },
+  { label: 'Inside a Room' },
+  { label: 'Hall' },
+  { label: 'Event Center' },
   { label: 'Office' },
   { label: 'School' },
-  { label: 'In a House' },
-  { label: 'Community Centry' },
+  { label: 'Concert Hall' },
+  { label: 'Village hall' },
   { label: 'Place of Worship' },
+  { label: 'Mosque' },
+  { label: 'Church' },
+  { label: 'Conference Centry' },
+  { label: 'Country' },
+  { label: 'Community Centry' },
   { label: 'Barn' },
 ];
 

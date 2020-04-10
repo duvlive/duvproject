@@ -14,7 +14,8 @@
     "server:debug": "babel-node server-debug.js",
     "build:server": "babel ./src-server -d ./dist -D",
     "build:frontend": "cd frontend && npm install && npm install --only=dev --no-shrinkwrap && npm run build && cd .. && cp -R frontend/build dist/ && cp -R frontend/build src-server",
-    "heroku-postbuild": "rm -rf ./dist && yarn run build:server && yarn run build:frontend && cd dist/server && sequelize db:migrate"
+    "heroku-postbuild": "rm -rf ./dist && yarn run build:server && yarn run build:frontend && cd dist/server && sequelize db:migrate",
+    "reset:db": "npx sequelize-cli db:migrate:undo:all && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all"
   },
   "repository": {
     "type": "git",
@@ -52,6 +53,7 @@
     "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
     "cloudinary": "^1.19.0",
+    "date-fns": "1.30.1",
     "dotenv": "^8.1.0",
     "ejs": "^3.0.1",
     "express": "^4.17.1",
