@@ -240,7 +240,7 @@ export const GENRE = [
   { label: 'Religious', value: 'Religious' },
   { label: 'Rock', value: 'Rock' },
   { label: 'The Eighties', value: 'The Eighties' },
-  { label: 'Variety', value: 'VarieOutdoorsty' },
+  { label: 'Variety', value: 'Variety' },
 ];
 
 export const RATINGS = [

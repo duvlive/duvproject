@@ -8,11 +8,18 @@ import { UserContext } from 'context/UserContext';
 import NoContent from 'components/common/utils/NoContent';
 import { getTokenFromStore } from 'utils/localStorage';
 import LoadingScreen from 'components/common/layout/LoadingScreen';
+import { twoDigitNumber } from 'utils/helpers';
+import { getEventDate, getTime, getTimeOfDay } from 'utils/date-helpers';
+import { groupEvents, userCanAddEntertainer } from 'utils/event-helpers';
+import { Link } from '@reach/router';
+import LoadItems from 'components/common/utils/LoadItems';
 
 const Dashboard = () => {
   let { userState } = React.useContext(UserContext);
   const [entertainers, setEntertainers] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
+
+  console.log('...userState.events', userState.events);
 
   React.useEffect(() => {
     axios
@@ -33,7 +40,6 @@ const Dashboard = () => {
         setLoading(false);
       });
   }, []);
-
   return (
     <BackEndPage title="Dashboard">
       <div className="main-app">
@@ -43,13 +49,19 @@ const Dashboard = () => {
             <div className="col-sm-8">
               <div className="card card-custom">
                 <div className="card-body">
-                  <h5 className="card-title text-green">Upcoming Events</h5>
-                  <NoContent
-                    isButton
-                    linkText="Add a New Event"
-                    linkTo="/user/events/new"
-                    text="You have no Upcoming Events"
-                  />
+                  <LoadItems
+                    items={userState.events}
+                    noContent={
+                      <NoContent
+                        isButton
+                        linkText="Add a New Event"
+                        linkTo="/user/events/new"
+                        text="You have no Upcoming Events"
+                      />
+                    }
+                  >
+                    <Dashboard.UpcomingEvents events={userState.events} />
+                  </LoadItems>
                 </div>
               </div>
               <Dashboard.AuctionTable />
@@ -68,69 +80,92 @@ const Dashboard = () => {
   );
 };
 
-Dashboard.UpcomingEvents = () => (
-  <div className="card card-custom">
-    <div className="card-body">
-      <h5 className="card-title text-green">Upcoming Events</h5>
+Dashboard.UpcomingEvents = ({ events }) => {
+  console.log('events upcoimngEvents', events);
+  // Sort event according - Today, Upcoming and Past
+  let allEvents = groupEvents(events);
+  let eventsToShow = [];
+  let title = 'Upcoming Events';
 
+  if (allEvents.today.length > 0) {
+    eventsToShow = allEvents.today;
+    title = 'Today Events';
+  } else if (allEvents.upcoming.length > 0) {
+    eventsToShow = allEvents.upcoming;
+  } else if (allEvents.past.length > 0) {
+    eventsToShow = allEvents.past;
+    title = 'Past Events';
+  }
+
+  return (
+    <>
+      <h5 className="card-title text-green">{title}</h5>
       <div className="table-responsive">
         <table className="table table-dark table__no-border">
           <tbody>
-            <tr>
-              <th className="table__number" scope="row">
-                01
-              </th>
-              <td>
-                <div className="table__title text-white">Wedding Ceremony</div>
-                <span>
-                  <i className="icon icon-location" />
-                  Yaba, Lagos state
-                </span>
-              </td>
-              <td>
-                <span className="text-red">3 days to go</span>
-                <span>
-                  <strong className="text-blue"> DJ Cuppy</strong> (DJ)
-                </span>
-              </td>
-              <td className="text-right">
-                <span>
-                  <i className="icon icon-clock" /> Sun, April 17, 2019
-                </span>
-                <span>9:00am</span>
-              </td>
-            </tr>
-            <tr>
-              <th className="table__number" scope="row">
-                02
-              </th>
-              <td>
-                <div className="table__title text-white">Birthday Party</div>
-                <span>
-                  <i className="icon icon-location" />
-                  Yaba, Lagos state
-                </span>
-              </td>
-              <td>
-                <span className="text-green">2 months to go</span>
-                <span>
-                  <strong className="text-blue"> High Soul</strong> (Live Band)
-                </span>
-              </td>
-              <td className="text-right">
-                <span>
-                  <i className="icon icon-clock" /> Sun, April 17, 2019
-                </span>
-                <span>9:00am</span>
-              </td>
-            </tr>
+            {eventsToShow.map((event, index) => (
+              <Dashboard.UpcomingEventsRow
+                event={event}
+                key={index}
+                number={index + 1}
+              />
+            ))}
           </tbody>
         </table>
         <div className="pt-4" />
       </div>
-    </div>
-  </div>
+    </>
+  );
+};
+
+Dashboard.UpcomingEvents.propTypes = {
+  events: PropTypes.array.isRequired,
+};
+
+Dashboard.UpcomingEventsRow = ({ event, number }) => (
+  <tr>
+    <th className="table__number" scope="row">
+      {twoDigitNumber(number)}
+    </th>
+    <td className="pl-4">
+      <span className="subtitle--2 text-red text-uppercase">
+        {getEventDate(event.eventDate)}
+      </span>
+      <span className="small--3 text-gray">
+        {getTime(event.startTime)} ({getTimeOfDay(event.startTime)})
+      </span>
+    </td>
+    <td>
+      <div className="table__title text-white">{event.eventType}</div>
+      <span>
+        <i className="icon icon-location" />
+        {event.lga}, {event.state} State
+      </span>
+    </td>
+    <td className="text-right">
+      {userCanAddEntertainer(event.eventDate) && (
+        <Link
+          className="btn btn-danger btn-transparent"
+          to={`/user/events/${event.id}/add-entertainer`}
+        >
+          Add Entertainer
+        </Link>
+      )}
+      &nbsp; &nbsp; &nbsp;
+      <Link
+        className="btn btn-info btn-transparent"
+        to={`/user/events/view/${event.id}`}
+      >
+        View Event
+      </Link>
+    </td>
+  </tr>
 );
+
+Dashboard.UpcomingEventsRow.propTypes = {
+  event: PropTypes.object.isRequired,
+  number: PropTypes.number.isRequired,
+};
 
 Dashboard.PendingReview = () => (
   <div className="card card-custom">

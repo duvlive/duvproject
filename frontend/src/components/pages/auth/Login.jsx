@@ -17,25 +17,27 @@ import { storeToken, storeUserType } from 'utils/localStorage';
 import AlertMessage from 'components/common/utils/AlertMessage';
 import { UserContext } from 'context/UserContext';
 
-const Login = ({ token }) => (
+const Login = ({ token, sid }) => (
   <>
     <section className="auth">
       <Header showRedLogo />
-      <Content token={token} />
+      <Content sid={sid} token={token} />
     </section>
     <Footer className="mt-0" />
   </>
 );
 
 Login.propTypes = {
-  token: PropTypes.string
+  sid: PropTypes.string,
+  token: PropTypes.string,
 };
 
 Login.defaultProps = {
-  token: ''
+  sid: '',
+  token: '',
 };
 
-const Content = ({ token }) => {
+const Content = ({ sid, token }) => {
   return (
     <section>
       <div className="container-fluid">
@@ -47,16 +49,16 @@ const Content = ({ token }) => {
             <div className="auth__container">
               <section>
                 <h5 className="header font-weight-normal mb-4">Login</h5>
-                <LoginForm token={token} />
+                <LoginForm sid={sid} token={token} />
               </section>
               <section className="auth__social-media">
                 <p className="auth__social-media--text">or login with:</p>
-                <Link
+                <a
                   className="auth__social-media--icons"
-                  to="/api/v1/auth/google"
+                  href="/api/v1/auth/google"
                 >
                   <span className="icon-google" />
-                </Link>
+                </a>
                 <Link
                   className="auth__social-media--icons"
                   to="/api/v1/auth/facebook"
@@ -83,10 +85,11 @@ const Content = ({ token }) => {
 };
 
 Content.propTypes = {
-  token: PropTypes.string.isRequired
+  sid: PropTypes.string.isRequired,
+  token: PropTypes.string.isRequired,
 };
 
-const LoginForm = ({ token }) => {
+const LoginForm = ({ sid, token }) => {
   const [message, setMessage] = useState(null);
   const { userState, userDispatch } = React.useContext(UserContext);
 
@@ -95,22 +98,49 @@ const LoginForm = ({ token }) => {
     token &&
       axios
         .get('/api/v1/users/activate', { params: { token } })
-        .then(function(response) {
+        .then(function (response) {
           const { status, data } = response;
           // handle success
           if (status === 200) {
             setMessage({
               type: 'success',
-              message: data.message
+              message: data.message,
             });
           }
         })
-        .catch(function(error) {
+        .catch(function (error) {
           setMessage({
-            message: error.response.data.message
+            message: error.response.data.message,
           });
         });
   }, [token]);
+
+  // CHECK IF SOCIAL MEDIA LOGIN
+  useEffect(() => {
+    sid &&
+      axios
+        .get('/api/v1/who-am-i', {
+          headers: {
+            'x-access-token': sid,
+          },
+        })
+        .then(function (response) {
+          const { status, data } = response;
+          console.log('data', data);
+          // handle success
+          if (status === 200) {
+            userDispatch({ type: 'user-social-media-login', user: data });
+            storeToken(sid);
+            storeUserType(data.type);
+          }
+        })
+        .catch(function (error) {
+          console.log('error', error);
+          setMessage({
+            message: error.response.data.message,
+          });
+        });
+  }, [sid, userDispatch]);
 
   // CHECK IF USER HAS PREVIOUSLY SIGNED IN
   useEffect(() => {
@@ -123,13 +153,13 @@ const LoginForm = ({ token }) => {
     <Formik
       initialValues={{
         email: '',
-        password: ''
+        password: '',
       }}
       onSubmit={(values, actions) => {
         // post to api
         axios
           .post('/api/v1/users/login', values)
-          .then(function(response) {
+          .then(function (response) {
             const { status, data } = response;
             if (status === 200) {
               userDispatch({ type: 'user-login', user: data.user });
@@ -137,9 +167,9 @@ const LoginForm = ({ token }) => {
               storeUserType(data.user.type);
             }
           })
-          .catch(function(error) {
+          .catch(function (error) {
             setMessage({
-              message: error.response.data.message
+              message: error.response.data.message,
             });
           });
         actions.setSubmitting(false);
@@ -158,7 +188,7 @@ const LoginForm = ({ token }) => {
             labelClassName="d-block"
             labelLink={{
               to: '/forgot-password',
-              text: 'Forgot Password'
+              text: 'Forgot Password',
             }}
             name="password"
             placeholder="Password"
@@ -176,7 +206,8 @@ const LoginForm = ({ token }) => {
 };
 
 LoginForm.propTypes = {
-  token: PropTypes.string.isRequired
+  sid: PropTypes.string.isRequired,
+  token: PropTypes.string.isRequired,
 };
 
 export default Login;

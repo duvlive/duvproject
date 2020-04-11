@@ -64,7 +64,7 @@ const INITIAL_STATE = {
     identification: null,
   },
   galleries: [],
-  events: [],
+  events: null,
 };
 
 // CONTEXT
@@ -82,6 +82,7 @@ let reducer = (state, action) => {
       return INITIAL_STATE;
     case 'user-info':
     case 'user-login':
+    case 'user-social-media-login':
     case 'user-profile-update':
     case 'user-contact-update':
     case 'entertainer-profile-update':
