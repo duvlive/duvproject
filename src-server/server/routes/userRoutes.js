@@ -4,7 +4,7 @@ import passport from 'passport';
 import GoogleStrategy from 'passport-google-oauth';
 import FacebookStrategy from 'passport-facebook';
 
-const userRoutes = router => {
+const userRoutes = (router) => {
   router.post('/api/v1/users', UserController.createUser);
   router.post('/api/v1/users/login', UserController.userLogin);
   router.get('/api/v1/users/logout', UserController.userLogout);
@@ -35,14 +35,16 @@ const userRoutes = router => {
     UserController.socialLogin
   );
 
+  router.get('/api/v1/auth/test', UserController.socialLogin);
+
   router.get(
     '/api/v1/auth/google',
     passport.authenticate('google', {
       scope: [
         'https://www.googleapis.com/auth/plus.login',
         'https://www.googleapis.com/auth/userinfo.profile',
-        'https://www.googleapis.com/auth/userinfo.email'
-      ]
+        'https://www.googleapis.com/auth/userinfo.email',
+      ],
     })
   );
   router.get(
@@ -73,15 +75,15 @@ const userRoutes = router => {
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: `${process.env.HOST}${process.env.GOOGLE_CALLBACK}`,
-        profileFields: ['emails', 'name']
+        callbackURL: `${process.env.GOOGLE_CALLBACK}`,
+        profileFields: ['emails', 'name'],
       },
-      function(accessToken, refreshToken, profile, done) {
+      function (accessToken, refreshToken, profile, done) {
         const {
           email,
           family_name: lastName,
           given_name: firstName,
-          picture: picture
+          picture: picture,
         } = profile._json;
         done(null, { firstName, lastName, email, picture });
       }
@@ -96,19 +98,24 @@ const userRoutes = router => {
       {
         clientID: process.env.FACEBOOK_APP_ID,
         clientSecret: process.env.FACEBOOK_APP_SECRET,
-        callbackURL: `${process.env.HOST}${process.env.FACEBOOK_CALLBACK}`,
-        profileFields: ['emails', 'name', 'picture.type(large)']
+        callbackURL: `${process.env.FACEBOOK_CALLBACK}`,
+        profileFields: ['emails', 'name', 'picture.type(large)'],
       },
-      function(accessToken, refreshToken, profile, done) {
+      function (accessToken, refreshToken, profile, done) {
         const {
           last_name: lastName,
           first_name: firstName,
           email,
           picture: {
-            data: { url }
-          }
+            data: { url },
+          },
         } = profile._json;
-        done(null, { firstName, lastName, email, picture: url });
+        done(null, {
+          firstName,
+          lastName,
+          email,
+          picture: url,
+        });
       }
     )
   );

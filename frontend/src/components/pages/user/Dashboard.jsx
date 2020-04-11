@@ -8,6 +8,12 @@ import { UserContext } from 'context/UserContext';
 import NoContent from 'components/common/utils/NoContent';
 import { getTokenFromStore } from 'utils/localStorage';
 import LoadingScreen from 'components/common/layout/LoadingScreen';
+import { commaNumber } from 'utils/helpers';
+import {
+  getEventDate,
+  getTime,
+  getNumberOfDaysToEvent,
+} from 'utils/date-helpers';
 
 const Dashboard = () => {
   let { userState } = React.useContext(UserContext);
@@ -44,12 +50,16 @@ const Dashboard = () => {
               <div className="card card-custom">
                 <div className="card-body">
                   <h5 className="card-title text-green">Upcoming Events</h5>
-                  <NoContent
-                    isButton
-                    linkText="Add a New Event"
-                    linkTo="/user/events/new"
-                    text="You have no Upcoming Events"
-                  />
+                  {userState.events ? (
+                    <Dashboard.UpcomingEvents events={userState.events} />
+                  ) : (
+                    <NoContent
+                      isButton
+                      linkText="Add a New Event"
+                      linkTo="/user/events/new"
+                      text="You have no Upcoming Events"
+                    />
+                  )}
                 </div>
               </div>
               <Dashboard.AuctionTable />
@@ -68,69 +78,60 @@ const Dashboard = () => {
   );
 };
 
-Dashboard.UpcomingEvents = () => (
-  <div className="card card-custom">
-    <div className="card-body">
-      <h5 className="card-title text-green">Upcoming Events</h5>
-
-      <div className="table-responsive">
-        <table className="table table-dark table__no-border">
-          <tbody>
-            <tr>
-              <th className="table__number" scope="row">
-                01
-              </th>
-              <td>
-                <div className="table__title text-white">Wedding Ceremony</div>
-                <span>
-                  <i className="icon icon-location" />
-                  Yaba, Lagos state
-                </span>
-              </td>
-              <td>
-                <span className="text-red">3 days to go</span>
-                <span>
-                  <strong className="text-blue"> DJ Cuppy</strong> (DJ)
-                </span>
-              </td>
-              <td className="text-right">
-                <span>
-                  <i className="icon icon-clock" /> Sun, April 17, 2019
-                </span>
-                <span>9:00am</span>
-              </td>
-            </tr>
-            <tr>
-              <th className="table__number" scope="row">
-                02
-              </th>
-              <td>
-                <div className="table__title text-white">Birthday Party</div>
-                <span>
-                  <i className="icon icon-location" />
-                  Yaba, Lagos state
-                </span>
-              </td>
-              <td>
-                <span className="text-green">2 months to go</span>
-                <span>
-                  <strong className="text-blue"> High Soul</strong> (Live Band)
-                </span>
-              </td>
-              <td className="text-right">
-                <span>
-                  <i className="icon icon-clock" /> Sun, April 17, 2019
-                </span>
-                <span>9:00am</span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div className="pt-4" />
-      </div>
-    </div>
+Dashboard.UpcomingEvents = ({ events }) => (
+  <div className="table-responsive">
+    <table className="table table-dark table__no-border">
+      <tbody>
+        {events.map((event, index) => (
+          <Dashboard.UpcomingEventsRow
+            event={event}
+            key={index}
+            number={index + 1}
+          />
+        ))}
+      </tbody>
+    </table>
+    <div className="pt-4" />
   </div>
 );
+
+Dashboard.UpcomingEvents.propTypes = {
+  events: PropTypes.array.isRequired,
+};
+
+Dashboard.UpcomingEventsRow = ({ event, number }) => (
+  <tr>
+    <th className="table__number" scope="row">
+      {commaNumber(number)}
+    </th>
+    <td>
+      <div className="table__title text-white">{event.eventType}</div>
+      <span>
+        <i className="icon icon-location" />
+        {event.lga}, {event.state} state
+      </span>
+    </td>
+    <td>
+      <span className="text-red">
+        {getNumberOfDaysToEvent(event.eventDate)}
+      </span>
+      <span>
+        <strong className="text-blue"> {event.eventDuration}</strong>
+      </span>
+    </td>
+    <td className="text-right">
+      <span>
+        <i className="icon icon-clock" /> {getEventDate(event.eventDate)}
+      </span>
+      <span>{getTime(event.startTime)}</span>
+    </td>
+  </tr>
+);
+
+Dashboard.UpcomingEventsRow.propTypes = {
+  event: PropTypes.object.isRequired,
+  number: PropTypes.number.isRequired,
+};
 
 Dashboard.PendingReview = () => (
   <div className="card card-custom">

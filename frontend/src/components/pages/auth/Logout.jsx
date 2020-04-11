@@ -11,6 +11,7 @@ const Logout = () => {
     store(false);
     userDispatch({ type: 'user-logout' });
     navigate('/');
+    window.location.href = '/';
   });
 
   return (

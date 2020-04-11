@@ -11,7 +11,7 @@ import {
   Identification,
   Notification,
   User,
-  Video
+  Video,
 } from '../models';
 import sendMail from '../MailSender';
 import Authentication from '../middleware/authentication';
@@ -22,31 +22,31 @@ export const userAssociatedOrder = [
   // ...we use the same syntax from the include
   // in the beginning of the order array
   [{ model: Notification, as: 'notifications' }, 'updatedAt', 'DESC'],
-  [{ model: Event, as: 'events' }, 'eventDate', 'ASC']
+  [{ model: Event, as: 'events' }, 'eventDate', 'ASC'],
 ];
 
 export const userAssociatedModels = [
   {
     model: EntertainerProfile,
-    as: 'profile'
+    as: 'profile',
   },
   {
     model: BankDetail,
-    as: 'bankDetail'
+    as: 'bankDetail',
   },
   {
     model: Contact,
-    as: 'contacts'
+    as: 'contacts',
   },
   {
     model: Gallery,
     as: 'galleries',
-    attributes: ['id', 'imageURL', 'imageID', 'approved']
+    attributes: ['id', 'imageURL', 'imageID', 'approved'],
   },
   {
     model: Video,
     as: 'videos',
-    attributes: ['id', 'title', 'youtubeID', 'approved']
+    attributes: ['id', 'title', 'youtubeID', 'approved'],
   },
   {
     model: ApprovalComment,
@@ -56,16 +56,16 @@ export const userAssociatedModels = [
       'bankAccount',
       'contact',
       'identification',
-      'youTube'
-    ]
+      'youTube',
+    ],
   },
   {
     model: Identification,
-    as: 'identification'
+    as: 'identification',
   },
   {
     model: Notification,
-    as: 'notifications'
+    as: 'notifications',
   },
   {
     model: Event,
@@ -83,14 +83,14 @@ export const userAssociatedModels = [
               {
                 model: User,
                 as: 'personalDetails',
-                attributes: ['id', 'firstName', 'lastName', 'profileImageURL']
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  }
+                attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 const UserController = {
@@ -120,7 +120,7 @@ const UserController = {
       galleries: user.galleries,
       videos: user.videos,
       approvalComment: user.approvalComment,
-      events: user.events
+      events: user.events,
     };
 
     return { ...transformedUser, ...updatedValues };
@@ -141,13 +141,13 @@ const UserController = {
       password,
       confirmPassword,
       phoneNumber,
-      type
+      type,
     } = req.body;
     const errors = {
       ...UserValidation.nameValidation(firstName, lastName),
       ...UserValidation.emailValidation(email),
       ...UserValidation.phoneNumberValidation(phoneNumber),
-      ...UserValidation.passwordValidaton(password, confirmPassword)
+      ...UserValidation.passwordValidaton(password, confirmPassword),
     };
 
     if (Object.keys(errors).length) {
@@ -156,13 +156,13 @@ const UserController = {
         .json({ message: 'There are invalid fields in the form', errors });
     }
     return User.findAll({
-      where: { email }
+      where: { email },
     })
-      .then(existingUser => {
+      .then((existingUser) => {
         if (existingUser.length > 0) {
           throw {
             status: 409,
-            message: 'This email address has already been taken'
+            message: 'This email address has already been taken',
           };
         }
         return User.create({
@@ -171,17 +171,17 @@ const UserController = {
           email,
           password,
           phoneNumber,
-          type
+          type,
         });
       })
-      .then(newUser => {
+      .then((newUser) => {
         return res.status(200).json({
           message: 'Signed up successfully',
           user: UserController.transformUser(newUser),
-          token: Authentication.generateToken(newUser, true)
+          token: Authentication.generateToken(newUser, true),
         });
       })
-      .catch(error => {
+      .catch((error) => {
         const status = error.status || 500;
         const errorMessage = error.message || error;
         return res.status(status).json({ message: errorMessage });
@@ -199,29 +199,30 @@ const UserController = {
     const { lastName, firstName, email, picture } = req.user;
     User.findOne({
       where: { email },
-      include: userAssociatedModels,
-      order: userAssociatedOrder
     })
-      .then(usr => {
-        if (!usr || usr.length === 0) {
-          return res.status(200).json({
-            user: { lastName, firstName, email, picture }
+      .then(async (result) => {
+        let user = (result && result.dataValues) || null;
+        if (!result) {
+          user = await User.create({
+            firstName,
+            lastName,
+            email,
+            phoneNumber: '12345678901',
+            password: Date.now().toString(36),
+            profileImageURL: picture,
+            isActive: true,
+            type: 1,
+            profileImageID: 'social-media',
           });
-        }
-        const user = usr.dataValues;
-        if (user.firstTimeLogin) {
-          user.update({ firstTimeLogin: false });
+        } else {
+          if (user.firstTimeLogin) {
+            user.update({ firstTimeLogin: false });
+          }
         }
         const token = Authentication.generateToken(user);
-        return res.status(200).json({
-          message: 'You are successfully Logged in',
-          user: UserController.transformUser(user, {
-            firstTimeLogin: !user.firstTimeLogin
-          }),
-          token
-        });
+        res.redirect(`http://localhost:3000/login/${token}`);
       })
-      .catch(error => {
+      .catch((error) => {
         const errorMessage = error.message || error;
         return res.status(400).json({ error: errorMessage });
       });
@@ -236,9 +237,9 @@ const UserController = {
    */
   activateUser(req, res) {
     User.findOne({
-      where: { activationToken: req.query.token }
+      where: { activationToken: req.query.token },
     })
-      .then(userFound => {
+      .then((userFound) => {
         if (!userFound || userFound.length === 0) {
           return res.status(404).json({ message: 'User not found' });
         }
@@ -252,14 +253,14 @@ const UserController = {
           { isActive: true, activatedAt: new Date().toISOString() },
           {
             where: {
-              activationToken: req.query.token
-            }
+              activationToken: req.query.token,
+            },
           }
         ).then(() =>
           res.status(200).json({ message: 'User activation successful' })
         );
       })
-      .catch(error => {
+      .catch((error) => {
         const errorMessage = error.message || error;
         return res.status(500).json({ message: errorMessage });
       });
@@ -282,22 +283,22 @@ const UserController = {
     User.findOne({
       where: { email },
       include: userAssociatedModels,
-      order: userAssociatedOrder
+      order: userAssociatedOrder,
     })
-      .then(user => {
+      .then((user) => {
         if (!user) {
           return res.status(404).json({ message: 'Invalid email or password' });
         }
 
         if (!user.isActive) {
           return res.status(403).json({
-            message: 'User needs to activate account.'
+            message: 'User needs to activate account.',
           });
         }
 
         if (!bcrypt.compareSync(password, user.password)) {
           return res.status(403).json({
-            message: 'Invalid email or password'
+            message: 'Invalid email or password',
           });
         }
 
@@ -309,13 +310,12 @@ const UserController = {
         return res.status(200).json({
           message: 'You are successfully logged in',
           user: UserController.transformUser(user, {
-            firstTimeLogin: !user.firstTimeLogin
+            firstTimeLogin: !user.firstTimeLogin,
           }),
-          token
+          token,
         });
       })
-      .catch(error => {
-        console.log({ error });
+      .catch((error) => {
         return res.status(500).json({ message: error.message });
       });
   },
@@ -334,23 +334,23 @@ const UserController = {
     }
 
     User.findOne({
-      where: { email }
+      where: { email },
     })
-      .then(user => {
+      .then((user) => {
         if (!user || user.length === 0) {
           return res.status(404).json({ message: 'User not found' });
         } else {
           const resetToken = Authentication.generateToken(user);
           const link = `${process.env.HOST}/reset-password/${resetToken}`;
           sendMail(EMAIL_CONTENT.PASSWORD_RESET, user, {
-            link
+            link,
           });
           return res.status(200).json({
-            message: 'Password reset email sent successfully'
+            message: 'Password reset email sent successfully',
           });
         }
       })
-      .catch(error => {
+      .catch((error) => {
         return res.status(500).json({ error: error.message });
       });
   },
@@ -374,16 +374,16 @@ const UserController = {
     jwt.verify(resetToken, process.env.SECRET, (error, decoded) => {
       if (error) {
         return res.status(401).send({
-          message: 'Invalid token'
+          message: 'Invalid token',
         });
       }
       req.decoded = decoded;
     });
 
     User.findOne({
-      where: { id: req.decoded.userId }
+      where: { id: req.decoded.userId },
     })
-      .then(user => {
+      .then((user) => {
         if (!user || user.length === 0) {
           return res.status(404).json({ message: 'User not found' });
         }
@@ -398,7 +398,7 @@ const UserController = {
             .json({ message: 'Password update successful' });
         });
       })
-      .catch(error => {
+      .catch((error) => {
         return res.status(500).json({ error: error.message });
       });
   },
@@ -417,7 +417,7 @@ const UserController = {
     if (!password || !confirmPassword || !oldPassword) {
       return res.status(400).json({
         message:
-          'The old, current and confirmation password fields cannot be empty'
+          'The old, current and confirmation password fields cannot be empty',
       });
     }
 
@@ -427,7 +427,7 @@ const UserController = {
 
     if (!bcrypt.compareSync(oldPassword, user.password)) {
       return res.status(403).json({
-        message: 'Invalid old password'
+        message: 'Invalid old password',
       });
     }
 
@@ -449,7 +449,7 @@ const UserController = {
   userLogout(req, res) {
     // TODO: set authorizaion and x-access- token to null
     res.status(200).json({
-      message: 'You have been Logged out'
+      message: 'You have been Logged out',
     });
   },
 
@@ -475,23 +475,23 @@ const UserController = {
     const { userId } = req.decoded;
     const { firstName, lastName, phoneNumber, phoneNumber2 } = req.body;
     User.findOne({
-      where: { id: userId }
+      where: { id: userId },
     })
-      .then(user => {
+      .then((user) => {
         const error = { ...UserValidation.isUserActive(user.isActive) };
         if (Object.keys(error).length) {
           return res.status(403).json(error);
         }
         if (!user) {
           return res.status(404).send({
-            message: 'User not found'
+            message: 'User not found',
           });
         }
         return user
           .update({ firstName, lastName, phoneNumber, phoneNumber2 })
           .then(() => res.status(200).json(UserController.transformUser(user)));
       })
-      .catch(error => {
+      .catch((error) => {
         return res.status(500).json({ error: error.message });
       });
   },
@@ -513,7 +513,7 @@ const UserController = {
       willingToTravel,
       eventType,
       entertainerType,
-      youTubeChannel
+      youTubeChannel,
     } = req.body;
 
     const entertainerProfileData = {
@@ -524,16 +524,16 @@ const UserController = {
       willingToTravel,
       eventType,
       entertainerType,
-      youTubeChannel
+      youTubeChannel,
     };
 
     return Promise.all([
       req.user.update({ phoneNumber }),
-      updateUser(req.user, entertainerProfileData, 'Profile')
-    ]).then(user => {
+      updateUser(req.user, entertainerProfileData, 'Profile'),
+    ]).then((user) => {
       res.status(200).json({
         user: UserController.transformUser(user[0]),
-        entertainerProfile: user[1]
+        entertainerProfile: user[1],
       });
     });
   },
@@ -550,7 +550,7 @@ const UserController = {
     const errors = {
       ...validString(userSubject),
       ...validString(userMessage),
-      ...UserValidation.emailValidation(userEmail)
+      ...UserValidation.emailValidation(userEmail),
     };
 
     if (Object.keys(errors).length) {
@@ -567,7 +567,7 @@ const UserController = {
       );
       return res.status(200).json({
         message:
-          'Your questions, complaints or suggestions has been successfully noted, the support team will get back to you'
+          'Your questions, complaints or suggestions has been successfully noted, the support team will get back to you',
       });
     } catch (error) {
       return res.status(400).json({ message: 'Something went wrong', error });
@@ -587,7 +587,7 @@ const UserController = {
       ...validString(userSubject),
       ...validString(userMessage),
       ...validString(fullName),
-      ...UserValidation.emailValidation(userEmail)
+      ...UserValidation.emailValidation(userEmail),
     };
 
     if (Object.keys(errors).length) {
@@ -618,7 +618,7 @@ const UserController = {
   async inviteFriend(req, res) {
     const { email } = req.body;
     const errors = {
-      ...UserValidation.emailValidation(email)
+      ...UserValidation.emailValidation(email),
     };
 
     if (Object.keys(errors).length) {
@@ -634,7 +634,7 @@ const UserController = {
     } catch (error) {
       return res.status(400).json({ message: 'Something went wrong', error });
     }
-  }
+  },
 };
 
 export default UserController;
