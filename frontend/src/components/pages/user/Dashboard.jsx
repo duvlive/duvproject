@@ -8,17 +8,18 @@ import { UserContext } from 'context/UserContext';
 import NoContent from 'components/common/utils/NoContent';
 import { getTokenFromStore } from 'utils/localStorage';
 import LoadingScreen from 'components/common/layout/LoadingScreen';
-import { commaNumber } from 'utils/helpers';
-import {
-  getEventDate,
-  getTime,
-  getNumberOfDaysToEvent,
-} from 'utils/date-helpers';
+import { twoDigitNumber } from 'utils/helpers';
+import { getEventDate, getTime, getTimeOfDay } from 'utils/date-helpers';
+import { groupEvents, userCanAddEntertainer } from 'utils/event-helpers';
+import { Link } from '@reach/router';
+import LoadItems from 'components/common/utils/LoadItems';
 
 const Dashboard = () => {
   let { userState } = React.useContext(UserContext);
   const [entertainers, setEntertainers] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
+
+  console.log('...userState.events', userState.events);
 
   React.useEffect(() => {
     axios
@@ -39,7 +40,6 @@ const Dashboard = () => {
         setLoading(false);
       });
   }, []);
-
   return (
     <BackEndPage title="Dashboard">
       <div className="main-app">
@@ -49,17 +49,19 @@ const Dashboard = () => {
             <div className="col-sm-8">
               <div className="card card-custom">
                 <div className="card-body">
-                  <h5 className="card-title text-green">Upcoming Events</h5>
-                  {userState.events ? (
+                  <LoadItems
+                    items={userState.events}
+                    noContent={
+                      <NoContent
+                        isButton
+                        linkText="Add a New Event"
+                        linkTo="/user/events/new"
+                        text="You have no Upcoming Events"
+                      />
+                    }
+                  >
                     <Dashboard.UpcomingEvents events={userState.events} />
-                  ) : (
-                    <NoContent
-                      isButton
-                      linkText="Add a New Event"
-                      linkTo="/user/events/new"
-                      text="You have no Upcoming Events"
-                    />
-                  )}
+                  </LoadItems>
                 </div>
               </div>
               <Dashboard.AuctionTable />
@@ -78,22 +80,43 @@ const Dashboard = () => {
   );
 };
 
-Dashboard.UpcomingEvents = ({ events }) => (
-  <div className="table-responsive">
-    <table className="table table-dark table__no-border">
-      <tbody>
-        {events.map((event, index) => (
-          <Dashboard.UpcomingEventsRow
-            event={event}
-            key={index}
-            number={index + 1}
-          />
-        ))}
-      </tbody>
-    </table>
-    <div className="pt-4" />
-  </div>
-);
+Dashboard.UpcomingEvents = ({ events }) => {
+  console.log('events upcoimngEvents', events);
+  // Sort event according - Today, Upcoming and Past
+  let allEvents = groupEvents(events);
+  let eventsToShow = [];
+  let title = 'Upcoming Events';
+
+  if (allEvents.today.length > 0) {
+    eventsToShow = allEvents.today;
+    title = 'Today Events';
+  } else if (allEvents.upcoming.length > 0) {
+    eventsToShow = allEvents.upcoming;
+  } else if (allEvents.past.length > 0) {
+    eventsToShow = allEvents.past;
+    title = 'Past Events';
+  }
+
+  return (
+    <>
+      <h5 className="card-title text-green">{title}</h5>
+      <div className="table-responsive">
+        <table className="table table-dark table__no-border">
+          <tbody>
+            {eventsToShow.map((event, index) => (
+              <Dashboard.UpcomingEventsRow
+                event={event}
+                key={index}
+                number={index + 1}
+              />
+            ))}
+          </tbody>
+        </table>
+        <div className="pt-4" />
+      </div>
+    </>
+  );
+};
 
 Dashboard.UpcomingEvents.propTypes = {
   events: PropTypes.array.isRequired,
@@ -102,28 +125,39 @@ Dashboard.UpcomingEvents.propTypes = {
 Dashboard.UpcomingEventsRow = ({ event, number }) => (
   <tr>
     <th className="table__number" scope="row">
-      {commaNumber(number)}
+      {twoDigitNumber(number)}
     </th>
+    <td className="pl-4">
+      <span className="subtitle--2 text-red text-uppercase">
+        {getEventDate(event.eventDate)}
+      </span>
+      <span className="small--3 text-gray">
+        {getTime(event.startTime)} ({getTimeOfDay(event.startTime)})
+      </span>
+    </td>
     <td>
       <div className="table__title text-white">{event.eventType}</div>
       <span>
         <i className="icon icon-location" />
-        {event.lga}, {event.state} state
-      </span>
-    </td>
-    <td>
-      <span className="text-red">
-        {getNumberOfDaysToEvent(event.eventDate)}
-      </span>
-      <span>
-        <strong className="text-blue"> {event.eventDuration}</strong>
+        {event.lga}, {event.state} State
       </span>
     </td>
     <td className="text-right">
-      <span>
-        <i className="icon icon-clock" /> {getEventDate(event.eventDate)}
-      </span>
-      <span>{getTime(event.startTime)}</span>
+      {userCanAddEntertainer(event.eventDate) && (
+        <Link
+          className="btn btn-danger btn-transparent"
+          to={`/user/events/${event.id}/add-entertainer`}
+        >
+          Add Entertainer
+        </Link>
+      )}
+      &nbsp; &nbsp; &nbsp;
+      <Link
+        className="btn btn-info btn-transparent"
+        to={`/user/events/view/${event.id}`}
+      >
+        View Event
+      </Link>
     </td>
   </tr>
 );

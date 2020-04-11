@@ -64,7 +64,7 @@ const INITIAL_STATE = {
     identification: null,
   },
   galleries: [],
-  events: [],
+  events: null,
 };
 
 // CONTEXT

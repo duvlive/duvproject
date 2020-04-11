@@ -302,15 +302,16 @@ const UserController = {
           });
         }
 
-        if (!user.firstTimeLogin) {
-          user.update({ firstTimeLogin: true });
+        const firstTimeLogin = user.firstTimeLogin;
+        if (firstTimeLogin) {
+          user.update({ firstTimeLogin: false });
         }
 
         const token = Authentication.generateToken(user);
         return res.status(200).json({
           message: 'You are successfully logged in',
           user: UserController.transformUser(user, {
-            firstTimeLogin: !user.firstTimeLogin,
+            firstTimeLogin,
           }),
           token,
         });

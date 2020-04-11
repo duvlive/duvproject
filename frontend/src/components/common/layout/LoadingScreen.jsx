@@ -19,11 +19,12 @@ const LoadingScreen = ({ children, loading, text }) => {
 
 LoadingScreen.propTypes = {
   children: PropTypes.any,
-  loading: PropTypes.bool.isRequired,
+  loading: PropTypes.bool,
   text: PropTypes.string,
 };
 
 LoadingScreen.defaultProps = {
+  loading: true,
   text: null,
   children: null,
 };
