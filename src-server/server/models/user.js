@@ -57,7 +57,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 1,
-        validate: { isIn: [[0, 1, 2, 3]] },
+        validate: { isIn: [[0, 1, 2, 3, 999]] },
       },
       isActive: {
         type: DataTypes.BOOLEAN,

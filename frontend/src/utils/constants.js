@@ -46,6 +46,7 @@ export const USER_TYPES = {
   user: 1,
   entertainer: 2,
   bandMember: 3,
+  unknown: 999,
 };
 
 export const HIRE_ENTERTAINERS_TYPE = {
@@ -79,6 +80,7 @@ export const DASHBOARD_PAGE = {
   [USER_TYPES.entertainer]: 'entertainer',
   [USER_TYPES.admin]: 'admin',
   [USER_TYPES.bandMember]: 'band-member',
+  [USER_TYPES.unknown]: 'unknown',
 };
 
 export const SLIDESHOW_TYPE = {

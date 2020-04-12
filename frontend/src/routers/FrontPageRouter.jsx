@@ -16,6 +16,7 @@ import ForgotPassword from 'components/pages/auth/ForgotPassword';
 import ResetPassword from 'components/pages/auth/ResetPassword';
 import ContextTest from 'components/pages/ContextTest';
 import ContactUs from 'components/pages/frontend/ContactUs';
+import CompleteRegistration from 'components/pages/auth/CompleteRegistration';
 
 const FrontPageRouter = () => (
   <Router>
@@ -38,6 +39,7 @@ const FrontPageRouter = () => (
     <SingleEntertainer path="entertainers/:slug" />
     <SingleEvent path="event/:slug" />
     <ContextTest path="context" />
+    <CompleteRegistration path="complete-registration" />
   </Router>
 );
 

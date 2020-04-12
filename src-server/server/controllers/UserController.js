@@ -211,7 +211,7 @@ const UserController = {
             password: Date.now().toString(36),
             profileImageURL: picture,
             isActive: true,
-            type: 1,
+            type: 999,
             profileImageID: 'social-media',
           });
         } else {
