@@ -17,6 +17,11 @@ const userRoutes = (router) => {
     Authentication.verifyToken,
     UserController.changePassword
   );
+  router.put(
+    '/api/v1/users/complete-registration',
+    Authentication.verifyToken,
+    UserController.completeRegistration
+  );
 
   router.get(
     '/api/v1/who-am-i',

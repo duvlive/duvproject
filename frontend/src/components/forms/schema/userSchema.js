@@ -6,7 +6,7 @@ import {
   strongPassword,
   confirmPassword,
   phoneNumber,
-  OptionalPhoneNumber
+  OptionalPhoneNumber,
 } from './schema-helpers';
 
 /////////////////////////
@@ -28,25 +28,31 @@ const registerObject = {
   email,
   password: strongPassword,
   confirmPassword: confirmPassword,
-  agreement
+  agreement,
 };
 
 const changePasswordObject = {
   oldPassword: strongPassword,
   password: strongPassword,
-  confirmPassword: confirmPassword
+  confirmPassword: confirmPassword,
 };
 
 const resetPasswordObject = {
   password: strongPassword,
-  confirmPassword: confirmPassword
+  confirmPassword: confirmPassword,
 };
 
 const personalInfoObject = {
   firstName: stringValidation('First Name'),
   lastName: stringValidation('Last Name'),
   phoneNumber,
-  phoneNumber2: OptionalPhoneNumber
+  phoneNumber2: OptionalPhoneNumber,
+};
+
+const completeRegistrationObject = {
+  phoneNumber,
+  password: strongPassword,
+  agreement,
 };
 
 /////////////////////////
@@ -54,18 +60,19 @@ const personalInfoObject = {
 ////////////////////////
 const loginSchema = yup.object().shape({
   email,
-  password
+  password,
 });
 
 const registerSchema = yup.object().shape(registerObject);
 const forgotPasswordSchema = yup.object().shape({ email });
 
 export {
+  completeRegistrationObject,
   loginSchema,
   registerSchema,
   registerObject,
   forgotPasswordSchema,
   changePasswordObject,
   resetPasswordObject,
-  personalInfoObject
+  personalInfoObject,
 };

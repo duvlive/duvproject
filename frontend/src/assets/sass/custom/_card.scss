@@ -300,3 +300,41 @@
     background: transparent;
   }
 }
+
+.custom-registration.card.card-custom {
+  cursor: pointer;
+  opacity: 0.7;
+
+  &.card-blue {
+    background: rgba($blue-300, 0.1);
+    &:hover {
+      background: rgba($blue-400, 0.3);
+    }
+    &.isActive,
+    &.isActive:hover {
+      background: rgba($blue-300, 0.5);
+      opacity: 1;
+    }
+  }
+
+  &.card-green {
+    background: rgba($green-300, 0.1);
+    &:hover {
+      background: rgba($green-400, 0.3);
+    }
+    &.isActive,
+    &.isActive:hover {
+      background: rgba($green-300, 0.5);
+      opacity: 1;
+    }
+  }
+
+  .selection__text {
+    font-size: 1rem;
+    font-weight: normal;
+    padding: 1.5rem;
+    text-align: center;
+    color: $white;
+    line-height: 1.5;
+  }
+}

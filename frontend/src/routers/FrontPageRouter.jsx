@@ -39,7 +39,7 @@ const FrontPageRouter = () => (
     <SingleEntertainer path="entertainers/:slug" />
     <SingleEvent path="event/:slug" />
     <ContextTest path="context" />
-    <CompleteRegistration path="complete-registration" />
+    <CompleteRegistration path="complete-registration/:sid" />
   </Router>
 );
 

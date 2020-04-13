@@ -17,6 +17,7 @@ import sendMail from '../MailSender';
 import Authentication from '../middleware/authentication';
 import { UserValidation, updateUser, validString } from '../utils';
 import EMAIL_CONTENT from '../email-template/content';
+import { USER_TYPES } from '../constant';
 
 export const userAssociatedOrder = [
   // ...we use the same syntax from the include
@@ -189,6 +190,60 @@ const UserController = {
   },
 
   /**
+   * complete user registration
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  async completeRegistration(req, res) {
+    const { id, password, phoneNumber, type } = req.body;
+    const errors = {
+      ...UserValidation.phoneNumberValidation(phoneNumber),
+      ...UserValidation.singlePasswordValidaton(password),
+    };
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    if (Object.keys(errors).length) {
+      return res
+        .status(400)
+        .json({ message: 'There are invalid fields in the form', errors });
+    }
+    // updated approved application
+    return User.update(
+      {
+        password: hashedPassword,
+        phoneNumber,
+        type,
+        userId: 999,
+        activatedAt: Date.now(),
+      },
+      {
+        where: {
+          id,
+        },
+      }
+    )
+      .then(() => {
+        if (type === USER_TYPES.ENTERTAINER) {
+          [EntertainerProfile, BankDetail, Identification, ApprovalComment].map(
+            async (model) => await model.create({ userId: id })
+          );
+        }
+        return res.json({
+          message: 'Registration completed',
+        });
+      })
+      .catch((error) => {
+        const status = error.status || 500;
+        const errorMessage = error.message || error;
+        return res.status(status).json({ message: errorMessage });
+      });
+  },
+
+  /**
    * social login
    * @function
    * @param {object} req is req object
@@ -214,13 +269,15 @@ const UserController = {
             type: 999,
             profileImageID: 'social-media',
           });
+          const token = Authentication.generateToken(user);
+          res.redirect(`${process.env.HOST}/complete-registration/${token}`);
         } else {
           if (user.firstTimeLogin) {
             user.update({ firstTimeLogin: false });
           }
+          const token = Authentication.generateToken(user);
+          res.redirect(`${process.env.HOST}/login/${token}`);
         }
-        const token = Authentication.generateToken(user);
-        res.redirect(`http://localhost:3000/login/${token}`);
       })
       .catch((error) => {
         const errorMessage = error.message || error;

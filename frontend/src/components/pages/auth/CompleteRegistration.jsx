@@ -3,17 +3,14 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import Header from 'components/common/layout/Header';
 import Footer from 'components/common/layout/Footer';
-import { Link } from '@reach/router';
+import { Link, navigate } from '@reach/router';
 import { Col, Row } from 'reactstrap';
 import { Formik, Form } from 'formik';
 import Input from 'components/forms/Input';
 import Button from 'components/forms/Button';
 import CheckboxGroup from 'components/forms/CheckboxGroup';
 import classNames from 'classnames';
-import {
-  registerSchema,
-  registerObject,
-} from 'components/forms/schema/userSchema';
+import { completeRegistrationObject } from 'components/forms/schema/userSchema';
 import {
   setInitialValues,
   DisplayFormikState,
@@ -21,20 +18,30 @@ import {
 import { USER_TYPES } from 'utils/constants';
 import AlertMessage from 'components/common/utils/AlertMessage';
 import Card from 'components/custom/Card';
+import { createSchema } from 'components/forms/schema/schema-helpers';
 
-const Register = () => (
+const CompleteRegistration = ({ sid }) => (
   <Fragment>
     <section className="auth">
       <Header showRedLogo />
-      <Content />
+      <Content token={sid} />
     </section>
     <Footer className="mt-0" />
   </Fragment>
 );
 
-const RegisterForm = () => {
+CompleteRegistration.propTypes = {
+  sid: PropTypes.string,
+};
+
+CompleteRegistration.defaultProps = {
+  sid: null,
+};
+
+const CompleteRegistrationForm = ({ token }) => {
   const [message, setMessage] = useState(null);
-  const [hireType, setHireType] = React.useState('user');
+  const [user, setUser] = useState({});
+  const [userType, setUserType] = React.useState(USER_TYPES.user);
   const agreementText = (
     <>
       I agree to the terms listed in the{' '}
@@ -42,26 +49,69 @@ const RegisterForm = () => {
       <Link to="/privacy-policy">DUV LIVE Privacy Policy</Link>.
     </>
   );
-  const handleTypeClick = (selectedType) => setHireType(selectedType);
+  const handleTypeClick = (selectedType) => setUserType(selectedType);
+  let userHasCompletedRegistration;
+
+  // CHECK IF SOCIAL MEDIA LOGIN
+  React.useEffect(() => {
+    token &&
+      axios
+        .get('/api/v1/who-am-i', {
+          headers: {
+            'x-access-token': token,
+          },
+        })
+        .then(function (response) {
+          const { status, data } = response;
+          if (status === 200) {
+            if (data.type === USER_TYPES.unknown) {
+              setUser(data);
+              return;
+            } else {
+              // navigate(`/login/${token}`);
+            }
+          }
+        })
+        .catch(function (error) {
+          navigate(`/register`);
+        });
+  }, [token]);
+
+  // CHECK IF USER HAS COMPLETED REGISTRATON
+  // React.useEffect(() => {
+  //   if (userHasCompletedRegistration) {
+  //     window.location.href = `/login/${token}`;
+  //   }
+  // }, [userHasCompletedRegistration, token]);
+
   return (
     <Formik
-      initialValues={setInitialValues(registerObject, { agreement: [] })}
+      initialValues={setInitialValues(completeRegistrationObject, {
+        agreement: [],
+      })}
       onSubmit={(values, actions) => {
         delete values.agreement;
-        // values.type = registrationType[type].id;
         axios
-          .post('/api/v1/users', { ...values, type: hireType })
+          .put(
+            '/api/v1/users/complete-registration',
+            { ...values, type: userType, id: user.id },
+            {
+              headers: { 'x-access-token': token },
+            }
+          )
           .then(function (response) {
-            const { status } = response;
+            const { data, status } = response;
             if (status === 200) {
-              setMessage({
-                type: 'success',
-                message: `Your registration is successful. Kindly confirm your email by clicking on the confirmation link`,
-              });
-              actions.resetForm();
+              console.log('status', status);
+              console.log('data', data);
+              //  force refresh since we are inside a put promise
+              // window.location.href = `/login/${token}`;
+              navigate(`/login/${token}`);
+              // userHasCompletedRegistration = true;
             }
           })
           .catch(function (error) {
+            console.log('error', error);
             setMessage({
               message: error.response.data.message,
               lists:
@@ -80,8 +130,9 @@ const RegisterForm = () => {
             NO GO SPOIL YOUR PARTY O!!!
           </div>
 
+          <h3 className="font-weight-normal">Welcome {user.firstName},</h3>
           <AlertMessage {...message} />
-          <HireEntertainersCardList onClick={handleTypeClick} type={hireType} />
+          <RegistrationCardList onClick={handleTypeClick} type={userType} />
           <div className="form-row">
             <Input
               formGroupClassName="col-md-6"
@@ -99,16 +150,6 @@ const RegisterForm = () => {
               type="password"
             />
           </div>
-          <div className="form-row">
-            {/* <Input
-              formGroupClassName="col-md-6"
-              isValidMessage="Awesome. Password matches"
-              label="Confirm Password"
-              name="confirmPassword"
-              placeholder="Confirm Password"
-              type="password"
-            /> */}
-          </div>
           <div className="form-row ml-0">
             <CheckboxGroup
               custom
@@ -125,21 +166,25 @@ const RegisterForm = () => {
           >
             Complete Registration
           </Button>
-          <DisplayFormikState {...props} hide showAll />
+          <DisplayFormikState {...props} showAll />
         </Form>
       )}
-      validationSchema={registerSchema}
+      validationSchema={createSchema(completeRegistrationObject)}
     />
   );
 };
 
-const Content = () => (
+CompleteRegistrationForm.propTypes = {
+  token: PropTypes.string.isRequired,
+};
+
+const Content = ({ token }) => (
   <section>
     <div className="container-fluid">
       <Row>
         <Col sm={{ size: 8, offset: 2 }}>
           <div className="auth__container auth__container--lg">
-            <RegisterForm />
+            <CompleteRegistrationForm token={token} />
           </div>
         </Col>
       </Row>
@@ -148,36 +193,49 @@ const Content = () => (
   </section>
 );
 
-const HireEntertainersCardList = ({ type, onClick }) => {
+Content.propTypes = {
+  token: PropTypes.string.isRequired,
+};
+
+const RegistrationCardList = ({ type, onClick }) => {
   const REGISTRATION_TYPE = {
+    user: {
+      color: 'green',
+      id: USER_TYPES.user,
+      subtitle: 'NO GO SPOIL YOUR PARTY O!!!',
+      text: (
+        <>
+          Register as a <span>User</span>
+        </>
+      ),
+    },
     entertainer: {
       color: 'blue',
       id: USER_TYPES.entertainer,
       subtitle: 'MC, DJ OR OWN A LIVE BAND?',
-      text: 'Register as an Entertainer',
-    },
-    user: {
-      color: 'success',
-      id: USER_TYPES.user,
-      subtitle: 'NO GO SPOIL YOUR PARTY O!!!',
-      text: 'Register as a User',
+      text: (
+        <>
+          Register as an <span>Entertainer</span>
+        </>
+      ),
     },
   };
   return (
-    <Row className="row-eq-height mb-5">
+    <Row className="row-eq-height">
       <label className="col-sm-12" htmlFor="">
-        Select Account Type
+        Select User Type
       </label>
       {Object.keys(REGISTRATION_TYPE).map((userType) => {
         const title = REGISTRATION_TYPE[userType].text;
-        const isActive = type.toLowerCase() === title.toLowerCase();
+        const isActive = type === REGISTRATION_TYPE[userType].id;
         return (
-          <HireEntertainersCard
+          <RegistrationCard
             color={REGISTRATION_TYPE[userType].color}
             isActive={isActive}
-            key={title}
+            key={REGISTRATION_TYPE[userType].id}
             onClick={onClick}
             title={title}
+            type={REGISTRATION_TYPE[userType].id}
           />
         );
       })}
@@ -185,27 +243,34 @@ const HireEntertainersCardList = ({ type, onClick }) => {
   );
 };
 
-HireEntertainersCardList.propTypes = {
+RegistrationCardList.propTypes = {
   onClick: PropTypes.func.isRequired,
-  type: PropTypes.string,
+  type: PropTypes.number,
 };
 
-const HireEntertainersCard = ({ color, title, isActive, onClick }) => {
+const RegistrationCard = ({ color, title, type, isActive, onClick }) => {
   return (
     <Col
       md={{ size: 6, offset: 0 }}
-      onClick={() => onClick(title)}
+      onClick={() => onClick(type)}
       sm={{ size: 6, offset: 0 }}
     >
       <Card
-        className={classNames('select-hire-type', {
+        className={classNames('custom-registration', {
           isActive: isActive,
         })}
         color={color}
         hover
       >
-        <h6 className="text-center mb-0">
-          {isActive && <span className="icon icon-ok text-white" />}
+        <h6 className="selection__text">
+          <small className="small--2">
+            {isActive && type === USER_TYPES.user && (
+              <span className="icon icon-user-circle"></span>
+            )}
+            {isActive && type === USER_TYPES.entertainer && (
+              <span className="icon icon-music"></span>
+            )}
+          </small>
           {title}
         </h6>
       </Card>
@@ -213,11 +278,12 @@ const HireEntertainersCard = ({ color, title, isActive, onClick }) => {
   );
 };
 
-HireEntertainersCard.propTypes = {
+RegistrationCard.propTypes = {
   color: PropTypes.string.isRequired,
   isActive: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired,
+  title: PropTypes.any.isRequired,
+  type: PropTypes.number.isRequired,
 };
 
-export default Register;
+export default CompleteRegistration;
