@@ -12,6 +12,7 @@ const INITIAL_STATE = {
   referral: '',
   profileImg: '',
   isLoggedIn: false,
+  firstTimeLogin: null,
   entertainerProfile: {
     entertainerType: null,
     approved: false,

@@ -88,6 +88,7 @@ export const SLIDESHOW_TYPE = {
   entertainers: 'entertainers',
   events: 'events',
   testimonials: 'testimonials',
+  welcome: 'welcome',
 };
 
 export const HIRE_ENTERTAINERS = {

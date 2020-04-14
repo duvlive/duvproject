@@ -13,13 +13,12 @@ import { getEventDate, getTime, getTimeOfDay } from 'utils/date-helpers';
 import { groupEvents, userCanAddEntertainer } from 'utils/event-helpers';
 import { Link } from '@reach/router';
 import LoadItems from 'components/common/utils/LoadItems';
+import WelcomeSlides from './WelcomeSlides';
 
 const Dashboard = () => {
   let { userState } = React.useContext(UserContext);
   const [entertainers, setEntertainers] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
-
-  console.log('...userState.events', userState.events);
 
   React.useEffect(() => {
     axios
@@ -40,6 +39,10 @@ const Dashboard = () => {
         setLoading(false);
       });
   }, []);
+
+  if (userState.firstTimeLogin) {
+    return <WelcomeSlides />;
+  }
   return (
     <BackEndPage title="Dashboard">
       <div className="main-app">

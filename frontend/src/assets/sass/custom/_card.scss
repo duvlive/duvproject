@@ -338,3 +338,15 @@
     line-height: 1.5;
   }
 }
+
+.onboarding__slides {
+  border-color: transparent !important;
+  padding: 6rem 5rem 3rem !important;
+
+  h3 {
+    font-weight: normal;
+  }
+  p {
+    margin-bottom: 8rem;
+  }
+}
