@@ -41,6 +41,7 @@ const OnboardingSlide = ({ items }) => {
   const welcomeSlides = items.map(({ color, name, text }, index) => {
     return (
       <CarouselItem key={index} onExited={onExited} onExiting={onExiting}>
+        <div className="text-right mb-5">Skip Intro</div>
         <h3>{name}</h3>
         <p>{text}</p>
       </CarouselItem>
