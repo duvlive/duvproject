@@ -14,6 +14,7 @@ import { groupEvents, userCanAddEntertainer } from 'utils/event-helpers';
 import { Link } from '@reach/router';
 import LoadItems from 'components/common/utils/LoadItems';
 import WelcomeSlides from './WelcomeSlides';
+import welcomeSlide from 'data/welcome';
 
 const Dashboard = () => {
   let { userState } = React.useContext(UserContext);
@@ -40,13 +41,16 @@ const Dashboard = () => {
       });
   }, []);
 
-  if (userState.firstTimeLogin) {
-    return <WelcomeSlides />;
-  }
+  const topMessage = userState.firstTimeLogin ? 'Hello' : 'Welcome back';
+
+  // if (userState.firstTimeLogin) {
+  //   return <WelcomeSlides items/>;
+  // }
   return (
     <BackEndPage title="Dashboard">
       <div className="main-app">
-        <TopMessage message={`Welcome back ${userState.firstName},`} />
+        <TopMessage message={`${topMessage} ${userState.firstName},`} />
+        <WelcomeSlides items={welcomeSlide} />
         <section className="app-content">
           <div className="row">
             <div className="col-sm-8">
