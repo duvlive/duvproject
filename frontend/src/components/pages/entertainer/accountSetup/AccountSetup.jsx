@@ -236,13 +236,3 @@ export default AccountSetup;
 // Add filter to auctions (Pendng Approved, Closed)
 // Add sample entertainer to DB
 // submitting recommendation
-
-// user 1
-// 2 past events
-//  1 this week event
-// 2 future events
-// event 1 - 2 auctions - 5 / 4 bids
-// event 2 - recommendation / auction - 2 bids
-// event 3 - search / recommedation
-// event 4 - auction / search - 3 bids
-// event 5 - recommendation

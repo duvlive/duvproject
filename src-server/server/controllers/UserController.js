@@ -17,7 +17,7 @@ import sendMail from '../MailSender';
 import Authentication from '../middleware/authentication';
 import { UserValidation, updateUser, validString } from '../utils';
 import EMAIL_CONTENT from '../email-template/content';
-import { USER_TYPES } from '../constant';
+import { USER_TYPES, NOTIFICATIONS, NOTIFICATION_TYPE } from '../constant';
 
 export const userAssociatedOrder = [
   // ...we use the same syntax from the include
@@ -175,7 +175,13 @@ const UserController = {
           type,
         });
       })
-      .then((newUser) => {
+      .then(async (newUser) => {
+        await Notification.create({
+          userId: newUser.id,
+          title: NOTIFICATIONS.ACCOUNT_CREATED,
+          description: 'Your DUV Live account was created',
+          type: NOTIFICATION_TYPE.CONTENT,
+        });
         return res.status(200).json({
           message: 'Signed up successfully',
           user: UserController.transformUser(newUser),
@@ -226,12 +232,18 @@ const UserController = {
         },
       }
     )
-      .then(() => {
+      .then(async () => {
         if (type === USER_TYPES.ENTERTAINER) {
           [EntertainerProfile, BankDetail, Identification, ApprovalComment].map(
             async (model) => await model.create({ userId: id })
           );
         }
+        await Notification.create({
+          userId: id,
+          title: NOTIFICATIONS.ACCOUNT_CREATED,
+          description: 'Your DUV Live account was created',
+          type: NOTIFICATION_TYPE.CONTENT,
+        });
         return res.json({
           message: 'Registration completed',
         });
