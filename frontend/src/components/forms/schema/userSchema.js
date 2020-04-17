@@ -49,6 +49,11 @@ const personalInfoObject = {
   phoneNumber2: OptionalPhoneNumber,
 };
 
+const referralObject = {
+  email,
+  recommendAs: stringValidation('Recommend As'),
+};
+
 const completeRegistrationObject = {
   phoneNumber,
   password: strongPassword,
@@ -75,4 +80,5 @@ export {
   changePasswordObject,
   resetPasswordObject,
   personalInfoObject,
+  referralObject,
 };

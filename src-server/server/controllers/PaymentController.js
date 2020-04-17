@@ -1,5 +1,5 @@
 import axios from 'axios';
-// import crypto from 'crypto';
+import crypto from 'crypto';
 import { Notification } from '../models';
 import { validString } from '../utils';
 import { NOTIFICATIONS, NOTIFICATION_TYPE } from '../constant';
@@ -58,20 +58,19 @@ const PaymentController = {
       });
   },
 
-  // paystactEventHook(req, res) {
-  //   const hash = crypto
-  //     .createHmac('sha512', secret)
-  //     .update(JSON.stringify(req.body))
-  //     .digest('hex');
-  //   if (hash == req.headers['x-paystack-signature']) {
-  //     const { event } = req.body;
-  //     console.log({ event });
-  //     // utilize data TODO
-
-  //     // Retrieve the request's body
-  //   }
-  //   return res.send(200);
-  // },
+  paystactEventHook(req, res) {
+    const hash = crypto
+      .createHmac('sha512', 'secret')
+      .update(JSON.stringify(req.body))
+      .digest('hex');
+    if (hash == req.headers['x-paystack-signature']) {
+      // const { event } = req.body;
+      // console.log({ event });
+      // utilize data TODO
+      // Retrieve the request's body
+    }
+    return res.send(200);
+  },
 
   verifyTransaction(req, res) {
     const { reference } = req.params;

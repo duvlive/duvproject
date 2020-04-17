@@ -678,6 +678,29 @@ const UserController = {
     }
   },
 
+  upgradeUserToEntertainer(req, res) {
+    const id = req.user.id;
+    EntertainerProfile.findOne({
+      where: { userId: id },
+    })
+      .then((entertainer) => {
+        if (entertainer) {
+          return res
+            .status(401)
+            .json({ message: 'Entertianer profile exists' });
+        }
+        [EntertainerProfile, BankDetail, Identification, ApprovalComment].map(
+          async (model) => await model.create({ userId: id })
+        );
+        return res.status(200).json({
+          message: 'Entertainer profile has been successfully generated',
+        });
+      })
+      .catch((error) => {
+        return res.status(500).json({ error: error.message });
+      });
+  },
+
   /**
    * invite Friend
    * @function
@@ -686,9 +709,10 @@ const UserController = {
    * @return {object} returns res object
    */
   async inviteFriend(req, res) {
-    const { email } = req.body;
+    const { email, recommendAs } = req.body;
     const errors = {
       ...UserValidation.emailValidation(email),
+      ...UserValidation.stringValidation(recommendAs),
     };
 
     if (Object.keys(errors).length) {
@@ -699,7 +723,12 @@ const UserController = {
 
     try {
       const link = `${process.env.HOST}`;
-      await sendMail(EMAIL_CONTENT.INVITE_FRIEND, { email }, { link });
+      const contentBottom = `You have been recommended as a ${recommendAs}. Live your best Life today and let your dreams come true.`;
+      await sendMail(
+        EMAIL_CONTENT.INVITE_FRIEND,
+        { email },
+        { link, contentBottom }
+      );
       return res.status(200).json({ message: 'Invite sent successfully' });
     } catch (error) {
       return res.status(400).json({ message: 'Something went wrong', error });

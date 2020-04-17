@@ -5,7 +5,7 @@ import { Col, Row, Form } from 'reactstrap';
 import { Formik } from 'formik';
 import {
   setInitialValues,
-  DisplayFormikState
+  DisplayFormikState,
 } from 'components/forms/form-helper';
 import AlertMessage from 'components/common/utils/AlertMessage';
 import Input from 'components/forms/Input';
@@ -14,6 +14,7 @@ import { contactUsSchema } from 'components/forms/schema/frontPageSchema';
 import { createSchema } from 'components/forms/schema/schema-helpers';
 import { Link } from '@reach/router';
 import { OUR_PHONE_NUMBER } from 'utils/constants';
+import Button from 'components/forms/Button';
 
 const ContactUs = () => {
   return (
@@ -50,26 +51,27 @@ export const ContactUsForm = () => {
       initialValues={setInitialValues(contactUsSchema)}
       onSubmit={(values, actions) => {
         axios
-          .post('/api/v1/users', values)
-          .then(function(response) {
-            const { status } = response;
+          .post('/api/v1/contactUs', values)
+          .then(function (response) {
+            const { data, status } = response;
             if (status === 200) {
               setMessage({
                 type: 'success',
-                message: `Your registration is successful. Kindly confirm your email by clicking on the confirmation link`
+                message: data.message,
               });
               actions.resetForm();
+              actions.setSubmitting(false);
             }
           })
-          .catch(function(error) {
+          .catch(function (error) {
             setMessage({
               message: error.response.data.message,
               lists:
                 error.response.data.errors &&
-                Object.values(error.response.data.errors)
+                Object.values(error.response.data.errors),
             });
+            actions.setSubmitting(false);
           });
-        actions.setSubmitting(false);
       }}
       render={({ isSubmitting, handleSubmit, ...props }) => (
         <Form>
@@ -79,25 +81,34 @@ export const ContactUsForm = () => {
             <Input
               formGroupClassName="col-md-6"
               label="Email"
-              name="email"
+              name="userEmail"
               placeholder="Email Address"
             />
             <Input
               formGroupClassName="col-md-6"
               label="Phone"
-              name="phoneNumber"
+              name="phone"
               optional
               placeholder="Phone"
             />
           </div>
-          <Input label="Subject" name="subject" placeholder="Subject" />
+          <Input label="Subject" name="userSubject" placeholder="Subject" />
           <TextArea
             label="Message"
-            name="message"
+            name="userMessage"
             placeholder="Your message"
             rows="6"
           />
           <DisplayFormikState {...props} hide showAll />
+          <div className="form-row">
+            <Button
+              className="btn-danger btn-wide btn-transparent"
+              loading={isSubmitting}
+              onClick={handleSubmit}
+            >
+              Contact Us
+            </Button>
+          </div>
         </Form>
       )}
       validationSchema={createSchema(contactUsSchema)}
