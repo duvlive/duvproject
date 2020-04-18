@@ -5,7 +5,7 @@ import {
   CarouselCaption,
   CarouselControl,
   CarouselIndicators,
-  CarouselItem
+  CarouselItem,
 } from 'reactstrap';
 import Entertainers from 'components/common/entertainers/Entertainers';
 import Events from 'components/common/events/Events';
@@ -22,6 +22,7 @@ class Slideshow extends Component {
     this.onExiting = this.onExiting.bind(this);
     this.onExited = this.onExited.bind(this);
     this.items = props.items;
+    console.log('items', props.items);
   }
 
   onExiting() {
@@ -58,7 +59,12 @@ class Slideshow extends Component {
   render() {
     const { activeIndex } = this.state;
 
-    const slides = this.items.map(item => {
+    console.log('this.items', this.items);
+    if (!this.items) {
+      return <h3>NOthing to display</h3>;
+    }
+
+    const slides = this.items.map((item) => {
       return (
         <CarouselItem
           key={item.id}
@@ -119,14 +125,14 @@ Slideshow.propTypes = {
     PropTypes.shape({
       id: PropTypes.number,
       caption: PropTypes.string,
-      src: PropTypes.string
+      src: PropTypes.string,
     }).isRequired
   ),
-  type: PropTypes.oneOf(Object.keys(SLIDESHOW_TYPE))
+  type: PropTypes.oneOf(Object.keys(SLIDESHOW_TYPE)),
 };
 
 Slideshow.defaultProps = {
-  caption: false
+  caption: false,
 };
 
 Slideshow.Image = ({ item }) => (
@@ -142,8 +148,8 @@ Slideshow.Image.propTypes = {
   item: PropTypes.shape({
     altText: PropTypes.string.isRequired,
     src: PropTypes.string.isRequired,
-    caption: PropTypes.string.isRequired
-  })
+    caption: PropTypes.string.isRequired,
+  }),
 };
 
 Slideshow.Entertainers = ({ item }) => (
@@ -154,8 +160,8 @@ Slideshow.Entertainers = ({ item }) => (
 
 Slideshow.Entertainers.propTypes = {
   item: PropTypes.shape({
-    list: PropTypes.arrayOf(PropTypes.object).isRequired
-  })
+    list: PropTypes.arrayOf(PropTypes.object).isRequired,
+  }),
 };
 
 Slideshow.Events = ({ item }) => (
@@ -166,8 +172,8 @@ Slideshow.Events = ({ item }) => (
 
 Slideshow.Events.propTypes = {
   item: PropTypes.shape({
-    list: PropTypes.arrayOf(PropTypes.object).isRequired
-  })
+    list: PropTypes.arrayOf(PropTypes.object).isRequired,
+  }),
 };
 
 Slideshow.Testimonials = ({ item }) => <Testimonials {...item} />;
@@ -175,8 +181,8 @@ Slideshow.Testimonials = ({ item }) => <Testimonials {...item} />;
 Slideshow.Testimonials.propTypes = {
   item: PropTypes.shape({
     name: PropTypes.string.isRequired,
-    testimonial: PropTypes.string.isRequired
-  })
+    testimonial: PropTypes.string.isRequired,
+  }),
 };
 
 export default Slideshow;

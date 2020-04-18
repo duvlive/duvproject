@@ -1,81 +1,81 @@
 'use strict';
-module.exports = function(sequelize, DataTypes) {
+module.exports = function (sequelize, DataTypes) {
   var EventEntertainer = sequelize.define(
     'EventEntertainer',
     {
       userId: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
       },
       eventId: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
       },
       entertainerType: {
         type: DataTypes.STRING,
         allowNull: true,
         defaultValue: null,
-        validate: { isIn: [['MC', 'DJ', 'Liveband', null]] }
+        validate: { isIn: [['MC', 'DJ', 'Liveband', null]] },
       },
       placeOfEvent: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
       },
       genre: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
       },
       language: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
       },
       expectedAudienceSize: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
       },
       ageGroup: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
       },
       lowestBudget: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true,
       },
       highestBudget: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true,
       },
       specialRequest: {
-        type: DataTypes.TEXT
+        type: DataTypes.TEXT,
       },
       auctionStartDate: {
         type: DataTypes.DATE,
-        allowNull: true
+        allowNull: true,
       },
       auctionEndDate: {
         type: DataTypes.DATE,
-        allowNull: true
+        allowNull: true,
       },
       hireType: {
         type: DataTypes.STRING,
         allowNull: true,
         defaultValue: 'Auction',
-        validate: { isIn: [['Search', 'Auction', 'Recommendation', null]] }
+        validate: { isIn: [['Search', 'Auction', 'Recommendation', null]] }, // null to be used for freestyle
       },
       hiredDate: {
         type: DataTypes.DATE,
-        allowNull: true
+        allowNull: true,
       },
       hiredEntertainer: {
         type: DataTypes.INTEGER,
-        allowNull: true
-      }
+        allowNull: true,
+      },
     },
     {
       classMethods: {
-        associate: function(models) {
+        associate: function (models) {
           // associations can be defined here
           // models.EventEntertainer.belongsTo(models.User);
-        }
-      }
+        },
+      },
     }
   );
   return EventEntertainer;

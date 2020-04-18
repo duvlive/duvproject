@@ -8,39 +8,43 @@ import { getTokenFromStore } from 'utils/localStorage';
 import {
   getNumberOfDaysToEvent,
   getLongDate,
-  subtractDays
+  subtractDays,
 } from 'utils/date-helpers';
 import {
   userCanAddEntertainer,
   eventHasExpired,
   eventIsVoid,
-  auctionIsVoid
+  auctionIsVoid,
 } from 'utils/event-helpers';
 import AlertMessage from 'components/common/utils/AlertMessage';
 import Image from 'components/common/utils/Image';
 import DuvLiveModal from 'components/custom/Modal';
 import { moneyFormat, twoDigitNumber, getBudgetRange } from 'utils/helpers';
 import Stars from 'components/common/utils/Stars';
+import LoadingScreen from 'components/common/layout/LoadingScreen';
 
 const Bids = ({ eventEntertainerId }) => {
   const [eventEntertainer, setEventEntertainer] = React.useState({});
+  const [loading, setLoading] = React.useState(true);
   React.useEffect(() => {
     eventEntertainerId &&
       axios
         .get(`/api/v1/auctions/bids/${eventEntertainerId}`, {
           headers: {
-            'x-access-token': getTokenFromStore()
-          }
+            'x-access-token': getTokenFromStore(),
+          },
         })
-        .then(function(response) {
+        .then(function (response) {
           const { status, data } = response;
           // handle success
           if (status === 200) {
             setEventEntertainer(data.eventEntertainer);
+            setLoading(false);
           }
         })
-        .catch(function(error) {
+        .catch(function (error) {
           navigate('/user/auctions/status/error');
+          setLoading(false);
         });
   }, [eventEntertainerId]);
 
@@ -57,93 +61,100 @@ const Bids = ({ eventEntertainerId }) => {
     <BackEndPage title="All Bids">
       <div className="main-app">
         <TopMessage />
-        <section className="app-content">
-          {/* Event Name and Event Status */}
-          <section className="row mb-3">
-            <div className="col-sm-12">
-              <h3 className="main-app__title">
-                {eventEntertainer.event.eventType} <br />{' '}
-              </h3>
+        {loading ? (
+          <LoadingScreen loading={loading} text="Loading Entertainers" />
+        ) : (
+          <>
+            <section className="app-content">
+              {/* Event Name and Event Status */}
+              <section className="row mb-3">
+                <div className="col-sm-12">
+                  <h3 className="main-app__title">
+                    {eventEntertainer.event.eventType} <br />{' '}
+                  </h3>
 
-              <h6 className="text-white small">
-                Budget:{' '}
-                {getBudgetRange(
-                  eventEntertainer.lowestBudget,
-                  eventEntertainer.highestBudget
-                )}{' '}
-              </h6>
+                  <h6 className="text-white small">
+                    Budget:{' '}
+                    {getBudgetRange(
+                      eventEntertainer.lowestBudget,
+                      eventEntertainer.highestBudget
+                    )}{' '}
+                  </h6>
 
-              <small className="main-app__small remaining-time">
-                <i className="icon icon-calendar"></i>
-                {getLongDate(eventDate)}
-              </small>
-            </div>
-          </section>
+                  <small className="main-app__small remaining-time">
+                    <i className="icon icon-calendar"></i>
+                    {getLongDate(eventDate)}
+                  </small>
+                </div>
+              </section>
 
-          {/* Event Details and Entertainers */}
-          <aside className="row">
-            <div className="col-md-12">
-              {eventHasExpired(eventDate) && (
-                <AlertMessage
-                  message="Event has expired. Bids can no longer be approved."
-                  type="error"
-                />
-              )}
+              {/* Event Details and Entertainers */}
+              <aside className="row">
+                <div className="col-md-12">
+                  {eventHasExpired(eventDate) && (
+                    <AlertMessage
+                      message="Event has expired. Bids can no longer be approved."
+                      type="error"
+                    />
+                  )}
 
-              {!eventHasExpired(eventDate) && eventIsVoid(eventDate) && (
-                <AlertMessage
-                  message="Bids can no longer be approved 48 hours before event"
-                  type="error"
-                />
-              )}
+                  {!eventHasExpired(eventDate) && eventIsVoid(eventDate) && (
+                    <AlertMessage
+                      message="Bids can no longer be approved 48 hours before event"
+                      type="error"
+                    />
+                  )}
 
-              {userCanAddEntertainer(eventDate) && auctionIsVoid(eventDate) && (
-                <AlertMessage
-                  message="Your event is closing soon within 1 day, select your entertainer now"
-                  type="warning"
-                />
-              )}
+                  {userCanAddEntertainer(eventDate) &&
+                    auctionIsVoid(eventDate) && (
+                      <AlertMessage
+                        message="Your event is closing soon within 1 day, select your entertainer now"
+                        type="warning"
+                      />
+                    )}
 
-              {!auctionIsVoid(eventDate) && (
-                <AlertMessage
-                  message={
-                    <>
-                      This auction will close on{' '}
-                      {getLongDate(subtractDays(eventDate, 4))} - &nbsp;
-                      <span className="text-white">
-                        {getNumberOfDaysToEvent(eventDate)} remaining
-                      </span>
-                    </>
-                  }
-                  type="info"
-                />
-              )}
+                  {!auctionIsVoid(eventDate) && (
+                    <AlertMessage
+                      message={
+                        <>
+                          This auction will close on{' '}
+                          {getLongDate(subtractDays(eventDate, 4))} - &nbsp;
+                          <span className="text-white">
+                            {getNumberOfDaysToEvent(eventDate)} remaining
+                          </span>
+                        </>
+                      }
+                      type="info"
+                    />
+                  )}
 
-              {userCanAddEntertainer(eventDate) && (
-                <BidsApplicationsTable
-                  applications={eventEntertainer.applications || []}
-                />
-              )}
-            </div>
-          </aside>
-        </section>
+                  {userCanAddEntertainer(eventDate) && (
+                    <BidsApplicationsTable
+                      applications={eventEntertainer.applications || []}
+                    />
+                  )}
+                </div>
+              </aside>
+            </section>
+          </>
+        )}
       </div>
     </BackEndPage>
   );
 };
 
 Bids.propTypes = {
-  eventEntertainerId: PropTypes.string
+  eventEntertainerId: PropTypes.string,
 };
 
 Bids.defaultProps = {
-  eventEntertainerId: null
+  eventEntertainerId: null,
 };
 
 const BidsApplicationsTable = ({ applications }) => {
   const [allApplications, setAllApplications] = React.useState(applications);
   const [currentSort, setSort] = React.useState('oldest');
-  const sortBids = type => {
+  const sortBids = (type) => {
     const sorted = [].concat(allApplications).sort((a, b) => {
       switch (type) {
         case 'oldest':
@@ -212,7 +223,7 @@ const BidsApplicationsTable = ({ applications }) => {
 };
 
 BidsApplicationsTable.propTypes = {
-  applications: PropTypes.array.isRequired
+  applications: PropTypes.array.isRequired,
 };
 
 const BidsApplicationsTableRow = ({ application, number }) => {
@@ -227,22 +238,22 @@ const BidsApplicationsTableRow = ({ application, number }) => {
         `/api/v1/pay`,
         {
           amount: application.askingPrice,
-          applicationId: application.id
+          applicationId: application.id,
         },
         {
           headers: {
-            'x-access-token': getTokenFromStore()
-          }
+            'x-access-token': getTokenFromStore(),
+          },
         }
       )
-      .then(function(response) {
+      .then(function (response) {
         const { status, data } = response;
         // handle success
         if (status === 200) {
           window.location.href = data.payment.authorization_url;
         }
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error.response.data.message);
         // TODO: ADD ERROR ALERT HERE
       });
@@ -355,10 +366,10 @@ const BidsApplicationsTableRow = ({ application, number }) => {
 };
 BidsApplicationsTableRow.propTypes = {
   application: PropTypes.object,
-  number: PropTypes.number.isRequired
+  number: PropTypes.number.isRequired,
 };
 BidsApplicationsTableRow.defaultProps = {
-  application: {}
+  application: {},
 };
 
 export default Bids;

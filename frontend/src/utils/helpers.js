@@ -17,12 +17,14 @@ export const chunk = (array, size) => {
   return chunked_arr;
 };
 
-export const commaNumber = value => {
+export const commaNumber = (value, prependCurrency = false) => {
   const number = parseInt(value, 10);
-  return Humanize.intComma(number);
+  const currency = prependCurrency ? '₦' : '';
+  return currency + Humanize.intComma(number);
 };
 
-export const moneyFormat = value => Humanize.formatNumber(value, 2);
+export const moneyFormat = (value) => Humanize.formatNumber(value, 2);
+export const moneyFormatInNaira = (value) => commaNumber(value, true);
 
 export const getBudgetRange = (minBudget, maxBudget) => {
   const MAX_BUDGET_OUTPUT = 1000000;
@@ -33,7 +35,7 @@ export const getBudgetRange = (minBudget, maxBudget) => {
   return range + suffix;
 };
 
-export const twoDigitNumber = number =>
+export const twoDigitNumber = (number) =>
   number > 0 && number < 10 ? '0' + number : number;
 
 export const listJsonItems = (items, defaultValue = null) => {
@@ -52,7 +54,7 @@ export const listJsonItems = (items, defaultValue = null) => {
  * Item Selection
  * @param {*} items
  */
-export const randomItem = items =>
+export const randomItem = (items) =>
   items[Math.floor(Math.random() * items.length)];
 
 export const getItems = (items, end) => {
@@ -60,7 +62,7 @@ export const getItems = (items, end) => {
   return items.slice(0, end);
 };
 
-export const shuffleItems = items => {
+export const shuffleItems = (items) => {
   for (let i = items.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [items[i], items[j]] = [items[j], items[i]];
@@ -75,13 +77,13 @@ export const shuffleItems = items => {
  */
 
 export const getSlug = (items, slug) =>
-  items.filter(item => item.slug === slug)[0];
+  items.filter((item) => item.slug === slug)[0];
 
 export const getOtherSlugs = (items, slug) =>
-  items.filter(item => item.slug !== slug);
+  items.filter((item) => item.slug !== slug);
 
 export const getRelatedEntertainers = (items, slug, type) =>
-  items.filter(item => item.slug !== slug && item.type === type);
+  items.filter((item) => item.slug !== slug && item.type === type);
 
 export const range = (start, stop, step = 1) => {
   const len = Math.floor((stop - start) / step) + 1;
@@ -93,14 +95,10 @@ export const range = (start, stop, step = 1) => {
  * Create HTML Markup
  * @param {*} text
  */
-export const createMarkup = text => ({ __html: text });
+export const createMarkup = (text) => ({ __html: text });
 
-export const dashedLowerCase = text =>
-  text &&
-  text
-    .toString()
-    .replace(/\s+/g, '-')
-    .toLowerCase();
+export const dashedLowerCase = (text) =>
+  text && text.toString().replace(/\s+/g, '-').toLowerCase();
 
 export const selectEntertainerType = () => {
   const select = [];
@@ -113,15 +111,15 @@ export const selectEntertainerType = () => {
 export const getProfileName = ({ firstName, lastName, stageName }) =>
   stageName || firstName + ' ' + lastName;
 
-export const countOccurences = arr => {
+export const countOccurences = (arr) => {
   const items = arr.reduce((acc, val) => {
     acc[val] = acc[val] === undefined ? 1 : (acc[val] += 1);
     return acc;
   }, {});
   return Object.keys(items).map(
-    name => items[name] + ' ' + Humanize.pluralize(items[name], name)
+    (name) => items[name] + ' ' + Humanize.pluralize(items[name], name)
   );
 };
 
-export const getPercentage = value => parseFloat(value) / 100;
+export const getPercentage = (value) => parseFloat(value) / 100;
 export const getNairaSymbol = () => <>&#8358;</>;

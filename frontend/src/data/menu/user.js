@@ -4,115 +4,120 @@ const navigation = {
     {
       title: 'Dashboard',
       to: '/user/dashboard',
-      icon: 'gauge'
+      icon: 'gauge',
     },
     {
       title: 'Auctions',
       to: '/user/auctions',
-      icon: 'auction'
+      icon: 'auction',
+    },
+    {
+      title: 'Requests',
+      to: '/user/requests',
+      icon: 'vcard',
     },
     {
       title: 'My Events',
       to: '/user/events',
-      icon: 'events'
+      icon: 'events',
     },
     {
       title: 'Notifications',
       to: '/user/notifications',
-      icon: 'megaphone'
+      icon: 'megaphone',
     },
     {
       title: 'Hire Entertainers',
       to: '/user/hire-entertainer',
-      icon: 'hire-entertainers'
+      icon: 'hire-entertainers',
     },
     {
       title: 'Payments History',
       to: '/user/payments-history',
-      icon: 'credit-card'
-    }
-  ]
+      icon: 'credit-card',
+    },
+  ],
 };
-const others = entertainerMenu => ({
+const others = (entertainerMenu) => ({
   name: 'Others',
   menus: [
     {
       title: 'Edit Profile',
       to: '/user/edit-profile',
-      icon: 'user-circle'
+      icon: 'user-circle',
     },
 
     {
       title: 'Invite Friends',
       to: '/entertainer/invite-friends',
-      icon: 'invite-friend'
+      icon: 'invite-friend',
     },
     { ...entertainerMenu },
     {
       title: 'Help',
       to: '/user/help',
-      icon: 'help'
+      icon: 'help',
     },
     {
       title: 'Logout',
       to: '/logout',
-      icon: 'logout'
-    }
-  ]
+      icon: 'logout',
+    },
+  ],
 });
 
 const registerAsEntertainer = {
   title: 'Register as Entertainer',
   to: '/user/register-as-entertainer',
-  icon: 'paper-plane'
+  icon: 'paper-plane',
 };
 
 const backToEntertainer = {
   title: 'Switch to Entertainer',
   to: '/entertainer/dashboard',
-  icon: 'loop'
+  icon: 'loop',
 };
 
 const backToBandMember = {
   title: 'Switch to Band Member',
   to: '/band-member/dashboard',
-  icon: 'loop'
+  icon: 'loop',
 };
 
 const backToAdministrator = {
   title: 'Switch to Admin',
   to: '/admin/dashboard',
-  icon: 'loop'
+  icon: 'loop',
 };
 
 export const userSideMenu = [navigation, others(registerAsEntertainer)];
 
 export const pseudoEntertainerUserSideMenu = [
   navigation,
-  others(backToEntertainer)
+  others(backToEntertainer),
 ];
 
 export const pseudoBandMemberUserSideMenu = [
   navigation,
-  others(backToBandMember)
+  others(backToBandMember),
 ];
 
 export const pseudoAdminUserSideMenu = [
   navigation,
-  others(backToAdministrator)
+  others(backToAdministrator),
 ];
 
 export const userTopMenu = [
   {
     title: 'Auctions',
-    to: '/user/auctions'
+    to: '/user/auctions',
   },
   {
     title: 'Payment History',
-    to: '/user/payments-history'
+    to: '/user/payments-history',
   },
   {
     title: 'Change Password',
-    to: '/user/change-password'
-  }
+    to: '/user/change-password',
+  },
 ];

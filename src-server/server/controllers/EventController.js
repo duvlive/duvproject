@@ -5,7 +5,7 @@ import {
   EventEntertainer,
   User,
   EntertainerProfile,
-  Application
+  Application,
 } from '../models';
 
 const EventController = {
@@ -30,7 +30,7 @@ const EventController = {
       city,
       landmark,
       description,
-      id
+      id,
     } = req.body;
 
     const error = {
@@ -45,7 +45,7 @@ const EventController = {
       ...validString(lga),
       ...validString(city),
       ...validString(landmark),
-      ...validString(description)
+      ...validString(description),
     };
     if (Object.keys(error).length > 1) {
       return res.status(400).json({ message: error.message.join('') });
@@ -65,19 +65,19 @@ const EventController = {
         city,
         landmark,
         description,
-        userId: req.user.id
+        userId: req.user.id,
       })
-        .then(event => {
+        .then((event) => {
           newEvent = event;
           return req.user.addEvent(event);
         })
         .then(() => {
           return res.status(200).json({
             message: 'Event created successfully',
-            event: newEvent
+            event: newEvent,
           });
         })
-        .catch(error => {
+        .catch((error) => {
           const status = error.status || 500;
           const errorMessage =
             (error.parent && error.parent.detail) || error.message || error;
@@ -86,7 +86,7 @@ const EventController = {
     }
     return req.user
       .getEvents({ where: { id } })
-      .then(events => {
+      .then((events) => {
         if (events && events.length > 0) {
           return events[0].update({
             eventType,
@@ -100,18 +100,18 @@ const EventController = {
             lga,
             city,
             landmark,
-            description
+            description,
           });
         }
         throw `No Event with id ${id}`;
       })
-      .then(event => {
+      .then((event) => {
         return res.status(200).json({
           message: 'Event updated successfully',
-          event
+          event,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         const status = error.status || 500;
         const errorMessage = error.message || error;
         return res.status(status).json({ message: errorMessage });
@@ -145,33 +145,38 @@ const EventController = {
                 'stageName',
                 'entertainerType',
                 'location',
-                'about'
+                'about',
               ],
               include: [
                 {
                   model: User,
                   as: 'personalDetails',
-                  attributes: ['id', 'firstName', 'lastName', 'profileImageURL']
-                }
-              ]
-            }
-          ]
+                  attributes: [
+                    'id',
+                    'firstName',
+                    'lastName',
+                    'profileImageURL',
+                  ],
+                },
+              ],
+            },
+          ],
         },
         {
           model: User,
           as: 'owner',
-          attributes: ['id', 'firstName', 'lastName', 'profileImageURL']
-        }
-      ]
+          attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+        },
+      ],
     })
-      .then(event => {
+      .then((event) => {
         if (!event) {
           return res.status(404).json({ message: 'Event not found' });
         }
 
         return res.json({ event });
       })
-      .catch(error => {
+      .catch((error) => {
         return res.status(500).json({ message: error.message });
       });
   },
@@ -184,7 +189,7 @@ const EventController = {
    * @return {object} returns res object
    */
   getUserEvent(req, res) {
-    req.user.getEvents().then(events => {
+    req.user.getEvents().then((events) => {
       if (!events || events.length === 0) {
         return res.status(404).json({ message: 'Event not found' });
       }
@@ -204,12 +209,12 @@ const EventController = {
       where: {
         hireType: 'Auction',
         userId: req.user.id,
-        hiredEntertainer: null // shown auctions with no hired Entertainer
+        hiredEntertainer: null, // shown auctions with no hired Entertainer
       },
       include: [
         {
           model: Event,
-          as: 'event'
+          as: 'event',
         },
         {
           model: EntertainerProfile,
@@ -219,26 +224,72 @@ const EventController = {
             'stageName',
             'entertainerType',
             'location',
-            'about'
+            'about',
           ],
           include: [
             {
               model: User,
               as: 'personalDetails',
-              attributes: ['id', 'firstName', 'lastName', 'profileImageURL']
-            }
-          ]
+              attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+            },
+          ],
         },
         {
           model: Application,
-          as: 'applications'
-        }
-      ]
-    }).then(auctions => {
+          as: 'applications',
+        },
+      ],
+    }).then((auctions) => {
       if (!auctions || auctions.length === 0) {
         return res.status(404).json({ message: 'Auction not found' });
       }
       return res.status(200).json({ auctions });
+    });
+  },
+
+  /**
+   * get User Requests
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  getUserRequests(req, res) {
+    const userId = req.user.id;
+    Application.findAll({
+      where: {
+        applicationType: 'Request',
+      },
+      include: [
+        {
+          model: Event,
+          as: 'event',
+          where: {
+            userId,
+          },
+        },
+        {
+          model: EventEntertainer,
+          as: 'eventEntertainerInfo',
+        },
+        {
+          model: User,
+          as: 'user',
+          attributes: ['id', 'email'],
+          include: [
+            {
+              model: EntertainerProfile,
+              as: 'profile',
+              attributes: ['id', 'stageName', 'slug'],
+            },
+          ],
+        },
+      ],
+    }).then((requests) => {
+      if (!requests || requests.length === 0) {
+        return res.status(404).json({ message: 'No request found' });
+      }
+      return res.status(200).json({ requests });
     });
   },
 
@@ -256,9 +307,9 @@ const EventController = {
         auctionStartDate: { [Op.lte]: Sequelize.literal('NOW()') },
         auctionEndDate: { [Op.gte]: Sequelize.literal('NOW()') },
         entertainerType: {
-          [Op.eq]: req.user.profile.entertainerType
+          [Op.eq]: req.user.profile.entertainerType,
         },
-        [Op.and]: Sequelize.literal('applications.id is null') // only auctions without applications should be shown
+        [Op.and]: Sequelize.literal('applications.id is null'), // only auctions without applications should be shown
       },
       include: [
         {
@@ -268,18 +319,18 @@ const EventController = {
             {
               model: User,
               as: 'owner',
-              attributes: ['id', 'firstName', 'lastName', 'profileImageURL']
-            }
-          ]
+              attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+            },
+          ],
         },
         {
           model: Application,
           as: 'applications',
           where: { userId: req.user.id },
-          required: false
-        }
-      ]
-    }).then(events => {
+          required: false,
+        },
+      ],
+    }).then((events) => {
       if (!events || events.length === 0) {
         return res.status(404).json({ message: 'Event not found' });
       }
@@ -299,14 +350,14 @@ const EventController = {
     const id = req.params.id;
     EntertainerProfile.findOne({
       where: {
-        userId
-      }
+        userId,
+      },
     })
-      .then(entertainer => {
+      .then((entertainer) => {
         EventEntertainer.findOne({
           where: {
             id,
-            hiredEntertainer: entertainer.id
+            hiredEntertainer: entertainer.id,
           },
           include: [
             {
@@ -322,25 +373,25 @@ const EventController = {
                     'lastName',
                     'phoneNumber',
                     'phoneNumber2',
-                    'profileImageURL'
-                  ]
-                }
-              ]
-            }
-          ]
+                    'profileImageURL',
+                  ],
+                },
+              ],
+            },
+          ],
         })
-          .then(event => {
+          .then((event) => {
             if (!event) {
               return res.status(404).json({ message: 'Event not found' });
             }
             return res.status(200).json({ event });
           })
-          .catch(error => {
+          .catch((error) => {
             const errorMessage = error.message || error;
             return res.status(412).json({ message: errorMessage });
           });
       })
-      .catch(error => {
+      .catch((error) => {
         const errorMessage = error.message || error;
         return res.status(412).json({ message: errorMessage });
       });
@@ -357,12 +408,12 @@ const EventController = {
     const userId = req.user.id;
     EntertainerProfile.findOne({
       where: {
-        userId
-      }
-    }).then(entertainer => {
+        userId,
+      },
+    }).then((entertainer) => {
       EventEntertainer.findAll({
         where: {
-          hiredEntertainer: entertainer.id
+          hiredEntertainer: entertainer.id,
         },
         include: [
           {
@@ -372,12 +423,12 @@ const EventController = {
               {
                 model: User,
                 as: 'owner',
-                attributes: ['id', 'firstName', 'lastName', 'profileImageURL']
-              }
-            ]
-          }
-        ]
-      }).then(events => {
+                attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+              },
+            ],
+          },
+        ],
+      }).then((events) => {
         if (!events || events.length === 0) {
           return res.status(404).json({ message: 'Events not found' });
         }
@@ -403,12 +454,12 @@ const EventController = {
     EventEntertainer.findOne({
       where: {
         id: eventEntertainerId,
-        userId: req.user.id
+        userId: req.user.id,
       },
       include: [
         {
           model: Event,
-          as: 'event'
+          as: 'event',
         },
         {
           model: Application,
@@ -427,15 +478,15 @@ const EventController = {
                     'stageName',
                     'entertainerType',
                     'location',
-                    'about'
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }).then(eventEntertainer => {
+                    'about',
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    }).then((eventEntertainer) => {
       if (!eventEntertainer) {
         return res.status(404).json({ message: 'Event Entertainer not found' });
       }
@@ -475,36 +526,41 @@ const EventController = {
                 'stageName',
                 'entertainerType',
                 'location',
-                'about'
+                'about',
               ],
               include: [
                 {
                   model: User,
                   as: 'personalDetails',
-                  attributes: ['id', 'firstName', 'lastName', 'profileImageURL']
-                }
-              ]
-            }
-          ]
+                  attributes: [
+                    'id',
+                    'firstName',
+                    'lastName',
+                    'profileImageURL',
+                  ],
+                },
+              ],
+            },
+          ],
         },
         {
           model: User,
           as: 'owner',
-          attributes: ['id', 'firstName', 'lastName', 'profileImageURL']
-        }
-      ]
+          attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+        },
+      ],
     })
-      .then(event => {
+      .then((event) => {
         if (!event) {
           return res.status(404).json({ message: 'Event not found' });
         }
 
         return res.json({ event });
       })
-      .catch(error => {
+      .catch((error) => {
         return res.status(500).json({ message: error.message });
       });
-  }
+  },
 };
 
 export default EventController;
