@@ -13,5 +13,5 @@ export const TRANSACTION_STATUSES = {
 
 export const RATINGS = {
   UPPER_BOUND: 5,
-  LOWER_BOUND: 0,
+  LOWER_BOUND: 1,
 };
