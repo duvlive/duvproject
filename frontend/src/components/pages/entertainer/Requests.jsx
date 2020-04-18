@@ -6,15 +6,15 @@ import TopMessage from 'components/common/layout/TopMessage';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import { getTokenFromStore } from 'utils/localStorage';
 import { twoDigitNumber, commaNumber, getNairaSymbol } from 'utils/helpers';
-import { getShortDate } from 'utils/date-helpers';
+import { remainingDays } from 'utils/date-helpers';
 import NoContent from 'components/common/utils/NoContent';
 import { Link } from '@reach/router';
 
-const Bids = () => {
-  const [bids, setBids] = React.useState([]);
+const Requests = () => {
+  const [requests, setRequests] = React.useState([]);
   React.useEffect(() => {
     axios
-      .get('/api/v1/entertainer/bids', {
+      .get('/api/v1/entertainer/requests', {
         headers: {
           'x-access-token': getTokenFromStore(),
         },
@@ -23,7 +23,7 @@ const Bids = () => {
         const { status, data } = response;
         // handle success
         if (status === 200) {
-          setBids(data.bids);
+          setRequests(data.requests);
         }
       })
       .catch(function (error) {
@@ -31,40 +31,38 @@ const Bids = () => {
         // navigate to all events
       });
   }, []);
-  console.log('bids', bids);
+  console.log('requests', requests);
   return (
-    <BackEndPage title="Bids">
+    <BackEndPage title="Requests">
       <div className="main-app">
-        <TopMessage message="Placed Bids" />
+        <TopMessage message="Placed Requests" />
 
         <section className="app-content">
           <div className="table-responsive">
-            <table className="table table-dark table__no-border table__with-bg">
-              <tbody>
-                {bids.length > 0 ? (
-                  bids.map((bid, index) => (
-                    <BidsRow
-                      askingPrice={bid.askingPrice}
-                      auctionEndDate={bid.eventEntertainerInfo.auctionEndDate}
-                      city={bid.event.city}
-                      eventType={bid.event.eventType}
-                      id={bid.id}
+            {requests.length > 0 ? (
+              <table className="table table-dark table__no-border table__with-bg">
+                <tbody>
+                  {requests.map((request, index) => (
+                    <RequestsRow
+                      askingPrice={request.askingPrice}
+                      city={request.event.city}
+                      eventType={request.event.eventType}
+                      expiryDate={request.expiryDate}
+                      id={request.id}
                       key={index}
                       number={index + 1}
-                      state={bid.event.state}
-                      status={bid.status}
+                      state={request.event.state}
+                      status={request.status}
                     />
-                  ))
-                ) : (
-                  <NoContent
-                    isButton
-                    linkText="Available Auctions"
-                    linkTo="/entertainer/available-auctions"
-                    text="No Bid Found. You can check available auctions here"
-                  />
-                )}
-              </tbody>
-            </table>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <NoContent
+                isButton
+                text="No Request Found. You can check available auctions here"
+              />
+            )}
             <br />
             <br />
           </div>
@@ -74,10 +72,10 @@ const Bids = () => {
   );
 };
 
-const BidsRow = ({
+const RequestsRow = ({
   id,
   askingPrice,
-  auctionEndDate,
+  expiryDate,
   city,
   eventType,
   number,
@@ -101,9 +99,9 @@ const BidsRow = ({
       </span>
     </td>
     <td>
-      <span className="text-yellow">Bidding closes on </span>
+      <span className="text-yellow">Reaquest closes on </span>
       <span>
-        <i className="icon icon-clock" /> {getShortDate(auctionEndDate)}
+        <i className="icon icon-clock" /> {remainingDays(expiryDate)}
       </span>
     </td>
     <td>
@@ -113,41 +111,37 @@ const BidsRow = ({
         {commaNumber(askingPrice)}
       </span>
     </td>
-    <td>
-      <span className="text-muted small--2">Status</span>
-      <span>{status === 'Rejected' ? 'Closed' : status}</span>
-    </td>
     <td className="text-right">
       <Link
         className="btn btn-info btn-transparent"
-        to={`/entertainer/bid/view/${id}`}
+        to={`/entertainer/request/view/${id}`}
       >
-        View Bid
+        View Request
       </Link>
     </td>
   </tr>
 );
 
-BidsRow.propTypes = {
+RequestsRow.propTypes = {
   askingPrice: PropTypes.string,
-  auctionEndDate: PropTypes.any,
   city: PropTypes.string,
   eventType: PropTypes.string,
-  id: PropTypes.string,
-  number: PropTypes.string,
+  expiryDate: PropTypes.any,
+  id: PropTypes.number,
+  number: PropTypes.number,
   state: PropTypes.string,
   status: PropTypes.string,
 };
 
-Bids.defaultProps = {
+Requests.defaultProps = {
   askingPrice: '',
-  auctionEndDate: '',
+  expiryDate: '',
   city: '',
   eventType: '',
-  id: '',
+  id: 0,
   number: 0,
   state: '',
   status: 'Pending',
 };
 
-export default Bids;
+export default Requests;

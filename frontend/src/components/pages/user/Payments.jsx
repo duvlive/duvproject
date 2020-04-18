@@ -8,6 +8,7 @@ import { getShortDate } from 'utils/date-helpers';
 import { moneyFormat } from 'utils/helpers';
 import { Link } from '@reach/router';
 import LoadingScreen from 'components/common/layout/LoadingScreen';
+import NoContent from 'components/common/utils/NoContent';
 
 const Payments = () => {
   const [loading, setLoading] = React.useState(true);
@@ -17,10 +18,10 @@ const Payments = () => {
     axios
       .get('/api/v1/user/payments', {
         headers: {
-          'x-access-token': getTokenFromStore()
-        }
+          'x-access-token': getTokenFromStore(),
+        },
       })
-      .then(function(response) {
+      .then(function (response) {
         const { status, data } = response;
         // handle success
         if (status === 200) {
@@ -28,14 +29,12 @@ const Payments = () => {
         }
         setLoading(false);
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error.response.data.message);
         // navigate to all events
         setLoading(false);
       });
   }, []);
-
-  console.log('payments', payments);
 
   return (
     <BackEndPage title="Payments History">
@@ -45,9 +44,20 @@ const Payments = () => {
         <section className="app-content">
           <section className="payments">
             <div className="row">
-              <LoadingScreen loading={loading} text="Loading Payments History">
+              {loading ? (
+                <LoadingScreen
+                  loading={loading}
+                  text="Loading Payments History"
+                />
+              ) : payments.length > 1 ? (
                 <Payments.CardLists payments={payments} />
-              </LoadingScreen>
+              ) : (
+                <>
+                  <div className="col-sm-12">
+                    <NoContent text="No Payments found" />
+                  </div>
+                </>
+              )}
             </div>
           </section>
         </section>
@@ -64,7 +74,7 @@ Payments.CardLists = ({ payments }) => {
 };
 
 Payments.CardLists.propTypes = {
-  payments: PropTypes.array.isRequired
+  payments: PropTypes.array.isRequired,
 };
 
 Payments.Card = ({ color, payment }) => (
@@ -106,7 +116,7 @@ Payments.Card = ({ color, payment }) => (
 
 Payments.Card.propTypes = {
   color: PropTypes.string.isRequired,
-  payment: PropTypes.object.isRequired
+  payment: PropTypes.object.isRequired,
 };
 
 export default Payments;

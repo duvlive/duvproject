@@ -24,6 +24,7 @@ import { UserContext } from 'context/UserContext';
 import { getUserTypeFromStore } from 'utils/localStorage';
 import { USER_TYPES } from 'utils/constants';
 import { DASHBOARD_PAGE } from 'utils/constants';
+import Requests from 'components/pages/entertainer/Requests';
 
 const EntertainerRouter = () => {
   const { userState } = React.useContext(UserContext);
@@ -45,6 +46,7 @@ const EntertainerRouter = () => {
       <ViewEvent path="/events/view/:eventEntertainerId" />
       <Notifications path="/notifications" />
       <UpcomingEvents path="/events" />
+      <Requests path="/requests" />
       <Payments path="/payments" />
       <EditProfile path="/edit-profile" />
       <Gallery path="/gallery" />

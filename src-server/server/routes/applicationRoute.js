@@ -1,13 +1,21 @@
 import { ApplicationController } from '../controllers';
 import Authentication from '../middleware/authentication';
 
-const applicationRoutes = router => {
+const applicationRoutes = (router) => {
   router.get(
     '/api/v1/entertainer/bids',
     Authentication.verifyToken,
     Authentication.isActiveUser,
     Authentication.validateEntertainer,
     ApplicationController.getEntertainerBids
+  );
+
+  router.get(
+    '/api/v1/entertainer/requests',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    Authentication.validateEntertainer,
+    ApplicationController.getEntertainerRequest
   );
 
   router

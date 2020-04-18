@@ -10,6 +10,7 @@ import { validString, getLongDate, getTime, moneyFormat } from '../utils';
 import EMAIL_CONTENT from '../email-template/content';
 
 import sendMail from '../MailSender';
+import { addDays } from 'date-fns';
 
 const sendRequestMail = ({ askingPrice, email, stageName, event }) => {
   // Build Email
@@ -179,7 +180,7 @@ const EventEntertainerController = {
               eventId,
               eventEntertainerId: eventEntertainer.id,
               applicationType: 'Request',
-              expiryDate: Date.now(),
+              expiryDate: addDays(Date.now(), 1),
             });
 
             if (savedApplication) {

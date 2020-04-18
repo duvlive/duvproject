@@ -141,6 +141,45 @@ const ApplicationController = {
   },
 
   /**
+   * get Entertainers Request
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  getEntertainerRequest(req, res) {
+    return req.user
+      .getApplications({
+        where: {
+          applicationType: 'Request',
+        },
+        include: [
+          {
+            model: Event,
+            as: 'event',
+            include: [
+              {
+                model: User,
+                as: 'owner',
+                attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+              },
+            ],
+          },
+          {
+            model: EventEntertainer,
+            as: 'eventEntertainerInfo',
+          },
+        ],
+      })
+      .then((requests) => {
+        if (!requests || requests.length === 0) {
+          return res.status(404).json({ message: 'Event not found' });
+        }
+        return res.status(200).json({ requests });
+      });
+  },
+
+  /**
    * Get application for valid entertainer only
    * @function
    * @param {object} req is req object
