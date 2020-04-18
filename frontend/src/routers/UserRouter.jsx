@@ -19,6 +19,7 @@ import ChangePassword from 'components/pages/user/ChangePassword';
 import RegisterAsEntertainer from 'components/pages/user/RegisterAsEntertainer';
 import Approval from 'components/pages/user/Approval';
 import AddEntertainerToEvent from 'components/pages/user/AddEntertainerToEvent';
+import InviteFriends from 'components/common/pages/InviteFriends';
 
 const UserRouter = () => (
   <Router>
@@ -41,6 +42,7 @@ const UserRouter = () => (
     <ViewEvent path="events/view/:id/:message" />
     <Bids path="/auction/bids/:eventEntertainerId" />
     <Approval path="/approval" />
+    <InviteFriends path="/invite-friends" />
     <EditProfile path="/edit-profile" />
     <ChangePassword path="/change-password" />
     <RegisterAsEntertainer path="/register-as-entertainer" />

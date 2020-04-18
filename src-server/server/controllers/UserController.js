@@ -17,6 +17,7 @@ import sendMail from '../MailSender';
 import Authentication from '../middleware/authentication';
 import { UserValidation, updateUser, validString } from '../utils';
 import EMAIL_CONTENT from '../email-template/content';
+import { USER_TYPES, NOTIFICATIONS, NOTIFICATION_TYPE } from '../constant';
 
 export const userAssociatedOrder = [
   // ...we use the same syntax from the include
@@ -174,11 +175,77 @@ const UserController = {
           type,
         });
       })
-      .then((newUser) => {
+      .then(async (newUser) => {
+        await Notification.create({
+          userId: newUser.id,
+          title: NOTIFICATIONS.ACCOUNT_CREATED,
+          description: 'Your DUV Live account was created',
+          type: NOTIFICATION_TYPE.CONTENT,
+        });
         return res.status(200).json({
           message: 'Signed up successfully',
           user: UserController.transformUser(newUser),
           token: Authentication.generateToken(newUser, true),
+        });
+      })
+      .catch((error) => {
+        const status = error.status || 500;
+        const errorMessage = error.message || error;
+        return res.status(status).json({ message: errorMessage });
+      });
+  },
+
+  /**
+   * complete user registration
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  async completeRegistration(req, res) {
+    const { id, password, phoneNumber, type } = req.body;
+    const errors = {
+      ...UserValidation.phoneNumberValidation(phoneNumber),
+      ...UserValidation.singlePasswordValidaton(password),
+    };
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    if (Object.keys(errors).length) {
+      return res
+        .status(400)
+        .json({ message: 'There are invalid fields in the form', errors });
+    }
+    // updated approved application
+    return User.update(
+      {
+        password: hashedPassword,
+        phoneNumber,
+        type,
+        userId: 999,
+        activatedAt: Date.now(),
+      },
+      {
+        where: {
+          id,
+        },
+      }
+    )
+      .then(async () => {
+        if (type === USER_TYPES.ENTERTAINER) {
+          [EntertainerProfile, BankDetail, Identification, ApprovalComment].map(
+            async (model) => await model.create({ userId: id })
+          );
+        }
+        await Notification.create({
+          userId: id,
+          title: NOTIFICATIONS.ACCOUNT_CREATED,
+          description: 'Your DUV Live account was created',
+          type: NOTIFICATION_TYPE.CONTENT,
+        });
+        return res.json({
+          message: 'Registration completed',
         });
       })
       .catch((error) => {
@@ -211,16 +278,18 @@ const UserController = {
             password: Date.now().toString(36),
             profileImageURL: picture,
             isActive: true,
-            type: 1,
+            type: 999,
             profileImageID: 'social-media',
           });
+          const token = Authentication.generateToken(user);
+          res.redirect(`${process.env.HOST}/complete-registration/${token}`);
         } else {
           if (user.firstTimeLogin) {
             user.update({ firstTimeLogin: false });
           }
+          const token = Authentication.generateToken(user);
+          res.redirect(`${process.env.HOST}/login/${token}`);
         }
-        const token = Authentication.generateToken(user);
-        res.redirect(`http://localhost:3000/login/${token}`);
       })
       .catch((error) => {
         const errorMessage = error.message || error;
@@ -498,6 +567,33 @@ const UserController = {
   },
 
   /**
+   *  skip intro text
+   * @function
+   * @param {object} req is request object
+   * @param {object} res is response object
+   * @return {undefined} returns undefined
+   * */
+  skipIntroText(req, res) {
+    const { userId } = req.decoded;
+    User.findOne({
+      where: { id: userId },
+    })
+      .then((user) => {
+        if (!user) {
+          return res.status(404).send({
+            message: 'User not found',
+          });
+        }
+        return user
+          .update({ firstTimeLogin: false })
+          .then(() => res.status(200).json(UserController.transformUser(user)));
+      })
+      .catch((error) => {
+        return res.status(500).json({ error: error.message });
+      });
+  },
+
+  /**
    *  user edit entertainer
    * @function
    * @param {object} req is request object
@@ -609,6 +705,29 @@ const UserController = {
     }
   },
 
+  upgradeUserToEntertainer(req, res) {
+    const id = req.user.id;
+    EntertainerProfile.findOne({
+      where: { userId: id },
+    })
+      .then((entertainer) => {
+        if (entertainer) {
+          return res
+            .status(401)
+            .json({ message: 'Entertianer profile exists' });
+        }
+        [EntertainerProfile, BankDetail, Identification, ApprovalComment].map(
+          async (model) => await model.create({ userId: id })
+        );
+        return res.status(200).json({
+          message: 'Entertainer profile has been successfully generated',
+        });
+      })
+      .catch((error) => {
+        return res.status(500).json({ error: error.message });
+      });
+  },
+
   /**
    * invite Friend
    * @function
@@ -617,9 +736,10 @@ const UserController = {
    * @return {object} returns res object
    */
   async inviteFriend(req, res) {
-    const { email } = req.body;
+    const { email, recommendAs } = req.body;
     const errors = {
       ...UserValidation.emailValidation(email),
+      ...UserValidation.stringValidation(recommendAs),
     };
 
     if (Object.keys(errors).length) {
@@ -630,7 +750,12 @@ const UserController = {
 
     try {
       const link = `${process.env.HOST}`;
-      await sendMail(EMAIL_CONTENT.INVITE_FRIEND, { email }, { link });
+      const contentBottom = `You have been recommended as a ${recommendAs}. Live your best Life today and let your dreams come true.`;
+      await sendMail(
+        EMAIL_CONTENT.INVITE_FRIEND,
+        { email },
+        { link, contentBottom }
+      );
       return res.status(200).json({ message: 'Invite sent successfully' });
     } catch (error) {
       return res.status(400).json({ message: 'Something went wrong', error });

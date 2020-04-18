@@ -46,6 +46,7 @@ export const USER_TYPES = {
   user: 1,
   entertainer: 2,
   bandMember: 3,
+  unknown: 999,
 };
 
 export const HIRE_ENTERTAINERS_TYPE = {
@@ -79,6 +80,7 @@ export const DASHBOARD_PAGE = {
   [USER_TYPES.entertainer]: 'entertainer',
   [USER_TYPES.admin]: 'admin',
   [USER_TYPES.bandMember]: 'band-member',
+  [USER_TYPES.unknown]: 'unknown',
 };
 
 export const SLIDESHOW_TYPE = {
@@ -86,6 +88,7 @@ export const SLIDESHOW_TYPE = {
   entertainers: 'entertainers',
   events: 'events',
   testimonials: 'testimonials',
+  welcome: 'welcome',
 };
 
 export const HIRE_ENTERTAINERS = {
@@ -304,4 +307,15 @@ export const DEFAULT_COMMISSION = {
   bidsCommission: '10',
   handlingPercent: '2',
   handlingPlus: '40',
+};
+
+export const NOTIFICATIONS = {
+  ACCOUNT_CREATED: 'ACCOUNT_CREATED',
+  ACCOUNT_APPROVED: 'ACCOUNT_APPROVED',
+  BID_APPROVED: 'BID_APPROVED',
+  PASSWORD_CHANGED: 'PASSWORD_CHANGED',
+  PAYMENT_MADE: 'PAYMENT_MADE',
+  PAYMENT_RECEIVED: 'PAYMENT_RECEIVED',
+  REQUEST_ACCEPTED: 'REQUEST_ACCEPTED',
+  REQUEST_REJECTED: 'REQUEST_REJECTED',
 };

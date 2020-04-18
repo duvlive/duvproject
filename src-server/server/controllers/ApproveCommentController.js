@@ -1,5 +1,6 @@
 import { updateUser } from '../utils';
-import { User, ApprovalComment } from '../models';
+import { User, ApprovalComment, Notification } from '../models';
+import { NOTIFICATIONS, NOTIFICATION_TYPE } from '../constant';
 
 const ApproveCommentController = {
   /**
@@ -17,18 +18,18 @@ const ApproveCommentController = {
       contact,
       identification,
       youTube,
-      userId
+      userId,
     } = req.body;
 
-    return User.findOne({ where: { id: userId } }).then(user => {
+    return User.findOne({ where: { id: userId } }).then((user) => {
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
       }
 
       ApprovalComment.findOne({
-        where: { userId }
+        where: { userId },
       })
-        .then(foundApprovalComment => {
+        .then((foundApprovalComment) => {
           if (!foundApprovalComment) {
             return res
               .status(404)
@@ -42,7 +43,7 @@ const ApproveCommentController = {
             contact: contact || foundApprovalComment.contact,
             identification:
               identification || foundApprovalComment.identification,
-            youTube: youTube || foundApprovalComment.youTube
+            youTube: youTube || foundApprovalComment.youTube,
           };
 
           let approved = false;
@@ -63,25 +64,32 @@ const ApproveCommentController = {
             updateUser(
               user,
               {
-                approved
+                approved,
               },
               'Profile'
-            )
+            ),
           ])
-            .then(([newApprovalComment, profile]) => {
+            .then(async ([newApprovalComment, profile]) => {
+              await Notification.create({
+                userId: userId,
+                title: NOTIFICATIONS.NEW_AWARD,
+                description: `You have been awarded the DUV CERTIFIED Award`,
+                type: NOTIFICATION_TYPE.SUCCESS,
+                actionId: 0, //TODO: Update to award Id
+              });
               return res.status(200).json({
                 message,
                 approvalComments: newApprovalComment,
-                profile
+                profile,
               });
             })
-            .catch(error => {
+            .catch((error) => {
               const status = error.status || 500;
               const errorMessage = error.message || error;
               return res.status(status).json({ message: errorMessage });
             });
         })
-        .catch(error => {
+        .catch((error) => {
           const errorMessage = error.message || error;
           return res.status(412).json({ message: errorMessage });
         });
@@ -98,16 +106,18 @@ const ApproveCommentController = {
   getEntertainerApprovalWithComment(req, res) {
     const { userId } = req.body;
     User.findOne({ where: { id: userId } })
-      .then(user => Promise.all([user.getApprovalComment(), user.getProfile()]))
+      .then((user) =>
+        Promise.all([user.getApprovalComment(), user.getProfile()])
+      )
       .then(([comments, profile]) =>
         res.status(200).json({ comments, profile })
       )
-      .catch(error => {
+      .catch((error) => {
         const status = error.status || 500;
         const errorMessage = error.message || error;
         return res.status(status).json({ message: errorMessage });
       });
-  }
+  },
 };
 
 export default ApproveCommentController;

@@ -5,11 +5,12 @@ import {
   EventEntertainer,
   User,
   EntertainerProfile,
-  Commission
+  Commission,
+  Notification,
 } from '../models';
 import sendMail from '../MailSender';
 import { validString, moneyFormat } from '../utils';
-import { USER_TYPES } from '../constant';
+import { USER_TYPES, NOTIFICATIONS, NOTIFICATION_TYPE } from '../constant';
 import EMAIL_CONTENT from '../email-template/content';
 
 const ApplicationController = {
@@ -25,7 +26,7 @@ const ApplicationController = {
 
     const error = {
       ...validString(status),
-      ...validString(askingPrice)
+      ...validString(askingPrice),
     };
     if (Object.keys(error).length > 1) {
       return res.status(400).json({ message: error.message.join('') });
@@ -37,19 +38,19 @@ const ApplicationController = {
         askingPrice,
         eventId,
         eventEntertainerId,
-        userId: req.user.id
+        userId: req.user.id,
       })
-        .then(application => {
+        .then((application) => {
           newApplication = application;
           return req.user.addApplication(application);
         })
         .then(() => {
           return res.status(200).json({
             message: 'Application created successfully',
-            application: newApplication
+            application: newApplication,
           });
         })
-        .catch(error => {
+        .catch((error) => {
           const status = error.status || 500;
           const errorMessage =
             (error.parent && error.parent.detail) || error.message || error;
@@ -58,26 +59,26 @@ const ApplicationController = {
     }
     return req.user
       .getApplications({ where: { id } })
-      .then(applications => {
+      .then((applications) => {
         if (applications && applications.length > 0) {
           if (req.user.type === USER_TYPES.ADMINISTRATOR) {
             return applications[0].update({
-              status
+              status,
             });
           }
           return applications[0].update({
-            askingPrice
+            askingPrice,
           });
         }
         throw `No Application with id ${id}`;
       })
-      .then(event => {
+      .then((event) => {
         return res.status(200).json({
           message: 'Application updated successfully',
-          event
+          event,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         const status = error.status || 500;
         const errorMessage = error.message || error;
         return res.status(status).json({ message: errorMessage });
@@ -92,7 +93,7 @@ const ApplicationController = {
    * @return {object} returns res object
    */
   getEntertainerApplications(req, res) {
-    req.user.getEvents().then(applications => {
+    req.user.getEvents().then((applications) => {
       if (!applications || applications.length === 0) {
         return res.status(404).json({ message: 'Application not found' });
       }
@@ -111,7 +112,7 @@ const ApplicationController = {
     return req.user
       .getApplications({
         where: {
-          applicationType: 'Bid'
+          applicationType: 'Bid',
         },
         include: [
           {
@@ -121,21 +122,60 @@ const ApplicationController = {
               {
                 model: User,
                 as: 'owner',
-                attributes: ['id', 'firstName', 'lastName', 'profileImageURL']
-              }
-            ]
+                attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+              },
+            ],
           },
           {
             model: EventEntertainer,
-            as: 'eventEntertainerInfo'
-          }
-        ]
+            as: 'eventEntertainerInfo',
+          },
+        ],
       })
-      .then(bids => {
+      .then((bids) => {
         if (!bids || bids.length === 0) {
           return res.status(404).json({ message: 'Event not found' });
         }
         return res.status(200).json({ bids });
+      });
+  },
+
+  /**
+   * get Entertainers Request
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  getEntertainerRequest(req, res) {
+    return req.user
+      .getApplications({
+        where: {
+          applicationType: 'Request',
+        },
+        include: [
+          {
+            model: Event,
+            as: 'event',
+            include: [
+              {
+                model: User,
+                as: 'owner',
+                attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+              },
+            ],
+          },
+          {
+            model: EventEntertainer,
+            as: 'eventEntertainerInfo',
+          },
+        ],
+      })
+      .then((requests) => {
+        if (!requests || requests.length === 0) {
+          return res.status(404).json({ message: 'Event not found' });
+        }
+        return res.status(200).json({ requests });
       });
   },
 
@@ -153,7 +193,7 @@ const ApplicationController = {
 
     if (!id) {
       return res.status(404).json({
-        message: 'Application Id needed to approve application'
+        message: 'Application Id needed to approve application',
       });
     }
 
@@ -170,24 +210,24 @@ const ApplicationController = {
               {
                 model: User,
                 as: 'owner',
-                attributes: ['id', 'firstName', 'lastName']
-              }
-            ]
-          }
+                attributes: ['id', 'firstName', 'lastName'],
+              },
+            ],
+          },
         },
         {
           model: Commission,
-          as: 'commission'
-        }
-      ]
+          as: 'commission',
+        },
+      ],
     })
-      .then(application => {
+      .then((application) => {
         if (!application) {
           return res.status(404).json({ message: 'Application not found' });
         }
         return res.json({ application });
       })
-      .catch(error => {
+      .catch((error) => {
         const errorMessage = error.message || error;
         return res.status(412).json({ message: errorMessage });
       });
@@ -206,7 +246,7 @@ const ApplicationController = {
 
     if (!id) {
       return res.status(404).json({
-        message: 'Application Id needed to approve application'
+        message: 'Application Id needed to approve application',
       });
     }
 
@@ -218,8 +258,8 @@ const ApplicationController = {
           as: 'eventEntertainerInfo',
           include: {
             model: Event,
-            as: 'event'
-          }
+            as: 'event',
+          },
         },
         {
           model: User,
@@ -229,13 +269,13 @@ const ApplicationController = {
             {
               model: EntertainerProfile,
               as: 'profile',
-              attributes: ['id', 'stageName']
-            }
-          ]
-        }
-      ]
+              attributes: ['id', 'stageName'],
+            },
+          ],
+        },
+      ],
     })
-      .then(application => {
+      .then((application) => {
         const currentDate = Date.now();
         const eventEntertainerId = application.eventEntertainerId;
         // for email
@@ -252,7 +292,7 @@ const ApplicationController = {
           eventStreetLine2: application.eventEntertainerInfo.event.streetLine2,
           eventState: application.eventEntertainerInfo.event.state,
           eventLga: application.eventEntertainerInfo.event.lga,
-          eventCity: application.eventEntertainerInfo.event.city
+          eventCity: application.eventEntertainerInfo.event.city,
         };
 
         if (!application) {
@@ -263,14 +303,14 @@ const ApplicationController = {
         if (application.status === 'Approved') {
           return res.status(200).json({
             application,
-            message: 'This application has already been approved'
+            message: 'This application has already been approved',
           });
         }
 
         // can only approve applications without hiredEntertainer
         if (application.eventEntertainerInfo.hiredEntertainer) {
           return res.status(400).json({
-            message: 'You have hired an entertainer for this request.'
+            message: 'You have hired an entertainer for this request.',
           });
         }
 
@@ -280,7 +320,7 @@ const ApplicationController = {
           application.eventEntertainerInfo.userId !== req.user.id
         ) {
           return res.status(401).json({
-            message: 'Only event owners can approve a bid application'
+            message: 'Only event owners can approve a bid application',
           });
         }
 
@@ -289,20 +329,20 @@ const ApplicationController = {
           { status: 'Approved', approvedDate: currentDate },
           {
             where: {
-              id
-            }
+              id,
+            },
           }
         ).then(() => {
           // add approved entertainer to evententertainer
           EventEntertainer.update(
             {
               hiredEntertainer: application.user.profile.id,
-              hiredDate: currentDate
+              hiredDate: currentDate,
             },
             {
               where: {
-                id: eventEntertainerId
-              }
+                id: eventEntertainerId,
+              },
             }
           ).then(() =>
             Application.update(
@@ -310,34 +350,41 @@ const ApplicationController = {
               {
                 status: 'Rejected',
                 rejectionDate: currentDate,
-                rejectionReason: 'Application not selected'
+                rejectionReason: 'Application not selected',
               },
               {
                 where: {
                   id: { [Op.ne]: id },
-                  eventEntertainerId: application.eventEntertainerInfo.id
-                }
+                  eventEntertainerId: application.eventEntertainerInfo.id,
+                },
               }
-            ).then(() => {
+            ).then(async () => {
               // Send Email to approved entertainer
               sendAuctionMail(EMAIL_PARAMS);
+              await Notification.create({
+                userId: application.user.profile.id,
+                title: NOTIFICATIONS.BID_APPROVED,
+                description: `Your bid NGN (${EMAIL_PARAMS.askingPrice}) for ${EMAIL_PARAMS.eventType} has been approved`,
+                type: NOTIFICATION_TYPE.SUCCESS,
+                actionId: id, //application id
+              });
               res.json({
                 application,
                 message:
-                  'Entertainer Application has been successfully approved'
+                  'Entertainer Application has been successfully approved',
               });
             })
           );
         });
       })
-      .catch(error => {
+      .catch((error) => {
         const errorMessage = error.message || error;
         return res.status(412).json({ message: errorMessage });
       });
-  }
+  },
 };
 
-const sendAuctionMail = params => {
+const sendAuctionMail = (params) => {
   // Build Email
   const contentTop = `Congratulations!!! Your bid of  NGN ${params.askingPrice} has been approved. Once payment has been made, then your application has been confirmed. You can find the details of the event below.`;
   const contentBottom = `
@@ -360,7 +407,7 @@ const sendAuctionMail = params => {
       title: `Your Bid of NGN ${params.askingPrice} has been approved`,
       link: '#',
       contentTop,
-      contentBottom
+      contentBottom,
     }
   );
 };

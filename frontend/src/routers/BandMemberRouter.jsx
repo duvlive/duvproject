@@ -9,7 +9,7 @@ import Gallery from 'components/pages/band-member/Gallery';
 import Video from 'components/pages/band-member/Video';
 import Badges from 'components/pages/band-member/Badges';
 import BandMembers from 'components/pages/band-member/BandMembers';
-import InviteFriends from 'components/pages/band-member/InviteFriends';
+import InviteFriends from 'components/common/pages/InviteFriends';
 import Help from 'components/pages/user/Help';
 import Logout from 'components/pages/auth/Logout';
 

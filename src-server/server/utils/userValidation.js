@@ -16,7 +16,7 @@ const UserValidation = {
     const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
     if (!emailRegex.test(email)) {
       return {
-        email: 'Email is not rightly formatted'
+        email: 'Email is not rightly formatted',
       };
     }
     return {};
@@ -24,7 +24,7 @@ const UserValidation = {
   phoneNumberValidation(phoneNumber) {
     if (phoneNumber.length < 11 && phoneNumber.length > 14) {
       return {
-        phoneNumber: 'Phone Number length must be between 11 and 14 characters'
+        phoneNumber: 'Phone Number length must be between 11 and 14 characters',
       };
     }
     return {};
@@ -40,13 +40,20 @@ const UserValidation = {
     }
     return error;
   },
+  singlePasswordValidaton(password) {
+    let error = {};
+    if (password.length < 6) {
+      error['password'] = 'Password length must have a minimum of 8 characters';
+    }
+    return error;
+  },
   isUserActive(isActive) {
     let error = {};
     if (!isActive) {
       error['isActive'] = 'User needs to activate account';
     }
     return error;
-  }
+  },
 };
 
 export default UserValidation;

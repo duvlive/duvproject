@@ -1,14 +1,15 @@
-import {
-  stringValidation,
-  email,
-  phoneNumber,
-  optionalValidation
-} from './schema-helpers';
+import { stringValidation, email, OptionalPhoneNumber } from './schema-helpers';
 
 export const contactUsSchema = {
   fullName: stringValidation('Full Name'),
-  phoneNumber: optionalValidation(phoneNumber),
-  email,
-  subject: stringValidation('Subject', 10),
-  message: stringValidation('Message', 20)
+  phone: OptionalPhoneNumber,
+  userEmail: email,
+  userSubject: stringValidation('Subject', 10),
+  userMessage: stringValidation('Message', 20),
+};
+
+export const faqSchema = {
+  userEmail: email,
+  userSubject: stringValidation('Subject', 10),
+  userMessage: stringValidation('Your Question', 20),
 };
