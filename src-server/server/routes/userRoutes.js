@@ -23,6 +23,12 @@ const userRoutes = (router) => {
     UserController.completeRegistration
   );
 
+  router.put(
+    '/api/v1/users/skip-first-time-text',
+    Authentication.verifyToken,
+    UserController.skipIntroText
+  );
+
   router.get(
     '/api/v1/who-am-i',
     Authentication.verifyToken,

@@ -340,6 +340,7 @@
 }
 
 .onboarding__slides {
+  margin-top: 1.5rem;
   border-color: transparent !important;
   padding: 2rem 3rem 3rem !important;
 
@@ -348,5 +349,21 @@
   }
   p {
     margin-bottom: 3rem;
+  }
+
+  button {
+    background: transparent;
+    border: transparent;
+    color: rgba(darken($white, 20%), 0.5);
+    transition: all 0.3s ease-out;
+
+    &:hover {
+      color: $white;
+    }
+  }
+
+  .carousel-indicators li {
+    width: 0.6rem;
+    height: 0.6rem;
   }
 }

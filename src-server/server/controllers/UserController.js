@@ -567,6 +567,33 @@ const UserController = {
   },
 
   /**
+   *  skip intro text
+   * @function
+   * @param {object} req is request object
+   * @param {object} res is response object
+   * @return {undefined} returns undefined
+   * */
+  skipIntroText(req, res) {
+    const { userId } = req.decoded;
+    User.findOne({
+      where: { id: userId },
+    })
+      .then((user) => {
+        if (!user) {
+          return res.status(404).send({
+            message: 'User not found',
+          });
+        }
+        return user
+          .update({ firstTimeLogin: false })
+          .then(() => res.status(200).json(UserController.transformUser(user)));
+      })
+      .catch((error) => {
+        return res.status(500).json({ error: error.message });
+      });
+  },
+
+  /**
    *  user edit entertainer
    * @function
    * @param {object} req is request object

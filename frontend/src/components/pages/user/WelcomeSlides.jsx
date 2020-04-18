@@ -1,11 +1,42 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 import { Carousel, CarouselIndicators, CarouselItem } from 'reactstrap';
 import Card from 'components/custom/Card';
+import { getTokenFromStore } from 'utils/localStorage';
+import { UserContext } from 'context/UserContext';
+import { Loading } from 'components/common/utils/PlayingMusicAnimation';
 
 const WelcomeSlides = ({ items }) => {
   const [animating, setAnimating] = React.useState(false);
   const [activeIndex, setActiveIndex] = React.useState(0);
+  const [loading, setLoading] = React.useState(false);
+  const { userDispatch } = React.useContext(UserContext);
+
+  const skipUserText = () => {
+    setLoading(true);
+    axios
+      .put(
+        '/api/v1/users/skip-first-time-text',
+        {},
+        {
+          headers: { 'x-access-token': getTokenFromStore() },
+        }
+      )
+      .then(function (response) {
+        const { status } = response;
+        if (status === 200) {
+          userDispatch({
+            type: 'user-hide-first-time-text',
+          });
+          setLoading(false);
+        }
+      })
+      .catch(function (error) {
+        console.log('error', error);
+        setLoading(false);
+      });
+  };
 
   const onExiting = () => setAnimating(true);
   const onExited = () => setAnimating(false);
@@ -26,7 +57,17 @@ const WelcomeSlides = ({ items }) => {
   const welcomeSlides = items.map(({ color, name, text }, index) => {
     return (
       <CarouselItem key={index} onExited={onExited} onExiting={onExiting}>
-        <div className="text-right small--2 mb-3">Skip Intro</div>
+        <div className="text-right">
+          <button className="small--2" onClick={skipUserText}>
+            {loading ? (
+              <>
+                <Loading />
+              </>
+            ) : (
+              `Don't show again`
+            )}
+          </button>
+        </div>
         <h3>{name}</h3>
         <p>{text}</p>
       </CarouselItem>

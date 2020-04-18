@@ -43,21 +43,18 @@ const Dashboard = () => {
 
   const topMessage = userState.firstTimeLogin ? 'Hello' : 'Welcome back';
 
-  // if (userState.firstTimeLogin) {
-  //   return <WelcomeSlides items/>;
-  // }
   return (
     <BackEndPage title="Dashboard">
       <div className="main-app">
         <TopMessage message={`${topMessage} ${userState.firstName},`} />
-        <WelcomeSlides items={welcomeSlide} />
+        {userState.firstTimeLogin && <WelcomeSlides items={welcomeSlide} />}
         <section className="app-content">
           <div className="row">
             <div className="col-sm-8">
               <div className="card card-custom">
                 <div className="card-body">
                   <LoadItems
-                    items={userState.events}
+                    items={userState.events || []}
                     noContent={
                       <NoContent
                         isButton
@@ -67,7 +64,7 @@ const Dashboard = () => {
                       />
                     }
                   >
-                    <Dashboard.UpcomingEvents events={userState.events} />
+                    <Dashboard.UpcomingEvents events={userState.events || []} />
                   </LoadItems>
                 </div>
               </div>
