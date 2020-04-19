@@ -275,7 +275,7 @@ const EventController = {
         {
           model: User,
           as: 'user',
-          attributes: ['id', 'email'],
+          attributes: ['id', 'email', 'profileImageURL'],
           include: [
             {
               model: EntertainerProfile,

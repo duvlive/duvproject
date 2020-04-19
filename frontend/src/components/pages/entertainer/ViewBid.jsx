@@ -7,7 +7,7 @@ import ViewEvent from '../user/ViewEvent';
 import { getTokenFromStore } from 'utils/localStorage';
 import { remainingDays } from 'utils/date-helpers';
 import { getNairaSymbol, commaNumber } from 'utils/helpers';
-import { PriceCalculator } from './NewBid';
+import PriceCalculator from 'components/common/utils/PriceCalculator';
 import { DEFAULT_COMMISSION } from 'utils/constants';
 
 const ViewBid = ({ applicationId }) => {
@@ -18,10 +18,10 @@ const ViewBid = ({ applicationId }) => {
       axios
         .get(`/api/v1/applications/${applicationId}`, {
           headers: {
-            'x-access-token': getTokenFromStore()
-          }
+            'x-access-token': getTokenFromStore(),
+          },
         })
-        .then(function(response) {
+        .then(function (response) {
           const { status, data } = response;
           console.log('data', data);
           // handle success
@@ -29,7 +29,7 @@ const ViewBid = ({ applicationId }) => {
             setApplication(data.application);
           }
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log(error.response.data.message);
           // TODO: navigate to all events
         });
@@ -89,11 +89,11 @@ const ViewBid = ({ applicationId }) => {
 };
 
 ViewBid.propTypes = {
-  applicationId: PropTypes.string
+  applicationId: PropTypes.string,
 };
 
 ViewBid.defaultProps = {
-  applicationId: null
+  applicationId: null,
 };
 
 export default ViewBid;

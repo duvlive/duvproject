@@ -319,3 +319,9 @@ export const NOTIFICATIONS = {
   REQUEST_ACCEPTED: 'REQUEST_ACCEPTED',
   REQUEST_REJECTED: 'REQUEST_REJECTED',
 };
+
+export const REQUEST_ACTION = {
+  APPROVED: 'Approved',
+  REJECTED: 'Rejected',
+  INCREMENT: 'Increment',
+};

@@ -50,7 +50,7 @@ const CompleteRegistrationForm = ({ token }) => {
     </>
   );
   const handleTypeClick = (selectedType) => setUserType(selectedType);
-  let userHasCompletedRegistration;
+  // let userHasCompletedRegistration;
 
   // CHECK IF SOCIAL MEDIA LOGIN
   React.useEffect(() => {

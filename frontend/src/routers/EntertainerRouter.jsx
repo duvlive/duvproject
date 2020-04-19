@@ -25,6 +25,7 @@ import { getUserTypeFromStore } from 'utils/localStorage';
 import { USER_TYPES } from 'utils/constants';
 import { DASHBOARD_PAGE } from 'utils/constants';
 import Requests from 'components/pages/entertainer/Requests';
+import ViewRequest from 'components/pages/entertainer/ViewRequest';
 
 const EntertainerRouter = () => {
   const { userState } = React.useContext(UserContext);
@@ -43,6 +44,7 @@ const EntertainerRouter = () => {
       <AvailableAuctions path="/available-auctions" />
       <NewBid path="/bid/:eventEntertainerId" />
       <ViewBid path="/bid/view/:applicationId" />
+      <ViewRequest path="/request/view/:applicationId" />
       <ViewEvent path="/events/view/:eventEntertainerId" />
       <Notifications path="/notifications" />
       <UpcomingEvents path="/events" />

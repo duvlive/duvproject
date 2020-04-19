@@ -57,7 +57,7 @@ export const positiveNumberValidation = (label, type = 'number') =>
     .positive(`${label} must be a positive ${type}`)
     .integer(`${label} must be a ${type}`);
 
-export const moneyRange = (label, type = 'number', min, max) =>
+export const moneyRange = (label, type = 'number', min, max = 0) =>
   yup
     .number()
     .transform((value) => (isNaN(value) ? undefined : value))
