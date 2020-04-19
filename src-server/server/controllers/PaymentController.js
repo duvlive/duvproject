@@ -1,6 +1,8 @@
 import axios from 'axios';
 import crypto from 'crypto';
+import { Notification } from '../models';
 import { validString } from '../utils';
+import { NOTIFICATIONS, NOTIFICATION_TYPE } from '../constant';
 
 const PaymentController = {
   initializeTransaction(req, res) {
@@ -37,11 +39,16 @@ const PaymentController = {
           },
         }
       )
-      .then(function (response) {
+      .then(async function (response) {
+        await Notification.create({
+          userId: req.user.id,
+          title: NOTIFICATIONS.PAYMENT_INITIATED,
+          description: `A payment of NGN ${amount} was initiated`,
+          type: NOTIFICATION_TYPE.CONTENT,
+        });
         return res.status(200).json({
           message: 'success',
           payment: response.data.data,
-          site: 'https://google.com',
         });
       })
       .catch(function (error) {
@@ -53,14 +60,13 @@ const PaymentController = {
 
   paystactEventHook(req, res) {
     const hash = crypto
-      .createHmac('sha512', secret)
+      .createHmac('sha512', 'secret')
       .update(JSON.stringify(req.body))
       .digest('hex');
     if (hash == req.headers['x-paystack-signature']) {
-      const { event } = req.body;
-      console.log({ event });
+      // const { event } = req.body;
+      // console.log({ event });
       // utilize data TODO
-
       // Retrieve the request's body
     }
     return res.send(200);

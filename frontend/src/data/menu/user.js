@@ -49,7 +49,7 @@ const others = (entertainerMenu) => ({
 
     {
       title: 'Invite Friends',
-      to: '/entertainer/invite-friends',
+      to: '/user/invite-friends',
       icon: 'invite-friend',
     },
     { ...entertainerMenu },

@@ -12,6 +12,7 @@ const INITIAL_STATE = {
   referral: '',
   profileImg: '',
   isLoggedIn: false,
+  firstTimeLogin: null,
   entertainerProfile: {
     entertainerType: null,
     approved: false,
@@ -88,6 +89,8 @@ let reducer = (state, action) => {
     case 'entertainer-profile-update':
     case 'entertainer-youtube-channel':
       return { ...state, ...action.user, isLoggedIn: true };
+    case 'user-hide-first-time-text':
+      return { ...state, ...action.user, firstTimeLogin: false };
     case 'update-user-profile-image':
     case 'user-profile-image':
       return { ...state, profileImg: action.imageURL };

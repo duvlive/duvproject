@@ -20,22 +20,22 @@ const Video = () => {
   const [message, setMessage] = useState({});
   const { userState } = React.useContext(UserContext);
 
-  const handleDelete = id => {
+  const handleDelete = (id) => {
     axios
       .delete(`/api/v1/video/delete/${id}`)
-      .then(function(response) {
+      .then(function (response) {
         const { status } = response;
         // handle success
         if (status === 202) {
-          const currentVideos = videos.filter(v => v.id !== id);
+          const currentVideos = videos.filter((v) => v.id !== id);
           setVideos(currentVideos);
           setMessage({
             type: 'danger',
-            msg: 'Video has been successfully deleted'
+            msg: 'Video has been successfully deleted',
           });
         }
       })
-      .catch(function(error) {
+      .catch(function (error) {
         setVideos([]);
       });
   };
@@ -45,7 +45,7 @@ const Video = () => {
     userState.videos && setVideos(userState.videos);
   }, [userState]);
 
-  const handleSaveVideo = newVideo => setVideos([newVideo, ...videos]);
+  const handleSaveVideo = (newVideo) => setVideos([newVideo, ...videos]);
 
   return (
     <BackEndPage title="Videos">
@@ -111,7 +111,7 @@ Video.DeleteVideoIcon.propTypes = {
   deleteVideo: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
-  youtubeImage: PropTypes.any.isRequired
+  youtubeImage: PropTypes.any.isRequired,
 };
 
 Video.YoutubeImage = ({ title, youtubeID }) => (
@@ -124,7 +124,7 @@ Video.YoutubeImage = ({ title, youtubeID }) => (
 
 Video.YoutubeImage.propTypes = {
   title: PropTypes.string.isRequired,
-  youtubeID: PropTypes.any.isRequired
+  youtubeID: PropTypes.any.isRequired,
 };
 
 Video.YoutubeOverlay = ({ title, youtubeID }) => (
@@ -137,7 +137,7 @@ Video.YoutubeOverlay = ({ title, youtubeID }) => (
 
 Video.YoutubeOverlay.propTypes = {
   title: PropTypes.string.isRequired,
-  youtubeID: PropTypes.any.isRequired
+  youtubeID: PropTypes.any.isRequired,
 };
 
 Video.Modal = ({ youtubeID, status, title, id, deleteVideo }) => {
@@ -183,7 +183,7 @@ Video.Modal.propTypes = {
   id: PropTypes.number.isRequired,
   status: PropTypes.any.isRequired,
   title: PropTypes.string.isRequired,
-  youtubeID: PropTypes.string.isRequired
+  youtubeID: PropTypes.string.isRequired,
 };
 
 const AddVideoForm = ({ afterSave, errorMessage }) => {
@@ -202,28 +202,28 @@ const AddVideoForm = ({ afterSave, errorMessage }) => {
             const payload = { title, youtubeID: match[2] };
             axios
               .post('/api/v1/video/save', payload, {
-                headers: { 'x-access-token': getTokenFromStore() }
+                headers: { 'x-access-token': getTokenFromStore() },
               })
-              .then(function(response) {
+              .then(function (response) {
                 const { status, data } = response;
                 if (status === 200) {
                   afterSave(data.video);
                   setMessage({
                     msg: 'Your video has been successfully added',
-                    type: 'success'
+                    type: 'success',
                   });
                   actions.resetForm();
                   actions.setSubmitting(false);
                 }
               })
-              .catch(function(error) {
-                setMessage(error.response.data.message);
+              .catch(function (error) {
+                setMessage({ msg: error.response.data.message });
                 actions.setSubmitting(false);
               });
           } else {
             setMessage({
               msg: 'Youtube link seems invalid. Please check and try again',
-              type: 'danger'
+              type: 'danger',
             });
             actions.setSubmitting(false);
           }
@@ -278,15 +278,15 @@ const AddVideoForm = ({ afterSave, errorMessage }) => {
 
 AddVideoForm.propTypes = {
   afterSave: PropTypes.func.isRequired,
-  errorMessage: PropTypes.object
+  errorMessage: PropTypes.object,
 };
 
 Video.defaultProps = {
-  errorMessage: {}
+  errorMessage: {},
 };
 Video.ModalCard.propTypes = {
   title: PropTypes.string.isRequired,
-  youtubeID: PropTypes.string.isRequired
+  youtubeID: PropTypes.string.isRequired,
 };
 
 export default Video;

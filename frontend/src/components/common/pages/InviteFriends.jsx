@@ -1,13 +1,18 @@
 import React from 'react';
+import axios from 'axios';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import { Formik, Form } from 'formik';
 import Input from 'components/forms/Input';
 import Select from 'components/forms/Select';
-import { personalInfoObject } from 'components/forms/schema/userSchema';
 import { createSchema } from 'components/forms/schema/schema-helpers';
-import { setInitialValues } from 'components/forms/form-helper';
+import {
+  setInitialValues,
+  DisplayFormikState,
+} from 'components/forms/form-helper';
 import Button from 'components/forms/Button';
-import { entertainerDetailsSchema } from 'components/forms/schema/entertainerSchema';
+import { referralObject } from 'components/forms/schema/userSchema';
+import { getTokenFromStore } from 'utils/localStorage';
+import AlertMessage from '../utils/AlertMessage';
 
 const InviteFriends = () => {
   return (
@@ -29,66 +34,64 @@ const InviteFriends = () => {
 };
 
 const InviteFriendsForm = () => {
+  const [message, setMessage] = React.useState({});
   return (
     <Formik
-      initialValues={{
-        entertainer: setInitialValues(entertainerDetailsSchema, {
-          available_for: [
-            { id: 1, name: 'Birthdays' },
-            { id: 2, name: 'Weddings' }
-          ]
-        }),
-        personal: setInitialValues(personalInfoObject)
-      }}
+      initialValues={setInitialValues(referralObject)}
       onSubmit={(values, actions) => {
-        setTimeout(() => {
-          actions.setSubmitting(false);
-        }, 400);
+        axios
+          .post('/api/v1/inviteFriend', values, {
+            headers: { 'x-access-token': getTokenFromStore() },
+          })
+          .then(function (response) {
+            const { status } = response;
+            if (status === 200) {
+              setMessage({
+                msg: 'An email has been sent to your friend. Thank you.',
+                type: 'success',
+              });
+              actions.resetForm();
+              actions.setSubmitting(false);
+            }
+          })
+          .catch(function (error) {
+            setMessage({ msg: error.response.data.message });
+            actions.setSubmitting(false);
+          });
       }}
       render={({ isSubmitting, handleSubmit, ...props }) => (
         <div className="card card-custom card-black card-form ">
           <div className="card-body col-md-10">
             <h4 className="card-title text-yellow">Recommend a Friend</h4>
             <Form>
-              <div className="form-row">
-                <Input
-                  formGroupClassName="col-md-6"
-                  isValidMessage="First Name looks good"
-                  label="First Name"
-                  name="personal.first_name"
-                  placeholder="First Name"
-                />
-                <Input
-                  formGroupClassName="col-md-6"
-                  isValidMessage="Last Name looks good"
-                  label="Last Name"
-                  name="personal.last_name"
-                  placeholder="Last Name"
-                />
-              </div>
+              <AlertMessage
+                message={message && message.msg}
+                type={message && message.type}
+              />
               <div className="form-row">
                 <Input
                   formGroupClassName="col-md-6"
                   isValidMessage="Email address seems valid"
                   label="Email"
-                  name="personal.email"
+                  name="email"
                   placeholder="Email Address"
                 />
                 <Select
                   blankOption="Select Relationship"
                   formGroupClassName="col-md-6"
                   label="Recommend As"
-                  name="entertainer.relationship"
+                  name="recommendAs"
                   options={[
                     { value: 'DJ' },
                     { value: 'Entertainer' },
                     { value: 'Friend' },
                     { value: 'Live Band' },
                     { value: 'MC' },
-                    { value: 'User' }
+                    { value: 'User' },
                   ]}
                 />
               </div>
+              <DisplayFormikState {...props} />
               <div className="form-row">
                 <Button
                   className="btn-danger btn-wide btn-transparent"
@@ -102,10 +105,7 @@ const InviteFriendsForm = () => {
           </div>
         </div>
       )}
-      validationSchema={createSchema({
-        entertainer: createSchema(entertainerDetailsSchema),
-        personal: createSchema(personalInfoObject)
-      })}
+      validationSchema={createSchema(referralObject)}
     />
   );
 };

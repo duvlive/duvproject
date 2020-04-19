@@ -2,8 +2,9 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import sendMail from '../MailSender';
 import EMAIL_CONTENT from '../email-template/content';
+import { USER_TYPES } from '../constant';
 
-const encryptPassword = (password) =>
+export const encryptPassword = (password) =>
   bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 
 module.exports = (sequelize, DataTypes) => {
@@ -57,7 +58,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 1,
-        validate: { isIn: [[0, 1, 2, 3]] },
+        validate: { isIn: [[0, 1, 2, 3, 999]] },
       },
       isActive: {
         type: DataTypes.BOOLEAN,
@@ -112,7 +113,7 @@ module.exports = (sequelize, DataTypes) => {
                   'Identification',
                   'ApprovalComment',
                 ].map((model) => models[model].create({ userId: user.id }));
-              if (user.type === 2) {
+              if (user.type === USER_TYPES.ENTERTAINER) {
                 return Promise.all(indentityInformation());
               }
               return Promise.resolve(null);

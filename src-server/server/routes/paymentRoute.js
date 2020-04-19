@@ -1,7 +1,7 @@
 import { PaymentController } from '../controllers';
 import Authentication from '../middleware/authentication';
 
-const paymentRoutes = router => {
+const paymentRoutes = (router) => {
   router.post(
     '/api/v1/pay',
     Authentication.verifyToken,

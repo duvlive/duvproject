@@ -182,7 +182,7 @@ Requests.defaultProps = {
   entertainerType: '',
   eventDate: '',
   eventType: '',
-  number: 0,
+  number: '0',
   profileImageURL: '',
   slug: '',
   stageName: '',

@@ -12,7 +12,7 @@ import { feedback } from 'components/forms/form-helper';
 import Button from 'components/forms/Button';
 import { loginSchema } from 'components/forms/schema/userSchema';
 import { navigate } from '@reach/router';
-import { DASHBOARD_PAGE } from 'utils/constants';
+import { DASHBOARD_PAGE, USER_TYPES } from 'utils/constants';
 import { storeToken, storeUserType } from 'utils/localStorage';
 import AlertMessage from 'components/common/utils/AlertMessage';
 import { UserContext } from 'context/UserContext';
@@ -127,11 +127,16 @@ const LoginForm = ({ sid, token }) => {
         .then(function (response) {
           const { status, data } = response;
           console.log('data', data);
+
           // handle success
           if (status === 200) {
-            userDispatch({ type: 'user-social-media-login', user: data });
-            storeToken(sid);
-            storeUserType(data.type);
+            if (data.type === USER_TYPES.unknown) {
+              navigate(`/complete-registration/${sid}`);
+            } else {
+              userDispatch({ type: 'user-social-media-login', user: data });
+              storeToken(sid);
+              storeUserType(data.type);
+            }
           }
         })
         .catch(function (error) {
@@ -144,7 +149,11 @@ const LoginForm = ({ sid, token }) => {
 
   // CHECK IF USER HAS PREVIOUSLY SIGNED IN
   useEffect(() => {
-    if (userState && userState.isLoggedIn) {
+    if (
+      userState &&
+      userState.isLoggedIn &&
+      userState.type !== USER_TYPES.unknown
+    ) {
       navigate(`/${DASHBOARD_PAGE[userState.type]}/dashboard`);
     }
   }, [userState]);

@@ -13,13 +13,13 @@ import { getEventDate, getTime, getTimeOfDay } from 'utils/date-helpers';
 import { groupEvents, userCanAddEntertainer } from 'utils/event-helpers';
 import { Link } from '@reach/router';
 import LoadItems from 'components/common/utils/LoadItems';
+import WelcomeSlides from './WelcomeSlides';
+import welcomeSlide from 'data/welcome';
 
 const Dashboard = () => {
   let { userState } = React.useContext(UserContext);
   const [entertainers, setEntertainers] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
-
-  console.log('...userState.events', userState.events);
 
   React.useEffect(() => {
     axios
@@ -40,17 +40,21 @@ const Dashboard = () => {
         setLoading(false);
       });
   }, []);
+
+  const topMessage = userState.firstTimeLogin ? 'Hello' : 'Welcome back';
+
   return (
     <BackEndPage title="Dashboard">
       <div className="main-app">
-        <TopMessage message={`Welcome back ${userState.firstName},`} />
+        <TopMessage message={`${topMessage} ${userState.firstName},`} />
+        {userState.firstTimeLogin && <WelcomeSlides items={welcomeSlide} />}
         <section className="app-content">
           <div className="row">
             <div className="col-sm-8">
               <div className="card card-custom">
                 <div className="card-body">
                   <LoadItems
-                    items={userState.events}
+                    items={userState.events || []}
                     noContent={
                       <NoContent
                         isButton
@@ -60,7 +64,7 @@ const Dashboard = () => {
                       />
                     }
                   >
-                    <Dashboard.UpcomingEvents events={userState.events} />
+                    <Dashboard.UpcomingEvents events={userState.events || []} />
                   </LoadItems>
                 </div>
               </div>
