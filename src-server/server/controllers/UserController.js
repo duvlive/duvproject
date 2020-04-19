@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import {
   ApprovalComment,
+  Badge,
   BankDetail,
   Contact,
   EntertainerProfile,
@@ -10,6 +11,8 @@ import {
   Gallery,
   Identification,
   Notification,
+  Rating,
+  Review,
   User,
   Video,
 } from '../models';
@@ -92,6 +95,18 @@ export const userAssociatedModels = [
       },
     ],
   },
+  {
+    model: Rating,
+    as: 'ratings',
+  },
+  {
+    model: Review,
+    as: 'reviews',
+  },
+  {
+    model: Badge,
+    as: 'badges',
+  },
 ];
 
 const UserController = {
@@ -114,14 +129,17 @@ const UserController = {
       referral: user.referral,
       profileImg: user.profileImageURL,
       entertainerProfile: user.profile,
+      approvalComment: user.approvalComment,
+      badges: user.badges,
       bankDetail: user.bankDetail,
       contacts: user.contacts,
+      events: user.events,
+      galleries: user.galleries,
       identification: user.identification,
       notifications: user.notifications,
-      galleries: user.galleries,
+      ratings: user.ratings,
+      reviews: user.reviews,
       videos: user.videos,
-      approvalComment: user.approvalComment,
-      events: user.events,
     };
 
     return { ...transformedUser, ...updatedValues };

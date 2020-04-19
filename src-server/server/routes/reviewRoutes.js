@@ -10,6 +10,22 @@ const reviewRoutes = (router) => {
     .get(ReviewController.getUserReviews);
 
   router.get('/api/v1/review/:id', ReviewController.getOneReview);
+
+  router.get(
+    '/api/v1/entertainer-reviews',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    Authentication.validateEntertainer,
+    ReviewController.getEntertainerReviews
+  );
+
+  router.get(
+    '/api/v1/entertainer-review/:id',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    Authentication.validateEntertainer,
+    ReviewController.getOneEntertainerReview
+  );
 };
 
 export default reviewRoutes;

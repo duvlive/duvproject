@@ -226,6 +226,26 @@ db.Rating.belongsTo(db.EntertainerProfile, {
   as: 'rated',
 });
 
+db.Event.hasOne(db.Rating, {
+  foreignKey: 'eventId',
+  as: 'eventRating',
+});
+
+db.Rating.belongsTo(db.Event, {
+  foreignKey: 'eventId',
+  as: 'ratedEvent',
+});
+
+db.Event.hasOne(db.Review, {
+  foreignKey: 'eventId',
+  as: 'eventReview',
+});
+
+db.Review.belongsTo(db.Event, {
+  foreignKey: 'eventId',
+  as: 'reviewedEvent',
+});
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 

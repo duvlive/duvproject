@@ -12,6 +12,10 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
+      eventId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
       professionalism: {
         type: DataTypes.INTEGER,
         allowNull: false,
