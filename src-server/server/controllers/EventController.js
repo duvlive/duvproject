@@ -1,5 +1,5 @@
 import Sequelize, { Op } from 'sequelize';
-import { Event } from '../models';
+import { Event, Rating } from '../models';
 import { validString } from '../utils';
 import {
   EventEntertainer,
@@ -166,6 +166,14 @@ const EventController = {
           model: User,
           as: 'owner',
           attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+        },
+        {
+          model: Rating,
+          as: 'eventRating',
+        },
+        {
+          model: Review,
+          as: 'eventReview',
         },
       ],
     })

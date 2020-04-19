@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import { User } from '../models';
 import {
   userAssociatedModels,
-  userAssociatedOrder
+  userAssociatedOrder,
 } from '../controllers/UserController';
 import { USER_TYPES } from '../constant';
 
@@ -12,7 +12,7 @@ const authentication = {
       request.headers.authorization || request.headers['x-access-token'];
     if (!token)
       return response.status(401).send({
-        message: 'Token required for this route'
+        message: 'Token required for this route',
       });
     const tokenArray = token.split(' ');
     token = tokenArray.length > 1 ? tokenArray[1] : token;
@@ -20,18 +20,18 @@ const authentication = {
       jwt.verify(token, process.env.SECRET, (error, decoded) => {
         if (error) {
           return response.status(401).send({
-            message: 'Invalid token'
+            message: 'Invalid token',
           });
         }
         request.decoded = decoded;
         User.findOne({
           where: { id: request.decoded.userId },
           include: userAssociatedModels,
-          order: userAssociatedOrder
-        }).then(user => {
+          order: userAssociatedOrder,
+        }).then((user) => {
           if (!user) {
             return response.status(401).send({
-              message: 'User not found'
+              message: 'User not found',
             });
           } else {
             request.user = user;
@@ -41,7 +41,7 @@ const authentication = {
       });
     } else {
       return response.status(401).send({
-        message: 'Token required for access'
+        message: 'Token required for access',
       });
     }
   },
@@ -54,7 +54,7 @@ const authentication = {
   generateToken(user, isLimitedExpiry = false) {
     const signData = {
       userId: user.id,
-      type: user.type
+      type: user.type,
     };
     return isLimitedExpiry
       ? jwt.sign(signData, process.env.SECRET)
@@ -72,7 +72,7 @@ const authentication = {
     return request.user.type === USER_TYPES.ADMINISTRATOR
       ? next()
       : response.status(401).send({
-          message: 'Not authorized to non-Admin'
+          message: 'Not authorized to non-Admin',
         });
   },
 
@@ -87,7 +87,7 @@ const authentication = {
     return request.user.type === USER_TYPES.ENTERTAINER
       ? next()
       : response.status(401).send({
-          message: 'Not authorized to non-entertainers'
+          message: 'Not authorized to non-entertainers',
         });
   },
 
@@ -102,7 +102,7 @@ const authentication = {
     return request.user.type === USER_TYPES.USER
       ? next()
       : response.status(401).send({
-          message: 'Not authorized to non-users'
+          message: 'Not authorized to non-users',
         });
   },
 
@@ -117,8 +117,8 @@ const authentication = {
     return request.user.isActive
       ? next()
       : response.status(403).send({
-          message: 'User needs to activate account'
+          message: 'User needs to activate account',
         });
-  }
+  },
 };
 export default authentication;

@@ -9,12 +9,31 @@ const ratingRoutes = (router) => {
     .put(RatingController.updateUserRating)
     .get(RatingController.getUserRatings);
 
-  router.get('/api/v1/rating/:id', RatingController.getOneRating);
+  router
+    .route('/api/v1/rating/:id')
+    .all(Authentication.verifyToken, Authentication.isActiveUser)
+    .get(RatingController.getOneRating);
 
   router
     .route('/api/v1/average-rating')
     .all(Authentication.verifyToken, Authentication.isActiveUser)
     .get(RatingController.getAverageEntertainerRatings);
+
+  router.get(
+    '/api/v1/entertainer-ratings',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    Authentication.validateEntertainer,
+    RatingController.getEntertainerRatings
+  );
+
+  router.get(
+    '/api/v1/entertainer-rating/:id',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    Authentication.validateEntertainer,
+    RatingController.getOneEntertainerRating
+  );
 };
 
 export default ratingRoutes;
