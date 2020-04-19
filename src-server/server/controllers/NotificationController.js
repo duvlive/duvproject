@@ -11,7 +11,8 @@ const NotificationController = {
   createNotification({ title, description, type, userId = 1 }) {
     if (!title && !description && !type && !userId) {
       return Promise.reject({
-        message: 'Notification must contain title, description, type and userId'
+        message:
+          'Notification must contain title, description, type and userId',
       });
     }
 
@@ -19,7 +20,7 @@ const NotificationController = {
       description,
       title,
       type,
-      userId
+      userId,
     });
   },
 
@@ -33,11 +34,11 @@ const NotificationController = {
     const { userId } = req.decoded;
     return Notification.findAll({
       where: { userId },
-      order: [['updatedAt', 'DESC']]
+      order: [['updatedAt', 'DESC']],
     })
-      .then(result => res.json(result))
-      .catch(error => res.status(412).json({ msg: error.message }));
-  }
+      .then((notifications) => res.json({ notifications }))
+      .catch((error) => res.status(412).json({ msg: error.message }));
+  },
 };
 
 export default NotificationController;

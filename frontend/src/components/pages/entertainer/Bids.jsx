@@ -39,10 +39,10 @@ const Bids = () => {
 
         <section className="app-content">
           <div className="table-responsive">
-            <table className="table table-dark table__no-border table__with-bg">
-              <tbody>
-                {bids.length > 0 ? (
-                  bids.map((bid, index) => (
+            {bids.length > 0 ? (
+              <table className="table table-dark table__no-border table__with-bg">
+                <tbody>
+                  {bids.map((bid, index) => (
                     <BidsRow
                       askingPrice={bid.askingPrice}
                       auctionEndDate={bid.eventEntertainerInfo.auctionEndDate}
@@ -54,17 +54,17 @@ const Bids = () => {
                       state={bid.event.state}
                       status={bid.status}
                     />
-                  ))
-                ) : (
-                  <NoContent
-                    isButton
-                    linkText="Available Auctions"
-                    linkTo="/entertainer/available-auctions"
-                    text="No Bid Found. You can check available auctions here"
-                  />
-                )}
-              </tbody>
-            </table>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <NoContent
+                isButton
+                linkText="Available Auctions"
+                linkTo="/entertainer/available-auctions"
+                text="No Bid Found. You can check available auctions here"
+              />
+            )}
             <br />
             <br />
           </div>

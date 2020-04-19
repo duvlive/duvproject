@@ -1,4 +1,4 @@
-import { UserController } from '../controllers';
+import { UserController, NotificationController } from '../controllers';
 import Authentication from '../middleware/authentication';
 import passport from 'passport';
 import GoogleStrategy from 'passport-google-oauth';
@@ -44,6 +44,12 @@ const userRoutes = (router) => {
     '/api/v1/auth/facebook/callback',
     passport.authenticate('facebook', { session: false }),
     UserController.socialLogin
+  );
+
+  router.get(
+    '/api/v1/notifications',
+    Authentication.verifyToken,
+    NotificationController.getNotifications
   );
 
   router.get('/api/v1/auth/test', UserController.socialLogin);
