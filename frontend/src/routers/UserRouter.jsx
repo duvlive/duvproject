@@ -5,7 +5,6 @@ import EmptyDashboard from 'components/pages/user/EmptyDashboard';
 import Auctions from 'components/pages/user/Auctions';
 import Requests from 'components/pages/user/Requests';
 import Events from 'components/pages/user/Events';
-import Notifications from 'components/pages/user/Notifications';
 import UserHelp from 'components/pages/user/Help';
 import Payments from 'components/pages/user/Payments';
 import ViewPayments from 'components/pages/user/ViewPayments';
@@ -15,11 +14,12 @@ import NewEvent from 'components/pages/user/NewEvent';
 import ViewEvent from 'components/pages/user/ViewEvent';
 import Bids from 'components/pages/user/Bids';
 import EditProfile from 'components/pages/user/EditProfile';
-import ChangePassword from 'components/pages/user/ChangePassword';
 import RegisterAsEntertainer from 'components/pages/user/RegisterAsEntertainer';
 import Approval from 'components/pages/user/Approval';
 import AddEntertainerToEvent from 'components/pages/user/AddEntertainerToEvent';
 import InviteFriends from 'components/common/pages/InviteFriends';
+import Notifications from 'components/common/pages/Notifications';
+import ChangePassword from 'components/common/pages/ChangePassword';
 
 const UserRouter = () => (
   <Router>

@@ -6,7 +6,6 @@ import AvailableAuctions from 'components/pages/entertainer/AvailableAuctions';
 import NewBid from 'components/pages/entertainer/NewBid';
 import ViewBid from 'components/pages/entertainer/ViewBid';
 import ViewEvent from 'components/pages/entertainer/ViewEvent';
-import Notifications from 'components/pages/entertainer/Notifications';
 import UpcomingEvents from 'components/pages/entertainer/UpcomingEvents';
 import Payments from 'components/pages/entertainer/Payments';
 import EditProfile from 'components/pages/entertainer/EditProfile';
@@ -26,6 +25,8 @@ import { USER_TYPES } from 'utils/constants';
 import { DASHBOARD_PAGE } from 'utils/constants';
 import Requests from 'components/pages/entertainer/Requests';
 import ViewRequest from 'components/pages/entertainer/ViewRequest';
+import Notifications from 'components/common/pages/Notifications';
+import ChangePassword from 'components/common/pages/ChangePassword';
 
 const EntertainerRouter = () => {
   const { userState } = React.useContext(UserContext);
@@ -60,6 +61,7 @@ const EntertainerRouter = () => {
       <AccountSetup path="/account-setup" />
       <AccountSetup path="/account-setup/:stepFromURL" />
       <InviteFriends path="/invite-friends" />
+      <ChangePassword path="/change-password" />
       <Help path="/help" />
       <Logout path="/logout" />
     </Router>

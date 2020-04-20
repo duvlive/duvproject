@@ -6,7 +6,6 @@ import EntertainersPayment from 'components/pages/administrator/EntertainersPaym
 import RegisteredUsers from 'components/pages/administrator/RegisteredUsers';
 import Auctions from 'components/pages/administrator/Auctions';
 import UsersPayment from 'components/pages/administrator/UsersPayment';
-import Notifications from 'components/pages/administrator/Notifications';
 import UpcomingEvents from 'components/pages/administrator/UpcomingEvents';
 import EditProfile from 'components/pages/administrator/EditProfile';
 import Gallery from 'components/pages/administrator/Gallery';
@@ -14,9 +13,11 @@ import Video from 'components/pages/administrator/Video';
 import Badges from 'components/pages/administrator/Badges';
 import BandMembers from 'components/pages/administrator/BandMembers';
 import Events from 'components/pages/administrator/Events';
-import InviteFriends from 'components/pages/administrator/InviteFriends';
 import Help from 'components/pages/user/Help';
 import Logout from 'components/pages/auth/Logout';
+import InviteFriends from 'components/common/pages/InviteFriends';
+import Notifications from 'components/common/pages/Notifications';
+import ChangePassword from 'components/common/pages/ChangePassword';
 
 const AdministratorRouter = () => (
   <Router>
@@ -35,6 +36,7 @@ const AdministratorRouter = () => (
     <BandMembers path="/band-members" />
     <Events path="/events" />
     <InviteFriends path="/invite-friends" />
+    <ChangePassword path="/change-password" />
     <Help path="/help" />
     <Logout path="/logout" />
   </Router>

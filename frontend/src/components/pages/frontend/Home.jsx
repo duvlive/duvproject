@@ -9,13 +9,14 @@ import noGoSpoilYourPartyList from 'data/duvSteps.js';
 import eventLists from 'data/events.js';
 import Footer from 'components/common/layout/Footer';
 import Slideshow from 'components/custom/Slideshow';
-import { SLIDESHOW_TYPE } from 'utils/constants';
+import { SLIDESHOW_TYPE, USER_TYPES, DASHBOARD_PAGE } from 'utils/constants';
 import YouTube from 'react-youtube';
 import { Link } from '@reach/router';
 import LiveYourBestLife from 'components/common/utils/LiveYourBestLife';
 import Quotes from 'components/common/utils/Quotes';
 import PlayingMusicAnimation from 'components/common/utils/PlayingMusicAnimation';
 import LoadingScreen from 'components/common/layout/LoadingScreen';
+import { getUserTypeFromStore, getTokenFromStore } from 'utils/localStorage';
 
 const Home = () => {
   const [entertainers, setEntertainers] = React.useState([]);
@@ -42,38 +43,56 @@ const Home = () => {
   );
 };
 
-const LandingSection = () => (
-  <section className="landing">
-    <div className="card bg-dark text-white">
-      <Header />
-      <div className="card-img-overlay">
-        <VideoSection />
-        <div className="card-img-overlay__conten\t">
-          <h2 className="card-title">
-            <br />
-            DJs, MCs &amp; LIVE BANDs
-          </h2>
-          <p className="card-text">
-            {' '}
-            <Link
-              className="btn btn-danger btn-lg hvr-sweep-to-right"
-              to="register/hire-entertainer"
-            >
-              Hire Entertainers
-            </Link>{' '}
-            &nbsp; &nbsp;
-            <Link
-              className="btn btn-light btn-lg hvr-sweep-to-left"
-              to="register/become-an-entertainer"
-            >
-              Become an Entertainer
-            </Link>
-          </p>
+const LandingSection = () => {
+  const userType = getUserTypeFromStore();
+  const userIsLoggedIn = !!getTokenFromStore();
+
+  console.log('Object.keys(USER_TYPES)', Object.keys(USER_TYPES));
+  return (
+    <section className="landing">
+      <div className="card bg-dark text-white">
+        <Header />
+        <div className="card-img-overlay">
+          <VideoSection />
+          <div className="card-img-overlay__content">
+            <h2 className="card-title">
+              <br />
+              DJs, MCs &amp; LIVE BANDs
+            </h2>
+            <p className="card-text">
+              <Link
+                className="btn btn-danger btn-lg hvr-sweep-to-right"
+                to={
+                  userIsLoggedIn
+                    ? 'user/hire-entertainer'
+                    : 'register/hire-entertainer'
+                }
+              >
+                Hire Entertainers
+              </Link>
+              &nbsp; &nbsp;
+              {userIsLoggedIn ? (
+                <Link
+                  className="btn btn-light btn-lg hvr-sweep-to-left"
+                  to={`/${DASHBOARD_PAGE[userType]}/dashboard`}
+                >
+                  Go to Dashboard
+                </Link>
+              ) : (
+                <Link
+                  className="btn btn-light btn-lg hvr-sweep-to-left"
+                  to="register/become-an-entertainer"
+                >
+                  Become an Entertainer
+                </Link>
+              )}
+            </p>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 const IntroSection = () => (
   <section className="intro spacer">

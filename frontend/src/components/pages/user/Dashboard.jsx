@@ -85,7 +85,6 @@ const Dashboard = () => {
 };
 
 Dashboard.UpcomingEvents = ({ events }) => {
-  console.log('events upcoimngEvents', events);
   // Sort event according - Today, Upcoming and Past
   let allEvents = groupEvents(events);
   let eventsToShow = [];

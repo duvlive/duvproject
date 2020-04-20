@@ -146,7 +146,7 @@ export const entertainerTopMenu = [
     to: '/entertainer/payments-history',
   },
   {
-    title: 'Login as User',
+    title: 'Switch to User Account',
     to: '/user/dashboard',
   },
   {
