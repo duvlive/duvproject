@@ -16,6 +16,7 @@ import { DASHBOARD_PAGE, USER_TYPES } from 'utils/constants';
 import { storeToken, storeUserType } from 'utils/localStorage';
 import AlertMessage from 'components/common/utils/AlertMessage';
 import { UserContext } from 'context/UserContext';
+import { getProxy } from 'utils/helpers';
 
 const Login = ({ token, sid }) => (
   <>
@@ -55,7 +56,7 @@ const Content = ({ sid, token }) => {
                 <p className="auth__social-media--text">or login with:</p>
                 <a
                   className="auth__social-media--icons"
-                  href="/api/v1/auth/google"
+                  href={`${getProxy()}/api/v1/auth/google`}
                 >
                   <span className="icon-google" />
                 </a>

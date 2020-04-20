@@ -271,18 +271,22 @@ ViewEvent.EventEntertainerDetailsCard = ({ eventEntertainer }) => {
 
   return (
     <ul className="list-group">
-      <li className="list-group-item">
-        <small className="small-text__with-icon">
-          <i className="icon icon-events"></i>
-          Budget
-        </small>
-        <h5 className="event-list-label">
-          {getBudgetRange(
-            sanitizedEntertainer.lowestBudget,
-            sanitizedEntertainer.highestBudget
-          )}
-        </h5>
-      </li>
+      {/* Budget */}
+      {sanitizedEntertainer.lowestBudget > 0 &&
+        sanitizedEntertainer.highestBudget > 0 && (
+          <li className="list-group-item">
+            <small className="small-text__with-icon">
+              <i className="icon icon-events"></i>
+              Budget
+            </small>
+            <h5 className="event-list-label">
+              {getBudgetRange(
+                sanitizedEntertainer.lowestBudget,
+                sanitizedEntertainer.highestBudget
+              )}
+            </h5>
+          </li>
+        )}
       {isAuction && (
         <li className="list-group-item">
           <small className="small-text__with-icon">

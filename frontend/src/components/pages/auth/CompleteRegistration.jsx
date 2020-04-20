@@ -11,10 +11,7 @@ import Button from 'components/forms/Button';
 import CheckboxGroup from 'components/forms/CheckboxGroup';
 import classNames from 'classnames';
 import { completeRegistrationObject } from 'components/forms/schema/userSchema';
-import {
-  setInitialValues,
-  DisplayFormikState,
-} from 'components/forms/form-helper';
+import { setInitialValues } from 'components/forms/form-helper';
 import { USER_TYPES } from 'utils/constants';
 import AlertMessage from 'components/common/utils/AlertMessage';
 import Card from 'components/custom/Card';
@@ -50,7 +47,7 @@ const CompleteRegistrationForm = ({ token }) => {
     </>
   );
   const handleTypeClick = (selectedType) => setUserType(selectedType);
-  let userHasCompletedRegistration;
+  // let userHasCompletedRegistration;
 
   // CHECK IF SOCIAL MEDIA LOGIN
   React.useEffect(() => {
@@ -68,7 +65,7 @@ const CompleteRegistrationForm = ({ token }) => {
               setUser(data);
               return;
             } else {
-              // navigate(`/login/${token}`);
+              navigate(`/login/${token}`);
             }
           }
         })
@@ -76,13 +73,6 @@ const CompleteRegistrationForm = ({ token }) => {
           navigate(`/register`);
         });
   }, [token]);
-
-  // CHECK IF USER HAS COMPLETED REGISTRATON
-  // React.useEffect(() => {
-  //   if (userHasCompletedRegistration) {
-  //     window.location.href = `/login/${token}`;
-  //   }
-  // }, [userHasCompletedRegistration, token]);
 
   return (
     <Formik
@@ -104,10 +94,7 @@ const CompleteRegistrationForm = ({ token }) => {
             if (status === 200) {
               console.log('status', status);
               console.log('data', data);
-              //  force refresh since we are inside a put promise
-              // window.location.href = `/login/${token}`;
               navigate(`/login/${token}`);
-              // userHasCompletedRegistration = true;
             }
           })
           .catch(function (error) {
@@ -121,16 +108,9 @@ const CompleteRegistrationForm = ({ token }) => {
           });
         actions.setSubmitting(false);
       }}
-      render={({ isSubmitting, handleSubmit, ...props }) => (
+      render={({ isSubmitting, handleSubmit }) => (
         <Form>
-          <h5 className="header font-weight-normal text-uppercase mb-1">
-            Complete your Registration
-          </h5>
-          <div className="text-red-100 small--2 mb-5">
-            NO GO SPOIL YOUR PARTY O!!!
-          </div>
-
-          <h3 className="font-weight-normal">Welcome {user.firstName},</h3>
+          <h3 className="font-weight-normal mb-4">Welcome {user.firstName},</h3>
           <AlertMessage {...message} />
           <RegistrationCardList onClick={handleTypeClick} type={userType} />
           <div className="form-row">
@@ -166,7 +146,6 @@ const CompleteRegistrationForm = ({ token }) => {
           >
             Complete Registration
           </Button>
-          <DisplayFormikState {...props} showAll />
         </Form>
       )}
       validationSchema={createSchema(completeRegistrationObject)}
@@ -222,9 +201,6 @@ const RegistrationCardList = ({ type, onClick }) => {
   };
   return (
     <Row className="row-eq-height">
-      <label className="col-sm-12" htmlFor="">
-        Select User Type
-      </label>
       {Object.keys(REGISTRATION_TYPE).map((userType) => {
         const title = REGISTRATION_TYPE[userType].text;
         const isActive = type === REGISTRATION_TYPE[userType].id;
@@ -264,10 +240,10 @@ const RegistrationCard = ({ color, title, type, isActive, onClick }) => {
       >
         <h6 className="selection__text">
           <small className="small--2">
-            {isActive && type === USER_TYPES.user && (
+            {type === USER_TYPES.user && (
               <span className="icon icon-user-circle"></span>
             )}
-            {isActive && type === USER_TYPES.entertainer && (
+            {type === USER_TYPES.entertainer && (
               <span className="icon icon-music"></span>
             )}
           </small>

@@ -10,23 +10,19 @@ import { createSchema } from 'components/forms/schema/schema-helpers';
 import { bidSchema } from 'components/forms/schema/entertainerSchema';
 import ViewEvent from '../user/ViewEvent';
 import { getTokenFromStore } from 'utils/localStorage';
-import {
-  getBudgetRange,
-  moneyFormat,
-  getPercentage,
-  getNairaSymbol
-} from 'utils/helpers';
+import { getBudgetRange } from 'utils/helpers';
 import { remainingDays } from 'utils/date-helpers';
 import { navigate } from '@reach/router';
 import InputFormat from 'components/forms/InputFormat';
-import { VAT, DEFAULT_COMMISSION } from 'utils/constants';
+import { DEFAULT_COMMISSION } from 'utils/constants';
+import PriceCalculator from 'components/common/utils/PriceCalculator';
 
 const NewBid = ({ eventEntertainerId }) => {
   const [eventEntertainer, setEventEntertainer] = React.useState({
     id: eventEntertainerId,
     lowestBudget: 0,
     highestBudget: 0,
-    event: { eventType: '', eventDate: '' }
+    event: { eventType: '', eventDate: '' },
   });
 
   React.useEffect(() => {
@@ -34,10 +30,10 @@ const NewBid = ({ eventEntertainerId }) => {
       axios
         .get(`/api/v1/eventEntertainer/${eventEntertainerId}`, {
           headers: {
-            'x-access-token': getTokenFromStore()
-          }
+            'x-access-token': getTokenFromStore(),
+          },
         })
-        .then(function(response) {
+        .then(function (response) {
           const { status, data } = response;
           console.log('data', data);
           // handle success
@@ -45,7 +41,7 @@ const NewBid = ({ eventEntertainerId }) => {
             setEventEntertainer(data.eventEntertainerInfo);
           }
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log(error.response.data.message);
           // navigate to all events
         });
@@ -87,11 +83,11 @@ const NewBid = ({ eventEntertainerId }) => {
 };
 
 NewBid.propTypes = {
-  eventEntertainerId: PropTypes.string
+  eventEntertainerId: PropTypes.string,
 };
 
 NewBid.defaultProps = {
-  eventEntertainerId: null
+  eventEntertainerId: null,
 };
 
 const BidsForm = ({ eventEntertainer }) => {
@@ -101,7 +97,7 @@ const BidsForm = ({ eventEntertainer }) => {
   React.useEffect(() => {
     axios
       .get('/api/v1/currentCommission')
-      .then(function(response) {
+      .then(function (response) {
         const { status, data } = response;
         console.log('status,data', status, data);
         // handle success
@@ -110,7 +106,7 @@ const BidsForm = ({ eventEntertainer }) => {
           console.log('data.commission: ', data.commission);
         }
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error.response.data.message);
       });
   }, []);
@@ -132,26 +128,26 @@ const BidsForm = ({ eventEntertainer }) => {
               status: 'Pending',
               askingPrice: values.askingPrice,
               eventId: eventEntertainer.eventId,
-              eventEntertainerId: eventEntertainer.id
+              eventEntertainerId: eventEntertainer.id,
             };
             console.log('payload', payload);
             axios
               .post('/api/v1/application', payload, {
-                headers: { 'x-access-token': getTokenFromStore() }
+                headers: { 'x-access-token': getTokenFromStore() },
               })
-              .then(function(response) {
+              .then(function (response) {
                 const { status, data } = response;
                 console.log('data', data);
                 if (status === 200) {
                   setMessage({
                     type: 'info',
-                    message: `Your bid has been successfully submitted.`
+                    message: `Your bid has been successfully submitted.`,
                   });
                   navigate('/entertainer/bids');
                   actions.setSubmitting(false);
                 }
               })
-              .catch(function(error) {
+              .catch(function (error) {
                 setMessage(error.response.data.message);
                 actions.setSubmitting(false);
               });
@@ -206,93 +202,11 @@ const BidsForm = ({ eventEntertainer }) => {
 
 BidsForm.propTypes = {
   eventEntertainer: PropTypes.object.isRequired,
-  values: PropTypes.object
+  values: PropTypes.object,
 };
 
 BidsForm.defaultProps = {
-  values: {}
-};
-export const PriceCalculator = ({ askingPrice, commission }) => {
-  const [showBreakdown, setShowBreakdown] = React.useState(false);
-
-  const { bidsCommission, handlingPercent, handlingPlus } = commission;
-  const calcCommission = getPercentage(bidsCommission) * askingPrice;
-  const calcVat = getPercentage(VAT) * calcCommission;
-  const handling =
-    getPercentage(handlingPercent) * askingPrice + parseInt(handlingPlus, 10);
-  const amountToPay = askingPrice - (calcCommission + calcVat + handling);
-  const entertainerFee = amountToPay > 0 ? amountToPay : 0;
-  return (
-    <>
-      <h4 className="mb-4 text-font">
-        You will be paid {getNairaSymbol()}
-        {moneyFormat(entertainerFee)}{' '}
-      </h4>
-
-      {showBreakdown ? (
-        <div className="card card-custom">
-          <div className="card-body">
-            <h5 className="card-title text-yellow">Breakdown</h5>
-            <div className="table-responsive">
-              <table className="table table-dark">
-                <tbody>
-                  <tr>
-                    <td>Your Bid</td>
-                    <td className="text-right">
-                      {getNairaSymbol()}
-                      {moneyFormat(askingPrice)}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Commission ({bidsCommission}%)</td>
-                    <td className="text-negative text-right">
-                      - {moneyFormat(calcCommission)}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      VAT ({VAT}%)
-                      <small className="small--3 d-block text-muted">
-                        From commision
-                      </small>
-                    </td>
-                    <td className="text-negative text-right">
-                      - {moneyFormat(calcVat)}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      Handling ({handlingPercent}% + N{handlingPlus})
-                    </td>
-                    <td className="text-negative text-right">
-                      - {moneyFormat(handling)}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>You will be paid</td>
-                    <td className="text-white text-right">
-                      <h6>
-                        {getNairaSymbol()}
-                        {moneyFormat(entertainerFee)}
-                      </h6>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <div className="text-link mb-4" onClick={() => setShowBreakdown(true)}>
-          See Breakdown
-        </div>
-      )}
-    </>
-  );
+  values: {},
 };
 
-PriceCalculator.propTypes = {
-  askingPrice: PropTypes.number.isRequired,
-  commission: PropTypes.object.isRequired
-};
 export default NewBid;

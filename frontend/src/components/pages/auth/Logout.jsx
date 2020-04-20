@@ -8,11 +8,12 @@ const Logout = () => {
   const { userDispatch } = React.useContext(UserContext);
 
   useEffect(() => {
+    console.log('useEffect is called');
     store(false);
     userDispatch({ type: 'user-logout' });
     navigate('/');
-    window.location.href = '/';
-  });
+    // window.location.href = '/';
+  }, [userDispatch]);
 
   return (
     <BackEndPage title="Log Out">

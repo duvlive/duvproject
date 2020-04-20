@@ -53,3 +53,9 @@
     }
   }
 }
+
+.dropdown-item.active,
+.dropdown-item:active {
+  color: $red;
+  background-color: transparent;
+}

@@ -14,7 +14,7 @@ import {
 } from './schema-helpers';
 import { commaNumber } from 'utils/helpers';
 import { isAfter } from 'date-fns';
-import { HIRE_ENTERTAINERS_TYPE } from 'utils/constants';
+import { HIRE_ENTERTAINERS_TYPE, REQUEST_ACTION } from 'utils/constants';
 
 /////////////////////////
 // Schema
@@ -131,11 +131,26 @@ export const bidSchema = (minAuctionPrice = 0, maxAuctionPrice = 0) => {
     askingPrice: positiveNumberValidation('Your Bid')
       .min(
         minAuctionPrice,
-        `Your bid must be more than ${commaNumber(minAuctionPrice)}`
+        `Your bid must be more than NGN ${commaNumber(minAuctionPrice)}`
       )
       .max(
         maxAuctionPrice,
-        `Your bid must be less than ${commaNumber(maxAuctionPrice)}`
+        `Your bid must be less than NGN ${commaNumber(maxAuctionPrice)}`
       ),
   };
+};
+
+export const requestSchema = (activeType, askingPrice = 0) => {
+  let schema = {
+    rejectionReason: optionalValidation(stringValidation('Reason')),
+  };
+
+  if (activeType === REQUEST_ACTION.INCREMENT) {
+    schema['proposedPrice'] = moneyRange(
+      'Your Proposed Fee',
+      'number',
+      askingPrice
+    );
+  }
+  return schema;
 };

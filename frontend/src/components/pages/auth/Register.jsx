@@ -12,37 +12,38 @@ import Button from 'components/forms/Button';
 import CheckboxGroup from 'components/forms/CheckboxGroup';
 import {
   registerSchema,
-  registerObject
+  registerObject,
 } from 'components/forms/schema/userSchema';
 import {
   setInitialValues,
-  DisplayFormikState
+  DisplayFormikState,
 } from 'components/forms/form-helper';
 import { USER_TYPES } from 'utils/constants';
 import AlertMessage from 'components/common/utils/AlertMessage';
+import { getProxy } from 'utils/helpers';
 
 const registrationType = {
   'become-an-entertainer': {
     subtitle: 'MC, DJ OR OWN A LIVE BAND?',
-    text: 'Become an Entertainer'
+    text: 'Become an Entertainer',
   },
   entertainer: {
     id: USER_TYPES.entertainer,
     subtitle: 'MC, DJ OR OWN A LIVE BAND?',
-    text: 'Register as an Entertainer'
+    text: 'Register as an Entertainer',
   },
   'hire-entertainer': {
     subtitle: 'NO GO SPOIL YOUR PARTY O!!!',
-    text: 'Hire an entertainer'
+    text: 'Hire an entertainer',
   },
   user: {
     id: USER_TYPES.user,
     subtitle: 'NO GO SPOIL YOUR PARTY O!!!',
-    text: 'Register as a User'
-  }
+    text: 'Register as a User',
+  },
 };
 const allowedTypes = Object.keys(registrationType);
-const showRegistrationPage = type => {
+const showRegistrationPage = (type) => {
   return allowedTypes.includes(type);
 };
 
@@ -61,11 +62,11 @@ const Register = ({ type }) => (
 );
 
 Register.propTypes = {
-  type: PropTypes.oneOf(allowedTypes)
+  type: PropTypes.oneOf(allowedTypes),
 };
 
 Register.defaultProps = {
-  type: null
+  type: null,
 };
 
 const RegisterForm = ({ type }) => {
@@ -85,22 +86,22 @@ const RegisterForm = ({ type }) => {
         values.type = registrationType[type].id;
         axios
           .post('/api/v1/users', values)
-          .then(function(response) {
+          .then(function (response) {
             const { status } = response;
             if (status === 200) {
               setMessage({
                 type: 'success',
-                message: `Your registration is successful. Kindly confirm your email by clicking on the confirmation link`
+                message: `Your registration is successful. Kindly confirm your email by clicking on the confirmation link`,
               });
               actions.resetForm();
             }
           })
-          .catch(function(error) {
+          .catch(function (error) {
             setMessage({
               message: error.response.data.message,
               lists:
                 error.response.data.errors &&
-                Object.values(error.response.data.errors)
+                Object.values(error.response.data.errors),
             });
           });
         actions.setSubmitting(false);
@@ -116,12 +117,12 @@ const RegisterForm = ({ type }) => {
 
           <section className="auth__social-media text-center">
             <p className="auth__social-media--text">Register with:</p>
-            <Link
+            <a
               className="auth__social-media--icons"
-              to="/api/v1/auth/google"
+              href={`${getProxy()}/api/v1/auth/google`}
             >
               <span className="icon-google" />
-            </Link>
+            </a>
             <Link
               className="auth__social-media--icons"
               to="/api/v1/auth/facebook"
@@ -206,11 +207,11 @@ const RegisterForm = ({ type }) => {
 };
 
 RegisterForm.propTypes = {
-  type: PropTypes.oneOf(allowedTypes)
+  type: PropTypes.oneOf(allowedTypes),
 };
 
 RegisterForm.defaultProps = {
-  type: null
+  type: null,
 };
 
 const Content = ({ type }) => (
@@ -239,11 +240,11 @@ const Content = ({ type }) => (
 );
 
 Content.propTypes = {
-  type: PropTypes.oneOf(allowedTypes)
+  type: PropTypes.oneOf(allowedTypes),
 };
 
 Content.defaultProps = {
-  type: null
+  type: null,
 };
 
 export default Register;

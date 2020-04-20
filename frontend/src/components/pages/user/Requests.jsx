@@ -11,6 +11,7 @@ import { getShortDate } from 'utils/date-helpers';
 import { moneyFormat } from 'utils/helpers';
 import NoContent from 'components/common/utils/NoContent';
 import Image from 'components/common/utils/Image';
+import { REQUEST_ACTION } from 'utils/constants';
 
 const Requests = () => {
   const [requests, setRequests] = React.useState([]);
@@ -92,6 +93,7 @@ const RequestsTable = ({ requests }) => (
             key={index}
             number={index + 1}
             profileImageURL={request.user.profileImageURL}
+            proposedPrice={request.proposedPrice}
             slug={request.user.profile.slug}
             stageName={request.user.profile.stageName}
             status={request.status}
@@ -113,6 +115,7 @@ const RequestsRow = ({
   eventType,
   number,
   profileImageURL,
+  proposedPrice,
   slug,
   stageName,
   status,
@@ -136,18 +139,33 @@ const RequestsRow = ({
       <span className="text-muted small--4">Type</span>
       {entertainerType}
     </td>
-    <td className="align-middle text-yellow">
-      <span className="text-muted small--4">Your Offer</span> &#8358;{' '}
-      {moneyFormat(askingPrice)}
-    </td>
+    {status === REQUEST_ACTION.INCREMENT ? (
+      <td className="align-middle text-white">
+        <span className="text-muted small--4">Your Offer</span> &#8358;{' '}
+        <strike>{moneyFormat(askingPrice)}</strike>
+      </td>
+    ) : (
+      <td className="align-middle text-yellow">
+        <span className="text-muted small--4">Your Offer</span> &#8358;{' '}
+        {moneyFormat(askingPrice)}
+      </td>
+    )}
+    {status === REQUEST_ACTION.INCREMENT && (
+      <td className="align-middle text-yellow">
+        <span className="text-muted small--4">Proposed Offer</span> &#8358;{' '}
+        {moneyFormat(proposedPrice)}
+      </td>
+    )}
     <td className="align-middle">
       <span className="text-muted small--4">{eventType}</span>
       {getShortDate(eventDate)}
     </td>
-    <td className="align-middle">
-      <span className="text-muted small--4">Status</span>
-      {status}
-    </td>
+    {status !== REQUEST_ACTION.INCREMENT && (
+      <td className="align-middle">
+        <span className="text-muted small--4">Status</span>
+        {status}
+      </td>
+    )}
     <td>
       <a
         className="btn btn-info btn-sm btn-transparent"
@@ -155,22 +173,30 @@ const RequestsRow = ({
         rel="noopener noreferrer"
         target="_blank"
       >
-        Profile
+        View Profile
       </a>
-      &nbsp;&nbsp;&nbsp;&nbsp;
-      <button className="btn btn-danger btn-sm btn-transparent">Pay</button>
+      {(status === REQUEST_ACTION.APPROVED ||
+        status === REQUEST_ACTION.INCREMENT) && (
+        <>
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <button className="btn btn-danger btn-sm btn-transparent">
+            Pay Now
+          </button>
+        </>
+      )}
     </td>
   </tr>
 );
 
 RequestsRow.propTypes = {
   askingPrice: PropTypes.string,
-  entertainerId: PropTypes.string,
+  entertainerId: PropTypes.number,
   entertainerType: PropTypes.string,
   eventDate: PropTypes.string,
   eventType: PropTypes.string,
   number: PropTypes.number,
   profileImageURL: PropTypes.string,
+  proposedPrice: PropTypes.string,
   slug: PropTypes.string,
   stageName: PropTypes.string,
   status: PropTypes.string,
@@ -178,12 +204,13 @@ RequestsRow.propTypes = {
 
 Requests.defaultProps = {
   askingPrice: '',
-  entertainerId: '',
+  entertainerId: 0,
   entertainerType: '',
   eventDate: '',
   eventType: '',
-  number: '0',
+  number: 0,
   profileImageURL: '',
+  proposedPrice: '',
   slug: '',
   stageName: '',
   status: '',

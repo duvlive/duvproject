@@ -286,9 +286,8 @@ const UserController = {
       where: { email },
     })
       .then(async (result) => {
-        let user = (result && result.dataValues) || null;
         if (!result) {
-          user = await User.create({
+          const user = await User.create({
             firstName,
             lastName,
             email,
@@ -302,10 +301,13 @@ const UserController = {
           const token = Authentication.generateToken(user);
           res.redirect(`${process.env.HOST}/complete-registration/${token}`);
         } else {
-          if (user.firstTimeLogin) {
-            user.update({ firstTimeLogin: false });
+          if (result.firstTimeLogin) {
+            await User.update(
+              { firstTimeLogin: false },
+              { where: { email: result.email } }
+            );
           }
-          const token = Authentication.generateToken(user);
+          const token = Authentication.generateToken(result);
           res.redirect(`${process.env.HOST}/login/${token}`);
         }
       })

@@ -9,7 +9,7 @@ import {
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
-  DropdownItem
+  DropdownItem,
 } from 'reactstrap';
 import { Link } from '@reach/router';
 import { userTopMenu } from 'data/menu/user';
@@ -17,7 +17,7 @@ import { entertainerTopMenu } from 'data/menu/entertainer';
 import { bandMemberTopMenu } from 'data/menu/band-member';
 import { administratorTopMenu } from 'data/menu/administrator';
 import LiveYourBestLife from '../utils/LiveYourBestLife';
-import { USER_TYPES } from 'utils/constants';
+import { USER_TYPES, DASHBOARD_PAGE } from 'utils/constants';
 import { UserContext } from 'context/UserContext';
 import ProfileAvatar from 'assets/img/avatar/profile.png';
 import { getUserTypeFromStore } from 'utils/localStorage';
@@ -27,7 +27,7 @@ const TOP_MENU = {
   [USER_TYPES.user]: userTopMenu,
   [USER_TYPES.entertainer]: entertainerTopMenu,
   [USER_TYPES.admin]: administratorTopMenu,
-  [USER_TYPES.bandMember]: bandMemberTopMenu
+  [USER_TYPES.bandMember]: bandMemberTopMenu,
 };
 
 const TopBar = ({ showSidebar }) => {
@@ -52,7 +52,7 @@ const TopBar = ({ showSidebar }) => {
               <NavLink
                 className="topbar__notification d-none d-sm-block"
                 tag={Link}
-                to="/user/notifications"
+                to={`/${DASHBOARD_PAGE[userState.type]}/notifications`}
               >
                 <i className="icon icon-notification" />
                 <span className="dot" />
@@ -68,7 +68,7 @@ const TopBar = ({ showSidebar }) => {
 };
 
 TopBar.propTypes = {
-  showSidebar: PropTypes.func.isRequired
+  showSidebar: PropTypes.func.isRequired,
 };
 
 const TopBarNavigation = ({ menus }) => {
@@ -79,7 +79,7 @@ const TopBarNavigation = ({ menus }) => {
     stageName:
       userState.entertainerProfile && userState.entertainerProfile.stageName
         ? userState.entertainerProfile.stageName
-        : null
+        : null,
   });
 
   const topMenu = menus.map(({ title, to }) => (
@@ -117,7 +117,7 @@ const TopBarNavigation = ({ menus }) => {
 };
 
 TopBarNavigation.propTypes = {
-  menus: PropTypes.array.isRequired
+  menus: PropTypes.array.isRequired,
 };
 
 export default TopBar;

@@ -93,11 +93,14 @@ const Footer = ({ className }) => (
 
 const getSocialMediaIcons = () => {
   const links = [
-    { name: 'facebook', link: 'http://www.facebook.com' },
-    { name: 'twitter', link: 'http://www.twitter.com' },
-    { name: 'linkedin', link: 'http://www.linkedin.com' },
-    { name: 'youtube', link: 'http://www.youtube.com' },
-    { name: 'instagram', link: 'http://www.instagram.com' }
+    { name: 'facebook', link: 'https://facebook.com/duvlive/' },
+    { name: 'twitter', link: 'https://twitter.com/duvlive' },
+    { name: 'linkedin', link: 'https://www.linkedin.com/company/duvlive' },
+    {
+      name: 'youtube',
+      link: 'https://www.youtube.com/channel/UCvEdDwBhWpWd3aoOgKBafBQ',
+    },
+    { name: 'instagram', link: 'https://www.instagram.com/duvlive/?hl=en' },
   ];
   return links.map(({ name, link }) => (
     <li key={name}>
@@ -109,10 +112,10 @@ const getSocialMediaIcons = () => {
 };
 
 Footer.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 Footer.defaultProps = {
-  className: ''
+  className: '',
 };
 
 export default Footer;

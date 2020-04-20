@@ -123,3 +123,9 @@ export const countOccurences = (arr) => {
 
 export const getPercentage = (value) => parseFloat(value) / 100;
 export const getNairaSymbol = () => <>&#8358;</>;
+
+export const isDevEnvironment = () =>
+  !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
+
+export const getProxy = () =>
+  isDevEnvironment() ? 'http://localhost:8080' : '';
