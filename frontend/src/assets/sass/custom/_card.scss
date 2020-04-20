@@ -320,11 +320,11 @@
   &.card-green {
     background: rgba($green-300, 0.1);
     &:hover {
-      background: rgba($green-400, 0.3);
+      background: rgba($green-400, 0.2);
     }
     &.isActive,
     &.isActive:hover {
-      background: rgba($green-300, 0.5);
+      background: rgba($green-300, 0.4);
       opacity: 1;
     }
   }

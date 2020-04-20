@@ -20,6 +20,7 @@ import {
 } from 'components/forms/form-helper';
 import { USER_TYPES } from 'utils/constants';
 import AlertMessage from 'components/common/utils/AlertMessage';
+import { getProxy } from 'utils/helpers';
 
 const registrationType = {
   'become-an-entertainer': {
@@ -118,7 +119,7 @@ const RegisterForm = ({ type }) => {
             <p className="auth__social-media--text">Register with:</p>
             <a
               className="auth__social-media--icons"
-              href="http://localhost:8080/api/v1/auth/google"
+              href={`${getProxy()}/api/v1/auth/google`}
             >
               <span className="icon-google" />
             </a>
