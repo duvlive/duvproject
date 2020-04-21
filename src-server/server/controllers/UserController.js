@@ -22,7 +22,6 @@ import { USER_TYPES, NOTIFICATIONS, NOTIFICATION_TYPE } from '../constant';
 export const userAssociatedOrder = [
   // ...we use the same syntax from the include
   // in the beginning of the order array
-  [{ model: Notification, as: 'notifications' }, 'updatedAt', 'DESC'],
   [{ model: Event, as: 'events' }, 'eventDate', 'ASC'],
 ];
 
@@ -63,10 +62,6 @@ export const userAssociatedModels = [
   {
     model: Identification,
     as: 'identification',
-  },
-  {
-    model: Notification,
-    as: 'notifications',
   },
   {
     model: Event,
@@ -739,9 +734,9 @@ const UserController = {
    */
   async inviteFriend(req, res) {
     const { email, recommendAs } = req.body;
+
     const errors = {
       ...UserValidation.emailValidation(email),
-      ...UserValidation.stringValidation(recommendAs),
     };
 
     if (Object.keys(errors).length) {
@@ -752,7 +747,9 @@ const UserController = {
 
     try {
       const link = `${process.env.HOST}`;
-      const contentBottom = `You have been recommended as a ${recommendAs}. Live your best Life today and let your dreams come true.`;
+      const contentBottom = `You have been recommended as a ${
+        recommendAs || 'Friend'
+      }. Live your best Life today and let your dreams come true.`;
       await sendMail(
         EMAIL_CONTENT.INVITE_FRIEND,
         { email },

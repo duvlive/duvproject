@@ -50,6 +50,13 @@ const applicationRoutes = (router) => {
     Authentication.isActiveUser,
     ApplicationController.processRequestApplication
   );
+
+  router.get(
+    '/api/v1/applications/dashboard/user',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    ApplicationController.getApplicationsForUserDashboard
+  );
 };
 
 export default applicationRoutes;

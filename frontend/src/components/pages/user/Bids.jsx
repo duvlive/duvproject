@@ -227,7 +227,6 @@ BidsApplicationsTable.propTypes = {
 };
 
 const BidsApplicationsTableRow = ({ application, number }) => {
-  console.log('application', application);
   if (!application && !application.user && !application.user.profile) {
     return null;
   }

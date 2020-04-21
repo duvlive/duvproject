@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import LoadingScreen from '../layout/LoadingScreen';
 
 const LoadItems = ({ items, children, loadingText, noContent }) => {
+  console.log('items', items);
   if (items == null) {
     return <LoadingScreen text={loadingText} />;
   }
