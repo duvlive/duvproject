@@ -6,7 +6,7 @@ $transparent-btn-colors: (
   'warning': $warning,
   'danger': $red-400,
   'light': $light,
-  'dark': $dark
+  'dark': $dark,
 );
 
 @each $name, $code in $transparent-btn-colors {

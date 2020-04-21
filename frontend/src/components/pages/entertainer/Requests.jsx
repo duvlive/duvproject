@@ -99,7 +99,7 @@ const RequestsRow = ({
       </span>
     </td>
     <td>
-      <span className="text-yellow">Reaquest closes on </span>
+      <span className="text-yellow">Request closes on </span>
       <span>
         <i className="icon icon-clock" /> {remainingDays(expiryDate)}
       </span>

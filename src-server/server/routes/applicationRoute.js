@@ -6,7 +6,6 @@ const applicationRoutes = (router) => {
     '/api/v1/applications/:id',
     Authentication.verifyToken,
     Authentication.isActiveUser,
-    Authentication.validateEntertainer,
     ApplicationController.getOneApplication
   );
 

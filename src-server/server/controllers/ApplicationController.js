@@ -485,7 +485,6 @@ const ApplicationController = {
 
   getOneApplication(req, res) {
     const id = req.params.id;
-    const userId = req.user.id;
 
     if (!id) {
       return res.status(404).json({
@@ -494,7 +493,7 @@ const ApplicationController = {
     }
 
     Application.findOne({
-      where: { id, userId },
+      where: { id },
       include: [
         {
           model: EventEntertainer,
@@ -514,6 +513,17 @@ const ApplicationController = {
         {
           model: Commission,
           as: 'commission',
+        },
+        {
+          model: User,
+          as: 'user',
+          attributes: ['id', 'email', 'profileImageURL'],
+          include: [
+            {
+              model: EntertainerProfile,
+              as: 'profile',
+            },
+          ],
         },
       ],
     })

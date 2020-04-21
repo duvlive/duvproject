@@ -17,6 +17,7 @@ import EditProfile from 'components/pages/user/EditProfile';
 import RegisterAsEntertainer from 'components/pages/user/RegisterAsEntertainer';
 import Approval from 'components/pages/user/Approval';
 import AddEntertainerToEvent from 'components/pages/user/AddEntertainerToEvent';
+import ViewRequest from 'components/pages/user/ViewRequest';
 import InviteFriends from 'components/common/pages/InviteFriends';
 import Notifications from 'components/common/pages/Notifications';
 import ChangePassword from 'components/common/pages/ChangePassword';
@@ -27,6 +28,7 @@ const UserRouter = () => (
     <Auctions path="/auctions" />
     <Auctions path="/auctions/status/:message" />
     <Requests path="/requests" />
+    <ViewRequest path="/request/view/:applicationId" />
     <Events path="/events" />
     <Notifications path="/notifications" />
     <UserHelp path="/help" />
