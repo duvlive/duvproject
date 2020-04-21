@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import * as queryString from 'query-string';
-import BackEndPage from 'components/common/layout/BackEndPage';
 import { getTokenFromStore } from 'utils/localStorage';
 import LoadingScreen from 'components/common/layout/LoadingScreen';
 import AlertMessage from 'components/common/utils/AlertMessage';
+import FrontEndPage from 'components/common/layout/FrontEndPage';
 import Invoice from 'components/common/utils/Invoice';
 
 const ViewPayments = (props) => {
@@ -24,8 +24,9 @@ const ViewPayments = (props) => {
         // handle success
         if (status === 200) {
           axios
-            .get(
-              `/api/v1/applications/${data.payment.metadata.custom_fields[0].value}`,
+            .post(
+              `/api/v1/applications/approve/${data.payment.metadata.custom_fields[0].value}`,
+              {},
               {
                 headers: {
                   'x-access-token': getTokenFromStore(),
@@ -37,6 +38,11 @@ const ViewPayments = (props) => {
               console.log('data', data);
               // handle success
               if (status === 200) {
+                console.log('data.payment', data.payment);
+                setMessage({
+                  msg: 'Your payment was successfull',
+                  type: 'success',
+                });
                 setPaymentInfo(data.payment);
                 setApplication(response.data.application);
                 setLoading(false);
@@ -58,10 +64,10 @@ const ViewPayments = (props) => {
   }, [reference]);
 
   return (
-    <BackEndPage title="Payment Receipt">
+    <FrontEndPage title="Payment">
       <div className="main-app">
-        <section className="app-content">
-          <section className="payments">
+        <section className="container">
+          <section className="col-md-10 offset-md-1">
             <LoadingScreen loading={loading} text="Generating your Receipt">
               {!loading && (
                 <>
@@ -78,7 +84,7 @@ const ViewPayments = (props) => {
           </section>
         </section>
       </div>
-    </BackEndPage>
+    </FrontEndPage>
   );
 };
 

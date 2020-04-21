@@ -1,7 +1,6 @@
 import React from 'react';
 import { Router } from '@reach/router';
 import Dashboard from 'components/pages/user/Dashboard';
-import EmptyDashboard from 'components/pages/user/EmptyDashboard';
 import Auctions from 'components/pages/user/Auctions';
 import Requests from 'components/pages/user/Requests';
 import Events from 'components/pages/user/Events';
@@ -48,7 +47,7 @@ const UserRouter = () => (
     <EditProfile path="/edit-profile" />
     <ChangePassword path="/change-password" />
     <RegisterAsEntertainer path="/register-as-entertainer" />
-    <EmptyDashboard default />
+    <Dashboard default />
   </Router>
 );
 

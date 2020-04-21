@@ -161,7 +161,7 @@ const RequestsRow = ({
       </a>
       &nbsp;&nbsp;&nbsp;&nbsp;
       <Link
-        className="btn btn-success btn-sm btn-transparent"
+        className="btn btn-danger btn-sm btn-transparent"
         to={`/user/request/view/${applicationId}`}
       >
         View Request

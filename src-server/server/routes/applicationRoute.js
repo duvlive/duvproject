@@ -37,13 +37,6 @@ const applicationRoutes = (router) => {
     .get(ApplicationController.getEntertainerApplications);
 
   router.post(
-    '/api/v1/applications/approve/:applicationId',
-    Authentication.verifyToken,
-    Authentication.isActiveUser,
-    ApplicationController.approveAuctionsApplication
-  );
-
-  router.post(
     '/api/v1/applications/process-request/:applicationId',
     Authentication.verifyToken,
     Authentication.isActiveUser,
@@ -55,6 +48,14 @@ const applicationRoutes = (router) => {
     Authentication.verifyToken,
     Authentication.isActiveUser,
     ApplicationController.getApplicationsForUserDashboard
+  );
+
+  // this is called after payment
+  // it is not protected to ensure that it is proccessed
+  // even if a user is not logged in
+  router.post(
+    '/api/v1/applications/approve/:applicationId',
+    ApplicationController.approveApplication
   );
 };
 

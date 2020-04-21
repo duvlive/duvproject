@@ -11,15 +11,72 @@ import {
   getNairaSymbol,
   commaNumber,
   getRequestStatusIcon,
+  moneyFormat,
 } from 'utils/helpers';
 import LoadingScreen from 'components/common/layout/LoadingScreen';
 import Image from 'components/common/utils/Image';
 import { REQUEST_ACTION } from 'utils/constants';
+import DuvLiveModal from 'components/custom/Modal';
 
 const ViewRequest = ({ applicationId }) => {
   const [message, setMessage] = React.useState({ msg: null, type: 'error' });
   const [application, setApplication] = React.useState(null);
   const [loadingPage, setLoadingPage] = React.useState(true);
+
+  const approveApplication = (amount) => {
+    axios
+      .post(
+        `/api/v1/pay`,
+        {
+          amount,
+          applicationId,
+        },
+        {
+          headers: {
+            'x-access-token': getTokenFromStore(),
+          },
+        }
+      )
+      .then(function (response) {
+        const { status, data } = response;
+        // handle success
+        if (status === 200) {
+          window.location.href = data.payment.authorization_url;
+        }
+      })
+      .catch(function (error) {
+        console.log(error.response.data.message);
+        setMessage({ messagr: error.response.data.message });
+        // TODO: ADD ERROR ALERT HERE
+      });
+  };
+
+  const approveBidModalBody = () => (
+    <>
+      <div className="text-center">
+        <Image
+          className="avatar--large"
+          name={application.user.profile.stageName || 'No name'}
+          responsiveImage={false}
+          src={application.user.profileImageURL || 'No src'}
+        />
+        <h4 className="font-weight-normal mt-3">
+          {application.user.profile.stageName}
+        </h4>
+        <h5 className="text-yellow mt-3 mb-4">
+          &#8358; {moneyFormat(application.askingPrice)}
+        </h5>
+      </div>
+      <div className="small--2">
+        <h6 className="text-white">Note</h6>
+        Approving this bid will inform the entertainer that they have won the
+        bid and should be prepared to perform in this event. However, their
+        attendance can only be confirmed by paying the assigned bid at lease 2
+        days (48 hours) before the event date, else the contract will be
+        terminated.
+      </div>
+    </>
+  );
 
   React.useEffect(() => {
     applicationId &&
@@ -68,6 +125,15 @@ const ViewRequest = ({ applicationId }) => {
                   {remainingDays(eventEntertainer.event.eventDate)}
                 </small>
               </h3>
+
+              {application.eventEntertainerInfo.hiredEntertainer && (
+                <div className="mt-3 text-left">
+                  <AlertMessage
+                    message="An entertainer has been hired for this details"
+                    type="info"
+                  />
+                </div>
+              )}
             </div>
             <div className="col-sm-6">
               <div className="card card-custom card-black card-form">
@@ -127,14 +193,25 @@ const ViewRequest = ({ applicationId }) => {
                       </a>
 
                       {(application.status === REQUEST_ACTION.APPROVED ||
-                        application.status === REQUEST_ACTION.INCREMENT) && (
-                        <>
-                          &nbsp;&nbsp;&nbsp;&nbsp;
-                          <button className="btn btn-danger btn-transparent">
-                            Pay Now
-                          </button>
-                        </>
-                      )}
+                        application.status === REQUEST_ACTION.INCREMENT) &&
+                        !application.eventEntertainerInfo.hiredEntertainer && (
+                          <>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <DuvLiveModal
+                              actionFn={() =>
+                                approveApplication(application.askingPrice)
+                              }
+                              actionText="Approve Bid"
+                              body={approveBidModalBody()}
+                              closeModalText="Cancel"
+                              title="Approve Bid"
+                            >
+                              <button className="btn btn-danger btn-transparent">
+                                Pay Now
+                              </button>
+                            </DuvLiveModal>
+                          </>
+                        )}
                     </div>
                   </section>
                 </div>

@@ -546,7 +546,7 @@ const ApplicationController = {
    * @param {object} res is res object
    * @return {object} returns res object
    */
-  approveAuctionsApplication(req, res) {
+  approveApplication(req, res) {
     // const currentDate = Date.now();
     const id = req.params.applicationId;
 
@@ -608,33 +608,21 @@ const ApplicationController = {
         }
 
         // application has previously been approved
-        if (application.status === 'Approved') {
+        if (application.status === 'Paid') {
           return res.status(200).json({
             application,
-            message: 'This application has already been approved',
-          });
-        }
-
-        // can only approve applications without hiredEntertainer
-        if (application.eventEntertainerInfo.hiredEntertainer) {
-          return res.status(400).json({
-            message: 'You have hired an entertainer for this request.',
-          });
-        }
-
-        // for Auctions, only owners of events can approve an application
-        if (
-          application.eventEntertainerInfo.hireType === 'Auction' &&
-          application.eventEntertainerInfo.userId !== req.user.id
-        ) {
-          return res.status(401).json({
-            message: 'Only event owners can approve a bid application',
+            message: 'This application has already been marked as paid',
           });
         }
 
         // updated approved application
         return Application.update(
-          { status: 'Approved', approvedDate: currentDate },
+          {
+            status: 'Paid',
+            approvedDate: currentDate,
+            paid: true,
+            paidOn: Date.now(),
+          },
           {
             where: {
               id,
@@ -673,6 +661,13 @@ const ApplicationController = {
                 userId: application.user.profile.id,
                 title: NOTIFICATIONS.BID_APPROVED,
                 description: `Your bid NGN (${EMAIL_PARAMS.askingPrice}) for ${EMAIL_PARAMS.eventType} has been approved`,
+                type: NOTIFICATION_TYPE.SUCCESS,
+                actionId: id, //application id
+              });
+              await Notification.create({
+                userId: application.eventEntertainerInfo.event.userId,
+                title: NOTIFICATIONS.PAYMENT_SUCCESSFUL,
+                description: `Your initiated payment was successful.`,
                 type: NOTIFICATION_TYPE.SUCCESS,
                 actionId: id, //application id
               });
