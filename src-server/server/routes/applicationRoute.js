@@ -6,7 +6,6 @@ const applicationRoutes = (router) => {
     '/api/v1/applications/:id',
     Authentication.verifyToken,
     Authentication.isActiveUser,
-    Authentication.validateEntertainer,
     ApplicationController.getOneApplication
   );
 
@@ -49,6 +48,13 @@ const applicationRoutes = (router) => {
     Authentication.verifyToken,
     Authentication.isActiveUser,
     ApplicationController.processRequestApplication
+  );
+
+  router.get(
+    '/api/v1/applications/dashboard/user',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    ApplicationController.getApplicationsForUserDashboard
   );
 };
 

@@ -8,17 +8,22 @@ import { UserContext } from 'context/UserContext';
 import NoContent from 'components/common/utils/NoContent';
 import { getTokenFromStore } from 'utils/localStorage';
 import LoadingScreen from 'components/common/layout/LoadingScreen';
-import { twoDigitNumber } from 'utils/helpers';
+import { twoDigitNumber, moneyFormat } from 'utils/helpers';
 import { getEventDate, getTime, getTimeOfDay } from 'utils/date-helpers';
 import { groupEvents, userCanAddEntertainer } from 'utils/event-helpers';
 import { Link } from '@reach/router';
 import LoadItems from 'components/common/utils/LoadItems';
 import WelcomeSlides from './WelcomeSlides';
 import welcomeSlide from 'data/welcome';
+import { InviteFriendsForm } from 'components/common/pages/InviteFriends';
 
 const Dashboard = () => {
   let { userState } = React.useContext(UserContext);
   const [entertainers, setEntertainers] = React.useState([]);
+  const [applications, setApplications] = React.useState({
+    requests: null,
+    bids: null,
+  });
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
@@ -41,7 +46,27 @@ const Dashboard = () => {
       });
   }, []);
 
+  React.useEffect(() => {
+    axios
+      .get(`/api/v1/applications/dashboard/user`, {
+        headers: {
+          'x-access-token': getTokenFromStore(),
+        },
+      })
+      .then(function (response) {
+        const { status, data } = response;
+        // handle success
+        if (status === 200) {
+          setApplications(data.results);
+        }
+      })
+      .catch(function (error) {
+        setApplications([]);
+      });
+  }, []);
+
   const topMessage = userState.firstTimeLogin ? 'Hello' : 'Welcome back';
+  const pendingReview = false;
 
   return (
     <BackEndPage title="Dashboard">
@@ -54,7 +79,7 @@ const Dashboard = () => {
               <div className="card card-custom">
                 <div className="card-body">
                   <LoadItems
-                    items={userState.events || []}
+                    items={userState.events}
                     noContent={
                       <NoContent
                         isButton
@@ -68,14 +93,21 @@ const Dashboard = () => {
                   </LoadItems>
                 </div>
               </div>
-              <Dashboard.AuctionTable />
+              <Dashboard.RecentApplications
+                bids={applications.bids}
+                requests={applications.requests}
+              />
             </div>
             <div className="col-sm-4">
               <Dashboard.RecommendedTable
                 entertainers={entertainers}
                 loading={loading}
               />
-              <Dashboard.PendingReview />
+              {pendingReview ? (
+                <Dashboard.PendingReview />
+              ) : (
+                <Dashboard.InviteFriends />
+              )}
             </div>
           </div>
         </section>
@@ -181,15 +213,97 @@ Dashboard.PendingReview = () => (
   </div>
 );
 
-Dashboard.AuctionTable = () => (
+Dashboard.RecentApplications = ({ bids, requests }) => (
+  <LoadItems
+    items={(requests && bids && [...requests, ...bids]) || null} //todo
+    noContent={<NoContent text="No Request found" />}
+  >
+    {requests && requests.length > 0 && (
+      <div className="table-responsive">
+        <h6 className="font-weight-normal text-white mt-4">Recent Requests</h6>
+        <table className="table table-dark  table__no-border table__with-bg">
+          <tbody>
+            {requests.map((request, index) => (
+              <Dashboard.RequestTableRow
+                application={request || []}
+                key={index}
+              />
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )}
+    {bids && bids.length > 0 && (
+      <div className="table-responsive">
+        <h6 className="font-weight-normal text-white mt-4">Recent Bids</h6>
+        <table className="table table-dark  table__no-border table__with-bg">
+          <tbody>
+            {bids.map((bid, index) => (
+              <Dashboard.RequestTableRow application={bid || []} key={index} />
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )}
+  </LoadItems>
+);
+
+Dashboard.RecentApplications.propTypes = {
+  bids: PropTypes.object,
+  requests: PropTypes.object,
+};
+
+Dashboard.RecentApplications.defaultProps = {
+  bids: null,
+  requests: null,
+};
+
+Dashboard.RequestTableRow = ({ application }) => (
+  <tr>
+    <td className="align-middle">
+      <Image
+        className="avatar--medium-small"
+        name={application.stageName || 'No name'}
+        responsiveImage={false}
+        src={application.profileImageURL || 'No src'}
+      />
+    </td>
+    <td className="align-middle text-gray">
+      <span className="text-muted small--4">Stage name</span>{' '}
+      {application.stageName}
+    </td>
+    <td className="align-middle text-yellow">
+      <span className="text-muted small--4">Asking Price</span> &#8358;{' '}
+      {moneyFormat(application.askingPrice)}
+    </td>
+    <td className="align-middle text-gray">
+      <span className="text-muted small--4">Location</span>{' '}
+      {application.location}
+    </td>
+    <td className="align-middle text-right td-btn">
+      <a
+        className="btn btn-info btn-sm btn-transparent"
+        href={`/entertainers/${application.slug}`}
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        View Profile
+      </a>
+    </td>
+  </tr>
+);
+
+Dashboard.RequestTableRow.propTypes = {
+  application: PropTypes.object.isRequired,
+};
+
+Dashboard.InviteFriends = () => (
   <div className="card card-custom">
     <div className="card-body">
-      <h5 className="card-title text-blue">Auction (Recent Bids)</h5>
-      <NoContent
-        linkText="Learn how it works"
-        linkTo="/user/events/new"
-        text="You have no current Auctions."
-      />
+      <h5 className="card-title text-red header__with-border">
+        Recommend a Friend
+      </h5>
+      <InviteFriendsForm widget />
     </div>
   </div>
 );

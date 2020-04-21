@@ -17,6 +17,7 @@ import {
   REQUEST_ACTION,
 } from '../constant';
 import EMAIL_CONTENT from '../email-template/content';
+import { addDays } from 'date-fns';
 
 const ApplicationController = {
   /**
@@ -103,6 +104,107 @@ const ApplicationController = {
         return res.status(404).json({ message: 'Application not found' });
       }
       return res.status(200).json({ applications });
+    });
+  },
+
+  /**
+   * get Dashboard Bids and Requests(for user)
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  getApplicationsForUserDashboard(req, res) {
+    EventEntertainer.findAll({
+      where: {
+        userId: req.user.id,
+        hiredEntertainer: null, // shown for events with no hired Entertainer
+      },
+      order: [
+        [{ model: Application, as: 'applications' }, 'createdAt', 'DESC'],
+      ],
+      attributes: ['id'],
+      include: [
+        {
+          model: Event,
+          as: 'event',
+          attributes: ['id', 'eventType', 'eventDate'],
+          where: {
+            eventDate: { [Op.gte]: addDays(Date.now(), 3) },
+          },
+        },
+        {
+          model: Application,
+          as: 'applications',
+          attributes: [
+            'id',
+            'status',
+            'askingPrice',
+            'applicationType',
+            'proposedPrice',
+            'createdAt',
+          ],
+          required: true,
+          include: [
+            {
+              model: User,
+              as: 'user',
+              attributes: ['id', 'profileImageURL'],
+              include: [
+                {
+                  model: EntertainerProfile,
+                  as: 'profile',
+                  attributes: [
+                    'id',
+                    'stageName',
+                    'entertainerType',
+                    'slug',
+                    'location',
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    }).then((eventEntertainers) => {
+      const results = eventEntertainers.reduce(
+        (result, eventEntertainer) => {
+          const eventDetails = {
+            eventEntertainerId: eventEntertainer.id,
+            eventId: eventEntertainer.event.id,
+            eventType: eventEntertainer.event.eventType,
+            eventDate: eventEntertainer.event.eventDate,
+          };
+
+          eventEntertainer.applications.map((application) => {
+            const applicationDetails = {
+              applicationId: application.id,
+              status: application.status,
+              type: application.applicationType,
+              askingPrice: application.askingPrice,
+              createdAt: getLongDate(application.createdAt),
+              proposedPrice: application.proposedPrice,
+              userId: application.user.id,
+              profileImageURL: application.user.profileImageURL,
+              entertainerId: application.user.profile.id,
+              stageName: application.user.profile.stageName,
+              entertainerType: application.user.profile.entertainerType,
+              location: application.user.profile.location,
+              slug: application.user.profile.slug,
+            };
+            if (applicationDetails.type === 'Bid') {
+              result.bids.push({ ...eventDetails, ...applicationDetails });
+            } else {
+              result.requests.push({ ...eventDetails, ...applicationDetails });
+            }
+          });
+          return result;
+        },
+        { requests: [], bids: [] }
+      );
+
+      return res.status(200).json({ results });
     });
   },
 
@@ -269,12 +371,6 @@ const ApplicationController = {
         if (!application) {
           return res.status(404).json({ message: 'Application not found' });
         }
-        console.log('------');
-        console.log('------');
-        console.log('------');
-        console.log('------');
-        console.log('------');
-        console.log('application.status', application.status);
         // application has previously been approved
         if (application.status !== 'Pending') {
           return res.status(401).json({
@@ -389,7 +485,6 @@ const ApplicationController = {
 
   getOneApplication(req, res) {
     const id = req.params.id;
-    const userId = req.user.id;
 
     if (!id) {
       return res.status(404).json({
@@ -398,7 +493,7 @@ const ApplicationController = {
     }
 
     Application.findOne({
-      where: { id, userId },
+      where: { id },
       include: [
         {
           model: EventEntertainer,
@@ -418,6 +513,17 @@ const ApplicationController = {
         {
           model: Commission,
           as: 'commission',
+        },
+        {
+          model: User,
+          as: 'user',
+          attributes: ['id', 'email', 'profileImageURL'],
+          include: [
+            {
+              model: EntertainerProfile,
+              as: 'profile',
+            },
+          ],
         },
       ],
     })
@@ -615,6 +721,7 @@ const sendAuctionMail = (params) => {
 };
 
 const sendRequestMail = (params) => {
+  console.log('params', params);
   // Build Email
   const contentTop = `
     <strong>Event:</strong> ${params.eventType} <br>

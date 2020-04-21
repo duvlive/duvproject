@@ -2,13 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import TopMessage from 'components/common/layout/TopMessage';
-import AlertMessage from 'components/common/utils/AlertMessage';
-import { Match } from '@reach/router';
+import { Link } from '@reach/router';
 import { twoDigitNumber } from 'utils/helpers';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import { getTokenFromStore } from 'utils/localStorage';
 import { getShortDate } from 'utils/date-helpers';
-import { moneyFormat } from 'utils/helpers';
+import { moneyFormat, getRequestStatusIcon } from 'utils/helpers';
 import NoContent from 'components/common/utils/NoContent';
 import Image from 'components/common/utils/Image';
 import { REQUEST_ACTION } from 'utils/constants';
@@ -24,11 +23,9 @@ const Requests = () => {
       })
       .then(function (response) {
         const { status, data } = response;
-        console.log('status,data', status, data);
         // handle success
         if (status === 200) {
           setRequests(data.requests);
-          console.log('Requests: ', data.requests);
         }
       })
       .catch(function (error) {
@@ -36,24 +33,12 @@ const Requests = () => {
         // navigate to all events
       });
   }, []);
-  console.log('requests', requests);
   return (
     <BackEndPage title="Requests">
       <div className="main-app">
         <TopMessage message="Requests" />
 
         <section className="app-content">
-          <Match path="/user/requests/status/error">
-            {(props) =>
-              // eslint-disable-next-line react/prop-types
-              props.match && (
-                <AlertMessage
-                  message="The selected request cannot be found or has already been approved."
-                  type="error"
-                />
-              )
-            }
-          </Match>
           {requests.length > 0 ? (
             <RequestsTable requests={requests} />
           ) : (
@@ -83,6 +68,7 @@ const RequestsTable = ({ requests }) => (
       <tbody>
         {requests.map((request, index) => (
           <RequestsRow
+            applicationId={request.id}
             askingPrice={request.askingPrice}
             entertainerId={request.user.profile.id}
             entertainerType={request.eventEntertainerInfo.entertainerType}
@@ -109,6 +95,7 @@ RequestsTable.propTypes = {
 };
 
 const RequestsRow = ({
+  applicationId,
   askingPrice,
   entertainerType,
   eventDate,
@@ -137,7 +124,7 @@ const RequestsRow = ({
     </td>
     <td className="align-middle">
       <span className="text-muted small--4">Type</span>
-      {entertainerType}
+      <span className="text-red">{entertainerType}</span>
     </td>
     {status === REQUEST_ACTION.INCREMENT ? (
       <td className="align-middle text-white">
@@ -145,28 +132,25 @@ const RequestsRow = ({
         <strike>{moneyFormat(askingPrice)}</strike>
       </td>
     ) : (
-      <td className="align-middle text-yellow">
+      <td className="align-middle text-white">
         <span className="text-muted small--4">Your Offer</span> &#8358;{' '}
         {moneyFormat(askingPrice)}
       </td>
     )}
-    {status === REQUEST_ACTION.INCREMENT && (
-      <td className="align-middle text-yellow">
-        <span className="text-muted small--4">Proposed Offer</span> &#8358;{' '}
-        {moneyFormat(proposedPrice)}
-      </td>
-    )}
+    <td className="align-middle text-yellow">
+      <span className="text-muted small--4">Proposed Offer</span> &#8358;{' '}
+      {moneyFormat(proposedPrice)}
+    </td>
     <td className="align-middle">
       <span className="text-muted small--4">{eventType}</span>
       {getShortDate(eventDate)}
     </td>
-    {status !== REQUEST_ACTION.INCREMENT && (
-      <td className="align-middle">
-        <span className="text-muted small--4">Status</span>
-        {status}
-      </td>
-    )}
-    <td>
+    <td className="align-middle">
+      <span className="text-muted small--4">Status</span>
+      <small>{getRequestStatusIcon(status)}</small>
+    </td>
+
+    <td className="pt-4">
       <a
         className="btn btn-info btn-sm btn-transparent"
         href={`/entertainers/${slug}`}
@@ -175,20 +159,19 @@ const RequestsRow = ({
       >
         View Profile
       </a>
-      {(status === REQUEST_ACTION.APPROVED ||
-        status === REQUEST_ACTION.INCREMENT) && (
-        <>
-          &nbsp;&nbsp;&nbsp;&nbsp;
-          <button className="btn btn-danger btn-sm btn-transparent">
-            Pay Now
-          </button>
-        </>
-      )}
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <Link
+        className="btn btn-success btn-sm btn-transparent"
+        to={`/user/request/view/${applicationId}`}
+      >
+        View Request
+      </Link>
     </td>
   </tr>
 );
 
 RequestsRow.propTypes = {
+  applicationId: PropTypes.string,
   askingPrice: PropTypes.string,
   entertainerId: PropTypes.number,
   entertainerType: PropTypes.string,
@@ -203,6 +186,7 @@ RequestsRow.propTypes = {
 };
 
 Requests.defaultProps = {
+  applicationId: '',
   askingPrice: '',
   entertainerId: 0,
   entertainerType: '',

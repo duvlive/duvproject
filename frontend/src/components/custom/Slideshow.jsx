@@ -22,7 +22,6 @@ class Slideshow extends Component {
     this.onExiting = this.onExiting.bind(this);
     this.onExited = this.onExited.bind(this);
     this.items = props.items;
-    console.log('items', props.items);
   }
 
   onExiting() {
@@ -59,9 +58,8 @@ class Slideshow extends Component {
   render() {
     const { activeIndex } = this.state;
 
-    console.log('this.items', this.items);
     if (!this.items) {
-      return <h3>NOthing to display</h3>;
+      return <h3>Nothing to display</h3>;
     }
 
     const slides = this.items.map((item) => {

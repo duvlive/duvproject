@@ -1,5 +1,5 @@
 import React from 'react';
-import { ENTERTAINER_TYPE } from './constants';
+import { ENTERTAINER_TYPE, REQUEST_ACTION } from './constants';
 import Humanize from 'humanize-plus';
 
 /**
@@ -129,3 +129,34 @@ export const isDevEnvironment = () =>
 
 export const getProxy = () =>
   isDevEnvironment() ? 'http://localhost:8080' : '';
+
+export const getRequestStatusIcon = (status) => {
+  switch (status) {
+    case REQUEST_ACTION.APPROVED:
+      return (
+        <div className="text-green">
+          <span className="icon icon-ok-circled"></span>
+          {status}
+        </div>
+      );
+
+    case REQUEST_ACTION.INCREMENT:
+      return (
+        <div className="text-white">
+          <span className="icon icon icon-up-big"></span>
+          {status}
+        </div>
+      );
+
+    case REQUEST_ACTION.REJECTED:
+      return (
+        <div className="text-danger">
+          <span className="icon icon icon-cancel-circled"></span>
+          {status}
+        </div>
+      );
+
+    default:
+      return <span className=" text-danger icon icon icon-hourglass"></span>;
+  }
+};

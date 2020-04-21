@@ -184,32 +184,41 @@ const LoginForm = ({ sid, token }) => {
           });
         actions.setSubmitting(false);
       }}
-      render={({ isSubmitting, handleSubmit }) => (
-        <Form>
-          <AlertMessage {...message} />
-          <Input
-            label="Email"
-            name="email"
-            placeholder="Email Address"
-            showFeedback={feedback.NONE}
-          />
-          <Input
-            label="Password"
-            labelClassName="d-block"
-            labelLink={{
-              to: '/forgot-password',
-              text: 'Forgot Password',
-            }}
-            name="password"
-            placeholder="Password"
-            showFeedback={feedback.NONE}
-            type="password"
-          />
-          <Button loading={isSubmitting} onClick={handleSubmit}>
-            Sign in
-          </Button>
-        </Form>
-      )}
+      render={({ isSubmitting, handleSubmit }) => {
+        const submitFormWithEnterKey = (event) => {
+          if (event.keyCode === 13) {
+            handleSubmit();
+          }
+        };
+        return (
+          <Form>
+            <AlertMessage {...message} />
+            <Input
+              label="Email"
+              name="email"
+              onKeyDown={(e) => submitFormWithEnterKey(e)}
+              placeholder="Email Address"
+              showFeedback={feedback.NONE}
+            />
+            <Input
+              label="Password"
+              labelClassName="d-block"
+              labelLink={{
+                to: '/forgot-password',
+                text: 'Forgot Password',
+              }}
+              name="password"
+              onKeyDown={(evt) => submitFormWithEnterKey(evt)}
+              placeholder="Password"
+              showFeedback={feedback.NONE}
+              type="password"
+            />
+            <Button loading={isSubmitting} onClick={handleSubmit}>
+              Sign in
+            </Button>
+          </Form>
+        );
+      }}
       validationSchema={loginSchema}
     />
   );

@@ -507,6 +507,7 @@ const EventController = {
       return res.status(200).json({ eventEntertainer });
     });
   },
+
   /**
    * get Auction Details
    * @function
