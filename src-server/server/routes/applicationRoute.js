@@ -50,6 +50,14 @@ const applicationRoutes = (router) => {
     ApplicationController.getApplicationsForUserDashboard
   );
 
+  router.get(
+    '/api/v1/applications/dashboard/entertainer',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    Authentication.validateEntertainer,
+    ApplicationController.getDashboardDetailsForEntertainer
+  );
+
   // this is called after payment
   // it is not protected to ensure that it is proccessed
   // even if a user is not logged in

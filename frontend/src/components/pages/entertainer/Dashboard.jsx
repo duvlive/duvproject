@@ -1,20 +1,26 @@
 import React from 'react';
+import axios from 'axios';
 import TopMessage from 'components/common/layout/TopMessage';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import DashboardCard from 'components/common/utils/DashboardCard';
 import Onboarding from 'components/pages/entertainer/Onboarding';
 import { UserContext } from 'context/UserContext';
+import { getTokenFromStore } from 'utils/localStorage';
+import LoadingScreen from 'components/common/layout/LoadingScreen';
+import { twoDigitNumber } from 'utils/helpers';
+import { InviteFriendsForm } from 'components/common/pages/InviteFriends';
 
 const Dashboard = () => {
   const { userState } = React.useContext(UserContext);
 
   let currentDashboard;
-  console.log('userState', userState);
 
-  if (userState.entertainerProfile.approved) {
-    currentDashboard = <DashboardItems />;
-  } else {
+  if (userState.entertainerProfile.approved == null) {
+    currentDashboard = <LoadingScreen text="Loading your Dashboard" />;
+  } else if (userState.entertainerProfile.approved === false) {
     currentDashboard = <Onboarding />;
+  } else {
+    currentDashboard = <DashboardItems />;
   }
 
   return (
@@ -26,35 +32,65 @@ const Dashboard = () => {
 
 const DashboardItems = () => {
   const { userState } = React.useContext(UserContext);
+  const [applications, setApplications] = React.useState({
+    requests: null,
+    auctions: null,
+    upcomingEvents: null,
+  });
+  React.useEffect(() => {
+    axios
+      .get(`/api/v1/applications/dashboard/entertainer`, {
+        headers: {
+          'x-access-token': getTokenFromStore(),
+        },
+      })
+      .then(function (response) {
+        const { status, data } = response;
+        // handle success
+        if (status === 200) {
+          setApplications(data.results);
+        }
+      })
+      .catch(function (error) {
+        setApplications([]);
+      });
+  }, []);
+  console.log('applications', applications);
   return (
     <>
       <TopMessage message={`Welcome back ${userState.firstName},`} />
       <section className="app-content">
         <div className="row">
-          <DashboardCard
-            color="yellow"
-            icon="auction"
-            number="08"
-            summary="3 applications sent"
-            title="Available Auction"
-            to="/entertainer/auctions"
-          />
-          <DashboardCard
-            color="green"
-            icon="calendar"
-            number="81"
-            summary="5 upcoming events"
-            title="Total Events"
-            to="/entertainer/events"
-          />
-          <DashboardCard
-            color="blue"
-            icon="credit-card"
-            number="79"
-            summary="2 pending payments"
-            title="Payments Received"
-            to="/entertainer/payments"
-          />
+          {applications.upcomingEvents == null ? (
+            <LoadingScreen />
+          ) : (
+            <>
+              <DashboardCard
+                color="green"
+                icon="calendar"
+                number={twoDigitNumber(applications.upcomingEvents.length)}
+                summary="Upcoming Events"
+                title="Upcoming Events"
+                to="/entertainer/events"
+              />
+              <DashboardCard
+                color="yellow"
+                icon="auction"
+                number={twoDigitNumber(applications.auctions.length)}
+                summary="Available Auctions"
+                title="Available Auction"
+                to="/entertainer/available-auctions"
+              />
+              <DashboardCard
+                color="blue"
+                icon="vcard"
+                number={twoDigitNumber(applications.requests.length)}
+                summary="Pending Requests"
+                title="Requests"
+                to="/entertainer/payments"
+              />
+            </>
+          )}
         </div>
         <div className="row">
           <div className="col-sm-8">
@@ -62,7 +98,7 @@ const DashboardItems = () => {
             <Dashboard.RecentBids />
           </div>
           <div className="col-sm-4">
-            <Dashboard.PaymentHistory />
+            <Dashboard.InviteFriends />
             <Dashboard.RecentBadges />
           </div>
         </div>
@@ -70,6 +106,17 @@ const DashboardItems = () => {
     </>
   );
 };
+
+Dashboard.InviteFriends = () => (
+  <div className="card card-custom">
+    <div className="card-body">
+      <h5 className="card-title text-red header__with-border">
+        Recommend a Friend
+      </h5>
+      <InviteFriendsForm widget />
+    </div>
+  </div>
+);
 
 Dashboard.UpcomingEvents = () => (
   <div className="card card-custom">

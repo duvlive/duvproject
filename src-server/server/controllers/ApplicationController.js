@@ -1,4 +1,4 @@
-import { Op } from 'sequelize';
+import { Sequelize, Op } from 'sequelize';
 import {
   Application,
   Event,
@@ -202,6 +202,112 @@ const ApplicationController = {
           return result;
         },
         { requests: [], bids: [] }
+      );
+
+      return res.status(200).json({ results });
+    });
+  },
+
+  /**
+   * get Dashboard Auctions, Requests, upcoming Events(for entertainers)
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  getDashboardDetailsForEntertainer(req, res) {
+    EventEntertainer.findAll({
+      where: {
+        [Op.or]: [
+          {
+            // Auctions
+            hireType: 'Auction',
+            auctionStartDate: { [Op.lte]: Sequelize.literal('NOW()') },
+            auctionEndDate: { [Op.gte]: Sequelize.literal('NOW()') },
+            entertainerType: {
+              [Op.eq]: req.user.profile.entertainerType,
+            },
+            [Op.and]: Sequelize.literal('applications.id is null'),
+          },
+          {
+            // Upcoming Events
+            hiredEntertainer: req.user.profile.id,
+            [Op.and]: Sequelize.literal('"event"."eventDate" > NOW()'),
+          },
+          {
+            // Requests
+            [Op.and]: [
+              {
+                [Op.and]: Sequelize.literal(
+                  `"applications"."userId" = ${req.user.id}`
+                ),
+              },
+              {
+                [Op.and]: Sequelize.literal(
+                  `"applications"."status" = 'Pending'`
+                ),
+              },
+              {
+                [Op.and]: Sequelize.literal(
+                  `"applications"."applicationType" = 'Request'`
+                ),
+              },
+              {
+                [Op.and]: Sequelize.literal(
+                  `"applications"."expiryDate" > NOW()`
+                ),
+              },
+            ],
+          },
+        ],
+        // get entertainer events
+        // hiredEntertainer: null, // shown for events with no hired Entertainer
+      },
+      // attributes: ['id'],
+      include: [
+        {
+          model: Event,
+          as: 'event',
+          attributes: ['id', 'eventType', 'eventDate'],
+          where: {
+            eventDate: { [Op.gte]: addDays(Date.now(), 3) },
+          },
+        },
+        {
+          model: Application,
+          as: 'applications',
+          attributes: [
+            'id',
+            'status',
+            'askingPrice',
+            'applicationType',
+            'proposedPrice',
+            'createdAt',
+          ],
+        },
+      ],
+    }).then((eventEntertainers) => {
+      const results = eventEntertainers.reduce(
+        (result, eventEntertainer) => {
+          const eventDetails = {
+            eventEntertainerId: eventEntertainer.id,
+            hireType: eventEntertainer.hireType,
+            hiredEntertainer: eventEntertainer.hiredEntertainer,
+            eventId: eventEntertainer.event.id,
+            eventType: eventEntertainer.event.eventType,
+            eventDate: eventEntertainer.event.eventDate,
+          };
+
+          if (eventDetails.hireType === 'Auction') {
+            result.auctions.push({ ...eventDetails });
+          } else if (eventDetails.hiredEntertainer) {
+            result.upcomingEvents.push({ ...eventDetails });
+          } else {
+            result.requests.push({ ...eventDetails });
+          }
+          return result;
+        },
+        { requests: [], auctions: [], upcomingEvents: [] }
       );
 
       return res.status(200).json({ results });
