@@ -18,10 +18,10 @@ const Events = () => {
     axios
       .get('/api/v1/events/entertainers', {
         headers: {
-          'x-access-token': getTokenFromStore()
-        }
+          'x-access-token': getTokenFromStore(),
+        },
       })
-      .then(function(response) {
+      .then(function (response) {
         const { status, data } = response;
         console.log('data', data);
         // handle success
@@ -30,7 +30,7 @@ const Events = () => {
           console.log('data.events: ', data);
         }
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error.response.data.message);
         // navigate to all events
       });
@@ -112,11 +112,13 @@ Events.CardList = ({ events, title }) => {
   ));
   return (
     <>
-      <tr className="transparent">
-        <td colSpan="5">
-          <h3 className={`event-title`}>{title}</h3>
-        </td>
-      </tr>
+      {title && (
+        <tr className="transparent">
+          <td colSpan="5">
+            <h3 className={`event-title`}>{title}</h3>
+          </td>
+        </tr>
+      )}
       {eventCard}
       <tr className="transparent">
         <td colSpan="5">
@@ -129,11 +131,12 @@ Events.CardList = ({ events, title }) => {
 
 Events.CardList.propTypes = {
   events: PropTypes.array,
-  title: PropTypes.string.isRequired
+  title: PropTypes.string,
 };
 
 Events.CardList.defaultProps = {
-  events: []
+  title: null,
+  events: [],
 };
 
 Events.Card = ({
@@ -144,7 +147,7 @@ Events.Card = ({
   eventDuration,
   lga,
   state,
-  owner
+  owner,
 }) => {
   return (
     <>
@@ -200,7 +203,7 @@ Events.Card.propTypes = {
   lga: PropTypes.string,
   owner: PropTypes.object.isRequired,
   startTime: PropTypes.string,
-  state: PropTypes.string
+  state: PropTypes.string,
 };
 
 Events.Card.defaultProps = {
@@ -210,6 +213,6 @@ Events.Card.defaultProps = {
   eventType: null,
   lga: null,
   startTime: null,
-  state: null
+  state: null,
 };
 export default Events;

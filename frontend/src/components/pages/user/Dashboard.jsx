@@ -8,7 +8,7 @@ import { UserContext } from 'context/UserContext';
 import NoContent from 'components/common/utils/NoContent';
 import { getTokenFromStore } from 'utils/localStorage';
 import LoadingScreen from 'components/common/layout/LoadingScreen';
-import { twoDigitNumber, moneyFormat } from 'utils/helpers';
+import { twoDigitNumber, moneyFormat, getItems } from 'utils/helpers';
 import { getEventDate, getTime, getTimeOfDay } from 'utils/date-helpers';
 import { groupEvents, userCanAddEntertainer } from 'utils/event-helpers';
 import { Link } from '@reach/router';
@@ -225,7 +225,7 @@ Dashboard.RecentApplications = ({ bids, requests }) => (
           <tbody>
             {requests.map((request, index) => (
               <Dashboard.RequestTableRow
-                application={request || []}
+                application={getItems(request, 2) || []}
                 key={index}
               />
             ))}
@@ -239,7 +239,10 @@ Dashboard.RecentApplications = ({ bids, requests }) => (
         <table className="table table-dark  table__no-border table__with-bg">
           <tbody>
             {bids.map((bid, index) => (
-              <Dashboard.RequestTableRow application={bid || []} key={index} />
+              <Dashboard.RequestTableRow
+                application={getItems(bid, 2) || []}
+                key={index}
+              />
             ))}
           </tbody>
         </table>

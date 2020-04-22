@@ -1,13 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import axios from 'axios';
 import TopMessage from 'components/common/layout/TopMessage';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import DashboardCard from 'components/common/utils/DashboardCard';
 import Onboarding from 'components/pages/entertainer/Onboarding';
+import Events from 'components/pages/entertainer/UpcomingEvents';
+import { BidsRow } from 'components/pages/entertainer/Bids';
 import { UserContext } from 'context/UserContext';
 import { getTokenFromStore } from 'utils/localStorage';
 import LoadingScreen from 'components/common/layout/LoadingScreen';
-import { twoDigitNumber } from 'utils/helpers';
+import { twoDigitNumber, getItems } from 'utils/helpers';
 import { InviteFriendsForm } from 'components/common/pages/InviteFriends';
 
 const Dashboard = () => {
@@ -33,8 +36,9 @@ const Dashboard = () => {
 const DashboardItems = () => {
   const { userState } = React.useContext(UserContext);
   const [applications, setApplications] = React.useState({
-    requests: null,
     auctions: null,
+    bids: null,
+    requests: null,
     upcomingEvents: null,
   });
   React.useEffect(() => {
@@ -61,41 +65,54 @@ const DashboardItems = () => {
       <TopMessage message={`Welcome back ${userState.firstName},`} />
       <section className="app-content">
         <div className="row">
-          {applications.upcomingEvents == null ? (
-            <LoadingScreen />
-          ) : (
-            <>
-              <DashboardCard
-                color="green"
-                icon="calendar"
-                number={twoDigitNumber(applications.upcomingEvents.length)}
-                summary="Upcoming Events"
-                title="Upcoming Events"
-                to="/entertainer/events"
-              />
-              <DashboardCard
-                color="yellow"
-                icon="auction"
-                number={twoDigitNumber(applications.auctions.length)}
-                summary="Available Auctions"
-                title="Available Auction"
-                to="/entertainer/available-auctions"
-              />
-              <DashboardCard
-                color="blue"
-                icon="vcard"
-                number={twoDigitNumber(applications.requests.length)}
-                summary="Pending Requests"
-                title="Requests"
-                to="/entertainer/payments"
-              />
-            </>
-          )}
+          <DashboardCard
+            color="green"
+            icon="calendar"
+            number={
+              applications.upcomingEvents == null
+                ? null
+                : twoDigitNumber(applications.upcomingEvents.length)
+            }
+            summary="Upcoming Events"
+            title="Events"
+            to="/entertainer/events"
+          />
+          <DashboardCard
+            color="yellow"
+            icon="auction"
+            number={
+              applications.auctions == null
+                ? null
+                : twoDigitNumber(applications.auctions.length)
+            }
+            summary="Available Auctions"
+            title="Auction"
+            to="/entertainer/available-auctions"
+          />
+          <DashboardCard
+            color="blue"
+            icon="vcard"
+            number={
+              applications.requests == null
+                ? null
+                : twoDigitNumber(applications.requests.length)
+            }
+            summary="Pending Requests"
+            title="Requests"
+            to="/entertainer/payments"
+          />
         </div>
         <div className="row">
           <div className="col-sm-8">
-            <Dashboard.UpcomingEvents />
-            <Dashboard.RecentBids />
+            {applications.upcomingEvents &&
+              applications.upcomingEvents.length > 0 && (
+                <Dashboard.UpcomingEvents
+                  events={getItems(applications.upcomingEvents, 2) || []}
+                />
+              )}
+            {applications.bids && applications.bids.length > 0 && (
+              <Dashboard.RecentBids bids={getItems(applications.bids, 2)} />
+            )}
           </div>
           <div className="col-sm-4">
             <Dashboard.InviteFriends />
@@ -118,27 +135,14 @@ Dashboard.InviteFriends = () => (
   </div>
 );
 
-Dashboard.UpcomingEvents = () => (
+Dashboard.UpcomingEvents = ({ events }) => (
   <div className="card card-custom">
     <div className="card-body">
-      <h5 className="card-title text-green">Upcoming Events</h5>
+      <h5 className="font-weight-normal text-white">Upcoming Events</h5>
       <div className="table-responsive">
-        <table className="table table-dark">
+        <table className="table table-dark table__no-border table__with-bg">
           <tbody>
-            <tr>
-              <td className="text-white">3 days to go</td>
-              <td>9:00am</td>
-              <td>Mon, Apr. 17, 2019</td>
-              <td>Wedding DJ</td>
-              <td>Lagos</td>
-            </tr>
-            <tr>
-              <td className="text-white">3 months to go</td>
-              <td>3:00pm</td>
-              <td>Sat, Dec. 3, 2019</td>
-              <td>Birthday DJ</td>
-              <td>Benin</td>
-            </tr>
+            <Events.CardList events={events} />
           </tbody>
         </table>
       </div>
@@ -146,67 +150,40 @@ Dashboard.UpcomingEvents = () => (
   </div>
 );
 
-Dashboard.RecentBids = () => (
+Dashboard.UpcomingEvents.propTypes = {
+  events: PropTypes.array.isRequired,
+};
+
+Dashboard.RecentBids = ({ bids }) => (
   <div className="card card-custom">
     <div className="card-body">
-      <h5 className="card-title text-yellow">Recent Bids</h5>
+      <h5 className="font-weight-normal text-white">Recent Bids</h5>
       <div className="table-responsive">
-        <table className="table table-dark">
+        <table className="table table-dark table__no-border table__with-bg">
           <tbody>
-            <tr>
-              <th className="table__number" scope="row">
-                01
-              </th>
-              <td>
-                <div className="table__title text-white">Wedding Ceremony</div>
-                <span>
-                  <i className="icon icon-location" />
-                  Yaba, Lagos state
-                </span>
-              </td>
-              <td>
-                <span className="text-red">3 days to go</span>
-                <span>
-                  <strong className="text-blue"> DJ Cuppy</strong> (DJ)
-                </span>
-              </td>
-              <td className="text-right">
-                <span>
-                  <i className="icon icon-clock" /> Sun, April 17, 2019
-                </span>
-                <span>9:00am</span>
-              </td>
-            </tr>
-            <tr>
-              <th className="table__number" scope="row">
-                02
-              </th>
-              <td>
-                <div className="table__title text-white">Birthday Party</div>
-                <span>
-                  <i className="icon icon-location" />
-                  Yaba, Lagos state
-                </span>
-              </td>
-              <td>
-                <span className="text-green">2 months to go</span>
-                <span>
-                  <strong className="text-blue"> High Soul</strong> (Live Band)
-                </span>
-              </td>
-              <td className="text-right">
-                <span>
-                  <i className="icon icon-clock" /> Sun, April 17, 2019
-                </span>
-                <span>9:00am</span>
-              </td>
-            </tr>
+            {bids.map((bid, index) => (
+              <BidsRow
+                askingPrice={bid.applications[0].askingPrice}
+                auctionEndDate={bid.auctionEndDate}
+                city={bid.event.city}
+                eventType={bid.event.eventType}
+                id={bid.applications[0].id}
+                key={index}
+                number={index + 1}
+                state={bid.event.state}
+                status={bid.applications[0].status}
+              />
+            ))}
           </tbody>
         </table>
       </div>
     </div>
   </div>
 );
+
+Dashboard.RecentBids.propTypes = {
+  bids: PropTypes.array.isRequired,
+};
 
 Dashboard.PaymentHistory = () => (
   <div className="card card-custom">

@@ -58,6 +58,7 @@ export const randomItem = (items) =>
   items[Math.floor(Math.random() * items.length)];
 
 export const getItems = (items, end) => {
+  if (items == null) return items;
   // The slice() method returns a shallow copy of a portion of an array into a new array object selected from begin to end (end not included). The original array will not be modified.
   return items.slice(0, end);
 };

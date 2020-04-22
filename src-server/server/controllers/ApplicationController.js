@@ -259,16 +259,40 @@ const ApplicationController = {
               },
             ],
           },
+          {
+            // Bids
+            [Op.and]: [
+              {
+                [Op.and]: Sequelize.literal(
+                  `"applications"."userId" = ${req.user.id}`
+                ),
+              },
+              {
+                [Op.and]: Sequelize.literal(
+                  `"applications"."status" = 'Pending'`
+                ),
+              },
+              {
+                [Op.and]: Sequelize.literal(
+                  `"applications"."applicationType" = 'Bid'`
+                ),
+              },
+            ],
+          },
         ],
-        // get entertainer events
-        // hiredEntertainer: null, // shown for events with no hired Entertainer
       },
       // attributes: ['id'],
       include: [
         {
           model: Event,
           as: 'event',
-          attributes: ['id', 'eventType', 'eventDate'],
+          include: [
+            {
+              model: User,
+              as: 'owner',
+              attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+            },
+          ],
           where: {
             eventDate: { [Op.gte]: addDays(Date.now(), 3) },
           },
@@ -289,25 +313,22 @@ const ApplicationController = {
     }).then((eventEntertainers) => {
       const results = eventEntertainers.reduce(
         (result, eventEntertainer) => {
-          const eventDetails = {
-            eventEntertainerId: eventEntertainer.id,
-            hireType: eventEntertainer.hireType,
-            hiredEntertainer: eventEntertainer.hiredEntertainer,
-            eventId: eventEntertainer.event.id,
-            eventType: eventEntertainer.event.eventType,
-            eventDate: eventEntertainer.event.eventDate,
-          };
-
-          if (eventDetails.hireType === 'Auction') {
-            result.auctions.push({ ...eventDetails });
-          } else if (eventDetails.hiredEntertainer) {
-            result.upcomingEvents.push({ ...eventDetails });
+          if (
+            eventEntertainer.applications &&
+            eventEntertainer.applications.length > 0 &&
+            eventEntertainer.applications[0].applicationType === 'Bid'
+          ) {
+            result.bids.push(eventEntertainer);
+          } else if (eventEntertainer.hireType === 'Auction') {
+            result.auctions.push(eventEntertainer);
+          } else if (eventEntertainer.hiredEntertainer) {
+            result.upcomingEvents.push(eventEntertainer.event);
           } else {
-            result.requests.push({ ...eventDetails });
+            result.requests.push(eventEntertainer);
           }
           return result;
         },
-        { requests: [], auctions: [], upcomingEvents: [] }
+        { auctions: [], bids: [], requests: [], upcomingEvents: [] }
       );
 
       return res.status(200).json({ results });

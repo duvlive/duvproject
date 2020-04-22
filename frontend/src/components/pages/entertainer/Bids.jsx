@@ -74,7 +74,7 @@ const Bids = () => {
   );
 };
 
-const BidsRow = ({
+export const BidsRow = ({
   id,
   askingPrice,
   auctionEndDate,
