@@ -300,14 +300,6 @@ const ApplicationController = {
         {
           model: Application,
           as: 'applications',
-          attributes: [
-            'id',
-            'status',
-            'askingPrice',
-            'applicationType',
-            'proposedPrice',
-            'createdAt',
-          ],
         },
       ],
     }).then((eventEntertainers) => {

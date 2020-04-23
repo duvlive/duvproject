@@ -7,11 +7,14 @@ import DashboardCard from 'components/common/utils/DashboardCard';
 import Onboarding from 'components/pages/entertainer/Onboarding';
 import Events from 'components/pages/entertainer/UpcomingEvents';
 import { BidsRow } from 'components/pages/entertainer/Bids';
+import { RequestsRow } from 'components/pages/entertainer/Requests';
+import { AuctionsRow } from 'components/pages/entertainer/AvailableAuctions';
 import { UserContext } from 'context/UserContext';
 import { getTokenFromStore } from 'utils/localStorage';
 import LoadingScreen from 'components/common/layout/LoadingScreen';
 import { twoDigitNumber, getItems } from 'utils/helpers';
 import { InviteFriendsForm } from 'components/common/pages/InviteFriends';
+import NoContent from 'components/common/utils/NoContent';
 
 const Dashboard = () => {
   const { userState } = React.useContext(UserContext);
@@ -104,6 +107,11 @@ const DashboardItems = () => {
         </div>
         <div className="row">
           <div className="col-sm-8">
+            {applications.requests && applications.requests.length > 0 && (
+              <Dashboard.RecentRequests
+                requests={getItems(applications.requests, 2)}
+              />
+            )}
             {applications.upcomingEvents &&
               applications.upcomingEvents.length > 0 && (
                 <Dashboard.UpcomingEvents
@@ -113,6 +121,19 @@ const DashboardItems = () => {
             {applications.bids && applications.bids.length > 0 && (
               <Dashboard.RecentBids bids={getItems(applications.bids, 2)} />
             )}
+            {applications.auctions && applications.auctions.length > 0 && (
+              <Dashboard.RecentAuctions
+                auctions={getItems(applications.auctions, 2)}
+              />
+            )}
+            {applications.upcomingEvents &&
+              applications.upcomingEvents.length === 0 && (
+                <div className="card card-custom">
+                  <div className="card-body">
+                    <NoContent text="You have no Upcoming Events" />
+                  </div>
+                </div>
+              )}
           </div>
           <div className="col-sm-4">
             <Dashboard.InviteFriends />
@@ -138,7 +159,7 @@ Dashboard.InviteFriends = () => (
 Dashboard.UpcomingEvents = ({ events }) => (
   <div className="card card-custom">
     <div className="card-body">
-      <h5 className="font-weight-normal text-white">Upcoming Events</h5>
+      <h5 className="font-weight-normal text-green">Upcoming Events</h5>
       <div className="table-responsive">
         <table className="table table-dark table__no-border table__with-bg">
           <tbody>
@@ -183,6 +204,66 @@ Dashboard.RecentBids = ({ bids }) => (
 
 Dashboard.RecentBids.propTypes = {
   bids: PropTypes.array.isRequired,
+};
+
+Dashboard.RecentRequests = ({ requests }) => (
+  <div className="card card-custom">
+    <div className="card-body">
+      <h5 className="font-weight-normal text-blue">Recent Requests</h5>
+      <div className="table-responsive">
+        <table className="table table-dark table__no-border table__with-bg">
+          <tbody>
+            {requests.map((request, index) => (
+              <RequestsRow
+                askingPrice={request.applications[0].askingPrice}
+                city={request.event.city}
+                eventType={request.event.eventType}
+                expiryDate={request.applications[0].expiryDate}
+                id={request.applications[0].id}
+                key={index}
+                number={index + 1}
+                state={request.event.state}
+                status={request.applications[0].status}
+              />
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+);
+
+Dashboard.RecentRequests.propTypes = {
+  requests: PropTypes.array.isRequired,
+};
+
+Dashboard.RecentAuctions = ({ auctions }) => (
+  <div className="card card-custom">
+    <div className="card-body">
+      <h5 className="font-weight-normal text-yellow">Recent Auctions</h5>
+      <div className="table-responsive">
+        <table className="table table-dark table__no-border table__with-bg">
+          <tbody>
+            {auctions.map((auction, index) => (
+              <AuctionsRow
+                auctionEndDate={auction.auctionEndDate}
+                city={auction.event.city}
+                eventType={auction.event.eventType}
+                id={auction.id}
+                key={index}
+                number={index + 1}
+                state={auction.event.state}
+              />
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+);
+
+Dashboard.RecentAuctions.propTypes = {
+  auctions: PropTypes.array.isRequired,
 };
 
 Dashboard.PaymentHistory = () => (

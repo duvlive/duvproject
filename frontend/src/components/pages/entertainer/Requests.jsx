@@ -58,10 +58,7 @@ const Requests = () => {
                 </tbody>
               </table>
             ) : (
-              <NoContent
-                isButton
-                text="No Request Found. You can check available auctions here"
-              />
+              <NoContent text="No Request Found." />
             )}
             <br />
             <br />
@@ -72,7 +69,7 @@ const Requests = () => {
   );
 };
 
-const RequestsRow = ({
+export const RequestsRow = ({
   id,
   askingPrice,
   expiryDate,

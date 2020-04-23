@@ -158,6 +158,11 @@ export const getRequestStatusIcon = (status) => {
       );
 
     default:
-      return <span className=" text-danger icon icon icon-hourglass"></span>;
+      return (
+        <div className="text-white">
+          <span className=" text-pending icon icon icon-hourglass"></span>
+          {status}
+        </div>
+      );
   }
 };

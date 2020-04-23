@@ -8,7 +8,12 @@ import { UserContext } from 'context/UserContext';
 import NoContent from 'components/common/utils/NoContent';
 import { getTokenFromStore } from 'utils/localStorage';
 import LoadingScreen from 'components/common/layout/LoadingScreen';
-import { twoDigitNumber, moneyFormat, getItems } from 'utils/helpers';
+import {
+  twoDigitNumber,
+  moneyFormat,
+  getItems,
+  getRequestStatusIcon,
+} from 'utils/helpers';
 import { getEventDate, getTime, getTimeOfDay } from 'utils/date-helpers';
 import { groupEvents, userCanAddEntertainer } from 'utils/event-helpers';
 import { Link } from '@reach/router';
@@ -55,6 +60,7 @@ const Dashboard = () => {
       })
       .then(function (response) {
         const { status, data } = response;
+        console.log('data.entertainers', data.results);
         // handle success
         if (status === 200) {
           setApplications(data.results);
@@ -89,13 +95,15 @@ const Dashboard = () => {
                       />
                     }
                   >
-                    <Dashboard.UpcomingEvents events={userState.events || []} />
+                    <Dashboard.UpcomingEvents
+                      events={getItems(userState.events, 3) || []}
+                    />
                   </LoadItems>
                 </div>
               </div>
               <Dashboard.RecentApplications
-                bids={applications.bids}
-                requests={applications.requests}
+                bids={getItems(applications.bids, 4) || []}
+                requests={getItems(applications.requests, 2) || []}
               />
             </div>
             <div className="col-sm-4">
@@ -118,25 +126,15 @@ const Dashboard = () => {
 
 Dashboard.UpcomingEvents = ({ events }) => {
   // Sort event according - Today, Upcoming and Past
-  let allEvents = groupEvents(events);
-  let eventsToShow = [];
-  let title = 'Upcoming Events';
-
-  if (allEvents.today.length > 0) {
-    eventsToShow = allEvents.today;
-    title = 'Today Events';
-  } else if (allEvents.upcoming.length > 0) {
-    eventsToShow = allEvents.upcoming;
-  } else if (allEvents.past.length > 0) {
-    eventsToShow = allEvents.past;
-    title = 'Past Events';
-  }
+  const allEvents = groupEvents(events);
+  const title = 'Upcoming Events';
+  const eventsToShow = [...allEvents.today, ...allEvents.upcoming];
 
   return (
     <>
-      <h5 className="card-title text-green">{title}</h5>
+      <h5 className="card-title text-green header__with-border">{title}</h5>
       <div className="table-responsive">
-        <table className="table table-dark table__no-border">
+        <table className="table table-dark table__no-border table__with-bg">
           <tbody>
             {eventsToShow.map((event, index) => (
               <Dashboard.UpcomingEventsRow
@@ -219,41 +217,50 @@ Dashboard.RecentApplications = ({ bids, requests }) => (
     noContent={<NoContent text="No Request found" />}
   >
     {requests && requests.length > 0 && (
-      <div className="table-responsive">
-        <h6 className="font-weight-normal text-white mt-4">Recent Requests</h6>
-        <table className="table table-dark  table__no-border table__with-bg">
-          <tbody>
-            {requests.map((request, index) => (
-              <Dashboard.RequestTableRow
-                application={getItems(request, 2) || []}
-                key={index}
-              />
-            ))}
-          </tbody>
-        </table>
+      <div className="card card-custom">
+        <div className="card-body">
+          <div className="table-responsive">
+            <h5 className="card-title text-blue header__with-border">
+              Recent Requests
+            </h5>
+            <table className="table table-dark  table__no-border table__with-bg">
+              <tbody>
+                {requests.map((request, index) => (
+                  <Dashboard.RequestTableRow
+                    application={request}
+                    key={index}
+                  />
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     )}
     {bids && bids.length > 0 && (
-      <div className="table-responsive">
-        <h6 className="font-weight-normal text-white mt-4">Recent Bids</h6>
-        <table className="table table-dark  table__no-border table__with-bg">
-          <tbody>
-            {bids.map((bid, index) => (
-              <Dashboard.RequestTableRow
-                application={getItems(bid, 2) || []}
-                key={index}
-              />
-            ))}
-          </tbody>
-        </table>
+      <div className="card card-custom">
+        <div className="card-body">
+          <div className="table-responsive">
+            <h5 className="card-title text-white header__with-border">
+              Recent Bids
+            </h5>
+            <table className="table table-dark  table__no-border table__with-bg">
+              <tbody>
+                {bids.map((bid, index) => (
+                  <Dashboard.RequestTableRow application={bid} key={index} />
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     )}
   </LoadItems>
 );
 
 Dashboard.RecentApplications.propTypes = {
-  bids: PropTypes.object,
-  requests: PropTypes.object,
+  bids: PropTypes.array,
+  requests: PropTypes.array,
 };
 
 Dashboard.RecentApplications.defaultProps = {
@@ -276,13 +283,22 @@ Dashboard.RequestTableRow = ({ application }) => (
       {application.stageName}
     </td>
     <td className="align-middle text-yellow">
-      <span className="text-muted small--4">Asking Price</span> &#8358;{' '}
-      {moneyFormat(application.askingPrice)}
+      <span className="text-muted small--4">
+        {application.type === 'Bid' ? 'Asking Price' : 'Your Offer'}
+      </span>{' '}
+      &#8358; {moneyFormat(application.askingPrice)}
     </td>
-    <td className="align-middle text-gray">
-      <span className="text-muted small--4">Location</span>{' '}
-      {application.location}
-    </td>
+    {application.type === 'Bid' ? (
+      <td className="align-middle text-gray">
+        <span className="text-muted small--4">Location</span>{' '}
+        {application.location}
+      </td>
+    ) : (
+      <td className="align-middle">
+        <span className="text-muted small--4">Status</span>
+        <small>{getRequestStatusIcon(application.status)}</small>
+      </td>
+    )}
     <td className="align-middle text-right td-btn">
       <a
         className="btn btn-info btn-sm btn-transparent"

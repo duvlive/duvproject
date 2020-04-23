@@ -93,11 +93,11 @@ const gems = {
       to: '/entertainer/videos',
       icon: 'video',
     },
-    {
-      title: 'Band Members',
-      to: '/entertainer/band-members',
-      icon: 'band-members',
-    },
+    // {
+    //   title: 'Band Members',
+    //   to: '/entertainer/band-members',
+    //   icon: 'band-members',
+    // },
   ],
 };
 
