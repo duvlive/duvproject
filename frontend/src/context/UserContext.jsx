@@ -15,7 +15,7 @@ const INITIAL_STATE = {
   firstTimeLogin: null,
   entertainerProfile: {
     entertainerType: null,
-    approved: false,
+    approved: null,
     about: '',
     stageName: '',
     location: '',

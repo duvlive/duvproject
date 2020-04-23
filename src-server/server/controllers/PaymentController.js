@@ -1,11 +1,11 @@
 import axios from 'axios';
 import crypto from 'crypto';
-import { Notification } from '../models';
+import { Application, EventEntertainer, Notification } from '../models';
 import { validString } from '../utils';
 import { NOTIFICATIONS, NOTIFICATION_TYPE } from '../constant';
 
 const PaymentController = {
-  initializeTransaction(req, res) {
+  async initializeTransaction(req, res) {
     const { amount, applicationId } = req.body;
     const { email } = req.user;
 
@@ -15,12 +15,48 @@ const PaymentController = {
         .json({ message: 'Application ID and Amount needed to process' });
     }
 
+    try {
+      // ensure that payment can be made
+      const application = await Application.findOne({
+        where: { id: applicationId },
+        include: [
+          {
+            model: EventEntertainer,
+            as: 'eventEntertainerInfo',
+          },
+        ],
+      });
+
+      if (!application) {
+        return res.status(404).json({ message: 'Application not found' });
+      }
+
+      // application has previously been approved
+      if (application.status === 'Paid') {
+        return res.status(400).json({
+          application,
+          message: 'This application has already marked as paid',
+        });
+      }
+
+      // can only approve applications without hiredEntertainer
+      if (application.eventEntertainerInfo.hiredEntertainer) {
+        return res.status(400).json({
+          message: 'You have hired an entertainer for this request.',
+        });
+      }
+    } catch (error) {
+      const status = error.status || 500;
+      const errorMessage = error.message || error;
+      return res.status(status).json({ message: errorMessage });
+    }
+
     axios
       .post(
         `${process.env.PAYSTACK_TRANSACT_INIT}`,
         {
           amount: amount * 100,
-          callback_url: `${process.env.HOST}/user/payments/view`,
+          callback_url: `${process.env.HOST}/payment`,
           email,
           metadata: {
             custom_fields: [

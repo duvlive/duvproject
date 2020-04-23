@@ -279,6 +279,9 @@ const EventController = {
         {
           model: EventEntertainer,
           as: 'eventEntertainerInfo',
+          where: {
+            hiredEntertainer: null, // shown requests with no hired Entertainer
+          },
         },
         {
           model: User,

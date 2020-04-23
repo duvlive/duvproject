@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import LoadingScreen from '../layout/LoadingScreen';
 
 const LoadItems = ({ items, children, loadingText, noContent }) => {
-  console.log('items', items);
   if (items == null) {
     return <LoadingScreen text={loadingText} />;
   }
@@ -16,13 +15,14 @@ const LoadItems = ({ items, children, loadingText, noContent }) => {
 
 LoadItems.propTypes = {
   children: PropTypes.any.isRequired,
-  items: PropTypes.array.isRequired,
+  items: PropTypes.array,
   loadingText: PropTypes.string,
   noContent: PropTypes.any.isRequired,
 };
 
 LoadItems.defaultProps = {
   loadingText: null,
+  items: null,
 };
 
 export default LoadItems;

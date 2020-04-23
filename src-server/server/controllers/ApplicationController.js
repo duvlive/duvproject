@@ -1,4 +1,4 @@
-import { Op } from 'sequelize';
+import { Sequelize, Op } from 'sequelize';
 import {
   Application,
   Event,
@@ -202,6 +202,125 @@ const ApplicationController = {
           return result;
         },
         { requests: [], bids: [] }
+      );
+
+      return res.status(200).json({ results });
+    });
+  },
+
+  /**
+   * get Dashboard Auctions, Requests, upcoming Events(for entertainers)
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  getDashboardDetailsForEntertainer(req, res) {
+    EventEntertainer.findAll({
+      where: {
+        [Op.or]: [
+          {
+            // Auctions
+            hireType: 'Auction',
+            auctionStartDate: { [Op.lte]: Sequelize.literal('NOW()') },
+            auctionEndDate: { [Op.gte]: Sequelize.literal('NOW()') },
+            entertainerType: {
+              [Op.eq]: req.user.profile.entertainerType,
+            },
+            [Op.and]: Sequelize.literal('applications.id is null'),
+          },
+          {
+            // Upcoming Events
+            hiredEntertainer: req.user.profile.id,
+            [Op.and]: Sequelize.literal('"event"."eventDate" > NOW()'),
+          },
+          {
+            // Requests
+            [Op.and]: [
+              {
+                [Op.and]: Sequelize.literal(
+                  `"applications"."userId" = ${req.user.id}`
+                ),
+              },
+              {
+                [Op.and]: Sequelize.literal(
+                  `"applications"."status" = 'Pending'`
+                ),
+              },
+              {
+                [Op.and]: Sequelize.literal(
+                  `"applications"."applicationType" = 'Request'`
+                ),
+              },
+              {
+                [Op.and]: Sequelize.literal(
+                  `"applications"."expiryDate" > NOW()`
+                ),
+              },
+            ],
+          },
+          {
+            // Bids
+            [Op.and]: [
+              {
+                [Op.and]: Sequelize.literal(
+                  `"applications"."userId" = ${req.user.id}`
+                ),
+              },
+              {
+                [Op.and]: Sequelize.literal(
+                  `"applications"."status" = 'Pending'`
+                ),
+              },
+              {
+                [Op.and]: Sequelize.literal(
+                  `"applications"."applicationType" = 'Bid'`
+                ),
+              },
+            ],
+          },
+        ],
+      },
+      // attributes: ['id'],
+      include: [
+        {
+          model: Event,
+          as: 'event',
+          include: [
+            {
+              model: User,
+              as: 'owner',
+              attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+            },
+          ],
+          where: {
+            eventDate: { [Op.gte]: addDays(Date.now(), 3) },
+          },
+        },
+        {
+          model: Application,
+          as: 'applications',
+        },
+      ],
+    }).then((eventEntertainers) => {
+      const results = eventEntertainers.reduce(
+        (result, eventEntertainer) => {
+          if (
+            eventEntertainer.applications &&
+            eventEntertainer.applications.length > 0 &&
+            eventEntertainer.applications[0].applicationType === 'Bid'
+          ) {
+            result.bids.push(eventEntertainer);
+          } else if (eventEntertainer.hireType === 'Auction') {
+            result.auctions.push(eventEntertainer);
+          } else if (eventEntertainer.hiredEntertainer) {
+            result.upcomingEvents.push(eventEntertainer.event);
+          } else {
+            result.requests.push(eventEntertainer);
+          }
+          return result;
+        },
+        { auctions: [], bids: [], requests: [], upcomingEvents: [] }
       );
 
       return res.status(200).json({ results });
@@ -546,7 +665,7 @@ const ApplicationController = {
    * @param {object} res is res object
    * @return {object} returns res object
    */
-  approveAuctionsApplication(req, res) {
+  approveApplication(req, res) {
     // const currentDate = Date.now();
     const id = req.params.applicationId;
 
@@ -608,33 +727,21 @@ const ApplicationController = {
         }
 
         // application has previously been approved
-        if (application.status === 'Approved') {
+        if (application.status === 'Paid') {
           return res.status(200).json({
             application,
-            message: 'This application has already been approved',
-          });
-        }
-
-        // can only approve applications without hiredEntertainer
-        if (application.eventEntertainerInfo.hiredEntertainer) {
-          return res.status(400).json({
-            message: 'You have hired an entertainer for this request.',
-          });
-        }
-
-        // for Auctions, only owners of events can approve an application
-        if (
-          application.eventEntertainerInfo.hireType === 'Auction' &&
-          application.eventEntertainerInfo.userId !== req.user.id
-        ) {
-          return res.status(401).json({
-            message: 'Only event owners can approve a bid application',
+            message: 'This application has already been marked as paid',
           });
         }
 
         // updated approved application
         return Application.update(
-          { status: 'Approved', approvedDate: currentDate },
+          {
+            status: 'Paid',
+            approvedDate: currentDate,
+            paid: true,
+            paidOn: Date.now(),
+          },
           {
             where: {
               id,
@@ -673,6 +780,13 @@ const ApplicationController = {
                 userId: application.user.profile.id,
                 title: NOTIFICATIONS.BID_APPROVED,
                 description: `Your bid NGN (${EMAIL_PARAMS.askingPrice}) for ${EMAIL_PARAMS.eventType} has been approved`,
+                type: NOTIFICATION_TYPE.SUCCESS,
+                actionId: id, //application id
+              });
+              await Notification.create({
+                userId: application.eventEntertainerInfo.event.userId,
+                title: NOTIFICATIONS.PAYMENT_SUCCESSFUL,
+                description: `Your initiated payment was successful.`,
                 type: NOTIFICATION_TYPE.SUCCESS,
                 actionId: id, //application id
               });

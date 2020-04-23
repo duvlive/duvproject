@@ -15,10 +15,10 @@ const Auctions = () => {
     axios
       .get('/api/v1/available-auctions', {
         headers: {
-          'x-access-token': getTokenFromStore()
-        }
+          'x-access-token': getTokenFromStore(),
+        },
       })
-      .then(function(response) {
+      .then(function (response) {
         const { status, data } = response;
         console.log('data', data);
         // handle success
@@ -26,7 +26,7 @@ const Auctions = () => {
           setAuctions(data.events);
         }
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error.response.data.message);
         // navigate to all events
       });
@@ -66,13 +66,13 @@ const Auctions = () => {
   );
 };
 
-const AuctionsRow = ({
+export const AuctionsRow = ({
   auctionEndDate,
   city,
   eventType,
   id,
   number,
-  state
+  state,
 }) => (
   <tr>
     <th className="table__number" scope="row">
@@ -109,7 +109,7 @@ AuctionsRow.propTypes = {
   id: PropTypes.number.isRequired,
   number: PropTypes.number,
   state: PropTypes.string,
-  status: PropTypes.string
+  status: PropTypes.string,
 };
 
 Auctions.defaultProps = {
@@ -118,7 +118,7 @@ Auctions.defaultProps = {
   eventType: '',
   number: 0,
   state: '',
-  status: 'Pending'
+  status: 'Pending',
 };
 
 export default Auctions;
