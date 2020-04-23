@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Formik, Form } from 'formik';
 import axios from 'axios';
 import Input from 'components/forms/Input';
@@ -12,7 +13,7 @@ import { UserContext } from 'context/UserContext';
 import { getTokenFromStore } from 'utils/localStorage';
 import { ONBOARDING_STEPS } from 'utils/constants';
 
-const IdentificationForm = () => {
+const IdentificationForm = ({ moveToNextStep }) => {
   const [message, setMessage] = React.useState(null);
   const { userState, userDispatch } = React.useContext(UserContext);
 
@@ -20,33 +21,30 @@ const IdentificationForm = () => {
     <Formik
       enableReinitialize={true}
       initialValues={setInitialValues(identificationSchema, {
-        ...userState.identification
+        ...userState.identification,
       })}
       onSubmit={(values, actions) => {
-        const payload = {
-          ...values,
-          expiryDate: values.expiryDate.date,
-          issueDate: values.issueDate.date
-        };
         axios
-          .put('/api/v1/identification', payload, {
-            headers: { 'x-access-token': getTokenFromStore() }
+          .put('/api/v1/identification', values, {
+            headers: { 'x-access-token': getTokenFromStore() },
           })
-          .then(function(response) {
+          .then(function (response) {
             const { status, data } = response;
+            console.log('data', data);
             if (status === 200) {
               userDispatch({
                 type: 'entertainer-identification',
-                user: data
+                identification: data.identification,
               });
               setMessage({
                 type: 'success',
-                message: `Your identification has been successfully updated`
+                message: `Your identification has been successfully updated`,
               });
               actions.setSubmitting(false);
+              moveToNextStep();
             }
           })
-          .catch(function(error) {
+          .catch(function (error) {
             setMessage(error.response.data.message);
             actions.setSubmitting(false);
           });
@@ -68,7 +66,7 @@ const IdentificationForm = () => {
                   options={[
                     { label: 'International Passport' },
                     { label: 'Driver Licence' },
-                    { label: 'National ID Card' }
+                    { label: 'National ID Card' },
                   ]}
                 />
                 <Input
@@ -106,6 +104,14 @@ const IdentificationForm = () => {
       validationSchema={createSchema(identificationSchema)}
     />
   );
+};
+
+IdentificationForm.propTypes = {
+  moveToNextStep: PropTypes.func,
+};
+
+IdentificationForm.defaultProps = {
+  moveToNextStep: () => {},
 };
 
 export default IdentificationForm;

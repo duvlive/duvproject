@@ -15,7 +15,7 @@ const IdentificationController = {
       ...validString(idType),
       ...validString(idNumber),
       ...validString(issueDate),
-      ...validString(expiryDate)
+      ...validString(expiryDate),
     };
     if (Object.keys(error).length > 1) {
       return res.status(400).json({ message: error.message.join('') });
@@ -27,17 +27,17 @@ const IdentificationController = {
         idNumber,
         issueDate,
         expiryDate,
-        userId: req.user.id
+        userId: req.user.id,
       },
       'Identification'
     )
-      .then(newIdentification => {
+      .then((newIdentification) => {
         return res.status(200).json({
           message: 'Entertainer Identification updated succesfully',
-          identification: newIdentification
+          identification: newIdentification,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         const status = error.status || 500;
         const errorMessage = error.message || error;
         return res.status(status).json({ message: errorMessage });
@@ -51,7 +51,7 @@ const IdentificationController = {
    * @return {object} returns res object
    */
   getIdentification(req, res) {
-    req.user.getIdentification().then(identification => {
+    req.user.getIdentification().then((identification) => {
       if (!identification || identification.length === 0) {
         return res
           .status(404)
@@ -59,7 +59,7 @@ const IdentificationController = {
       }
       return res.status(200).json({ identification });
     });
-  }
+  },
 };
 
 export default IdentificationController;

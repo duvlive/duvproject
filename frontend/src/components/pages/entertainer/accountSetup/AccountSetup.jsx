@@ -14,6 +14,7 @@ import { BankDetailsForm } from 'components/pages/entertainer/accountSetup/BankD
 import { UserContext } from 'context/UserContext';
 import { ONBOARDING_STEPS, STEPS_REQUIREMENT } from 'utils/constants';
 import AlertMessage from 'components/common/utils/AlertMessage';
+import { navigate } from '@reach/router';
 
 const MIN_STEP = 1;
 const MAX_STEP = 5;
@@ -33,18 +34,6 @@ const AccountSetup = ({ stepFromURL }) => {
     setCurrentStep(parseInt(stepFromURL, 10));
   }, [stepFromURL]);
 
-  const ALL_STEPS = [
-    null,
-    <EntertainerDetailsForm />,
-    <BankDetailsForm />,
-    <>
-      <NextOfKinForm />
-      <ProfessionalContactForm />
-    </>,
-    <YoutubeChannelForm />,
-    <IdentificationForm />,
-  ];
-
   const handleCurrentStep = (step) => setCurrentStep(step);
   const moveToPreviousStep = () =>
     currentStep <= MIN_STEP
@@ -52,8 +41,20 @@ const AccountSetup = ({ stepFromURL }) => {
       : setCurrentStep(currentStep - 1);
   const moveToNextStep = () =>
     currentStep >= MAX_STEP
-      ? setCurrentStep(MAX_STEP)
+      ? navigate('/entertainer/dashboard')
       : setCurrentStep(currentStep + 1);
+
+  const ALL_STEPS = [
+    null,
+    <EntertainerDetailsForm moveToNextStep={moveToNextStep} />,
+    <BankDetailsForm moveToNextStep={moveToNextStep} />,
+    <>
+      <NextOfKinForm moveToNextStep={moveToNextStep} />
+      <ProfessionalContactForm moveToNextStep={moveToNextStep} />
+    </>,
+    <YoutubeChannelForm moveToNextStep={moveToNextStep} />,
+    <IdentificationForm moveToNextStep={moveToNextStep} />,
+  ];
 
   return (
     <BackEndPage title="Account Setup">
@@ -90,7 +91,7 @@ const StepperList = ({ currentStep, setCurrentStep }) => {
   const steps = Object.keys(ONBOARDING_STEPS);
   const done = [
     !!userState.entertainerProfile.stageName && !!userState.profileImg,
-    !!userState.bankDetail.bankName,
+    !!userState.bankDetail && !!userState.bankDetail.bankName,
     (userState.contacts.length > 0 &&
       !!(userState.contacts[0] && userState.contacts[0].firstName)) ||
       !!(userState.contacts[1] && userState.contacts[1].firstName),
@@ -228,11 +229,5 @@ export default AccountSetup;
 // 2. Update backend to handle updates after approval. [Needs review instead of yes]
 // 8. Recommend a friend, api, facebook, twitter and linkedin
 // 12. Add a get started button that will create entertainer profile for user
-// e. User application for search and recommendation must be approved in 24 hours
-// f. Create a proper search page for user
-// g. create a proper recommendation page for user
 // update lastViewed when notification page is view
-// add notification to approval (admin approval, profile approval, new review)
 // Add filter to auctions (Pendng Approved, Closed)
-// Add sample entertainer to DB
-// submitting recommendation

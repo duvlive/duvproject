@@ -214,7 +214,7 @@ Dashboard.PendingReview = () => (
 Dashboard.RecentApplications = ({ bids, requests }) => (
   <LoadItems
     items={(requests && bids && [...requests, ...bids]) || null} //todo
-    noContent={<NoContent text="No Request found" />}
+    noContent={<Dashboard.NoRequestFound />}
   >
     {requests && requests.length > 0 && (
       <div className="card card-custom">
@@ -323,6 +323,13 @@ Dashboard.InviteFriends = () => (
         Recommend a Friend
       </h5>
       <InviteFriendsForm widget />
+    </div>
+  </div>
+);
+Dashboard.NoRequestFound = () => (
+  <div className="card card-custom">
+    <div className="card-body">
+      <NoContent text="No Request found" />
     </div>
   </div>
 );

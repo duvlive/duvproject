@@ -209,6 +209,11 @@
     }
   }
 
+  .icon.pending {
+    background: rgba($green-300, 0.3);
+    color: rgba($white, 0.7);
+  }
+
   &--icon {
     font-size: 8rem;
     position: absolute;

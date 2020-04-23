@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import axios from 'axios';
 import TopMessage from 'components/common/layout/TopMessage';
 import BackEndPage from 'components/common/layout/BackEndPage';
@@ -26,9 +27,10 @@ const BankDetails = () => {
   );
 };
 
-export const BankDetailsForm = () => {
+export const BankDetailsForm = ({ moveToNextStep }) => {
   const [message, setMessage] = React.useState(null);
   const { userState, userDispatch } = React.useContext(UserContext);
+
   return (
     <Formik
       enableReinitialize={true}
@@ -36,23 +38,24 @@ export const BankDetailsForm = () => {
       onSubmit={(values, actions) => {
         axios
           .put('/api/v1/bankDetail', values, {
-            headers: { 'x-access-token': getTokenFromStore() }
+            headers: { 'x-access-token': getTokenFromStore() },
           })
-          .then(function(response) {
+          .then(function (response) {
             const { status, data } = response;
             if (status === 200) {
               userDispatch({
                 type: 'bank-account-update',
-                user: data
+                bankDetail: data.bankDetail,
               });
               setMessage({
                 type: 'info',
-                message: `Your bank has been successfully submitted.`
+                message: `Your bank has been successfully submitted.`,
               });
               actions.setSubmitting(false);
+              moveToNextStep();
             }
           })
-          .catch(function(error) {
+          .catch(function (error) {
             setMessage(error.response.data.message);
             actions.setSubmitting(false);
           });
@@ -94,6 +97,13 @@ export const BankDetailsForm = () => {
       validationSchema={createSchema(bankDetailsSchema)}
     />
   );
+};
+BankDetailsForm.propTypes = {
+  moveToNextStep: PropTypes.func,
+};
+
+BankDetailsForm.defaultProps = {
+  moveToNextStep: () => {},
 };
 
 export default BankDetails;
