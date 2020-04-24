@@ -32,6 +32,7 @@ const Onboarding = () => {
   }));
 
   const entertainerIsDone = done.every((isDone) => isDone);
+  const firstUndoneIndex = done.findIndex((isDone) => !isDone);
 
   return (
     <>
@@ -64,11 +65,17 @@ const Onboarding = () => {
       {onboardingTasks.map((task, index) => (
         <Onboarding.Card key={index} number={index + 1} {...task} />
       ))}
-      <div className="text-center">
-        <button className="btn btn-danger btn-lg btn-wide btn-transparent mt-5">
-          Continue Setup
-        </button>
-      </div>
+
+      {!entertainerIsDone && (
+        <div className="text-center">
+          <Link
+            className="btn btn-danger btn-lg btn-wide btn-transparent mt-5"
+            to={`/entertainer/account-setup/${firstUndoneIndex + 1}`}
+          >
+            Continue Setup
+          </Link>
+        </div>
+      )}
     </>
   );
 };

@@ -37,7 +37,7 @@ const AccountSetup = ({ stepFromURL }) => {
   const handleCurrentStep = (step) => setCurrentStep(step);
   const moveToPreviousStep = () =>
     currentStep <= MIN_STEP
-      ? setCurrentStep(1)
+      ? navigate('/entertainer/dashboard')
       : setCurrentStep(currentStep - 1);
   const moveToNextStep = () =>
     currentStep >= MAX_STEP
@@ -169,24 +169,26 @@ const StepperNavigation = ({
 }) => (
   <section className="row mt-3">
     <div className="col-6">
-      {currentStep > MIN_STEP && (
-        <button
-          className="btn btn-info btn-circle btn-transparent"
-          onClick={moveToPreviousStep}
-        >
-          <span className="icon icon-angle-left"></span> Previous Step
-        </button>
-      )}
+      <button
+        className={`btn ${
+          currentStep > MIN_STEP ? 'btn-info' : 'btn-danger'
+        } btn-circle btn-transparent`}
+        onClick={moveToPreviousStep}
+      >
+        <span className="icon icon-angle-left"></span>{' '}
+        {currentStep > MIN_STEP ? 'Previous Step' : 'Back'}
+      </button>
     </div>
     <div className="col-6 text-right">
-      {currentStep < MAX_STEP && (
-        <button
-          className="btn btn-info btn-circle btn-transparent"
-          onClick={moveToNextStep}
-        >
-          Next Step <span className="icon icon-angle-right"></span>
-        </button>
-      )}
+      <button
+        className={`btn ${
+          currentStep < MAX_STEP ? 'btn-info' : 'btn-danger'
+        } btn-circle btn-transparent`}
+        onClick={moveToNextStep}
+      >
+        {currentStep < MAX_STEP ? 'Next Step' : 'Finish'}{' '}
+        <span className="icon icon-angle-right"></span>
+      </button>
     </div>
   </section>
 );

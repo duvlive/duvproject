@@ -123,11 +123,13 @@ const SidebarMenu = ({ showUserType }) => {
         ? userState.entertainerProfile.stageName
         : null,
   });
+
   // user is not shown on the sidebar
   const userType =
     userState.type !== USER_TYPES.user &&
     Object.keys(USER_TYPES)[userState.type];
 
+  // if available,show the entertainer type for entertainers
   const entertainerType =
     userState.type === USER_TYPES.entertainer &&
     userState.entertainerProfile.entertainerType;
@@ -143,8 +145,9 @@ const SidebarMenu = ({ showUserType }) => {
         <div className="user-status offline" />
       </div>
       <h5 className="text-uppercase">{userName}</h5>
-      {showUserType && <small className="text-uppercase">{userType}</small>}
-      {<small className="text-muted small--3 mt-n1">{entertainerType}</small>}
+      {showUserType && (
+        <small className="text-uppercase">{entertainerType || userType}</small>
+      )}
     </div>
   );
 };
