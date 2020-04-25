@@ -13,7 +13,7 @@ const Ratings = (props) => (
 const Star = (props) => {
   const starProps = Object.assign({}, props);
   const nameMap = {
-    isDisabled: 'text-muted',
+    isDisabled: 'text-white',
     isActive: 'text-green',
     isActiveHalf: 'text-yellow',
     willBeActive: 'text-red',

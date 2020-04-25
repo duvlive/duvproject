@@ -63,7 +63,10 @@ const ReviewEntertainer = ({ eventEntertainerId }) => {
 };
 
 ReviewEntertainer.propTypes = {
-  eventEntertainerId: PropTypes.any.isRequired,
+  eventEntertainerId: PropTypes.any,
+};
+ReviewEntertainer.defaultProps = {
+  eventEntertainerId: '',
 };
 
 const LeaveAReviewForm = ({ entertainer, event }) => {

@@ -226,13 +226,13 @@ db.Rating.belongsTo(db.EntertainerProfile, {
   as: 'rated',
 });
 
-db.Event.hasOne(db.Rating, {
-  foreignKey: 'eventId',
+db.EventEntertainer.hasOne(db.Rating, {
+  foreignKey: 'eventEntertainerId',
   as: 'eventRating',
 });
 
-db.Rating.belongsTo(db.Event, {
-  foreignKey: 'eventId',
+db.Rating.belongsTo(db.EventEntertainer, {
+  foreignKey: 'eventEntertainerId',
   as: 'ratedEvent',
 });
 
