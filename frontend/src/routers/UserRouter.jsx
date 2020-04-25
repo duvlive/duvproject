@@ -14,6 +14,7 @@ import ViewEvent from 'components/pages/user/ViewEvent';
 import Bids from 'components/pages/user/Bids';
 import EditProfile from 'components/pages/user/EditProfile';
 import RegisterAsEntertainer from 'components/pages/user/RegisterAsEntertainer';
+import ReviewEntertainer from 'components/pages/user/ReviewEntertainer';
 import Approval from 'components/pages/user/Approval';
 import AddEntertainerToEvent from 'components/pages/user/AddEntertainerToEvent';
 import ViewRequest from 'components/pages/user/ViewRequest';
@@ -47,6 +48,7 @@ const UserRouter = () => (
     <EditProfile path="/edit-profile" />
     <ChangePassword path="/change-password" />
     <RegisterAsEntertainer path="/register-as-entertainer" />
+    <ReviewEntertainer path="/review-entertainer/:eventEntertainerId" />
     <Dashboard default />
   </Router>
 );

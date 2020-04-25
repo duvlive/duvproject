@@ -4,12 +4,12 @@ import { getIn } from 'formik';
 
 const validityOptions = {
   valid: 'is-valid',
-  invalid: 'is-invalid'
+  invalid: 'is-invalid',
 };
 
 const feebackOptions = {
   valid: 'valid-feedback',
-  invalid: 'invalid-feedback'
+  invalid: 'invalid-feedback',
 };
 
 const showErrors = ({ showFeedback, formik }) => {
@@ -28,7 +28,7 @@ export const feedback = {
   ALL: 'ALL',
   ERROR: 'ERROR',
   SUCCESS: 'SUCCESS',
-  NONE: 'NONE'
+  NONE: 'NONE',
 };
 
 export const getValidityClass = (
@@ -54,7 +54,7 @@ export const FeedbackMessage = ({
   helpText,
   name,
   showFeedback,
-  validMessage
+  validMessage,
 }) => {
   const className = getValidityClass(
     formik,
@@ -77,12 +77,12 @@ FeedbackMessage.propTypes = {
   helpText: PropTypes.string,
   name: PropTypes.string.isRequired,
   showFeedback: PropTypes.string.isRequired,
-  validMessage: PropTypes.string
+  validMessage: PropTypes.string,
 };
 
 FeedbackMessage.defaultProps = {
   helpText: null,
-  validMessage: null
+  validMessage: null,
 };
 
 export const HelpText = ({ name, text }) => (
@@ -93,10 +93,10 @@ export const HelpText = ({ name, text }) => (
 
 HelpText.propTypes = {
   name: PropTypes.string.isRequired,
-  text: PropTypes.string.isRequired
+  text: PropTypes.string.isRequired,
 };
 
-export const DisplayFormikState = props => {
+export const DisplayFormikState = (props) => {
   const displayFormikValues = (
     <div style={{ margin: '1rem 0' }}>
       <pre
@@ -105,7 +105,7 @@ export const DisplayFormikState = props => {
           fontSize: '.65rem',
           border: '1px solid #666',
           marginTop: '5rem',
-          padding: '1.5rem 2rem'
+          padding: '1.5rem 2rem',
         }}
       >
         {props.showAll ? (
@@ -118,23 +118,24 @@ export const DisplayFormikState = props => {
       </pre>
     </div>
   );
+  if (process.env.NODE_ENV === 'production') return null;
   return !props.hide && displayFormikValues;
 };
 
 DisplayFormikState.propTypes = {
   hide: PropTypes.bool,
   showAll: PropTypes.bool,
-  values: PropTypes.object.isRequired
+  values: PropTypes.object.isRequired,
 };
 
 DisplayFormikState.defaultProps = {
   showAll: false,
-  hide: false
+  hide: false,
 };
 
 export const setInitialValues = (schema, initialValues = {}) => {
   const values = {};
-  Object.keys(schema).forEach(key => {
+  Object.keys(schema).forEach((key) => {
     if (initialValues[key]) {
       values[key] = initialValues[key];
     } else {

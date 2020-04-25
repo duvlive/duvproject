@@ -200,13 +200,43 @@ Dashboard.UpcomingEventsRow.propTypes = {
   number: PropTypes.number.isRequired,
 };
 
-Dashboard.PendingReview = () => (
+// Dashboard.PendingReview = () => (
+//   <div className="card card-custom">
+//     <div className="card-body">
+//       <h5 className="card-title text-red header__with-border">
+//         Pending Review
+//       </h5>
+//       <NoContent text="No pending Reviews." />
+//     </div>
+//   </div>
+// );
+
+Dashboard.PendingReview = ({ entertainer }) => (
   <div className="card card-custom">
     <div className="card-body">
       <h5 className="card-title text-red header__with-border">
         Pending Review
       </h5>
-      <NoContent text="No pending Reviews." />
+      <p className="card-text">
+        To serve you better, kindly help us improve our service and give other
+        users a better understanding about entertainers.
+      </p>
+
+      <div className="text-center">
+        <img
+          alt={entertainer.stageName}
+          className="rounded-circle img-thumbnail img-responsive avatar--large"
+          src={entertainer.img.profile}
+          title={entertainer.stageName}
+        />{' '}
+        <h5 className="card-subtitle card-subtitle--2 mt-3 mb-0 white">
+          {entertainer.stageName}
+        </h5>
+        <p className="card-subtitle--3">Party DJ on 15th Apr., 2019</p>
+        <button className="btn btn-danger btn-wide btn-transparent">
+          Rate Now
+        </button>
+      </div>
     </div>
   </div>
 );
@@ -326,6 +356,7 @@ Dashboard.InviteFriends = () => (
     </div>
   </div>
 );
+
 Dashboard.NoRequestFound = () => (
   <div className="card card-custom">
     <div className="card-body">

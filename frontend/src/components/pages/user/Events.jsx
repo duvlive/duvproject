@@ -14,7 +14,7 @@ import { userCanAddEntertainer } from 'utils/event-helpers';
 
 const Events = () => {
   const { userState } = React.useContext(UserContext);
-  const events = userState && userState.events;
+  const events = (userState && userState.events) || [];
   const [showPastEvents, setShowPastEvents] = React.useState(false);
   // Sort event according - Today, Upcoming and Past
   let allEvents = groupEvents(events);
@@ -30,6 +30,14 @@ const Events = () => {
         <TopMessage message="All Events" />
 
         <section className="app-content">
+          <div className="text-right">
+            <Link
+              className="btn btn-danger btn-transparent btn-wide"
+              to="/user/events/new"
+            >
+              <span className="icon icon-events"></span> New Event
+            </Link>
+          </div>
           {events.length > 0 ? (
             <div className="table-responsive">
               <table className="table table-dark table__no-border table__with-bg">
@@ -100,11 +108,11 @@ Events.CardList = ({ events, title }) => {
 
 Events.CardList.propTypes = {
   events: PropTypes.array,
-  title: PropTypes.string.isRequired
+  title: PropTypes.string.isRequired,
 };
 
 Events.CardList.defaultProps = {
-  events: []
+  events: [],
 };
 
 Events.Card = ({
@@ -115,7 +123,7 @@ Events.Card = ({
   eventDuration,
   lga,
   state,
-  entertainers
+  entertainers,
 }) => {
   const entertainerTypes =
     entertainers &&
@@ -133,7 +141,7 @@ Events.Card = ({
     (entertainers &&
       entertainers
         .filter(({ entertainer }) => !!entertainer)
-        .map(event => event.entertainer)) ||
+        .map((event) => event.entertainer)) ||
     [];
 
   return (
@@ -213,7 +221,7 @@ Events.Card.propTypes = {
   id: PropTypes.number,
   lga: PropTypes.string,
   startTime: PropTypes.string,
-  state: PropTypes.string
+  state: PropTypes.string,
 };
 
 Events.Card.defaultProps = {
@@ -224,6 +232,6 @@ Events.Card.defaultProps = {
   eventType: null,
   lga: null,
   startTime: null,
-  state: null
+  state: null,
 };
 export default Events;
