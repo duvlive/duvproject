@@ -6,6 +6,7 @@ import {
   User,
   EntertainerProfile,
   Application,
+  Rating,
 } from '../models';
 
 const EventController = {
@@ -455,7 +456,9 @@ const EventController = {
         hiredEntertainer: {
           [Op.ne]: null,
         },
+        // [Op.and]: Sequelize.literal(`"eventRating"."id" is null`),
       },
+      order: [Sequelize.fn('RANDOM')],
       attributes: ['id', 'placeOfEvent'],
       include: [
         {
@@ -485,6 +488,10 @@ const EventController = {
               attributes: ['id', 'profileImageURL'],
             },
           ],
+        },
+        {
+          model: Rating,
+          as: 'eventRating',
         },
       ],
     }).then((info) => {

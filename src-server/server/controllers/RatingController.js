@@ -71,6 +71,7 @@ const RatingController = {
             professionalism,
             accommodating,
             overallTalent,
+            review,
             recommend,
           });
         }

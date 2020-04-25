@@ -300,7 +300,7 @@ const EventEntertainerController = {
         {
           model: EntertainerProfile,
           as: 'entertainer',
-          attributes: ['entertainerType', 'stageName', 'slug'],
+          attributes: ['id', 'entertainerType', 'stageName', 'slug'],
           include: [
             {
               model: User,

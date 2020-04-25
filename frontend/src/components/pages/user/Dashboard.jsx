@@ -76,6 +76,11 @@ const Dashboard = () => {
   }, []);
 
   const topMessage = userState.firstTimeLogin ? 'Hello' : 'Welcome back';
+  // Sort event according - Today, Upcoming and Past
+  const allEvents = groupEvents(userState.events || []);
+  const eventsToShow = userState.events
+    ? getItems([...allEvents.today, ...allEvents.upcoming], 3)
+    : null;
 
   return (
     <BackEndPage title="Dashboard">
@@ -88,7 +93,7 @@ const Dashboard = () => {
               <div className="card card-custom">
                 <div className="card-body">
                   <LoadItems
-                    items={userState.events}
+                    items={eventsToShow}
                     noContent={
                       <NoContent
                         isButton
@@ -98,21 +103,19 @@ const Dashboard = () => {
                       />
                     }
                   >
-                    <Dashboard.UpcomingEvents
-                      events={getItems(userState.events, 3) || []}
-                    />
+                    <Dashboard.UpcomingEvents events={eventsToShow || []} />
                   </LoadItems>
                 </div>
               </div>
               <Dashboard.RecentApplications
-                bids={getItems(applications.bids, 4) || []}
-                requests={getItems(applications.requests, 2) || []}
+                bids={getItems(applications.bids, 4) || null}
+                requests={getItems(applications.requests, 2) || null}
               />
             </div>
             <div className="col-sm-4">
               <Dashboard.InviteFriends />
               <LoadItems
-                items={pendingReview || null} //todo
+                items={pendingReview}
                 noContent={<Dashboard.NoPendingReview />}
               >
                 {pendingReview && pendingReview.length > 0 && (
@@ -128,18 +131,15 @@ const Dashboard = () => {
 };
 
 Dashboard.UpcomingEvents = ({ events }) => {
-  // Sort event according - Today, Upcoming and Past
-  const allEvents = groupEvents(events);
-  const title = 'Upcoming Events';
-  const eventsToShow = [...allEvents.today, ...allEvents.upcoming];
-
   return (
     <>
-      <h5 className="card-title text-green header__with-border">{title}</h5>
+      <h5 className="card-title text-green header__with-border">
+        Upcoming Events
+      </h5>
       <div className="table-responsive">
         <table className="table table-dark table__no-border table__with-bg">
           <tbody>
-            {eventsToShow.map((event, index) => (
+            {events.map((event, index) => (
               <Dashboard.UpcomingEventsRow
                 event={event}
                 key={index}
@@ -258,7 +258,7 @@ Dashboard.PendingReview.propTypes = {
 
 Dashboard.RecentApplications = ({ bids, requests }) => (
   <LoadItems
-    items={(requests && bids && [...requests, ...bids]) || null} //todo
+    items={requests && bids ? [...requests, ...bids] : null}
     noContent={<Dashboard.NoRequestFound />}
   >
     {requests && requests.length > 0 && (

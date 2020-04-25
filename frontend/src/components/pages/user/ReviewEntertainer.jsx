@@ -54,6 +54,7 @@ const ReviewEntertainer = ({ eventEntertainerId }) => {
             <LeaveAReviewForm
               entertainer={eventEntertainer.entertainer}
               event={eventEntertainer.event}
+              eventEntertainerId={eventEntertainerId}
             />
           )}
         </section>
@@ -69,14 +70,33 @@ ReviewEntertainer.defaultProps = {
   eventEntertainerId: '',
 };
 
-const LeaveAReviewForm = ({ entertainer, event }) => {
+const LeaveAReviewForm = ({ entertainer, event, eventEntertainerId }) => {
   return (
     <Formik
       initialValues={setInitialValues(reviewSchema)}
       onSubmit={(values, actions) => {
-        setTimeout(() => {
-          actions.setSubmitting(false);
-        }, 400);
+        const payload = {
+          entertainerId: entertainer.id,
+          eventEntertainerId: eventEntertainerId,
+          ...values,
+        };
+        console.log('payload', payload);
+        axios
+          .post('/api/v1/rating', payload, {
+            headers: { 'x-access-token': getTokenFromStore() },
+          })
+          .then(function (response) {
+            const { status, data } = response;
+            console.log('status, data', status, data);
+            if (status === 200) {
+              // navigate(`/user/events/${eventId}/add-entertainer/new-event`);
+              actions.setSubmitting(false);
+            }
+          })
+          .catch(function (error) {
+            // setMessage(error.response.data.message);
+            actions.setSubmitting(false);
+          });
       }}
       render={({ isSubmitting, handleSubmit, ...props }) => (
         <div className="card card-custom card-black card-form ">
@@ -150,6 +170,7 @@ const LeaveAReviewForm = ({ entertainer, event }) => {
 LeaveAReviewForm.propTypes = {
   entertainer: PropTypes.object.isRequired,
   event: PropTypes.object.isRequired,
+  eventEntertainerId: PropTypes.any.isRequired,
 };
 
 export default ReviewEntertainer;
