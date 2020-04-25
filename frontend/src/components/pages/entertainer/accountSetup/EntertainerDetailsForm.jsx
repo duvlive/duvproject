@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Formik, Form } from 'formik';
 import axios from 'axios';
 import Input from 'components/forms/Input';
@@ -20,7 +21,7 @@ import { getStates, getLgas } from 'data/naija-states-and-lgas';
 
 const currentYear = new Date().getFullYear();
 
-const EntertainerDetailsForm = () => {
+const EntertainerDetailsForm = ({ moveToNextStep }) => {
   const [message, setMessage] = React.useState(null);
   const { userState, userDispatch } = React.useContext(UserContext);
   return (
@@ -28,30 +29,31 @@ const EntertainerDetailsForm = () => {
       enableReinitialize={true}
       initialValues={setInitialValues(entertainerDetailsSchema, {
         ...userState.entertainerProfile,
-        availableFor: JSON.parse(userState.entertainerProfile.availableFor)
+        availableFor: JSON.parse(userState.entertainerProfile.availableFor),
       })}
       onSubmit={(values, actions) => {
         const availableFor = JSON.stringify(values.availableFor);
         const payload = { ...values, availableFor };
         axios
           .put('/api/v1/users/updateEntertainerProfile', payload, {
-            headers: { 'x-access-token': getTokenFromStore() }
+            headers: { 'x-access-token': getTokenFromStore() },
           })
-          .then(function(response) {
+          .then(function (response) {
             const { status, data } = response;
             if (status === 200) {
               userDispatch({
                 type: 'entertainer-profile-update',
-                user: data
+                user: data,
               });
               setMessage({
                 type: 'success',
-                message: `Your profile has been successfully updated`
+                message: `Your profile has been successfully updated`,
               });
               actions.setSubmitting(false);
+              moveToNextStep();
             }
           })
-          .catch(function(error) {
+          .catch(function (error) {
             setMessage(error.response.data.message);
             actions.setSubmitting(false);
           });
@@ -128,12 +130,12 @@ const EntertainerDetailsForm = () => {
                   options={[
                     {
                       label: 'Yes, I can move to other states for events',
-                      value: true
+                      value: true,
                     },
                     {
                       label: 'No, I prefer events in my location only',
-                      value: false
-                    }
+                      value: false,
+                    },
                   ]}
                 />
                 <Select
@@ -142,8 +144,8 @@ const EntertainerDetailsForm = () => {
                   label="Year you started"
                   name="yearStarted"
                   options={range(currentYear, currentYear - 20, -1).map(
-                    year => ({
-                      label: year
+                    (year) => ({
+                      label: year,
                     })
                   )}
                 />
@@ -155,7 +157,7 @@ const EntertainerDetailsForm = () => {
                   { id: 3, name: 'Yoruba Party' },
                   { id: 4, name: 'Party' },
                   { id: 5, name: 'Weddings' },
-                  { id: 6, name: 'Aniversary' }
+                  { id: 6, name: 'Aniversary' },
                 ]}
               />
               <TextArea
@@ -180,6 +182,14 @@ const EntertainerDetailsForm = () => {
       validationSchema={createSchema(entertainerDetailsSchema)}
     />
   );
+};
+
+EntertainerDetailsForm.propTypes = {
+  moveToNextStep: PropTypes.func,
+};
+
+EntertainerDetailsForm.defaultProps = {
+  moveToNextStep: () => {},
 };
 
 export default EntertainerDetailsForm;

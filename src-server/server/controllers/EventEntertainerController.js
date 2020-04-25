@@ -297,6 +297,18 @@ const EventEntertainerController = {
             },
           ],
         },
+        {
+          model: EntertainerProfile,
+          as: 'entertainer',
+          attributes: ['id', 'entertainerType', 'stageName', 'slug'],
+          include: [
+            {
+              model: User,
+              as: 'personalDetails',
+              attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+            },
+          ],
+        },
       ],
     })
       .then((eventEntertainerInfo) => {

@@ -6,6 +6,7 @@ import Card from 'components/custom/Card';
 import { getTokenFromStore } from 'utils/localStorage';
 import { UserContext } from 'context/UserContext';
 import { Loading } from 'components/common/utils/PlayingMusicAnimation';
+import { Link } from '@reach/router';
 
 const WelcomeSlides = ({ items }) => {
   const [animating, setAnimating] = React.useState(false);
@@ -64,12 +65,22 @@ const WelcomeSlides = ({ items }) => {
                 <Loading />
               </>
             ) : (
-              `Don't show again`
+              <button class="btn btn-link">
+                <span className="icon icon-cancel-circled"></span> Dismiss{' '}
+              </button>
             )}
           </button>
         </div>
         <h3>{name}</h3>
         <p>{text}</p>
+        {index === items.length - 1 && (
+          <Link
+            className="btn btn-link text-white mt-n3 ml-n3"
+            to="/how-it-works"
+          >
+            Learn More
+          </Link>
+        )}
       </CarouselItem>
     );
   });
@@ -103,6 +114,7 @@ WelcomeSlides.propTypes = {
       color: PropTypes.string,
       name: PropTypes.string,
       title: PropTypes.string,
+      text: PropTypes.any,
     }).isRequired
   ),
 };

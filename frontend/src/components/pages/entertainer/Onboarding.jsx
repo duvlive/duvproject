@@ -7,93 +7,96 @@ import { Link } from '@reach/router';
 import { UserContext } from 'context/UserContext';
 import { ONBOARDING_STEPS } from 'utils/constants';
 
-const STATUS = {
-  PENDING: 'pending',
-  APPROVED: 'approved',
-  REJECTED: 'rejected'
-};
-
-const getOnboardingStatus = status => {
-  /* == is used to check for null
-   * null -> pending
-   * true -> approved
-   * false -> rejected
-   */
-  if (null == status) {
-    return STATUS.PENDING;
-  }
-  return status === 'YES' ? STATUS.APPROVED : STATUS.REJECTED;
-};
-
 const Onboarding = () => {
-  let { userState } = React.useContext(UserContext);
+  const { userState } = React.useContext(UserContext);
+
+  const steps = Object.keys(ONBOARDING_STEPS);
+  const done = [
+    !!userState.entertainerProfile.stageName && !!userState.profileImg,
+    !!userState.bankDetail && !!userState.bankDetail.bankName,
+    (userState.contacts.length > 0 &&
+      !!(userState.contacts[0] && userState.contacts[0].firstName)) ||
+      !!(userState.contacts[1] && userState.contacts[1].firstName),
+    !!userState.entertainerProfile.youTubeChannel,
+    !!userState.identification.idType,
+  ];
+
+  const onboardingTasks = steps.map((step, index) => ({
+    link: `/entertainer/account-setup/${index + 1}`,
+    title: ONBOARDING_STEPS[step].title,
+    approved: userState.approvalComment[steps[index]] === 'YES',
+    done: done[index],
+    rejected:
+      userState.approvalComment[steps[index]] !== null &&
+      userState.approvalComment[steps[index]] !== 'YES',
+  }));
+
+  const entertainerIsDone = done.every((isDone) => isDone);
+  const firstUndoneIndex = done.findIndex((isDone) => !isDone);
+
   return (
     <>
-      <TopMessage message={`Welcome back ${userState.firstName},`} />
+      <TopMessage message={`Hello ${userState.firstName},`} />
       <Card
         className="dashboard__card offset-md-2 col-md-8 mt-5 mb-0 rounded-0"
-        color="blue"
+        color={entertainerIsDone ? 'green' : 'blue'}
       >
         <h4 className="onboarding__title">
-          You are just a few steps away
-          <br /> from activating your account.
+          {entertainerIsDone ? (
+            <>Your account will be approved within 24 hours</>
+          ) : (
+            <>
+              You are just a few steps away
+              <br /> from activating your account.
+            </>
+          )}
         </h4>
+      </Card>
+      <Card
+        className="dashboard__card offset-md-2 col-md-8 mb-0 rounded-0"
+        color="black"
+      >
         <p className="onboarding__instruction">
           Follow the 5 steps below to complete your account whenever you are
-          ready. Once completed, your account would be approved within 24 hours.
+          ready. <br />
+          Once completed, your account would be approved within 24 hours.
         </p>
       </Card>
+      {onboardingTasks.map((task, index) => (
+        <Onboarding.Card key={index} number={index + 1} {...task} />
+      ))}
 
-      <OnboardingList />
-      <div className="text-center">
-        <Link
-          className="btn btn-danger btn-lg btn-wide btn-transparent mt-5"
-          to="/entertainer/account-setup"
-        >
-          Continue Setup
-        </Link>
-      </div>
+      {!entertainerIsDone && (
+        <div className="text-center">
+          <Link
+            className="btn btn-danger btn-lg btn-wide btn-transparent mt-5"
+            to={`/entertainer/account-setup/${firstUndoneIndex + 1}`}
+          >
+            Continue Setup
+          </Link>
+        </div>
+      )}
     </>
   );
 };
 
-const OnboardingList = () => {
-  const { userState } = React.useContext(UserContext);
-
-  return Object.keys(ONBOARDING_STEPS).map((step, index) => (
-    <Onboarding.Card
-      key={index}
-      link="/entertainer/account-setup"
-      number={index + 1}
-      status={getOnboardingStatus(userState.approvalComment[step])}
-      title={ONBOARDING_STEPS[step].title}
-    />
-  ));
-};
-
-Onboarding.Card = ({ title, status, number, link }) => {
-  const approvedStep = status === STATUS.APPROVED;
-  const pendingStep = status === STATUS.PENDING;
-  const rejectedStep = status === STATUS.REJECTED;
+Onboarding.Card = ({ approved, done, link, rejected, title, number }) => {
   return (
-    <Link to={`${link}/${number}`}>
+    <Link to={link}>
       <Card
-        className="onboarding__card offset-md-2 col-md-8 mb-0 rounded-0"
-        color={approvedStep ? 'green' : rejectedStep ? 'red' : 'black'}
-        hover={!approvedStep}
+        className="dashboard__card offset-md-2 col-md-8 mb-0 rounded-0"
+        color={approved ? 'green' : 'black'}
+        hover={!approved}
       >
         <h5 className="onboarding__text">
           <span
             className={classNames(
-              'icon account-setup-icon',
+              'icon',
               {
-                pending: pendingStep
+                'icon-circle pending': done && !approved && !rejected,
               },
               {
-                'icon-cancel rejected': rejectedStep
-              },
-              {
-                'icon-ok completed': approvedStep
+                'icon-ok completed': approved,
               }
             )}
           />
@@ -106,10 +109,12 @@ Onboarding.Card = ({ title, status, number, link }) => {
 };
 
 Onboarding.Card.propTypes = {
+  approved: PropTypes.bool.isRequired,
+  done: PropTypes.bool.isRequired,
   link: PropTypes.string.isRequired,
   number: PropTypes.number.isRequired,
-  status: PropTypes.oneOf(Object.values(STATUS)).isRequired,
-  title: PropTypes.string.isRequired
+  rejected: PropTypes.bool.isRequired,
+  title: PropTypes.string.isRequired,
 };
 
 export default Onboarding;

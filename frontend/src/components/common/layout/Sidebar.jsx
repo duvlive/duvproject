@@ -9,11 +9,11 @@ import {
   userSideMenu,
   pseudoEntertainerUserSideMenu,
   pseudoBandMemberUserSideMenu,
-  pseudoAdminUserSideMenu
+  pseudoAdminUserSideMenu,
 } from 'data/menu/user';
 import {
   entertainerSideMenu,
-  unApprovedEntertainerSideMenu
+  unApprovedEntertainerSideMenu,
 } from 'data/menu/entertainer';
 import bandMemberSideMenu from 'data/menu/band-member';
 import administratorSideMenu from 'data/menu/administrator';
@@ -27,13 +27,13 @@ const SIDE_MENU = {
   [USER_TYPES.user]: userSideMenu,
   [USER_TYPES.entertainer]: entertainerSideMenu,
   [USER_TYPES.admin]: administratorSideMenu,
-  [USER_TYPES.bandMember]: bandMemberSideMenu
+  [USER_TYPES.bandMember]: bandMemberSideMenu,
 };
 
 const PSEUDO_SIDE_MENU = {
   [USER_TYPES.entertainer]: pseudoEntertainerUserSideMenu,
   [USER_TYPES.admin]: pseudoAdminUserSideMenu,
-  [USER_TYPES.bandMember]: pseudoBandMemberUserSideMenu
+  [USER_TYPES.bandMember]: pseudoBandMemberUserSideMenu,
 };
 
 const Sidebar = ({ showSidebar, closeSidebar, ...props }) => {
@@ -52,13 +52,13 @@ const Sidebar = ({ showSidebar, closeSidebar, ...props }) => {
     <>
       <div
         className={classNames('backdrop', {
-          showSidebar
+          showSidebar,
         })}
         onClick={closeSidebar}
       />
       <aside
         className={classNames('sidebar', {
-          showSidebar
+          showSidebar,
         })}
       >
         <div className="sidebar__logo">
@@ -77,7 +77,7 @@ const Sidebar = ({ showSidebar, closeSidebar, ...props }) => {
         </div>
         <PerfectScrollbar style={{ height: 'calc(100% - 12rem)' }}>
           <Match path="/user/:item">
-            {props =>
+            {(props) =>
               // eslint-disable-next-line react/prop-types
               props.match && currentUserType !== USER_TYPES.user ? (
                 <>
@@ -110,7 +110,7 @@ const Sidebar = ({ showSidebar, closeSidebar, ...props }) => {
 
 Sidebar.propTypes = {
   closeSidebar: PropTypes.func.isRequired,
-  showSidebar: PropTypes.bool.isRequired
+  showSidebar: PropTypes.bool.isRequired,
 };
 
 const SidebarMenu = ({ showUserType }) => {
@@ -121,11 +121,18 @@ const SidebarMenu = ({ showUserType }) => {
     stageName:
       userState.entertainerProfile && userState.entertainerProfile.stageName
         ? userState.entertainerProfile.stageName
-        : null
+        : null,
   });
-  const userType =
-    userState.type !== 1 && Object.keys(USER_TYPES)[userState.type];
 
+  // user is not shown on the sidebar
+  const userType =
+    userState.type !== USER_TYPES.user &&
+    Object.keys(USER_TYPES)[userState.type];
+
+  // if available,show the entertainer type for entertainers
+  const entertainerType =
+    userState.type === USER_TYPES.entertainer &&
+    userState.entertainerProfile.entertainerType;
   return (
     <div className="user-box">
       <div className="user-img">
@@ -138,17 +145,19 @@ const SidebarMenu = ({ showUserType }) => {
         <div className="user-status offline" />
       </div>
       <h5 className="text-uppercase">{userName}</h5>
-      {showUserType && <small className="text-uppercase">{userType}</small>}
+      {showUserType && (
+        <small className="text-uppercase">{entertainerType || userType}</small>
+      )}
     </div>
   );
 };
 
 SidebarMenu.propTypes = {
-  showUserType: PropTypes.bool
+  showUserType: PropTypes.bool,
 };
 
 SidebarMenu.defaultProps = {
-  showUserType: true
+  showUserType: true,
 };
 
 Sidebar.Navigation = ({ menus, closeSidebar }) => {
@@ -172,7 +181,7 @@ Sidebar.Navigation = ({ menus, closeSidebar }) => {
 
 Sidebar.Navigation.propTypes = {
   closeSidebar: PropTypes.func.isRequired,
-  menus: PropTypes.array.isRequired
+  menus: PropTypes.array.isRequired,
 };
 
 const isActive = ({ isCurrent }) => {

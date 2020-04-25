@@ -14,13 +14,14 @@ const LoadItems = ({ items, children, loadingText, noContent }) => {
 };
 
 LoadItems.propTypes = {
-  children: PropTypes.any.isRequired,
+  children: PropTypes.any,
   items: PropTypes.array,
   loadingText: PropTypes.string,
   noContent: PropTypes.any.isRequired,
 };
 
 LoadItems.defaultProps = {
+  children: null,
   loadingText: null,
   items: null,
 };

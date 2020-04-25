@@ -3,7 +3,7 @@ import {
   required,
   requiredDate,
   stringValidation,
-  optionalValidation
+  optionalValidation,
 } from './schema-helpers';
 
 /////////////////////////
@@ -14,7 +14,7 @@ export const eventDetailsSchema = {
   eventDate: requiredDate('Event Date'),
   startTime: requiredDate('Start Time'),
   eventDuration: required('Event Duration'),
-  moreInformation: optionalValidation(stringValidation('More Information', 20))
+  moreInformation: optionalValidation(stringValidation('More Information', 20)),
 };
 export const eventAddressSchema = {
   streetLine1: stringValidation('Street Line 1'),
@@ -23,5 +23,13 @@ export const eventAddressSchema = {
   lga: required('Local Government'),
   city: required('City'),
   landmark: optionalValidation(stringValidation('Landmark', 3)),
-  description: optionalValidation(stringValidation('Description', 10))
+  description: optionalValidation(stringValidation('Description', 10)),
+};
+
+export const reviewSchema = {
+  professionalism: required('Professionalism rating'),
+  accommodating: required('Accommodating rating'),
+  overallTalent: required('Overall Talent rating'),
+  recommend: required('Recommend rating'),
+  review: optionalValidation(stringValidation('Review', 10)),
 };

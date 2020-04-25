@@ -128,3 +128,14 @@
     }
   }
 }
+
+.stars__review {
+  font-size: 2rem;
+  margin-left: -0.5rem;
+  color: #2f3440;
+
+  &--label {
+    font-size: 0.8rem !important;
+    margin-top: 0.5rem;
+  }
+}

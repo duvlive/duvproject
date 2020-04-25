@@ -16,7 +16,7 @@ import AlertMessage from 'components/common/utils/AlertMessage';
 
 const CONTACTS = {
   PROFESSIONAL: 1,
-  NEXT_OF_KIN: 2
+  NEXT_OF_KIN: 2,
 };
 
 const INITIAL_CONTACT = {
@@ -24,7 +24,7 @@ const INITIAL_CONTACT = {
   lastName: '',
   email: '',
   phoneNumber: '',
-  relationship: ''
+  relationship: '',
 };
 
 const EmergencyContact = () => {
@@ -41,29 +41,39 @@ const EmergencyContact = () => {
   );
 };
 
-export const ProfessionalContactForm = () => {
+export const ProfessionalContactForm = ({ moveToNextStep }) => {
   const { userState } = React.useContext(UserContext);
   const initialValue = userState.contacts.filter(
-    contact => contact.type === CONTACTS.PROFESSIONAL
+    (contact) => contact.type === CONTACTS.PROFESSIONAL
   );
 
   return (
     <ContactsForm
       initialValue={initialValue[0] || INITIAL_CONTACT}
+      moveToNextStep={moveToNextStep}
       name="Professional Contact"
       type={CONTACTS.PROFESSIONAL}
     />
   );
 };
 
-export const NextOfKinForm = () => {
+ProfessionalContactForm.propTypes = {
+  moveToNextStep: PropTypes.func,
+};
+
+ProfessionalContactForm.defaultProps = {
+  moveToNextStep: () => {},
+};
+
+export const NextOfKinForm = ({ moveToNextStep }) => {
   const { userState } = React.useContext(UserContext);
   const initialValue = userState.contacts.filter(
-    contact => contact.type === CONTACTS.NEXT_OF_KIN
+    (contact) => contact.type === CONTACTS.NEXT_OF_KIN
   );
   return (
     <ContactsForm
       initialValue={initialValue[0] || INITIAL_CONTACT}
+      moveToNextStep={moveToNextStep}
       name="Next of Kin"
       textColor="blue"
       type={CONTACTS.NEXT_OF_KIN}
@@ -71,7 +81,21 @@ export const NextOfKinForm = () => {
   );
 };
 
-export const ContactsForm = ({ type, name, textColor, initialValue }) => {
+NextOfKinForm.propTypes = {
+  moveToNextStep: PropTypes.func,
+};
+
+NextOfKinForm.defaultProps = {
+  moveToNextStep: () => {},
+};
+
+export const ContactsForm = ({
+  type,
+  name,
+  textColor,
+  initialValue,
+  moveToNextStep,
+}) => {
   const [message, setMessage] = React.useState(null);
   const { userDispatch } = React.useContext(UserContext);
   return (
@@ -85,23 +109,24 @@ export const ContactsForm = ({ type, name, textColor, initialValue }) => {
           data: initialValue.id
             ? { ...values, contactId: initialValue.id }
             : { ...values, type },
-          headers: { 'x-access-token': getTokenFromStore() }
+          headers: { 'x-access-token': getTokenFromStore() },
         })
-          .then(function(response) {
+          .then(function (response) {
             const { status, data } = response;
             if (status === 200) {
               userDispatch({
                 type: 'user-contact-update',
-                user: data
+                contact: data.contact,
               });
               setMessage({
                 type: 'info',
-                message: `Your ${name} contact has been successfully submitted.`
+                message: `Your ${name} contact has been successfully submitted.`,
               });
               actions.setSubmitting(false);
+              moveToNextStep();
             }
           })
-          .catch(function(error) {
+          .catch(function (error) {
             setMessage(error.response.data.message);
             actions.setSubmitting(false);
           });
@@ -165,7 +190,7 @@ export const ContactsForm = ({ type, name, textColor, initialValue }) => {
                       { label: 'Sister' },
                       { label: 'Spouse' },
                       { label: 'Uncle' },
-                      { label: 'Wife' }
+                      { label: 'Wife' },
                     ]}
                   />
                 )}
@@ -188,14 +213,16 @@ export const ContactsForm = ({ type, name, textColor, initialValue }) => {
 
 ContactsForm.propTypes = {
   initialValue: PropTypes.object.isRequired,
+  moveToNextStep: PropTypes.func,
   name: PropTypes.string.isRequired,
   textColor: PropTypes.string,
-  type: PropTypes.number
+  type: PropTypes.number,
 };
 
 ContactsForm.defaultProps = {
+  moveToNextStep: () => {},
   type: 1,
-  textColor: 'yellow'
+  textColor: 'yellow',
 };
 
 export default EmergencyContact;

@@ -14,7 +14,12 @@ import {
   getItems,
   getRequestStatusIcon,
 } from 'utils/helpers';
-import { getEventDate, getTime, getTimeOfDay } from 'utils/date-helpers';
+import {
+  getEventDate,
+  getTime,
+  getTimeOfDay,
+  getShortDate,
+} from 'utils/date-helpers';
 import { groupEvents, userCanAddEntertainer } from 'utils/event-helpers';
 import { Link } from '@reach/router';
 import LoadItems from 'components/common/utils/LoadItems';
@@ -24,32 +29,11 @@ import { InviteFriendsForm } from 'components/common/pages/InviteFriends';
 
 const Dashboard = () => {
   let { userState } = React.useContext(UserContext);
-  const [entertainers, setEntertainers] = React.useState([]);
+  const [pendingReview, setPendingReview] = React.useState(null);
   const [applications, setApplications] = React.useState({
     requests: null,
     bids: null,
   });
-  const [loading, setLoading] = React.useState(true);
-
-  React.useEffect(() => {
-    axios
-      .get(`/api/v1/entertainers/recommend/random`, {
-        headers: {
-          'x-access-token': getTokenFromStore(),
-        },
-      })
-      .then(function (response) {
-        const { status, data } = response;
-        // handle success
-        if (status === 200) {
-          setEntertainers(data.entertainers);
-          setLoading(false);
-        }
-      })
-      .catch(function (error) {
-        setLoading(false);
-      });
-  }, []);
 
   React.useEffect(() => {
     axios
@@ -71,8 +55,32 @@ const Dashboard = () => {
       });
   }, []);
 
+  React.useEffect(() => {
+    axios
+      .get(`/api/v1/user/reviews/pending`, {
+        headers: {
+          'x-access-token': getTokenFromStore(),
+        },
+      })
+      .then(function (response) {
+        const { status, data } = response;
+        console.log('data.info', data.info);
+        // handle success
+        if (status === 200) {
+          setPendingReview(data.info);
+        }
+      })
+      .catch(function (error) {
+        setPendingReview([]);
+      });
+  }, []);
+
   const topMessage = userState.firstTimeLogin ? 'Hello' : 'Welcome back';
-  const pendingReview = false;
+  // Sort event according - Today, Upcoming and Past
+  const allEvents = groupEvents(userState.events || []);
+  const eventsToShow = userState.events
+    ? getItems([...allEvents.today, ...allEvents.upcoming], 3)
+    : null;
 
   return (
     <BackEndPage title="Dashboard">
@@ -85,7 +93,7 @@ const Dashboard = () => {
               <div className="card card-custom">
                 <div className="card-body">
                   <LoadItems
-                    items={userState.events}
+                    items={eventsToShow}
                     noContent={
                       <NoContent
                         isButton
@@ -95,27 +103,25 @@ const Dashboard = () => {
                       />
                     }
                   >
-                    <Dashboard.UpcomingEvents
-                      events={getItems(userState.events, 3) || []}
-                    />
+                    <Dashboard.UpcomingEvents events={eventsToShow || []} />
                   </LoadItems>
                 </div>
               </div>
               <Dashboard.RecentApplications
-                bids={getItems(applications.bids, 4) || []}
-                requests={getItems(applications.requests, 2) || []}
+                bids={getItems(applications.bids, 4) || null}
+                requests={getItems(applications.requests, 2) || null}
               />
             </div>
             <div className="col-sm-4">
-              <Dashboard.RecommendedTable
-                entertainers={entertainers}
-                loading={loading}
-              />
-              {pendingReview ? (
-                <Dashboard.PendingReview />
-              ) : (
-                <Dashboard.InviteFriends />
-              )}
+              <Dashboard.InviteFriends />
+              <LoadItems
+                items={pendingReview}
+                noContent={<Dashboard.NoPendingReview />}
+              >
+                {pendingReview && pendingReview.length > 0 && (
+                  <Dashboard.PendingReview info={pendingReview[0]} />
+                )}
+              </LoadItems>
             </div>
           </div>
         </section>
@@ -125,18 +131,15 @@ const Dashboard = () => {
 };
 
 Dashboard.UpcomingEvents = ({ events }) => {
-  // Sort event according - Today, Upcoming and Past
-  const allEvents = groupEvents(events);
-  const title = 'Upcoming Events';
-  const eventsToShow = [...allEvents.today, ...allEvents.upcoming];
-
   return (
     <>
-      <h5 className="card-title text-green header__with-border">{title}</h5>
+      <h5 className="card-title text-green header__with-border">
+        Upcoming Events
+      </h5>
       <div className="table-responsive">
         <table className="table table-dark table__no-border table__with-bg">
           <tbody>
-            {eventsToShow.map((event, index) => (
+            {events.map((event, index) => (
               <Dashboard.UpcomingEventsRow
                 event={event}
                 key={index}
@@ -200,7 +203,7 @@ Dashboard.UpcomingEventsRow.propTypes = {
   number: PropTypes.number.isRequired,
 };
 
-Dashboard.PendingReview = () => (
+Dashboard.NoPendingReview = () => (
   <div className="card card-custom">
     <div className="card-body">
       <h5 className="card-title text-red header__with-border">
@@ -211,10 +214,52 @@ Dashboard.PendingReview = () => (
   </div>
 );
 
+Dashboard.PendingReview = ({ info }) => (
+  <div className="card card-custom">
+    <div className="card-body">
+      <h5 className="card-title text-red header__with-border">
+        Pending Review
+      </h5>
+      <p className="card-text">
+        To serve you better, kindly help us improve our service and give other
+        users a better understanding about entertainers.
+      </p>
+
+      <div className="text-center">
+        <img
+          alt={info.entertainer.stageName}
+          className="rounded-circle img-thumbnail img-responsive avatar--large"
+          src={info.entertainer.personalDetails.profileImageURL}
+          title={info.entertainer.stageName}
+        />{' '}
+        <h5 className="card-subtitle card-subtitle--2 mt-3 mb-0 white">
+          {info.entertainer.stageName}
+        </h5>
+        <small className="card-subtitle--3 text-muted">
+          {info.entertainer.entertainerType} at {info.event.eventType} on{' '}
+          {getShortDate(info.event.eventDate)}
+        </small>
+        <div className="mt-3">
+          <Link
+            className="btn btn-danger btn-wide btn-transparent"
+            to={`/user/review-entertainer/${info.id}`}
+          >
+            Rate Now
+          </Link>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+Dashboard.PendingReview.propTypes = {
+  info: PropTypes.object.isRequired,
+};
+
 Dashboard.RecentApplications = ({ bids, requests }) => (
   <LoadItems
-    items={(requests && bids && [...requests, ...bids]) || null} //todo
-    noContent={<NoContent text="No Request found" />}
+    items={requests && bids ? [...requests, ...bids] : null}
+    noContent={<Dashboard.NoRequestFound />}
   >
     {requests && requests.length > 0 && (
       <div className="card card-custom">
@@ -319,10 +364,18 @@ Dashboard.RequestTableRow.propTypes = {
 Dashboard.InviteFriends = () => (
   <div className="card card-custom">
     <div className="card-body">
-      <h5 className="card-title text-red header__with-border">
+      <h5 className="card-title text-blue header__with-border">
         Recommend a Friend
       </h5>
       <InviteFriendsForm widget />
+    </div>
+  </div>
+);
+
+Dashboard.NoRequestFound = () => (
+  <div className="card card-custom">
+    <div className="card-body">
+      <NoContent text="No Request found" />
     </div>
   </div>
 );
