@@ -14,8 +14,8 @@ import SingleEntertainer from 'components/pages/frontend/SingleEntertainer';
 import SingleEvent from 'components/pages/frontend/SingleEvent';
 import ForgotPassword from 'components/pages/auth/ForgotPassword';
 import ResetPassword from 'components/pages/auth/ResetPassword';
-import ContextTest from 'components/pages/ContextTest';
 import ContactUs from 'components/pages/frontend/ContactUs';
+import ProcessPayments from 'components/pages/frontend/ProcessPayments';
 import CompleteRegistration from 'components/pages/auth/CompleteRegistration';
 
 const FrontPageRouter = () => (
@@ -38,8 +38,8 @@ const FrontPageRouter = () => (
     <Register path="register/:type" />
     <SingleEntertainer path="entertainers/:slug" />
     <SingleEvent path="event/:slug" />
-    <ContextTest path="context" />
     <CompleteRegistration path="complete-registration/:sid" />
+    <ProcessPayments path="/payment" />
   </Router>
 );
 

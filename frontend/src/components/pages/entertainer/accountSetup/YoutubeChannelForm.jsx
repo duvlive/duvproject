@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Formik, Form } from 'formik';
 import axios from 'axios';
 import Input from 'components/forms/Input';
@@ -11,35 +12,36 @@ import { UserContext } from 'context/UserContext';
 import { getTokenFromStore } from 'utils/localStorage';
 import { ONBOARDING_STEPS } from 'utils/constants';
 
-export const YoutubeChannelForm = () => {
+export const YoutubeChannelForm = ({ moveToNextStep }) => {
   const [message, setMessage] = React.useState(null);
   const { userState, userDispatch } = React.useContext(UserContext);
   return (
     <Formik
       enableReinitialize={true}
       initialValues={setInitialValues(youtubeChannelSchema, {
-        ...userState.entertainerProfile
+        ...userState.entertainerProfile,
       })}
       onSubmit={(values, actions) => {
         axios
           .put('/api/v1/users/updateEntertainerProfile', values, {
-            headers: { 'x-access-token': getTokenFromStore() }
+            headers: { 'x-access-token': getTokenFromStore() },
           })
-          .then(function(response) {
+          .then(function (response) {
             const { status, data } = response;
             if (status === 200) {
               userDispatch({
                 type: 'entertainer-youtube-channel',
-                user: data
+                user: { entertainerProfile: data.entertainerProfile },
               });
               setMessage({
                 type: 'success',
-                message: `Your youtube channel has been successfully updated`
+                message: `Your youtube channel has been successfully updated`,
               });
               actions.setSubmitting(false);
+              moveToNextStep();
             }
           })
-          .catch(function(error) {
+          .catch(function (error) {
             setMessage(error.response.data.message);
             actions.setSubmitting(false);
           });
@@ -72,6 +74,14 @@ export const YoutubeChannelForm = () => {
       validationSchema={createSchema(youtubeChannelSchema)}
     />
   );
+};
+
+YoutubeChannelForm.propTypes = {
+  moveToNextStep: PropTypes.func,
+};
+
+YoutubeChannelForm.defaultProps = {
+  moveToNextStep: () => {},
 };
 
 export default YoutubeChannelForm;

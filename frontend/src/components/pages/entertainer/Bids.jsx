@@ -31,7 +31,7 @@ const Bids = () => {
         // navigate to all events
       });
   }, []);
-  console.log('bids', bids);
+
   return (
     <BackEndPage title="Bids">
       <div className="main-app">
@@ -74,7 +74,7 @@ const Bids = () => {
   );
 };
 
-const BidsRow = ({
+export const BidsRow = ({
   id,
   askingPrice,
   auctionEndDate,
@@ -133,8 +133,8 @@ BidsRow.propTypes = {
   auctionEndDate: PropTypes.any,
   city: PropTypes.string,
   eventType: PropTypes.string,
-  id: PropTypes.string,
-  number: PropTypes.string,
+  id: PropTypes.any,
+  number: PropTypes.any,
   state: PropTypes.string,
   status: PropTypes.string,
 };

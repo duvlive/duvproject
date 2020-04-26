@@ -1,5 +1,11 @@
 import Sequelize from 'sequelize';
-import { EntertainerProfile, Event, Rating, Review, User } from '../models';
+import {
+  EntertainerProfile,
+  EventEntertainer,
+  Rating,
+  Review,
+  User,
+} from '../models';
 import { validString } from '../utils';
 
 const RatingController = {
@@ -13,11 +19,12 @@ const RatingController = {
   updateUserRating(req, res) {
     const {
       entertainerId,
-      eventId,
+      eventEntertainerId,
       professionalism,
       accommodating,
       overallTalent,
       recommend,
+      review = '',
       id,
     } = req.body;
 
@@ -36,11 +43,12 @@ const RatingController = {
     if (!id) {
       return Rating.create({
         entertainerId,
-        eventId,
+        eventEntertainerId,
         professionalism,
         accommodating,
         overallTalent,
         recommend,
+        review,
         userId: req.user.id,
       })
         .then((rating) => {
@@ -69,6 +77,7 @@ const RatingController = {
             professionalism,
             accommodating,
             overallTalent,
+            review,
             recommend,
           });
         }
@@ -99,17 +108,6 @@ const RatingController = {
       .getRatings({
         include: [
           {
-            model: Review,
-            as: 'reviews',
-            include: [
-              {
-                model: User,
-                as: 'reviewer',
-                attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
-              },
-            ],
-          },
-          {
             model: User,
             as: 'rater',
             attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
@@ -127,7 +125,7 @@ const RatingController = {
             ],
           },
           {
-            model: Event,
+            model: EventEntertainer,
             as: 'ratedEvent',
           },
         ],
@@ -156,17 +154,6 @@ const RatingController = {
       where: { id: ratingId },
       include: [
         {
-          model: Review,
-          as: 'reviews',
-          include: [
-            {
-              model: User,
-              as: 'reviewer',
-              attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
-            },
-          ],
-        },
-        {
           model: User,
           as: 'rater',
           attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
@@ -184,7 +171,7 @@ const RatingController = {
           ],
         },
         {
-          model: Event,
+          model: EventEntertainer,
           as: 'ratedEvent',
         },
       ],
@@ -229,12 +216,18 @@ const RatingController = {
         ],
         [Sequelize.fn('AVG', Sequelize.col('recommend')), 'avgRecommend'],
       ],
-    }).then((avgRatings) => {
-      if (!avgRatings || avgRatings.length === 0) {
-        return res.status(404).json({ message: 'Average Rating not found' });
-      }
-      return res.status(200).json({ avgRatings });
-    });
+    })
+      .then((avgRatings) => {
+        if (!avgRatings || avgRatings.length === 0) {
+          return res.status(404).json({ message: 'Average Rating not found' });
+        }
+        return res.status(200).json({ avgRatings });
+      })
+      .catch((error) => {
+        console.log('=====>', error);
+        const errorMessage = error.message || error;
+        return res.status(412).json({ message: errorMessage });
+      });
   },
 
   /**
@@ -256,7 +249,7 @@ const RatingController = {
           as: 'reviews',
         },
         {
-          model: Event,
+          model: EventEntertainer,
           as: 'ratedEvent',
         },
         {
@@ -323,7 +316,7 @@ const RatingController = {
           as: 'reviews',
         },
         {
-          model: Event,
+          model: EventEntertainer,
           as: 'ratedEvent',
         },
         {

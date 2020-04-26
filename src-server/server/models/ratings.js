@@ -12,7 +12,7 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      eventId: {
+      eventEntertainerId: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
@@ -47,6 +47,10 @@ module.exports = function (sequelize, DataTypes) {
           max: RATINGS.UPPER_BOUND,
           min: RATINGS.LOWER_BOUND,
         },
+      },
+      review: {
+        type: DataTypes.TEXT,
+        allowNull: true,
       },
     },
     {

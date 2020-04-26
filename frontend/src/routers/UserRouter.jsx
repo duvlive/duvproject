@@ -1,7 +1,6 @@
 import React from 'react';
 import { Router } from '@reach/router';
 import Dashboard from 'components/pages/user/Dashboard';
-import EmptyDashboard from 'components/pages/user/EmptyDashboard';
 import Auctions from 'components/pages/user/Auctions';
 import Requests from 'components/pages/user/Requests';
 import Events from 'components/pages/user/Events';
@@ -15,6 +14,7 @@ import ViewEvent from 'components/pages/user/ViewEvent';
 import Bids from 'components/pages/user/Bids';
 import EditProfile from 'components/pages/user/EditProfile';
 import RegisterAsEntertainer from 'components/pages/user/RegisterAsEntertainer';
+import ReviewEntertainer from 'components/pages/user/ReviewEntertainer';
 import Approval from 'components/pages/user/Approval';
 import AddEntertainerToEvent from 'components/pages/user/AddEntertainerToEvent';
 import ViewRequest from 'components/pages/user/ViewRequest';
@@ -48,7 +48,8 @@ const UserRouter = () => (
     <EditProfile path="/edit-profile" />
     <ChangePassword path="/change-password" />
     <RegisterAsEntertainer path="/register-as-entertainer" />
-    <EmptyDashboard default />
+    <ReviewEntertainer path="/review-entertainer/:eventEntertainerId" />
+    <Dashboard default />
   </Router>
 );
 

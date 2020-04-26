@@ -57,6 +57,15 @@ const eventRoutes = (router) => {
     Authentication.isActiveUser,
     EventController.getEventBids
   );
+
+  // Event Reviews
+  router.get(
+    '/api/v1/user/reviews/pending',
+    Authentication.verifyToken,
+    Authentication.validateUser,
+    Authentication.isActiveUser,
+    EventController.getPendingEventReviews
+  );
 };
 
 export default eventRoutes;

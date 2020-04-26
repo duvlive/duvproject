@@ -1,5 +1,7 @@
 $normal-circle-background: rgba($blue, 0.3);
 $normal-text-color: rgba(lighten($blue, 30), 0.7);
+$active-circle-background: rgba($white, 0.2);
+$active-text-color: rgba(lighten($white, 30), 0.8);
 $approved-circle-background: rgba($green-400, 0.3);
 $approved-text-color: rgba(lighten($green-300, 60), 0.5);
 $rejected-circle-background: rgba($red, 0.4);
@@ -93,9 +95,11 @@ $rejected-text-color: rgba(lighten($red, 35), 0.6);
   }
 
   li.active {
-    .step-inner-circle,
+    .step-inner-circle {
+      background-color: $active-circle-background;
+    }
     .step-text {
-      opacity: 0.4;
+      color: $active-text-color;
     }
   }
 }

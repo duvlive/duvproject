@@ -476,7 +476,13 @@ const UserController = {
           return res.status(403).json({ message: 'Passwords do not match' });
         }
 
-        return user.update({ password }).then(() => {
+        return user.update({ password }).then(async () => {
+          await Notification.create({
+            userId: req.decoded.userId,
+            title: NOTIFICATIONS.PASSWORD_CHANGED,
+            description: 'Your DUV Live account password was changed',
+            type: NOTIFICATION_TYPE.INFO,
+          });
           sendMail(EMAIL_CONTENT.CHANGE_PASSWORD, user);
           return res
             .status(200)
@@ -516,7 +522,13 @@ const UserController = {
       });
     }
 
-    return user.update({ password }).then(() => {
+    return user.update({ password }).then(async () => {
+      await Notification.create({
+        userId: req.user.id,
+        title: NOTIFICATIONS.PASSWORD_CHANGED,
+        description: 'Your DUV Live account password was changed',
+        type: NOTIFICATION_TYPE.INFO,
+      });
       sendMail(EMAIL_CONTENT.CHANGE_PASSWORD, user);
       return res
         .status(200)

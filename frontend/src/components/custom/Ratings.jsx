@@ -4,25 +4,25 @@ import Rater from 'react-rater';
 import 'react-rater/lib/react-rater.css';
 import Stars from 'components/common/utils/Stars';
 
-const Rating = props => (
+const Ratings = (props) => (
   <Rater {...props}>
     <Star />
   </Rater>
 );
 
-const Star = props => {
+const Star = (props) => {
   const starProps = Object.assign({}, props);
   const nameMap = {
-    isDisabled: 'text-muted',
-    isActive: 'text-red',
+    isDisabled: 'text-white',
+    isActive: 'text-green',
     isActiveHalf: 'text-yellow',
-    willBeActive: 'text-green'
+    willBeActive: 'text-red',
   };
 
   const className = Object.keys(nameMap)
     // eslint-disable-next-line
-    .filter(prop => (delete starProps[prop], props[prop]))
-    .map(prop => nameMap[prop])
+    .filter((prop) => (delete starProps[prop], props[prop]))
+    .map((prop) => nameMap[prop])
     .join(' ');
   return (
     <div className={`${className}`} {...starProps}>
@@ -35,14 +35,14 @@ Star.defaultProps = {
   willBeActive: false,
   isActive: false,
   isActiveHalf: false,
-  isDisabled: false
+  isDisabled: false,
 };
 
 Star.propTypes = {
   isActive: PropTypes.bool,
   isActiveHalf: PropTypes.bool,
   isDisabled: PropTypes.bool,
-  willBeActive: PropTypes.bool
+  willBeActive: PropTypes.bool,
 };
 
-export default Rating;
+export default Ratings;

@@ -49,7 +49,7 @@ const Payments = () => {
                   loading={loading}
                   text="Loading Payments History"
                 />
-              ) : payments.length > 1 ? (
+              ) : payments.length > 0 ? (
                 <Payments.CardLists payments={payments} />
               ) : (
                 <>
@@ -78,7 +78,7 @@ Payments.CardLists.propTypes = {
 };
 
 Payments.Card = ({ color, payment }) => (
-  <div className="col-sm-4">
+  <div className="col-lg-4 col-md-8 offset-md-2 offset-lg-0">
     <Link to={`/user/payments/view?reference=${payment.reference}`}>
       <div
         className={`card card-custom card-tiles card-${color} card__no-hover`}

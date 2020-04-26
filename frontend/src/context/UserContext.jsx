@@ -15,7 +15,7 @@ const INITIAL_STATE = {
   firstTimeLogin: null,
   entertainerProfile: {
     entertainerType: null,
-    approved: false,
+    approved: null,
     about: '',
     stageName: '',
     location: '',
@@ -85,7 +85,6 @@ let reducer = (state, action) => {
     case 'user-login':
     case 'user-social-media-login':
     case 'user-profile-update':
-    case 'user-contact-update':
     case 'entertainer-profile-update':
     case 'entertainer-youtube-channel':
       return { ...state, ...action.user, isLoggedIn: true };
@@ -94,10 +93,15 @@ let reducer = (state, action) => {
     case 'update-user-profile-image':
     case 'user-profile-image':
       return { ...state, profileImg: action.imageURL };
-
     case 'add-new-event':
     case 'add-entertainer-to-event':
       return { ...state, events: [action.event, ...state.events] };
+    case 'bank-account-update':
+      return { ...state, bankDetail: action.bankDetail };
+    case 'user-contact-update':
+      return { ...state, contacts: [action.contact, ...state.contacts] };
+    case 'entertainer-identification':
+      return { ...state, identification: action.identification };
     default:
       return state;
   }
@@ -107,6 +111,8 @@ let reducer = (state, action) => {
 let UserContextProvider = (props) => {
   let [userState, userDispatch] = React.useReducer(reducer, INITIAL_STATE);
   let value = { userState, userDispatch };
+
+  window.userState = value.userState;
 
   return (
     <UserContext.Provider value={value}>{props.children}</UserContext.Provider>
