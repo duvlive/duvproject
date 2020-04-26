@@ -11,10 +11,13 @@ import router from './server/routes';
 
 dotenv.config();
 
-const options = {
-  key: fs.readFileSync('server.key'),
-  cert: fs.readFileSync('server.cert'),
-};
+let options = {};
+if (process.env.NODE_ENV === 'development') {
+  options = {
+    key: fs.readFileSync('server.key'),
+    cert: fs.readFileSync('server.cert'),
+  };
+}
 
 const port = parseInt(process.env.PORT, 10) || 8080;
 
