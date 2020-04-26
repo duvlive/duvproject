@@ -1,13 +1,20 @@
+import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import express from 'express';
-import path from 'path';
+import fs from 'fs';
+import https from 'https';
 import logger from 'morgan';
 import passport from 'passport';
-import bodyParser from 'body-parser';
+import path from 'path';
 
 import router from './server/routes';
 
 dotenv.config();
+
+const options = {
+  key: fs.readFileSync('server.key'),
+  cert: fs.readFileSync('server.cert'),
+};
 
 const port = parseInt(process.env.PORT, 10) || 8080;
 
@@ -27,17 +34,21 @@ app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'build')));
 
 // Logo displayed in sent emails
-app.get('/email-logo.png', function(req, res) {
+app.get('/email-logo.png', function (req, res) {
   res.sendFile(path.join(__dirname, 'server', 'email-template', 'logo.png'));
 });
 
 if (process.env.NODE_ENV === 'production') {
   // Handle React routing, return all requests to React app
-  app.get('*', function(req, res) {
+  app.get('*', function (req, res) {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
   });
 }
 
-app.listen(port, () => {
+// app.listen(port, () => {
+//   console.info(`Started up the server at port ${port}`);
+// });
+
+https.createServer(options, app).listen(port, () => {
   console.info(`Started up the server at port ${port}`);
 });
