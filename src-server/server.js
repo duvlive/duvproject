@@ -12,12 +12,12 @@ import router from './server/routes';
 dotenv.config();
 
 let options = {};
-// if (process.env.NODE_ENV === 'development') {
-//   options = {
-//     key: fs.readFileSync('server.key'),
-//     cert: fs.readFileSync('server.cert'),
-//   };
-// }
+if (process.env.NODE_ENV === 'development') {
+  options = {
+    key: fs.readFileSync('server.key'),
+    cert: fs.readFileSync('server.cert'),
+  };
+}
 
 const port = parseInt(process.env.PORT, 10) || 8080;
 
@@ -48,6 +48,12 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-https.createServer(options, app).listen(port, () => {
+app.listen(port, () => {
   console.info(`Started up the server at port ${port}`);
 });
+
+if (process.env.NODE_ENV === 'development') {
+  https.createServer(options, app).listen(port, () => {
+    console.info(`Started up the server at port ${port}`);
+  });
+}
