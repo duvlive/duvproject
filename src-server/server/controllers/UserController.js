@@ -277,6 +277,9 @@ const UserController = {
    */
   socialLogin(req, res) {
     const { lastName, firstName, email, picture } = req.user;
+    if (!email) {
+      return res.status(400).json({ error: 'No email found' });
+    }
     User.findOne({
       where: { email },
     })

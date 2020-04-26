@@ -53,7 +53,7 @@ app.listen(port, () => {
 });
 
 if (process.env.NODE_ENV === 'development') {
-  https.createServer(options, app).listen(port, () => {
-    console.info(`Started up the server at port ${port}`);
+  https.createServer(options, app).listen(443, () => {
+    console.info(`Started up the server at port 443`);
   });
 }
