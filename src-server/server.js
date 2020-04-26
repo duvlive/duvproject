@@ -48,10 +48,6 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-// app.listen(port, () => {
-//   console.info(`Started up the server at port ${port}`);
-// });
-
 https.createServer(options, app).listen(port, () => {
   console.info(`Started up the server at port ${port}`);
 });
