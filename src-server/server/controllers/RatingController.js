@@ -1,5 +1,11 @@
 import Sequelize from 'sequelize';
-import { EntertainerProfile, EventEntertainer, Rating, User } from '../models';
+import {
+  EntertainerProfile,
+  EventEntertainer,
+  Rating,
+  Review,
+  User,
+} from '../models';
 import { validString } from '../utils';
 
 const RatingController = {
@@ -190,30 +196,37 @@ const RatingController = {
    * @return {object} returns res object
    */
   getAverageEntertainerRatings(req, res) {
-    req.user
-      .getRatings({
-        attributes: [
-          [
-            Sequelize.fn('AVG', Sequelize.col('professionalism')),
-            'avgProfessionalism',
-          ],
-          [
-            Sequelize.fn('AVG', Sequelize.col('accommodating')),
-            'avgAccommodating',
-          ],
-          [
-            Sequelize.fn('AVG', Sequelize.col('overallTalent')),
-            'avgOverallTalent',
-          ],
-          [Sequelize.fn('AVG', Sequelize.col('recommend')), 'avgRecommend'],
+    const entertainerId = req.user.profile.id;
+    Rating.findAll({
+      where: {
+        entertainerId,
+      },
+      attributes: [
+        [
+          Sequelize.fn('AVG', Sequelize.col('professionalism')),
+          'avgProfessionalism',
         ],
-        raw: true,
-      })
+        [
+          Sequelize.fn('AVG', Sequelize.col('accommodating')),
+          'avgAccommodating',
+        ],
+        [
+          Sequelize.fn('AVG', Sequelize.col('overallTalent')),
+          'avgOverallTalent',
+        ],
+        [Sequelize.fn('AVG', Sequelize.col('recommend')), 'avgRecommend'],
+      ],
+    })
       .then((avgRatings) => {
         if (!avgRatings || avgRatings.length === 0) {
           return res.status(404).json({ message: 'Average Rating not found' });
         }
         return res.status(200).json({ avgRatings });
+      })
+      .catch((error) => {
+        console.log('=====>', error);
+        const errorMessage = error.message || error;
+        return res.status(412).json({ message: errorMessage });
       });
   },
 
@@ -225,39 +238,56 @@ const RatingController = {
    * @return {object} returns res object
    */
   getEntertainerRatings(req, res) {
-    const userId = req.user.id;
-    EntertainerProfile.findOne({
+    const entertainerId = req.user.profile.id;
+    Rating.findAll({
       where: {
-        userId,
+        entertainerId,
       },
+      include: [
+        {
+          model: Review,
+          as: 'reviews',
+        },
+        {
+          model: EventEntertainer,
+          as: 'ratedEvent',
+        },
+        {
+          model: User,
+          as: 'rater',
+          attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+        },
+      ],
     })
-      .then((entertainer) => {
-        Rating.findAll({
-          where: {
-            entertainerId: entertainer.id,
+      .then((ratings) => {
+        if (!ratings) {
+          return res.status(404).json({ message: 'Rating not found' });
+        }
+        const ratingLength = ratings.length;
+        const averageRatings = ratings.reduce(
+          (acc, rate) => {
+            acc['professionalism'] += rate.professionalism;
+            acc['accommodating'] += rate.accommodating;
+            acc['overallTalent'] += rate.overallTalent;
+            acc['recommend'] += rate.recommend;
+            return acc;
           },
-          include: [
-            {
-              model: EventEntertainer,
-              as: 'ratedEvent',
-            },
-            {
-              model: User,
-              as: 'rater',
-              attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
-            },
-          ],
-        })
-          .then((ratings) => {
-            if (!ratings) {
-              return res.status(404).json({ message: 'Rating not found' });
-            }
-            return res.status(200).json({ ratings });
-          })
-          .catch((error) => {
-            const errorMessage = error.message || error;
-            return res.status(412).json({ message: errorMessage });
-          });
+          {
+            professionalism: 0,
+            accommodating: 0,
+            overallTalent: 0,
+            recommend: 0,
+          }
+        );
+        const jj = Object.keys(averageRatings).forEach((item) => {
+          averageRatings;
+        });
+        console.log(averageRatings, jj);
+        return res.status(200).json({
+          ratings,
+          averageRatings,
+          ratingLength,
+        });
       })
       .catch((error) => {
         const errorMessage = error.message || error;
@@ -273,41 +303,34 @@ const RatingController = {
    * @return {object} returns res object
    */
   getOneEntertainerRating(req, res) {
-    const userId = req.user.id;
+    const entertainerId = req.user.profile.id;
     const id = req.params.id;
-    EntertainerProfile.findOne({
+    Rating.findOne({
       where: {
-        userId,
+        id,
+        entertainerId,
       },
+      include: [
+        {
+          model: Review,
+          as: 'reviews',
+        },
+        {
+          model: EventEntertainer,
+          as: 'ratedEvent',
+        },
+        {
+          model: User,
+          as: 'rater',
+          attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+        },
+      ],
     })
-      .then((entertainer) => {
-        Rating.findOne({
-          where: {
-            id,
-            entertainerId: entertainer.id,
-          },
-          include: [
-            {
-              model: EventEntertainer,
-              as: 'ratedEvent',
-            },
-            {
-              model: User,
-              as: 'rater',
-              attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
-            },
-          ],
-        })
-          .then((ratings) => {
-            if (!ratings) {
-              return res.status(404).json({ message: 'Rating not found' });
-            }
-            return res.status(200).json({ ratings });
-          })
-          .catch((error) => {
-            const errorMessage = error.message || error;
-            return res.status(412).json({ message: errorMessage });
-          });
+      .then((ratings) => {
+        if (!ratings) {
+          return res.status(404).json({ message: 'Rating not found' });
+        }
+        return res.status(200).json({ ratings });
       })
       .catch((error) => {
         const errorMessage = error.message || error;

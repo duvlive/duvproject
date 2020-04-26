@@ -16,7 +16,11 @@ const ratingRoutes = (router) => {
 
   router
     .route('/api/v1/average-rating')
-    .all(Authentication.verifyToken, Authentication.isActiveUser)
+    .all(
+      Authentication.verifyToken,
+      Authentication.isActiveUser,
+      Authentication.validateEntertainer
+    )
     .get(RatingController.getAverageEntertainerRatings);
 
   router.get(

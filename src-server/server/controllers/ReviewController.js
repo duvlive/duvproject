@@ -181,43 +181,32 @@ const ReviewController = {
    * @return {object} returns res object
    */
   getEntertainerReviews(req, res) {
-    const userId = req.user.id;
-    EntertainerProfile.findOne({
+    const entertainerId = req.user.profile.id;
+    Review.findAll({
       where: {
-        userId,
+        entertainerId,
       },
+      include: [
+        {
+          model: Rating,
+          as: 'rating',
+        },
+        {
+          model: Event,
+          as: 'reviewedEvent',
+        },
+        {
+          model: User,
+          as: 'reviewer',
+          attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+        },
+      ],
     })
-      .then((entertainer) => {
-        Review.findAll({
-          where: {
-            entertainerId: entertainer.id,
-          },
-          include: [
-            {
-              model: Rating,
-              as: 'rating',
-            },
-            {
-              model: Event,
-              as: 'reviewedEvent',
-            },
-            {
-              model: User,
-              as: 'reviewer',
-              attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
-            },
-          ],
-        })
-          .then((reviews) => {
-            if (!reviews) {
-              return res.status(404).json({ message: 'Review not found' });
-            }
-            return res.status(200).json({ reviews });
-          })
-          .catch((error) => {
-            const errorMessage = error.message || error;
-            return res.status(412).json({ message: errorMessage });
-          });
+      .then((reviews) => {
+        if (!reviews) {
+          return res.status(404).json({ message: 'Review not found' });
+        }
+        return res.status(200).json({ reviews });
       })
       .catch((error) => {
         const errorMessage = error.message || error;
@@ -233,45 +222,35 @@ const ReviewController = {
    * @return {object} returns res object
    */
   getOneEntertainerReview(req, res) {
-    const userId = req.user.id;
+    const entertainerId = req.user.profile.id;
     const id = req.params.id;
-    EntertainerProfile.findOne({
+
+    Review.findOne({
       where: {
-        userId,
+        id,
+        entertainerId,
       },
+      include: [
+        {
+          model: Rating,
+          as: 'rating',
+        },
+        {
+          model: Event,
+          as: 'reviewedEvent',
+        },
+        {
+          model: User,
+          as: 'reviewer',
+          attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+        },
+      ],
     })
-      .then((entertainer) => {
-        Review.findOne({
-          where: {
-            id,
-            entertainerId: entertainer.id,
-          },
-          include: [
-            {
-              model: Rating,
-              as: 'rating',
-            },
-            {
-              model: Event,
-              as: 'reviewedEvent',
-            },
-            {
-              model: User,
-              as: 'reviewer',
-              attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
-            },
-          ],
-        })
-          .then((reviews) => {
-            if (!reviews) {
-              return res.status(404).json({ message: 'Review not found' });
-            }
-            return res.status(200).json({ reviews });
-          })
-          .catch((error) => {
-            const errorMessage = error.message || error;
-            return res.status(412).json({ message: errorMessage });
-          });
+      .then((reviews) => {
+        if (!reviews) {
+          return res.status(404).json({ message: 'Review not found' });
+        }
+        return res.status(200).json({ reviews });
       })
       .catch((error) => {
         const errorMessage = error.message || error;
