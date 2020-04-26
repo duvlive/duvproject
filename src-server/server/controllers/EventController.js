@@ -450,15 +450,22 @@ const EventController = {
    */
   getPendingEventReviews(req, res) {
     const userId = req.user.id;
+    const { sortType } = req.params;
+
+    const order =
+      sortType === 'random'
+        ? [Sequelize.fn('RANDOM')]
+        : [[{ model: Event, as: 'event' }, 'eventDate', 'DESC']];
+
     EventEntertainer.findAll({
       where: {
         userId,
         hiredEntertainer: {
           [Op.ne]: null,
         },
-        // [Op.and]: Sequelize.literal(`"eventRating"."id" is null`),
+        [Op.and]: Sequelize.literal(`"eventRating"."id" is null`),
       },
-      order: [Sequelize.fn('RANDOM')],
+      order,
       attributes: ['id', 'placeOfEvent'],
       include: [
         {

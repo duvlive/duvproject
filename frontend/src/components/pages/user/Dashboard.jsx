@@ -57,7 +57,7 @@ const Dashboard = () => {
 
   React.useEffect(() => {
     axios
-      .get(`/api/v1/user/reviews/pending`, {
+      .get(`/api/v1/user/reviews/pending/random`, {
         headers: {
           'x-access-token': getTokenFromStore(),
         },

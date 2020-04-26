@@ -36,6 +36,11 @@ const navigation = {
       to: '/user/payments-history',
       icon: 'credit-card',
     },
+    {
+      title: 'Leave A Review',
+      to: '/user/review',
+      icon: 'star',
+    },
   ],
 };
 const others = (entertainerMenu) => ({

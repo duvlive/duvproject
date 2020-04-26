@@ -60,7 +60,7 @@ const eventRoutes = (router) => {
 
   // Event Reviews
   router.get(
-    '/api/v1/user/reviews/pending',
+    '/api/v1/user/reviews/pending/:sortType',
     Authentication.verifyToken,
     Authentication.validateUser,
     Authentication.isActiveUser,

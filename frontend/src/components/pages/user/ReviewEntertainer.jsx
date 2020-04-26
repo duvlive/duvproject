@@ -16,6 +16,7 @@ import { reviewSchema } from 'components/forms/schema/eventSchema';
 import { getTokenFromStore } from 'utils/localStorage';
 import LoadingScreen from 'components/common/layout/LoadingScreen';
 import { getShortDate } from 'utils/date-helpers';
+import { navigate } from '@reach/router';
 
 const ReviewEntertainer = ({ eventEntertainerId }) => {
   const [eventEntertainer, setEventEntertainer] = React.useState({});
@@ -38,8 +39,6 @@ const ReviewEntertainer = ({ eventEntertainerId }) => {
           }
         })
         .catch(function (error) {
-          // console.log(error.response.data.message);
-          // TODO: navigate to all events
           setLoading(false);
         });
   }, [eventEntertainerId]);
@@ -86,10 +85,9 @@ const LeaveAReviewForm = ({ entertainer, event, eventEntertainerId }) => {
             headers: { 'x-access-token': getTokenFromStore() },
           })
           .then(function (response) {
-            const { status, data } = response;
-            console.log('status, data', status, data);
+            const { status } = response;
             if (status === 200) {
-              // navigate(`/user/events/${eventId}/add-entertainer/new-event`);
+              navigate('/user/review/success');
               actions.setSubmitting(false);
             }
           })
