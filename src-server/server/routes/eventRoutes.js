@@ -60,11 +60,19 @@ const eventRoutes = (router) => {
 
   // Event Reviews
   router.get(
-    '/api/v1/user/reviews/pending/:sortType',
+    '/api/v1/user/reviews/pending',
     Authentication.verifyToken,
     Authentication.validateUser,
     Authentication.isActiveUser,
-    EventController.getPendingEventReviews
+    EventController.getOnePendingEventReview
+  );
+
+  router.get(
+    '/api/v1/user/reviews/all',
+    Authentication.verifyToken,
+    Authentication.validateUser,
+    Authentication.isActiveUser,
+    EventController.getAllEventsReview
   );
 };
 

@@ -9,6 +9,35 @@ import {
   Rating,
 } from '../models';
 
+const reviewsInclude = [
+  {
+    model: Event,
+    as: 'event',
+    where: {
+      eventDate: {
+        [Op.lte]: Sequelize.literal('NOW()'),
+      },
+    },
+    attributes: ['id', 'eventDate', 'eventType', 'eventDuration'],
+  },
+  {
+    model: EntertainerProfile,
+    as: 'entertainer',
+    attributes: ['id', 'slug', 'stageName', 'entertainerType', 'location'],
+    include: [
+      {
+        model: User,
+        as: 'personalDetails',
+        attributes: ['id', 'profileImageURL'],
+      },
+    ],
+  },
+  {
+    model: Rating,
+    as: 'eventRating',
+  },
+];
+
 const EventController = {
   /**
    * create Event
@@ -442,22 +471,16 @@ const EventController = {
   },
 
   /**
-   * get Pending Event Review
+   * get One Pending Event Review
    * @function
    * @param {object} req is req object
    * @param {object} res is res object
    * @return {object} returns res object
    */
-  getPendingEventReviews(req, res) {
+  getOnePendingEventReview(req, res) {
     const userId = req.user.id;
-    const { sortType } = req.params;
 
-    const order =
-      sortType === 'random'
-        ? [Sequelize.fn('RANDOM')]
-        : [[{ model: Event, as: 'event' }, 'eventDate', 'DESC']];
-
-    EventEntertainer.findAll({
+    EventEntertainer.findOne({
       where: {
         userId,
         hiredEntertainer: {
@@ -465,42 +488,39 @@ const EventController = {
         },
         [Op.and]: Sequelize.literal(`"eventRating"."id" is null`),
       },
-      order,
+      order: [Sequelize.fn('RANDOM')],
       attributes: ['id', 'placeOfEvent'],
-      include: [
-        {
-          model: Event,
-          as: 'event',
-          where: {
-            eventDate: {
-              [Op.lte]: Sequelize.literal('NOW()'),
-            },
-          },
-          attributes: ['id', 'eventDate', 'eventType', 'eventDuration'],
+      include: reviewsInclude,
+    }).then((info) => {
+      if (!info || info.length === 0) {
+        return res
+          .status(404)
+          .json({ message: 'Event Entertainers not found' });
+      }
+      return res.status(200).json({ info });
+    });
+  },
+
+  /**
+   * get All Events Review
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  getAllEventsReview(req, res) {
+    const userId = req.user.id;
+
+    EventEntertainer.findAll({
+      where: {
+        userId,
+        hiredEntertainer: {
+          [Op.ne]: null,
         },
-        {
-          model: EntertainerProfile,
-          as: 'entertainer',
-          attributes: [
-            'id',
-            'slug',
-            'stageName',
-            'entertainerType',
-            'location',
-          ],
-          include: [
-            {
-              model: User,
-              as: 'personalDetails',
-              attributes: ['id', 'profileImageURL'],
-            },
-          ],
-        },
-        {
-          model: Rating,
-          as: 'eventRating',
-        },
-      ],
+      },
+      order: [[{ model: Event, as: 'event' }, 'eventDate', 'DESC']],
+      attributes: ['id', 'placeOfEvent'],
+      include: reviewsInclude,
     }).then((info) => {
       if (!info || info.length === 0) {
         return res

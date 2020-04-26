@@ -57,14 +57,13 @@ const Dashboard = () => {
 
   React.useEffect(() => {
     axios
-      .get(`/api/v1/user/reviews/pending/random`, {
+      .get(`/api/v1/user/reviews/pending`, {
         headers: {
           'x-access-token': getTokenFromStore(),
         },
       })
       .then(function (response) {
         const { status, data } = response;
-        console.log('data.info', data.info);
         // handle success
         if (status === 200) {
           setPendingReview(data.info);
@@ -74,6 +73,8 @@ const Dashboard = () => {
         setPendingReview([]);
       });
   }, []);
+
+  console.log('Pending Review', pendingReview);
 
   const topMessage = userState.firstTimeLogin ? 'Hello' : 'Welcome back';
   // Sort event according - Today, Upcoming and Past
@@ -115,11 +116,11 @@ const Dashboard = () => {
             <div className="col-sm-4">
               <Dashboard.InviteFriends />
               <LoadItems
-                items={pendingReview}
+                items={pendingReview ? [pendingReview] : null}
                 noContent={<Dashboard.NoPendingReview />}
               >
                 {pendingReview && pendingReview.length > 0 && (
-                  <Dashboard.PendingReview info={pendingReview[0]} />
+                  <Dashboard.PendingReview info={pendingReview} />
                 )}
               </LoadItems>
             </div>

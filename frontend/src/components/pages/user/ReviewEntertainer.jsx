@@ -54,6 +54,7 @@ const ReviewEntertainer = ({ eventEntertainerId }) => {
               entertainer={eventEntertainer.entertainer}
               event={eventEntertainer.event}
               eventEntertainerId={eventEntertainerId}
+              eventRating={eventEntertainer.eventRating || {}}
             />
           )}
         </section>
@@ -69,16 +70,25 @@ ReviewEntertainer.defaultProps = {
   eventEntertainerId: '',
 };
 
-const LeaveAReviewForm = ({ entertainer, event, eventEntertainerId }) => {
+const LeaveAReviewForm = ({
+  entertainer,
+  event,
+  eventEntertainerId,
+  eventRating,
+}) => {
   return (
     <Formik
-      initialValues={setInitialValues(reviewSchema)}
+      initialValues={setInitialValues(reviewSchema, eventRating)}
       onSubmit={(values, actions) => {
-        const payload = {
+        let payload = {
           entertainerId: entertainer.id,
           eventEntertainerId: eventEntertainerId,
           ...values,
         };
+
+        if (eventRating && eventRating.id) {
+          payload.id = eventRating.id;
+        }
         console.log('payload', payload);
         axios
           .post('/api/v1/rating', payload, {
@@ -169,6 +179,7 @@ LeaveAReviewForm.propTypes = {
   entertainer: PropTypes.object.isRequired,
   event: PropTypes.object.isRequired,
   eventEntertainerId: PropTypes.any.isRequired,
+  eventRating: PropTypes.object.isRequired,
 };
 
 export default ReviewEntertainer;
