@@ -11,7 +11,7 @@ import router from './server/routes';
 
 dotenv.config();
 
-let options = {};
+// let options = {};
 // if (process.env.NODE_ENV === 'development') {
 //   options = {
 //     key: fs.readFileSync('server.key'),
@@ -48,6 +48,10 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-https.createServer(options, app).listen(port, () => {
+app.listen(port, () => {
   console.info(`Started up the server at port ${port}`);
 });
+
+// https.createServer(options, app).listen(port, () => {
+//   console.info(`Started up the server at port ${port}`);
+// });
