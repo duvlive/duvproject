@@ -1,5 +1,5 @@
 import { updateUser } from '../utils';
-import { User, ApprovalComment, Notification } from '../models';
+import { User, ApprovalComment, Notification, BadgeUser } from '../models';
 import { NOTIFICATIONS, NOTIFICATION_TYPE } from '../constant';
 
 const ApproveCommentController = {
@@ -70,12 +70,16 @@ const ApproveCommentController = {
             ),
           ])
             .then(async ([newApprovalComment, profile]) => {
+              await BadgeUser.create({
+                badgeId: 1,
+                userId: userId,
+              });
               await Notification.create({
                 userId: userId,
                 title: NOTIFICATIONS.NEW_AWARD,
                 description: `You have been awarded the DUV CERTIFIED Award`,
                 type: NOTIFICATION_TYPE.SUCCESS,
-                actionId: 0, //TODO: Update to award Id
+                actionId: 1,
               });
               return res.status(200).json({
                 message,

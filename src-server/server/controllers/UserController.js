@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import {
   ApprovalComment,
   Badge,
+  BadgeUser,
   BankDetail,
   Contact,
   EntertainerProfile,
@@ -11,6 +12,7 @@ import {
   Gallery,
   Identification,
   Notification,
+  Payment,
   Rating,
   Review,
   User,
@@ -32,10 +34,26 @@ export const userAssociatedModels = [
   {
     model: EntertainerProfile,
     as: 'profile',
+    include: [
+      {
+        model: Payment,
+        as: 'payments',
+      },
+    ],
   },
   {
     model: BankDetail,
     as: 'bankDetail',
+  },
+  {
+    model: BadgeUser,
+    as: 'badges',
+    include: [
+      {
+        model: Badge,
+        as: 'badge',
+      },
+    ],
   },
   {
     model: Contact,
@@ -97,10 +115,6 @@ export const userAssociatedModels = [
   {
     model: Review,
     as: 'reviews',
-  },
-  {
-    model: Badge,
-    as: 'badges',
   },
 ];
 
