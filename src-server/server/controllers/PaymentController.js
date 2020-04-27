@@ -1,8 +1,15 @@
 import axios from 'axios';
 import crypto from 'crypto';
-import { Application, EventEntertainer, Notification } from '../models';
+import {
+  Application,
+  EventEntertainer,
+  Notification,
+  Payment,
+} from '../models';
 import { validString } from '../utils';
 import { NOTIFICATIONS, NOTIFICATION_TYPE } from '../constant';
+// import EMAIL_CONTENT from '../email-template/content';
+// import sendMail from '../MailSender';
 
 const PaymentController = {
   async initializeTransaction(req, res) {
@@ -255,6 +262,76 @@ const PaymentController = {
         const errorMessage = error.message || error;
         return res.status(status).json({ message: errorMessage });
       });
+  },
+
+  /**
+   * Pay Entertainers
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  PayEnteratainer(req, res) {
+    const adminId = req.user.id;
+    const { amount, entertainerId, eventEntertainerId, userId } = req.body;
+    if (!amount && !entertainerId && !eventEntertainerId && !userId) {
+      return Promise.reject({
+        message:
+          'Payment must contain amount, entertainerId, eventEntertainerId and userId',
+      });
+    }
+
+    return Payment.create({
+      adminId,
+      amount,
+      entertainerId,
+      eventEntertainerId,
+    })
+      .then(async (payment) => {
+        // send mail
+        // sendMail(
+        //   EMAIL_CONTENT.ENTERTAINER_REQUEST,
+        //   { email: email },
+        //   {
+        //     firstName: stageName,
+        //     title: `You have a request of NGN ${offer}`,
+        //     link: '#',
+        //     contentTop,
+        //     contentBottom,
+        //   }
+        // );
+
+        // Notification
+        await Notification.create({
+          userId,
+          title: NOTIFICATIONS.PAYMENT_RECEIVED,
+          description: `You have been paid ${amount}`,
+          type: NOTIFICATION_TYPE.SUCCESS,
+        });
+        return res.json({ message: 'Payment has been made', payment });
+      })
+      .catch((error) => {
+        const status = error.status || 500;
+        const errorMessage =
+          (error.parent && error.parent.detail) || error.message || error;
+        return res.status(status).json({ message: errorMessage });
+      });
+  },
+
+  /**
+   * @desc Get all Entertainer Payments
+   * @param {object} req - The request sent to the route
+   * @param {object} res - The response sent back
+   * @return {object} json response
+   */
+  getPayments(req, res) {
+    const { entertainerId } = req.user.profile.id;
+    return Payment.findAll({
+      where: { entertainerId },
+      order: [['updatedAt', 'DESC']],
+    })
+      .then((payments) => res.json({ payments }))
+      .catch((error) => res.status(412).json({ msg: error.message }));
   },
 };
 

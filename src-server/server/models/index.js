@@ -246,6 +246,36 @@ db.Review.belongsTo(db.Event, {
   as: 'reviewedEvent',
 });
 
+db.EntertainerProfile.hasMany(db.Payment, {
+  foreignKey: 'entertainerId',
+  as: 'payments',
+});
+
+db.Payment.belongsTo(db.EntertainerProfile, {
+  foreignKey: 'entertainerId',
+  as: 'entertainer',
+});
+
+db.User.hasMany(db.Payment, {
+  foreignKey: 'userId',
+  as: 'payouts',
+});
+
+db.Payment.belongsTo(db.User, {
+  foreignKey: 'userId',
+  as: 'paidBy',
+});
+
+db.EventEntertainer.hasMany(db.Payment, {
+  foreignKey: 'eventEntertainerId',
+  as: 'eventEntainer',
+});
+
+db.Payment.belongsTo(db.EventEntertainer, {
+  foreignKey: 'eventEntertainerId',
+  as: 'eventPaidFor',
+});
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
