@@ -23,8 +23,8 @@ import {
 import { groupEvents, userCanAddEntertainer } from 'utils/event-helpers';
 import { Link } from '@reach/router';
 import LoadItems from 'components/common/utils/LoadItems';
-import WelcomeSlides from './WelcomeSlides';
-import welcomeSlide from 'data/welcome';
+import WelcomeSlides from 'components/common/utils//WelcomeSlides';
+import welcomeSlide from 'data/firstTimeUser';
 import { InviteFriendsForm } from 'components/common/pages/InviteFriends';
 
 const Dashboard = () => {
@@ -119,7 +119,7 @@ const Dashboard = () => {
                 items={pendingReview ? [pendingReview] : null}
                 noContent={<Dashboard.NoPendingReview />}
               >
-                {pendingReview && pendingReview.length > 0 && (
+                {pendingReview && pendingReview.entertainer && (
                   <Dashboard.PendingReview info={pendingReview} />
                 )}
               </LoadItems>
