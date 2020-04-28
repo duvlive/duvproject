@@ -11,7 +11,8 @@ import {
   DropdownMenu,
   DropdownItem,
 } from 'reactstrap';
-import { Link } from '@reach/router';
+import Humanize from 'humanize-plus';
+import { Link, Match } from '@reach/router';
 import { userTopMenu } from 'data/menu/user';
 import { entertainerTopMenu } from 'data/menu/entertainer';
 import { bandMemberTopMenu } from 'data/menu/band-member';
@@ -21,7 +22,6 @@ import { USER_TYPES, DASHBOARD_PAGE } from 'utils/constants';
 import { UserContext } from 'context/UserContext';
 import ProfileAvatar from 'assets/img/avatar/profile.png';
 import { getUserTypeFromStore } from 'utils/localStorage';
-import { getProfileName } from 'utils/helpers';
 
 const TOP_MENU = {
   [USER_TYPES.user]: userTopMenu,
@@ -32,7 +32,9 @@ const TOP_MENU = {
 
 const TopBar = ({ showSidebar }) => {
   let { userState } = React.useContext(UserContext);
-  const menus = TOP_MENU[userState.type || getUserTypeFromStore()];
+  const currentUserType = userState.type || getUserTypeFromStore();
+  const menus = TOP_MENU[currentUserType];
+
   return (
     <div className="topbar">
       <Navbar color="transparent" expand>
@@ -59,7 +61,16 @@ const TopBar = ({ showSidebar }) => {
               </NavLink>
             </NavItem>
 
-            <TopBarNavigation menus={menus} />
+            <Match path="/user/:item">
+              {(props) =>
+                // eslint-disable-next-line react/prop-types
+                props.match && currentUserType !== USER_TYPES.user ? (
+                  <TopBarNavigation menus={TOP_MENU[USER_TYPES.user]} />
+                ) : (
+                  <TopBarNavigation menus={menus} />
+                )
+              }
+            </Match>
           </Nav>
         </Collapse>
       </Navbar>
@@ -73,14 +84,10 @@ TopBar.propTypes = {
 
 const TopBarNavigation = ({ menus }) => {
   let { userState } = React.useContext(UserContext);
-  const userName = getProfileName({
-    firstName: userState.firstName,
-    lastName: userState.lastName,
-    stageName:
-      userState.entertainerProfile && userState.entertainerProfile.stageName
-        ? userState.entertainerProfile.stageName
-        : null,
-  });
+  const userName =
+    userState.firstName.length > 20
+      ? Humanize.truncate(userState.firstName, 15)
+      : userState.firstName;
 
   const topMenu = menus.map(({ title, to }) => (
     <DropdownItem key={title}>

@@ -21,6 +21,7 @@ import ViewRequest from 'components/pages/user/ViewRequest';
 import InviteFriends from 'components/common/pages/InviteFriends';
 import Notifications from 'components/common/pages/Notifications';
 import ChangePassword from 'components/common/pages/ChangePassword';
+import LeaveReview from 'components/pages/user/LeaveReview';
 
 const UserRouter = () => (
   <Router>
@@ -49,10 +50,10 @@ const UserRouter = () => (
     <ChangePassword path="/change-password" />
     <RegisterAsEntertainer path="/register-as-entertainer" />
     <ReviewEntertainer path="/review-entertainer/:eventEntertainerId" />
+    <LeaveReview path="/review" />
+    <LeaveReview path="/review/:message" />
     <Dashboard default />
   </Router>
 );
 
 export default UserRouter;
-
-// https://duvlive.herokuapp.com/?trxref=dilqpr8eth&reference=dilqpr8eth

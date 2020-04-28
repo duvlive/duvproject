@@ -23,14 +23,14 @@ const ViewBid = ({ applicationId }) => {
         })
         .then(function (response) {
           const { status, data } = response;
-          console.log('data', data);
+
           // handle success
           if (status === 200) {
             setApplication(data.application);
           }
         })
         .catch(function (error) {
-          console.log(error.response.data.message);
+          // console.log(error.response.data.message);
           // TODO: navigate to all events
         });
   }, [applicationId]);

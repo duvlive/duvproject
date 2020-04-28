@@ -93,6 +93,7 @@ const authentication = {
 
   /**
    * validateUser
+   * @deprecated
    * @param {Object} request object
    * @param {Object} response object
    * @param {Object} next object

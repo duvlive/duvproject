@@ -88,10 +88,8 @@ const ViewRequest = ({ applicationId }) => {
         })
         .then(function (response) {
           const { status, data } = response;
-          console.log('data', data);
           // handle success
           if (status === 200) {
-            console.log('data', data);
             setApplication(data.application);
             setLoadingPage(false);
           }

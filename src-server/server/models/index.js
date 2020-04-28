@@ -94,12 +94,6 @@ db.User.hasMany(db.Application, {
   targetKey: 'applications',
 });
 
-db.User.hasMany(db.Badge, {
-  foreignKey: 'userId',
-  as: 'badges',
-  targetKey: 'badges',
-});
-
 db.User.hasMany(db.Video, {
   foreignKey: 'userId',
   as: 'videos',
@@ -244,6 +238,66 @@ db.Event.hasOne(db.Review, {
 db.Review.belongsTo(db.Event, {
   foreignKey: 'eventId',
   as: 'reviewedEvent',
+});
+
+db.EntertainerProfile.hasMany(db.Payment, {
+  foreignKey: 'entertainerId',
+  as: 'payments',
+});
+
+db.Payment.belongsTo(db.EntertainerProfile, {
+  foreignKey: 'entertainerId',
+  as: 'entertainer',
+});
+
+db.User.hasMany(db.Payment, {
+  foreignKey: 'adminId',
+  as: 'payouts',
+});
+
+db.Payment.belongsTo(db.User, {
+  foreignKey: 'adminId',
+  as: 'paidBy',
+});
+
+db.EventEntertainer.hasMany(db.Payment, {
+  foreignKey: 'eventEntertainerId',
+  as: 'eventEntainer',
+});
+
+db.Payment.belongsTo(db.EventEntertainer, {
+  foreignKey: 'eventEntertainerId',
+  as: 'eventPaidFor',
+});
+
+db.Badge.hasMany(db.BadgeUser, {
+  foreignKey: 'badgeId',
+  as: 'userBadges',
+});
+
+db.BadgeUser.belongsTo(db.Badge, {
+  foreignKey: 'badgeId',
+  as: 'badge',
+});
+
+db.User.hasMany(db.BadgeUser, {
+  foreignKey: 'userId',
+  as: 'badges',
+});
+
+db.BadgeUser.belongsTo(db.User, {
+  foreignKey: 'userId',
+  as: 'badgeUser',
+});
+
+db.User.hasMany(db.Badge, {
+  foreignKey: 'adminId',
+  as: 'createdBadges',
+});
+
+db.Badge.belongsTo(db.User, {
+  foreignKey: 'adminId',
+  as: 'creator',
 });
 
 db.sequelize = sequelize;

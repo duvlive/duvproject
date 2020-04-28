@@ -18,7 +18,6 @@ const HowItWorks = () => {
   React.useEffect(() => {
     axios.get(`/api/v1/entertainers/total`).then(function (response) {
       const { status, data } = response;
-      console.log('status,data', status, data);
       // handle success
       if (status === 200) {
         setTotal(data.entertainers);

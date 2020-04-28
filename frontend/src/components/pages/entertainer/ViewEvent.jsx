@@ -7,7 +7,7 @@ import {
   remainingDays,
   getShortDate,
   getTime,
-  getTimeOfDay
+  getTimeOfDay,
 } from 'utils/date-helpers';
 import Image from 'components/common/utils/Image';
 import DuvLiveModal from 'components/custom/Modal';
@@ -17,7 +17,7 @@ import { listJsonItems } from 'utils/helpers';
 import {
   eventHasExpired,
   defaultEvent,
-  defaultEventEntertainer
+  defaultEventEntertainer,
 } from 'utils/event-helpers';
 
 const ViewEvent = ({ eventEntertainerId }) => {
@@ -28,18 +28,17 @@ const ViewEvent = ({ eventEntertainerId }) => {
       axios
         .get(`/api/v1/entertainer/events/${eventEntertainerId}`, {
           headers: {
-            'x-access-token': getTokenFromStore()
-          }
+            'x-access-token': getTokenFromStore(),
+          },
         })
-        .then(function(response) {
+        .then(function (response) {
           const { status, data } = response;
-          console.log('data', data);
           // handle success
           if (status === 200) {
             setEventEntertainer(data.event);
           }
         })
-        .catch(function(error) {
+        .catch(function (error) {
           // console.log(error.response.data.message);
           // TODO: navigate to all events
         });
@@ -101,11 +100,11 @@ const ViewEvent = ({ eventEntertainerId }) => {
 };
 
 ViewEvent.propTypes = {
-  eventEntertainerId: PropTypes.string
+  eventEntertainerId: PropTypes.string,
 };
 
 ViewEvent.defaultProps = {
-  eventEntertainerId: null
+  eventEntertainerId: null,
 };
 
 ViewEvent.EventTitle = ({ event }) => {
@@ -125,12 +124,12 @@ ViewEvent.EventTitle = ({ event }) => {
 ViewEvent.EventTitle.propTypes = {
   event: PropTypes.shape({
     eventDate: PropTypes.string,
-    eventType: PropTypes.string
-  })
+    eventType: PropTypes.string,
+  }),
 };
 
 ViewEvent.EventTitle.propTypes = {
-  event: {}
+  event: {},
 };
 
 ViewEvent.OwnerDetailsCard = ({ owner }) => {
@@ -138,7 +137,7 @@ ViewEvent.OwnerDetailsCard = ({ owner }) => {
     firstName: '',
     lastName: '',
     phoneNumber: '',
-    phoneNumber2: ''
+    phoneNumber2: '',
   };
   const sanitizedOwner = { ...defaultOwner, ...owner };
   return (
@@ -176,10 +175,10 @@ ViewEvent.OwnerDetailsCard.propTypes = {
     firstName: PropTypes.string,
     lastName: PropTypes.string,
     phoneNumber: PropTypes.string,
-    phoneNuber2: PropTypes.string
+    phoneNuber2: PropTypes.string,
   }),
   showAddress: PropTypes.bool,
-  transparent: PropTypes.bool
+  transparent: PropTypes.bool,
 };
 
 ViewEvent.EventDetailsCard = ({ event, showAddress, transparent }) => {
@@ -255,10 +254,10 @@ ViewEvent.EventDetailsCard.propTypes = {
     streetLine2: PropTypes.string,
     lga: PropTypes.string,
     landmark: PropTypes.string,
-    location: PropTypes.string
+    location: PropTypes.string,
   }),
   showAddress: PropTypes.bool,
-  transparent: PropTypes.bool
+  transparent: PropTypes.bool,
 };
 
 ViewEvent.EventDetailsCard = ({ event, showAddress, transparent }) => {
@@ -334,22 +333,22 @@ ViewEvent.EventDetailsCard.propTypes = {
     streetLine2: PropTypes.string,
     lga: PropTypes.string,
     landmark: PropTypes.string,
-    location: PropTypes.string
+    location: PropTypes.string,
   }),
   showAddress: PropTypes.bool,
-  transparent: PropTypes.bool
+  transparent: PropTypes.bool,
 };
 
 ViewEvent.EventDetailsCard.defaultProps = {
   event: {},
   showAddress: true,
-  transparent: false
+  transparent: false,
 };
 
 ViewEvent.EventEntertainerDetailsCard = ({ eventEntertainer }) => {
   const sanitizedEntertainer = {
     ...defaultEventEntertainer,
-    ...eventEntertainer
+    ...eventEntertainer,
   };
 
   return (
@@ -413,15 +412,15 @@ ViewEvent.EventEntertainerDetailsCard = ({ eventEntertainer }) => {
 };
 
 ViewEvent.EventEntertainerDetailsCard.propTypes = {
-  eventEntertainer: PropTypes.object.isRequired
+  eventEntertainer: PropTypes.object.isRequired,
 };
 
 ViewEvent.EntertainersTable = ({ eventEntertainers }) => {
   const hiredEntertainers = eventEntertainers.filter(
-    eventEntertainer => !!eventEntertainer.entertainer
+    (eventEntertainer) => !!eventEntertainer.entertainer
   );
   const pendingEntertainers = eventEntertainers.filter(
-    eventEntertainer => !eventEntertainer.entertainer
+    (eventEntertainer) => !eventEntertainer.entertainer
   );
 
   return eventEntertainers.length > 0 ? (
@@ -484,7 +483,7 @@ ViewEvent.EntertainersTable = ({ eventEntertainers }) => {
 };
 
 ViewEvent.EntertainersTable.propTypes = {
-  eventEntertainers: PropTypes.array.isRequired
+  eventEntertainers: PropTypes.array.isRequired,
 };
 
 ViewEvent.HireEntertainersRow = ({ entertainer }) => {
@@ -529,10 +528,10 @@ ViewEvent.HireEntertainersRow = ({ entertainer }) => {
   );
 };
 ViewEvent.HireEntertainersRow.propTypes = {
-  entertainer: PropTypes.object
+  entertainer: PropTypes.object,
 };
 ViewEvent.HireEntertainersRow.defaultProps = {
-  entertainer: {}
+  entertainer: {},
 };
 
 ViewEvent.PendingEntertainersRow = ({ eventEntertainer }) => {
@@ -569,10 +568,10 @@ ViewEvent.PendingEntertainersRow = ({ eventEntertainer }) => {
   );
 };
 ViewEvent.PendingEntertainersRow.propTypes = {
-  eventEntertainer: PropTypes.object
+  eventEntertainer: PropTypes.object,
 };
 ViewEvent.PendingEntertainersRow.defaultProps = {
-  eventEntertainer: {}
+  eventEntertainer: {},
 };
 
 export default ViewEvent;

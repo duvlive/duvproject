@@ -115,16 +115,18 @@ Sidebar.propTypes = {
 
 const SidebarMenu = ({ showUserType }) => {
   let { userState } = React.useContext(UserContext);
-  const userName = getProfileName({
-    firstName: userState.firstName,
-    lastName: userState.lastName,
-    stageName:
-      userState.entertainerProfile && userState.entertainerProfile.stageName
-        ? userState.entertainerProfile.stageName
-        : null,
-  });
+  const userName = showUserType
+    ? getProfileName({
+        firstName: userState.firstName,
+        lastName: userState.lastName,
+        stageName:
+          userState.entertainerProfile && userState.entertainerProfile.stageName
+            ? userState.entertainerProfile.stageName
+            : null,
+      })
+    : userState.firstName + ' ' + userState.lastName;
 
-  // user is not shown on the sidebar
+  // userType for user is not shown on the sidebar
   const userType =
     userState.type !== USER_TYPES.user &&
     Object.keys(USER_TYPES)[userState.type];

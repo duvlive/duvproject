@@ -12,9 +12,11 @@ import { AuctionsRow } from 'components/pages/entertainer/AvailableAuctions';
 import { UserContext } from 'context/UserContext';
 import { getTokenFromStore } from 'utils/localStorage';
 import LoadingScreen from 'components/common/layout/LoadingScreen';
-import { twoDigitNumber, getItems } from 'utils/helpers';
+import { twoDigitNumber, getItems, moneyFormatInNaira } from 'utils/helpers';
 import { InviteFriendsForm } from 'components/common/pages/InviteFriends';
 import NoContent from 'components/common/utils/NoContent';
+import { getTinyDate } from 'utils/date-helpers';
+import LoadItems from 'components/common/utils/LoadItems';
 
 const Dashboard = () => {
   const { userState } = React.useContext(UserContext);
@@ -136,8 +138,11 @@ const DashboardItems = () => {
               )}
           </div>
           <div className="col-sm-4">
+            <Dashboard.PaymentHistory
+              payments={userState.entertainerProfile.payments || null}
+            />
             <Dashboard.InviteFriends />
-            <Dashboard.RecentBadges />
+            {/* <Dashboard.RecentBadges /> */}
           </div>
         </div>
       </section>
@@ -173,6 +178,45 @@ Dashboard.UpcomingEvents = ({ events }) => (
 
 Dashboard.UpcomingEvents.propTypes = {
   events: PropTypes.array.isRequired,
+};
+
+Dashboard.PaymentHistory = ({ payments }) => (
+  <div className="card card-custom">
+    <div className="card-body">
+      <h5 className="font-weight-normal mb-3 text-green">Recent Payments</h5>
+      <div className="table-responsive">
+        <LoadItems
+          items={payments}
+          noContent={<NoContent text="You have no payment History" />}
+        >
+          <table className="table table-dark table-border--x">
+            <tbody>
+              {payments &&
+                payments.length > 0 &&
+                payments.map((payment, index) => (
+                  <Dashboard.PaymentRow key={index} payment={payment} />
+                ))}
+            </tbody>
+          </table>
+        </LoadItems>
+      </div>
+    </div>
+  </div>
+);
+
+Dashboard.PaymentHistory.propTypes = {
+  payments: PropTypes.any,
+};
+
+Dashboard.PaymentRow = ({ payment }) => (
+  <tr>
+    <td className="pt-3">{getTinyDate(payment.createdAt)}</td>
+    <td className="text-muted-light-2">{moneyFormatInNaira(payment.amount)}</td>
+  </tr>
+);
+
+Dashboard.PaymentRow.propTypes = {
+  payment: PropTypes.object.isRequired,
 };
 
 Dashboard.RecentBids = ({ bids }) => (
@@ -265,28 +309,6 @@ Dashboard.RecentAuctions = ({ auctions }) => (
 Dashboard.RecentAuctions.propTypes = {
   auctions: PropTypes.array.isRequired,
 };
-
-Dashboard.PaymentHistory = () => (
-  <div className="card card-custom">
-    <div className="card-body">
-      <h5 className="card-title text-red">Payment History</h5>
-      <div className="table-responsive">
-        <table className="table table-dark">
-          <tbody>
-            <tr>
-              <td>17 Mar. 2019</td>
-              <td className="text-white">N 50,000</td>
-            </tr>
-            <tr>
-              <td>20 Jan. 2019</td>
-              <td className="text-white">N 80,000</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-);
 
 Dashboard.RecentBadges = () => (
   <div className="card card-custom">

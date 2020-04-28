@@ -16,6 +16,7 @@ import { reviewSchema } from 'components/forms/schema/eventSchema';
 import { getTokenFromStore } from 'utils/localStorage';
 import LoadingScreen from 'components/common/layout/LoadingScreen';
 import { getShortDate } from 'utils/date-helpers';
+import { navigate } from '@reach/router';
 
 const ReviewEntertainer = ({ eventEntertainerId }) => {
   const [eventEntertainer, setEventEntertainer] = React.useState({});
@@ -32,14 +33,11 @@ const ReviewEntertainer = ({ eventEntertainerId }) => {
           const { status, data } = response;
           // handle success
           if (status === 200) {
-            console.log('data.event', data.eventEntertainerInfo);
             setEventEntertainer(data.eventEntertainerInfo);
             setLoading(false);
           }
         })
         .catch(function (error) {
-          // console.log(error.response.data.message);
-          // TODO: navigate to all events
           setLoading(false);
         });
   }, [eventEntertainerId]);
@@ -55,6 +53,7 @@ const ReviewEntertainer = ({ eventEntertainerId }) => {
               entertainer={eventEntertainer.entertainer}
               event={eventEntertainer.event}
               eventEntertainerId={eventEntertainerId}
+              eventRating={eventEntertainer.eventRating || {}}
             />
           )}
         </section>
@@ -70,26 +69,34 @@ ReviewEntertainer.defaultProps = {
   eventEntertainerId: '',
 };
 
-const LeaveAReviewForm = ({ entertainer, event, eventEntertainerId }) => {
+const LeaveAReviewForm = ({
+  entertainer,
+  event,
+  eventEntertainerId,
+  eventRating,
+}) => {
   return (
     <Formik
-      initialValues={setInitialValues(reviewSchema)}
+      initialValues={setInitialValues(reviewSchema, eventRating)}
       onSubmit={(values, actions) => {
-        const payload = {
+        let payload = {
           entertainerId: entertainer.id,
           eventEntertainerId: eventEntertainerId,
           ...values,
         };
+
+        if (eventRating && eventRating.id) {
+          payload.id = eventRating.id;
+        }
         console.log('payload', payload);
         axios
           .post('/api/v1/rating', payload, {
             headers: { 'x-access-token': getTokenFromStore() },
           })
           .then(function (response) {
-            const { status, data } = response;
-            console.log('status, data', status, data);
+            const { status } = response;
             if (status === 200) {
-              // navigate(`/user/events/${eventId}/add-entertainer/new-event`);
+              navigate('/user/review/success');
               actions.setSubmitting(false);
             }
           })
@@ -171,6 +178,7 @@ LeaveAReviewForm.propTypes = {
   entertainer: PropTypes.object.isRequired,
   event: PropTypes.object.isRequired,
   eventEntertainerId: PropTypes.any.isRequired,
+  eventRating: PropTypes.object.isRequired,
 };
 
 export default ReviewEntertainer;

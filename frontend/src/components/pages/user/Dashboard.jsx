@@ -23,8 +23,8 @@ import {
 import { groupEvents, userCanAddEntertainer } from 'utils/event-helpers';
 import { Link } from '@reach/router';
 import LoadItems from 'components/common/utils/LoadItems';
-import WelcomeSlides from './WelcomeSlides';
-import welcomeSlide from 'data/welcome';
+import WelcomeSlides from 'components/common/utils//WelcomeSlides';
+import welcomeSlide from 'data/firstTimeUser';
 import { InviteFriendsForm } from 'components/common/pages/InviteFriends';
 
 const Dashboard = () => {
@@ -64,7 +64,6 @@ const Dashboard = () => {
       })
       .then(function (response) {
         const { status, data } = response;
-        console.log('data.info', data.info);
         // handle success
         if (status === 200) {
           setPendingReview(data.info);
@@ -74,6 +73,8 @@ const Dashboard = () => {
         setPendingReview([]);
       });
   }, []);
+
+  console.log('Pending Review', pendingReview);
 
   const topMessage = userState.firstTimeLogin ? 'Hello' : 'Welcome back';
   // Sort event according - Today, Upcoming and Past
@@ -115,11 +116,11 @@ const Dashboard = () => {
             <div className="col-sm-4">
               <Dashboard.InviteFriends />
               <LoadItems
-                items={pendingReview}
+                items={pendingReview ? [pendingReview] : null}
                 noContent={<Dashboard.NoPendingReview />}
               >
-                {pendingReview && pendingReview.length > 0 && (
-                  <Dashboard.PendingReview info={pendingReview[0]} />
+                {pendingReview && pendingReview.entertainer && (
+                  <Dashboard.PendingReview info={pendingReview} />
                 )}
               </LoadItems>
             </div>

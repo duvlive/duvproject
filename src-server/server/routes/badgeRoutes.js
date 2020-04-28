@@ -1,15 +1,11 @@
 import { BadgeController } from '../controllers';
 import Authentication from '../middleware/authentication';
 
-const badgeRoutes = router => {
+const badgeRoutes = (router) => {
   router
     .route('/api/v1/badge')
-    .all(
-      Authentication.verifyToken,
-      Authentication.validateUser,
-      Authentication.isActiveUser
-    )
-    .post(BadgeController.userBadge)
+    .all(Authentication.verifyToken, Authentication.isActiveUser)
+    .post(BadgeController.createNewBadge)
     .get(BadgeController.getUserBadges);
 };
 

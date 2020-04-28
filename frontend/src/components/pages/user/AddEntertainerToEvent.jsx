@@ -185,7 +185,6 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
           entertainerDetails.entertainerType =
             selectedEntertainer.entertainer.entertainerType;
         }
-        console.log('entertainerDetails', entertainerDetails);
 
         axios
           .post('/api/v1/eventEntertainer', entertainerDetails, {
@@ -193,11 +192,10 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
           })
           .then(function (response) {
             const { status, data } = response;
-            console.log('response', response);
             if (status === 200) {
               userDispatch({
                 type: 'add-entertainer-to-event',
-                user: data,
+                event: data,
               });
               actions.setSubmitting(false);
 
@@ -208,7 +206,6 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
             setLoading(false);
           })
           .catch(function (error) {
-            console.log('error', error.response);
             setMessage({ message: error.response.data.message });
             actions.setSubmitting(false);
             setLoading(false);

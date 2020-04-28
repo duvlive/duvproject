@@ -27,11 +27,10 @@ const Requests = () => {
         }
       })
       .catch(function (error) {
-        console.log(error.response.data.message);
+        // console.log(error.response.data.message);
         // navigate to all events
       });
   }, []);
-  console.log('requests', requests);
   return (
     <BackEndPage title="Requests">
       <div className="main-app">
