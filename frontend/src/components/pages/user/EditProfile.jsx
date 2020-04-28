@@ -40,23 +40,24 @@ export const UserProfileForm = () => {
       onSubmit={(values, actions) => {
         axios
           .put('/api/v1/users/editUser', values, {
-            headers: { 'x-access-token': getTokenFromStore() }
+            headers: { 'x-access-token': getTokenFromStore() },
           })
-          .then(function(response) {
+          .then(function (response) {
             const { status, data } = response;
+            console.log('data', data);
             if (status === 200) {
               userDispatch({
                 type: 'user-profile-update',
-                user: data
+                user: data,
               });
               setMessage({
                 type: 'success',
-                message: `Your profile has been successfully updated`
+                message: `Your profile has been successfully updated`,
               });
               actions.setSubmitting(false);
             }
           })
-          .catch(function(error) {
+          .catch(function (error) {
             setMessage(error.response.data.message);
             actions.setSubmitting(false);
           });

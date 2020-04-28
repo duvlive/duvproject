@@ -12,6 +12,11 @@ $duv-td-line-height: 1.8;
   border-color: rgba($text-color, 0.2);
 }
 
+.table-dark.table-border--x td {
+  border-top: 1px solid rgba($text-color, 0.2) !important;
+  border-bottom: 1px solid rgba($text-color, 0.2) !important;
+}
+
 .table th,
 .table td {
   line-height: $duv-td-line-height;

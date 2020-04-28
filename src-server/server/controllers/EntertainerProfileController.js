@@ -25,6 +25,16 @@ export const entertainerProfileAssociatedModels = [
   },
 ];
 
+const slugify = async (stageName, id) => {
+  const slug = stageName
+    .toLowerCase()
+    .replace(/[^\w ]+/g, '')
+    .replace(/ +/g, '-');
+
+  const slugIsFound = await EntertainerProfile.findOne({ where: { slug } });
+  return slugIsFound ? `${slug}${id}` : slug;
+};
+
 const formatSearchEntertainers = (result) =>
   result.reduce((acc, user) => {
     const entertainer = {
@@ -52,7 +62,7 @@ const EntertainerProfileController = {
    * @param {object} res is res object
    * @return {object} returns res object
    */
-  updateUserAndEntertainerProfile(req, res) {
+  async updateUserAndEntertainerProfile(req, res) {
     const {
       about,
       city,
@@ -67,6 +77,9 @@ const EntertainerProfileController = {
       entertainerType,
       youTubeChannel,
     } = req.body;
+
+    const slug = await slugify(stageName, req.user.dataValues.id);
+
     const entertainerProfileData = {
       about,
       city,
@@ -80,9 +93,7 @@ const EntertainerProfileController = {
       eventType,
       entertainerType,
       youTubeChannel,
-      slug: stageName
-        ? `${stageName}-${req.user.dataValues.id}`
-        : `${req.user.dataValues.id}`,
+      slug,
     };
 
     updateUser(req.user, entertainerProfileData, 'Profile')

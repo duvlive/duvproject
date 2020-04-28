@@ -35,10 +35,8 @@ const ViewPayments = (props) => {
             )
             .then(function (response) {
               const { status } = response;
-              console.log('data', data);
               // handle success
               if (status === 200) {
-                console.log('data.payment', data.payment);
                 setMessage({
                   msg: 'Your payment was successfull',
                   type: 'success',

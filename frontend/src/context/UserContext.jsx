@@ -27,6 +27,7 @@ const INITIAL_STATE = {
     baseCharges: '',
     preferredCharges: '',
     availableFor: '[]',
+    payments: null,
   },
   bankDetail: {
     accountName: '',
@@ -66,6 +67,7 @@ const INITIAL_STATE = {
   },
   galleries: [],
   events: null,
+  badges: null,
 };
 
 // CONTEXT
@@ -95,7 +97,8 @@ let reducer = (state, action) => {
       return { ...state, profileImg: action.imageURL };
     case 'add-new-event':
     case 'add-entertainer-to-event':
-      return { ...state, events: [action.event, ...state.events] };
+      const prevEvents = state.events || [];
+      return { ...state, events: [action.event, ...prevEvents] };
     case 'bank-account-update':
       return { ...state, bankDetail: action.bankDetail };
     case 'user-contact-update':

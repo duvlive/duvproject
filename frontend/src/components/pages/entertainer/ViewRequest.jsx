@@ -39,13 +39,10 @@ const ViewRequest = ({ applicationId }) => {
     rejectionReason = null,
     proposedPrice = null
   ) => {
-    console.log('currently processing');
     const action = requestType;
     const payload = { action, proposedPrice, rejectionReason };
 
     setLoading(true);
-
-    console.log('payload', payload);
 
     axios
       .post(`/api/v1/applications/process-request/${applicationId}`, payload, {
@@ -78,10 +75,9 @@ const ViewRequest = ({ applicationId }) => {
         })
         .then(function (response) {
           const { status, data } = response;
-          console.log('data', data);
+
           // handle success
           if (status === 200) {
-            console.log('data', data);
             setApplication(data.application);
             setLoadingPage(false);
           }
@@ -235,7 +231,6 @@ const RequestsForm = ({
       .get('/api/v1/currentCommission')
       .then(function (response) {
         const { status, data } = response;
-        console.log('status,data', status, data);
         // handle success
         if (status === 200) {
           setCommission(data.commission);

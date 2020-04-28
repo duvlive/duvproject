@@ -30,7 +30,7 @@ const IdentificationForm = ({ moveToNextStep }) => {
           })
           .then(function (response) {
             const { status, data } = response;
-            console.log('data', data);
+
             if (status === 200) {
               userDispatch({
                 type: 'entertainer-identification',

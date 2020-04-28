@@ -34,7 +34,6 @@ const ViewPayments = (props) => {
             )
             .then(function (response) {
               const { status } = response;
-              console.log('data', data);
               // handle success
               if (status === 200) {
                 setPaymentInfo(data.payment);

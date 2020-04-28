@@ -19,24 +19,22 @@ const Auctions = () => {
     axios
       .get('/api/v1/auctions', {
         headers: {
-          'x-access-token': getTokenFromStore()
-        }
+          'x-access-token': getTokenFromStore(),
+        },
       })
-      .then(function(response) {
+      .then(function (response) {
         const { status, data } = response;
-        console.log('status,data', status, data);
         // handle success
         if (status === 200) {
           setAuctions(data.auctions);
-          console.log('Auctions: ', data.auctions);
         }
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error.response.data.message);
         // navigate to all events
       });
   }, []);
-  console.log('auctions', auctions);
+
   return (
     <BackEndPage title="Auctions">
       <div className="main-app">
@@ -44,7 +42,7 @@ const Auctions = () => {
 
         <section className="app-content">
           <Match path="/user/auctions/status/success">
-            {props =>
+            {(props) =>
               // eslint-disable-next-line react/prop-types
               props.match && (
                 <AlertMessage
@@ -55,7 +53,7 @@ const Auctions = () => {
             }
           </Match>
           <Match path="/user/auctions/status/error">
-            {props =>
+            {(props) =>
               // eslint-disable-next-line react/prop-types
               props.match && (
                 <AlertMessage
@@ -111,7 +109,7 @@ const AuctionsTable = ({ auctions }) => (
 );
 
 AuctionsTable.propTypes = {
-  auctions: PropTypes.array.isRequired
+  auctions: PropTypes.array.isRequired,
 };
 
 const AuctionsRow = ({
@@ -122,7 +120,7 @@ const AuctionsRow = ({
   state,
   totalApplications,
   auctionEndDate,
-  entertainerType
+  entertainerType,
 }) => (
   <tr>
     <th className="table__number" scope="row">
@@ -173,7 +171,7 @@ AuctionsRow.propTypes = {
   id: PropTypes.any,
   number: PropTypes.number,
   state: PropTypes.string,
-  totalApplications: PropTypes.number
+  totalApplications: PropTypes.number,
 };
 
 Auctions.defaultProps = {
@@ -185,7 +183,7 @@ Auctions.defaultProps = {
   id: '',
   number: 0,
   state: '',
-  totalApplications: 0
+  totalApplications: 0,
 };
 
 export default Auctions;
