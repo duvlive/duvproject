@@ -2,8 +2,8 @@
 import nodemailer from 'nodemailer';
 import ejs from 'ejs';
 import textEmailTemplate from './email-template/duv-text-email-template';
-
-const DUV_LIVE_NO_REPLY_EMAIL = 'DUV LIVE <no-reply@duvlive.com>';
+// const DUV_LIVE_NO_REPLY_EMAIL = 'DUV LIVE <no-reply@duvlive.com>';
+const DUV_LIVE_NO_REPLY_EMAIL = 'DUV LIVE <duvtest.123@gmail.com>';
 const emailLogo = `https://duvlive.herokuapp.com/email-logo.png`;
 
 export function generateEmailTemplate(options) {
@@ -27,7 +27,7 @@ export function generateEmailTemplate(options) {
 // sendMail(EMAIL_CONTENT.ACTIVATE_YOUR_ACCOUNT, user, options)
 export default async function sendMail(content, user, additionalOptions = {}) {
   let transporter = nodemailer.createTransport({
-    host: process.env.EMAIL_SMTP || 'smtp.mailtrap.io',
+    host: process.env.EMAIL_SERVER || 'smtp.mailtrap.io',
     port: process.env.EMAIL_PORT || 2525,
     secure: !!process.env.EMAIL_SECURE || false,
     auth: {
