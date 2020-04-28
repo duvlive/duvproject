@@ -14,7 +14,6 @@ import {
   Notification,
   Payment,
   Rating,
-  Review,
   User,
   Video,
 } from '../models';
@@ -112,10 +111,6 @@ export const userAssociatedModels = [
     model: Rating,
     as: 'ratings',
   },
-  {
-    model: Review,
-    as: 'reviews',
-  },
 ];
 
 const UserController = {
@@ -145,9 +140,7 @@ const UserController = {
       events: user.events,
       galleries: user.galleries,
       identification: user.identification,
-      notifications: user.notifications,
       ratings: user.ratings,
-      reviews: user.reviews,
       videos: user.videos,
     };
 

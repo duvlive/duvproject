@@ -1,14 +1,10 @@
 import { EventEntertainerController } from '../controllers';
 import Authentication from '../middleware/authentication';
 
-const eventEntertainerRoutes = router => {
+const eventEntertainerRoutes = (router) => {
   router
     .route('/api/v1/eventEntertainer')
-    .all(
-      Authentication.verifyToken,
-      Authentication.validateUser,
-      Authentication.isActiveUser
-    )
+    .all(Authentication.verifyToken, Authentication.isActiveUser)
     .post(EventEntertainerController.updateEventEntertainer)
     .put(EventEntertainerController.updateEventEntertainer)
     .get(EventEntertainerController.getEventEntertainers);
