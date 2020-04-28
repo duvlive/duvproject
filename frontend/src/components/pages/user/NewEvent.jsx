@@ -8,7 +8,7 @@ import { navigate } from '@reach/router';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import {
   eventDetailsSchema,
-  eventAddressSchema
+  eventAddressSchema,
 } from 'components/forms/schema/eventSchema';
 import { createSchema } from 'components/forms/schema/schema-helpers';
 import axios from 'axios';
@@ -25,7 +25,7 @@ const NewEvent = () => {
 
         <section className="app-content">
           <Match path="/user/hire-entertainer">
-            {props =>
+            {(props) =>
               // eslint-disable-next-line react/prop-types
               props.match && (
                 <AlertMessage
@@ -52,11 +52,11 @@ const NewEvent = () => {
 const NewEventForm = () => {
   const initialValues = {
     event: setInitialValues(eventDetailsSchema),
-    address: setInitialValues(eventAddressSchema)
+    address: setInitialValues(eventAddressSchema),
   };
   const entertainersSchema = {
     event: createSchema(eventDetailsSchema),
-    address: createSchema(eventAddressSchema)
+    address: createSchema(eventAddressSchema),
   };
   const { userDispatch } = React.useContext(UserContext);
   const [message, setMessage] = React.useState(null);
@@ -71,19 +71,18 @@ const NewEventForm = () => {
           startTime: event.startTime.date,
           eventDuration: event.eventDuration,
           moreInformation: event.moreInformation,
-          ...address
+          ...address,
         };
         axios
           .post('/api/v1/events', payload, {
-            headers: { 'x-access-token': getTokenFromStore() }
+            headers: { 'x-access-token': getTokenFromStore() },
           })
-          .then(function(response) {
+          .then(function (response) {
             const { status, data } = response;
-            console.log('status, data', status, data);
             if (status === 200) {
               userDispatch({
                 type: 'add-new-event',
-                event: data.event
+                event: data.event,
               });
 
               const eventId = data.event.id;
@@ -91,7 +90,7 @@ const NewEventForm = () => {
               actions.setSubmitting(false);
             }
           })
-          .catch(function(error) {
+          .catch(function (error) {
             setMessage(error.response.data.message);
             actions.setSubmitting(false);
           });

@@ -23,20 +23,17 @@ const Events = () => {
       })
       .then(function (response) {
         const { status, data } = response;
-        console.log('data', data);
         // handle success
         if (status === 200) {
           setEvents(data.events);
-          console.log('data.events: ', data);
         }
       })
       .catch(function (error) {
-        console.log(error.response.data.message);
+        // console.log(error.response.data.message);
         // navigate to all events
       });
   }, []);
 
-  console.log('events', events);
   // Sort event according - Today, Upcoming and Past
   let allEvents = events.reduce(
     (result, { id, event }) => {

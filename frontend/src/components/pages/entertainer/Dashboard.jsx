@@ -183,13 +183,13 @@ Dashboard.UpcomingEvents.propTypes = {
 Dashboard.PaymentHistory = ({ payments }) => (
   <div className="card card-custom">
     <div className="card-body">
-      <h5 className="font-weight-normal text-green">Recent Payments</h5>
+      <h5 className="font-weight-normal mb-3 text-green">Recent Payments</h5>
       <div className="table-responsive">
         <LoadItems
           items={payments}
           noContent={<NoContent text="You have no payment History" />}
         >
-          <table className="table table-dark">
+          <table className="table table-dark table-border--x">
             <tbody>
               {payments &&
                 payments.length > 0 &&

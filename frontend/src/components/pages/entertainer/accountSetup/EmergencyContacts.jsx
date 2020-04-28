@@ -184,6 +184,7 @@ export const ContactsForm = ({
                       { label: 'Brother' },
                       { label: 'Cousin' },
                       { label: 'Family' },
+                      { label: 'Guardian' },
                       { label: 'Husband' },
                       { label: 'Parent' },
                       { label: 'Sibling' },

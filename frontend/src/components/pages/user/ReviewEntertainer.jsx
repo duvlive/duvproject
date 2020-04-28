@@ -33,7 +33,6 @@ const ReviewEntertainer = ({ eventEntertainerId }) => {
           const { status, data } = response;
           // handle success
           if (status === 200) {
-            console.log('data.event', data.eventEntertainerInfo);
             setEventEntertainer(data.eventEntertainerInfo);
             setLoading(false);
           }

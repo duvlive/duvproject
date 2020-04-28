@@ -1,61 +1,98 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import UserAvatar from 'assets/img/avatar/user.png';
 import TopMessage from 'components/common/layout/TopMessage';
-import Image from 'components/common/utils/Image';
 import BackEndPage from 'components/common/layout/BackEndPage';
+import { Link } from '@reach/router';
+import { moneyFormat } from 'utils/helpers';
+import { getShortDate } from 'utils/date-helpers';
+import LoadingScreen from 'components/common/layout/LoadingScreen';
+import { UserContext } from 'context/UserContext';
+import NoContent from 'components/common/utils/NoContent';
 
-const Payments = () => (
-  <BackEndPage title="Payments History">
-    <div className="main-app">
-      <TopMessage message="Payments History" />
+const Payments = () => {
+  const { userState } = React.useContext(UserContext);
+  const payments = userState.entertainerProfile.payments;
 
-      <section className="app-content">
-        <section className="payments">
-          <h4 className="main-app__subtitle">June 2019</h4>
-          <div className="row">
-            <Payments.Card color="blue" />
-            <Payments.Card color="red" />
-            <Payments.Card color="green" />
-            <Payments.Card color="black" />
-            <Payments.Card color="yellow" />
-          </div>
+  return (
+    <BackEndPage title="Payments History">
+      <div className="main-app">
+        <TopMessage message="Payments History" />
+
+        <section className="app-content">
+          <section className="payments">
+            <div className="row">
+              {payments == null ? (
+                <LoadingScreen loading={true} text="Loading Payments History" />
+              ) : payments.length > 0 ? (
+                <Payments.CardLists payments={payments} />
+              ) : (
+                <>
+                  <div className="col-sm-12">
+                    <NoContent text="No Payments found" />
+                  </div>
+                </>
+              )}
+            </div>
+          </section>
         </section>
-      </section>
-    </div>
-  </BackEndPage>
-);
-
-Payments.Card = ({ color }) => (
-  <div className="col-sm-4">
-    <div className={`card card-custom card-tiles card-${color} card__no-hover`}>
-      <div className="card-body">
-        <h4 className="subtitle--2 white mb-0">N50, 000</h4>
-        <div className="small--1 text-gray">Paid on Apr. 2, 2019</div>
       </div>
-      <div className="spacer--tiles--3" />
-      <div className="card-footer">
-        <div className="row">
-          <div className="col-8">
-            <h5 className="subtitle--3 mt-2 mb-0 gray">DJ Cuppy</h5>
-            <div className="small--3 text-gray">Wedding DJ</div>
+    </BackEndPage>
+  );
+};
+
+Payments.CardLists = ({ payments }) => {
+  const colors = ['blue', 'red', 'green', 'black', 'yellow'];
+  return payments.map((payment, index) => (
+    <Payments.Card color={colors[index % 4]} key={index} payment={payment} />
+  ));
+};
+
+Payments.CardLists.propTypes = {
+  payments: PropTypes.array.isRequired,
+};
+
+Payments.Card = ({ color, payment }) => (
+  <div className="col-lg-4 col-md-8 offset-md-2 offset-lg-0">
+    <Link
+      to={`/entertainer/payments/view?reference=${payment.eventEntertainerId}`}
+    >
+      <div
+        className={`card card-custom card-tiles card-${color} card__no-hover`}
+      >
+        <div className="card-body">
+          <h4 className="subtitle--2 white mb-0">
+            NGN {moneyFormat(payment.amount / 100)}
+          </h4>
+          <div className="small--1 text-gray">
+            Paid on {getShortDate(payment.createdAt)}
           </div>
-          <div className="col-4">
-            <Image
-              bordered
-              className="float-right avatar--medium"
-              name="Mariam Obi"
-              src={UserAvatar}
-            />
+        </div>
+        <div className="spacer--tiles--3" />
+        <div className="card-footer">
+          <div className="row">
+            <div className="col-8">
+              <h5 className="subtitle--3 mt-2 mb-0 gray">
+                {/* {payment.authorization.bank} */}DKASFLADS
+              </h5>
+              <div className="small--3 text-gray">
+                {/* {payment.authorization.card_type} */} card type
+              </div>
+            </div>
+            <div className="col-4">
+              <div className="text-muted text-right h1">
+                <span className="icon icon-credit-card"></span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   </div>
 );
 
 Payments.Card.propTypes = {
-  color: PropTypes.string.isRequired
+  color: PropTypes.string.isRequired,
+  payment: PropTypes.object.isRequired,
 };
 
 export default Payments;

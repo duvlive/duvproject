@@ -57,5 +57,3 @@ const UserRouter = () => (
 );
 
 export default UserRouter;
-
-// https://duvlive.herokuapp.com/?trxref=dilqpr8eth&reference=dilqpr8eth

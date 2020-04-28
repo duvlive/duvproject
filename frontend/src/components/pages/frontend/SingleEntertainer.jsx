@@ -28,7 +28,6 @@ const SingleEntertainer = ({ slug }) => {
         if (status === 200) {
           setEntertainer(data.entertainer);
           setOtherEntertainers(data.otherEntertainers);
-          console.log('data.entertainer: ', data.entertainer);
           setLoading(false);
         }
       });

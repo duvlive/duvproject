@@ -1,41 +1,57 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import TopMessage from 'components/common/layout/TopMessage';
 import BackEndPage from 'components/common/layout/BackEndPage';
+import { getShortDate } from 'utils/date-helpers';
+import LoadingScreen from 'components/common/layout/LoadingScreen';
+import { UserContext } from 'context/UserContext';
+import NoContent from 'components/common/utils/NoContent';
 import AwardCard from 'components/common/utils/AwardCard';
 
-const Badges = () => (
-  <BackEndPage title="Badges">
-    <div className="main-app">
-      <TopMessage message="4 assigned badges" />
+const Badges = () => {
+  const { userState } = React.useContext(UserContext);
+  const badges = userState.badges;
 
-      <section className="app-content">
-        <section className="gallery">
-          <div className="row">
-            <AwardCard
-              color="yellow"
-              date="Sun, April 17, 2019"
-              title="Completed 20 Events"
-            />
-            <AwardCard
-              color="white"
-              date="Sun, April 17, 2019"
-              title="Has over 10 five star ratings"
-            />
-            <AwardCard
-              color="red"
-              date="Sun, April 17, 2019"
-              title="Completed over 10 Events"
-            />
-            <AwardCard
-              color="blue"
-              date="Sun, April 17, 2019"
-              title="DUV LIVE Certified Entertainer"
-            />
-          </div>
+  return (
+    <BackEndPage title="Badges">
+      <div className="main-app">
+        <TopMessage message="Awarded Badges" />
+
+        <section className="app-content">
+          <section className="badges">
+            <div className="row">
+              {badges == null ? (
+                <LoadingScreen loading={true} text="Loading Your Badges" />
+              ) : badges.length > 0 ? (
+                <Badges.CardLists badges={badges} />
+              ) : (
+                <>
+                  <div className="col-sm-12">
+                    <NoContent text="You have no Badges" />
+                  </div>
+                </>
+              )}
+            </div>
+          </section>
         </section>
-      </section>
-    </div>
-  </BackEndPage>
-);
+      </div>
+    </BackEndPage>
+  );
+};
+
+Badges.CardLists = ({ badges }) => {
+  return badges.map(({ badge }, index) => (
+    <AwardCard
+      color={badge.color}
+      date={getShortDate(badge.createdAt)}
+      key={index}
+      title={badge.title}
+    />
+  ));
+};
+
+Badges.CardLists.propTypes = {
+  badges: PropTypes.array.isRequired,
+};
 
 export default Badges;
