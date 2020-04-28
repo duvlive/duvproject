@@ -140,7 +140,7 @@ Video.YoutubeOverlay.propTypes = {
   youtubeID: PropTypes.any.isRequired,
 };
 
-Video.Modal = ({ youtubeID, status, title, id, deleteVideo }) => {
+Video.Modal = ({ youtubeID, status, title, id, deleteVideo, showExtra }) => {
   const youtubeImage = (
     <Video.YoutubeImage title={title} youtubeID={youtubeID} />
   );
@@ -166,26 +166,34 @@ Video.Modal = ({ youtubeID, status, title, id, deleteVideo }) => {
           {youtubeImage}
           {youtubeOverlay}
         </DuvLiveModal>
-        <Video.DeleteVideoIcon
-          deleteVideo={deleteVideo}
-          id={id}
-          title={title}
-          youtubeImage={youtubeImage}
-        />
-        {approvalText}
+        {showExtra && (
+          <Video.DeleteVideoIcon
+            deleteVideo={deleteVideo}
+            id={id}
+            title={title}
+            youtubeImage={youtubeImage}
+          />
+        )}
+        {showExtra && approvalText}
       </div>
     </section>
   );
 };
 
 Video.Modal.propTypes = {
-  deleteVideo: PropTypes.func.isRequired,
+  deleteVideo: PropTypes.func,
   id: PropTypes.number.isRequired,
-  status: PropTypes.any.isRequired,
+  showExtra: PropTypes.bool,
+  status: PropTypes.any,
   title: PropTypes.string.isRequired,
   youtubeID: PropTypes.string.isRequired,
 };
 
+Video.Modal.defaultProps = {
+  deleteVideo: () => {},
+  showExtra: true,
+  status: 'approved',
+};
 const AddVideoForm = ({ afterSave, errorMessage }) => {
   const [message, setMessage] = useState({});
   return (

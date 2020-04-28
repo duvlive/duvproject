@@ -4,17 +4,28 @@ import classNames from 'classnames';
 import Header from 'components/common/layout/Header';
 import Humanize from 'humanize-plus';
 import TopBar from 'components/common/layout/TopBar';
+import { UserContext } from 'context/UserContext';
+import { USER_TYPES } from 'utils/constants';
+import { Match } from '@reach/router';
+import { getUserTypeFromStore } from 'utils/localStorage';
 
-const LandingSection = ({ showSidebar, isDashboard, title, subtitle }) => (
-  <section className="landing">
+const LandingSection = ({ showSidebar, isDashboard, title, subtitle }) => {
+  let { userState } = React.useContext(UserContext);
+  const currentUserType = userState.type || getUserTypeFromStore();
+  const userType = Object.keys(USER_TYPES)[currentUserType];
+  const entertainerType = userState.entertainerProfile
+    ? userState.entertainerProfile.entertainerType
+    : '';
+
+  const landingContent = (
     <div
       className={classNames(
         'card bg-dark text-white',
         {
-          card__dashboard: isDashboard
+          card__dashboard: isDashboard,
         },
         {
-          card__menu: !isDashboard
+          card__menu: !isDashboard,
         }
       )}
     >
@@ -30,19 +41,34 @@ const LandingSection = ({ showSidebar, isDashboard, title, subtitle }) => (
         </div>
       </div>
     </div>
-  </section>
-);
+  );
+
+  return (
+    <Match path="/user/:item">
+      {(props) =>
+        // eslint-disable-next-line react/prop-types
+        props.match && currentUserType !== USER_TYPES.user ? (
+          <section className={`landing`}>{landingContent}</section>
+        ) : (
+          <section className={`landing ${userType} ${entertainerType}`}>
+            {landingContent}
+          </section>
+        )
+      }
+    </Match>
+  );
+};
 
 LandingSection.propTypes = {
   isDashboard: PropTypes.bool,
   showSidebar: PropTypes.func,
   subtitle: PropTypes.string,
-  title: PropTypes.string.isRequired
+  title: PropTypes.string.isRequired,
 };
 
 LandingSection.defaultProps = {
   isDashboard: false,
   subtitle: null,
-  showSidebar: () => {}
+  showSidebar: () => {},
 };
 export default LandingSection;
