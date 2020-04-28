@@ -114,8 +114,12 @@ const EntertainerProfileController = {
 
   getEntertainers(req, res) {
     User.findAll({
-      where: { type: USER_TYPES.ENTERTAINER },
+      where: {
+        type: USER_TYPES.ENTERTAINER,
+        [Op.and]: Sequelize.literal('"profile"."approved" is TRUE'),
+      },
       include: userAssociatedModels,
+      order: [[{ model: EntertainerProfile, as: 'profile' }, 'id', 'DESC']],
     })
       .then((entertainers) => {
         return res.status(200).json({

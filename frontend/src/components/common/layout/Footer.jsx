@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Row, Col } from 'reactstrap';
 import { Link } from '@reach/router';
 import RedLogo from 'assets/img/logo/red-white.svg';
+import { getYear } from 'date-fns';
 
 const Footer = ({ className }) => (
   <footer className={`footer ${className}`}>
@@ -81,8 +82,9 @@ const Footer = ({ className }) => (
           </Col>
           <Col sm={6} xs={12}>
             <p className="footer__bottom--copyright">
-              &copy; 2019 <strong className="text-danger">DUV LIVE</strong>. All
-              Rights Reserved.
+              &copy; {getYear(new Date())}{' '}
+              <strong className="text-danger">DUV LIVE</strong>. All Rights
+              Reserved.
             </p>
           </Col>
         </Row>

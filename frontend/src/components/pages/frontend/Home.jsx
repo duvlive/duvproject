@@ -9,7 +9,7 @@ import noGoSpoilYourPartyList from 'data/duvSteps.js';
 import eventLists from 'data/events.js';
 import Footer from 'components/common/layout/Footer';
 import Slideshow from 'components/custom/Slideshow';
-import { SLIDESHOW_TYPE, DASHBOARD_PAGE } from 'utils/constants';
+import { SLIDESHOW_TYPE, DASHBOARD_PAGE, USER_TYPES } from 'utils/constants';
 import YouTube from 'react-youtube';
 import { Link } from '@reach/router';
 import LiveYourBestLife from 'components/common/utils/LiveYourBestLife';
@@ -47,6 +47,23 @@ const LandingSection = () => {
   const userType = getUserTypeFromStore();
   const userIsLoggedIn = !!getTokenFromStore();
 
+  const loggedInButton =
+    userType === USER_TYPES.user ? (
+      <Link
+        className="btn btn-light btn-lg hvr-sweep-to-left"
+        to="/user/register-as-entertainer"
+      >
+        Become an Entertainer
+      </Link>
+    ) : (
+      <Link
+        className="btn btn-light btn-lg hvr-sweep-to-left"
+        to={`/${DASHBOARD_PAGE[userType]}/dashboard`}
+      >
+        Go to Dashboard
+      </Link>
+    );
+
   return (
     <section className="landing">
       <div className="card bg-dark text-white">
@@ -71,12 +88,7 @@ const LandingSection = () => {
               </Link>
               &nbsp; &nbsp;
               {userIsLoggedIn ? (
-                <Link
-                  className="btn btn-light btn-lg hvr-sweep-to-left"
-                  to={`/${DASHBOARD_PAGE[userType]}/dashboard`}
-                >
-                  Go to Dashboard
-                </Link>
+                loggedInButton
               ) : (
                 <Link
                   className="btn btn-light btn-lg hvr-sweep-to-left"

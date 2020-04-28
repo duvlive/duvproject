@@ -22,18 +22,18 @@ const paymentRoutes = (router) => {
 
   router
     .route('/api/v1/myPayments')
-    .all(Authentication.verifyToken, Authentication.validateUser)
+    .all(Authentication.verifyToken, Authentication.isActiveUser)
     .get(PaymentController.getSuccessTransactionsByUserId);
 
   router
     .route('/api/v1/currentCustomer')
-    .all(Authentication.verifyToken, Authentication.validateUser)
+    .all(Authentication.verifyToken, Authentication.isActiveUser)
     .get(PaymentController.getPaystackCustomer);
 
   router.get(
     '/api/v1/user/payments',
     Authentication.verifyToken,
-    Authentication.validateUser,
+    Authentication.isActiveUser,
     PaymentController.getAllUserPayments
   );
 };

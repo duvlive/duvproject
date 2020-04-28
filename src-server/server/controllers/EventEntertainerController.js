@@ -5,6 +5,7 @@ import {
   EventEntertainer,
   Event,
   User,
+  Rating,
 } from '../models';
 import { validString, getLongDate, getTime, moneyFormat } from '../utils';
 import EMAIL_CONTENT from '../email-template/content';
@@ -308,6 +309,10 @@ const EventEntertainerController = {
               attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
             },
           ],
+        },
+        {
+          model: Rating,
+          as: 'eventRating',
         },
       ],
     })

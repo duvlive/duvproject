@@ -6,6 +6,8 @@ import classNames from 'classnames';
 import { Link } from '@reach/router';
 import { UserContext } from 'context/UserContext';
 import { ONBOARDING_STEPS } from 'utils/constants';
+import WelcomeSlides from 'components/common/utils/WelcomeSlides';
+import welcomeSlide from 'data/firstTimeEntertainer';
 
 const Onboarding = () => {
   const { userState } = React.useContext(UserContext);
@@ -35,10 +37,12 @@ const Onboarding = () => {
   const firstUndoneIndex = done.findIndex((isDone) => !isDone);
 
   return (
-    <>
+    <section className="px-5">
       <TopMessage message={`Hello ${userState.firstName},`} />
+
+      {<WelcomeSlides items={welcomeSlide} />}
       <Card
-        className="dashboard__card offset-md-2 col-md-8 mt-5 mb-0 rounded-0"
+        className="dashboard__card col-md-12 px-5 mt-5 mb-0 rounded-0"
         color={entertainerIsDone ? 'green' : 'blue'}
       >
         <h4 className="onboarding__title">
@@ -53,7 +57,7 @@ const Onboarding = () => {
         </h4>
       </Card>
       <Card
-        className="dashboard__card offset-md-2 col-md-8 mb-0 rounded-0"
+        className="dashboard__card col-md-12 px-5 mb-0 rounded-0"
         color="black"
       >
         <p className="onboarding__instruction">
@@ -76,7 +80,7 @@ const Onboarding = () => {
           </Link>
         </div>
       )}
-    </>
+    </section>
   );
 };
 
@@ -84,7 +88,7 @@ Onboarding.Card = ({ approved, done, link, rejected, title, number }) => {
   return (
     <Link to={link}>
       <Card
-        className="dashboard__card offset-md-2 col-md-8 mb-0 rounded-0"
+        className="dashboard__card col-md-12 px-5 mb-0 rounded-0"
         color={approved ? 'green' : 'black'}
         hover={!approved}
       >
