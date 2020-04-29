@@ -2,8 +2,7 @@
 import nodemailer from 'nodemailer';
 import ejs from 'ejs';
 import textEmailTemplate from './email-template/duv-text-email-template';
-// const DUV_LIVE_NO_REPLY_EMAIL = 'DUV LIVE <no-reply@duvlive.com>';
-const DUV_LIVE_NO_REPLY_EMAIL = 'DUV LIVE <duvtest.123@gmail.com>';
+const DUV_LIVE_NO_REPLY_EMAIL = 'DUV LIVE <no-reply@duvlive.com>';
 const emailLogo = `https://duvlive.herokuapp.com/email-logo.png`;
 
 export function generateEmailTemplate(options) {
