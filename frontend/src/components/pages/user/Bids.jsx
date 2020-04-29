@@ -314,7 +314,7 @@ const BidsApplicationsTableRow = ({ application, number }) => {
       <td className="align-middle">
         {application && (
           <Image
-            className="avatar--medium-small"
+            className="avatar--medium--small"
             name={application.user.profile.stageName || 'No name'}
             responsiveImage={false}
             src={application.user.profileImageURL || 'No src'}

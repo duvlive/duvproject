@@ -5,7 +5,7 @@ import { Row, Col } from 'reactstrap';
 import FrontEndPage from 'components/common/layout/FrontEndPage';
 import Entertainers from 'components/common/entertainers/Entertainers';
 import Stars from 'components/common/utils/Stars';
-import AwardCard from 'components/common/utils/AwardCard';
+import Badges from 'components/pages/entertainer/Badges';
 import Image from 'components/common/utils/Image';
 import Video from 'components/pages/entertainer/Video';
 import DuvLiveModal from 'components/custom/Modal';
@@ -13,6 +13,8 @@ import { getTokenFromStore } from 'utils/localStorage';
 import LoadingScreen from 'components/common/layout/LoadingScreen';
 import { commaNumber } from 'utils/helpers';
 import { getYear } from 'utils/date-helpers';
+import ReactTimeago from 'react-timeago';
+import Humanize from 'humanize-plus';
 
 const SingleEntertainer = ({ slug }) => {
   const [entertainer, setEntertainer] = React.useState({
@@ -65,9 +67,23 @@ const LoadEntertainerInfo = ({ entertainer, otherEntertainers }) => (
       <>
         <EntertainerSectionInfo entertainer={entertainer} />
         {false && <UpcomingEvents />}
-        <Awards entertainer={entertainer.awards || []} />
-        <Gallery entertainer={entertainer.galleries} />
-        <Videos entertainer={entertainer.videos} />
+
+        {entertainer.badges && entertainer.badges.length > 0 && (
+          <Awards badges={entertainer.badges} />
+        )}
+
+        {entertainer.galleries && entertainer.galleries.length > 0 && (
+          <Gallery galleries={entertainer.galleries} />
+        )}
+
+        {entertainer.videos && entertainer.videos.length > 0 && (
+          <Videos videos={entertainer.videos} />
+        )}
+        {entertainer.profile &&
+          entertainer.profile.ratings &&
+          entertainer.profile.ratings.length > 0 && (
+            <ReviewSection ratings={entertainer.profile.ratings} />
+          )}
       </>
     )}
     <OtherEntertainersSection entertainers={otherEntertainers} />
@@ -92,7 +108,7 @@ const EntertainerSection = ({ entertainer }) => (
         </Col>
         <Col sm="9">
           <section className="entertainer__summary">
-            <h2 className="entertainer__summary--title">
+            <h2 className="entertainer__summary--title text-capitalize">
               {entertainer.profile.stageName}
             </h2>
             <div className="text-danger">
@@ -103,12 +119,12 @@ const EntertainerSection = ({ entertainer }) => (
                 <div className="col-sm-9">{entertainer.profile.about}</div>
               </div>
             </section>
-            <button
+            {/* <button
               className="btn btn-danger btn-transparent btn-lg"
               type="submit"
             >
               Hire {entertainer.profile.stageName}
-            </button>
+            </button> */}
           </section>
         </Col>
       </Row>
@@ -120,54 +136,69 @@ EntertainerSection.propTypes = {
   entertainer: PropTypes.object.isRequired,
 };
 
-const EntertainerSectionInfo = ({ entertainer }) => (
-  <section
-    className={`entertainer-info ${entertainer.profile.entertainerType.toLowerCase()} mt-5`}
-  >
-    <div className="container-fluid">
-      <Row>
-        <h4 className="text-uppercase col-12 font-weight-normal mb-5">
-          Information
-        </h4>
-        <Col sm="4">
-          <InfoList title="Stage Name">
-            {entertainer.profile.stageName}
-          </InfoList>
-          <InfoList title="Speciality">
-            {entertainer.profile.entertainerType}
-          </InfoList>
-          <InfoList title="Years of Experience">
-            {parseInt(getYear(Date.now()), 10) -
-              parseInt(entertainer.profile.yearStarted, 10)}{' '}
-            years
-          </InfoList>
-          {/* <InfoList title="Total Shows">
-            {entertainer.total_shows} Shows
-          </InfoList> */}
-        </Col>
-        <Col sm="4">
-          <InfoList title="Member Since">
-            {getYear(entertainer.profile.createdAt)}
-          </InfoList>
-          <InfoList title="Location"> {entertainer.profile.location}</InfoList>
-          <InfoList title="Average Charges">
-            {commaNumber(entertainer.profile.baseCharges)} -{' '}
-            {commaNumber(entertainer.profile.preferredCharges)}
-          </InfoList>
-          <InfoList title="Willing to Travel for Shows">
-            {entertainer.profile.willing_to_travel ? 'YES' : 'NO'}
-          </InfoList>
-        </Col>
-        <Col sm="4">
-          <InfoStar rating={4.5} title="Professionalism" />
-          <InfoStar rating={4.5} title="Accommodating" />
-          <InfoStar rating={4.5} title="Overall Talent" />
-          <InfoStar rating={4} title="Recommend" />
-        </Col>
-      </Row>
-    </div>
-  </section>
-);
+const EntertainerSectionInfo = ({ entertainer }) => {
+  const avgRatings = entertainer.avgRatings[0];
+  const totalShows = entertainer.profile.hired
+    ? entertainer.profile.hired.length
+    : 0;
+  return (
+    <section
+      className={`entertainer-info ${entertainer.profile.entertainerType.toLowerCase()} mt-5`}
+    >
+      <div className="container-fluid">
+        <Row>
+          <h4 className="text-uppercase col-12 font-weight-normal mb-5">
+            Information
+          </h4>
+          <Col sm="4">
+            <InfoList title="Stage Name">
+              {entertainer.profile.stageName}
+            </InfoList>
+            <InfoList title="Speciality">
+              {entertainer.profile.entertainerType}
+            </InfoList>
+            <InfoList title="Years of Experience">
+              {parseInt(getYear(Date.now()), 10) -
+                parseInt(entertainer.profile.yearStarted, 10)}{' '}
+              years
+            </InfoList>
+            <InfoList title="Total Shows">
+              {totalShows} {Humanize.pluralize(totalShows, 'Show')}
+            </InfoList>
+          </Col>
+          <Col sm="4">
+            <InfoList title="Member Since">
+              {getYear(entertainer.profile.createdAt)}
+            </InfoList>
+            <InfoList title="Location">
+              {' '}
+              {entertainer.profile.location}
+            </InfoList>
+            <InfoList title="Average Charges">
+              {commaNumber(entertainer.profile.baseCharges)} -{' '}
+              {commaNumber(entertainer.profile.preferredCharges)}
+            </InfoList>
+            <InfoList title="Willing to Travel for Shows">
+              {entertainer.profile.willing_to_travel ? 'YES' : 'NO'}
+            </InfoList>
+          </Col>
+          <Col sm="4">
+            <InfoStar
+              rating={avgRatings.professionalism}
+              title="Professionalism"
+            />
+            <InfoStar rating={avgRatings.accommodating} title="Accommodating" />
+            <InfoStar
+              rating={avgRatings.overallTalent}
+              title="Overall Talent"
+            />
+            <InfoStar rating={avgRatings.recommend} title="Recommend" />
+          </Col>
+        </Row>
+      </div>
+    </section>
+  );
+};
 
 EntertainerSectionInfo.propTypes = {
   entertainer: PropTypes.object.isRequired,
@@ -229,6 +260,7 @@ const InfoList = ({ title, children }) => (
     <h3>{children}</h3>
   </div>
 );
+
 InfoList.propTypes = {
   children: PropTypes.any,
   title: PropTypes.string.isRequired,
@@ -238,19 +270,26 @@ InfoList.defaultProps = {
   children: null,
 };
 
-const InfoStar = ({ title, rating }) => (
-  <div className="entertainer-info__list">
-    <h6>{title}</h6>
-    <Stars name={title} rating={rating} />
-  </div>
-);
+const InfoStar = ({ title, rating }) => {
+  console.log('rating info star ', parseFloat(rating));
+  return (
+    <div className="entertainer-info__list">
+      <h6>{title}</h6>
+      {rating === 0 || rating == null ? (
+        <span className="text-uppercase">No Ratings Yet</span>
+      ) : (
+        <Stars name={title} rating={parseFloat(rating)} />
+      )}
+    </div>
+  );
+};
 
 InfoStar.propTypes = {
-  rating: PropTypes.number.isRequired,
+  rating: PropTypes.any.isRequired,
   title: PropTypes.string.isRequired,
 };
 
-const Awards = ({ awards }) => {
+const Awards = ({ badges }) => {
   return (
     <section className="my-5 py-5">
       <div className="container-fluid">
@@ -258,33 +297,18 @@ const Awards = ({ awards }) => {
           <h4 className="text-uppercase col-12 font-weight-normal mb-3">
             Awards
           </h4>
-          {/* <AwardCard
-            color="yellow"
-            date="Sun, April 17, 2019"
-            title="Completed 20 Events"
-          />
-          <AwardCard
-            color="white"
-            date="Sun, April 17, 2019"
-            title="Has over 10 five star ratings"
-          />
-          <AwardCard
-            color="red"
-            date="Sun, April 17, 2019"
-            title="Completed over 10 Events"
-          /> */}
-          <AwardCard
-            color="blue"
-            date="Sun, April 17, 2019"
-            title="DUV LIVE Certified Entertainer"
-          />
+          <Badges.CardLists badges={badges} />
         </div>
       </div>
     </section>
   );
 };
 
-const Gallery = () => {
+Awards.propTypes = {
+  badges: PropTypes.array.isRequired,
+};
+
+const Gallery = ({ galleries }) => {
   return (
     <section className="my-5 py-5">
       <div className="container-fluid">
@@ -292,16 +316,17 @@ const Gallery = () => {
           <h4 className="text-uppercase col-12 font-weight-normal mb-3">
             Gallery
           </h4>
-          {false && (
-            <GalleryImage
-              name="gallery"
-              src={'https://placeholder.com/kitten'}
-            />
-          )}
+          {galleries.map(({ imageURL, id, approved }, index) => (
+            <GalleryImage key={id} name={'gallery' + index} src={imageURL} />
+          ))}
         </div>
       </div>
     </section>
   );
+};
+
+Gallery.propTypes = {
+  galleries: PropTypes.array.isRequired,
 };
 
 const GalleryImage = ({ name, src }) => (
@@ -329,7 +354,12 @@ const GalleryImage = ({ name, src }) => (
   </div>
 );
 
-const Videos = () => {
+GalleryImage.propTypes = {
+  name: PropTypes.string.isRequired,
+  src: PropTypes.string.isRequired,
+};
+
+const Videos = ({ videos }) => {
   return (
     <section className="my-5 py-5">
       <div className="container-fluid">
@@ -337,12 +367,17 @@ const Videos = () => {
           <h4 className="text-uppercase col-12 font-weight-normal mb-3">
             Videos
           </h4>
-          {/* <YoutubeVideo title="Gelato" youtubeID="5ILiIQdUDV8" />
-          <YoutubeVideo title="gallery" youtubeID="O4yp_KbkVLE" /> */}
+          {videos.map(({ title, youtubeID }, index) => (
+            <YoutubeVideo key={index} title={title} youtubeID={youtubeID} />
+          ))}
         </div>
       </div>
     </section>
   );
+};
+
+Videos.propTypes = {
+  videos: PropTypes.array.isRequired,
 };
 
 const YoutubeVideo = ({ title, youtubeID }) => (
@@ -354,7 +389,7 @@ const YoutubeVideo = ({ title, youtubeID }) => (
         title={title}
       >
         <Video.YoutubeImage title={title} youtubeID={youtubeID} />
-        <Video.YoutubeOverlay title={title} youtubeId={youtubeID} />
+        <Video.YoutubeOverlay title={title} youtubeID={youtubeID} />
       </DuvLiveModal>
     </div>
   </section>
@@ -363,6 +398,83 @@ const YoutubeVideo = ({ title, youtubeID }) => (
 YoutubeVideo.propTypes = {
   title: PropTypes.string.isRequired,
   youtubeID: PropTypes.any.isRequired,
+};
+
+const ReviewSection = ({ ratings }) => {
+  return (
+    <section className="my-5 py-5">
+      <div className="container-fluid">
+        <div className="row">
+          <h4 className="text-uppercase col-12 font-weight-normal mb-3">
+            Reviews
+          </h4>
+          {ratings.map((rating, index) => (
+            <ReviewSectionCard
+              averageRating={
+                (rating.professionalism +
+                  rating.overallTalent +
+                  rating.recommend +
+                  rating.accommodating) /
+                4
+              }
+              comment={rating.review}
+              key={index}
+              profileImageURL={rating.rater.profileImageURL}
+              reviewDate={rating.createdAt}
+              title={rating.ratedEvent.event.eventType}
+              userName={rating.rater.firstName}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+ReviewSection.propTypes = {
+  ratings: PropTypes.array.isRequired,
+};
+
+const ReviewSectionCard = ({
+  averageRating,
+  comment,
+  profileImageURL,
+  reviewDate,
+  title,
+  userName,
+}) => (
+  <div className="w-100">
+    <div className="card">
+      <div className="card-body">
+        <div className="row py-3">
+          <div className="col-md-1 col-sm-2 col-2">
+            <Image name={userName} rounded={false} src={profileImageURL} />
+          </div>
+          <div className="col-md-11 col-sm-10 col-10">
+            <div className="float-right">
+              <Stars name="Professionalism" rating={averageRating} />
+            </div>
+            <h6 className="text-font-weight-normal text-white">{title}</h6>
+            <div className="clearfix" />
+            <p className="mb-0 text-muted-light-2">{comment}</p>
+            <small className="text-muted">
+              Reviewed by {userName}, <ReactTimeago date={reviewDate} />
+            </small>
+          </div>
+        </div>
+        <hr />
+      </div>
+    </div>
+  </div>
+);
+
+ReviewSectionCard.propTypes = {
+  averageRating: PropTypes.number.isRequired,
+  comment: PropTypes.string.isRequired,
+  profileImageURL: PropTypes.string.isRequired,
+  reviewDate: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  userName: PropTypes.string.isRequired,
 };
 
 const OtherEntertainersSection = ({ entertainers }) => (

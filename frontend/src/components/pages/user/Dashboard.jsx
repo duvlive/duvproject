@@ -318,7 +318,7 @@ Dashboard.RequestTableRow = ({ application }) => (
   <tr>
     <td className="align-middle">
       <Image
-        className="avatar--medium-small"
+        className="avatar--medium--small"
         name={application.stageName || 'No name'}
         responsiveImage={false}
         src={application.profileImageURL || 'No src'}

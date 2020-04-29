@@ -113,7 +113,7 @@ const RequestsRow = ({
     </th>
     <td className="align-middle">
       <Image
-        className="avatar--medium-small"
+        className="avatar--medium--small"
         name={stageName}
         responsiveImage={false}
         src={profileImageURL}

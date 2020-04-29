@@ -493,9 +493,7 @@ const EventController = {
       include: reviewsInclude,
     }).then((info) => {
       if (!info || info.length === 0) {
-        return res
-          .status(404)
-          .json({ message: 'Event Entertainers not found' });
+        return res.json({ message: 'You have no pending review', info: [] });
       }
       return res.status(200).json({ info });
     });
