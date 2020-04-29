@@ -2,6 +2,10 @@ import Sequelize, { Op } from 'sequelize';
 import { updateUser } from '../utils';
 import {
   User,
+  Badge,
+  BadgeUser,
+  Rating,
+  Event,
   EntertainerProfile,
   Gallery,
   Video,
@@ -172,22 +176,99 @@ const EntertainerProfileController = {
           model: EntertainerProfile,
           as: 'profile',
           where: { slug },
+          include: [
+            {
+              model: Rating,
+              as: 'ratings',
+              required: false,
+              where: {
+                review: {
+                  [Op.ne]: null,
+                },
+              },
+              attributes: [
+                'id',
+                'professionalism',
+                'accommodating',
+                'overallTalent',
+                'recommend',
+                'review',
+                'createdAt',
+              ],
+              include: [
+                {
+                  model: User,
+                  as: 'rater',
+                  attributes: ['firstName', 'profileImageURL'],
+                },
+                {
+                  model: EventEntertainer,
+                  as: 'ratedEvent',
+                  attributes: ['id'],
+                  include: [
+                    {
+                      model: Event,
+                      as: 'event',
+                      attributes: ['eventType'],
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              model: EventEntertainer,
+              as: 'hired',
+              attributes: ['placeOfEvent'],
+            },
+          ],
         },
         {
           model: Gallery,
           as: 'galleries',
           attributes: ['id', 'imageURL', 'imageID', 'approved'],
           required: false,
+          where: { approved: true },
         },
         {
           model: Video,
           as: 'videos',
           attributes: ['id', 'title', 'youtubeID', 'approved'],
           required: false,
+          where: { approved: true },
+        },
+        {
+          required: false,
+          model: BadgeUser,
+          as: 'badges',
+          include: [
+            {
+              model: Badge,
+              as: 'badge',
+            },
+          ],
         },
       ],
     })
-      .then((entertainer) => {
+      .then(async (entertainer) => {
+        const avgRatings = await Rating.findAll({
+          where: { entertainerId: entertainer.profile.id },
+          attributes: [
+            [
+              Sequelize.fn('AVG', Sequelize.col('professionalism')),
+              'professionalism',
+            ],
+            [
+              Sequelize.fn('AVG', Sequelize.col('accommodating')),
+              'accommodating',
+            ],
+            [
+              Sequelize.fn('AVG', Sequelize.col('overallTalent')),
+              'overallTalent',
+            ],
+            [Sequelize.fn('AVG', Sequelize.col('recommend')), 'recommend'],
+          ],
+        });
+
         User.findAll({
           order: [Sequelize.fn('RANDOM')],
           limit: 3,
@@ -208,7 +289,7 @@ const EntertainerProfileController = {
         }).then((otherEntertainers) => {
           return res.status(200).json({
             message: 'Entertainer detail',
-            entertainer,
+            entertainer: { ...entertainer.toJSON(), avgRatings },
             otherEntertainers: otherEntertainers.map((entertainer) =>
               EntertainerProfileController.transformEntertainers(entertainer)
             ),

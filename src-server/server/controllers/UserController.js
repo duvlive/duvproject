@@ -13,7 +13,6 @@ import {
   Identification,
   Notification,
   Payment,
-  Rating,
   User,
   Video,
 } from '../models';
@@ -106,10 +105,6 @@ export const userAssociatedModels = [
         ],
       },
     ],
-  },
-  {
-    model: Rating,
-    as: 'ratings',
   },
 ];
 

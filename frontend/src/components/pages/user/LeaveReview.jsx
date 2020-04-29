@@ -242,7 +242,7 @@ const ReviewedEntertainersRow = ({
     </th>
     <td className="align-middle">
       <Image
-        className="avatar--medium-small"
+        className="avatar--medium--small"
         name={entertainer.stageName}
         responsiveImage={false}
         src={entertainer.personalDetails.profileImageURL}

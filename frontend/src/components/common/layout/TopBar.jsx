@@ -35,6 +35,14 @@ const TopBar = ({ showSidebar }) => {
   const currentUserType = userState.type || getUserTypeFromStore();
   const menus = TOP_MENU[currentUserType];
 
+  const USER_NAME = {
+    [USER_TYPES.user]: userState.firstName,
+    [USER_TYPES.entertainer]:
+      userState.entertainerProfile && userState.entertainerProfile.stageName,
+    [USER_TYPES.admin]: userState.firstName,
+    [USER_TYPES.bandMember]: userState.firstName,
+  };
+
   return (
     <div className="topbar">
       <Navbar color="transparent" expand>
@@ -65,9 +73,15 @@ const TopBar = ({ showSidebar }) => {
               {(props) =>
                 // eslint-disable-next-line react/prop-types
                 props.match && currentUserType !== USER_TYPES.user ? (
-                  <TopBarNavigation menus={TOP_MENU[USER_TYPES.user]} />
+                  <TopBarNavigation
+                    menus={TOP_MENU[USER_TYPES.user]}
+                    userName={USER_NAME[USER_TYPES.user]}
+                  />
                 ) : (
-                  <TopBarNavigation menus={menus} />
+                  <TopBarNavigation
+                    menus={menus}
+                    userName={USER_NAME[currentUserType]}
+                  />
                 )
               }
             </Match>
@@ -82,12 +96,10 @@ TopBar.propTypes = {
   showSidebar: PropTypes.func.isRequired,
 };
 
-const TopBarNavigation = ({ menus }) => {
+const TopBarNavigation = ({ menus, userName }) => {
   let { userState } = React.useContext(UserContext);
-  const userName =
-    userState.firstName.length > 20
-      ? Humanize.truncate(userState.firstName, 15)
-      : userState.firstName;
+  const displayedName =
+    userName.length > 20 ? Humanize.truncate(userName, 15) : userName;
 
   const topMenu = menus.map(({ title, to }) => (
     <DropdownItem key={title}>
@@ -101,7 +113,7 @@ const TopBarNavigation = ({ menus }) => {
     <UncontrolledDropdown inNavbar nav>
       <DropdownToggle caret nav>
         <span className="d-none d-sm-inline text-capitalize">
-          {userName} &nbsp;
+          {displayedName} &nbsp;
         </span>
         <img
           alt={userName}
@@ -125,6 +137,7 @@ const TopBarNavigation = ({ menus }) => {
 
 TopBarNavigation.propTypes = {
   menus: PropTypes.array.isRequired,
+  userName: PropTypes.string.isRequired,
 };
 
 export default TopBar;

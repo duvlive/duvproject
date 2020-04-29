@@ -18,6 +18,8 @@ import NoContent from 'components/common/utils/NoContent';
 import { getTinyDate } from 'utils/date-helpers';
 import LoadItems from 'components/common/utils/LoadItems';
 
+import Humanize from 'humanize-plus';
+
 const Dashboard = () => {
   const { userState } = React.useContext(UserContext);
 
@@ -64,10 +66,12 @@ const DashboardItems = () => {
         setApplications([]);
       });
   }, []);
-  console.log('applications', applications);
+
+  const stageName = Humanize.capitalize(userState.entertainerProfile.stageName);
+
   return (
     <>
-      <TopMessage message={`Welcome back ${userState.firstName},`} />
+      <TopMessage message={`Welcome back ${stageName},`} />
       <section className="app-content">
         <div className="row">
           <DashboardCard

@@ -7,7 +7,7 @@ import {
   NavbarBrand,
   Nav,
   NavItem,
-  NavLink
+  NavLink,
 } from 'reactstrap';
 import { Link } from '@reach/router';
 import IconPhone from 'assets/icons/phone.svg';
@@ -17,14 +17,15 @@ import classNames from 'classnames';
 import { UserContext } from 'context/UserContext';
 import ProfileAvatar from 'assets/img/avatar/profile.png';
 import { getProfileName } from 'utils/helpers';
-import { OUR_PHONE_NUMBER } from 'utils/constants';
+import { OUR_PHONE_NUMBER, DASHBOARD_PAGE } from 'utils/constants';
+import { getUserTypeFromStore } from 'utils/localStorage';
 
 const menus = [
   { name: 'Home', to: '/' },
   { name: 'How it Works', to: '/how-it-works' },
   { name: 'Hire Entertainers', to: '/hire-entertainers' },
   { name: 'Upcoming Events', to: '/upcoming-events' },
-  { name: 'Help', to: '/help' }
+  { name: 'Help', to: '/help' },
 ];
 
 const Header = ({ showRedLogo }) => {
@@ -58,15 +59,16 @@ const Header = ({ showRedLogo }) => {
 };
 
 Header.propTypes = {
-  showRedLogo: PropTypes.bool
+  showRedLogo: PropTypes.bool,
 };
 
 Header.defaultProps = {
-  showRedLogo: false
+  showRedLogo: false,
 };
 
 const HeaderTopNav = () => {
   const { userState } = React.useContext(UserContext);
+  const userType = getUserTypeFromStore();
   const Avatar = userState.profileImg || ProfileAvatar;
   const userName = getProfileName({
     firstName: userState.firstName,
@@ -74,7 +76,7 @@ const HeaderTopNav = () => {
     stageName:
       userState.entertainerProfile && userState.entertainerProfile.stageName
         ? userState.entertainerProfile.stageName
-        : null
+        : null,
   });
 
   return (
@@ -94,7 +96,7 @@ const HeaderTopNav = () => {
                 </Link>
               </li>
               <li className="list-inline-item d-none d-sm-inline">
-                <a href="/">info@duvlive.com</a>
+                <a href="mailto:info@duvlive.com">info@duvlive.com</a>
               </li>
             </ul>
           </div>
@@ -102,10 +104,12 @@ const HeaderTopNav = () => {
             <div className="top-header__right text-right col-6">
               <ul className="list-inline">
                 <li className="list-inline-item">
-                  <Link to="/user/dashboard">{userName} &nbsp;</Link>
+                  <Link to={`/${DASHBOARD_PAGE[userType]}/dashboard`}>
+                    {userName} &nbsp;
+                  </Link>
                 </li>
                 <li className="list-inline-item">
-                  <Link to="/user/dashboard">
+                  <Link to={`/${DASHBOARD_PAGE[userType]}/dashboard`}>
                     <img
                       alt={userName}
                       className="rounded-circle img-responsive avatar--small"

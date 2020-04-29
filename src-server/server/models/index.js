@@ -155,6 +155,11 @@ db.EventEntertainer.belongsTo(db.EntertainerProfile, {
   as: 'entertainer',
 });
 
+db.EntertainerProfile.hasMany(db.EventEntertainer, {
+  foreignKey: 'hiredEntertainer',
+  as: 'hired',
+});
+
 db.EventEntertainer.belongsTo(db.User, {
   foreignKey: 'userId',
   as: 'user',

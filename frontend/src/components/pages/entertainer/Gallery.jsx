@@ -12,19 +12,19 @@ import { getTokenFromStore } from 'utils/localStorage';
 export const approval = {
   approved: {
     color: 'success',
-    text: 'Approved'
+    text: 'Approved',
   },
   rejected: {
     color: 'danger',
-    text: 'Rejected'
+    text: 'Rejected',
   },
   pending: {
     color: 'info',
-    text: 'Pending'
-  }
+    text: 'Pending',
+  },
 };
 
-export const getStatus = status => {
+export const getStatus = (status) => {
   /* == is used to check for null
    * null -> pending
    * true -> approved
@@ -40,38 +40,38 @@ const Gallery = () => {
   const [gallery, setGallery] = React.useState([]);
   const { userDispatch, userState } = React.useContext(UserContext);
 
-  const handleDelete = id => {
+  const handleDelete = (id) => {
     axios
       .delete(`/api/v1/gallery/delete/${id}`)
-      .then(function(response) {
+      .then(function (response) {
         const { status } = response;
         // handle success
         if (status === 202) {
-          const currentImages = gallery.filter(g => g.id !== id);
+          const currentImages = gallery.filter((g) => g.id !== id);
           setGallery(currentImages);
         }
       })
-      .catch(function(error) {
+      .catch(function (error) {
         setGallery([]);
       });
   };
 
-  const setAsProfile = imageURL => {
+  const setAsProfile = (imageURL) => {
     const values = { profileImageURL: imageURL };
     axios
       .put(`/api/v1/gallery/set-as-profile`, values, {
-        headers: { 'x-access-token': getTokenFromStore() }
+        headers: { 'x-access-token': getTokenFromStore() },
       })
-      .then(function(response) {
+      .then(function (response) {
         const { status, data } = response;
         if (status === 200) {
           userDispatch({
             type: 'update-user-profile-image',
-            imageURL: data.profileImageURL
+            imageURL: data.profileImageURL,
           });
         }
       })
-      .catch(function(error) {
+      .catch(function (error) {
         setGallery([]);
       });
   };
@@ -95,11 +95,11 @@ const Gallery = () => {
     userState.galleries && setGallery(userState.galleries);
   }, [userState]);
 
-  const addImageToGallery = image => {
+  const addImageToGallery = (image) => {
     setGallery([image, ...gallery]);
   };
 
-  const isCurrentProfileImage = imageURL => userState.profileImg === imageURL;
+  const isCurrentProfileImage = (imageURL) => userState.profileImg === imageURL;
   return (
     <BackEndPage title="Gallery">
       <div className="main-app">
@@ -146,7 +146,7 @@ const GalleryCard = ({
   isCurrentProfileImage,
   src,
   name,
-  status
+  status,
 }) => {
   const currentImage = (
     <Image
@@ -214,7 +214,7 @@ GalleryCard.propTypes = {
   name: PropTypes.string.isRequired,
   setAsProfile: PropTypes.func.isRequired,
   src: PropTypes.string.isRequired,
-  status: PropTypes.any.isRequired
+  status: PropTypes.any.isRequired,
 };
 
 export default Gallery;
