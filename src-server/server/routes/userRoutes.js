@@ -70,6 +70,13 @@ const userRoutes = (router) => {
     UserController.socialLogin
   );
 
+  router.get(
+    '/api/v1/become-an-entertainer',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    UserController.upgradeUserToEntertainer
+  );
+
   router
     .route('/api/v1/users/editUser')
     .put(

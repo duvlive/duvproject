@@ -99,34 +99,34 @@ $section-height: 50rem;
   }
 }
 
-// .content-page {
-//   .landing {
-//     &.entertainer.DJ .card {
-//       background: url('../img/bg/entertainer-dj.jpg') center center no-repeat;
+.content-page {
+  .landing {
+    &.entertainer.DJ .card {
+      background: url('../img/bg/entertainer-dj.jpg') center center no-repeat;
 
-//       .card-img-overlay {
-//         background: rgba($black, 0.85);
-//       }
-//     }
+      .card-img-overlay {
+        background: rgba($black, 0.85);
+      }
+    }
 
-//     &.entertainer.MC .card {
-//       background: url('../img/bg/entertainers-counter.jpg') center center
-//         no-repeat;
+    &.entertainer.MC .card {
+      background: url('../img/bg/entertainers-counter.jpg') center center
+        no-repeat;
 
-//       .card-img-overlay {
-//         background: rgba($black, 0.8);
-//       }
-//     }
+      .card-img-overlay {
+        background: rgba($black, 0.8);
+      }
+    }
 
-//     &.entertainer.LIVE .card {
-//       background: url('../img/bg/felebration.jpg') center bottom no-repeat;
+    &.entertainer.LIVE .card {
+      background: url('../img/bg/felebration.jpg') center bottom no-repeat;
 
-//       .card-img-overlay {
-//         background: rgba($black, 0.4);
-//       }
-//     }
-//   }
-// }
+      .card-img-overlay {
+        background: rgba($black, 0.4);
+      }
+    }
+  }
+}
 
 .intro {
   background: $black;

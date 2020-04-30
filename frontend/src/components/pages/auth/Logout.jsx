@@ -8,7 +8,6 @@ const Logout = () => {
   const { userDispatch } = React.useContext(UserContext);
 
   useEffect(() => {
-    console.log('useEffect is called');
     store(false);
     userDispatch({ type: 'user-logout' });
     navigate('/');

@@ -42,6 +42,7 @@ const Sidebar = ({ showSidebar, closeSidebar, ...props }) => {
 
   const UnapprovedEntertainer =
     currentUserType === USER_TYPES.entertainer &&
+    userState.entertainerProfile &&
     !userState.entertainerProfile.approved;
 
   const sideMenu = UnapprovedEntertainer
@@ -134,6 +135,7 @@ const SidebarMenu = ({ showUserType }) => {
   // if available,show the entertainer type for entertainers
   const entertainerType =
     userState.type === USER_TYPES.entertainer &&
+    userState.entertainerProfile &&
     userState.entertainerProfile.entertainerType;
   return (
     <div className="user-box">

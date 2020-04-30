@@ -746,13 +746,27 @@ const UserController = {
         if (entertainer) {
           return res
             .status(401)
-            .json({ message: 'Entertianer profile exists' });
+            .json({ message: 'Entertainer profile exists' });
         }
-        [EntertainerProfile, BankDetail, Identification, ApprovalComment].map(
-          async (model) => await model.create({ userId: id })
-        );
-        return res.status(200).json({
-          message: 'Entertainer profile has been successfully generated',
+
+        // for some weird reasons, creating this records via a array loop doesn't work as expected
+        EntertainerProfile.create({ userId: id }).then(() => {
+          BankDetail.create({ userId: id }).then(() => {
+            Identification.create({ userId: id }).then(() => {
+              ApprovalComment.create({ userId: id }).then(() => {
+                return req.user
+                  .update({
+                    type: USER_TYPES.ENTERTAINER,
+                  })
+                  .then(() => {
+                    return res.status(200).json({
+                      message:
+                        'Entertainer profile has been successfully generated',
+                    });
+                  });
+              });
+            });
+          });
         });
       })
       .catch((error) => {

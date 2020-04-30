@@ -163,7 +163,7 @@ const EntertainerSection = ({ entertainers, loading }) => (
   <section className="entertainers spacer">
     <div className="container-fluid">
       <h2 className="header title-border">
-        <span>ENTERTAINER</span>
+        OUR <span>ENTERTAINERS</span>
       </h2>
       <Row className="pt-5">
         {loading ? (
@@ -178,6 +178,14 @@ const EntertainerSection = ({ entertainers, loading }) => (
             type={SLIDESHOW_TYPE.entertainers}
           />
         )}
+      </Row>
+      <Row className="pt-3">
+        <Link
+          className="btn btn-danger btn-transparent btn-lg btn-wide"
+          to="/hire-entertainers"
+        >
+          View More Entertainers
+        </Link>
       </Row>
     </div>
   </section>
