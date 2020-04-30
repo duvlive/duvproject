@@ -86,14 +86,14 @@ const HeaderTopNav = () => {
           <div className="top-header__left col-6">
             <ul className="list-inline">
               <li className="list-inline-item">
-                <Link to="/">
+                <a href={`tel:${OUR_PHONE_NUMBER.split(' ').join('')}`}>
                   <img
                     alt="phone icon"
                     className="top-header__icon"
                     src={IconPhone}
                   />{' '}
                   {OUR_PHONE_NUMBER}
-                </Link>
+                </a>
               </li>
               <li className="list-inline-item d-none d-sm-inline">
                 <a href="mailto:info@duvlive.com">info@duvlive.com</a>
@@ -103,7 +103,7 @@ const HeaderTopNav = () => {
           {userState.isLoggedIn ? (
             <div className="top-header__right text-right col-6">
               <ul className="list-inline">
-                <li className="list-inline-item">
+                <li className="list-inline-item d-none d-sm-inline">
                   <Link to={`/${DASHBOARD_PAGE[userType]}/dashboard`}>
                     {userName} &nbsp;
                   </Link>

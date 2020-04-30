@@ -271,7 +271,6 @@ InfoList.defaultProps = {
 };
 
 const InfoStar = ({ title, rating }) => {
-  console.log('rating info star ', parseFloat(rating));
   return (
     <div className="entertainer-info__list">
       <h6>{title}</h6>
@@ -285,8 +284,12 @@ const InfoStar = ({ title, rating }) => {
 };
 
 InfoStar.propTypes = {
-  rating: PropTypes.any.isRequired,
+  rating: PropTypes.any,
   title: PropTypes.string.isRequired,
+};
+
+InfoStar.defaultProps = {
+  rating: null,
 };
 
 const Awards = ({ badges }) => {
@@ -480,9 +483,9 @@ ReviewSectionCard.propTypes = {
 const OtherEntertainersSection = ({ entertainers }) => (
   <section className="other-entertainers mt-5 py-5">
     <div className="container-fluid">
-      <h2 className="header title-border">
+      <h3 className="header title-border">
         RELATED <span>ENTERTAINERS</span>
-      </h2>
+      </h3>
       <Row className="pt-5">
         <Entertainers.List lists={entertainers || []} />
       </Row>
