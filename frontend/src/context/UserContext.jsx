@@ -1,18 +1,8 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
+import { USER_TYPES } from 'utils/constants';
 
-const INITIAL_STATE = {
-  id: '',
-  firstName: '',
-  lastName: '',
-  email: '',
-  phoneNumber: '',
-  phoneNumber2: '',
-  type: null,
-  referral: '',
-  profileImg: '',
-  isLoggedIn: false,
-  firstTimeLogin: null,
+const DEFAULT_ENTERTAINER_STATE = {
   entertainerProfile: {
     entertainerType: null,
     approved: null,
@@ -65,9 +55,25 @@ const INITIAL_STATE = {
     youTube: null,
     identification: null,
   },
+};
+
+const INITIAL_STATE = {
+  id: '',
+  firstName: '',
+  lastName: '',
+  email: '',
+  phoneNumber: '',
+  phoneNumber2: '',
+  type: null,
+  referral: '',
+  profileImg: '',
+  isLoggedIn: false,
+  firstTimeLogin: null,
+  ...DEFAULT_ENTERTAINER_STATE,
   galleries: [],
   events: null,
   badges: null,
+  alert: null,
 };
 
 // CONTEXT
@@ -92,6 +98,19 @@ let reducer = (state, action) => {
       return { ...state, ...action.user, isLoggedIn: true };
     case 'user-hide-first-time-text':
       return { ...state, ...action.user, firstTimeLogin: false };
+    case 'upgrade-to-an-entertainer':
+      return {
+        ...state,
+        ...{
+          ...DEFAULT_ENTERTAINER_STATE,
+          entertainerProfile: {
+            ...DEFAULT_ENTERTAINER_STATE.entertainerProfile,
+            approved: false,
+          },
+        },
+        type: USER_TYPES.entertainer,
+        alert: 'entertainer-upgrade',
+      };
     case 'update-user-profile-image':
     case 'user-profile-image':
       return { ...state, profileImg: action.imageURL };

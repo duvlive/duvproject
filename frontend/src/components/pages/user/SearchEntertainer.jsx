@@ -42,6 +42,7 @@ export const SearchEntertainerForm = ({ selectedSearchedEntertainer }) => {
   const [title, setTitle] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
   const [entertainers, setEntertainers] = React.useState([]);
+  const [searchTerm, setSearchTerm] = React.useState(null);
 
   // React.useEffect(() => {
   //   eventEntertainerId &&
@@ -70,6 +71,7 @@ export const SearchEntertainerForm = ({ selectedSearchedEntertainer }) => {
         }}
         onSubmit={({ stageName }, actions) => {
           setLoading(true);
+          setSearchTerm(stageName);
           // post to api
           axios
             .get(`/api/v1/entertainers/search?name=${stageName}`, {
@@ -86,7 +88,7 @@ export const SearchEntertainerForm = ({ selectedSearchedEntertainer }) => {
                   setTitle(
                     `${noOfEntertainers} ${Humanize.pluralize(
                       noOfEntertainers,
-                      'entertianer'
+                      'entertainer'
                     )} found`
                   );
                 } else {
@@ -140,6 +142,7 @@ export const SearchEntertainerForm = ({ selectedSearchedEntertainer }) => {
       ) : (
         <EntertainersSearchResult
           entertainers={entertainers}
+          searchTerm={searchTerm}
           selectedSearchedEntertainer={(entertainer) =>
             selectedSearchedEntertainer(entertainer, 'search')
           }

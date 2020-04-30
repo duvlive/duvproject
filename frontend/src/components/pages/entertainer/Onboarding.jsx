@@ -8,6 +8,7 @@ import { UserContext } from 'context/UserContext';
 import { ONBOARDING_STEPS } from 'utils/constants';
 import WelcomeSlides from 'components/common/utils/WelcomeSlides';
 import welcomeSlide from 'data/firstTimeEntertainer';
+import AlertMessage from 'components/common/utils/AlertMessage';
 
 const Onboarding = () => {
   const { userState } = React.useContext(UserContext);
@@ -39,8 +40,15 @@ const Onboarding = () => {
   return (
     <section className="px-5">
       <TopMessage message={`Hello ${userState.firstName},`} />
-
-      {<WelcomeSlides items={welcomeSlide} />}
+      {userState.alert === 'entertainer-upgrade' && (
+        <div className="mt-4">
+          <AlertMessage
+            message="Your upgrade was successful. Welcome to your Entertainer Account"
+            type="success"
+          />
+        </div>
+      )}
+      {userState.firstTimeLogin && <WelcomeSlides items={welcomeSlide} />}
       <Card
         className="dashboard__card col-md-12 px-5 mt-5 mb-0 rounded-0"
         color={entertainerIsDone ? 'green' : 'blue'}

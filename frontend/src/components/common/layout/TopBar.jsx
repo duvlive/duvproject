@@ -80,7 +80,9 @@ const TopBar = ({ showSidebar }) => {
                 ) : (
                   <TopBarNavigation
                     menus={menus}
-                    userName={USER_NAME[currentUserType]}
+                    userName={
+                      USER_NAME[currentUserType] || USER_NAME[USER_TYPES.user]
+                    }
                   />
                 )
               }

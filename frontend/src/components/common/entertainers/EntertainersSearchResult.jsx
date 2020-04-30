@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Stars from 'components/common/utils/Stars';
-// import DuvLiveModal from 'components/custom/Modal';
 import Image from 'components/common/utils/Image';
 import { commaNumber } from 'utils/helpers';
 
 const EntertainersSearchResult = ({
   entertainers,
+  searchTerm,
   selectedSearchedEntertainer,
   title,
 }) => (
@@ -20,6 +20,7 @@ const EntertainersSearchResult = ({
               entertainer={entertainer}
               key={index}
               number={index + 1}
+              searchTerm={searchTerm}
               selectedSearchedEntertainer={selectedSearchedEntertainer}
             />
           ))}
@@ -35,19 +36,17 @@ EntertainersSearchResult.defaultProps = {
 
 EntertainersSearchResult.propTypes = {
   entertainers: PropTypes.array.isRequired,
+  searchTerm: PropTypes.string.isRequired,
   selectedSearchedEntertainer: PropTypes.func.isRequired,
   title: PropTypes.string,
 };
 
 EntertainersSearchResult.Card = ({
   entertainer,
-  number,
+  searchTerm,
   selectedSearchedEntertainer,
 }) => (
   <tr>
-    {/* <th className="table__number" scope="row">
-      {twoDigitNumber(number)}
-    </th> */}
     <td>
       <Image
         className="avatar--medium--small"
@@ -58,7 +57,7 @@ EntertainersSearchResult.Card = ({
     </td>
     <td>
       <span className="text-muted small--4">Stage name</span>{' '}
-      {entertainer.stageName}
+      {formatSearchTerm(entertainer.stageName, searchTerm)}
     </td>
     <td>
       <span className="text-muted small--4">Type</span>{' '}
@@ -99,8 +98,19 @@ EntertainersSearchResult.Card = ({
 
 EntertainersSearchResult.Card.propTypes = {
   entertainer: PropTypes.object.isRequired,
-  number: PropTypes.number.isRequired,
+  searchTerm: PropTypes.string.isRequired,
   selectedSearchedEntertainer: PropTypes.func.isRequired,
 };
 
+const formatSearchTerm = (text, filterValue) => {
+  const reg = new RegExp(`(${filterValue})`, 'gi');
+  const textParts = text.split(reg);
+  return (
+    <>
+      {textParts.map((part) =>
+        part.match(reg) ? <b className="text-danger">{part}</b> : part
+      )}
+    </>
+  );
+};
 export default EntertainersSearchResult;

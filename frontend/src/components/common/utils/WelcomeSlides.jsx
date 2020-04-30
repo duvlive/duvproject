@@ -59,15 +59,15 @@ const WelcomeSlides = ({ items }) => {
     return (
       <CarouselItem key={index} onExited={onExited} onExiting={onExiting}>
         <div className="text-right">
-          <button className="small--2" onClick={skipUserText}>
+          <button className="small--2 btn btn-link" onClick={skipUserText}>
             {loading ? (
               <>
                 <Loading />
               </>
             ) : (
-              <button class="btn btn-link">
+              <>
                 <span className="icon icon-cancel-circled"></span> Dismiss{' '}
-              </button>
+              </>
             )}
           </button>
         </div>
