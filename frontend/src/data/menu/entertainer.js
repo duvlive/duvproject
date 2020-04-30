@@ -143,7 +143,7 @@ export const entertainerTopMenu = [
   },
   {
     title: 'Payment History',
-    to: '/entertainer/payments-history',
+    to: '/entertainer/payments',
   },
   {
     title: 'Switch to User Account',

@@ -310,7 +310,10 @@ a:hover {
       left: -2.5rem;
     }
     &--text {
-      font-size: 1.5rem;
+      font-size: 1.2rem;
+      @include media-breakpoint-up(sm) {
+        font-size: 1.5rem;
+      }
       margin-right: 3rem;
       font-weight: normal;
       line-height: 1.6;

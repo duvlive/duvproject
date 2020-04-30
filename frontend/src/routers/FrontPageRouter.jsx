@@ -24,6 +24,7 @@ const FrontPageRouter = () => (
     <HowItWorks path="how-it-works" />
     <UpcomingEvents path="upcoming-events" />
     <HireEntertainers path="hire-entertainers" />
+    <HireEntertainers path="hire-entertainers/:type" />
     <Help path="help" />
     <ContactUs path="contact-us" />
     <TermsOfUse path="terms-of-use" />

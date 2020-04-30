@@ -125,7 +125,22 @@ const TopBarNavigation = ({ menus, userName }) => {
         />{' '}
       </DropdownToggle>
       <DropdownMenu right>
+        {/* Display Top Menu */}
         {topMenu}
+
+        {/* Show Entertainer Menu */}
+        {userState.type === USER_TYPES.entertainer &&
+          userState.entertainerProfile &&
+          userState.entertainerProfile.stageName && (
+            <DropdownItem>
+              <Link
+                className="text-color"
+                to={`/entertainers/${userState.entertainerProfile.stageName}`}
+              >
+                View My Profile
+              </Link>
+            </DropdownItem>
+          )}
         <DropdownItem divider />
         <DropdownItem>
           <Link className="text-color" to="/logout">
