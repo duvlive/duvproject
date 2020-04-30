@@ -3,6 +3,7 @@ import nodemailer from 'nodemailer';
 import ejs from 'ejs';
 import textEmailTemplate from './email-template/duv-text-email-template';
 const DUV_LIVE_NO_REPLY_EMAIL = 'DUV LIVE <no-reply@duvlive.com>';
+const DUV_LIVE_INFO_EMAIL = 'DUV LIVE <info@duvlive.com>';
 const emailLogo = `https://duvlive.herokuapp.com/email-logo.png`;
 
 export function generateEmailTemplate(options) {
@@ -52,6 +53,7 @@ export default async function sendMail(content, user, additionalOptions = {}) {
     subject: `${options.subject}`, // Subject line
     text,
     html,
+    replyTo: options.userEmail || DUV_LIVE_INFO_EMAIL,
   });
 
   // html: ejs.render( fs.readFileSync('e-mail.ejs', 'utf-8') , {mensagem: 'olá, funciona'})
