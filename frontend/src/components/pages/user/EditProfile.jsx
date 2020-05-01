@@ -6,7 +6,7 @@ import Input from 'components/forms/Input';
 import Button from 'components/forms/Button';
 import { personalInfoObject } from 'components/forms/schema/userSchema';
 import axios from 'axios';
-import { setInitialValues } from 'components/forms/form-helper';
+import { setInitialValues, feedback } from 'components/forms/form-helper';
 import UploadImage from 'components/common/utils/UploadImage';
 import { UserContext } from 'context/UserContext';
 import { getTokenFromStore } from 'utils/localStorage';
@@ -58,7 +58,7 @@ export const UserProfileForm = () => {
             }
           })
           .catch(function (error) {
-            setMessage(error.response.data.message);
+            setMessage({ message: error.response.data.message });
             actions.setSubmitting(false);
           });
       }}
@@ -101,7 +101,9 @@ export const UserProfileForm = () => {
                   isValidMessage="Phone number looks good"
                   label="Alternative Phone Number"
                   name="phoneNumber2"
+                  optional
                   placeholder="Alternative Phone Number"
+                  showFeedback={feedback.ERROR}
                 />
               </div>
               <Button

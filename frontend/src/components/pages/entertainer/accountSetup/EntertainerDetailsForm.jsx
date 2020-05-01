@@ -54,7 +54,7 @@ const EntertainerDetailsForm = ({ moveToNextStep }) => {
             }
           })
           .catch(function (error) {
-            setMessage(error.response.data.message);
+            setMessage({ message: error.response.data.message });
             actions.setSubmitting(false);
           });
       }}
