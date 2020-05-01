@@ -733,6 +733,7 @@ const UserController = {
       );
       return res.status(200).json({ message: 'Thanks for contacting us' });
     } catch (error) {
+      console.log(error);
       return res.status(400).json({ message: 'Something went wrong', error });
     }
   },
