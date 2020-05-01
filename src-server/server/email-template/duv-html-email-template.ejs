@@ -382,18 +382,44 @@
                                   <!--<![endif]-->
                                 </td>
                               </tr>
+                              <% if (typeof userSubject !== "undefined") { %>
+                              <tr>
+                                <td valign="middle" width="100%"
+                                  style="text-align: left; font-family: Helvetica, Arial, sans-serif; font-size: 14px; color: rgb(63, 67, 69); line-height: 24px; font-weight: bold;">
+                                  <!--[if !mso]><!--><span style="font-family: 'Roboto', Helvetica; font-weight: bold;">
+                                    <!-[endif]-->
+                                      <%= userSubject %>
+                                      <!--[if !mso]><!-->
+                                  </span>
+                                  <!--<![endif]-->
+                                </td>
+                              </tr>
+                              <tr>
+                                <td height="20px">
+                                </td>
+                              </tr>
+                              <% } %>
+
+                              <% if (typeof userMessage !== "undefined") { %>
                               <tr>
                                 <td valign="middle" width="100%"
                                   style="text-align: left; font-family: Helvetica, Arial, sans-serif; font-size: 14px; color: rgb(63, 67, 69); line-height: 24px; font-weight: normal;">
                                   <!--[if !mso]><!--><span
                                     style="font-family: 'Roboto', Helvetica; font-weight: normal;">
                                     <!-[endif]-->
-                                      <%= (typeof userSubject !== "undefined") ? `${userSubject}: ${userMessage}` : '' %>
+                                      <%= (typeof userMessage !== "undefined") ? userMessage : '' %>
                                       <!--[if !mso]><!-->
                                   </span>
                                   <!--<![endif]-->
                                 </td>
                               </tr>
+                              <tr>
+                                <td height="30px">
+                                </td>
+                              </tr>
+                              <% } %>
+
+                              <% if (typeof userEmail !== "undefined") { %>
                               <tr>
                                 <td valign="middle" width="100%"
                                   style="text-align: left; font-family: Helvetica, Arial, sans-serif; font-size: 14px; color: rgb(63, 67, 69); line-height: 24px; font-weight: normal;">
@@ -405,26 +431,35 @@
                                   <!--<![endif]-->
                                 </td>
                               </tr>
-                        </tr>
-                        <tr>
-                          <td valign="middle" width="100%"
-                            style="text-align: left; font-family: Helvetica, Arial, sans-serif; font-size: 14px; color: rgb(63, 67, 69); line-height: 24px; font-weight: normal;">
-                            <!--[if !mso]><!--><span style="font-family: 'Roboto', Helvetica; font-weight: normal;">
-                              <!--<![endif]-->
-                              <%= (typeof fullName !== "undefined") ? `Fullname: ${fullName}` : '' %>
-                              <!--[if !mso]><!--></span>
-                            <!--<![endif]-->
-                          </td>
-                        </tr>
-                        <tr>
-                          <td valign="middle" width="100%"
-                            style="text-align: left; font-family: Helvetica, Arial, sans-serif; font-size: 14px; color: rgb(63, 67, 69); line-height: 24px; font-weight: normal;">
-                            <!--[if !mso]><!--><span style="font-family: 'Roboto', Helvetica; font-weight: normal;">
-                              <!--<![endif]-->
-                              <%= (typeof phone !== "undefined") ? `Phone: ${phone}` : '' %>
-                              <!--[if !mso]><!--></span>
-                            <!--<![endif]-->
-                          </td>
+                              <% } %>
+
+                              <% if (typeof fullName !== "undefined") { %>
+                              <tr>
+                                <td valign="middle" width="100%"
+                                  style="text-align: left; font-family: Helvetica, Arial, sans-serif; font-size: 14px; color: rgb(63, 67, 69); line-height: 24px; font-weight: normal;">
+                                  <!--[if !mso]><!--><span
+                                    style="font-family: 'Roboto', Helvetica; font-weight: normal;">
+                                    <!--<![endif]-->
+                                    <%= (typeof fullName !== "undefined") ? `Fullname: ${fullName}` : '' %>
+                                    <!--[if !mso]><!--></span>
+                                  <!--<![endif]-->
+                                </td>
+                              </tr>
+                              <% } %>
+
+                              <% if (typeof phone !== "undefined") { %>
+                              <tr>
+                                <td valign="middle" width="100%"
+                                  style="text-align: left; font-family: Helvetica, Arial, sans-serif; font-size: 14px; color: rgb(63, 67, 69); line-height: 24px; font-weight: normal;">
+                                  <!--[if !mso]><!--><span
+                                    style="font-family: 'Roboto', Helvetica; font-weight: normal;">
+                                    <!--<![endif]-->
+                                    <%= (typeof phone !== "undefined") ? `Phone: ${phone}` : '' %>
+                                    <!--[if !mso]><!--></span>
+                                  <!--<![endif]-->
+                                </td>
+                              </tr>
+                              <% } %>
                         </tr>
                       </table>
                   </td>
@@ -530,7 +565,7 @@
               </table>
 
               <!-- Spacer -->
-              <table width="352" border="0" cellpadding="0" cellspacing="0" align="center">
+              <table width="352" border="0" cellpadding="0" cellspacing="0" align="center" bgcolor="#ffffff">
                 <tr>
                   <td width="352" valign="middle">
                     <table width="300" border="0" cellpadding="0" cellspacing="0" align="center"
@@ -593,7 +628,7 @@
               <% } %>
 
               <!-- Spacer -->
-              <table width="352" border="0" cellpadding="0" cellspacing="0" align="center">
+              <table width="352" border="0" cellpadding="0" cellspacing="0" align="center" bgcolor="#ffffff">
                 <tr>
                   <td width="352" valign="middle">
                     <table width="300" border="0" cellpadding="0" cellspacing="0" align="center"
@@ -611,7 +646,7 @@
               <!-- Content -->
 
               <!-- Start Paragraph -->
-              <table width="352" border="0" cellpadding="0" cellspacing="0" align="center">
+              <table width="352" border="0" cellpadding="0" cellspacing="0" align="center" bgcolor="#ffffff">
                 <tr>
                   <td width="352" valign="middle" align="center">
                     <table width="300" border="0" cellpadding="0" cellspacing="0" align="center"
@@ -686,8 +721,9 @@
                   <td valign="middle" width="100%"
                     style="text-align: center; font-family: Helvetica, Arial, sans-serif; font-size: 11px; color: rgb(63, 67, 69); line-height: 24px; font-weight: normal;">
                     <!--[if !mso]><!--><span style="font-family: 'Roboto', Helvetica; font-weight: normal;">
-                      <!--<![endif]-->Any questions? <a href="#" style="color: #bb0000;">Contact us</a> or check
-                      our <a href="#" style="color: #bb0000;">FAQ Page</a>
+                      <!--<![endif]-->Any questions? <a href="https//duvlive.com/contact-us"
+                        style="color: #bb0000;">Contact us</a> or check
+                      our <a href="https//duvlive.com/help" style="color: #bb0000;">FAQ Page</a>
                       <!--[if !mso]><!--></span>
                     <!--<![endif]-->
                   </td>
