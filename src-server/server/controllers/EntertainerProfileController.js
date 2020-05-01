@@ -169,13 +169,22 @@ const EntertainerProfileController = {
 
   getEntertainerBySlug(req, res) {
     const { slug } = req.params;
+    if (!slug) {
+      return res
+        .status(401)
+        .json({ message: 'Invalid URL. Entertainer not found.' });
+    }
     User.findOne({
       attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
       include: [
         {
           model: EntertainerProfile,
           as: 'profile',
-          where: { slug },
+          where: {
+            slug: {
+              [Op.iLike]: slug.toLowerCase(),
+            },
+          },
           include: [
             {
               model: Rating,
@@ -249,25 +258,11 @@ const EntertainerProfileController = {
         },
       ],
     })
-      .then(async (entertainer) => {
-        const avgRatings = await Rating.findAll({
-          where: { entertainerId: entertainer.profile.id },
-          attributes: [
-            [
-              Sequelize.fn('AVG', Sequelize.col('professionalism')),
-              'professionalism',
-            ],
-            [
-              Sequelize.fn('AVG', Sequelize.col('accommodating')),
-              'accommodating',
-            ],
-            [
-              Sequelize.fn('AVG', Sequelize.col('overallTalent')),
-              'overallTalent',
-            ],
-            [Sequelize.fn('AVG', Sequelize.col('recommend')), 'recommend'],
-          ],
-        });
+      .then((entertainer) => {
+        const entertainerType =
+          entertainer && entertainer.profile
+            ? entertainer.profile.entertainerType
+            : ['MC', 'DJ', 'Liveband'];
 
         User.findAll({
           order: [Sequelize.fn('RANDOM')],
@@ -276,7 +271,7 @@ const EntertainerProfileController = {
             {
               where: {
                 [Op.and]: [
-                  { entertainerType: entertainer.profile.entertainerType },
+                  { entertainerType },
                   {
                     slug: { [Op.ne]: slug },
                   },
@@ -286,13 +281,38 @@ const EntertainerProfileController = {
               as: 'profile',
             },
           ],
-        }).then((otherEntertainers) => {
+        }).then(async (randomEntertainers) => {
+          const otherEntertainers = randomEntertainers.map((entertainer) =>
+            EntertainerProfileController.transformEntertainers(entertainer)
+          );
+          if (!entertainer) {
+            return res
+              .status(401)
+              .json({ message: 'Entertainer not found.', otherEntertainers });
+          }
+          const avgRatings = await Rating.findAll({
+            where: { entertainerId: entertainer.profile.id },
+            attributes: [
+              [
+                Sequelize.fn('AVG', Sequelize.col('professionalism')),
+                'professionalism',
+              ],
+              [
+                Sequelize.fn('AVG', Sequelize.col('accommodating')),
+                'accommodating',
+              ],
+              [
+                Sequelize.fn('AVG', Sequelize.col('overallTalent')),
+                'overallTalent',
+              ],
+              [Sequelize.fn('AVG', Sequelize.col('recommend')), 'recommend'],
+            ],
+          });
+
           return res.status(200).json({
             message: 'Entertainer detail',
             entertainer: { ...entertainer.toJSON(), avgRatings },
-            otherEntertainers: otherEntertainers.map((entertainer) =>
-              EntertainerProfileController.transformEntertainers(entertainer)
-            ),
+            otherEntertainers,
           });
         });
       })
@@ -321,7 +341,7 @@ const EntertainerProfileController = {
     // };
 
     const entertainerQuery = {
-      stageName: { [Op.iLike]: `%${name}%` },
+      stageName: { [Op.iLike]: `%${name.toLowerCase()}%` },
     };
 
     const include = [

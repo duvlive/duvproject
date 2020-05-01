@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { Row, Col } from 'reactstrap';
+import AlertMessage from 'components/common/utils/AlertMessage';
 import FrontEndPage from 'components/common/layout/FrontEndPage';
 import Entertainers from 'components/common/entertainers/Entertainers';
 import Stars from 'components/common/utils/Stars';
@@ -22,17 +23,29 @@ const SingleEntertainer = ({ slug }) => {
   });
   const [otherEntertainers, setOtherEntertainers] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
+  const [message, setMessage] = React.useState(null);
+
   React.useEffect(() => {
     slug &&
-      axios.get(`/api/v1/entertainer/${slug}`).then(function (response) {
-        const { status, data } = response;
-        // handle success
-        if (status === 200) {
-          setEntertainer(data.entertainer);
-          setOtherEntertainers(data.otherEntertainers);
+      axios
+        .get(`/api/v1/entertainer/${slug.toLowerCase()}`)
+        .then(function (response) {
+          const { status, data } = response;
+          // handle success
+          if (status === 200) {
+            setEntertainer(data.entertainer);
+            setOtherEntertainers(data.otherEntertainers);
+            setLoading(false);
+          }
+        })
+        .catch(function (error) {
+          error.response.data.otherEntertainers &&
+            setOtherEntertainers(error.response.data.otherEntertainers);
+          setMessage({
+            message: error.response.data.message,
+          });
           setLoading(false);
-        }
-      });
+        });
   }, [slug]);
 
   return (
@@ -43,10 +56,13 @@ const SingleEntertainer = ({ slug }) => {
       {loading ? (
         <LoadingScreen loading={loading} text={`Loading ${slug} information`} />
       ) : (
-        <LoadEntertainerInfo
-          entertainer={entertainer}
-          otherEntertainers={otherEntertainers}
-        />
+        <>
+          <NotFound message={message} />
+          <LoadEntertainerInfo
+            entertainer={entertainer}
+            otherEntertainers={otherEntertainers}
+          />
+        </>
       )}
     </FrontEndPage>
   );
@@ -60,30 +76,49 @@ SingleEntertainer.defaultProps = {
   slug: null,
 };
 
+const NotFound = ({ message }) => (
+  <section className="my-5 pt-5">
+    <div className="container-fluid">
+      <AlertMessage {...message} />
+    </div>
+  </section>
+);
+
+NotFound.propTypes = {
+  message: PropTypes.object,
+};
+
+NotFound.defaultProps = {
+  message: {},
+};
+
 const LoadEntertainerInfo = ({ entertainer, otherEntertainers }) => (
   <>
-    <EntertainerSection entertainer={entertainer} />
-    {getTokenFromStore() && (
+    {entertainer && entertainer.id && (
       <>
-        <EntertainerSectionInfo entertainer={entertainer} />
-        {false && <UpcomingEvents />}
+        <EntertainerSection entertainer={entertainer} />
+        {getTokenFromStore() && (
+          <>
+            <EntertainerSectionInfo entertainer={entertainer} />
 
-        {entertainer.badges && entertainer.badges.length > 0 && (
-          <Awards badges={entertainer.badges} />
-        )}
+            {entertainer.badges && entertainer.badges.length > 0 && (
+              <Awards badges={entertainer.badges} />
+            )}
 
-        {entertainer.galleries && entertainer.galleries.length > 0 && (
-          <Gallery galleries={entertainer.galleries} />
-        )}
+            {entertainer.galleries && entertainer.galleries.length > 0 && (
+              <Gallery galleries={entertainer.galleries} />
+            )}
 
-        {entertainer.videos && entertainer.videos.length > 0 && (
-          <Videos videos={entertainer.videos} />
+            {entertainer.videos && entertainer.videos.length > 0 && (
+              <Videos videos={entertainer.videos} />
+            )}
+            {entertainer.profile &&
+              entertainer.profile.ratings &&
+              entertainer.profile.ratings.length > 0 && (
+                <ReviewSection ratings={entertainer.profile.ratings} />
+              )}
+          </>
         )}
-        {entertainer.profile &&
-          entertainer.profile.ratings &&
-          entertainer.profile.ratings.length > 0 && (
-            <ReviewSection ratings={entertainer.profile.ratings} />
-          )}
       </>
     )}
     <OtherEntertainersSection entertainers={otherEntertainers} />
@@ -203,52 +238,6 @@ const EntertainerSectionInfo = ({ entertainer }) => {
 EntertainerSectionInfo.propTypes = {
   entertainer: PropTypes.object.isRequired,
 };
-
-const UpcomingEvents = ({ events }) => {
-  return (
-    <section className="my-5 py-5">
-      <div className="container-fluid">
-        <div className="row">
-          <h4 className="text-uppercase col-12 font-weight-normal mb-3">
-            Upcoming Events
-          </h4>
-          <UpcomingEvent event={events} />
-          <UpcomingEvent event={events} />
-        </div>
-      </div>
-    </section>
-  );
-};
-
-const UpcomingEvent = ({ event }) => (
-  <aside className="col-md-6">
-    <div className="table-responsive">
-      <table className="table table-dark table__no-border table__with-bg">
-        <tbody>
-          <tr>
-            <td className="pl-4">
-              <span className="subtitle--2 text-red text-uppercase">
-                APR. 11 (SUN) {event && event}
-              </span>
-              <span className="small--3 text-gray">9:00am - 4:00pm</span>
-            </td>
-            <td>
-              <div className="table__title text-white">Wedding Ceremony</div>
-              <span>
-                <i className="icon icon-location" />
-                Yaba, Lagos state
-              </span>
-            </td>
-            <td>
-              <span className="text-yellow">DJ, Live Band</span>
-              <span>DJ Cuppy, High Soul</span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </aside>
-);
 
 EntertainerSectionInfo.propTypes = {
   entertainer: PropTypes.object.isRequired,
@@ -480,18 +469,24 @@ ReviewSectionCard.propTypes = {
   userName: PropTypes.string.isRequired,
 };
 
-const OtherEntertainersSection = ({ entertainers }) => (
-  <section className="other-entertainers mt-5 py-5">
-    <div className="container-fluid">
-      <h3 className="header title-border">
-        RELATED <span>ENTERTAINERS</span>
-      </h3>
-      <Row className="pt-5">
-        <Entertainers.List lists={entertainers || []} />
-      </Row>
-    </div>
-  </section>
-);
+const OtherEntertainersSection = ({ entertainers }) => {
+  if (entertainers.length === 0) {
+    return <></>;
+  }
+
+  return (
+    <section className="other-entertainers mt-5 py-5">
+      <div className="container-fluid">
+        <h3 className="header title-border">
+          RELATED <span>ENTERTAINERS</span>
+        </h3>
+        <Row className="pt-5">
+          <Entertainers.List lists={entertainers || []} />
+        </Row>
+      </div>
+    </section>
+  );
+};
 
 OtherEntertainersSection.propTypes = {
   entertainers: PropTypes.array.isRequired,
