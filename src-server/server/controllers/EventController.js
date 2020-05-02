@@ -175,7 +175,7 @@ const EventController = {
                 'stageName',
                 'entertainerType',
                 'location',
-                'about',
+                'slug',
               ],
               include: [
                 {
@@ -189,6 +189,11 @@ const EventController = {
                   ],
                 },
               ],
+            },
+            {
+              model: Application,
+              as: 'applications',
+              attributes: ['id', 'status'],
             },
           ],
         },

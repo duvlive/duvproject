@@ -127,7 +127,6 @@ const LoginForm = ({ sid, token }) => {
         })
         .then(function (response) {
           const { status, data } = response;
-          console.log('data', data);
 
           // handle success
           if (status === 200) {
@@ -199,6 +198,7 @@ const LoginForm = ({ sid, token }) => {
               onKeyDown={(e) => submitFormWithEnterKey(e)}
               placeholder="Email Address"
               showFeedback={feedback.NONE}
+              tabIndex={1}
             />
             <Input
               label="Password"
@@ -211,6 +211,7 @@ const LoginForm = ({ sid, token }) => {
               onKeyDown={(evt) => submitFormWithEnterKey(evt)}
               placeholder="Password"
               showFeedback={feedback.NONE}
+              tabIndex={2}
               type="password"
             />
             <Button loading={isSubmitting} onClick={handleSubmit}>

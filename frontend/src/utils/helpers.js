@@ -159,7 +159,7 @@ export const getRequestStatusIcon = (status) => {
 
     default:
       return (
-        <div className="text-white">
+        <div className="text-yellow">
           <span className=" text-pending icon icon icon-hourglass"></span>
           {status}
         </div>

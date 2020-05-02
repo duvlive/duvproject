@@ -7,6 +7,7 @@ import LoadingScreen from 'components/common/layout/LoadingScreen';
 import AlertMessage from 'components/common/utils/AlertMessage';
 import FrontEndPage from 'components/common/layout/FrontEndPage';
 import Invoice from 'components/common/utils/Invoice';
+import { Link } from '@reach/router';
 
 const ViewPayments = (props) => {
   const [message, setMessage] = React.useState({ msg: null, type: null });
@@ -38,7 +39,8 @@ const ViewPayments = (props) => {
               // handle success
               if (status === 200) {
                 setMessage({
-                  msg: 'Your payment was successfull',
+                  msg:
+                    'Your payment was successful. Please see your receipt below.',
                   type: 'success',
                 });
                 setPaymentInfo(data.payment);
@@ -69,12 +71,25 @@ const ViewPayments = (props) => {
             <LoadingScreen loading={loading} text="Generating your Receipt">
               {!loading && (
                 <>
-                  <AlertMessage message={message.msg} type={message.type} />
+                  <div className="col-sm-12 px-5">
+                    <AlertMessage message={message.msg} type={message.type} />
+                  </div>
                   {application && (
-                    <Invoice
-                      application={application}
-                      paymentInfo={paymentInfo}
-                    />
+                    <div className="mt-n5">
+                      <Invoice
+                        application={application}
+                        paymentInfo={paymentInfo}
+                      />
+
+                      <div className="col-sm-12 text-center mt-5">
+                        <Link
+                          className="btn btn-danger btn-wide btn-lg btn-transparent"
+                          to="/user/dashboard"
+                        >
+                          Back to Dashboard
+                        </Link>
+                      </div>
+                    </div>
                   )}
                 </>
               )}

@@ -108,7 +108,7 @@ const DashboardItems = () => {
             }
             summary="Pending Requests"
             title="Requests"
-            to="/entertainer/payments"
+            to="/entertainer/requests"
           />
         </div>
         <div className="row">

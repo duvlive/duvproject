@@ -11,11 +11,11 @@ import {
   getNumberOfDaysToEvent,
 } from 'utils/date-helpers';
 import Image from 'components/common/utils/Image';
-import DuvLiveModal from 'components/custom/Modal';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import { getTokenFromStore } from 'utils/localStorage';
 import { Link, Match } from '@reach/router';
 import { listJsonItems, getBudgetRange } from 'utils/helpers';
+import { getRequestStatusIcon } from 'utils/helpers';
 import {
   userCanAddEntertainer,
   eventIsVoid,
@@ -25,6 +25,7 @@ import {
 } from 'utils/event-helpers';
 import AlertMessage from 'components/common/utils/AlertMessage';
 import LoadingScreen from 'components/common/layout/LoadingScreen';
+import { HIRE_ENTERTAINERS_TYPE } from 'utils/constants';
 
 const ViewEvent = ({ id }) => {
   const [event, setEvent] = React.useState({});
@@ -42,12 +43,11 @@ const ViewEvent = ({ id }) => {
           // handle success
           if (status === 200) {
             setEvent(data.event);
+            console.log('data.event', data.event);
             setLoading(false);
           }
         })
         .catch(function (error) {
-          // console.log(error.response.data.message);
-          // TODO: navigate to all events
           setLoading(false);
         });
   }, [id]);
@@ -63,12 +63,12 @@ const ViewEvent = ({ id }) => {
             <div className="col-sm-12">
               <h3 className="main-app__title">
                 {event.eventType} <br />{' '}
-                <small className="main-app__small remaining-time">
-                  <i className="icon icon-hourglass"></i>
-                  {!eventHasExpired(event.eventDate) && (
+                {!eventHasExpired(event.eventDate) && (
+                  <small className="main-app__small remaining-time">
+                    <i className="icon icon-hourglass"></i>
                     <>{remainingDays(event.eventDate)}</>
-                  )}
-                </small>
+                  </small>
+                )}
               </h3>
             </div>
           </section>
@@ -93,7 +93,7 @@ const ViewEvent = ({ id }) => {
             <>
               {/* Event Details and Entertainers */}
               <aside className="row">
-                <div className="col-md-8">
+                <div className="col-md-8 mt-3">
                   {eventHasExpired(event.eventDate) && (
                     <AlertMessage
                       message="Event Date has passed"
@@ -109,6 +109,7 @@ const ViewEvent = ({ id }) => {
                     )}
 
                   <ViewEvent.EntertainersTable
+                    eventDate={event.eventDate || ''}
                     eventEntertainers={event.entertainers || []}
                   />
                   {userCanAddEntertainer() && (
@@ -229,13 +230,6 @@ ViewEvent.EventDetailsCard = ({ event, showAddress, transparent }) => {
           </h5>
         </li>
       )}
-      {/* <li className="list-group-item">
-        <small className="small-text__with-icon">
-          <i className="icon icon-dot-circled"></i>
-          Event Status
-        </small>
-        <h5 className="event-list-label">Random Status</h5>
-      </li> */}
     </ul>
   );
 };
@@ -360,7 +354,7 @@ ViewEvent.EventEntertainerDetailsCard.propTypes = {
   eventEntertainer: PropTypes.object.isRequired,
 };
 
-ViewEvent.EntertainersTable = ({ eventEntertainers }) => {
+ViewEvent.EntertainersTable = ({ eventEntertainers, eventDate }) => {
   const hiredEntertainers = eventEntertainers.filter(
     (eventEntertainer) => !!eventEntertainer.entertainer
   );
@@ -374,11 +368,15 @@ ViewEvent.EntertainersTable = ({ eventEntertainers }) => {
         <thead>
           <tr className="transparent">
             <td colSpan="5">
-              <h3 className="event-title text-blue">
-                {hiredEntertainers.length > 0
-                  ? 'Hired Entertainers'
-                  : 'You have not hired any Entertainer'}
-              </h3>
+              {hiredEntertainers.length > 0 ? (
+                <h3 className="event-title text-blue">Hired Entertainers</h3>
+              ) : (
+                <h4 className="main-app__title text-muted pb-4 text-center">
+                  <span className="icon icon-help no-entertainer-icon"></span>
+                  <br />
+                  No Entertainer has been hired
+                </h4>
+              )}
             </td>
           </tr>
         </thead>
@@ -393,7 +391,7 @@ ViewEvent.EntertainersTable = ({ eventEntertainers }) => {
         </tbody>
       </table>
 
-      {pendingEntertainers.length > 0 && (
+      {!eventHasExpired(eventDate) && pendingEntertainers.length > 0 && (
         <>
           <hr className="mt-6 mb-4" />
 
@@ -401,7 +399,7 @@ ViewEvent.EntertainersTable = ({ eventEntertainers }) => {
             <thead>
               <tr className="transparent">
                 <td colSpan="5">
-                  <h3 className="event-title text-white">
+                  <h3 className="main-app__subtitle font-weight-normal text-muted-light ml-n3">
                     Entertainer Requests (In View)
                   </h3>
                 </td>
@@ -428,6 +426,7 @@ ViewEvent.EntertainersTable = ({ eventEntertainers }) => {
 };
 
 ViewEvent.EntertainersTable.propTypes = {
+  eventDate: PropTypes.string.isRequired,
   eventEntertainers: PropTypes.array.isRequired,
 };
 
@@ -453,20 +452,41 @@ ViewEvent.HireEntertainersRow = ({ entertainer }) => {
           />
         )}
       </td>
-      <td className="align-middle text-right">
-        {entertainer && entertainer.stageName}
+      <td className="align-middle">
+        <span className="text-muted small--4">Stage Name</span>{' '}
+        <span className="text-white">
+          {entertainer && entertainer.stageName}
+        </span>
       </td>
       <td className="align-middle text-yellow">
-        {entertainer && entertainer.entertainerType}
+        <span className="text-muted small--4">Type</span>{' '}
+        <span className="text-white">
+          {entertainer && entertainer.entertainerType}
+        </span>
       </td>
-      <td className="align-middle text-right td-btn">
-        <button className="btn btn-danger btn-sm btn-transparent">
-          Pay Now
-        </button>
+      <td className="align-middle text-yellow">
+        <span className="text-muted small--4">Location</span>
+        <span className="text-white">
+          {entertainer && entertainer.location}
+        </span>
       </td>
-      <td className="align-middle text-right td-btn">
+      <td className="align-middle text-yellow">
+        <span className="text-muted small--4">Status</span>
+        <span className="text-green">
+          <span className="icon icon-ok-circled"></span>
+          PAID
+        </span>
+      </td>
+      <td className="align-middle td-btn">
         {entertainer && (
-          <DuvLiveModal.ViewEntertainerProfile entertainer={entertainer} />
+          <a
+            className="btn btn-info btn-sm btn-transparent"
+            href={`/entertainers/${entertainer.slug}`}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            View Profile
+          </a>
         )}
       </td>
     </tr>
@@ -484,31 +504,54 @@ ViewEvent.PendingEntertainersRow = ({ eventEntertainer }) => {
     return null;
   }
 
+  let entertainerEventUrl;
+
+  const isAuction =
+    eventEntertainer.hireType === HIRE_ENTERTAINERS_TYPE.auction;
+
+  const hasApplication =
+    eventEntertainer.applications &&
+    eventEntertainer.applications[0] &&
+    eventEntertainer.applications[0].id;
+
+  if (isAuction) {
+    entertainerEventUrl = `/user/auction/bids/${eventEntertainer.id}`;
+  } else {
+    entertainerEventUrl = hasApplication
+      ? `/user/request/view/${eventEntertainer.applications[0].id}`
+      : `/user/dashboard`;
+  }
+
   return (
     <tr>
       <td className="align-middle">
         <span className="text-muted small--4">Type</span>{' '}
-        <span className="text-yellow"> {eventEntertainer.entertainerType}</span>
+        <span className="text-white">{eventEntertainer.entertainerType}</span>
       </td>
       <td className="align-middle">
         <span className="text-muted small--4">Hire Type</span>{' '}
-        <span className="text-yellow"> {eventEntertainer.hireType}</span>
+        <span className="text-muted-light-2"> {eventEntertainer.hireType}</span>
       </td>
       <td className="align-middle">
         <span className="text-muted small--4">Place of Event</span>{' '}
-        <span className="text-yellow"> {eventEntertainer.placeOfEvent}</span>
+        <span className="text-muted-light">
+          {' '}
+          {eventEntertainer.placeOfEvent}
+        </span>
       </td>
       <td className="align-middle">
-        <span className="text-muted small--4">Audience Size</span>{' '}
-        <span className="text-yellow">
-          {eventEntertainer.expectedAudienceSize}
+        <span className="text-muted small--4">Status</span>{' '}
+        <span>
+          {hasApplication
+            ? getRequestStatusIcon(eventEntertainer.applications[0].status)
+            : getRequestStatusIcon('Pending')}
         </span>
       </td>
       <td className="align-middle text-right td-btn">
         {/* TODO Add for other types e.g search and recommendation  */}
         <Link
           className="btn btn-info btn-sm btn-transparent"
-          to={`/user/auction/bids/${eventEntertainer.id}`}
+          to={entertainerEventUrl}
         >
           View Details
         </Link>
