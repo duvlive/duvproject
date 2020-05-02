@@ -34,21 +34,21 @@ export const ChangePasswordForm = () => {
       onSubmit={(values, actions) => {
         axios
           .put('/api/v1/users/change-password', values, {
-            headers: { 'x-access-token': getTokenFromStore() }
+            headers: { 'x-access-token': getTokenFromStore() },
           })
-          .then(function(response) {
+          .then(function (response) {
             const { status } = response;
             if (status === 200) {
               setMessage({
                 type: 'success',
-                message: `Your password has been successfully updated`
+                message: `Your password has been successfully updated`,
               });
               actions.setSubmitting(false);
               actions.resetForm();
             }
           })
-          .catch(function(error) {
-            setMessage(error.response.data.message);
+          .catch(function (error) {
+            setMessage({ message: error.response.data.message });
             actions.setSubmitting(false);
           });
       }}

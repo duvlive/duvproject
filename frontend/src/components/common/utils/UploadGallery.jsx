@@ -5,34 +5,40 @@ import { getTokenFromStore } from 'utils/localStorage';
 import { Loading } from './PlayingMusicAnimation';
 import AlertMessage from 'components/common/utils/AlertMessage';
 
-const UploadGallery = ({ afterSave }) => {
+const UploadGallery = ({ afterSave, deleteMessage }) => {
   const MAX_IMG_SIZE = 1000000; //1MB
 
   // HOOKS
-  const [message, setMessage] = useState(null);
+  const [message, setMessage] = useState({});
   const [loading, setLoading] = useState(false);
 
-  const onChangeHandler = event => {
+  React.useEffect(() => {
+    setMessage({ message: deleteMessage });
+  }, [deleteMessage]);
+
+  const onChangeHandler = (event) => {
     const file = event.target.files[0];
     if (!file) {
       return null;
     }
 
     setLoading(true);
-    setMessage(null);
+    setMessage({ message: '' });
 
     if (file.size > MAX_IMG_SIZE) {
-      setMessage(
-        `'${
+      setMessage({
+        message: `'${
           file.name
-        }' is too large, please pick a file smaller than ${MAX_IMG_SIZE /
-          1000}kb`
-      );
+        }' is too large, please pick a file smaller than ${
+          MAX_IMG_SIZE / 1000
+        }kb`,
+      });
       setLoading(false);
     } else if (file.type !== 'image/png' && file.type !== 'image/jpeg') {
-      setMessage(
-        "Unsupported format. Only '.png' and '.jpg' files are supported"
-      );
+      setMessage({
+        message:
+          "Unsupported format. Only '.png' and '.jpg' files are supported",
+      });
       setLoading(false);
     } else {
       const data = new FormData();
@@ -40,18 +46,18 @@ const UploadGallery = ({ afterSave }) => {
 
       axios
         .post('/api/v1/gallery/save', data, {
-          headers: { 'x-access-token': getTokenFromStore() }
+          headers: { 'x-access-token': getTokenFromStore() },
         })
-        .then(function(response) {
+        .then(function (response) {
           const { status, data } = response;
           if (status === 200) {
             setLoading(false);
             afterSave(data.image);
-            setMessage('Image has been successfully uplaoded');
+            setMessage('Image has been successfully uploaded');
           }
         })
-        .catch(function(error) {
-          setMessage(error.response.data.message);
+        .catch(function (error) {
+          setMessage({ message: error.response.data.message });
           setLoading(false);
         });
     }
@@ -75,13 +81,17 @@ const UploadGallery = ({ afterSave }) => {
           )}
         </label>
       </div>
-      <AlertMessage.Text message={message} />
+      <AlertMessage.Text {...message} />
     </>
   );
 };
 
 UploadGallery.propTypes = {
-  afterSave: PropTypes.func.isRequired
+  afterSave: PropTypes.func.isRequired,
+  deleteMessage: PropTypes.string,
 };
 
+UploadGallery.defaultProps = {
+  deleteMessage: null,
+};
 export default UploadGallery;

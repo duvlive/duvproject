@@ -2,14 +2,14 @@
 const EMAIL_CONTENT = {
   // After Registration
   ACTIVATE_YOUR_ACCOUNT: {
-    subject: '[D.U.V LIVE] Verify your Email',
+    subject: 'Verify your Email',
     title: 'Verify Your Email',
     contentTop:
       'You have successfully created your D.U.V Live account. To complete your registration, you need to confirm that we got your email address right.',
     buttonText: 'Verify Email',
   },
   PASSWORD_RESET: {
-    subject: '[D.U.V LIVE] Password Reset',
+    subject: 'Password Reset',
     title: 'Password Reset',
     contentTop:
       "You (or someone pretending to be you) requested a password reset for your account. If you didn't made this request you can ignore this email.",
@@ -18,33 +18,33 @@ const EMAIL_CONTENT = {
     buttonText: 'Reset Password',
   },
   CHANGE_PASSWORD: {
-    subject: '[D.U.V LIVE] Your password has been changed!',
+    subject: 'Your password has been changed!',
     title: 'Password Changed!',
     contentTop: 'This email confirms that your password has been changed.',
     contentBottom:
       "If you didn't change your password, your account might have been compromised and we recommend that you reset your password as soon as possible.",
   },
   FAQ: {
-    subject: '[D.U.V LIVE] FAQ',
+    subject: 'FAQ',
     title: 'FAQ',
   },
   CONTACT_US: {
-    subject: '[D.U.V LIVE] CONTACT US',
+    subject: 'CONTACT US',
     title: 'CONTACT US',
   },
   INVITE_FRIEND: {
-    subject: '[D.U.V LIVE] INVITE FRIEND',
+    subject: 'INVITE FRIEND',
     title: 'INVITE FRIEND',
     contentTop:
       'You have been invited to join the D.U.V LIVE online platform that supports and promotes the best in live entertainment. Join now!',
     buttonText: 'JOIN NOW',
   },
   APPROVED_BID: {
-    subject: '[D.U.V LIVE] YIPPEE!!! Your Bid has been approved',
+    subject: 'YIPPEE!!! Your Bid has been approved',
     buttonText: 'Check it out!',
   },
   ENTERTAINER_REQUEST: {
-    subject: '[D.U.V LIVE] YIPPEE!!! You have a new event request',
+    subject: 'YIPPEE!!! You have a new event request',
     buttonText: 'Accept Request',
   },
 };

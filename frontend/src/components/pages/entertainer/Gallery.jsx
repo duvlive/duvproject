@@ -38,6 +38,7 @@ export const getStatus = (status) => {
 
 const Gallery = () => {
   const [gallery, setGallery] = React.useState([]);
+  const [message, setMessage] = React.useState(null);
   const { userDispatch, userState } = React.useContext(UserContext);
 
   const handleDelete = (id) => {
@@ -49,6 +50,7 @@ const Gallery = () => {
         if (status === 202) {
           const currentImages = gallery.filter((g) => g.id !== id);
           setGallery(currentImages);
+          setMessage('Your image has been successfully deleted');
         }
       })
       .catch(function (error) {
@@ -78,20 +80,6 @@ const Gallery = () => {
 
   // Load Gallery
   React.useEffect(() => {
-    // const { id } = userState;
-    // id &&
-    //   axios
-    //     .get(`/api/v1/gallery/${id}`)
-    //     .then(function(response) {
-    //       const { status, data } = response;
-    //       // handle success
-    //       if (status === 200) {
-    //         setGallery(data);
-    //       }
-    //     })
-    //     .catch(function(error) {
-    //       setGallery([]);
-    //     });
     userState.galleries && setGallery(userState.galleries);
   }, [userState]);
 
@@ -107,7 +95,10 @@ const Gallery = () => {
 
         <section className="app-content">
           <section className="gallery">
-            <UploadGallery afterSave={addImageToGallery} />
+            <UploadGallery
+              afterSave={addImageToGallery}
+              deleteMessage={message}
+            />
             <div className="row">
               {gallery.map(({ imageURL, id, approved }, index) => (
                 <GalleryCard
@@ -125,7 +116,7 @@ const Gallery = () => {
             {gallery && (
               <div className="row">
                 <div className="col-12 mt-5">
-                  <p className="text-info">
+                  <p className="text-muted-light">
                     Note: Gallery images must be approved by an administrator
                     before they are shown on your profile.
                   </p>
