@@ -26,10 +26,14 @@ import {
 import AlertMessage from 'components/common/utils/AlertMessage';
 import LoadingScreen from 'components/common/layout/LoadingScreen';
 import { HIRE_ENTERTAINERS_TYPE } from 'utils/constants';
+import { UserContext } from 'context/UserContext';
 
 const ViewEvent = ({ id }) => {
+  const [message, setMessage] = React.useState({ msg: null, type: null });
   const [event, setEvent] = React.useState({});
   const [loading, setLoading] = React.useState(true);
+  const { userState, userDispatch } = React.useContext(UserContext);
+
   React.useEffect(() => {
     id &&
       axios
@@ -43,7 +47,6 @@ const ViewEvent = ({ id }) => {
           // handle success
           if (status === 200) {
             setEvent(data.event);
-            console.log('data.event', data.event);
             setLoading(false);
           }
         })
@@ -51,6 +54,17 @@ const ViewEvent = ({ id }) => {
           setLoading(false);
         });
   }, [id]);
+
+  if (userState && userState.alert === 'add-entertainer-details-success') {
+    !message.msg &&
+      setMessage({
+        msg: 'Your entertainer details has been successfully added to event',
+        type: 'success',
+      });
+    userDispatch({
+      type: 'remove-alert',
+    });
+  }
 
   return (
     <BackEndPage title="View Event">
@@ -86,6 +100,10 @@ const ViewEvent = ({ id }) => {
               )
             }
           </Match>
+
+          <div className="mt-4">
+            <AlertMessage message={message.msg} type={message.type} />
+          </div>
 
           {loading ? (
             <LoadingScreen loading={loading} text="Loading Event Details" />
@@ -507,7 +525,7 @@ ViewEvent.PendingEntertainersRow = ({ eventEntertainer }) => {
   let entertainerEventUrl;
 
   const isAuction =
-    eventEntertainer.hireType === HIRE_ENTERTAINERS_TYPE.auction;
+    eventEntertainer.hireType === HIRE_ENTERTAINERS_TYPE.auction.title;
 
   const hasApplication =
     eventEntertainer.applications &&

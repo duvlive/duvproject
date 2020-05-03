@@ -16,6 +16,7 @@ import { navigate } from '@reach/router';
 import InputFormat from 'components/forms/InputFormat';
 import { DEFAULT_COMMISSION } from 'utils/constants';
 import PriceCalculator from 'components/common/utils/PriceCalculator';
+import { UserContext } from 'context/UserContext';
 
 const NewBid = ({ eventEntertainerId }) => {
   const [eventEntertainer, setEventEntertainer] = React.useState({
@@ -92,6 +93,7 @@ NewBid.defaultProps = {
 
 const BidsForm = ({ eventEntertainer }) => {
   const [message, setMessage] = React.useState(null);
+  let { userDispatch } = React.useContext(UserContext);
 
   const [commission, setCommission] = React.useState(DEFAULT_COMMISSION);
   React.useEffect(() => {
@@ -136,12 +138,15 @@ const BidsForm = ({ eventEntertainer }) => {
                 headers: { 'x-access-token': getTokenFromStore() },
               })
               .then(function (response) {
-                const { status, data } = response;
-                console.log('data', data);
+                const { status } = response;
                 if (status === 200) {
                   setMessage({
                     type: 'info',
                     message: `Your bid has been successfully submitted.`,
+                  });
+                  userDispatch({
+                    type: 'add-alert',
+                    alert: 'place-bid-success',
                   });
                   navigate('/entertainer/bids');
                   actions.setSubmitting(false);

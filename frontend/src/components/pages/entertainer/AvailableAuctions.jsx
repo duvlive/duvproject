@@ -5,7 +5,7 @@ import { Link } from '@reach/router';
 import TopMessage from 'components/common/layout/TopMessage';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import { getTokenFromStore } from 'utils/localStorage';
-import { twoDigitNumber } from 'utils/helpers';
+import { twoDigitNumber, getBudgetRange } from 'utils/helpers';
 import { getShortDate } from 'utils/date-helpers';
 import NoContent from 'components/common/utils/NoContent';
 
@@ -46,8 +46,10 @@ const Auctions = () => {
                       auctionEndDate={auction.auctionEndDate}
                       city={auction.event.city}
                       eventType={auction.event.eventType}
+                      highestBudget={auction.highestBudget}
                       id={auction.id}
                       key={index}
+                      lowestBudget={auction.lowestBudget}
                       number={index + 1}
                       state={auction.event.state}
                     />
@@ -70,7 +72,9 @@ export const AuctionsRow = ({
   auctionEndDate,
   city,
   eventType,
+  highestBudget,
   id,
+  lowestBudget,
   number,
   state,
 }) => (
@@ -86,9 +90,16 @@ export const AuctionsRow = ({
       </span>
     </td>
     <td>
-      <span className="text-yellow">Bidding closes on </span>
-      <span>
+      <span>Bidding closes on </span>
+      <span className="text-muted-light-2">
         <i className="icon icon-clock" /> {getShortDate(auctionEndDate)}
+      </span>
+    </td>
+    <td>
+      <span>Budget</span>
+      <span className="text-yellow">
+        <i className="icon icon-clock" />
+        {getBudgetRange(lowestBudget, highestBudget)}{' '}
       </span>
     </td>
     <td className="text-right">
@@ -106,7 +117,9 @@ AuctionsRow.propTypes = {
   auctionEndDate: PropTypes.any,
   city: PropTypes.string,
   eventType: PropTypes.string,
+  highestBudget: PropTypes.any,
   id: PropTypes.number.isRequired,
+  lowestBudget: PropTypes.any,
   number: PropTypes.number,
   state: PropTypes.string,
   status: PropTypes.string,
@@ -116,6 +129,8 @@ Auctions.defaultProps = {
   auctionEndDate: '',
   city: '',
   eventType: '',
+  highestBudget: 0,
+  lowestBudget: 0,
   number: 0,
   state: '',
   status: 'Pending',

@@ -1,11 +1,15 @@
 import React from 'react';
 import axios from 'axios';
-import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import TopMessage from 'components/common/layout/TopMessage';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import { getTokenFromStore } from 'utils/localStorage';
-import { twoDigitNumber, commaNumber, getNairaSymbol } from 'utils/helpers';
+import {
+  twoDigitNumber,
+  commaNumber,
+  getNairaSymbol,
+  getRequestStatusIcon,
+} from 'utils/helpers';
 import { remainingDays } from 'utils/date-helpers';
 import NoContent from 'components/common/utils/NoContent';
 import { Link } from '@reach/router';
@@ -78,12 +82,7 @@ export const RequestsRow = ({
   state,
   status,
 }) => (
-  <tr
-    className={classNames({
-      'tr-success': status === 'Approved',
-      'tr-error': status === 'Rejected',
-    })}
-  >
+  <tr>
     <th className="table__number" scope="row">
       {twoDigitNumber(number)}
     </th>
@@ -106,6 +105,10 @@ export const RequestsRow = ({
         {getNairaSymbol()}
         {commaNumber(askingPrice)}
       </span>
+    </td>
+    <td>
+      <span className="text-muted-light">Status</span>
+      <span>{getRequestStatusIcon(status)}</span>
     </td>
     <td className="text-right">
       <Link

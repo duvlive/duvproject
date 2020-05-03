@@ -385,8 +385,8 @@ const EventController = {
    */
   getOneEntertainerEvent(req, res) {
     const userId = req.user.id;
-    const id = req.params.id;
-    EntertainerProfile.findOne({
+    const id = req.params.eventEntertainerId;
+    return EntertainerProfile.findOne({
       where: {
         userId,
       },
@@ -573,9 +573,29 @@ const EventController = {
                   attributes: [
                     'id',
                     'stageName',
+                    'slug',
                     'entertainerType',
                     'location',
                     'about',
+                  ],
+                  include: [
+                    {
+                      model: Rating,
+                      as: 'ratings',
+                      required: false,
+                      where: {
+                        review: {
+                          [Op.ne]: null,
+                        },
+                      },
+                      attributes: [
+                        'id',
+                        'professionalism',
+                        'accommodating',
+                        'overallTalent',
+                        'recommend',
+                      ],
+                    },
                   ],
                 },
               ],

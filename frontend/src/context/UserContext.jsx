@@ -117,13 +117,21 @@ let reducer = (state, action) => {
     case 'add-new-event':
     case 'add-entertainer-to-event':
       const prevEvents = state.events || [];
-      return { ...state, events: [action.event, ...prevEvents] };
+      return {
+        ...state,
+        events: [action.event, ...prevEvents],
+        alert: action.alert,
+      };
     case 'bank-account-update':
       return { ...state, bankDetail: action.bankDetail };
     case 'user-contact-update':
       return { ...state, contacts: [action.contact, ...state.contacts] };
     case 'entertainer-identification':
       return { ...state, identification: action.identification };
+    case 'remove-alert':
+      return { ...state, alert: null };
+    case 'add-alert':
+      return { ...state, alert: action.alert };
     default:
       return state;
   }
@@ -135,6 +143,7 @@ let UserContextProvider = (props) => {
   let value = { userState, userDispatch };
 
   window.userState = value.userState;
+  window.userDispatch = value.userDispatch;
 
   return (
     <UserContext.Provider value={value}>{props.children}</UserContext.Provider>

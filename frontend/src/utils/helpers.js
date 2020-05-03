@@ -131,13 +131,14 @@ export const isDevEnvironment = () =>
 export const getProxy = () =>
   isDevEnvironment() ? 'http://localhost:8080' : '';
 
-export const getRequestStatusIcon = (status) => {
+export const getRequestStatusIcon = (status, rejectedText = null) => {
   switch (status) {
     case REQUEST_ACTION.APPROVED:
+    case REQUEST_ACTION.PAID:
       return (
         <div className="text-green">
           <span className="icon icon-ok-circled"></span>
-          {status}
+          Approved
         </div>
       );
 
@@ -151,9 +152,9 @@ export const getRequestStatusIcon = (status) => {
 
     case REQUEST_ACTION.REJECTED:
       return (
-        <div className="text-danger">
+        <div className="text-red">
           <span className="icon icon icon-cancel-circled"></span>
-          {status}
+          {rejectedText || status}
         </div>
       );
 
@@ -165,4 +166,30 @@ export const getRequestStatusIcon = (status) => {
         </div>
       );
   }
+};
+
+export const getAverageRatings = (ratings) => {
+  if (!ratings || ratings.length === 0) {
+    return 0;
+  }
+
+  const output = ratings.reduce(
+    (acc, rating) => {
+      acc.professionalism += rating.professionalism;
+      acc.accommodating += rating.accommodating;
+      acc.overallTalent += rating.overallTalent;
+      acc.recommend += rating.recommend;
+      return acc;
+    },
+    { professionalism: 0, accommodating: 0, overallTalent: 0, recommend: 0 }
+  );
+
+  const length = ratings.length;
+  return (
+    (output.professionalism / length +
+      output.accommodating / length +
+      output.overallTalent / length +
+      output.recommend / length) /
+    4
+  );
 };
