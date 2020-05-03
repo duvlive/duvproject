@@ -298,8 +298,10 @@ Dashboard.RecentAuctions = ({ auctions }) => (
                 auctionEndDate={auction.auctionEndDate}
                 city={auction.event.city}
                 eventType={auction.event.eventType}
+                highestBudget={auction.highestBudget}
                 id={auction.id}
                 key={index}
+                lowestBudget={auction.lowestBudget}
                 number={index + 1}
                 state={auction.event.state}
               />
