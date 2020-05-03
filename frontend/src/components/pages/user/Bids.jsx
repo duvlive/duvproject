@@ -19,13 +19,19 @@ import {
 import AlertMessage from 'components/common/utils/AlertMessage';
 import Image from 'components/common/utils/Image';
 import DuvLiveModal from 'components/custom/Modal';
-import { moneyFormat, twoDigitNumber, getBudgetRange } from 'utils/helpers';
+import {
+  moneyFormat,
+  twoDigitNumber,
+  getBudgetRange,
+  getAverageRatings,
+} from 'utils/helpers';
 import Stars from 'components/common/utils/Stars';
 import LoadingScreen from 'components/common/layout/LoadingScreen';
 
 const Bids = ({ eventEntertainerId }) => {
   const [eventEntertainer, setEventEntertainer] = React.useState({});
   const [loading, setLoading] = React.useState(true);
+
   React.useEffect(() => {
     eventEntertainerId &&
       axios
@@ -49,7 +55,6 @@ const Bids = ({ eventEntertainerId }) => {
   }, [eventEntertainerId]);
 
   if (!eventEntertainer.event) {
-    console.log('eventEntertainer.eventDate', eventEntertainer.eventDate);
     return null;
     // TODO
   }
@@ -165,6 +170,11 @@ const BidsApplicationsTable = ({ applications }) => {
           return parseInt(a.askingPrice, 10) - parseInt(b.askingPrice, 10);
         case 'highest':
           return parseInt(b.askingPrice, 10) - parseInt(a.askingPrice, 10);
+        case 'ratings':
+          return (
+            getAverageRatings(b.user.profile.ratings) -
+            getAverageRatings(a.user.profile.ratings)
+          );
 
         default:
           break;
@@ -198,7 +208,7 @@ const BidsApplicationsTable = ({ applications }) => {
                 {sortButton('Newest', 'newest')}
                 {sortButton('Lowest Price', 'lowest')}
                 {sortButton('Highest Price', 'highest')}
-                {/* {sortButton('Ratings', 'ratings')} */}
+                {sortButton('Ratings', 'ratings')}
               </nav>
             </td>
           </tr>
@@ -285,27 +295,7 @@ const BidsApplicationsTableRow = ({ application, number }) => {
     </>
   );
 
-  const ViewEntertainerProfileModal = () => (
-    <>
-      <div className="text-center">
-        <Image
-          className="avatar--large"
-          name={application.user.profile.stageName || 'No name'}
-          responsiveImage={false}
-          src={application.user.profileImageURL || 'No src'}
-        />
-        <h4 className="font-weight-normal mt-3">
-          {application.user.profile.stageName}
-        </h4>
-        <Stars name={application.user.profile.stageName} rating={4.5} />
-        <small>{application.user.profile.location}</small>
-        <div className="small--2 text-muted">
-          {application.user.profile.about}
-        </div>
-      </div>
-    </>
-  );
-
+  const avgRating = getAverageRatings(application.user.profile.ratings);
   return (
     <tr>
       <th className="table__number" scope="row">
@@ -331,7 +321,14 @@ const BidsApplicationsTableRow = ({ application, number }) => {
       </td>
       <td className="align-middle text-white td-btn">
         <span className="text-muted small--4">Ratings</span>{' '}
-        <Stars name={application.user.profile.stageName} rating={4.5} />
+        {avgRating > 0 ? (
+          <Stars
+            name={application.user.profile.stageName}
+            rating={getAverageRatings(application.user.profile.ratings)}
+          />
+        ) : (
+          <span className="text-muted-light-2">No Ratings Yet</span>
+        )}
       </td>
       <td className="align-middle text-gray">
         <span className="text-muted small--4">Location</span>{' '}
@@ -346,19 +343,19 @@ const BidsApplicationsTableRow = ({ application, number }) => {
           title="Approve Bid"
         >
           <button className="btn btn-success btn-sm btn-transparent">
-            Approve
+            Approve Bid
           </button>
         </DuvLiveModal>
       </td>
       <td className="align-middle text-right td-btn">
-        <DuvLiveModal
-          body={ViewEntertainerProfileModal()}
-          title={application.user.profile.stageName}
+        <a
+          className="btn btn-info btn-sm btn-transparent"
+          href={`/entertainers/${application.user.profile.slug}`}
+          rel="noopener noreferrer"
+          target="_blank"
         >
-          <button className="btn btn-info btn-sm btn-transparent">
-            View Profile
-          </button>
-        </DuvLiveModal>
+          View Profile
+        </a>
       </td>
     </tr>
   );

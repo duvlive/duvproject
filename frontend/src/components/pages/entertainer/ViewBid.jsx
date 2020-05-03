@@ -6,9 +6,14 @@ import axios from 'axios';
 import ViewEvent from '../user/ViewEvent';
 import { getTokenFromStore } from 'utils/localStorage';
 import { remainingDays } from 'utils/date-helpers';
-import { getNairaSymbol, commaNumber } from 'utils/helpers';
+import {
+  getNairaSymbol,
+  commaNumber,
+  getRequestStatusIcon,
+} from 'utils/helpers';
 import PriceCalculator from 'components/common/utils/PriceCalculator';
 import { DEFAULT_COMMISSION } from 'utils/constants';
+import { navigate } from '@reach/router';
 
 const ViewBid = ({ applicationId }) => {
   const [application, setApplication] = React.useState(null);
@@ -30,8 +35,7 @@ const ViewBid = ({ applicationId }) => {
           }
         })
         .catch(function (error) {
-          // console.log(error.response.data.message);
-          // TODO: navigate to all events
+          navigate('/entertainer/bids');
         });
   }, [applicationId]);
 
@@ -62,6 +66,9 @@ const ViewBid = ({ applicationId }) => {
                 <h5 className="text-muted mb-4 text-font">
                   Your Bid: {getNairaSymbol()}
                   {commaNumber(application.askingPrice)}
+                  <small className="float-right">
+                    {getRequestStatusIcon(application.status, 'Closed')}
+                  </small>
                 </h5>
                 <hr className="d-block mb-4" />
                 <PriceCalculator

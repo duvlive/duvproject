@@ -51,7 +51,7 @@ const ViewRequest = ({ applicationId }) => {
       });
   };
 
-  const approveBidModalBody = () => (
+  const approveRequestModalBody = () => (
     <>
       <div className="text-center">
         <Image
@@ -69,11 +69,8 @@ const ViewRequest = ({ applicationId }) => {
       </div>
       <div className="small--2">
         <h6 className="text-white">Note</h6>
-        Approving this bid will inform the entertainer that they have won the
-        bid and should be prepared to perform in this event. However, their
-        attendance can only be confirmed by paying the assigned bid at lease 2
-        days (48 hours) before the event date, else the contract will be
-        terminated.
+        Approving this request will inform the entertainer that they should be
+        prepared to perform in this event.
       </div>
     </>
   );
@@ -199,10 +196,10 @@ const ViewRequest = ({ applicationId }) => {
                               actionFn={() =>
                                 approveApplication(application.askingPrice)
                               }
-                              actionText="Approve Bid"
-                              body={approveBidModalBody()}
+                              actionText="Pay Now"
+                              body={approveRequestModalBody()}
                               closeModalText="Cancel"
-                              title="Approve Bid"
+                              title="Approve Request"
                             >
                               <button className="btn btn-danger btn-transparent">
                                 Pay Now

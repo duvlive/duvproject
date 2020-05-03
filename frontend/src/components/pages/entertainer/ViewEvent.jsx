@@ -26,7 +26,7 @@ const ViewEvent = ({ eventEntertainerId }) => {
   React.useEffect(() => {
     eventEntertainerId &&
       axios
-        .get(`/api/v1/entertainer/events/${eventEntertainerId}`, {
+        .get(`/api/v1/events/entertainers/${eventEntertainerId}`, {
           headers: {
             'x-access-token': getTokenFromStore(),
           },
@@ -76,7 +76,7 @@ const ViewEvent = ({ eventEntertainerId }) => {
                 <h3 className="main-app__title mt-5 small--1 text-blue">
                   Event Details
                 </h3>
-                <ul class="list-group transparent">
+                <ul className="list-group transparent">
                   <ViewEvent.OwnerDetailsCard
                     owner={eventEntertainer.event.owner}
                   />

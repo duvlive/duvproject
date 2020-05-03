@@ -314,7 +314,10 @@ const ApplicationController = {
           } else if (eventEntertainer.hireType === 'Auction') {
             result.auctions.push(eventEntertainer);
           } else if (eventEntertainer.hiredEntertainer) {
-            result.upcomingEvents.push(eventEntertainer.event);
+            result.upcomingEvents.push({
+              ...eventEntertainer.event.toJSON(),
+              eventEntertainerId: eventEntertainer.id,
+            });
           } else {
             result.requests.push(eventEntertainer);
           }

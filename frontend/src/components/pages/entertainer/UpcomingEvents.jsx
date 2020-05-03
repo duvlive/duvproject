@@ -37,7 +37,7 @@ const Events = () => {
   // Sort event according - Today, Upcoming and Past
   let allEvents = events.reduce(
     (result, { id, event }) => {
-      event.id = id; // use the evententertainer id here
+      event.eventEntertainerId = id; // use the evententertainer id here
       if (parse(event.eventDate).toDateString() === new Date().toDateString()) {
         result.today.push(event);
       } else if (parse(event.eventDate) > Date.now()) {
@@ -137,7 +137,7 @@ Events.CardList.defaultProps = {
 };
 
 Events.Card = ({
-  id,
+  eventEntertainerId,
   eventType,
   eventDate,
   startTime,
@@ -182,7 +182,7 @@ Events.Card = ({
           {/* TODO: Create view events for entertainer */}
           <Link
             className="btn btn-info btn-transparent"
-            to={`/entertainer/events/view/${id}`}
+            to={`/entertainer/events/view/${eventEntertainerId}`}
           >
             View Event
           </Link>
@@ -195,8 +195,8 @@ Events.Card = ({
 Events.Card.propTypes = {
   eventDate: PropTypes.string,
   eventDuration: PropTypes.string,
+  eventEntertainerId: PropTypes.any,
   eventType: PropTypes.string,
-  id: PropTypes.number,
   lga: PropTypes.string,
   owner: PropTypes.object.isRequired,
   startTime: PropTypes.string,
@@ -204,7 +204,7 @@ Events.Card.propTypes = {
 };
 
 Events.Card.defaultProps = {
-  id: '0',
+  eventEntertainerId: '0',
   eventDuration: null,
   eventDate: null,
   eventType: null,

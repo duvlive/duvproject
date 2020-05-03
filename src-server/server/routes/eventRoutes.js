@@ -10,6 +10,14 @@ const eventRoutes = (router) => {
     .get(EventController.getUserEvent);
 
   router.get(
+    '/api/v1/events/entertainers/:eventEntertainerId',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    Authentication.validateEntertainer,
+    EventController.getOneEntertainerEvent
+  );
+
+  router.get(
     '/api/v1/events/entertainers',
     Authentication.verifyToken,
     Authentication.isActiveUser,

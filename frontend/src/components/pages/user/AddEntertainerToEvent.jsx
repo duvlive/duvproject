@@ -179,7 +179,7 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
 
         if (isAuction) {
           entertainerDetails.auctionStartDate = values.auctionStartDate.date;
-          entertainerDetails.auctionEndDate = values.auctionStartDate.date;
+          entertainerDetails.auctionEndDate = values.auctionEndDate.date;
         } else {
           entertainerDetails.entertainerId = selectedEntertainer.entertainer.id;
           entertainerDetails.entertainerType =
@@ -196,6 +196,7 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
               userDispatch({
                 type: 'add-entertainer-to-event',
                 event: data,
+                alert: 'add-entertainer-details-success',
               });
               actions.setSubmitting(false);
 

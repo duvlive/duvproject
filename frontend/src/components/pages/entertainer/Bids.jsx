@@ -1,17 +1,26 @@
 import React from 'react';
 import axios from 'axios';
-import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import TopMessage from 'components/common/layout/TopMessage';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import { getTokenFromStore } from 'utils/localStorage';
-import { twoDigitNumber, commaNumber, getNairaSymbol } from 'utils/helpers';
+import {
+  twoDigitNumber,
+  commaNumber,
+  getNairaSymbol,
+  getRequestStatusIcon,
+} from 'utils/helpers';
 import { getShortDate } from 'utils/date-helpers';
 import NoContent from 'components/common/utils/NoContent';
 import { Link } from '@reach/router';
+import { UserContext } from 'context/UserContext';
+import AlertMessage from 'components/common/utils/AlertMessage';
 
 const Bids = () => {
+  const [message, setMessage] = React.useState({ msg: null, type: null });
   const [bids, setBids] = React.useState([]);
+  const { userState, userDispatch } = React.useContext(UserContext);
+
   React.useEffect(() => {
     axios
       .get('/api/v1/entertainer/bids', {
@@ -32,12 +41,26 @@ const Bids = () => {
       });
   }, []);
 
+  if (userState && userState.alert === 'place-bid-success') {
+    !message.msg &&
+      setMessage({
+        msg: 'Your bid has been successfully placed',
+        type: 'success',
+      });
+    userDispatch({
+      type: 'remove-alert',
+    });
+  }
+
   return (
     <BackEndPage title="Bids">
       <div className="main-app">
         <TopMessage message="Placed Bids" />
 
         <section className="app-content">
+          <div className="mt-4">
+            <AlertMessage message={message.msg} type={message.type} />
+          </div>
           <div className="table-responsive">
             {bids.length > 0 ? (
               <table className="table table-dark table__no-border table__with-bg">
@@ -84,38 +107,33 @@ export const BidsRow = ({
   state,
   status,
 }) => (
-  <tr
-    className={classNames({
-      'tr-success': status === 'Approved',
-      'tr-error': status === 'Rejected',
-    })}
-  >
+  <tr>
     <th className="table__number" scope="row">
       {twoDigitNumber(number)}
     </th>
     <td>
-      <div className="table__title text-white">{eventType}</div>
+      <div className="table__title text-muted-light-2">{eventType}</div>
       <span>
         <i className="icon icon-location" />
         {city}, {state} state
       </span>
     </td>
     <td>
-      <span className="text-yellow">Bidding closes on </span>
+      <span className="text-muted-light-2">Bidding closes on </span>
       <span>
         <i className="icon icon-clock" /> {getShortDate(auctionEndDate)}
       </span>
     </td>
     <td>
-      <span className="text-red">Asking Price</span>
-      <span>
+      <span className="text-muted-light-2">Asking Price</span>
+      <span className="text-yellow">
         {getNairaSymbol()}
         {commaNumber(askingPrice)}
       </span>
     </td>
     <td>
-      <span className="text-muted small--2">Status</span>
-      <span>{status === 'Rejected' ? 'Closed' : status}</span>
+      <span className="text-muted-light-2 small--2">Status</span>
+      <span>{getRequestStatusIcon(status, 'Closed')}</span>
     </td>
     <td className="text-right">
       <Link

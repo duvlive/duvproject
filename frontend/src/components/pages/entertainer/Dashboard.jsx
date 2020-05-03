@@ -60,6 +60,7 @@ const DashboardItems = () => {
         // handle success
         if (status === 200) {
           setApplications(data.results);
+          console.log('results', data.results);
         }
       })
       .catch(function (error) {
@@ -108,7 +109,7 @@ const DashboardItems = () => {
             }
             summary="Pending Requests"
             title="Requests"
-            to="/entertainer/payments"
+            to="/entertainer/requests"
           />
         </div>
         <div className="row">

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import TopMessage from 'components/common/layout/TopMessage';
 import { Link } from '@reach/router';
-import { twoDigitNumber } from 'utils/helpers';
+import { twoDigitNumber, moneyFormatInNaira } from 'utils/helpers';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import { getTokenFromStore } from 'utils/localStorage';
 import { getShortDate } from 'utils/date-helpers';
@@ -138,8 +138,12 @@ const RequestsRow = ({
       </td>
     )}
     <td className="align-middle text-yellow">
-      <span className="text-muted small--4">Proposed Offer</span> &#8358;{' '}
-      {moneyFormat(proposedPrice)}
+      <span className="text-muted small--4">Proposed Offer</span>
+      {proposedPrice === null ? (
+        <span className="text-muted-light">None</span>
+      ) : (
+        moneyFormatInNaira(proposedPrice)
+      )}
     </td>
     <td className="align-middle">
       <span className="text-muted small--4">{eventType}</span>
@@ -171,13 +175,13 @@ const RequestsRow = ({
 );
 
 RequestsRow.propTypes = {
-  applicationId: PropTypes.string,
+  applicationId: PropTypes.any,
   askingPrice: PropTypes.string,
   entertainerId: PropTypes.number,
   entertainerType: PropTypes.string,
   eventDate: PropTypes.string,
   eventType: PropTypes.string,
-  number: PropTypes.number,
+  number: PropTypes.any,
   profileImageURL: PropTypes.string,
   proposedPrice: PropTypes.string,
   slug: PropTypes.string,
