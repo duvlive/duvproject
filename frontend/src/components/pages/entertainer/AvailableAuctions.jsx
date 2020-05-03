@@ -98,7 +98,6 @@ export const AuctionsRow = ({
     <td>
       <span>Budget</span>
       <span className="text-yellow">
-        <i className="icon icon-clock" />
         {getBudgetRange(lowestBudget, highestBudget)}{' '}
       </span>
     </td>
