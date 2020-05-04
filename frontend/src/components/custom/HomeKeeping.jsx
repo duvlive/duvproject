@@ -1,5 +1,5 @@
 import React from 'react';
-import { getTokenFromStore } from 'utils/localStorage';
+import { getTokenFromStore, storeUserType } from 'utils/localStorage';
 import axios from 'axios';
 import { UserContext } from 'context/UserContext';
 
@@ -10,16 +10,17 @@ export const HomeKeeping = ({ children, location }) => {
       axios
         .get('/api/v1/who-am-i', {
           headers: {
-            'x-access-token': getTokenFromStore()
-          }
+            'x-access-token': getTokenFromStore(),
+          },
         })
-        .then(function(response) {
+        .then(function (response) {
           const { status, data } = response;
           if (status === 200) {
             userDispatch({ type: 'user-info', user: data });
+            storeUserType(data.type);
           }
         })
-        .catch(function(error) {});
+        .catch(function (error) {});
     }
   }, [userDispatch, userState.isLoggedIn]);
 
@@ -29,7 +30,7 @@ export const HomeKeeping = ({ children, location }) => {
       window.scroll({
         top: 0,
         left: 0,
-        behavior: 'smooth'
+        behavior: 'smooth',
       });
     } catch (error) {
       // just a fallback for older browsers

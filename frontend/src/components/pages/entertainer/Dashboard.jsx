@@ -17,7 +17,6 @@ import { InviteFriendsForm } from 'components/common/pages/InviteFriends';
 import NoContent from 'components/common/utils/NoContent';
 import { getTinyDate } from 'utils/date-helpers';
 import LoadItems from 'components/common/utils/LoadItems';
-
 import Humanize from 'humanize-plus';
 
 const Dashboard = () => {

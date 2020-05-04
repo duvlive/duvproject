@@ -77,7 +77,7 @@ const Sidebar = ({ showSidebar, closeSidebar, ...props }) => {
           </div>
         </div>
         <PerfectScrollbar style={{ height: 'calc(100% - 12rem)' }}>
-          <Match path="/user/:item">
+          <Match path="/user/*">
             {(props) =>
               // eslint-disable-next-line react/prop-types
               props.match && currentUserType !== USER_TYPES.user ? (

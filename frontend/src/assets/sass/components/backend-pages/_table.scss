@@ -24,7 +24,10 @@ $duv-td-line-height: 1.8;
 
 .table__with-bg {
   border-collapse: separate;
-  border-spacing: 0 0.7rem;
+  border-spacing: 0 0.35rem;
+  @include media-breakpoint-up(sm) {
+    border-spacing: 0 0.7rem;
+  }
   tr {
     background-color: rgba($admin-card-bg, 0.3) !important;
     padding: 5px;
@@ -57,13 +60,19 @@ $duv-td-line-height: 1.8;
 
     th,
     td {
-      padding-top: 1.2rem;
+      padding-top: 0.8rem;
+      @include media-breakpoint-up(sm) {
+        padding-top: 1.2rem;
+      }
     }
 
     th:first-child,
     td:first-child {
       border-radius: 5px 0 0 5px;
-      padding-left: 20px;
+      padding-left: 5px;
+      @include media-breakpoint-up(sm) {
+        padding-left: 20px;
+      }
       vertical-align: middle;
     }
 
@@ -79,7 +88,10 @@ $duv-td-line-height: 1.8;
 }
 
 .table {
-  font-size: 0.9rem;
+  font-size: 0.75rem;
+  @include media-breakpoint-up(sm) {
+    font-size: 0.9rem;
+  }
   &__number {
     font-size: 1.2rem;
     line-height: $duv-td-line-height;
@@ -145,5 +157,12 @@ $duv-td-line-height: 1.8;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+}
+
+@include media-breakpoint-down(sm) {
+  .table th,
+  .table td {
+    padding: 0.5rem;
   }
 }

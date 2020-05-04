@@ -8,6 +8,7 @@ const DEFAULT_ENTERTAINER_STATE = {
     approved: null,
     about: '',
     stageName: '',
+    slug: '',
     location: '',
     yearStarted: '',
     willingToTravel: false,

@@ -69,7 +69,7 @@ const TopBar = ({ showSidebar }) => {
               </NavLink>
             </NavItem>
 
-            <Match path="/user/:item">
+            <Match path="/user/*">
               {(props) =>
                 // eslint-disable-next-line react/prop-types
                 props.match && currentUserType !== USER_TYPES.user ? (
@@ -135,12 +135,27 @@ const TopBarNavigation = ({ menus, userName }) => {
             <DropdownItem>
               <Link
                 className="text-color"
-                to={`/entertainers/${userState.entertainerProfile.stageName}`}
+                to={`/entertainers/${userState.entertainerProfile.slug}`}
               >
                 View My Profile
               </Link>
             </DropdownItem>
           )}
+
+        {/* Switch Back to Entertainer Account */}
+        <Match path="/user/*">
+          {(props) =>
+            // eslint-disable-next-line react/prop-types
+            props.match &&
+            userState.type === USER_TYPES.entertainer && (
+              <DropdownItem>
+                <Link className="text-color" to={'/entertainer/dashboard'}>
+                  Switch to Entertainer Account
+                </Link>
+              </DropdownItem>
+            )
+          }
+        </Match>
         <DropdownItem divider />
         <DropdownItem>
           <Link className="text-color" to="/logout">

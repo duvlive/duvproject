@@ -267,7 +267,7 @@ db.Payment.belongsTo(db.User, {
 
 db.EventEntertainer.hasMany(db.Payment, {
   foreignKey: 'eventEntertainerId',
-  as: 'eventEntainer',
+  as: 'eventPayment',
 });
 
 db.Payment.belongsTo(db.EventEntertainer, {
