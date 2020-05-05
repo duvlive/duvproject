@@ -138,19 +138,15 @@ export const unApprovedEntertainerSideMenu = [accountSetup, othersMenu];
 
 export const entertainerTopMenu = [
   {
-    title: 'My Bids',
-    to: '/entertainer/bids',
-  },
-  {
     title: 'Payment History',
     to: '/entertainer/payments',
   },
   {
-    title: 'Switch to User Account',
-    to: '/user/dashboard',
-  },
-  {
     title: 'Change Password',
     to: '/entertainer/change-password',
+  },
+  {
+    title: 'Switch to User Account',
+    to: '/user/dashboard',
   },
 ];

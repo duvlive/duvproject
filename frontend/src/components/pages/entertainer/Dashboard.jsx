@@ -12,10 +12,14 @@ import { AuctionsRow } from 'components/pages/entertainer/AvailableAuctions';
 import { UserContext } from 'context/UserContext';
 import { getTokenFromStore } from 'utils/localStorage';
 import LoadingScreen from 'components/common/layout/LoadingScreen';
-import { twoDigitNumber, getItems, moneyFormatInNaira } from 'utils/helpers';
+import {
+  twoDigitNumber,
+  getItems,
+  moneyFormatInNaira,
+  priceCalculatorHelper,
+} from 'utils/helpers';
 import { InviteFriendsForm } from 'components/common/pages/InviteFriends';
 import NoContent from 'components/common/utils/NoContent';
-import { getTinyDate } from 'utils/date-helpers';
 import LoadItems from 'components/common/utils/LoadItems';
 import Humanize from 'humanize-plus';
 
@@ -142,11 +146,10 @@ const DashboardItems = () => {
               )}
           </div>
           <div className="col-sm-4">
-            <Dashboard.PaymentHistory
-              payments={userState.entertainerProfile.payments || null}
+            <Dashboard.PendingPayments
+              pendingPayments={applications.pendingPayments}
             />
             <Dashboard.InviteFriends />
-            {/* <Dashboard.RecentBadges /> */}
           </div>
         </div>
       </section>
@@ -184,22 +187,46 @@ Dashboard.UpcomingEvents.propTypes = {
   events: PropTypes.array.isRequired,
 };
 
-Dashboard.PaymentHistory = ({ payments }) => (
+Dashboard.PendingPayments = ({ pendingPayments }) => (
   <div className="card card-custom">
     <div className="card-body">
-      <h5 className="font-weight-normal mb-3 text-green">Recent Payments</h5>
+      <h5 className="font-weight-normal text-green">Pending Payments</h5>
+      <small className="text-muted d-block  mb-3">
+        {pendingPayments && pendingPayments.length > 0 && (
+          <>
+            You have {pendingPayments.length} pending{' '}
+            {Humanize.pluralize(pendingPayments.length, 'payment')}
+          </>
+        )}
+      </small>
+
       <div className="table-responsive">
         <LoadItems
-          items={payments}
-          noContent={<NoContent text="You have no payment History" />}
+          items={pendingPayments}
+          noContent={<NoContent text="You have no pending payments" />}
         >
           <table className="table table-dark table-border--x">
             <tbody>
-              {payments &&
-                payments.length > 0 &&
-                payments.map((payment, index) => (
-                  <Dashboard.PaymentRow key={index} payment={payment} />
-                ))}
+              {pendingPayments &&
+                pendingPayments.length > 0 &&
+                pendingPayments.map((payment, index) => {
+                  const price = payment.applications[0].proposedPrice
+                    ? payment.applications[0].proposedPrice
+                    : payment.applications[0].askingPrice;
+                  const calculatedPrice = priceCalculatorHelper(
+                    price,
+                    payment.applications[0].commission,
+                    payment.hireType
+                  );
+                  console.log('calculatedPrice', calculatedPrice);
+                  return (
+                    <Dashboard.PendingPaymentRow
+                      event={payment.event.eventType}
+                      key={index}
+                      payment={calculatedPrice.entertainerFee}
+                    />
+                  );
+                })}
             </tbody>
           </table>
         </LoadItems>
@@ -208,19 +235,24 @@ Dashboard.PaymentHistory = ({ payments }) => (
   </div>
 );
 
-Dashboard.PaymentHistory.propTypes = {
-  payments: PropTypes.any,
+Dashboard.PendingPayments.propTypes = {
+  pendingPayments: PropTypes.array,
 };
 
-Dashboard.PaymentRow = ({ payment }) => (
+Dashboard.PendingPayments.defaultProps = {
+  pendingPayments: [],
+};
+
+Dashboard.PendingPaymentRow = ({ event, payment }) => (
   <tr>
-    <td className="pt-3">{getTinyDate(payment.createdAt)}</td>
-    <td className="text-muted-light-2">{moneyFormatInNaira(payment.amount)}</td>
+    <td className="pt-3">{event}</td>
+    <td className="text-muted-light-2">{moneyFormatInNaira(payment)}</td>
   </tr>
 );
 
-Dashboard.PaymentRow.propTypes = {
-  payment: PropTypes.object.isRequired,
+Dashboard.PendingPaymentRow.propTypes = {
+  event: PropTypes.string.isRequired,
+  payment: PropTypes.any.isRequired,
 };
 
 Dashboard.RecentBids = ({ bids }) => (

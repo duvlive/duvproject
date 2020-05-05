@@ -63,9 +63,10 @@ const Sidebar = ({ showSidebar, closeSidebar, ...props }) => {
         })}
       >
         <div className="sidebar__logo">
-          <Link to="/">
+          {/* For some reasons, using Link to homepage causes the page to freeze */}
+          <a href="/">
             <img alt="Duv Live Red-White Logo" src={RedLogo} />
-          </Link>
+          </a>
           <div className="sidebar__close" onClick={closeSidebar}>
             <button
               aria-label="Close"

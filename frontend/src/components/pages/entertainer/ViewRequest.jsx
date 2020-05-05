@@ -132,6 +132,7 @@ const ViewRequest = ({ applicationId }) => {
                             activeType={activeType}
                             application={application}
                             hideRequestForm={hideRequestForm}
+                            hireType={eventEntertainer.hireType}
                             processRequest={processRequest}
                           />
                         </section>
@@ -142,6 +143,7 @@ const ViewRequest = ({ applicationId }) => {
                             commission={
                               application.commission || DEFAULT_COMMISSION
                             }
+                            hireType={eventEntertainer.hireType}
                           />
                           {application.status !== 'Pending' ? (
                             // Dont show this when another alert if active
@@ -223,6 +225,7 @@ const RequestsForm = ({
   activeType,
   application,
   hideRequestForm,
+  hireType,
   processRequest,
 }) => {
   const [commission, setCommission] = React.useState(DEFAULT_COMMISSION);
@@ -281,6 +284,7 @@ const RequestsForm = ({
                 <PriceCalculator
                   askingPrice={proposedPrice}
                   commission={commission}
+                  hireType={hireType}
                 />
               )}
               <TextArea
@@ -320,6 +324,7 @@ RequestsForm.propTypes = {
   activeType: PropTypes.string.isRequired,
   application: PropTypes.object.isRequired,
   hideRequestForm: PropTypes.func.isRequired,
+  hireType: PropTypes.string.isRequired,
   processRequest: PropTypes.func.isRequired,
   values: PropTypes.object,
 };

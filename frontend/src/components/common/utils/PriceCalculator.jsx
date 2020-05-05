@@ -1,19 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { moneyFormat, getPercentage, getNairaSymbol } from 'utils/helpers';
-import { VAT, DEFAULT_COMMISSION } from 'utils/constants';
+import {
+  moneyFormat,
+  getNairaSymbol,
+  priceCalculatorHelper,
+} from 'utils/helpers';
+import { VAT } from 'utils/constants';
 
-const PriceCalculator = ({ askingPrice, commission }) => {
+const PriceCalculator = ({ askingPrice, commission, hireType }) => {
   const [showBreakdown, setShowBreakdown] = React.useState(false);
-  const commissionToUse = commission || DEFAULT_COMMISSION;
 
-  const { bidsCommission, handlingPercent, handlingPlus } = commissionToUse;
-  const calcCommission = getPercentage(bidsCommission) * askingPrice;
-  const calcVat = getPercentage(VAT) * calcCommission;
-  const handling =
-    getPercentage(handlingPercent) * askingPrice + parseInt(handlingPlus, 10);
-  const amountToPay = askingPrice - (calcCommission + calcVat + handling);
-  const entertainerFee = amountToPay > 0 ? amountToPay : 0;
+  const {
+    baseCommission,
+    calcCommission,
+    calcVat,
+    entertainerFee,
+    handling,
+    handlingPercent,
+    handlingPlus,
+  } = priceCalculatorHelper(askingPrice, commission, hireType);
+
   return (
     <>
       <h6 className="mb-4 text-font font-weight-light">
@@ -36,7 +42,7 @@ const PriceCalculator = ({ askingPrice, commission }) => {
                     </td>
                   </tr>
                   <tr>
-                    <td>Commission ({bidsCommission}%)</td>
+                    <td>Commission ({baseCommission}%)</td>
                     <td className="text-negative text-right">
                       - {moneyFormat(calcCommission)}
                     </td>
@@ -88,6 +94,7 @@ const PriceCalculator = ({ askingPrice, commission }) => {
 PriceCalculator.propTypes = {
   askingPrice: PropTypes.number.isRequired,
   commission: PropTypes.object.isRequired,
+  hireType: PropTypes.string.isRequired,
 };
 
 export default PriceCalculator;

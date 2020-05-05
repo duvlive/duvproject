@@ -7,6 +7,7 @@ import {
   EntertainerProfile,
   Commission,
   Notification,
+  Payment,
 } from '../models';
 import sendMail from '../MailSender';
 import { validString, moneyFormat, getLongDate, getTime } from '../utils';
@@ -209,7 +210,7 @@ const ApplicationController = {
   },
 
   /**
-   * get Dashboard Auctions, Requests, upcoming Events(for entertainers)
+   * get Dashboard Auctions, Requests, upcoming Events, pending payments (for entertainers)
    * @function
    * @param {object} req is req object
    * @param {object} res is res object
@@ -302,7 +303,44 @@ const ApplicationController = {
           as: 'applications',
         },
       ],
-    }).then((eventEntertainers) => {
+    }).then(async (eventEntertainers) => {
+      const pendingPayments = await EventEntertainer.findAll({
+        attributes: ['id', 'hireType'],
+        where: {
+          hiredEntertainer: req.user.profile.id,
+          [Op.and]: Sequelize.literal('"event"."eventDate" < NOW()'),
+          [Op.and]: Sequelize.literal('"eventPayment"."id" is null'),
+        },
+        include: [
+          {
+            model: Event,
+            as: 'event',
+            attributes: ['id', 'eventType', 'eventDate'],
+          },
+          {
+            model: Payment,
+            as: 'eventPayment',
+          },
+          {
+            model: Application,
+            as: 'applications',
+            attributes: [
+              'id',
+              'commissionId',
+              'askingPrice',
+              'applicationType',
+              'proposedPrice',
+              'createdAt',
+            ],
+            include: [
+              {
+                model: Commission,
+                as: 'commission',
+              },
+            ],
+          },
+        ],
+      });
       const results = eventEntertainers.reduce(
         (result, eventEntertainer) => {
           if (
@@ -326,7 +364,7 @@ const ApplicationController = {
         { auctions: [], bids: [], requests: [], upcomingEvents: [] }
       );
 
-      return res.status(200).json({ results });
+      return res.status(200).json({ results: { ...results, pendingPayments } });
     });
   },
 
@@ -585,7 +623,7 @@ const ApplicationController = {
           });
 
           // response
-          res.json({
+          return res.json({
             application: { ...application.toJSON(), ...updateConditions },
             message: 'Your response has been recorded. Thank you.',
           });
@@ -793,7 +831,7 @@ const ApplicationController = {
                 type: NOTIFICATION_TYPE.SUCCESS,
                 actionId: id, //application id
               });
-              res.json({
+              return res.json({
                 application,
                 message:
                   'Entertainer Application has been successfully approved',

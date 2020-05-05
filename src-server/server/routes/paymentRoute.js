@@ -36,6 +36,13 @@ const paymentRoutes = (router) => {
     Authentication.isActiveUser,
     PaymentController.getAllUserPayments
   );
+
+  router.post(
+    '/api/v1/pay/entertainer',
+    Authentication.verifyToken,
+    Authentication.validateAdmin,
+    PaymentController.PayEntertainer
+  );
 };
 
 export default paymentRoutes;
