@@ -314,4 +314,5 @@ export const REQUEST_ACTION = {
   REJECTED: 'Rejected',
   INCREMENT: 'Increment',
   PAID: 'Paid',
+  PENDING: 'Pending',
 };

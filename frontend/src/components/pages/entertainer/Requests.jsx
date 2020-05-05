@@ -13,6 +13,7 @@ import {
 import { remainingDays } from 'utils/date-helpers';
 import NoContent from 'components/common/utils/NoContent';
 import { Link } from '@reach/router';
+import { REQUEST_ACTION } from 'utils/constants';
 
 const Requests = () => {
   const [requests, setRequests] = React.useState([]);
@@ -93,12 +94,14 @@ export const RequestsRow = ({
         {city}, {state} state
       </span>
     </td>
-    <td>
-      <span className="text-yellow">Request closes on </span>
-      <span>
-        <i className="icon icon-clock" /> {remainingDays(expiryDate)}
-      </span>
-    </td>
+    {status === REQUEST_ACTION.PENDING && (
+      <td>
+        <span className="text-yellow">Request closes on </span>
+        <span>
+          <i className="icon icon-clock" /> {remainingDays(expiryDate)}
+        </span>
+      </td>
+    )}
     <td>
       <span className="text-red">Asking Price</span>
       <span>

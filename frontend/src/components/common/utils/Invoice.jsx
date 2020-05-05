@@ -7,11 +7,11 @@ import { moneyFormat } from 'utils/helpers';
 const Invoice = ({ application, paymentInfo }) => (
   <div className="duv-live-invoice">
     <section className="row invoice__page">
-      <div className="col-sm-12 mb-4">
+      <div className="col-sm-12 mb-1 mb-sm-4 invoice__content">
         <div className="card-body d-flex flex-column">
           {/* Logo */}
           <div className="d-flex align-self-center text-center">
-            <img alt="Logo" height="125" src={DUVLiveLogo} />
+            <img alt="Logo" className="invoice__logo" src={DUVLiveLogo} />
           </div>
 
           {/* Header Details */}
@@ -21,7 +21,9 @@ const Invoice = ({ application, paymentInfo }) => (
                 <tbody>
                   <tr className="tr-content">
                     <td colSpan={2}>
-                      <h6 className="mb-3">{paymentInfo.customer.email}</h6>
+                      <h6 className="mb-2 mb-sm-3 invoice__email">
+                        {paymentInfo.customer.email}
+                      </h6>
                     </td>
                   </tr>
                   <tr>
@@ -75,7 +77,7 @@ const Invoice = ({ application, paymentInfo }) => (
             <tbody>
               <tr className="tr-content">
                 <td>
-                  <p className="mt-5">
+                  <p className="mt-3 mt-sm-5">
                     Payment to{' '}
                     <strong>
                       {application.user.profile.stageName} (
@@ -113,7 +115,7 @@ const Invoice = ({ application, paymentInfo }) => (
     <section className="row invoice__page invoice__footer">
       <div className="col-sm-12">
         <div className="d-flex flex-column">
-          <table className="mt-5 invoice__table">
+          <table className="mt-3 mt-sm-5 invoice__table">
             <thead>
               <tr className="tr-header tr-border-bottom">
                 <th>PAYMENT INFO</th>
@@ -145,15 +147,15 @@ const Invoice = ({ application, paymentInfo }) => (
             </tbody>
           </table>
           <div className="row invoice__separator">
-            <div className="col-md-6">
+            <div className="col-6">
               <h4>
                 <span className="icon icon-heart text-danger"></span> Thank You!
               </h4>
             </div>
-            <div className="col-md-6 text-right">
-              <p className="text-uppercase invoice__tag-line">
+            <div className="col-6 text-right">
+              <h4 className="text-uppercase invoice__tag-line">
                 Live your best Life
-              </p>
+              </h4>
             </div>
           </div>
         </div>
