@@ -477,12 +477,28 @@ a:hover {
 }
 
 .duv-live-invoice {
-  margin: 6rem 4rem 0;
+  margin: 3rem 1rem 0;
+  font-size: 0.7rem;
+  @include media-breakpoint-up(sm) {
+    margin: 6rem 4rem 0;
+    font-size: 0.85rem;
+  }
   color: #5a5a5a;
+
+  .invoice__logo {
+    height: 6rem;
+  }
 
   h4,
   h6 {
     color: $black;
+  }
+
+  th,
+  h4 {
+    @include media-breakpoint-down(sm) {
+      font-size: 0.8rem;
+    }
   }
 
   .text-amount {
@@ -491,7 +507,10 @@ a:hover {
   }
 
   .invoice__page {
-    padding: 3rem;
+    padding: 2rem 0;
+    @include media-breakpoint-up(sm) {
+      padding: 3rem;
+    }
     background: white;
 
     &.invoice__footer {
@@ -499,8 +518,16 @@ a:hover {
       padding-bottom: 6rem;
     }
   }
+
   .invoice__separator {
-    margin-top: 5rem;
+    margin-top: 2rem;
+    @include media-breakpoint-up(sm) {
+      margin-top: 3.5rem;
+    }
+  }
+
+  .invoice__email {
+    font-size: 0.9rem;
   }
 
   .invoice__table {
@@ -517,6 +544,7 @@ a:hover {
   .invoice__tag-line {
     color: #aaa;
     font-size: 0.8rem;
+    font-weight: normal;
   }
 }
 
