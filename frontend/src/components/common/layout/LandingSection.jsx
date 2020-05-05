@@ -44,7 +44,7 @@ const LandingSection = ({ showSidebar, isDashboard, title, subtitle }) => {
   );
 
   return (
-    <Match path="/user/:item">
+    <Match path="/user/*">
       {(props) =>
         // eslint-disable-next-line react/prop-types
         props.match && currentUserType !== USER_TYPES.user ? (

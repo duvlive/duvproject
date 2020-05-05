@@ -2,14 +2,17 @@ import axios from 'axios';
 import crypto from 'crypto';
 import {
   Application,
+  EntertainerProfile,
+  Event,
+  User,
   EventEntertainer,
   Notification,
   Payment,
 } from '../models';
 import { validString } from '../utils';
 import { NOTIFICATIONS, NOTIFICATION_TYPE } from '../constant';
-// import EMAIL_CONTENT from '../email-template/content';
-// import sendMail from '../MailSender';
+import sendMail from '../MailSender';
+import EMAIL_CONTENT from '../email-template/content';
 
 const PaymentController = {
   async initializeTransaction(req, res) {
@@ -271,49 +274,105 @@ const PaymentController = {
    * @param {object} res is res object
    * @return {object} returns res object
    */
-  PayEnteratainer(req, res) {
+  async PayEntertainer(req, res) {
     const adminId = req.user.id;
-    const { amount, entertainerId, eventEntertainerId, userId } = req.body;
-    if (!amount && !entertainerId && !eventEntertainerId && !userId) {
-      return Promise.reject({
-        message:
-          'Payment must contain amount, entertainerId, eventEntertainerId and userId',
+    const { amount, eventEntertainerId } = req.body;
+    if (!amount || !eventEntertainerId) {
+      return res.status(403).json({
+        message: 'Payment must contain amount and eventEntertainerId',
+      });
+    }
+
+    const eventDetails = await EventEntertainer.findOne({
+      where: { id: eventEntertainerId },
+      include: [
+        {
+          model: Event,
+          as: 'event',
+          include: [
+            {
+              model: User,
+              as: 'owner',
+              attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+            },
+          ],
+        },
+        {
+          model: EntertainerProfile,
+          as: 'entertainer',
+          attributes: ['id', 'entertainerType', 'stageName', 'slug'],
+          include: [
+            {
+              model: User,
+              as: 'personalDetails',
+              attributes: [
+                'id',
+                'firstName',
+                'lastName',
+                'email',
+                'profileImageURL',
+              ],
+            },
+          ],
+          required: true,
+        },
+      ],
+    });
+
+    if (!eventDetails) {
+      res.status(404).json({
+        message: 'Payment cannot be saved. Invalid Event Details',
+      });
+    }
+
+    const entertainerId = eventDetails.entertainer.id;
+
+    const paymentExists = await Payment.findOne({
+      entertainerId,
+      eventEntertainerId,
+    });
+
+    if (paymentExists) {
+      return res.status(401).json({
+        message: 'The entertainer has already been paid for the event',
       });
     }
 
     return Payment.create({
       adminId,
       amount,
-      entertainerId,
+      entertainerId: eventDetails.entertainer.id,
       eventEntertainerId,
     })
       .then(async (payment) => {
-        // send mail
-        // sendMail(
-        //   EMAIL_CONTENT.ENTERTAINER_REQUEST,
-        //   { email: email },
-        //   {
-        //     firstName: stageName,
-        //     title: `You have a request of NGN ${offer}`,
-        //     link: '#',
-        //     contentTop,
-        //     contentBottom,
-        //   }
-        // );
+        const contentTop = `Congratulations!!! Your have a been paid NGN ${amount} for the completion of ${eventDetails.event.eventType}.`;
+
+        sendMail(
+          EMAIL_CONTENT.ENTERTAINER_REQUEST,
+          { email: eventDetails.entertainer.personalDetails.email },
+          {
+            firstName: eventDetails.entertainer.stageName,
+            title: `You have a been paid NGN ${amount}`,
+            link: '#',
+            contentTop,
+          }
+        );
 
         // Notification
         await Notification.create({
-          userId,
+          userId: eventDetails.entertainer.personalDetails.id,
           title: NOTIFICATIONS.PAYMENT_RECEIVED,
           description: `You have been paid ${amount}`,
           type: NOTIFICATION_TYPE.SUCCESS,
         });
-        return res.json({ message: 'Payment has been made', payment });
+        return res.json({
+          message: 'Payment to Entertainer was successful.',
+          payment,
+        });
       })
       .catch((error) => {
         const status = error.status || 500;
-        const errorMessage =
-          (error.parent && error.parent.detail) || error.message || error;
+        const errorMessage = error.message || error;
         return res.status(status).json({ message: errorMessage });
       });
   },

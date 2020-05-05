@@ -238,7 +238,6 @@ const UserController = {
         password: hashedPassword,
         phoneNumber,
         type,
-        userId: 999,
         activatedAt: Date.now(),
       },
       {
@@ -278,7 +277,7 @@ const UserController = {
    * @return {object} returns res object
    */
   socialLogin(req, res) {
-    const { lastName, firstName, email, picture } = req.user;
+    const { lastName, firstName, email, picture, source } = req.user;
     if (!email) {
       return res.status(400).json({ error: 'No email found' });
     }
@@ -296,6 +295,7 @@ const UserController = {
             profileImageURL: picture,
             isActive: true,
             type: 999,
+            // source,
             profileImageID: 'social-media',
           });
           const token = Authentication.generateToken(user);

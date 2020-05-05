@@ -74,6 +74,7 @@ const ViewBid = ({ applicationId }) => {
                 <PriceCalculator
                   askingPrice={parseInt(application.askingPrice, 10)}
                   commission={application.commission || DEFAULT_COMMISSION}
+                  hireType="Auction"
                 />
               </div>
             </div>

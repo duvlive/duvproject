@@ -180,6 +180,7 @@ const BidsForm = ({ eventEntertainer }) => {
                     <PriceCalculator
                       askingPrice={askingPrice}
                       commission={commission}
+                      hireType="Auction"
                     />
                   )}
                   <Button

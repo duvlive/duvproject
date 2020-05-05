@@ -63,9 +63,10 @@ const Sidebar = ({ showSidebar, closeSidebar, ...props }) => {
         })}
       >
         <div className="sidebar__logo">
-          <Link to="/">
+          {/* For some reasons, using Link to homepage causes the page to freeze */}
+          <a href="/">
             <img alt="Duv Live Red-White Logo" src={RedLogo} />
-          </Link>
+          </a>
           <div className="sidebar__close" onClick={closeSidebar}>
             <button
               aria-label="Close"
@@ -77,7 +78,7 @@ const Sidebar = ({ showSidebar, closeSidebar, ...props }) => {
           </div>
         </div>
         <PerfectScrollbar style={{ height: 'calc(100% - 12rem)' }}>
-          <Match path="/user/:item">
+          <Match path="/user/*">
             {(props) =>
               // eslint-disable-next-line react/prop-types
               props.match && currentUserType !== USER_TYPES.user ? (

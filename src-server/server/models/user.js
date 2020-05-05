@@ -71,6 +71,10 @@ module.exports = (sequelize, DataTypes) => {
       referral: {
         type: DataTypes.STRING,
       },
+      // source: {
+      //   type: DataTypes.STRING,
+      //   defaultValue: 'Direct',
+      // },
       profileImageURL: {
         type: DataTypes.STRING,
       },
