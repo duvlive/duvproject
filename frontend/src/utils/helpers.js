@@ -139,7 +139,7 @@ export const getRequestStatusIcon = (status, rejectedText = null) => {
       return (
         <div className="text-green">
           <span className="icon icon-ok-circled"></span>
-          Approved
+          {status}
         </div>
       );
 

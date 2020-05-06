@@ -45,7 +45,7 @@ const PaymentController = {
       if (application.status === 'Paid') {
         return res.status(400).json({
           application,
-          message: 'This application has already marked as paid',
+          message: 'This application has already been marked as paid',
         });
       }
 

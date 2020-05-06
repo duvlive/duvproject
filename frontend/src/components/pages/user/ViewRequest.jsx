@@ -69,8 +69,12 @@ const ViewRequest = ({ applicationId }) => {
       </div>
       <div className="small--2">
         <h6 className="text-white">Note</h6>
-        Approving this request will inform the entertainer that they should be
-        prepared to perform in this event.
+        Sending this will <strong>only notify</strong> the entertainer that they
+        are wanted to perform at this event. To <strong>enlist</strong> their
+        services, <span className="text-red">when they accept to perform,</span>{' '}
+        the full amount shown above{' '}
+        <strong>must be paid at least 48hrs before the event date</strong> to
+        make the contract with the performer valid.
       </div>
     </>
   );

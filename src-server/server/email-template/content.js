@@ -2,11 +2,13 @@
 const EMAIL_CONTENT = {
   // After Registration
   ACTIVATE_YOUR_ACCOUNT: {
-    subject: 'Verify your Email',
-    title: 'Verify Your Email',
+    subject: 'Please Confirm Your Email',
+    title: 'Please Confirm Your Email',
     contentTop:
-      'You have successfully created your D.U.V Live account. To complete your registration, you need to confirm that we got your email address right.',
+      'Thanks for signing up to DUV LIVE. To complete your account set up, please confirm your email address by clicking the button below',
     buttonText: 'Verify Email',
+    copyright: `You are receiving this email because you signed up to DUV LIVE, the No 1 Promoter of Premium Live Entertainment. If you did not make this request, please contact DUV LIVE support.
+    Please do not reply to this email. Emails sent to this address will not be answered.`,
   },
   PASSWORD_RESET: {
     subject: 'Password Reset',

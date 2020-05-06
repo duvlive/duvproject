@@ -286,11 +286,15 @@ const BidsApplicationsTableRow = ({ application, number }) => {
       </div>
       <div className="small--2">
         <h6 className="text-white">Note</h6>
-        Approving this bid will inform the entertainer that they have won the
-        bid and should be prepared to perform in this event. However, their
-        attendance can only be confirmed by paying the assigned bid at lease 2
-        days (48 hours) before the event date, else the contract will be
-        terminated.
+        Approving this bid will <strong>only notify</strong> the entertainer
+        that they have been selected to perform at this event. To{' '}
+        <strong>enlist</strong> their services, the full amount shown above{' '}
+        <strong>must be paid</strong>{' '}
+        <span className="text-red">
+          after the entertainer accepts to perform
+        </span>
+        ,<strong>at least 48hrs before the event date</strong> to make the
+        contract with the performer valid.
       </div>
     </>
   );

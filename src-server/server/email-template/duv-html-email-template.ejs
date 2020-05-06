@@ -238,7 +238,7 @@
                               style="text-align: center; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"
                               class="fullCenter">
                               <tr>
-                                <td width="100%" height="30"></td>
+                                <td width="100%" height="50"></td>
                               </tr>
                             </table>
                           </td>
@@ -290,7 +290,7 @@
                               class="fullCenter">
                               <tr>
                                 <td valign="middle" width="100%"
-                                  style="text-align: center; font-family: Roboto, Helvetica, Arial, sans-serif; font-size: 24px; color: rgb(63, 67, 69); line-height: 46px; font-weight: bold;"
+                                  style="text-align: center; font-family: Roboto, Helvetica, Arial, sans-serif; font-size: 18px; color: rgb(63, 67, 69); line-height: 46px; font-weight: bold;"
                                   class="fullCenter">
                                   <!--[if !mso]><!--><span style="font-family: 'Roboto', Helvetica; font-weight: bold;">
                                     <!--<![endif]--><%= title %>
@@ -330,12 +330,12 @@
                               class="fullCenter">
                               <tr>
                                 <td valign="middle" width="100%"
-                                  style="text-align: left; font-family: Helvetica, Arial, sans-serif; font-size: 16px; color: rgb(63, 67, 69); line-height: 28px; font-weight: bold;">
+                                  style="text-align: left; font-family: Helvetica, Arial, sans-serif; font-size: 14px; color: rgb(63, 67, 69); line-height: 28px; font-weight: bold;">
                                   <!--[if !mso]><!--><span
                                     style="font-family: 'Roboto', Helvetica; font-weight: normal;">
                                     <!--<![endif]-->
                                     <!-- Use FirstName with Greetings if available -->
-                                    <%= (typeof firstName !== "undefined") ? (typeof greeting !== "undefined") ? `${greeting} ${firstName}` : `Hello ${firstName}` : 'Hello' %>,
+                                    <%= (typeof firstName !== "undefined") ? (typeof greeting !== "undefined") ? `${greeting}, ${firstName}.` : `Hello, ${firstName}.` : 'Hello,' %>
                                     <!--[if !mso]><!--></span>
                                   <!--<![endif]-->
                                 </td>
@@ -373,7 +373,7 @@
                               class="fullCenter">
                               <tr>
                                 <td valign="middle" width="100%"
-                                  style="text-align: left; font-family: Helvetica, Arial, sans-serif; font-size: 14px; color: rgb(63, 67, 69); line-height: 24px; font-weight: normal;">
+                                  style="text-align: left; font-family: Helvetica, Arial, sans-serif; font-size: 14px; color: rgb(63, 67, 69); line-height: 22px; font-weight: normal;">
                                   <!--[if !mso]><!--><span
                                     style="font-family: 'Roboto', Helvetica; font-weight: normal;">
                                     <!--<![endif]-->
@@ -385,7 +385,7 @@
                               <% if (typeof userSubject !== "undefined") { %>
                               <tr>
                                 <td valign="middle" width="100%"
-                                  style="text-align: left; font-family: Helvetica, Arial, sans-serif; font-size: 14px; color: rgb(63, 67, 69); line-height: 24px; font-weight: bold;">
+                                  style="text-align: left; font-family: Helvetica, Arial, sans-serif; font-size: 14px; color: rgb(63, 67, 69); line-height: 22px; font-weight: bold;">
                                   <!--[if !mso]><!--><span style="font-family: 'Roboto', Helvetica; font-weight: bold;">
                                     <!-[endif]-->
                                       <%= userSubject %>
@@ -403,7 +403,7 @@
                               <% if (typeof userMessage !== "undefined") { %>
                               <tr>
                                 <td valign="middle" width="100%"
-                                  style="text-align: left; font-family: Helvetica, Arial, sans-serif; font-size: 14px; color: rgb(63, 67, 69); line-height: 24px; font-weight: normal;">
+                                  style="text-align: left; font-family: Helvetica, Arial, sans-serif; font-size: 14px; color: rgb(63, 67, 69); line-height: 22px; font-weight: normal;">
                                   <!--[if !mso]><!--><span
                                     style="font-family: 'Roboto', Helvetica; font-weight: normal;">
                                     <!-[endif]-->
@@ -422,7 +422,7 @@
                               <% if (typeof userEmail !== "undefined") { %>
                               <tr>
                                 <td valign="middle" width="100%"
-                                  style="text-align: left; font-family: Helvetica, Arial, sans-serif; font-size: 14px; color: rgb(63, 67, 69); line-height: 24px; font-weight: normal;">
+                                  style="text-align: left; font-family: Helvetica, Arial, sans-serif; font-size: 14px; color: rgb(63, 67, 69); line-height: 22px; font-weight: normal;">
                                   <!--[if !mso]><!--><span
                                     style="font-family: 'Roboto', Helvetica; font-weight: normal;">
                                     <!--<![endif]-->
@@ -436,7 +436,7 @@
                               <% if (typeof fullName !== "undefined") { %>
                               <tr>
                                 <td valign="middle" width="100%"
-                                  style="text-align: left; font-family: Helvetica, Arial, sans-serif; font-size: 14px; color: rgb(63, 67, 69); line-height: 24px; font-weight: normal;">
+                                  style="text-align: left; font-family: Helvetica, Arial, sans-serif; font-size: 14px; color: rgb(63, 67, 69); line-height: 22px; font-weight: normal;">
                                   <!--[if !mso]><!--><span
                                     style="font-family: 'Roboto', Helvetica; font-weight: normal;">
                                     <!--<![endif]-->
@@ -450,7 +450,7 @@
                               <% if (typeof phone !== "undefined") { %>
                               <tr>
                                 <td valign="middle" width="100%"
-                                  style="text-align: left; font-family: Helvetica, Arial, sans-serif; font-size: 14px; color: rgb(63, 67, 69); line-height: 24px; font-weight: normal;">
+                                  style="text-align: left; font-family: Helvetica, Arial, sans-serif; font-size: 14px; color: rgb(63, 67, 69); line-height: 22px; font-weight: normal;">
                                   <!--[if !mso]><!--><span
                                     style="font-family: 'Roboto', Helvetica; font-weight: normal;">
                                     <!--<![endif]-->
@@ -496,7 +496,7 @@
                       class="fullCenter">
                       <tr>
                         <td valign="middle" width="100%"
-                          style="text-align: left; font-family: Helvetica, Arial, sans-serif; font-size: 14px; color: rgb(63, 67, 69); line-height: 24px; font-weight: normal;">
+                          style="text-align: left; font-family: Helvetica, Arial, sans-serif; font-size: 14px; color: rgb(63, 67, 69); line-height: 22px; font-weight: normal;">
                           <!--[if !mso]><!--><span style="font-family: 'Roboto', Helvetica; font-weight: normal;">
                             <!--<![endif]-->
                             <%- contentBottom %>
@@ -590,13 +590,27 @@
                       class="fullCenter">
                       <tr>
                         <td valign="middle" width="100%"
-                          style="text-align: center; font-family: Helvetica, Arial, sans-serif; font-size: 13px; color: rgb(63, 67, 69); line-height: 24px; font-weight: normal;">
+                          style="text-align: center; font-family: Helvetica, Arial, sans-serif; font-size: 13px; color: rgb(63, 67, 69); line-height: 22px; font-weight: normal;">
                           <!--[if !mso]><!--><span style="font-family: 'Roboto', Helvetica; font-weight: normal;">
                             <!--<![endif]-->
                             <p
                               style="word-break: normal; border-collapse : collapse !important; width: 300px; max-width: 300px; overflow-wrap: break-word !important;
                                       word-wrap: break-word !important;  word-break: break-all !important; word-break: break-word !important">
-                              or copy this url and view in a web browser (<%= link %>)</p>
+                              or Copy this link to your browser <br /> </p>
+                            <!--[if !mso]><!-->
+                          </span>
+                          <!--<![endif]-->
+                        </td>
+                      </tr>
+                      <tr>
+                        <td valign="middle" width="100%"
+                          style="font-family: Helvetica, Arial, sans-serif; font-size: 12px; color: rgb(63, 67, 69); line-height: 18px; font-weight: normal;">
+                          <!--[if !mso]><!--><span style="font-family: 'Roboto', Helvetica; font-weight: normal;">
+                            <!--<![endif]-->
+                            <p
+                              style="word-break: normal; border-collapse : collapse !important; width: 300px; max-width: 300px; overflow-wrap: break-word !important;
+                                      word-wrap: break-word !important;  word-break: break-all !important; word-break: break-word !important">
+                              (<%= link %>) </p>
                             <!--[if !mso]><!-->
                           </span>
                           <!--<![endif]-->
@@ -635,7 +649,7 @@
                       style="text-align: center; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"
                       class="fullCenter">
                       <tr>
-                        <td width="100%" height="30"></td>
+                        <td width="100%" height="50"></td>
                       </tr>
                     </table>
                   </td>
@@ -654,7 +668,7 @@
                       class="fullCenter">
                       <tr>
                         <td valign="middle" width="100%"
-                          style="text-align: left; font-family: Helvetica, Arial, sans-serif; font-size: 14px; color: rgb(63, 67, 69); line-height: 24px; font-weight: bold;">
+                          style="text-align: left; font-family: Helvetica, Arial, sans-serif; font-size: 14px; color: rgb(63, 67, 69); line-height: 22px; font-weight: bold;">
                           <!--[if !mso]><!--><span style="font-family: 'Roboto', Helvetica; font-weight: bold;">
                             <!--<![endif]-->Thank you,<br />
                             <strong>D.U.V LIVE TEAM</strong>
@@ -676,13 +690,68 @@
                       style="text-align: center; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"
                       class="fullCenter">
                       <tr>
-                        <td width="100%" height="20"></td>
+                        <td width="100%" height="50"></td>
                       </tr>
                     </table>
                   </td>
                 </tr>
               </table>
               <!-- /.Content -->
+
+
+              <!-- Footer -->
+              <table width="352" border="0" cellpadding="0" cellspacing="0" align="center" bgcolor="#eeeeee">
+                <tr>
+                  <td width="100%" height="30"></td>
+                </tr>
+                <tr>
+                  <td width="352" valign="middle" align="center">
+                    <table width="300" border="0" cellpadding="0" cellspacing="0" align="center"
+                      style="text-align: center; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"
+                      class="fullCenter">
+                      <tr>
+                        <td valign="middle" width="100%"
+                          style="text-align: left; font-family: Helvetica, Arial, sans-serif; color: rgb(63, 67, 69); line-height: 20px; font-size: 11px">
+                          <%= (typeof copyright !== "undefined") ? copyright : '' %>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                <tr>
+                  <td width="100%" height="30"></td>
+                </tr>
+                <tr>
+                  <td width="352" valign="middle" align="center">
+                    <table width="300" border="0" cellpadding="0" cellspacing="0" align="center"
+                      style="text-align: center; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"
+                      class="fullCenter">
+                      <tr>
+                        <td valign="middle" width="100%"
+                          style="text-align: left; font-family: Helvetica, Arial, sans-serif; color: rgb(63, 67, 69); line-height: 22px; font-style: italic; font-size: 11px">
+                          Copyright &copy; <%= new Date().getFullYear(); %> <a href="https://duvlive.com"
+                            style="text-align: left; font-family: Helvetica, Arial, sans-serif; color: #ff0000;">DUV
+                            LIVE </a>. All rights reserved.
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td width="100%" height="50"></td>
+                </tr>
+              </table>
+              <!-- /.Footer -->
+
+
+              <!-- Space -->
+              <table width="352" border="0" cellpadding="0" cellspacing="0" align="center" bgcolor="#131722">
+                <tr>
+                  <td width="100%" height="150"></td>
+                </tr>
+              </table>
+              <!-- /.Space -->
 
               </div>
             </td>
@@ -691,105 +760,10 @@
 
 
         <!-- Content -->
-
-        <!-- WHITE BREAK 60PX -->
-        <table width="352" border="0" cellpadding="0" cellspacing="0" align="center" class="mobile" bgcolor="#ffffff"
-          object="drag-module-small" style="background-color: rgb(255, 255, 255);">
-          <tr>
-            <td width="352" valign="middle">
-              <table width="300" border="0" cellpadding="0" cellspacing="0" align="center"
-                style="text-align: center; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"
-                class="fullCenter">
-                <tr>
-                  <td width="100%" height="60"></td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-        </table>
-        <!-- /.WHITE BREAK 60PX -->
-
-        <!-- Start Footer -->
-        <table width="352" border="0" cellpadding="0" cellspacing="0" align="center" class="mobile" bgcolor="#ffffff"
-          object="drag-module-small" style="background-color: rgb(255, 255, 255);">
-          <tr>
-            <td width="352" valign="middle" align="center">
-              <table width="300" border="0" cellpadding="0" cellspacing="0" align="center"
-                style="text-align: center; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"
-                class="fullCenter">
-                <tr>
-                  <td valign="middle" width="100%"
-                    style="text-align: center; font-family: Helvetica, Arial, sans-serif; font-size: 11px; color: rgb(63, 67, 69); line-height: 24px; font-weight: normal;">
-                    <!--[if !mso]><!--><span style="font-family: 'Roboto', Helvetica; font-weight: normal;">
-                      <!--<![endif]-->Any questions? <a href="https//duvlive.com/contact-us"
-                        style="color: #bb0000;">Contact us</a> or check
-                      our <a href="https//duvlive.com/help" style="color: #bb0000;">FAQ Page</a>
-                      <!--[if !mso]><!--></span>
-                    <!--<![endif]-->
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-        </table>
-        <!-- /.Footer -->
-
-        <table width="352" border="0" cellpadding="0" cellspacing="0" align="center" class="mobile" bgcolor="#ffffff"
-          object="drag-module-small" style="background-color: rgb(255, 255, 255);">
-          <tr>
-            <td width="352" valign="middle">
-              <table width="300" border="0" cellpadding="0" cellspacing="0" align="center"
-                style="text-align: center; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"
-                class="fullCenter">
-                <tr>
-                  <td width="100%" height="20"></td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-        </table>
-        <!-- /.Content -->
       </td>
-      <td align="center" width="20" valign="middle"></td>
+      <td align="center" width="50" valign="middle"></td>
     </tr>
   </table>
-
-  <!-- Spacer -->
-  <table width="352" border="0" cellpadding="0" cellspacing="0" align="center">
-    <tr>
-      <td width="352" valign="middle">
-        <table width="300" border="0" cellpadding="0" cellspacing="0" align="center"
-          style="text-align: center; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"
-          class="fullCenter">
-          <tr>
-            <td width="100%" height="30"></td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
-  <!-- /.Spacer -->
-
-  <!-- Spacer -->
-  <table width="352" border="0" cellpadding="0" cellspacing="0" align="center">
-    <tr>
-      <td width="352" valign="middle">
-        <table width="300" border="0" cellpadding="0" cellspacing="0" align="center"
-          style="text-align: center; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"
-          class="fullCenter">
-          <tr>
-            <td width="100%" height="30"></td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
-  <!-- /.Spacer -->
-  </div>
-  </td>
-  </tr>
-  </table><!-- End Notification 5 -->
-  </div>
 </body>
 
 </html>
