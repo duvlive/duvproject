@@ -15,11 +15,11 @@ module.exports = function (sequelize, DataTypes) {
         },
       },
       eventDate: {
-        type: DataTypes.STRING,
+        type: DataTypes.DATE,
         allowNull: false,
       },
       startTime: {
-        type: DataTypes.STRING,
+        type: DataTypes.DATE,
         allowNull: false,
       },
       eventDuration: {
