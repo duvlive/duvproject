@@ -295,7 +295,7 @@ const UserController = {
             profileImageURL: picture,
             isActive: true,
             type: 999,
-            // source,
+            source,
             profileImageID: 'social-media',
           });
           const token = Authentication.generateToken(user);
@@ -346,7 +346,7 @@ const UserController = {
             },
           }
         ).then(() =>
-          res.status(200).json({ message: 'User activation successful' })
+          res.status(200).json({ message: 'Account activation successful' })
         );
       })
       .catch((error) => {

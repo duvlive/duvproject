@@ -71,10 +71,16 @@ module.exports = (sequelize, DataTypes) => {
       referral: {
         type: DataTypes.STRING,
       },
-      // source: {
-      //   type: DataTypes.STRING,
-      //   defaultValue: 'Direct',
-      // },
+      source: {
+        type: DataTypes.STRING,
+        defaultValue: 'Direct',
+      },
+      bandRole: {
+        type: DataTypes.STRING,
+      },
+      referredBy: {
+        type: DataTypes.INTEGER,
+      },
       profileImageURL: {
         type: DataTypes.STRING,
       },
@@ -103,25 +109,22 @@ module.exports = (sequelize, DataTypes) => {
         afterCreate: (user) => {
           const models = require('./');
           const link = `${process.env.HOST}/activate/${user.activationToken}`;
-          sendMail(EMAIL_CONTENT.ACTIVATE_YOUR_ACCOUNT, user, {
-            link,
-          })
-            .then(() => {
-              const indentityInformation = () =>
-                [
-                  'EntertainerProfile',
-                  'BankDetail',
-                  'Identification',
-                  'ApprovalComment',
-                ].map((model) => models[model].create({ userId: user.id }));
-              if (user.type === USER_TYPES.ENTERTAINER) {
-                return Promise.all(indentityInformation());
-              }
-              return Promise.resolve(null);
-            })
-            .catch((error) => {
-              console.log(error);
+          if (user.source === 'Direct') {
+            sendMail(EMAIL_CONTENT.ACTIVATE_YOUR_ACCOUNT, user, {
+              link,
             });
+          }
+          const indentityInformation = () =>
+            [
+              'EntertainerProfile',
+              'BankDetail',
+              'Identification',
+              'ApprovalComment',
+            ].map((model) => models[model].create({ userId: user.id }));
+          if (user.type === USER_TYPES.ENTERTAINER) {
+            return Promise.all(indentityInformation());
+          }
+          return Promise.resolve(null);
         },
         beforeUpdate: (user) => {
           if (user.changed('password')) {

@@ -109,7 +109,7 @@ const userRoutes = (router) => {
           given_name: firstName,
           picture: picture,
         } = profile._json;
-        done(null, { firstName, lastName, email, picture });
+        done(null, { firstName, lastName, email, picture, source: 'Google' });
       }
     )
   );
@@ -139,6 +139,7 @@ const userRoutes = (router) => {
           lastName,
           email,
           picture: url,
+          source: 'Facebook',
         });
       }
     )

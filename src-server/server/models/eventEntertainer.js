@@ -68,6 +68,18 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.INTEGER,
         allowNull: true,
       },
+      cancelled: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      cancelledDate: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
+      cancelledReason: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
     },
     {
       classMethods: {
