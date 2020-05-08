@@ -3,7 +3,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
-  <title><%= title %></title>
+  <title><%= (typeof title !== "undefined") ? title : '' %></title>
 
   <style type="text/css">
     @import url(http://fonts.googleapis.com/css?family=Roboto);
@@ -293,8 +293,10 @@
                                   style="text-align: center; font-family: Roboto, Helvetica, Arial, sans-serif; font-size: 18px; color: rgb(63, 67, 69); line-height: 46px; font-weight: bold;"
                                   class="fullCenter">
                                   <!--[if !mso]><!--><span style="font-family: 'Roboto', Helvetica; font-weight: bold;">
-                                    <!--<![endif]--><%= title %>
-                                    <!--[if !mso]><!--></span>
+                                    <!--<![endif]-->
+                                    <%= (typeof title !== "undefined") ? title : '' %>
+                                    <!--[if !mso]><!-->
+                                  </span>
                                   <!--<![endif]-->
                                 </td>
                               </tr>
@@ -513,7 +515,7 @@
               <% } %>
               <!-- /.Content Bottom -->
 
-              <% if ((typeof link !== "undefined") && (typeof buttonText !== "undefined")) { %>
+              <% if ((typeof link !== "undefined") && (typeof buttonText !== "undefined") && (typeof copyLink === "undefined")) { %>
               <!-- Spacer -->
               <table width="352" border="0" cellpadding="0" cellspacing="0" align="center" bgcolor="#ffffff">
                 <tr>
@@ -641,6 +643,52 @@
               <!-- End Link -->
               <% } %>
 
+
+              <!-- Content Bottom -->
+              <% if (typeof contentFooter !== "undefined") { %>
+              <!-- Spacer -->
+              <table width="352" border="0" cellpadding="0" cellspacing="0" align="center" class="mobile"
+                bgcolor="#ffffff" object="drag-module-small" style="background-color: rgb(255, 255, 255);">
+                <tr>
+                  <td width="352" valign="middle">
+                    <table width="300" border="0" cellpadding="0" cellspacing="0" align="center"
+                      style="text-align: center; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"
+                      class="fullCenter">
+                      <tr>
+                        <td width="100%" height="20"></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+              <!-- /.Spacer -->
+              <!-- Start Paragraph -->
+              <table width="352" border="0" cellpadding="0" cellspacing="0" align="center" class="mobile"
+                bgcolor="#ffffff" object="drag-module-small" style="background-color: rgb(255, 255, 255);">
+                <tr>
+                  <td width="352" valign="middle" align="center">
+                    <table width="300" border="0" cellpadding="0" cellspacing="0" align="center"
+                      style="text-align: center; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"
+                      class="fullCenter">
+                      <tr>
+                        <td valign="middle" width="100%"
+                          style="text-align: left; font-family: Helvetica, Arial, sans-serif; font-size: 14px; color: rgb(63, 67, 69); line-height: 22px; font-weight: normal;">
+                          <!--[if !mso]><!--><span style="font-family: 'Roboto', Helvetica; font-weight: normal;">
+                            <!--<![endif]-->
+                            <%- contentFooter %>
+                            <!--[if !mso]><!--></span>
+                          <!--<![endif]-->
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+              <!-- /.Paragraph -->
+              <!-- /.Content -->
+              <% } %>
+              <!-- /.Content Bottom -->
+
               <!-- Spacer -->
               <table width="352" border="0" cellpadding="0" cellspacing="0" align="center" bgcolor="#ffffff">
                 <tr>
@@ -669,9 +717,10 @@
                       <tr>
                         <td valign="middle" width="100%"
                           style="text-align: left; font-family: Helvetica, Arial, sans-serif; font-size: 14px; color: rgb(63, 67, 69); line-height: 22px; font-weight: bold;">
-                          <!--[if !mso]><!--><span style="font-family: 'Roboto', Helvetica; font-weight: bold;">
-                            <!--<![endif]-->Thank you,<br />
-                            <strong>D.U.V LIVE TEAM</strong>
+                          <!--[if !mso]><!--><span style="font-family: 'Roboto', Helvetica; font-weight: normal;">
+                            <!--<![endif]-->
+                            <strong><em>Live Your Best Live,</em></strong><br />
+                            DUV LIVE Team.
                             <!--[if !mso]><!--></span>
                           <!--<![endif]-->
                         </td>
@@ -713,6 +762,10 @@
                         <td valign="middle" width="100%"
                           style="text-align: left; font-family: Helvetica, Arial, sans-serif; color: rgb(63, 67, 69); line-height: 20px; font-size: 11px">
                           <%= (typeof copyright !== "undefined") ? copyright : '' %>
+                          <% if (typeof copyright === "undefined") { %>
+                          If you got this mail in error, please contact DUV LIVE support.
+                          Please do not reply to this email. Emails sent to this address will not be answered.
+                          <% } %>
                         </td>
                       </tr>
                     </table>

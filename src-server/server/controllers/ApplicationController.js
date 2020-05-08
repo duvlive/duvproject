@@ -19,6 +19,8 @@ import {
 } from '../constant';
 import EMAIL_CONTENT from '../email-template/content';
 import { addDays } from 'date-fns';
+import { DEFAULT_COMMISSION } from './CommissionController';
+import { priceCalculatorHelper } from '../utils/priceCalculator';
 
 const ApplicationController = {
   /**
@@ -645,15 +647,24 @@ const ApplicationController = {
 
   getOneApplication(req, res) {
     const id = req.params.id;
+    const userId = req.user.id;
 
     if (!id) {
       return res.status(404).json({
-        message: 'Application Id needed to approve application',
+        message: 'Application Id needed to view application',
       });
     }
 
     Application.findOne({
-      where: { id },
+      where: {
+        id,
+        [Op.or]: {
+          userId,
+          [Op.and]: Sequelize.literal(
+            `"eventEntertainerInfo"."userId" = ${userId}`
+          ),
+        },
+      },
       include: [
         {
           model: EventEntertainer,
@@ -739,9 +750,21 @@ const ApplicationController = {
             },
           ],
         },
+        {
+          model: Commission,
+          as: 'commission',
+        },
       ],
     })
       .then((application) => {
+        const isARequest = application.applicationType !== 'Bid';
+
+        const commission = application.commission || DEFAULT_COMMISSION;
+        const { entertainerFee } = priceCalculatorHelper(
+          application.askingPrice,
+          commission,
+          application.eventEntertainerInfo.hireType
+        );
         const currentDate = Date.now();
         const eventEntertainerId = application.eventEntertainerId;
         // for email
@@ -756,11 +779,8 @@ const ApplicationController = {
           ),
           eventStart: getTime(application.eventEntertainerInfo.event.startTime),
           eventDuration: application.eventEntertainerInfo.event.eventDuration,
-          eventStreetLine1: application.eventEntertainerInfo.event.streetLine1,
-          eventStreetLine2: application.eventEntertainerInfo.event.streetLine2,
-          eventState: application.eventEntertainerInfo.event.state,
-          eventLga: application.eventEntertainerInfo.event.lga,
-          eventCity: application.eventEntertainerInfo.event.city,
+          id: application.id,
+          takeHome: moneyFormat(entertainerFee),
         };
 
         if (!application) {
@@ -778,6 +798,7 @@ const ApplicationController = {
         // updated approved application
         return Application.update(
           {
+            takeHome: entertainerFee,
             status: 'Paid',
             approvedDate: currentDate,
             paid: true,
@@ -815,15 +836,28 @@ const ApplicationController = {
                 },
               }
             ).then(async () => {
+              // if it is an auction
               // Send Email to approved entertainer
-              sendAuctionMail(EMAIL_PARAMS);
-              await Notification.create({
-                userId: application.user.profile.id,
-                title: NOTIFICATIONS.BID_APPROVED,
-                description: `Your bid NGN (${EMAIL_PARAMS.askingPrice}) for ${EMAIL_PARAMS.eventType} has been approved`,
-                type: NOTIFICATION_TYPE.SUCCESS,
-                actionId: id, //application id
-              });
+              if (isARequest) {
+                sendPaidRequestMail(EMAIL_PARAMS);
+                await Notification.create({
+                  userId: application.user.profile.id,
+                  title: NOTIFICATIONS.PAID_REQUEST,
+                  description: `Your request for ${EMAIL_PARAMS.eventType} has been approved`,
+                  type: NOTIFICATION_TYPE.SUCCESS,
+                  actionId: id, //application id
+                });
+              } else {
+                sendApprovedBidMail(EMAIL_PARAMS);
+                await Notification.create({
+                  userId: application.user.profile.id,
+                  title: NOTIFICATIONS.BID_APPROVED,
+                  description: `Your bid for ${EMAIL_PARAMS.eventType} has been approved`,
+                  type: NOTIFICATION_TYPE.SUCCESS,
+                  actionId: id, //application id
+                });
+              }
+
               await Notification.create({
                 userId: application.eventEntertainerInfo.event.userId,
                 title: NOTIFICATIONS.PAYMENT_SUCCESSFUL,
@@ -847,30 +881,63 @@ const ApplicationController = {
   },
 };
 
-const sendAuctionMail = (params) => {
+const sendApprovedBidMail = (params) => {
   // Build Email
-  const contentTop = `Congratulations!!! Your bid of  NGN ${params.askingPrice} has been approved. Once payment has been made, then your application has been confirmed. You can find the details of the event below.`;
+  const contentTop =
+    'We are pleased to inform you that your bid for performance at an event with details below has been selected and approved by the event host.';
   const contentBottom = `
     <strong>Event:</strong> ${params.eventType} <br>
     <strong>Place:</strong> ${params.eventPlace} <br>
     <strong>Date:</strong> ${params.eventDate} <br>
     <strong>Start Time:</strong> ${params.eventStart} <br>
     <strong>Duration:</strong> ${params.eventDuration} <br>
-    <strong>Street Line 1:</strong> ${params.eventStreetLine1} <br>
-    <strong>Street Line 2:</strong> ${params.eventStreetLine2} <br>
-    <strong>State:</strong> ${params.eventState} <br>
-    <strong>LGA:</strong> ${params.eventLga} <br>
-    <strong>City:</strong> ${params.eventCity} <br>
+    <strong>Take Home Pay:</strong> NGN ${params.takeHome}
   `;
+
+  const contentFooter = `
+  <small>
+  Note: By not clicking decline, you are accepting to perform, and hereby undertake to: <br />
+  <ol type="a">
+   <li>Perform at the above event after which your bank account will be credited with the above stated take-home amount.</li>
+   <li>Inform the event host and DUV LIVE of any cancellation at least 48hrs before the event date. Failure to do so (except due to reasons considered under Force Majeure) shall result in the removal of the entertainer's account, the blacklisting of the User's Personal Details on the DUV LIVE online platform, and any other legal action deemed reasonably necessary by the affected persons.</li>
+   </ol>
+   </small>
+   `;
   sendMail(
     EMAIL_CONTENT.APPROVED_BID,
-    { email: params.entertainerEmail },
+    { email: params.entertainerEmail, firstName: params.entertainerName },
     {
-      firstName: params.entertainerName,
-      title: `Your Bid of NGN ${params.askingPrice} has been approved`,
-      link: '#',
+      link: `${process.env.HOST}/entertainer/bid/view/${params.id}`,
       contentTop,
       contentBottom,
+      contentFooter,
+    }
+  );
+};
+
+const sendPaidRequestMail = (params) => {
+  // Build Email
+  const contentTop =
+    'We are pleased to inform you that your fee for performance at the event with details below has been fully paid for by the event host.';
+  const contentBottom = `
+    <strong>Event:</strong> ${params.eventType} <br>
+    <strong>Place:</strong> ${params.eventPlace} <br>
+    <strong>Date:</strong> ${params.eventDate} <br>
+    <strong>Start Time:</strong> ${params.eventStart} <br>
+    <strong>Duration:</strong> ${params.eventDuration} <br>
+    <strong>Take Home Pay:</strong> NGN ${params.takeHome}<br><br>
+    For More Details on the Upcoming Event, Click the link below
+  `;
+
+  const contentFooter = `We do hope you enjoy your performance while delivering an exciting and positively unforgettable memory for your audience.`;
+  sendMail(
+    EMAIL_CONTENT.PAID_REQUEST,
+    { email: params.entertainerEmail, firstName: params.entertainerName },
+    {
+      link: `${process.env.HOST}/entertainer/request/view/${params.id}`,
+      contentTop,
+      contentBottom,
+      contentFooter,
     }
   );
 };

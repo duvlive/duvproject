@@ -128,7 +128,7 @@ const ViewRequest = ({ applicationId }) => {
               {application.eventEntertainerInfo.hiredEntertainer && (
                 <div className="mt-3 text-left">
                   <AlertMessage
-                    message="An entertainer has been hired for this details"
+                    message="An entertainer has been hired for this request"
                     type="info"
                   />
                 </div>

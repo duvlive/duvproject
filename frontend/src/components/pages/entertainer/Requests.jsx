@@ -15,9 +15,14 @@ import NoContent from 'components/common/utils/NoContent';
 import { Link } from '@reach/router';
 import { REQUEST_ACTION } from 'utils/constants';
 import LoadItems from 'components/common/utils/LoadItems';
+import { UserContext } from 'context/UserContext';
+import AlertMessage from 'components/common/utils/AlertMessage';
 
 const Requests = () => {
   const [requests, setRequests] = React.useState(null);
+  let { userState, userDispatch } = React.useContext(UserContext);
+  const [message, setMessage] = React.useState({ msg: null, type: null });
+
   React.useEffect(() => {
     axios
       .get('/api/v1/entertainer/requests', {
@@ -35,14 +40,30 @@ const Requests = () => {
       .catch(function (error) {
         // console.log(error.response.data.message);
         // navigate to all events
+        setRequests([]);
       });
   }, []);
+
+  if (userState && userState.alert === 'bid-not-found-error') {
+    !message.msg &&
+      setMessage({
+        msg: 'The request is not found',
+        type: 'error',
+      });
+    userDispatch({
+      type: 'remove-alert',
+    });
+  }
+
   return (
     <BackEndPage title="Requests">
       <div className="main-app">
         <TopMessage message="Placed Requests" />
 
         <section className="app-content">
+          <div className="mt-4">
+            <AlertMessage message={message.msg} type={message.type} />
+          </div>
           <div className="table-responsive">
             <LoadItems
               items={requests}

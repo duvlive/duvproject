@@ -42,7 +42,13 @@ const EMAIL_CONTENT = {
     buttonText: 'JOIN NOW',
   },
   APPROVED_BID: {
-    subject: 'YIPPEE!!! Your Bid has been approved',
+    title: 'Your Bids has been approved',
+    subject: 'Your Bid has been approved',
+    buttonText: 'Decline',
+  },
+  PAID_REQUEST: {
+    title: 'Congratulations!!! Your Performance Has Been Fully Paid For',
+    subject: 'Congratulations!!! Your Performance Has Been Fully Paid For',
     buttonText: 'Check it out!',
   },
   ENTERTAINER_REQUEST: {

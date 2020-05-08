@@ -22,6 +22,8 @@ import { DEFAULT_COMMISSION, REQUEST_ACTION } from 'utils/constants';
 import { setInitialValues } from 'components/forms/form-helper';
 import TextArea from 'components/forms/TextArea';
 import LoadingScreen from 'components/common/layout/LoadingScreen';
+import { UserContext } from 'context/UserContext';
+import { navigate } from '@reach/router';
 
 const ViewRequest = ({ applicationId }) => {
   const [activeType, setActiveType] = React.useState(null);
@@ -37,6 +39,8 @@ const ViewRequest = ({ applicationId }) => {
   const hideRequestForm = () => {
     setActiveType(null);
   };
+
+  let { userDispatch } = React.useContext(UserContext);
 
   const processRequest = (
     requestType,
@@ -88,9 +92,13 @@ const ViewRequest = ({ applicationId }) => {
         })
         .catch(function (error) {
           console.log(error.response.data.message);
-          // TODO: navigate to all events
+          userDispatch({
+            type: 'add-alert',
+            alert: 'bid-not-found-error',
+          });
+          navigate('/entertainer/requests');
         });
-  }, [applicationId]);
+  }, [applicationId, userDispatch]);
 
   if (!application) {
     return null;

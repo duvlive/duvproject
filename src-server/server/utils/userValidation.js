@@ -32,7 +32,7 @@ const UserValidation = {
   passwordValidaton(password, confirmPassword) {
     let error = {};
     if (password.length < 6) {
-      error['password'] = 'Password length must have a minimum of 8 characters';
+      error['password'] = 'Password length must have a minimum of 6 characters';
     }
 
     if (password !== confirmPassword) {
@@ -43,7 +43,7 @@ const UserValidation = {
   singlePasswordValidaton(password) {
     let error = {};
     if (password.length < 6) {
-      error['password'] = 'Password length must have a minimum of 8 characters';
+      error['password'] = 'Password length must have a minimum of 6 characters';
     }
     return error;
   },

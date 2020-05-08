@@ -1,13 +1,13 @@
 import { Commission } from '../models';
 import { validString } from '../utils';
 
-const DEFAULT_COMMISSION = {
+export const DEFAULT_COMMISSION = {
   title: 'Default Commission',
   recommendationsCommission: '15',
   directHireCommission: '6',
   bidsCommission: '10',
   handlingPercent: '2',
-  handlingPlus: '40'
+  handlingPlus: '40',
 };
 
 const CommissionController = {
@@ -26,7 +26,7 @@ const CommissionController = {
       bidsCommission,
       handlingPercent,
       handlingPlus,
-      id
+      id,
     } = req.body;
 
     const error = {
@@ -34,7 +34,7 @@ const CommissionController = {
       ...validString(recommendationsCommission),
       ...validString(directHireCommission),
       ...validString(bidsCommission),
-      ...validString(handlingPercent)
+      ...validString(handlingPercent),
     };
     if (Object.keys(error).length > 1) {
       return res.status(400).json({ message: error.message.join('') });
@@ -47,15 +47,15 @@ const CommissionController = {
         bidsCommission,
 
         handlingPercent,
-        handlingPlus
+        handlingPlus,
       })
-        .then(commission => {
+        .then((commission) => {
           return res.status(200).json({
             message: 'Commission has been created successfully',
-            commission
+            commission,
           });
         })
-        .catch(error => {
+        .catch((error) => {
           const status = error.status || 500;
           const errorMessage =
             (error.parent && error.parent.detail) || error.message || error;
@@ -69,19 +69,19 @@ const CommissionController = {
         directHireCommission,
         bidsCommission,
         handlingPercent,
-        handlingPlus
+        handlingPlus,
       },
       {
-        where: { id }
+        where: { id },
       }
     )
-      .then(commission => {
+      .then((commission) => {
         return res.status(200).json({
           message: 'Commission updated successfully',
-          commission
+          commission,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         const status = error.status || 500;
         const errorMessage = error.message || error;
         return res.status(status).json({ message: errorMessage });
@@ -97,17 +97,17 @@ const CommissionController = {
    */
   getDefaultCommission(req, res) {
     Commission.findOne({
-      where: { default: true }
+      where: { default: true },
     })
-      .then(commission => {
+      .then((commission) => {
         return res.json({
-          commission: commission || DEFAULT_COMMISSION
+          commission: commission || DEFAULT_COMMISSION,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         return res.status(500).json({ message: error.message });
       });
-  }
+  },
 };
 
 export default CommissionController;
