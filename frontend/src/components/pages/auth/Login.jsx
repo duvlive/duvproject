@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import * as queryString from 'query-string';
 import Header from 'components/common/layout/Header';
 import Footer from 'components/common/layout/Footer';
 import { Formik, Form } from 'formik';
@@ -18,17 +19,23 @@ import AlertMessage from 'components/common/utils/AlertMessage';
 import { UserContext } from 'context/UserContext';
 import { getProxy } from 'utils/helpers';
 
-const Login = ({ token, sid }) => (
-  <>
-    <section className="auth">
-      <Header showRedLogo />
-      <Content sid={sid} token={token} />
-    </section>
-    <Footer className="mt-0" />
-  </>
-);
+const Login = ({ token, sid, location }) => {
+  const queryParams = queryString.parse(location.search);
+  const { url } = queryParams;
+
+  return (
+    <>
+      <section className="auth">
+        <Header showRedLogo />
+        <Content redirectTo={url || ''} sid={sid} token={token} />
+      </section>
+      <Footer className="mt-0" />
+    </>
+  );
+};
 
 Login.propTypes = {
+  location: PropTypes.object,
   sid: PropTypes.string,
   token: PropTypes.string,
 };
@@ -36,9 +43,10 @@ Login.propTypes = {
 Login.defaultProps = {
   sid: '',
   token: '',
+  location: { search: {} },
 };
 
-const Content = ({ sid, token }) => {
+const Content = ({ redirectTo, sid, token }) => {
   return (
     <section>
       <div className="container-fluid">
@@ -50,7 +58,7 @@ const Content = ({ sid, token }) => {
             <div className="auth__container">
               <section>
                 <h5 className="header font-weight-normal mb-4">Login</h5>
-                <LoginForm sid={sid} token={token} />
+                <LoginForm redirectTo={redirectTo} sid={sid} token={token} />
               </section>
               <section className="auth__social-media">
                 <p className="auth__social-media--text">or login with:</p>
@@ -86,11 +94,12 @@ const Content = ({ sid, token }) => {
 };
 
 Content.propTypes = {
+  redirectTo: PropTypes.string.isRequired,
   sid: PropTypes.string.isRequired,
   token: PropTypes.string.isRequired,
 };
 
-const LoginForm = ({ sid, token }) => {
+const LoginForm = ({ redirectTo, sid, token }) => {
   const [message, setMessage] = useState(null);
   const { userState, userDispatch } = React.useContext(UserContext);
 
@@ -147,16 +156,17 @@ const LoginForm = ({ sid, token }) => {
         });
   }, [sid, userDispatch]);
 
-  // CHECK IF USER HAS PREVIOUSLY SIGNED IN
+  // CHECK IF USER HAS SIGNED IN
   useEffect(() => {
     if (
       userState &&
       userState.isLoggedIn &&
       userState.type !== USER_TYPES.unknown
     ) {
-      navigate(`/${DASHBOARD_PAGE[userState.type]}/dashboard`);
+      const dashboardUrl = `/${DASHBOARD_PAGE[userState.type]}/dashboard`;
+      navigate(redirectTo || dashboardUrl);
     }
-  }, [userState]);
+  }, [userState, redirectTo]);
 
   return (
     <Formik
