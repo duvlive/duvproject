@@ -2,6 +2,7 @@ import { Commission } from '../models';
 import { validString } from '../utils';
 
 export const DEFAULT_COMMISSION = {
+  id: null,
   title: 'Default Commission',
   recommendationsCommission: '15',
   directHireCommission: '6',

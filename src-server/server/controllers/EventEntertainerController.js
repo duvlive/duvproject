@@ -3,42 +3,63 @@ import {
   Application,
   EntertainerProfile,
   EventEntertainer,
+  Commission,
   Event,
   User,
   Rating,
 } from '../models';
 import { validString, getLongDate, getTime, moneyFormat } from '../utils';
 import EMAIL_CONTENT from '../email-template/content';
+import { DEFAULT_COMMISSION } from './CommissionController';
+import { priceCalculatorHelper } from '../utils/priceCalculator';
 
 import sendMail from '../MailSender';
 import { addDays } from 'date-fns';
 
-const sendRequestMail = ({ askingPrice, email, stageName, event }) => {
+const sendRequestMail = ({
+  askingPrice,
+  takeHome,
+  email,
+  stageName,
+  event,
+  id,
+}) => {
   // Build Email
+  const title = `YIPEE!!! You Have A Request To Perform At ${event.eventType}`;
 
-  const offer = moneyFormat(askingPrice);
-  const contentTop = `Congratulations!!! Your have a new event request  NGN ${offer}. Please find event details below`;
+  const contentTop =
+    'We are pleased to inform you are requested to perform at an event with the details stated below by an event host.';
   const contentBottom = `
     <strong>Event:</strong> ${event.eventType} <br>
+    <strong>Place:</strong> ${event.eventPlace} <br>
     <strong>Date:</strong> ${getLongDate(event.eventDate)} <br>
     <strong>Start Time:</strong> ${getTime(event.startTime)} <br>
     <strong>Duration:</strong> ${event.eventDuration} <br>
-    <strong>Street Line 1:</strong> ${event.streetLine1} <br>
-    <strong>Street Line 2:</strong> ${event.streetLine2} <br>
-    <strong>State:</strong> ${event.state} <br>
-    <strong>LGA:</strong> ${event.lga} <br>
-    <strong>City:</strong> ${event.city} <br>
+    <strong>Offer Amount:</strong> NGN ${moneyFormat(askingPrice)} <br>
+    <strong>Take Home Pay:</strong> ${moneyFormat(takeHome)} <br>
   `;
+
+  const contentFooter = `
+  <small>
+  Note:  By accepting, you undertake to: <br />
+  <ol type="a">
+   <li>Perform at the above event after which your bank account will be credited with the above stated take-home amount.</li>
+   <li>Inform the event host and DUV LIVE of any cancellation at least 48hrs before the event date. Failure to do so (except due to reasons considered under Force Majeure) shall result in the removal of the entertainer's account, the blacklisting of the User's Personal Details on the DUV LIVE online platform, and any other legal action deemed reasonably necessary by the affected persons.</li>
+   </ol>
+   </small>
+   `;
 
   sendMail(
     EMAIL_CONTENT.ENTERTAINER_REQUEST,
-    { email: email },
+    { email: email, firstName: stageName },
     {
-      firstName: stageName,
-      title: `You have a request of NGN ${offer}`,
-      link: '#',
+      title,
+      subject: title,
+      link: `${process.env.HOST}/entertainer/request/view/${id}`,
+      button: 'Respond',
       contentTop,
       contentBottom,
+      contentFooter,
     }
   );
 };
@@ -175,19 +196,36 @@ const EventEntertainerController = {
           });
 
           if (hasApplicationRequest) {
+            const defaultCommission = await Commission.findOne({
+              where: { default: true },
+            });
+
+            // calculate commission
+            const commission = defaultCommission || DEFAULT_COMMISSION;
+            const { entertainerFee } = priceCalculatorHelper(
+              askingPrice,
+              commission,
+              hireType
+            );
+
+            // jsdla
             const savedApplication = await Application.create({
               userId: entertainerId,
               askingPrice,
               eventId,
+              commission: commission.id,
               eventEntertainerId: eventEntertainer.id,
               applicationType: 'Request',
+              takeHome: entertainerFee,
               expiryDate: addDays(Date.now(), 1),
             });
 
             if (savedApplication) {
               // send mail to entertainer
               sendRequestMail({
+                id: savedApplication.id,
                 askingPrice,
+                takeHome: entertainerFee,
                 email: entertainerDetails.email,
                 stageName: entertainerDetails.profile.stageName,
                 event,

@@ -551,6 +551,7 @@ const ApplicationController = {
         let updateConditions;
         let notificationCondition;
         let description;
+        let contentTop;
 
         switch (action) {
           /*
@@ -565,7 +566,9 @@ const ApplicationController = {
               status: REQUEST_ACTION.APPROVED,
               approvedDate: currentDate,
             };
-            description = `Yippeee! ${EMAIL_PARAMS.entertainerName} accepted your request (NGN ${EMAIL_PARAMS.askingPrice}) for ${EMAIL_PARAMS.eventType}`;
+            contentTop =
+              'We are happy to inform you that World Best has accepted your request to perform/provide entertainment services at the event with details stated below.';
+            description = ` YIPEE!!! ${EMAIL_PARAMS.entertainerName} ACCEPTED Your Request`;
             notificationCondition = {
               title: NOTIFICATIONS.REQUEST_ACCEPTED,
               type: NOTIFICATION_TYPE.SUCCESS,
@@ -578,7 +581,9 @@ const ApplicationController = {
               approvedDate: currentDate,
               proposedPrice,
             };
-            description = `${EMAIL_PARAMS.entertainerName} wants a payment of (NGN ${EMAIL_PARAMS.proposedPrice}) for ${EMAIL_PARAMS.eventType}`;
+            contentTop =
+              'This is to inform you that Tantelke has responded to your request to perform/provide entertainment services at the event with details stated below.';
+            description = `${EMAIL_PARAMS.entertainerName} Wants An Increment For ${EMAIL_PARAMS.eventType}`;
             notificationCondition = {
               title: NOTIFICATIONS.REQUEST_INCREMENT,
               type: NOTIFICATION_TYPE.INFO,
@@ -591,7 +596,9 @@ const ApplicationController = {
               rejectionReason,
               rejectionDate: currentDate,
             };
-            description = `Unfortunately, ${EMAIL_PARAMS.entertainerName} rejected your request for ${EMAIL_PARAMS.eventType}`;
+            contentTop =
+              'We regret to inform you that World Best declined your request to perform/provide entertainment services at the event with details stated below.';
+            description = `${EMAIL_PARAMS.entertainerName} Declined Your Request For ${EMAIL_PARAMS.eventType}`;
             notificationCondition = {
               title: NOTIFICATIONS.REQUEST_REJECTED,
               type: NOTIFICATION_TYPE.DANGER,
@@ -618,10 +625,12 @@ const ApplicationController = {
           });
 
           // send mail to user
-          await sendRequestMail({
+          await sendEntertainerResponseToRequestMail({
             ...EMAIL_PARAMS,
             ...updateConditions,
             description,
+            contentTop,
+            applicationId,
           });
 
           // response
@@ -942,27 +951,59 @@ const sendPaidRequestMail = (params) => {
   );
 };
 
-const sendRequestMail = (params) => {
-  console.log('params', params);
+const sendEntertainerResponseToRequestMail = (params) => {
+  let buttonText;
+  let link;
   // Build Email
-  const contentTop = `
-    <strong>Event:</strong> ${params.eventType} <br>
-    <strong>Place:</strong> ${params.eventPlace} <br>
-    <strong>Date:</strong> ${params.eventDate} <br>
-    <strong>Price:</sttrong> NGN ${
-      params.proposedPrice || params.askingPrice
-    } <br>
+  const contentTop = `We are pleased to inform you are requested to perform at an event with the details stated below by an event host.
   `;
+  let contentBottom = `
+  <strong>Event:</strong> ${params.eventType} <br>
+  <strong>Place:</strong> ${params.eventPlace} <br>
+  <strong>Date:</strong> ${params.eventDate} <br>
+  <strong>Start Time:</strong> ${params.eventStart} <br>
+  <strong>Duration:</strong> ${params.eventDuration} <br>
+  `;
+
+  switch (params.status) {
+    case REQUEST_ACTION.APPROVED:
+      contentBottom += `<strong>Offer Amount:</strong> ${params.askingPrice} <br><br>`;
+      contentBottom +=
+        'To make payment, kindly proceed by clicking the link stated below.';
+      link = `${process.env.HOST}/user/request/view/${params.applicationId}`;
+      buttonText = 'Pay Now';
+      break;
+
+    case REQUEST_ACTION.INCREMENT:
+      contentBottom += `<strong>Your Offer Amount:</strong> ${params.askingPrice} <br><br>`;
+      contentBottom += `<strong>${params.userName} Amount:</strong> ${params.proposedPrice} <br>`;
+      link = `${process.env.HOST}/user/request/view/${params.applicationId}`;
+      buttonText = 'Respond';
+      break;
+
+    case REQUEST_ACTION.REJECTED:
+      contentBottom += `<strong>Offer Amount:</strong> ${params.askingPrice} <br><br>`;
+      contentBottom += `<strong>Rejection Reason:</strong> ${params.rejectionReason} <br><br>`;
+      contentBottom +=
+        'No worries. You can try hiring other entertainers by heading to your dashboard.';
+      link = `${process.env.HOST}/user/dashboard`; // link to hire entetainer
+      buttonText = 'Proceed To Dashboard';
+      break;
+
+    default:
+      break;
+  }
+
   sendMail(
     {
       subject: `[D.U.V LIVE ] ${params.description}`,
-      firstName: params.userName,
       title: params.description,
-      buttonText: 'See Details',
-      link: '#',
+      buttonText,
+      link,
       contentTop,
+      contentBottom,
     },
-    { email: params.userEmail }
+    { email: params.userEmail, firstName: params.userName }
   );
 };
 
