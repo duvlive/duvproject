@@ -310,7 +310,6 @@ const ApplicationController = {
         attributes: ['id', 'hireType'],
         where: {
           hiredEntertainer: req.user.profile.id,
-          [Op.and]: Sequelize.literal('"event"."eventDate" < NOW()'),
           [Op.and]: Sequelize.literal('"eventPayment"."id" is null'),
         },
         include: [
@@ -318,6 +317,11 @@ const ApplicationController = {
             model: Event,
             as: 'event',
             attributes: ['id', 'eventType', 'eventDate'],
+            where: {
+              eventDate: {
+                [Op.lt]: Date.now(),
+              },
+            },
           },
           {
             model: Payment,

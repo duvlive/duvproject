@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Stars from 'components/common/utils/Stars';
 import Image from 'components/common/utils/Image';
-import { commaNumber } from 'utils/helpers';
+import { commaNumber, getAverageRatings } from 'utils/helpers';
 
 const EntertainersSearchResult = ({
   entertainers,
@@ -31,12 +31,13 @@ const EntertainersSearchResult = ({
 );
 
 EntertainersSearchResult.defaultProps = {
+  searchTerm: '',
   title: null,
 };
 
 EntertainersSearchResult.propTypes = {
   entertainers: PropTypes.array.isRequired,
-  searchTerm: PropTypes.string.isRequired,
+  searchTerm: PropTypes.string,
   selectedSearchedEntertainer: PropTypes.func.isRequired,
   title: PropTypes.string,
 };
@@ -45,56 +46,65 @@ EntertainersSearchResult.Card = ({
   entertainer,
   searchTerm,
   selectedSearchedEntertainer,
-}) => (
-  <tr>
-    <td>
-      <Image
-        className="avatar--medium--small"
-        name={entertainer.stageName}
-        responsiveImage={false}
-        src={entertainer.profileImageURL}
-      />
-    </td>
-    <td>
-      <span className="text-muted small--4">Stage name</span>{' '}
-      {formatSearchTerm(entertainer.stageName, searchTerm)}
-    </td>
-    <td>
-      <span className="text-muted small--4">Type</span>{' '}
-      {entertainer.entertainerType}
-    </td>
-    <td className="align-middle text-gray">
-      <span className="text-muted small--4">Location</span>{' '}
-      {entertainer.location}
-    </td>
-    <td>
-      <span className="text-muted small--4">Ratings</span>{' '}
-      <Stars name={entertainer.stageName} rating={4.5} />
-    </td>
-    <td>
-      <span className="text-muted small--4">Charges</span>{' '}
-      {commaNumber(entertainer.baseCharges)} -{' '}
-      {commaNumber(entertainer.preferredCharges)}
-    </td>
-    <td>
-      <a
-        className="btn btn-info btn-sm btn-transparent"
-        href={`/entertainers/${entertainer.slug}`}
-        rel="noopener noreferrer"
-        target="_blank"
-      >
-        Profile
-      </a>
-      &nbsp;&nbsp;
-      <button
-        className="btn btn-success btn-sm btn-transparent"
-        onClick={() => selectedSearchedEntertainer(entertainer)}
-      >
-        Select
-      </button>
-    </td>
-  </tr>
-);
+}) => {
+  return (
+    <tr>
+      <td>
+        <Image
+          className="avatar--medium--small"
+          name={entertainer.stageName}
+          responsiveImage={false}
+          src={entertainer.profileImageURL}
+        />
+      </td>
+      <td>
+        <span className="text-muted small--4">Stage name</span>{' '}
+        {formatSearchTerm(entertainer.stageName, searchTerm)}
+      </td>
+      <td>
+        <span className="text-muted small--4">Type</span>{' '}
+        {entertainer.entertainerType}
+      </td>
+      <td className="align-middle text-gray">
+        <span className="text-muted small--4">Location</span>{' '}
+        {entertainer.location}
+      </td>
+      <td className="align-middle text-gray">
+        <span className="text-muted small--4">Ratings</span>{' '}
+        {getAverageRatings(entertainer.ratings) > 0 ? (
+          <Stars
+            name={entertainer.stageName}
+            rating={getAverageRatings(entertainer.ratings)}
+          />
+        ) : (
+          <> No Ratings Yet</>
+        )}
+      </td>
+      <td className="align-middle text-gray">
+        <span className="text-muted small--4">Charges</span>{' '}
+        {commaNumber(entertainer.baseCharges)} -{' '}
+        {commaNumber(entertainer.preferredCharges)}
+      </td>
+      <td className="align-middle text-gray">
+        <a
+          className="btn btn-info btn-sm btn-transparent"
+          href={`/entertainers/${entertainer.slug}`}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Profile
+        </a>
+        &nbsp;&nbsp;
+        <button
+          className="btn btn-success btn-sm btn-transparent"
+          onClick={() => selectedSearchedEntertainer(entertainer)}
+        >
+          Select
+        </button>
+      </td>
+    </tr>
+  );
+};
 
 EntertainersSearchResult.Card.propTypes = {
   entertainer: PropTypes.object.isRequired,
@@ -107,8 +117,14 @@ const formatSearchTerm = (text, filterValue) => {
   const textParts = text.split(reg);
   return (
     <>
-      {textParts.map((part) =>
-        part.match(reg) ? <b className="text-danger">{part}</b> : part
+      {textParts.map((part, index) =>
+        part.match(reg) ? (
+          <b className="text-danger" key={index}>
+            {part}
+          </b>
+        ) : (
+          part
+        )
       )}
     </>
   );

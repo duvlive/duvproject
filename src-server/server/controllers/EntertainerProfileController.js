@@ -54,6 +54,7 @@ const formatSearchEntertainers = (result) =>
       preferredCharges: user.profile.preferredCharges,
       slug: user.profile.slug,
       availableFor: user.profile.availableFor,
+      ratings: user.profile.ratings,
     };
     return [...acc, entertainer];
   }, []);
@@ -349,6 +350,21 @@ const EntertainerProfileController = {
         model: EntertainerProfile,
         as: 'profile',
         where: entertainerQuery,
+        include: [
+          {
+            model: Rating,
+            as: 'ratings',
+            attributes: [
+              'id',
+              'professionalism',
+              'accommodating',
+              'overallTalent',
+              'recommend',
+              'review',
+              'createdAt',
+            ],
+          },
+        ],
       },
     ];
 
@@ -518,6 +534,21 @@ const EntertainerProfileController = {
           model: EntertainerProfile,
           as: 'profile',
           where: entertainerQuery,
+          include: [
+            {
+              model: Rating,
+              as: 'ratings',
+              attributes: [
+                'id',
+                'professionalism',
+                'accommodating',
+                'overallTalent',
+                'recommend',
+                'review',
+                'createdAt',
+              ],
+            },
+          ],
         },
       ];
 

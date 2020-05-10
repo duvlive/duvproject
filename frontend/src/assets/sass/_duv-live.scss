@@ -577,3 +577,25 @@ a:hover {
     opacity: 0.3;
   }
 }
+
+.opacity-30 {
+  opacity: 0.3;
+}
+
+.sharer__icons {
+  text-align: center;
+  li {
+    margin-bottom: 1rem;
+    margin-right: 1rem;
+    display: inline-block;
+
+    button {
+      opacity: 1;
+      transition: opacity 0.3s ease-out;
+
+      &:hover {
+        opacity: 0.5;
+      }
+    }
+  }
+}
