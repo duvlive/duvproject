@@ -9,6 +9,7 @@ import { getEventDate, getTime, getTimeOfDay } from 'utils/date-helpers';
 import NoContent from 'components/common/utils/NoContent';
 import { getTokenFromStore } from 'utils/localStorage';
 import { parse } from 'date-fns';
+import AlertMessage from 'components/common/utils/AlertMessage';
 
 const Events = () => {
   const [showPastEvents, setShowPastEvents] = React.useState(false);
@@ -61,6 +62,9 @@ const Events = () => {
         <TopMessage />
 
         <section className="app-content">
+          {!hasActiveEvents && (
+            <AlertMessage message="You have no upcoming events" />
+          )}
           {events.length > 0 ? (
             <div className="table-responsive">
               <table className="table table-dark table__no-border table__with-bg">

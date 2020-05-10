@@ -18,7 +18,9 @@ import {
   eventHasExpired,
   defaultEvent,
   defaultEventEntertainer,
+  eventIsOngoing,
 } from 'utils/event-helpers';
+import AlertMessage from 'components/common/utils/AlertMessage';
 
 const ViewEvent = ({ eventEntertainerId }) => {
   const [eventEntertainer, setEventEntertainer] = React.useState({});
@@ -61,9 +63,11 @@ const ViewEvent = ({ eventEntertainerId }) => {
                 <h3 className="main-app__title">
                   {eventEntertainer.event.eventType} <br />{' '}
                   <small className="main-app__small remaining-time">
-                    <i className="icon icon-hourglass"></i>
                     {!eventHasExpired(eventEntertainer.event.eventDate) && (
-                      <>{remainingDays(eventEntertainer.event.eventDate)}</>
+                      <>
+                        <i className="icon icon-hourglass"></i>{' '}
+                        {remainingDays(eventEntertainer.event.eventDate)}
+                      </>
                     )}
                   </small>
                 </h3>
@@ -72,8 +76,29 @@ const ViewEvent = ({ eventEntertainerId }) => {
 
             {/* Event Details and Entertainers */}
             <aside className="row">
+              <div className="col-sm-12 mt-3">
+                {eventIsOngoing(
+                  eventEntertainer.event.eventDate,
+                  eventEntertainer.event.eventDuration
+                ) && (
+                  <AlertMessage
+                    message="Event is currently ongoing."
+                    type="info"
+                  />
+                )}
+                {eventHasExpired(eventEntertainer.event.eventDate) &&
+                  !eventIsOngoing(
+                    eventEntertainer.event.eventDate,
+                    eventEntertainer.event.eventDuration
+                  ) && (
+                    <AlertMessage
+                      message="Event Date has passed"
+                      type="error"
+                    />
+                  )}
+              </div>
               <div className="col-md-6">
-                <h3 className="main-app__title mt-5 small--1 text-blue">
+                <h3 className="main-app__subtitle mt-5 text-red">
                   Event Details
                 </h3>
                 <ul className="list-group transparent">
@@ -84,7 +109,7 @@ const ViewEvent = ({ eventEntertainerId }) => {
                 </ul>
               </div>
               <div className="col-md-6">
-                <h3 className="main-app__title mt-5 small--1 text-yellow">
+                <h3 className="main-app__subtitle mt-5  text-yellow">
                   Event Requirements
                 </h3>
                 <ViewEvent.EventEntertainerDetailsCard
@@ -147,25 +172,29 @@ ViewEvent.OwnerDetailsCard = ({ owner }) => {
           <i className="icon icon-user-circle"></i>
           Name
         </small>
-        <h5 className="event-list-label">
+        <h5 className="event-list-label text-muted-light-2">
           {`${sanitizedOwner.firstName} ${sanitizedOwner.lastName}`}
         </h5>
       </li>
       <li className="list-group-item">
         <small className="small-text__with-icon">
-          <i className="icon icon-vcard"></i>
-          Phone Number
+          <i className="icon icon-vcard"></i> Phone Number
         </small>
-        <h5 className="event-list-label">{sanitizedOwner.phoneNumber}</h5>
+        <h5 className="event-list-label text-muted-light-2">
+          {sanitizedOwner.phoneNumber}
+        </h5>
       </li>
-
-      <li className="list-group-item">
-        <small className="small-text__with-icon">
-          <i className="icon icon-vcard"></i>
-          Phone Number 2
-        </small>
-        <h5 className="event-list-label">{sanitizedOwner.phoneNumber2}</h5>
-      </li>
+      {sanitizedOwner.phoneNumber2 && (
+        <li className="list-group-item">
+          <small className="small-text__with-icon">
+            <i className="icon icon-vcard"></i>
+            Phone Number 2
+          </small>
+          <h5 className="event-list-label text-muted-light-2">
+            {sanitizedOwner.phoneNumber2}
+          </h5>
+        </li>
+      )}
     </>
   );
 };

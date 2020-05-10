@@ -1,5 +1,5 @@
 import React from 'react';
-import { OCCASSION_TYPE } from 'utils/constants';
+import { OCCASSION_TYPE, START_TIME } from 'utils/constants';
 import Input from 'components/forms/Input';
 import Select from 'components/forms/Select';
 import TextArea from 'components/forms/TextArea';
@@ -17,7 +17,6 @@ const EventDetails = () => {
   const EVENT_DURATION = getEventDuration();
   const [displayForm, setDisplayForm] = React.useState({ eventType: false });
   const toggleForm = (value) => {
-    console.log('value', value);
     setDisplayForm({ [value]: !displayForm[value] });
   };
   return (
@@ -61,15 +60,12 @@ const EventDetails = () => {
             />
           </div>
           <div className="form-row">
-            <DatePicker
-              dateFormat="h:mm aa"
+            <Select
+              blankOption="Approx. Start Time"
               formGroupClassName="col-md-6"
               label="Start Time"
               name="event.startTime"
-              placeholder="Approx. Start Time"
-              showTimeSelect
-              showTimeSelectOnly
-              timeCaption="Start Time"
+              options={START_TIME}
             />
             <Select
               blankOption="Select Duration"

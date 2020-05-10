@@ -15,11 +15,11 @@ module.exports = function (sequelize, DataTypes) {
         },
       },
       eventDate: {
-        type: DataTypes.STRING,
+        type: DataTypes.DATE,
         allowNull: false,
       },
       startTime: {
-        type: DataTypes.STRING,
+        type: DataTypes.DATE,
         allowNull: false,
       },
       eventDuration: {
@@ -54,6 +54,18 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: true,
       },
       description: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
+      cancelled: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      cancelledDate: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
+      cancelledReason: {
         type: DataTypes.TEXT,
         allowNull: true,
       },

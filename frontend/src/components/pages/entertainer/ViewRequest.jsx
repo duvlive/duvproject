@@ -13,11 +13,17 @@ import { getTokenFromStore } from 'utils/localStorage';
 import { remainingDays } from 'utils/date-helpers';
 import InputFormat from 'components/forms/InputFormat';
 import PriceCalculator from 'components/common/utils/PriceCalculator';
-import { getNairaSymbol, commaNumber } from 'utils/helpers';
+import {
+  getNairaSymbol,
+  commaNumber,
+  getRequestStatusIcon,
+} from 'utils/helpers';
 import { DEFAULT_COMMISSION, REQUEST_ACTION } from 'utils/constants';
 import { setInitialValues } from 'components/forms/form-helper';
 import TextArea from 'components/forms/TextArea';
 import LoadingScreen from 'components/common/layout/LoadingScreen';
+import { UserContext } from 'context/UserContext';
+import { navigate } from '@reach/router';
 
 const ViewRequest = ({ applicationId }) => {
   const [activeType, setActiveType] = React.useState(null);
@@ -33,6 +39,8 @@ const ViewRequest = ({ applicationId }) => {
   const hideRequestForm = () => {
     setActiveType(null);
   };
+
+  let { userDispatch } = React.useContext(UserContext);
 
   const processRequest = (
     requestType,
@@ -84,9 +92,13 @@ const ViewRequest = ({ applicationId }) => {
         })
         .catch(function (error) {
           console.log(error.response.data.message);
-          // TODO: navigate to all events
+          userDispatch({
+            type: 'add-alert',
+            alert: 'bid-not-found-error',
+          });
+          navigate('/entertainer/requests');
         });
-  }, [applicationId]);
+  }, [applicationId, userDispatch]);
 
   if (!application) {
     return null;
@@ -116,8 +128,22 @@ const ViewRequest = ({ applicationId }) => {
               <div className="card card-custom card-black card-form">
                 <div className="card-body">
                   <h5 className="text-muted-light mb-4 text-font">
-                    Proposed Offer: {getNairaSymbol()}
-                    {commaNumber(application.askingPrice)}
+                    {application.status === REQUEST_ACTION.PAID ? (
+                      <>
+                        Amount Paid: {getNairaSymbol()}
+                        {commaNumber(
+                          application.proposedPrice || application.askingPrice
+                        )}
+                      </>
+                    ) : (
+                      <>
+                        Proposed Offer: {getNairaSymbol()}
+                        {commaNumber(application.askingPrice)}
+                      </>
+                    )}
+                    <small className="float-right">
+                      {getRequestStatusIcon(application.status)}
+                    </small>
                   </h5>
                   <hr className="d-block mb-4" />
 
@@ -139,7 +165,11 @@ const ViewRequest = ({ applicationId }) => {
                       ) : (
                         <section className="accept">
                           <PriceCalculator
-                            askingPrice={parseInt(application.askingPrice, 10)}
+                            askingPrice={parseInt(
+                              application.proposedPrice ||
+                                application.askingPrice,
+                              10
+                            )}
                             commission={
                               application.commission || DEFAULT_COMMISSION
                             }

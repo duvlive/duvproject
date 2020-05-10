@@ -44,7 +44,6 @@ const Dashboard = () => {
       })
       .then(function (response) {
         const { status, data } = response;
-        console.log('data.entertainers', data.results);
         // handle success
         if (status === 200) {
           setApplications(data.results);
@@ -73,8 +72,6 @@ const Dashboard = () => {
         setPendingReview([]);
       });
   }, []);
-
-  console.log('Pending Review', pendingReview);
 
   const topMessage = userState.firstTimeLogin ? 'Hello' : 'Welcome back';
   // Sort event according - Today, Upcoming and Past

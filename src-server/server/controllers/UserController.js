@@ -279,7 +279,9 @@ const UserController = {
   socialLogin(req, res) {
     const { lastName, firstName, email, picture, source } = req.user;
     if (!email) {
-      return res.status(400).json({ error: 'No email found' });
+      return res
+        .status(400)
+        .json({ error: 'No email found', message: 'No email found' });
     }
     User.findOne({
       where: { email },
@@ -295,7 +297,7 @@ const UserController = {
             profileImageURL: picture,
             isActive: true,
             type: 999,
-            // source,
+            source,
             profileImageID: 'social-media',
           });
           const token = Authentication.generateToken(user);
@@ -316,6 +318,41 @@ const UserController = {
         return res.status(400).json({ error: errorMessage });
       });
   },
+
+  /**
+   * Register Band Member
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  // addBandMember(req, res) {
+  //   const { id } = req.user;
+  //   const { lastName, firstName, email, bandRole } = req.body;
+  //   if (!email || !bandRole) {
+  //     return res
+  //       .status(400)
+  //       .json({ message: 'Email and band role are required' });
+  //   }
+  //   // if user exists, send a mail that to confirm his addition
+  //   User.findOne({
+  //     where: { email },
+  //   })
+  //     .then((result) => {
+  //       if (!result) {
+  //         // send mail
+  //         // update add activation token, encode band admin token in activation token
+  //       } else {
+  //         //create the user
+  //         // send user a mail with user_id as activation token
+  //         // clicking on the link, leads him to register page.
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       const errorMessage = error.message || error;
+  //       return res.status(400).json({ error: errorMessage });
+  //     });
+  // },
 
   /**
    * activate User
@@ -346,7 +383,7 @@ const UserController = {
             },
           }
         ).then(() =>
-          res.status(200).json({ message: 'User activation successful' })
+          res.status(200).json({ message: 'Account activation successful' })
         );
       })
       .catch((error) => {

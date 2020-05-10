@@ -316,3 +316,35 @@ export const REQUEST_ACTION = {
   PAID: 'Paid',
   PENDING: 'Pending',
 };
+
+export const START_TIME = [
+  { label: '9:00 AM', value: 9 },
+  { label: '10:00 AM', value: 10 },
+  { label: '11:00 AM', value: 11 },
+  { label: '12:00 PM', value: 12 },
+  { label: '1:00 PM', value: 13 },
+  { label: '2:00 PM', value: 14 },
+  { label: '3:00 PM', value: 15 },
+  { label: '4:00 PM', value: 16 },
+  { label: '5:00 PM', value: 17 },
+  { label: '6:00 PM', value: 18 },
+  { label: '7:00 PM', value: 19 },
+  { label: '8:00 PM', value: 20 },
+  { label: '9:00 PM', value: 21 },
+  { label: '10:00 PM', value: 22 },
+  { label: '11:00 PM', value: 23 },
+  { label: '12:00 PM', value: 0 },
+  { label: '1:00 AM', value: 1 },
+  { label: '2:00 AM', value: 2 },
+  { label: '3:00 AM', value: 3 },
+  { label: '4:00 AM', value: 4 },
+  { label: '5:00 AM', value: 5 },
+  { label: '6:00 AM', value: 6 },
+  { label: '7:00 AM', value: 7 },
+  { label: '8:00 AM', value: 8 },
+];
+
+// get event time with startof day
+// add start time to eventtime to get actual start time
+// add event duration to starttime to get if the event is ongoing
+// add hours (string) to everywhere event duration is used

@@ -28,7 +28,7 @@ import {
 import LoadingScreen from 'components/common/layout/LoadingScreen';
 import { SearchEntertainerForm } from 'components/pages/user/SearchEntertainer';
 import Image from 'components/common/utils/Image';
-import { commaNumber } from 'utils/helpers';
+import { commaNumber, getAverageRatings } from 'utils/helpers';
 import Stars from 'components/common/utils/Stars';
 import {
   SearchEntertainerDetailsForm,
@@ -466,60 +466,69 @@ const ExpiredEvent = () => (
 );
 
 const SelectedEntertainer = ({ entertainer, selectedSearchedEntertainer }) => (
-  <table className="table table-dark table__no-border table__with-bg">
-    <tbody>
-      <tr>
-        <td>
-          <Image
-            className="avatar--medium--small"
-            name={entertainer.stageName}
-            responsiveImage={false}
-            src={entertainer.profileImageURL}
-          />
-        </td>
-        <td>
-          <span className="text-muted small--4">Stage name</span>{' '}
-          {entertainer.stageName}
-        </td>
-        <td>
-          <span className="text-muted small--4">Type</span>{' '}
-          {entertainer.entertainerType}
-        </td>
-        <td className="align-middle text-gray">
-          <span className="text-muted small--4">Location</span>{' '}
-          {entertainer.location}
-        </td>
-        <td>
-          <span className="text-muted small--4">Ratings</span>{' '}
-          <Stars name={entertainer.stageName} rating={4.5} />
-        </td>
-        <td>
-          <span className="text-muted small--4">Charges</span>{' '}
-          {commaNumber(entertainer.baseCharges)} -{' '}
-          {commaNumber(entertainer.preferredCharges)}
-        </td>
-        <td>
-          <a
-            className="btn btn-info btn-sm btn-transparent"
-            href={`/entertainers/${entertainer.slug}`}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Profile
-          </a>{' '}
-          &nbsp;&nbsp;
-          <button
-            className="btn btn-danger btn-sm btn-transparent"
-            onClick={() =>
-              selectedSearchedEntertainer({ entertainer: null, type: null })
-            }
-          >
-            Remove
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div className="table-responsive">
+    <table className="table table-dark table__no-border table__with-bg">
+      <tbody>
+        <tr>
+          <td className="align-middle">
+            <Image
+              className="avatar--medium--small"
+              name={entertainer.stageName}
+              responsiveImage={false}
+              src={entertainer.profileImageURL}
+            />
+          </td>
+          <td className="align-middle">
+            <span className="text-muted small--4">Stage name</span>{' '}
+            {entertainer.stageName}
+          </td>
+          <td className="align-middle">
+            <span className="text-muted small--4">Type</span>{' '}
+            {entertainer.entertainerType}
+          </td>
+          <td className="align-middle text-gray">
+            <span className="text-muted small--4">Location</span>{' '}
+            {entertainer.location}
+          </td>
+          <td className="align-middle">
+            <span className="text-muted small--4">Ratings</span>{' '}
+            {getAverageRatings(entertainer.ratings) > 0 ? (
+              <Stars
+                name={entertainer.stageName}
+                rating={getAverageRatings(entertainer.ratings)}
+              />
+            ) : (
+              <> No Ratings Yet</>
+            )}
+          </td>
+          <td className="align-middle">
+            <span className="text-muted small--4">Charges</span>{' '}
+            {commaNumber(entertainer.baseCharges)} -{' '}
+            {commaNumber(entertainer.preferredCharges)}
+          </td>
+          <td className="align-middle">
+            <a
+              className="btn btn-info btn-sm btn-transparent"
+              href={`/entertainers/${entertainer.slug}`}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              Profile
+            </a>{' '}
+            &nbsp;&nbsp;
+            <button
+              className="btn btn-danger btn-sm btn-transparent"
+              onClick={() =>
+                selectedSearchedEntertainer({ entertainer: null, type: null })
+              }
+            >
+              Remove
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 );
 
 SelectedEntertainer.propTypes = {

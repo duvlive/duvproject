@@ -14,9 +14,15 @@ import { remainingDays } from 'utils/date-helpers';
 import NoContent from 'components/common/utils/NoContent';
 import { Link } from '@reach/router';
 import { REQUEST_ACTION } from 'utils/constants';
+import LoadItems from 'components/common/utils/LoadItems';
+import { UserContext } from 'context/UserContext';
+import AlertMessage from 'components/common/utils/AlertMessage';
 
 const Requests = () => {
-  const [requests, setRequests] = React.useState([]);
+  const [requests, setRequests] = React.useState(null);
+  let { userState, userDispatch } = React.useContext(UserContext);
+  const [message, setMessage] = React.useState({ msg: null, type: null });
+
   React.useEffect(() => {
     axios
       .get('/api/v1/entertainer/requests', {
@@ -34,36 +40,55 @@ const Requests = () => {
       .catch(function (error) {
         // console.log(error.response.data.message);
         // navigate to all events
+        setRequests([]);
       });
   }, []);
+
+  if (userState && userState.alert === 'bid-not-found-error') {
+    !message.msg &&
+      setMessage({
+        msg: 'The request is not found',
+        type: 'error',
+      });
+    userDispatch({
+      type: 'remove-alert',
+    });
+  }
+
   return (
     <BackEndPage title="Requests">
       <div className="main-app">
         <TopMessage message="Placed Requests" />
 
         <section className="app-content">
+          <div className="mt-4">
+            <AlertMessage message={message.msg} type={message.type} />
+          </div>
           <div className="table-responsive">
-            {requests.length > 0 ? (
+            <LoadItems
+              items={requests}
+              noContent={<NoContent text="No Request Found." />}
+            >
               <table className="table table-dark table__no-border table__with-bg">
                 <tbody>
-                  {requests.map((request, index) => (
-                    <RequestsRow
-                      askingPrice={request.askingPrice}
-                      city={request.event.city}
-                      eventType={request.event.eventType}
-                      expiryDate={request.expiryDate}
-                      id={request.id}
-                      key={index}
-                      number={index + 1}
-                      state={request.event.state}
-                      status={request.status}
-                    />
-                  ))}
+                  {requests &&
+                    requests.map((request, index) => (
+                      <RequestsRow
+                        askingPrice={request.askingPrice}
+                        city={request.event.city}
+                        eventType={request.event.eventType}
+                        expiryDate={request.expiryDate}
+                        id={request.id}
+                        key={index}
+                        number={index + 1}
+                        proposedPrice={request.proposedPrice}
+                        state={request.event.state}
+                        status={request.status}
+                      />
+                    ))}
                 </tbody>
               </table>
-            ) : (
-              <NoContent text="No Request Found." />
-            )}
+            </LoadItems>
             <br />
             <br />
           </div>
@@ -80,6 +105,7 @@ export const RequestsRow = ({
   city,
   eventType,
   number,
+  proposedPrice,
   state,
   status,
 }) => (
@@ -95,20 +121,36 @@ export const RequestsRow = ({
       </span>
     </td>
     {status === REQUEST_ACTION.PENDING && (
-      <td>
-        <span className="text-yellow">Request closes on </span>
-        <span>
-          <i className="icon icon-clock" /> {remainingDays(expiryDate)}
-        </span>
-      </td>
+      <>
+        <td>
+          <span className="text-yellow">Request closes on </span>
+          <span>
+            <i className="icon icon-clock" /> {remainingDays(expiryDate)}
+          </span>
+        </td>
+        <td>
+          <span className="text-red">Asking Price</span>
+          <span>
+            {getNairaSymbol()}
+            {commaNumber(askingPrice)}
+          </span>
+        </td>
+      </>
     )}
-    <td>
-      <span className="text-red">Asking Price</span>
-      <span>
-        {getNairaSymbol()}
-        {commaNumber(askingPrice)}
-      </span>
-    </td>
+
+    {(status === REQUEST_ACTION.APPROVED || status === REQUEST_ACTION.PAID) && (
+      <>
+        <td>
+          <span className="text-yellow">Approved Price </span>
+          <span>
+            {getNairaSymbol()}
+            {commaNumber(
+              proposedPrice && proposedPrice > 0 ? proposedPrice : askingPrice
+            )}
+          </span>
+        </td>
+      </>
+    )}
     <td>
       <span className="text-muted-light">Status</span>
       <span>{getRequestStatusIcon(status)}</span>
@@ -131,6 +173,7 @@ RequestsRow.propTypes = {
   expiryDate: PropTypes.any,
   id: PropTypes.number,
   number: PropTypes.number,
+  proposedPrice: PropTypes.string,
   state: PropTypes.string,
   status: PropTypes.string,
 };
@@ -143,6 +186,7 @@ Requests.defaultProps = {
   id: 0,
   number: 0,
   state: '',
+  proposedPrice: null,
   status: 'Pending',
 };
 

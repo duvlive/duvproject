@@ -22,6 +22,7 @@ import {
   eventHasExpired,
   defaultEvent,
   defaultEventEntertainer,
+  eventIsOngoing,
 } from 'utils/event-helpers';
 import AlertMessage from 'components/common/utils/AlertMessage';
 import LoadingScreen from 'components/common/layout/LoadingScreen';
@@ -112,14 +113,22 @@ const ViewEvent = ({ id }) => {
               {/* Event Details and Entertainers */}
               <aside className="row">
                 <div className="col-md-8 mt-3">
-                  {eventHasExpired(event.eventDate) && (
+                  {eventIsOngoing(event.eventDate, event.eventDuration) && (
                     <AlertMessage
-                      message="Event Date has passed"
-                      type="error"
+                      message="Event is currently ongoing."
+                      type="info"
                     />
                   )}
+                  {eventHasExpired(event.eventDate) &&
+                    !eventIsOngoing(event.eventDate, event.eventDuration) && (
+                      <AlertMessage
+                        message="Event Date has passed"
+                        type="error"
+                      />
+                    )}
                   {!eventHasExpired(event.eventDate) &&
-                    eventIsVoid(event.eventDate) && (
+                    eventIsVoid(event.eventDate) &&
+                    !eventIsOngoing(event.eventDate, event.eventDuration) && (
                       <AlertMessage
                         message="Event can no longer be edited."
                         type="info"
@@ -389,11 +398,7 @@ ViewEvent.EntertainersTable = ({ eventEntertainers, eventDate }) => {
               {hiredEntertainers.length > 0 ? (
                 <h3 className="event-title text-blue">Hired Entertainers</h3>
               ) : (
-                <h4 className="main-app__title text-muted pb-4 text-center">
-                  <span className="icon icon-help no-entertainer-icon"></span>
-                  <br />
-                  No Entertainer has been hired
-                </h4>
+                <ViewEvent.NoHiredEntertainer />
               )}
             </td>
           </tr>
@@ -437,9 +442,7 @@ ViewEvent.EntertainersTable = ({ eventEntertainers, eventDate }) => {
       )}
     </div>
   ) : (
-    <h3 className="text-white event-title ml-0 mt-5">
-      You have no Entertainer in Review
-    </h3>
+    <ViewEvent.NoHiredEntertainer />
   );
 };
 
@@ -447,6 +450,14 @@ ViewEvent.EntertainersTable.propTypes = {
   eventDate: PropTypes.string.isRequired,
   eventEntertainers: PropTypes.array.isRequired,
 };
+
+ViewEvent.NoHiredEntertainer = () => (
+  <h4 className="main-app__title text-muted pb-4 text-center">
+    <span className="icon icon-help no-entertainer-icon"></span>
+    <br />
+    No hired Entertainer
+  </h4>
+);
 
 ViewEvent.HireEntertainersRow = ({ entertainer }) => {
   if (!entertainer) {

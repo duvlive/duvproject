@@ -16,6 +16,7 @@ import { getTokenFromStore } from 'utils/localStorage';
 import { UserContext } from 'context/UserContext';
 import AlertMessage from 'components/common/utils/AlertMessage';
 import { Link, Match } from '@reach/router';
+import { startOfDay, addHours } from 'date-fns';
 
 const NewEvent = () => {
   return (
@@ -65,10 +66,12 @@ const NewEventForm = () => {
     <Formik
       initialValues={initialValues}
       onSubmit={({ event, address }, actions) => {
+        const eventDate = startOfDay(event.eventDate.date);
+        const startTime = addHours(eventDate, event.startTime);
         const payload = {
           eventType: event.eventType,
-          eventDate: event.eventDate.date,
-          startTime: event.startTime.date,
+          eventDate: startTime,
+          startTime: startTime,
           eventDuration: event.eventDuration,
           moreInformation: event.moreInformation,
           ...address,

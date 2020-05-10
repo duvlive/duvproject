@@ -1,26 +1,33 @@
 import { subtractDays } from './date-helpers';
 import { parse, distanceInWordsToNow, isPast } from 'date-fns';
+import { addHours } from 'date-fns';
 
 /**
  * Event Helpers
  * @param {*} date
  */
-export const auctionIsVoid = eventDate =>
+export const auctionIsVoid = (eventDate) =>
   Date.now() > subtractDays(eventDate, 4);
 
-export const userCanAddEntertainer = eventDate =>
+export const userCanAddEntertainer = (eventDate) =>
   Date.now() < subtractDays(eventDate, 3);
 
-export const eventIsVoid = eventDate =>
+export const eventIsVoid = (eventDate) =>
   Date.now() >= subtractDays(eventDate, 2);
 
-export const eventHasExpired = eventDate => isPast(eventDate);
-export const maxAuctionDate = eventDate => subtractDays(eventDate, 4);
-export const minAuctionDate = eventDate => subtractDays(eventDate, 5);
+export const eventHasExpired = (eventDate) => isPast(eventDate);
+export const maxAuctionDate = (eventDate) => subtractDays(eventDate, 4);
+export const minAuctionDate = (eventDate) => subtractDays(eventDate, 5);
 
-export const dateDistance = eventDate => distanceInWordsToNow(eventDate);
+export const eventIsOngoing = (eventDate, eventDuration) => {
+  const durationInHours = eventDuration.slice(0, 2);
+  const eventEndTime = addHours(eventDate, durationInHours);
+  return isPast(eventDate) && eventEndTime > Date.now();
+};
 
-export const groupEvents = events =>
+export const dateDistance = (eventDate) => distanceInWordsToNow(eventDate);
+
+export const groupEvents = (events) =>
   events.reduce(
     (result, event) => {
       if (parse(event.eventDate).toDateString() === new Date().toDateString()) {
@@ -48,7 +55,7 @@ export const defaultEvent = {
   lga: null,
   city: null,
   landmark: null,
-  description: null
+  description: null,
 };
 
 export const defaultEventEntertainer = {
@@ -65,5 +72,5 @@ export const defaultEventEntertainer = {
   auctionEndDate: null,
   hireType: 'Auction',
   hiredDate: null,
-  hiredEntertainer: null
+  hiredEntertainer: null,
 };
