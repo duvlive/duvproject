@@ -15,7 +15,7 @@ const textEmailTemplate = ({
   const greetings = firstName ? `${hello}, ${firstName}` : hello;
   const button =
     link && buttonText
-      ? `${buttonText} [${link}] \n\n or copy this url and view in a web browser ${link}`
+      ? `${buttonText} [${link}] \n\n or copy this url and view in a web browser ${link}\n\n`
       : '';
   content += (contentTop && contentTop.replace('<br>', '\n')) || '';
   content += contentBottom ? '\n\n' + contentBottom.replace('<br>', '\n') : '';
