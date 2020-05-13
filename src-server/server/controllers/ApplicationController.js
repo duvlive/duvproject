@@ -962,7 +962,7 @@ const sendEntertainerResponseToRequestMail = (params) => {
   let buttonText;
   let link;
   // Build Email
-  const contentTop = `We are pleased to inform you are requested to perform at an event with the details stated below by an event host.
+  let contentTop = `We are pleased to inform you are requested to perform at an event with the details stated below by an event host.
   `;
   let contentBottom = `
   <strong>Event:</strong> ${params.eventType} <br>
@@ -982,6 +982,7 @@ const sendEntertainerResponseToRequestMail = (params) => {
       break;
 
     case REQUEST_ACTION.INCREMENT:
+      contentTop = `This is to inform you that ${params.entertainerName} has responded to your request to perform/ provide entertainment services at the event with details stated below.`;
       contentBottom += `<strong>Your Offer Amount:</strong> NGN ${params.askingPrice} <br><br>`;
       contentBottom += `<strong>${params.entertainerName} Amount:</strong> NGN ${params.proposedPrice} <br>`;
       link = `${process.env.HOST}/user/request/view/${params.applicationId}`;
@@ -989,6 +990,7 @@ const sendEntertainerResponseToRequestMail = (params) => {
       break;
 
     case REQUEST_ACTION.REJECTED:
+      contentTop = `We regret to inform you that ${params.entertainerName} declined your request to perform/provide entertainment services at the event with details stated below.`;
       contentBottom += `<strong>Offer Amount:</strong> ${params.askingPrice} <br><br>`;
       if (params.rejectionReason) {
         contentBottom += `<strong>Rejection Reason:</strong><br> ${params.rejectionReason} <br><br>`;
