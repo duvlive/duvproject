@@ -73,6 +73,14 @@ const eventRoutes = (router) => {
     Authentication.isActiveUser,
     EventController.getAllEventsReview
   );
+
+  // cancel event
+  router.post(
+    '/api/v1/event/cancel/:id',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    EventController.cancelEvent
+  );
 };
 
 export default eventRoutes;

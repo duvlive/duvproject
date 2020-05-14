@@ -60,6 +60,9 @@ const EMAIL_CONTENT = {
     subject: 'YIPPEE!!! You have a new event request',
     buttonText: 'Accept Request',
   },
+  USER_CANCELLED_EVENT: {
+    subject: 'Cancelled Event',
+  },
 };
 
 export default EMAIL_CONTENT;

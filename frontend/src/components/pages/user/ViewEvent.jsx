@@ -13,7 +13,7 @@ import {
 import Image from 'components/common/utils/Image';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import { getTokenFromStore } from 'utils/localStorage';
-import { Link, Match } from '@reach/router';
+import { Link, Match, navigate } from '@reach/router';
 import { listJsonItems, getBudgetRange } from 'utils/helpers';
 import { getRequestStatusIcon } from 'utils/helpers';
 import {
@@ -28,6 +28,13 @@ import AlertMessage from 'components/common/utils/AlertMessage';
 import LoadingScreen from 'components/common/layout/LoadingScreen';
 import { HIRE_ENTERTAINERS_TYPE } from 'utils/constants';
 import { UserContext } from 'context/UserContext';
+import DuvLiveModal from 'components/custom/Modal';
+import { Formik, Form } from 'formik';
+import Button from 'components/forms/Button';
+import { cancelEventSchema } from 'components/forms/schema/eventSchema';
+import { createSchema } from 'components/forms/schema/schema-helpers';
+import { setInitialValues } from 'components/forms/form-helper';
+import TextArea from 'components/forms/TextArea';
 
 const ViewEvent = ({ id }) => {
   const [message, setMessage] = React.useState({ msg: null, type: null });
@@ -66,6 +73,7 @@ const ViewEvent = ({ id }) => {
       type: 'remove-alert',
     });
   }
+  console.log('event', event);
 
   return (
     <BackEndPage title="View Event">
@@ -151,9 +159,7 @@ const ViewEvent = ({ id }) => {
                 <div className="col-md-4">
                   <ViewEvent.EventDetailsCard event={event} />
                   {!eventHasExpired(event.eventDate) && (
-                    <div className="text-right cancel-event__text mt-3 mb-5">
-                      <i className="icon icon-cancel"></i> Cancel Event
-                    </div>
+                    <ViewEvent.CancelEvent event={event} />
                   )}
                 </div>
               </aside>
@@ -593,6 +599,118 @@ ViewEvent.PendingEntertainersRow.propTypes = {
 };
 ViewEvent.PendingEntertainersRow.defaultProps = {
   eventEntertainer: {},
+};
+
+ViewEvent.CancelEvent = ({ event }) => {
+  const hiredEntertainers = event.entertainers.filter(
+    (eventEntertainer) => !!eventEntertainer.entertainer
+  );
+
+  return (
+    <>
+      {hiredEntertainers.length > 0 ? (
+        <div className="text-right cancel-event__text mt-3 mb-5">
+          <DuvLiveModal
+            body={<CancelEventForm eventId={event.id} />}
+            closeModalText="Cancel"
+            title="Cancel Event"
+          >
+            <>
+              <i className="icon icon-cancel"></i> Cancel Event
+            </>
+          </DuvLiveModal>
+        </div>
+      ) : (
+        ''
+      )}
+    </>
+  );
+};
+
+ViewEvent.CancelEvent.propTypes = {
+  event: PropTypes.object,
+};
+
+ViewEvent.CancelEvent.defaultProps = {
+  event: { entertainer: {} },
+};
+
+const CancelEventForm = ({ eventId }) => {
+  const [message, setMessage] = React.useState({});
+  let { userDispatch } = React.useContext(UserContext);
+
+  return (
+    <Formik
+      initialValues={setInitialValues(cancelEventSchema)}
+      onSubmit={(values, actions) => {
+        axios
+          .post(`/api/v1/event/cancel/${eventId}`, values, {
+            headers: { 'x-access-token': getTokenFromStore() },
+          })
+          .then(function (response) {
+            const { status, data } = response;
+            console.log('data', data);
+            if (status === 200) {
+              // setMessage({
+              //   type: 'success',
+              //   msg: 'Event has been successfully cancelled',
+              // });
+              userDispatch({
+                type: 'add-alert',
+                alert: 'place-bid-success',
+              });
+              navigate('/user/events');
+              actions.resetForm();
+              actions.setSubmitting(false);
+            }
+          })
+          .catch(function (error) {
+            console.log('error ', error.response.data.message);
+            setMessage({ msg: error.response.data.message });
+            actions.setSubmitting(false);
+          });
+      }}
+      render={({ isSubmitting, handleSubmit }) => (
+        <>
+          <Form>
+            <AlertMessage
+              message={message && message.msg}
+              type={message && message.type}
+            />
+
+            <TextArea
+              label="Reason"
+              name="cancelledReason"
+              placeholder="Enter the reason for cancelling the event"
+              rows="3"
+            />
+            <div className="small--2 mt-n3 mb-3 text-muted-light">
+              Late Cancellations (i.e cancellations done less than 48hrs to
+              event date) attract a{' '}
+              <strong className="text-info">penalty</strong> in the form of a
+              compensation charge which is 35% of the Principal Amount Paid, and
+              is Payable to the Entertainer hired. Refunds will be made only to
+              a bank account with details matching the personal profile of the
+              User. Do you wish to proceed with the cancellation of Corporate
+              Event?
+            </div>
+            <Button
+              className="btn-info btn-wide btn-transparent mt-2"
+              loading={isSubmitting}
+              onClick={handleSubmit}
+            >
+              Yes, Cancel Event
+            </Button>
+          </Form>
+        </>
+      )}
+      validationSchema={createSchema(cancelEventSchema)}
+    />
+  );
+};
+
+CancelEventForm.propTypes = {
+  eventId: PropTypes.any.isRequired,
 };
 
 export default ViewEvent;

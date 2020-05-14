@@ -33,3 +33,7 @@ export const reviewSchema = {
   recommend: required('Recommend rating'),
   review: optionalValidation(stringValidation('Review', 10)),
 };
+
+export const cancelEventSchema = {
+  cancelledReason: stringValidation('Reason', 5),
+};

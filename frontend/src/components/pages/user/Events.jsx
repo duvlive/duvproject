@@ -11,9 +11,11 @@ import { groupEvents } from 'utils/event-helpers';
 import NoContent from 'components/common/utils/NoContent';
 import { countOccurences } from 'utils/helpers';
 import { userCanAddEntertainer } from 'utils/event-helpers';
+import AlertMessage from 'components/common/utils/AlertMessage';
 
 const Events = () => {
-  const { userState } = React.useContext(UserContext);
+  const { userState, userDispatch } = React.useContext(UserContext);
+  const [message, setMessage] = React.useState({ msg: null, type: null });
   const events = (userState && userState.events) || [];
   const [showPastEvents, setShowPastEvents] = React.useState(false);
   // Sort event according - Today, Upcoming and Past
@@ -23,6 +25,17 @@ const Events = () => {
 
   const hasActiveEvents =
     allEvents.today.length > 0 || allEvents.upcoming.length > 0;
+
+  if (userState && userState.alert === 'place-bid-success') {
+    !message.msg &&
+      setMessage({
+        msg: 'Your event has been successfully cancelled',
+        type: 'danger',
+      });
+    userDispatch({
+      type: 'remove-alert',
+    });
+  }
 
   return (
     <BackEndPage title="My Events">
@@ -37,6 +50,9 @@ const Events = () => {
             >
               <span className="icon icon-events"></span> New Event
             </Link>
+          </div>
+          <div className="mt-4">
+            <AlertMessage message={message.msg} type={message.type} />
           </div>
           {events.length > 0 ? (
             <div className="table-responsive">
@@ -117,6 +133,7 @@ Events.CardList.defaultProps = {
 
 Events.Card = ({
   id,
+  cancelled,
   eventType,
   eventDate,
   startTime,
@@ -147,7 +164,7 @@ Events.Card = ({
   return (
     <>
       <tr className="transparent">
-        <td colSpan="5">
+        <td colSpan="6">
           <h4 className="main-app__subtitle">
             <Timeago date={eventDate} />
           </h4>
@@ -162,13 +179,23 @@ Events.Card = ({
             {getTime(startTime)} ({getTimeOfDay(startTime)})
           </span>
         </td>
-        <td>
-          <div className="table__title text-white">{eventType}</div>
-          <span>
-            <i className="icon icon-location" />
-            {lga}, {state} State
-          </span>
-        </td>
+        {cancelled ? (
+          <td>
+            <div className="table__title text-white">{eventType}</div>
+            <span>
+              <i className="icon icon-location" />
+              Cancelled
+            </span>
+          </td>
+        ) : (
+          <td>
+            <div className="table__title text-white">{eventType}</div>
+            <span>
+              <i className="icon icon-location" />
+              {lga}, {state} State
+            </span>
+          </td>
+        )}
         <td>
           <span className="text-yellow">
             {entertainerTypes.review.length > 0 ? (
