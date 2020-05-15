@@ -718,7 +718,13 @@ const EventController = {
                 {
                   model: User,
                   as: 'personalDetails',
-                  attributes: ['id', 'firstName', 'lastName', 'email'],
+                  attributes: [
+                    'id',
+                    'firstName',
+                    'lastName',
+                    'email',
+                    'profileImageURL',
+                  ],
                 },
               ],
             },

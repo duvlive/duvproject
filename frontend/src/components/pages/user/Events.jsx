@@ -6,7 +6,12 @@ import { Link } from '@reach/router';
 import Timeago from 'react-timeago';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import { UserContext } from 'context/UserContext';
-import { getEventDate, getTime, getTimeOfDay } from 'utils/date-helpers';
+import {
+  getEventDate,
+  getTime,
+  getTimeOfDay,
+  getShortDate,
+} from 'utils/date-helpers';
 import { groupEvents } from 'utils/event-helpers';
 import NoContent from 'components/common/utils/NoContent';
 import { countOccurences } from 'utils/helpers';
@@ -65,6 +70,10 @@ const Events = () => {
                   <Events.CardList
                     events={allEvents.upcoming}
                     title="Upcoming Events"
+                  />
+                  <Events.CardList
+                    events={allEvents.cancelled}
+                    title="Cancelled Events"
                   />
                   {(showPastEvents || !hasActiveEvents) && (
                     <Events.CardList
@@ -134,6 +143,7 @@ Events.CardList.defaultProps = {
 Events.Card = ({
   id,
   cancelled,
+  cancelledDate,
   eventType,
   eventDate,
   startTime,
@@ -170,7 +180,7 @@ Events.Card = ({
           </h4>
         </td>
       </tr>
-      <tr>
+      <tr className={cancelled ? 'strikethrough' : ''}>
         <td className="pl-4">
           <span className="subtitle--2 text-red text-uppercase">
             {getEventDate(eventDate)}
@@ -179,23 +189,13 @@ Events.Card = ({
             {getTime(startTime)} ({getTimeOfDay(startTime)})
           </span>
         </td>
-        {cancelled ? (
-          <td>
-            <div className="table__title text-white">{eventType}</div>
-            <span>
-              <i className="icon icon-location" />
-              Cancelled
-            </span>
-          </td>
-        ) : (
-          <td>
-            <div className="table__title text-white">{eventType}</div>
-            <span>
-              <i className="icon icon-location" />
-              {lga}, {state} State
-            </span>
-          </td>
-        )}
+        <td>
+          <div className="table__title text-white">{eventType}</div>
+          <span>
+            <i className="icon icon-location" />
+            {lga}, {state} State
+          </span>
+        </td>
         <td>
           <span className="text-yellow">
             {entertainerTypes.review.length > 0 ? (
@@ -218,22 +218,36 @@ Events.Card = ({
         <td className="text-right pr-5">
           <Avatars entertainers={entertainersAvatars} />
         </td>
-        <td className="text-right">
-          {userCanAddEntertainer(eventDate) && (
-            <Link
-              className="btn btn-danger btn-transparent"
-              to={`/user/events/${id}/add-entertainer`}
-            >
-              Add Entertainer
-            </Link>
+        <td className="text-right no-strikethrough">
+          {cancelled && (
+            <div className="no-strikethrough d-inline-block">
+              <span className="subtitle--2 text-red">
+                <i className="icon icon-cancel-circled"></i> Cancelled Event
+              </span>
+              <span className="small--3 text-gray">
+                on {getShortDate(cancelledDate)}
+              </span>
+            </div>
           )}
-          &nbsp; &nbsp; &nbsp;
-          <Link
-            className="btn btn-info btn-transparent"
-            to={`/user/events/view/${id}`}
-          >
-            View Event
-          </Link>
+          {!cancelled && (
+            <>
+              {userCanAddEntertainer(eventDate) && (
+                <Link
+                  className="btn btn-danger btn-transparent"
+                  to={`/user/events/${id}/add-entertainer`}
+                >
+                  Add Entertainer
+                </Link>
+              )}
+              &nbsp; &nbsp; &nbsp;
+              <Link
+                className="btn btn-info btn-transparent"
+                to={`/user/events/view/${id}`}
+              >
+                View Event
+              </Link>
+            </>
+          )}
         </td>
       </tr>
     </>
@@ -241,6 +255,8 @@ Events.Card = ({
 };
 
 Events.Card.propTypes = {
+  cancelled: PropTypes.bool,
+  cancelledDate: PropTypes.string,
   entertainers: PropTypes.array,
   eventDate: PropTypes.string,
   eventDuration: PropTypes.string,
@@ -252,6 +268,8 @@ Events.Card.propTypes = {
 };
 
 Events.Card.defaultProps = {
+  cancelled: false,
+  cancelledDate: null,
   id: '0',
   eventDuration: null,
   entertainers: [],

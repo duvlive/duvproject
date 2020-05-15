@@ -123,6 +123,16 @@ let reducer = (state, action) => {
         events: [action.event, ...prevEvents],
         alert: action.alert,
       };
+    case 'cancel-event':
+      const otherEvents = state.events || [];
+      const currentEvents = otherEvents.filter(
+        (event) => event.id !== action.event.id
+      );
+      return {
+        ...state,
+        events: [action.event, ...currentEvents],
+        alert: action.alert,
+      };
     case 'bank-account-update':
       return { ...state, bankDetail: action.bankDetail };
     case 'user-contact-update':

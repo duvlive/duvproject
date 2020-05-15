@@ -651,12 +651,13 @@ const CancelEventForm = ({ eventId }) => {
             const { status, data } = response;
             console.log('data', data);
             if (status === 200) {
-              // setMessage({
-              //   type: 'success',
-              //   msg: 'Event has been successfully cancelled',
-              // });
               userDispatch({
-                type: 'add-alert',
+                type: 'add-entertainer-to-event',
+                event: {
+                  ...data.event,
+                  cancelled: true,
+                  cancelledDate: Date.now(),
+                },
                 alert: 'place-bid-success',
               });
               navigate('/user/events');
