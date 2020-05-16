@@ -21,9 +21,17 @@ module.exports = function (sequelize, DataTypes) {
         defaultValue: 'Pending',
         validate: {
           isIn: [
-            ['Pending', 'Rejected', 'Approved', 'Increment', 'Paid', null],
+            [
+              'Pending',
+              'Rejected',
+              'Approved',
+              'Increment',
+              'Paid',
+              'Cancelled',
+              null,
+            ],
           ],
-        }, //null to be used for cancelled  by entertainer
+        },
       },
       askingPrice: {
         type: DataTypes.STRING,

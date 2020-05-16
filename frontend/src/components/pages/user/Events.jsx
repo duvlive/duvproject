@@ -31,7 +31,7 @@ const Events = () => {
   const hasActiveEvents =
     allEvents.today.length > 0 || allEvents.upcoming.length > 0;
 
-  if (userState && userState.alert === 'place-bid-success') {
+  if (userState && userState.alert === 'cancel-event-success') {
     !message.msg &&
       setMessage({
         msg: 'Your event has been successfully cancelled',
@@ -216,10 +216,7 @@ Events.Card = ({
           </span>
         </td>
         <td className="text-right pr-5">
-          <Avatars entertainers={entertainersAvatars} />
-        </td>
-        <td className="text-right no-strikethrough">
-          {cancelled && (
+          {cancelled ? (
             <div className="no-strikethrough d-inline-block">
               <span className="subtitle--2 text-red">
                 <i className="icon icon-cancel-circled"></i> Cancelled Event
@@ -228,26 +225,28 @@ Events.Card = ({
                 on {getShortDate(cancelledDate)}
               </span>
             </div>
+          ) : (
+            <Avatars entertainers={entertainersAvatars} />
           )}
-          {!cancelled && (
+        </td>
+        <td className="text-right no-strikethrough">
+          {userCanAddEntertainer(eventDate) && !cancelled && (
             <>
-              {userCanAddEntertainer(eventDate) && (
-                <Link
-                  className="btn btn-danger btn-transparent"
-                  to={`/user/events/${id}/add-entertainer`}
-                >
-                  Add Entertainer
-                </Link>
-              )}
-              &nbsp; &nbsp; &nbsp;
               <Link
-                className="btn btn-info btn-transparent"
-                to={`/user/events/view/${id}`}
+                className="btn btn-danger btn-transparent"
+                to={`/user/events/${id}/add-entertainer`}
               >
-                View Event
+                Add Entertainer
               </Link>
+              &nbsp; &nbsp; &nbsp;
             </>
           )}
+          <Link
+            className="btn btn-info btn-transparent"
+            to={`/user/events/view/${id}`}
+          >
+            View Event
+          </Link>
         </td>
       </tr>
     </>

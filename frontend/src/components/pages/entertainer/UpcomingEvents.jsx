@@ -10,10 +10,14 @@ import NoContent from 'components/common/utils/NoContent';
 import { getTokenFromStore } from 'utils/localStorage';
 import { parse } from 'date-fns';
 import AlertMessage from 'components/common/utils/AlertMessage';
+import { UserContext } from 'context/UserContext';
+import LoadItems from 'components/common/utils/LoadItems';
 
 const Events = () => {
+  const { userState, userDispatch } = React.useContext(UserContext);
+  const [message, setMessage] = React.useState({ msg: null, type: null });
   const [showPastEvents, setShowPastEvents] = React.useState(false);
-  const [events, setEvents] = React.useState([]);
+  const [events, setEvents] = React.useState(null);
 
   React.useEffect(() => {
     axios
@@ -32,11 +36,12 @@ const Events = () => {
       .catch(function (error) {
         // console.log(error.response.data.message);
         // navigate to all events
+        setEvents([]);
       });
   }, []);
 
   // Sort event according - Today, Upcoming and Past
-  let allEvents = events.reduce(
+  let allEvents = (events || []).reduce(
     (result, { id, event }) => {
       event.eventEntertainerId = id; // use the evententertainer id here
       if (parse(event.eventDate).toDateString() === new Date().toDateString()) {
@@ -56,16 +61,34 @@ const Events = () => {
   const hasActiveEvents =
     allEvents.today.length > 0 || allEvents.upcoming.length > 0;
 
+  if (userState && userState.alert === 'cancel-event-success') {
+    !message.msg &&
+      setMessage({
+        msg: 'You have been successfully remove from the event',
+        type: 'danger',
+      });
+    userDispatch({
+      type: 'remove-alert',
+    });
+  }
+
   return (
     <BackEndPage title="Upcoming Events">
       <div className="main-app">
         <TopMessage />
 
         <section className="app-content">
-          {!hasActiveEvents && (
-            <AlertMessage message="You have no upcoming events" />
+          {!hasActiveEvents && events && allEvents.past.length > 0 && (
+            <AlertMessage message="You have no upcoming events" type="info" />
           )}
-          {events.length > 0 ? (
+          <div className="mt-4">
+            <AlertMessage message={message.msg} type={message.type} />
+          </div>
+
+          <LoadItems
+            items={events}
+            noContent={<NoContent text="No events found" />}
+          >
             <div className="table-responsive">
               <table className="table table-dark table__no-border table__with-bg">
                 <tbody>
@@ -96,9 +119,7 @@ const Events = () => {
               <br />
               <br />
             </div>
-          ) : (
-            <NoContent text="You have no upcoming events." />
-          )}
+          </LoadItems>
         </section>
       </div>
     </BackEndPage>

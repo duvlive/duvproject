@@ -7,9 +7,12 @@ import {
   EntertainerProfile,
   Application,
   Rating,
+  Notification,
+  CancelEventEntertainer,
 } from '../models';
 import sendMail from '../MailSender';
 import EMAIL_CONTENT from '../email-template/content';
+import { NOTIFICATIONS, NOTIFICATION_TYPE } from '../constant';
 
 const reviewsInclude = [
   {
@@ -728,6 +731,11 @@ const EventController = {
                 },
               ],
             },
+            {
+              model: Application,
+              as: 'applications',
+              attributes: ['id', 'proposedPrice', 'askingPrice'],
+            },
           ],
         },
         {
@@ -737,7 +745,7 @@ const EventController = {
         },
       ],
     })
-      .then((event) => {
+      .then(async (event) => {
         if (!event) {
           return res.status(404).json({ message: 'Event not found' });
         }
@@ -753,6 +761,15 @@ const EventController = {
           cancelled: true,
           cancelledDate: Date.now(),
           cancelledReason,
+        });
+
+        // Add User notification
+        await Notification.create({
+          userId: userId,
+          title: NOTIFICATIONS.USER_CANCEL_EVENT,
+          description: `You CANCELLED ${event.eventType}`,
+          type: NOTIFICATION_TYPE.DANGER,
+          actionId: event.id,
         });
 
         // inform event entertainers
@@ -773,10 +790,30 @@ const EventController = {
                 id: eventEntertainer.id,
               },
             }
-          ).then(() => {
-            //  send mail
-            // remove entertainer from hired event
-            // update hired entertainer to null
+          ).then(async () => {
+            // add to cancelled
+            const amount =
+              eventEntertainer.applications[0].proposedPrice ||
+              eventEntertainer.applications[0].askingPrice;
+
+            await CancelEventEntertainer.create({
+              userId,
+              amount,
+              eventEntertainerId: eventEntertainer.id,
+              cancelledBy: 'User',
+              cancelledDate: Date.now(),
+              cancelledReason,
+            });
+
+            // add entertainer notification
+            await Notification.create({
+              userId: eventEntertainer.entertainer.personalDetails.id,
+              title: NOTIFICATIONS.USER_CANCEL_EVENT,
+              description: `${event.owner.firstName} CANCELLED ${event.eventType}`,
+              type: NOTIFICATION_TYPE.DANGER,
+              actionId: event.id,
+            });
+
             sendMail(
               EMAIL_CONTENT.USER_CANCELLED_EVENT,
               {
@@ -791,7 +828,7 @@ const EventController = {
                 <strong>Event:</strong> ${event.eventType} <br>
                 <strong>Place:</strong> ${eventEntertainer.placeOfEvent} <br>
                 <strong>Date:</strong> ${getLongDate(event.eventDate)} <br>
-                <strong>Start Time:</strong> ${getTime(event.eventStart)} <br>
+                <strong>Start Time:</strong> ${getTime(event.startTime)} <br>
                 <strong>Duration:</strong> ${event.eventDuration} <br>
                 <strong>Reason for Cancellation:</strong><br> ${cancelledReason}
               `,
