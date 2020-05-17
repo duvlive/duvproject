@@ -10,6 +10,15 @@ const EMAIL_CONTENT = {
     copyright: `You are receiving this email because you signed up to DUV LIVE, the No 1 Promoter of Premium Live Entertainment. If you did not make this request, please contact DUV LIVE support.
     Please do not reply to this email. Emails sent to this address will not be answered.`,
   },
+  ACTIVATE_YOUR_BAND_ACCOUNT: {
+    subject: 'Band Member Invite',
+    title: 'Band Member Invite',
+    contentTop:
+      'Thanks for signing up to DUV LIVE. To complete your account set up, please confirm your email address by clicking the button below',
+    buttonText: 'Join Now',
+    contentFooter:
+      'We look forward to you having a richer and more rewarding experience on our platform.',
+  },
   PASSWORD_RESET: {
     subject: 'Password Reset',
     title: 'Password Reset',

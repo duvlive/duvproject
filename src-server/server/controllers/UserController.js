@@ -326,33 +326,257 @@ const UserController = {
    * @param {object} res is res object
    * @return {object} returns res object
    */
-  // addBandMember(req, res) {
-  //   const { id } = req.user;
-  //   const { lastName, firstName, email, bandRole } = req.body;
-  //   if (!email || !bandRole) {
-  //     return res
-  //       .status(400)
-  //       .json({ message: 'Email and band role are required' });
-  //   }
-  //   // if user exists, send a mail that to confirm his addition
-  //   User.findOne({
-  //     where: { email },
-  //   })
-  //     .then((result) => {
-  //       if (!result) {
-  //         // send mail
-  //         // update add activation token, encode band admin token in activation token
-  //       } else {
-  //         //create the user
-  //         // send user a mail with user_id as activation token
-  //         // clicking on the link, leads him to register page.
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       const errorMessage = error.message || error;
-  //       return res.status(400).json({ error: errorMessage });
-  //     });
-  // },
+  addBandMember(req, res) {
+    const adminId = req.user.id;
+
+    const { lastName, firstName, email, bandRole } = req.body;
+    if (!email || !bandRole || !firstName || !lastName) {
+      return res.status(400).json({
+        message: 'FirstName, LastName, Email and band role are required',
+      });
+    }
+
+    if (req.user.profile.entertainerType !== 'Liveband') {
+      return res.status(400).json({
+        message: 'Only Liveband adminstrators can add band members',
+      });
+    }
+
+    User.findOne({
+      where: { email },
+    })
+      .then(async (result) => {
+        let bandMember;
+        let activationToken;
+        let link;
+
+        if (result) {
+          // check if user belongs to an existing band member
+          if (result.userId && result.userId !== req.user.id) {
+            return res
+              .status(401)
+              .json({ message: 'User already belongs to another band member' });
+          }
+          // check if user belongs to this band member
+          if (result.userId && result.userId === req.user.id) {
+            return res.status(401).json({
+              message: 'User has already been added as your band member',
+            });
+          }
+
+          // check if user is not a user
+          if (result.type !== USER_TYPES.USER) {
+            return res.status(401).json({
+              message: 'You can only add DUV Live users as your band member',
+            });
+          }
+          activationToken = jwt.sign(
+            {
+              userId: result.id,
+              adminId,
+            },
+            process.env.SECRET
+          );
+          await User.update(
+            { activationToken, bandRole },
+            {
+              where: {
+                id: result.id,
+              },
+            }
+          );
+          bandMember = { ...result.toJSON(), activationToken };
+          link = `${process.env.HOST}/activate/existing/band-member/${activationToken}`;
+        } else {
+          //create the user
+          bandMember = await User.create({
+            firstName,
+            lastName,
+            userId: adminId,
+            email,
+            phoneNumber: '12345678901',
+            type: USER_TYPES.UNKNOWN,
+            password: Date.now().toString(36),
+            source: 'Band Administrator',
+            bandRole,
+          });
+          activationToken = jwt.sign(
+            {
+              userId: bandMember.id,
+              adminId,
+            },
+            process.env.SECRET
+          );
+          link = `${process.env.HOST}/activate/new/band-member/${activationToken}`;
+        }
+        // send mail
+        const contentTop = `You have been invited to join <strong>${req.user.profile.stageName}</strong> on DUV LIVE, the No 1 Promoter of Premium Live Entertainment.`;
+        const contentBottom = `Your Invitation came by the request of <strong>${req.user.firstName}  ${req.user.lastName}</strong>.`;
+        sendMail(EMAIL_CONTENT.ACTIVATE_YOUR_BAND_ACCOUNT, bandMember, {
+          contentBottom,
+          contentTop,
+          link,
+        });
+
+        // return new bandmember
+        return res.json({
+          message: 'Band memeber successfully invited',
+          bandMember,
+        });
+      })
+      .catch((error) => {
+        const errorMessage = error.message || error;
+        return res.status(400).json({ error: errorMessage });
+      });
+  },
+
+  /**
+   * complete bandmember registration
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  async completeBandMemberRegistration(req, res) {
+    const { id, password, phoneNumber, phoneNumber2 } = req.body;
+    const errors = {
+      ...UserValidation.phoneNumberValidation(phoneNumber),
+      ...UserValidation.singlePasswordValidaton(password),
+    };
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    if (Object.keys(errors).length) {
+      return res
+        .status(400)
+        .json({ message: 'There are invalid fields in the form', errors });
+    }
+
+    const user = await User.findOne({
+      where: { id },
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: 'Account does not exist' });
+    }
+
+    // updated approved application
+    return User.update(
+      {
+        password: hashedPassword,
+        phoneNumber,
+        phoneNumber2,
+        isActive: true,
+        activatedAt: Date.now(),
+        activationToken: null,
+        type: USER_TYPES.BAND_MEMBER,
+      },
+      {
+        where: {
+          id,
+        },
+      }
+    )
+      .then(async () => {
+        // notification for band member registration
+        await Notification.create({
+          userId: id,
+          title: NOTIFICATIONS.ACCOUNT_CREATED,
+          description: 'Your DUV Live BAND MEMBER account was created',
+          type: NOTIFICATION_TYPE.CONTENT,
+        });
+
+        // notification for adminstrator
+        await Notification.create({
+          userId: user.userId,
+          title: NOTIFICATIONS.BAND_MEMBER_ADDITION,
+          description: `${user.firstName} ${user.lastName} has been added to your Live Band Account`,
+          type: NOTIFICATION_TYPE.INFO,
+        });
+
+        return res.json({
+          message: 'Registration completed',
+        });
+      })
+      .catch((error) => {
+        const status = error.status || 500;
+        const errorMessage = error.message || error;
+        return res.status(status).json({ message: errorMessage });
+      });
+  },
+
+  /**
+   * add existing user to bandmember
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  async AddExistingUserAsBandMember(req, res) {
+    const token = req.query.bandToken;
+    User.findOne({
+      where: { activationToken: token },
+    }).then((userFound) => {
+      if (!userFound || userFound.length === 0) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      jwt.verify(token, process.env.SECRET, (error, decoded) => {
+        if (error) {
+          return res.status(401).send({
+            message:
+              'Invalid token. Please inform your admin to resent your invite.',
+          });
+        }
+        User.findOne({
+          where: { id: decoded.userId },
+        })
+          .then((user) => {
+            if (!user) {
+              return res.status(401).send({
+                message: 'User not found',
+              });
+            } else {
+              return user
+                .update({
+                  isActive: true,
+                  activatedAt: Date.now(),
+                  activationToken: null,
+                  type: USER_TYPES.BAND_MEMBER,
+                  userId: decoded.adminId,
+                })
+                .then(async () => {
+                  // notification for band member registration
+                  await Notification.create({
+                    userId: user.id,
+                    title: NOTIFICATIONS.ACCOUNT_UPDATED,
+                    description:
+                      'Your DUV Live BAND MEMBER account was created',
+                    type: NOTIFICATION_TYPE.CONTENT,
+                  });
+
+                  // notification for adminstrator
+                  await Notification.create({
+                    userId: decoded.adminId,
+                    title: NOTIFICATIONS.BAND_MEMBER_ADDITION,
+                    description: `${user.firstName} ${user.lastName} has been added to your Live Band Account`,
+                    type: NOTIFICATION_TYPE.INFO,
+                  });
+
+                  return res.json({
+                    message: 'Registration completed',
+                  });
+                });
+            }
+          })
+          .catch((error) => {
+            const errorMessage = error.message || error;
+            return res.status(500).json({ message: errorMessage });
+          });
+      });
+    });
+  },
 
   /**
    * activate User

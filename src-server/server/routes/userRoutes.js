@@ -23,6 +23,25 @@ const userRoutes = (router) => {
     UserController.completeRegistration
   );
 
+  router.post(
+    '/api/v1/new/bandMember',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    Authentication.validateEntertainer,
+    UserController.addBandMember
+  );
+
+  router.put(
+    '/api/v1/users/new/bandMember',
+    Authentication.verifyToken,
+    UserController.completeBandMemberRegistration
+  );
+
+  router.get(
+    '/api/v1/users/existing/bandMember',
+    UserController.AddExistingUserAsBandMember
+  );
+
   router.put(
     '/api/v1/users/skip-first-time-text',
     Authentication.verifyToken,

@@ -59,6 +59,13 @@ const completeRegistrationObject = {
   password: strongPassword,
   agreement,
 };
+const bandMemberRegistrationObject = {
+  phoneNumber,
+  phoneNumber2: OptionalPhoneNumber,
+  password: strongPassword,
+  confirmPassword: confirmPassword,
+  agreement,
+};
 
 /////////////////////////
 // Schema
@@ -72,6 +79,7 @@ const registerSchema = yup.object().shape(registerObject);
 const forgotPasswordSchema = yup.object().shape({ email });
 
 export {
+  bandMemberRegistrationObject,
   completeRegistrationObject,
   loginSchema,
   registerSchema,
