@@ -121,5 +121,34 @@ const authentication = {
           message: 'User needs to activate account',
         });
   },
+
+  /**
+   * isActiveUser
+   * @param {Object} request object
+   * @param {Object} response object
+   * @param {Object} next object
+   * @returns {Object} response message
+   */
+  convertBandMemberToEntertainer(request, response, next) {
+    if (!request.user.userId) {
+      return response.status(401).send({
+        message: 'Not authorize to non band-members',
+      });
+    }
+    return User.findOne({
+      where: { id: request.user.userId },
+      include: userAssociatedModels,
+      order: userAssociatedOrder,
+    }).then((user) => {
+      if (!user) {
+        return response.status(401).send({
+          message: 'Administrator account not found',
+        });
+      } else {
+        request.user = user;
+        next();
+      }
+    });
+  },
 };
 export default authentication;

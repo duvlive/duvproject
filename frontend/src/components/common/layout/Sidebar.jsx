@@ -13,12 +13,13 @@ import {
 } from 'data/menu/user';
 import {
   entertainerSideMenu,
+  liveBandSideMenu,
   unApprovedEntertainerSideMenu,
 } from 'data/menu/entertainer';
 import bandMemberSideMenu from 'data/menu/band-member';
 import administratorSideMenu from 'data/menu/administrator';
 import classNames from 'classnames';
-import { USER_TYPES } from 'utils/constants';
+import { USER_TYPES, ENTERTAINER } from 'utils/constants';
 import { UserContext } from 'context/UserContext';
 import { getUserTypeFromStore } from 'utils/localStorage';
 import { getProfileName } from 'utils/helpers';
@@ -45,8 +46,15 @@ const Sidebar = ({ showSidebar, closeSidebar, ...props }) => {
     userState.entertainerProfile &&
     !userState.entertainerProfile.approved;
 
+  console.log('userState', userState);
+  const LiveBandEntertainer =
+    currentUserType === USER_TYPES.entertainer &&
+    userState.entertainerProfile.entertainerType === ENTERTAINER.LIVEBAND;
+
   const sideMenu = UnapprovedEntertainer
     ? unApprovedEntertainerSideMenu
+    : LiveBandEntertainer // if liveband
+    ? liveBandSideMenu
     : SIDE_MENU[currentUserType];
 
   return (

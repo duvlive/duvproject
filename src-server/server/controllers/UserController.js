@@ -125,6 +125,8 @@ const UserController = {
       phoneNumber: user.phoneNumber,
       phoneNumber2: user.phoneNumber2,
       type: user.type,
+      isActive: user.isActive,
+      bandRole: user.bandRole,
       referral: user.referral,
       profileImg: user.profileImageURL,
       entertainerProfile: user.profile,
@@ -318,6 +320,38 @@ const UserController = {
         return res.status(400).json({ error: errorMessage });
       });
   },
+  /**
+   * Get Band Member
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  getBandMembers(req, res) {
+    const userId = req.user.id;
+
+    if (req.user.profile.entertainerType !== 'Liveband') {
+      return res.status(400).json({
+        message: 'Only Liveband administrator can view all band members',
+      });
+    }
+
+    User.findAll({
+      where: { userId },
+    })
+      .then(async (bandMembers) => {
+        return res.json({
+          message: 'Band member loaded successfully',
+          bandMembers: bandMembers.map((member) =>
+            UserController.transformUser(member)
+          ),
+        });
+      })
+      .catch((error) => {
+        const errorMessage = error.message || error;
+        return res.status(400).json({ error: errorMessage });
+      });
+  },
 
   /**
    * Register Band Member
@@ -421,7 +455,7 @@ const UserController = {
         // return new bandmember
         return res.json({
           message: 'Band memeber successfully invited',
-          bandMember,
+          bandMember: UserController.transformUser(bandMember),
         });
       })
       .catch((error) => {

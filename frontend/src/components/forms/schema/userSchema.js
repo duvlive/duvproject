@@ -59,6 +59,14 @@ const completeRegistrationObject = {
   password: strongPassword,
   agreement,
 };
+
+const newBandMemberObject = {
+  firstName: stringValidation('First Name'),
+  lastName: stringValidation('Last Name'),
+  email,
+  bandRole: stringValidation('Band Role'),
+};
+
 const bandMemberRegistrationObject = {
   phoneNumber,
   phoneNumber2: OptionalPhoneNumber,
@@ -79,6 +87,7 @@ const registerSchema = yup.object().shape(registerObject);
 const forgotPasswordSchema = yup.object().shape({ email });
 
 export {
+  newBandMemberObject,
   bandMemberRegistrationObject,
   completeRegistrationObject,
   loginSchema,

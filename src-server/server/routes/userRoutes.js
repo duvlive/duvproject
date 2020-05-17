@@ -23,6 +23,14 @@ const userRoutes = (router) => {
     UserController.completeRegistration
   );
 
+  router.get(
+    '/api/v1/bandMembers',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    Authentication.validateEntertainer,
+    UserController.getBandMembers
+  );
+
   router.post(
     '/api/v1/new/bandMember',
     Authentication.verifyToken,
