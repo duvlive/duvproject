@@ -503,11 +503,11 @@ const EntertainerProfileController = {
         entertainerType: { [Op.eq]: entertainerType },
       };
 
-      if (lowestBudget) {
+      if (lowestBudget && parseInt(lowestBudget, 10) > 0) {
         entertainerQuery.baseCharges = { [Op.gte]: lowestBudget };
       }
 
-      if (highestBudget) {
+      if (highestBudget && parseInt(highestBudget, 10) > 0) {
         entertainerQuery.preferredCharges = { [Op.lte]: highestBudget };
       }
 
@@ -525,7 +525,7 @@ const EntertainerProfileController = {
         };
       }
 
-      if (location) {
+      if (location && location !== 'Any') {
         entertainerQuery.location = { [Op.eq]: location };
       }
 

@@ -1,6 +1,12 @@
 export const OUR_PHONE_NUMBER = '+234 708 7821 561';
 export const VAT = '7.5';
 
+export const ENTERTAINER = {
+  MC: 'MC',
+  DJ: 'DJ',
+  LIVEBAND: 'Liveband',
+};
+
 export const COLOR_STYLE = [
   'primary',
   'secondary',

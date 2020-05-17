@@ -17,6 +17,8 @@ import ResetPassword from 'components/pages/auth/ResetPassword';
 import ContactUs from 'components/pages/frontend/ContactUs';
 import ProcessPayments from 'components/pages/frontend/ProcessPayments';
 import CompleteRegistration from 'components/pages/auth/CompleteRegistration';
+import NewBandMemberRegistration from 'components/pages/auth/NewBandMemberRegistration';
+import ProcessExistingUserAsBandMember from 'components/pages/auth/ProcessExistingUserAsBandMember';
 
 const FrontPageRouter = () => (
   <Router>
@@ -41,6 +43,8 @@ const FrontPageRouter = () => (
     <SingleEvent path="event/:slug" />
     <CompleteRegistration path="complete-registration/:sid" />
     <ProcessPayments path="/payment" />
+    <NewBandMemberRegistration path="activate/new/band-member/:bandToken" />
+    <ProcessExistingUserAsBandMember path="activate/existing/band-member/:bandToken" />
   </Router>
 );
 

@@ -1,13 +1,18 @@
 import Sequelize, { Op } from 'sequelize';
 import { Event } from '../models';
-import { validString } from '../utils';
+import { validString, getLongDate, getTime } from '../utils';
 import {
   EventEntertainer,
   User,
   EntertainerProfile,
   Application,
   Rating,
+  Notification,
+  CancelEventEntertainer,
 } from '../models';
+import sendMail from '../MailSender';
+import EMAIL_CONTENT from '../email-template/content';
+import { NOTIFICATIONS, NOTIFICATION_TYPE } from '../constant';
 
 const reviewsInclude = [
   {
@@ -679,6 +684,173 @@ const EventController = {
         return res.status(500).json({ message: error.message });
       });
   },
+
+  cancelEvent(req, res) {
+    const id = req.params.id;
+    const userId = req.user.id;
+    const cancelledReason = req.body.cancelledReason;
+
+    if (!id) {
+      return res.status(404).json({
+        message: 'EventId is required to cancel event',
+      });
+    }
+
+    Event.findOne({
+      where: {
+        id,
+        userId, //need to ensure the owner of the event is making this request
+      },
+      include: [
+        {
+          model: EventEntertainer,
+          as: 'entertainers',
+          include: [
+            {
+              required: true,
+              model: EntertainerProfile,
+              as: 'entertainer',
+              attributes: [
+                'id',
+                'stageName',
+                'entertainerType',
+                'location',
+                'about',
+              ],
+              include: [
+                {
+                  model: User,
+                  as: 'personalDetails',
+                  attributes: [
+                    'id',
+                    'firstName',
+                    'lastName',
+                    'email',
+                    'profileImageURL',
+                  ],
+                },
+              ],
+            },
+            {
+              model: Application,
+              as: 'applications',
+              attributes: ['id', 'proposedPrice', 'askingPrice'],
+            },
+          ],
+        },
+        {
+          model: User,
+          as: 'owner',
+          attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+        },
+      ],
+    })
+      .then(async (event) => {
+        if (!event) {
+          return res.status(404).json({ message: 'Event not found' });
+        }
+
+        if (event.cancelled) {
+          return res
+            .status(401)
+            .json({ message: 'Event has already been cancelled' });
+        }
+
+        // update event details
+        event.update({
+          cancelled: true,
+          cancelledDate: Date.now(),
+          cancelledReason,
+        });
+
+        // Add User notification
+        await Notification.create({
+          userId: userId,
+          title: NOTIFICATIONS.USER_CANCEL_EVENT,
+          description: `You CANCELLED ${event.eventType}`,
+          type: NOTIFICATION_TYPE.DANGER,
+          actionId: event.id,
+        });
+
+        // inform event entertainers
+        // set mail title
+        const title = `${event.owner.firstName} Cancelled ${event.eventType}`;
+
+        event.entertainers.map((eventEntertainer) => {
+          EventEntertainer.update(
+            {
+              hiredEntertainer: null,
+              hiredDate: null,
+              cancelled: true,
+              cancelledDate: Date.now(),
+              cancelledReason,
+            },
+            {
+              where: {
+                id: eventEntertainer.id,
+              },
+            }
+          ).then(async () => {
+            // add to cancelled
+            const amount =
+              eventEntertainer.applications[0].proposedPrice ||
+              eventEntertainer.applications[0].askingPrice;
+
+            await CancelEventEntertainer.create({
+              userId,
+              amount,
+              eventEntertainerId: eventEntertainer.id,
+              cancelledBy: 'User',
+              cancelledDate: Date.now(),
+              cancelledReason,
+            });
+
+            // add entertainer notification
+            await Notification.create({
+              userId: eventEntertainer.entertainer.personalDetails.id,
+              title: NOTIFICATIONS.USER_CANCEL_EVENT,
+              description: `${event.owner.firstName} CANCELLED ${event.eventType}`,
+              type: NOTIFICATION_TYPE.DANGER,
+              actionId: event.id,
+            });
+
+            sendMail(
+              EMAIL_CONTENT.USER_CANCELLED_EVENT,
+              {
+                email: eventEntertainer.entertainer.personalDetails.email,
+                firstName: eventEntertainer.entertainer.stageName,
+              },
+              {
+                title,
+                subject: title,
+                contentTop: `We regret to inform you that ${event.owner.firstName} has cancelled corporate event and therefore, no longer requires your performance/entertainment services to be provided at the event with details stated below.`,
+                contentBottom: `
+                <strong>Event:</strong> ${event.eventType} <br>
+                <strong>Place:</strong> ${eventEntertainer.placeOfEvent} <br>
+                <strong>Date:</strong> ${getLongDate(event.eventDate)} <br>
+                <strong>Start Time:</strong> ${getTime(event.startTime)} <br>
+                <strong>Duration:</strong> ${event.eventDuration} <br>
+                <strong>Reason for Cancellation:</strong><br> ${cancelledReason}
+              `,
+                contentFooter: `Compensation Due: 35% of Take-Home Amount (You are entitled to compensation only If cancellation is done less than 48hrs to event date)
+                `,
+              }
+            );
+          });
+        });
+
+        return res.json({ event });
+      })
+      .catch((error) => {
+        const errorMessage = error.message || error;
+        return res.status(412).json({ message: errorMessage });
+      });
+  },
+  // update event details
+  // inform entertainer
+  // add to admin (how do I process)
+  // refund entertainer
+  // refund user
 };
 
 export default EventController;

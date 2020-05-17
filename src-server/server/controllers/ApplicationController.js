@@ -523,7 +523,7 @@ const ApplicationController = {
         const EMAIL_PARAMS = {
           askingPrice: moneyFormat(application.askingPrice),
           proposedPrice: REQUEST_ACTION.REQUEST_INCREMENT
-            ? moneyFormat(proposedPrice)
+            ? moneyFormat(parseInt(proposedPrice, 10))
             : 0,
           userName: application.eventEntertainerInfo.event.owner.firstName,
           userEmail: application.eventEntertainerInfo.event.owner.email,
@@ -532,6 +532,9 @@ const ApplicationController = {
           eventDate: getLongDate(
             application.eventEntertainerInfo.event.eventDate
           ),
+          startTime: getTime(application.eventEntertainerInfo.event.startTime),
+          eventPlace: application.eventEntertainerInfo.placeOfEvent,
+          eventDuration: application.eventEntertainerInfo.event.eventDuration,
         };
 
         if (!application) {
@@ -959,13 +962,13 @@ const sendEntertainerResponseToRequestMail = (params) => {
   let buttonText;
   let link;
   // Build Email
-  const contentTop = `We are pleased to inform you are requested to perform at an event with the details stated below by an event host.
+  let contentTop = `We are pleased to inform you are requested to perform at an event with the details stated below by an event host.
   `;
   let contentBottom = `
   <strong>Event:</strong> ${params.eventType} <br>
   <strong>Place:</strong> ${params.eventPlace} <br>
   <strong>Date:</strong> ${params.eventDate} <br>
-  <strong>Start Time:</strong> ${params.eventStart} <br>
+  <strong>Start Time:</strong> ${params.startTime} <br>
   <strong>Duration:</strong> ${params.eventDuration} <br>
   `;
 
@@ -979,15 +982,19 @@ const sendEntertainerResponseToRequestMail = (params) => {
       break;
 
     case REQUEST_ACTION.INCREMENT:
-      contentBottom += `<strong>Your Offer Amount:</strong> ${params.askingPrice} <br><br>`;
-      contentBottom += `<strong>${params.userName} Amount:</strong> ${params.proposedPrice} <br>`;
+      contentTop = `This is to inform you that ${params.entertainerName} has responded to your request to perform/ provide entertainment services at the event with details stated below.`;
+      contentBottom += `<strong>Your Offer Amount:</strong> NGN ${params.askingPrice} <br><br>`;
+      contentBottom += `<strong>${params.entertainerName} Amount:</strong> NGN ${params.proposedPrice} <br>`;
       link = `${process.env.HOST}/user/request/view/${params.applicationId}`;
       buttonText = 'Respond';
       break;
 
     case REQUEST_ACTION.REJECTED:
+      contentTop = `We regret to inform you that ${params.entertainerName} declined your request to perform/provide entertainment services at the event with details stated below.`;
       contentBottom += `<strong>Offer Amount:</strong> ${params.askingPrice} <br><br>`;
-      contentBottom += `<strong>Rejection Reason:</strong> ${params.rejectionReason} <br><br>`;
+      if (params.rejectionReason) {
+        contentBottom += `<strong>Rejection Reason:</strong><br> ${params.rejectionReason} <br><br>`;
+      }
       contentBottom +=
         'No worries. You can try hiring other entertainers by heading to your dashboard.';
       link = `${process.env.HOST}/user/dashboard`; // link to hire entetainer
@@ -1000,7 +1007,7 @@ const sendEntertainerResponseToRequestMail = (params) => {
 
   sendMail(
     {
-      subject: `[D.U.V LIVE ] ${params.description}`,
+      subject: params.description,
       title: params.description,
       buttonText,
       link,

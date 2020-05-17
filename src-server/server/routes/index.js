@@ -5,6 +5,7 @@ import commissionRoutes from './commissionRoute';
 import contactRoutes from './contactRoutes';
 import emailRoutes from './emailRoutes';
 import entertainerRoutes from './entertainerRoutes';
+import bandMemberRoutes from './bandMemberRoutes';
 import eventEntertainerRoutes from './eventEntertainerRoute';
 import eventRoutes from './eventRoutes';
 import galleryRoutes from './galleryRoutes';
@@ -38,6 +39,7 @@ const routes = (app) => {
   userRoutes(app);
   videoRoutes(app);
   welcomeRoute(app);
+  bandMemberRoutes(app);
 };
 
 export default routes;

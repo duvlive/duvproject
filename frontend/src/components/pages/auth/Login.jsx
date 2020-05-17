@@ -236,10 +236,14 @@ const LoginForm = ({ redirectTo, sid, token }) => {
 };
 
 LoginForm.propTypes = {
+  redirectTo: PropTypes.string,
   sid: PropTypes.string.isRequired,
   token: PropTypes.string.isRequired,
 };
 
+LoginForm.defaultProps = {
+  redirectTo: '',
+};
 export default Login;
 
 // Please verify your email address by clicking the link you received in email.

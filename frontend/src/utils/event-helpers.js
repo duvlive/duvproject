@@ -30,7 +30,11 @@ export const dateDistance = (eventDate) => distanceInWordsToNow(eventDate);
 export const groupEvents = (events) =>
   events.reduce(
     (result, event) => {
-      if (parse(event.eventDate).toDateString() === new Date().toDateString()) {
+      if (event.cancelled) {
+        result.cancelled.push(event);
+      } else if (
+        parse(event.eventDate).toDateString() === new Date().toDateString()
+      ) {
         result.today.push(event);
       } else if (parse(event.eventDate) > Date.now()) {
         result.upcoming.push(event);
@@ -39,7 +43,7 @@ export const groupEvents = (events) =>
       }
       return result;
     },
-    { today: [], upcoming: [], past: [] }
+    { today: [], upcoming: [], past: [], cancelled: [] }
   );
 
 export const defaultEvent = {

@@ -166,3 +166,11 @@ $duv-td-line-height: 1.8;
     padding: 0.5rem;
   }
 }
+
+tr.strikethrough {
+  text-decoration: line-through;
+
+  .no-strikethrough {
+    text-decoration: none !important;
+  }
+}

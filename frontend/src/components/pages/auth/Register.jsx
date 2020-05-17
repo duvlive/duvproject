@@ -72,11 +72,17 @@ Register.defaultProps = {
 const RegisterForm = ({ type }) => {
   const [message, setMessage] = useState(null);
   const agreementText = (
-    <>
+    <small>
       I agree to the terms listed in the{' '}
-      <Link to="/terms-of-use">DUV LIVE Terms of Use</Link> and acknowledge the{' '}
-      <Link to="/privacy-policy">DUV LIVE Privacy Policy</Link>.
-    </>
+      <a href="/terms-of-use" target="_blank">
+        DUV LIVE Terms of Use
+      </a>{' '}
+      and acknowledge the{' '}
+      <a href="/privacy-policy" target="_blank">
+        DUV LIVE Privacy Policy
+      </a>
+      .
+    </small>
   );
   return (
     <Formik
