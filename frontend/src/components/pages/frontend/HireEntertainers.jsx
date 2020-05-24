@@ -46,8 +46,10 @@ const EntertainerSection = ({ entertainers, loading, type }) => {
   React.useEffect(() => {
     const filteredEntertainer = entertainers.filter(
       (entertainer) =>
+        entertainer &&
+        entertainer.entertainerType &&
         entertainer.entertainerType.toUpperCase() ===
-        currentFilter.toUpperCase()
+          currentFilter.toUpperCase()
     );
     filteredEntertainer.length > 0
       ? setAllEntertainers(filteredEntertainer)

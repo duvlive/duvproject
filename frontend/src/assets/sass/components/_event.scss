@@ -158,7 +158,9 @@
 
 .event-title {
   color: $white;
-  margin-left: -1rem;
+  @include media-breakpoint-up(md) {
+    margin-left: -1rem;
+  }
   font-size: 0.9rem;
   text-transform: uppercase;
   margin-top: 1rem;
