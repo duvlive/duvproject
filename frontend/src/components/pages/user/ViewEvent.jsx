@@ -433,7 +433,7 @@ const ViewEventEntertainersTable = ({ event }) => {
               <thead>
                 <tr className="transparent">
                   <td colSpan="5">
-                    <h3 className="main-app__subtitle font-weight-normal text-muted-light ml-n3">
+                    <h3 className="main-app__subtitle font-weight-normal text-muted-light ml-md-n3">
                       Entertainer Requests (In View)
                     </h3>
                   </td>
