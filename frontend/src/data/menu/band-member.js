@@ -5,24 +5,19 @@ export default [
       {
         title: 'Dashboard',
         to: '/band-member/dashboard',
-        icon: 'gauge'
-      },
-      {
-        title: 'Notifications',
-        to: '/band-member/notifications',
-        icon: 'megaphone'
+        icon: 'gauge',
       },
       {
         title: 'Upcoming Events',
         to: '/band-member/events',
-        icon: 'events'
+        icon: 'events',
       },
       {
         title: 'Payment History',
         to: '/band-member/payments',
-        icon: 'credit-card'
-      }
-    ]
+        icon: 'credit-card',
+      },
+    ],
   },
   {
     name: 'Gems',
@@ -30,24 +25,24 @@ export default [
       {
         title: 'Badges',
         to: '/band-member/badges',
-        icon: 'badge'
+        icon: 'badge',
       },
       {
         title: 'Team Gallery',
         to: '/band-member/gallery',
-        icon: 'gallery'
+        icon: 'gallery',
       },
       {
         title: 'Team Videos',
         to: '/band-member/videos',
-        icon: 'video'
+        icon: 'video',
       },
       {
         title: 'Team Members',
         to: '/band-member/team-members',
-        icon: 'band-members'
-      }
-    ]
+        icon: 'band-members',
+      },
+    ],
   },
   {
     name: 'Others',
@@ -55,39 +50,39 @@ export default [
       {
         title: 'Edit Profile',
         to: '/band-member/edit-profile',
-        icon: 'user-circle'
+        icon: 'user-circle',
       },
       {
         title: 'Invite Friends',
         to: '/band-member/invite-friends',
-        icon: 'invite-friend'
+        icon: 'invite-friend',
       },
       {
         title: 'Switch to User Account',
         to: '/user/dashboard',
-        icon: 'loop'
+        icon: 'loop',
       },
       {
         title: 'Help',
         to: '/band-member/help',
-        icon: 'help'
+        icon: 'help',
       },
       {
         title: 'Logout',
         to: '/logout',
-        icon: 'logout'
-      }
-    ]
-  }
+        icon: 'logout',
+      },
+    ],
+  },
 ];
 
 export const bandMemberTopMenu = [
   {
     title: 'Payment History',
-    to: '/band-member/payments-history'
+    to: '/band-member/payments-history',
   },
   {
     title: 'Change Password',
-    to: '/band-member/change-password'
-  }
+    to: '/band-member/change-password',
+  },
 ];

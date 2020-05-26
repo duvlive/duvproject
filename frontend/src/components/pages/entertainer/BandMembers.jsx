@@ -81,7 +81,7 @@ const BandMembers = () => {
           <LoadItems
             items={bandMembers}
             loadingText="Loading your Band Members"
-            noContent={<NoContent isButton text="No Notifications found" />}
+            noContent={<NoContent isButton text="No Band Member found" />}
           >
             <BandMembersTable bandMembers={bandMembers || []} />
           </LoadItems>

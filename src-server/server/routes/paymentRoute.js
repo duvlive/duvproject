@@ -43,6 +43,13 @@ const paymentRoutes = (router) => {
     Authentication.validateAdmin,
     PaymentController.PayEntertainer
   );
+
+  router.get(
+    '/api/v1/payments/entertainers',
+    Authentication.verifyToken,
+    Authentication.validateEntertainer,
+    PaymentController.getPayments
+  );
 };
 
 export default paymentRoutes;

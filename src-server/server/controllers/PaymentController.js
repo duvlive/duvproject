@@ -384,13 +384,27 @@ const PaymentController = {
    * @return {object} json response
    */
   getPayments(req, res) {
-    const { entertainerId } = req.user.profile.id;
+    const entertainerId = req.user.profile.id;
     return Payment.findAll({
       where: { entertainerId },
       order: [['updatedAt', 'DESC']],
+      include: [
+        {
+          attributes: ['id', 'placeOfEvent'],
+          model: EventEntertainer,
+          as: 'eventPaidFor',
+          include: [
+            {
+              model: Event,
+              as: 'event',
+              attributes: ['id', 'eventType', 'eventDate'],
+            },
+          ],
+        },
+      ],
     })
       .then((payments) => res.json({ payments }))
-      .catch((error) => res.status(412).json({ msg: error.message }));
+      .catch((error) => res.status(412).json({ message: error.message }));
   },
 };
 
