@@ -1,60 +1,153 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 import TopMessage from 'components/common/layout/TopMessage';
 import BackEndPage from 'components/common/layout/BackEndPage';
+import DuvLiveModal from 'components/custom/Modal';
+import { getTokenFromStore } from 'utils/localStorage';
+import { approval, getStatus } from 'components/pages/entertainer/Gallery';
+import NoContent from 'components/common/utils/NoContent';
+import LoadItems from 'components/common/utils/LoadItems';
 
-const Video = () => (
-  <BackEndPage title="Team Videos">
-    <div className="main-app">
-      <TopMessage message="Team Videos" />
+const Video = () => {
+  const [videos, setVideos] = useState(null);
 
-      <section className="app-content">
-        <section className="gallery">
-          <div className="row">
-            <Video.Card
-              src="https://www.youtube.com/embed/LX0XMqjjzFA"
-              title="DJ Cuppy in the  mix"
-            />
-            <Video.Card
-              src="https://www.youtube.com/embed/sUNyzg8O6dk"
-              title="Cuppy Ft L.A.X - Currency (Official Video)"
-            />
-            <Video.Card
-              src="https://www.youtube.com/embed/XJteFC9jqVM"
-              title="Abena - DJ Cuppy"
-            />
-            <Video.Card
-              src="https://www.youtube.com/embed/osvde7xNQ0s"
-              title="Cuppy &amp; Tekno - Green Light (Official Video)"
-            />
-            <Video.Card
-              src="https://www.youtube.com/embed/RxzyXOUSRQM"
-              title="Cuppy on a Mission"
-            />
-          </div>
+  // Load Videos
+  React.useEffect(() => {
+    axios
+      .get('/api/v1/videos/bandMember', {
+        headers: {
+          'x-access-token': getTokenFromStore(),
+        },
+      })
+      .then(function (response) {
+        const { status, data } = response;
+        // handle success
+        if (status === 200) {
+          console.log('data', data);
+          setVideos(data.videos);
+        }
+      })
+      .catch(function (error) {
+        console.log(error.response.data.message);
+        setVideos([]);
+      });
+  }, []);
+
+  return (
+    <BackEndPage title="Videos">
+      <div className="main-app">
+        <TopMessage message="Uploaded Videos" />
+
+        <section className="app-content">
+          <section className="videos">
+            <LoadItems
+              items={videos}
+              loadingText="Loading your Videos"
+              noContent={<NoContent isButton text="No Team Videos found" />}
+            >
+              <div className="row">
+                {(videos || []).map(({ id, youtubeID, title, approved }) => {
+                  return (
+                    <Video.Modal
+                      id={id}
+                      key={id}
+                      status={getStatus(approved)}
+                      title={title}
+                      youtubeID={youtubeID}
+                    />
+                  );
+                })}
+              </div>
+            </LoadItems>
+          </section>
         </section>
-      </section>
-    </div>
-  </BackEndPage>
+      </div>
+    </BackEndPage>
+  );
+};
+
+Video.ModalCard = ({ youtubeID, title }) => (
+  <div className="embed-responsive embed-responsive-16by9">
+    <iframe
+      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+      allowFullScreen
+      frameBorder="0"
+      src={`https://www.youtube.com/embed/${youtubeID}`}
+      title={title}
+    ></iframe>
+  </div>
 );
 
-Video.Card = ({ src, title }) => (
-  <div className="col-md-4 col-6 mb-5">
-    <div className="embed-responsive embed-responsive-16by9">
-      <iframe
-        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen
-        frameborder="0"
-        src={src}
-        title={title}
-      ></iframe>
+Video.ModalCard.propTypes = {
+  title: PropTypes.string.isRequired,
+  youtubeID: PropTypes.string.isRequired,
+};
+
+Video.YoutubeImage = ({ title, youtubeID }) => (
+  <img
+    alt={title}
+    className="img-fluid"
+    src={`https://i1.ytimg.com/vi/${youtubeID}/0.jpg`}
+  />
+);
+
+Video.YoutubeImage.propTypes = {
+  title: PropTypes.string.isRequired,
+  youtubeID: PropTypes.any.isRequired,
+};
+
+Video.YoutubeOverlay = () => (
+  <div className="card-img-overlay">
+    <div className="card-img-overlay__content">
+      <span className="icon icon-video"></span>
     </div>
   </div>
 );
 
-Video.Card.propTypes = {
-  src: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired
+Video.Modal = ({ youtubeID, status, title, id, showExtra }) => {
+  const youtubeImage = (
+    <Video.YoutubeImage title={title} youtubeID={youtubeID} />
+  );
+  const approvalText = (
+    <small
+      className={`badge badge-${approval[status].color} transparent-${approval[status].color}`}
+    >
+      {approval[status].text}
+    </small>
+  );
+
+  return (
+    <section className="d-block col-md-4 mb-4">
+      <div className="card card__with-icon position-relative">
+        <DuvLiveModal
+          body={<Video.ModalCard title={title} youtubeID={youtubeID} />}
+          className="modal-full"
+          title={title}
+        >
+          {youtubeImage}
+          <Video.YoutubeOverlay />
+        </DuvLiveModal>
+
+        {showExtra && approvalText}
+      </div>
+    </section>
+  );
+};
+
+Video.Modal.propTypes = {
+  deleteVideo: PropTypes.func,
+  id: PropTypes.number.isRequired,
+  showExtra: PropTypes.bool,
+  status: PropTypes.any,
+  title: PropTypes.string.isRequired,
+  youtubeID: PropTypes.string.isRequired,
+};
+
+Video.Modal.defaultProps = {
+  deleteVideo: () => {},
+  showExtra: true,
+  status: 'approved',
 };
 
 export default Video;

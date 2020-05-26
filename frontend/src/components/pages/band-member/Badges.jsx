@@ -1,61 +1,78 @@
 import React from 'react';
+import axios from 'axios';
 import PropTypes from 'prop-types';
 import TopMessage from 'components/common/layout/TopMessage';
 import BackEndPage from 'components/common/layout/BackEndPage';
+import { getShortDate } from 'utils/date-helpers';
+import { getTokenFromStore } from 'utils/localStorage';
+import LoadingScreen from 'components/common/layout/LoadingScreen';
+import NoContent from 'components/common/utils/NoContent';
+import AwardCard from 'components/common/utils/AwardCard';
 
-const Badges = () => (
-  <BackEndPage title="Badges">
-    <div className="main-app">
-      <TopMessage message="4 assigned badges" />
+const Badges = () => {
+  const [badges, setBadges] = React.useState(null);
+  React.useEffect(() => {
+    axios
+      .get('/api/v1/badges/bandMember', {
+        headers: {
+          'x-access-token': getTokenFromStore(),
+        },
+      })
+      .then(function (response) {
+        const { status, data } = response;
+        console.log('status,data', status, data);
+        // handle success
+        if (status === 200) {
+          console.log('data', data);
+          setBadges(data.badges);
+        }
+      })
+      .catch(function (error) {
+        console.log(error.response.data.message);
+        setBadges([]);
+      });
+  }, []);
 
-      <section className="app-content">
-        <section className="gallery">
-          <div className="row">
-            <Badges.Card
-              color="yellow"
-              date="Sun, April 17, 2019"
-              title="Completed 20 Events"
-            />
-            <Badges.Card
-              color="white"
-              date="Sun, April 17, 2019"
-              title="Has over 10 five star ratings"
-            />
-            <Badges.Card
-              color="red"
-              date="Sun, April 17, 2019"
-              title="Completed over 10 Events"
-            />
-            <Badges.Card
-              color="blue"
-              date="Sun, April 17, 2019"
-              title="DUV LIVE Certified Entertainer"
-            />
-          </div>
+  return (
+    <BackEndPage title="Badges">
+      <div className="main-app">
+        <TopMessage message="Team Badges" />
+
+        <section className="app-content">
+          <section className="badges">
+            <div className="row">
+              {badges == null ? (
+                <LoadingScreen loading={true} text="Loading Your Badges" />
+              ) : badges.length > 0 ? (
+                <Badges.CardLists badges={badges} />
+              ) : (
+                <>
+                  <div className="col-sm-12">
+                    <NoContent text="You have no Badges" />
+                  </div>
+                </>
+              )}
+            </div>
+          </section>
         </section>
-      </section>
-    </div>
-  </BackEndPage>
-);
-
-Badges.Card = ({ title, color, date }) => (
-  <div className="col-sm-4">
-    <div className={`card card-custom card-tiles card-${color} card__no-hover`}>
-      <div className="text-center">
-        <i className="icon icon-xl icon-badge"></i>
       </div>
-      <div className="card-body m-0 fh-3 text-center">
-        <h4 className="subtitle--4 text-white mb-1">{title}</h4>
-        <div className="small--3 text-gray">{date}</div>
-      </div>
-    </div>
-  </div>
-);
+    </BackEndPage>
+  );
+};
 
-Badges.Card.propTypes = {
-  color: PropTypes.string.isRequired,
-  date: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired
+Badges.CardLists = ({ badges }) => {
+  return badges.map(({ badge }, index) => (
+    <AwardCard
+      color={badge.color}
+      date={getShortDate(badge.createdAt)}
+      key={index}
+      title={badge.title}
+    />
+  ));
+};
+
+Badges.CardLists.propTypes = {
+  badges: PropTypes.array.isRequired,
 };
 
 export default Badges;
