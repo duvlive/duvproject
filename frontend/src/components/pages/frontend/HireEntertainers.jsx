@@ -78,18 +78,19 @@ const EntertainerSection = ({ entertainers, loading, type }) => {
   return (
     <section className="entertainers spacer">
       <div className="container-fluid">
-        <div className="float-right">
-          <nav className="nav nav-pills nav-filter nav-pull-right">
-            <div className="nav-link disabled btn nav-text">Filter By: </div>
-            {filterButton('Show All', 'None')}
-            {filterButton('DJ', 'dj')}
-            {filterButton('MC', 'mc')}
-            {filterButton('Live Band', 'liveband')}
-          </nav>
-        </div>
         <h2 className="header title-border">
           OUR <span>ENTERTAINERS</span>
         </h2>
+        <div className="float-md-right">
+          <nav className="nav nav-pills nav-filter">
+            <div className="nav-link disabled btn nav-text">Filter By: </div>
+            {filterButton('Show All', 'None')}
+            {filterButton('DJs', 'dj')}
+            {filterButton('MCs', 'mc')}
+            {filterButton('Live Bands', 'liveband')}
+          </nav>
+        </div>
+        <div className="clearfix"></div>
         {loading ? (
           <LoadingScreen loading={loading} text="Loading Entertainers" />
         ) : (

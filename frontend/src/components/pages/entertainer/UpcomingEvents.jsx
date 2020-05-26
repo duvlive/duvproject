@@ -204,7 +204,6 @@ Events.Card = ({
           </span>
         </td>
         <td className="text-right">
-          {/* TODO: Create view events for entertainer */}
           <Link
             className="btn btn-info btn-transparent"
             to={`/entertainer/events/view/${eventEntertainerId}`}

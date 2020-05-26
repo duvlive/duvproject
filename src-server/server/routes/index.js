@@ -17,6 +17,7 @@ import ratingRoutes from './ratingRoute';
 import reviewRoutes from './reviewRoutes';
 import userRoutes from './userRoutes';
 import videoRoutes from './videoRoutes';
+import badgeRoutes from './badgeRoutes';
 import welcomeRoute from './welcomeRoute';
 
 const routes = (app) => {
@@ -40,6 +41,7 @@ const routes = (app) => {
   videoRoutes(app);
   welcomeRoute(app);
   bandMemberRoutes(app);
+  badgeRoutes(app);
 };
 
 export default routes;

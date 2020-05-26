@@ -37,7 +37,10 @@ $section-height: 50rem;
   }
 
   .card-title {
-    font-size: 3.5rem;
+    font-size: 3rem;
+    @include media-breakpoint-up(md) {
+      font-size: 3.5rem;
+    }
     padding-top: 16rem;
     margin-bottom: 2rem;
   }

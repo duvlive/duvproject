@@ -373,6 +373,111 @@ const ApplicationController = {
       return res.status(200).json({ results: { ...results, pendingPayments } });
     });
   },
+  /**
+   * get Dashboard Payments, upcoming Events, Band Members
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  getDashboardDetailsForBandMember(req, res) {
+    const entertainerId = req.user.profile.id;
+
+    EventEntertainer.findAll({
+      where: {
+        [Op.or]: [
+          {
+            // Upcoming Events
+            hiredEntertainer: entertainerId,
+            [Op.and]: Sequelize.literal('"event"."eventDate" > NOW()'),
+          },
+        ],
+      },
+      // attributes: ['id'],
+      include: [
+        {
+          model: Event,
+          as: 'event',
+          include: [
+            {
+              model: User,
+              as: 'owner',
+              attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+            },
+          ],
+          where: {
+            eventDate: { [Op.gte]: addDays(Date.now(), 3) },
+          },
+        },
+        {
+          model: Application,
+          as: 'applications',
+        },
+      ],
+    }).then(async (upcomingEvents) => {
+      const pendingPayments = await EventEntertainer.findAll({
+        attributes: ['id', 'hireType'],
+        where: {
+          hiredEntertainer: req.user.profile.id,
+          [Op.and]: Sequelize.literal('"eventPayment"."id" is null'),
+        },
+        include: [
+          {
+            model: Event,
+            as: 'event',
+            attributes: ['id', 'eventType', 'eventDate'],
+            where: {
+              eventDate: {
+                [Op.lt]: Date.now(),
+              },
+            },
+          },
+          {
+            model: Payment,
+            as: 'eventPayment',
+          },
+          {
+            model: Application,
+            as: 'applications',
+            attributes: [
+              'id',
+              'commissionId',
+              'askingPrice',
+              'applicationType',
+              'proposedPrice',
+              'createdAt',
+            ],
+            include: [
+              {
+                model: Commission,
+                as: 'commission',
+              },
+            ],
+          },
+        ],
+      });
+      const bandMembers = await User.findAll({
+        where: {
+          userId: req.user.id,
+          isActive: true,
+        },
+      });
+      const allPayments = await Payment.findAll({
+        where: {
+          entertainerId,
+        },
+      });
+
+      return res.status(200).json({
+        results: {
+          upcomingEvents,
+          pendingPayments,
+          bandMembers: bandMembers.length,
+          allPayments: allPayments.length,
+        },
+      });
+    });
+  },
 
   /**
    * get Entertainers Bids

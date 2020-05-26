@@ -113,7 +113,7 @@ const Gallery = () => {
                 />
               ))}
             </div>
-            {gallery && (
+            {gallery && gallery.length > 0 && (
               <div className="row">
                 <div className="col-12 mt-5">
                   <p className="text-muted-light">

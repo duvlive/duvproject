@@ -15,19 +15,19 @@ const VideoController = {
 
     const error = {
       ...validString(title),
-      ...validString(youtubeID)
+      ...validString(youtubeID),
     };
     if (Object.keys(error).length > 1) {
       return res.status(400).json({ message: error.message.join('') });
     }
     return Video.create({ title, youtubeID, userId })
-      .then(video => {
+      .then((video) => {
         return res.status(200).json({
           message: 'Video has been successfully upload',
-          video
+          video,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         const status = error.status || 500;
         const errorMessage = error.message || error;
         return res.status(status).json({ message: errorMessage });
@@ -36,11 +36,11 @@ const VideoController = {
 
   getEntertainerVideo(req, res) {
     return Video.findAll({
-      where: { userId: req.params.userId },
-      order: [['updatedAt', 'DESC']]
+      where: { userId: req.user.id },
+      order: [['updatedAt', 'DESC']],
     })
-      .then(result => res.json({ videos: result }))
-      .catch(error => res.status(412).json({ msg: error.message }));
+      .then((result) => res.json({ videos: result }))
+      .catch((error) => res.status(412).json({ msg: error.message }));
   },
 
   /**
@@ -55,19 +55,19 @@ const VideoController = {
     const approveVideo = approve === 'approve';
     const approval = {
       value: approveVideo,
-      type: approveVideo ? 'approved' : 'disapproved'
+      type: approveVideo ? 'approved' : 'disapproved',
     };
 
     Video.findOne({
-      where: { id }
+      where: { id },
     })
       .then(() => {
         return Video.update(
           { approved: approval.value },
           {
             where: {
-              id
-            }
+              id,
+            },
           }
         )
           .then(() =>
@@ -77,7 +77,7 @@ const VideoController = {
             return res.status(404).json({ message: 'Video not found' });
           });
       })
-      .catch(error => {
+      .catch((error) => {
         const errorMessage = error.message || error;
         return res.status(412).json({ message: errorMessage });
       });
@@ -92,27 +92,27 @@ const VideoController = {
   deleteVideo(req, res) {
     const { id } = req.params;
     return Video.findOne({ where: { id } })
-      .then(result => {
+      .then((result) => {
         if (result) {
           const { id } = result;
           result
             .destroy({ where: { id } })
             .then(() => {
               return res.status(202).json({
-                msg: `Video has been successfully deleted`
+                msg: `Video has been successfully deleted`,
               });
             })
-            .catch(error => {
+            .catch((error) => {
               res.status(412).json({ msg: error.message });
             });
         } else {
           res.status(404).json({ msg: 'Video does not exist' });
         }
       })
-      .catch(error => {
+      .catch((error) => {
         res.status(412).json({ msg: error.message });
       });
-  }
+  },
 };
 
 export default VideoController;
