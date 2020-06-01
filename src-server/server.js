@@ -28,6 +28,12 @@ app.use(passport.initialize());
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use((req, res, next) => {
+  if (req.protocol === 'https') {
+    return next();
+  }
+  return res.redirect(process.env.HOST);
+});
 router(app);
 
 // set the view engine to ejs
