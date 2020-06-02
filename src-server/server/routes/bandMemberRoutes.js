@@ -49,7 +49,7 @@ const bandMemberRoutes = (router) => {
     Authentication.verifyToken,
     Authentication.convertBandMemberToEntertainer,
     Authentication.validateEntertainer,
-    BadgeController.getBadges
+    BadgeController.getUserBadges
   );
 
   router.get(

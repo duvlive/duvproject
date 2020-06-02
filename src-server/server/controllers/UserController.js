@@ -1115,24 +1115,36 @@ const UserController = {
    * */
   async getAllUsers(req, res) {
     const { isActive, type, offset, limit } = req.query;
-    let userQuery = {};
-    if (isActive) {
-      userQuery.isActive = isActive;
+    try {
+      let userQuery = {};
+      if (isActive) {
+        userQuery.isActive = isActive;
+      }
+      if (type) {
+        userQuery.type = type;
+      }
+      const options = {
+        offset: offset || 0,
+        limit: limit || 10,
+        where: userQuery,
+        include: userAssociatedModels,
+      };
+      try {
+        const { result, pagination } = await getAll(User, options);
+        return res.status(200).json({
+          users: result.map((user) => UserController.transformUser(user)),
+          pagination,
+        });
+      } catch (error) {
+        const status = error.status || 500;
+        const errorMessage = error.message || error;
+        return res.status(status).json({ message: errorMessage });
+      }
+    } catch (error) {
+      const status = error.status || 500;
+      const errorMessage = error.message || error;
+      return res.status(status).json({ message: errorMessage });
     }
-    if (type) {
-      userQuery.type = type;
-    }
-    const options = {
-      offset: offset || 0,
-      limit: limit || 10,
-      where: userQuery,
-      include: userAssociatedModels,
-    };
-    const users = await getAll(User, options);
-    return res.status(200).json({
-      users: users.result.map((user) => UserController.transformUser(user)),
-      pagination: users.pagination,
-    });
   },
 };
 
