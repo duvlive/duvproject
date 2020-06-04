@@ -92,7 +92,7 @@ module.exports = new Factory()
     const entertainerType = ENTERTAINER_TYPE[id % 3];
     const typeInFull = TYPE_IN_FULL[id % 3];
     const stageName = STAGE_NAME[id % 18];
-    return `${entertainerType} ${stageName} is a professional ${typeInFull}.}`;
+    return `${entertainerType} ${stageName} is a professional ${typeInFull}.`;
   })
   .attrs({
     approved: true,
