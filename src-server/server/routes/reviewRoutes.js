@@ -26,6 +26,14 @@ const reviewRoutes = (router) => {
     Authentication.validateEntertainer,
     ReviewController.getOneEntertainerReview
   );
+
+  router.get(
+    '/api/v1/reviews',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    Authentication.validateAdmin,
+    ReviewController.getReviews
+  );
 };
 
 export default reviewRoutes;

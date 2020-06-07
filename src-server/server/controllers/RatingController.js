@@ -6,11 +6,11 @@ import {
   Review,
   User,
 } from '../models';
-import { validString } from '../utils';
+import { getAll, validString } from '../utils';
 
 const RatingController = {
   /**
-   * create and update Rating
+   * @desc create and update Rating
    * @function
    * @param {object} req is req object
    * @param {object} res is res object
@@ -97,7 +97,7 @@ const RatingController = {
   },
 
   /**
-   * get User Rating
+   * @desc get User Rating
    * @function
    * @param {object} req is req object
    * @param {object} res is res object
@@ -139,7 +139,7 @@ const RatingController = {
   },
 
   /**
-   * get one Rating details
+   * @desc get one Rating details
    * @function
    * @param {object} req is req object
    * @param {object} res is res object
@@ -189,7 +189,7 @@ const RatingController = {
   },
 
   /**
-   * get average User Rating
+   * @desc get average User Rating
    * @function
    * @param {object} req is req object
    * @param {object} res is res object
@@ -231,7 +231,7 @@ const RatingController = {
   },
 
   /**
-   * get Entertainer Ratings
+   * @desc get Entertainer Ratings
    * @function
    * @param {object} req is req object
    * @param {object} res is res object
@@ -296,7 +296,7 @@ const RatingController = {
   },
 
   /**
-   * get One Entertainer Rating
+   * @desc get One Entertainer Rating
    * @function
    * @param {object} req is req object
    * @param {object} res is res object
@@ -336,6 +336,49 @@ const RatingController = {
         const errorMessage = error.message || error;
         return res.status(412).json({ message: errorMessage });
       });
+  },
+
+  /**
+   * @desc get ratings
+   * @param {object} req - The request sent to the route
+   * @param {object} res - The response sent back
+   * @return {object} json response
+   */
+  async getRatings(req, res) {
+    const { userId, entertainerId, eventEntertainerId } = req.params;
+    const { offset, limit } = req.query;
+    try {
+      let ratingQuery = {};
+      if (userId) {
+        ratingQuery.userId = userId;
+      }
+      if (entertainerId) {
+        ratingQuery.entertainerId = entertainerId;
+      }
+      if (eventEntertainerId) {
+        ratingQuery.eventEntertainerId = eventEntertainerId;
+      }
+      const options = {
+        offset: offset || 0,
+        limit: limit || 10,
+        where: ratingQuery,
+      };
+      try {
+        const { result, pagination } = await getAll(Rating, options);
+        return res.status(200).json({
+          result,
+          pagination,
+        });
+      } catch (error) {
+        const status = error.status || 500;
+        const errorMessage = error.message || error;
+        return res.status(status).json({ message: errorMessage });
+      }
+    } catch (error) {
+      const status = error.status || 500;
+      const errorMessage = error.message || error;
+      return res.status(status).json({ message: errorMessage });
+    }
   },
 };
 
