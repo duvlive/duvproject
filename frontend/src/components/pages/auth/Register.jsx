@@ -97,7 +97,7 @@ const RegisterForm = ({ type }) => {
             if (status === 200) {
               setMessage({
                 type: 'success',
-                message: `Your registration is successful. Kindly confirm your email by clicking on the confirmation link`,
+                message: `Your registration is successful. Kindly activate your account by clicking on the confirmation link sent to your inbox (${values.email}).`,
               });
               actions.resetForm();
             }
@@ -197,6 +197,7 @@ const RegisterForm = ({ type }) => {
             />
             <label className="form-check-label" htmlFor="agreement"></label>
           </div>
+          <AlertMessage {...message} />
           <Button
             className="btn-danger btn-wide btn-transparent mt-4"
             loading={isSubmitting}

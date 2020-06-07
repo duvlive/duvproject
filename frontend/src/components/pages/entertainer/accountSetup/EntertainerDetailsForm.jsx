@@ -94,13 +94,13 @@ const EntertainerDetailsForm = ({ moveToNextStep }) => {
                   placeholder="Location (in Nigeria)"
                 />
                 <DynamicSelect
-                  blankOption="Select City"
+                  blankOption="Select LGA / City"
                   dependentOn="location"
                   formGroupClassName="col-md-6"
-                  label="City"
+                  label="LGA / City"
                   name="city"
                   options={getLgas}
-                  placeholder="City"
+                  placeholder="LGA / City"
                 />
               </div>
               <div className="form-row">
@@ -117,6 +117,7 @@ const EntertainerDetailsForm = ({ moveToNextStep }) => {
                   formGroupClassName="col-md-6"
                   label="Preferred Charges (in Naira)"
                   name="preferredCharges"
+                  optional
                   options={BUDGET}
                   placeholder="Preferred Charges"
                 />

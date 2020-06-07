@@ -228,6 +228,9 @@ const UserController = {
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
+    const user = await User.findOne({
+      where: { id },
+    });
 
     if (Object.keys(errors).length) {
       return res
@@ -260,6 +263,8 @@ const UserController = {
           description: 'Your DUV Live account was created',
           type: NOTIFICATION_TYPE.CONTENT,
         });
+
+        sendMail(EMAIL_CONTENT.WELCOME_MAIL, user);
         return res.json({
           message: 'Registration completed',
         });
@@ -513,6 +518,7 @@ const UserController = {
       }
     )
       .then(async () => {
+        sendMail(EMAIL_CONTENT.WELCOME_MAIL, user);
         // notification for band member registration
         await Notification.create({
           userId: id,
@@ -521,7 +527,7 @@ const UserController = {
           type: NOTIFICATION_TYPE.CONTENT,
         });
 
-        // notification for adminstrator
+        // notification for band member adminstrator
         await Notification.create({
           userId: user.userId,
           title: NOTIFICATIONS.BAND_MEMBER_ADDITION,
@@ -640,9 +646,12 @@ const UserController = {
               activationToken: req.query.token,
             },
           }
-        ).then(() =>
-          res.status(200).json({ message: 'Account activation successful' })
-        );
+        ).then(() => {
+          sendMail(EMAIL_CONTENT.WELCOME_MAIL, userFound);
+          return res
+            .status(200)
+            .json({ message: 'Account activation successful' });
+        });
       })
       .catch((error) => {
         const errorMessage = error.message || error;

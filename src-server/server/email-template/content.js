@@ -72,6 +72,17 @@ const EMAIL_CONTENT = {
   USER_CANCELLED_EVENT: {
     subject: 'Cancelled Event',
   },
+  WELCOME_MAIL: {
+    subject: 'Welcome to DUV LIVE!',
+    title: 'Welcome to DUV LIVE!',
+    contentTop: `We are excited to have you as a part of the <strong>fastest</strong> growing online platform for live <strong>entertainment</strong>, poised to deliver <strong>fun and excitement</strong> to <strong>audiences</strong> near and far, all year round.
+    <br><br>
+    From <strong>Entertainers</strong> to Event <strong>Hosts</strong>, Talent <strong>Managers</strong> and <strong>Promoters</strong> alike, we <strong>connect</strong> the best quality performers, to those who desire to <strong>create positively unforgettable memories</strong>.
+    <br><br>
+    As the leading <strong>promoter</strong> of premium live entertainment, we invite you to join us in our mission to <strong>maximize value</strong> for the <strong>creative works</strong> of live <strong>performers</strong>, and for the money paid by those who hire them.
+
+    `,
+  },
 };
 
 export default EMAIL_CONTENT;

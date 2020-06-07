@@ -26,7 +26,7 @@ export const entertainerDetailsSchema = {
   entertainerType: stringValidation('Entertainer Type'),
   city: required('City'),
   baseCharges: required('Base Charges'),
-  preferredCharges: required('Preferred Charges'),
+  preferredCharges: optionalValidation(required('Preferred Charges')),
   yearStarted: required('Started Year'),
   willingToTravel: stringValidation('Willing to travel'),
   availableFor: optionalValidation(autocompleteValidation('Available for')),
