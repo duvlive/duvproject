@@ -6,7 +6,10 @@ import Input from 'components/forms/Input';
 import TextArea from 'components/forms/TextArea';
 import Select from 'components/forms/Select';
 import { createSchema } from 'components/forms/schema/schema-helpers';
-import { setInitialValues } from 'components/forms/form-helper';
+import {
+  setInitialValues,
+  DisplayFormikState,
+} from 'components/forms/form-helper';
 import { range, selectEntertainerType } from 'utils/helpers';
 import AutoComplete from 'components/forms/AutoComplete';
 import Button from 'components/forms/Button';
@@ -33,7 +36,10 @@ const EntertainerDetailsForm = ({ moveToNextStep }) => {
       })}
       onSubmit={(values, actions) => {
         const availableFor = JSON.stringify(values.availableFor);
-        const payload = { ...values, availableFor };
+        const preferredCharges =
+          values.preferredCharges || BUDGET[BUDGET.length - 1].value;
+        const payload = { ...values, availableFor, preferredCharges };
+        console.log('payload', payload);
         axios
           .put('/api/v1/users/updateEntertainerProfile', payload, {
             headers: { 'x-access-token': getTokenFromStore() },

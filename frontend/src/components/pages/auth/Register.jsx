@@ -137,7 +137,9 @@ const RegisterForm = ({ type }) => {
             </Link>
             <p className="auth__social-media--text mt-0 mb-5">OR</p>
           </section>
-          <AlertMessage {...message} />
+          <div className="mt-3 d-none d-md-block">
+            <AlertMessage {...message} />
+          </div>
           <div className="form-row">
             <Input
               formGroupClassName="col-md-6"
@@ -197,7 +199,9 @@ const RegisterForm = ({ type }) => {
             />
             <label className="form-check-label" htmlFor="agreement"></label>
           </div>
-          <AlertMessage {...message} />
+          <div className="mt-3 d-block d-md-none">
+            <AlertMessage {...message} />
+          </div>
           <Button
             className="btn-danger btn-wide btn-transparent mt-4"
             loading={isSubmitting}

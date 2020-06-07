@@ -599,3 +599,32 @@ a:hover {
     }
   }
 }
+
+.pagination {
+  li:first-child a {
+    margin-left: 0;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+  }
+  li:last-child a {
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+  }
+
+  a {
+    position: relative;
+    display: block;
+    padding: 0.85rem 1.5rem;
+    margin-left: -1px;
+    line-height: 2;
+    color: $text-muted;
+    background-color: transparent;
+    border: 1px solid $text-muted;
+    cursor: pointer;
+  }
+
+  .active a {
+    background: rgba($info, 0.1);
+    color: $text-color;
+  }
+}
