@@ -6,10 +6,7 @@ import Input from 'components/forms/Input';
 import TextArea from 'components/forms/TextArea';
 import Select from 'components/forms/Select';
 import { createSchema } from 'components/forms/schema/schema-helpers';
-import {
-  setInitialValues,
-  DisplayFormikState,
-} from 'components/forms/form-helper';
+import { setInitialValues } from 'components/forms/form-helper';
 import { range, selectEntertainerType } from 'utils/helpers';
 import AutoComplete from 'components/forms/AutoComplete';
 import Button from 'components/forms/Button';
@@ -113,7 +110,7 @@ const EntertainerDetailsForm = ({ moveToNextStep }) => {
                 <Select
                   blankOption="Choose your base charges"
                   formGroupClassName="col-md-6"
-                  label="Base Charges (in Naira)"
+                  label="Minimum Charges (in Naira)"
                   name="baseCharges"
                   options={BUDGET}
                   placeholder="Base Charges"
@@ -121,9 +118,8 @@ const EntertainerDetailsForm = ({ moveToNextStep }) => {
                 <Select
                   blankOption="Choose your highest charges"
                   formGroupClassName="col-md-6"
-                  label="Preferred Charges (in Naira)"
+                  label="Preferred Charge (in Naira)"
                   name="preferredCharges"
-                  optional
                   options={BUDGET}
                   placeholder="Preferred Charges"
                 />
