@@ -30,6 +30,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use((req, res, next) => {
   if (req.protocol === 'https') {
+    console.log(req.protocol, 'HERE???');
     return next();
   }
   return res.redirect(process.env.HOST);
