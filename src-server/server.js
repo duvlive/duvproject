@@ -30,15 +30,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use((req, res, next) => {
   console.log(req.protocol, 'first???');
-  if (req.protocol !== 'https') {
+  if (req.secure) {
     console.log(req.protocol, 'second???');
-    req.protocol = 'https';
-  }
-  if (req.protocol === 'https') {
-    console.log(req.protocol, 'third???');
     return next();
+  } else {
+    console.log(req.protocol, 'third???');
+    return res.redirect('https://' + req.headers.host + req.url);
   }
-  return res.redirect(process.env.HOST);
 });
 router(app);
 
