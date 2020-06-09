@@ -14,7 +14,7 @@
     "server:debug": "babel-node server-debug.js",
     "build:server": "babel ./src-server -d ./dist -D",
     "build:frontend": "cd frontend && npm install && npm install --only=dev --no-shrinkwrap && npm run build && cd .. && cp -R frontend/build dist/ && cp -R frontend/build src-server",
-    "heroku-postbuild": "rm -rf ./dist && yarn run build:server && yarn run build:frontend && cd dist/server && sequelize db:migrate",
+    "heroku-postbuild": "rm -rf ./dist && yarn run build:frontend && cd dist/server && sequelize db:migrate",
     "reset:db": "npx sequelize-cli db:migrate:undo:all && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all"
   },
   "repository": {
