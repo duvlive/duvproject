@@ -29,6 +29,7 @@ app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use((req, res, next) => {
+  console.log(req, 'first???');
   console.log(req.protocol, 'first???');
   if (req.protocol === 'https') {
     console.log(req.protocol, 'HERE???');
