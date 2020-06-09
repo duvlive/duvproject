@@ -171,6 +171,12 @@ const userRoutes = (router) => {
       }
     )
   );
+
+  // Admin routes
+  router
+    .route('/api/v1/users')
+    .all(Authentication.verifyToken, Authentication.validateAdmin)
+    .get(UserController.getAllUsers);
 };
 
 export default userRoutes;

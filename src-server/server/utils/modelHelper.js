@@ -42,7 +42,7 @@ export const getAll = async (Model, options) => {
       if (currentPage > totalPage) {
         currentPage = totalPage;
       }
-      const pagination = { total, currentPage, totalPage, limit, offset };
+      const pagination = { currentPage, limit, offset, total, totalPage };
       return { result, pagination };
     } catch (error) {
       throw error;

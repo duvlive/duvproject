@@ -18,7 +18,7 @@ import {
 } from '../models';
 import sendMail from '../MailSender';
 import Authentication from '../middleware/authentication';
-import { UserValidation, updateUser, validString } from '../utils';
+import { UserValidation, updateUser, validString, getAll } from '../utils';
 import EMAIL_CONTENT from '../email-template/content';
 import { USER_TYPES, NOTIFICATIONS, NOTIFICATION_TYPE } from '../constant';
 
@@ -1104,6 +1104,35 @@ const UserController = {
     } catch (error) {
       return res.status(400).json({ message: 'Something went wrong', error });
     }
+  },
+
+  /**
+   *  get-all-users
+   * @function
+   * @param {object} req is request object
+   * @param {object} res is response object
+   * @return {undefined} returns undefined
+   * */
+  async getAllUsers(req, res) {
+    const { isActive, type, offset, limit } = req.query;
+    let userQuery = {};
+    if (isActive) {
+      userQuery.isActive = isActive;
+    }
+    if (type) {
+      userQuery.type = type;
+    }
+    const options = {
+      offset: offset || 0,
+      limit: limit || 10,
+      where: userQuery,
+      include: userAssociatedModels,
+    };
+    const users = await getAll(User, options);
+    return res.status(200).json({
+      users: users.result.map((user) => UserController.transformUser(user)),
+      pagination: users.pagination,
+    });
   },
 };
 

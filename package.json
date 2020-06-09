@@ -13,7 +13,7 @@
     "start": "node dist/server.js",
     "server:debug": "babel-node server-debug.js",
     "build:server": "babel ./src-server -d ./dist -D",
-    "build:frontend": "cd frontend && npm install && npm install --only=dev --no-shrinkwrap && npm run build && cd .. && cp -R frontend/build dist/ && cp -R frontend/build src-server",
+    "build:frontend": "npm --prefix ./frontend install && npm --prefix ./frontend install --only=dev --no-shrinkwrap && npm --prefix ./frontend run build && cp -R frontend/build dist/ && cp -R frontend/build src-server",
     "heroku-postbuild": "rm -rf ./dist && yarn run build:server && yarn run build:frontend && cd dist/server && sequelize db:migrate",
     "reset:db": "npx sequelize-cli db:migrate:undo:all && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all"
   },
@@ -42,6 +42,7 @@
     "supertest": "^4.0.2"
   },
   "dependencies": {
+    "@babel/compat-data": "^7.9.0",
     "@babel/core": "^7.5.5",
     "@babel/node": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
