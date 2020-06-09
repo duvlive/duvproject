@@ -29,12 +29,10 @@ app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use((req, res, next) => {
-  console.log(req.protocol, 'first???');
+  console.log(req.secure, 'first???');
   if (req.secure) {
-    console.log(req.protocol, 'second???');
     return next();
   } else {
-    console.log(req.protocol, 'third???');
     return res.redirect('https://' + req.headers.host + req.url);
   }
 });
