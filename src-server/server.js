@@ -49,6 +49,7 @@ app.get('/email-logo.png', function (req, res) {
 });
 
 if (process.env.NODE_ENV === 'production') {
+  console.log(req.protocol, 'first???');
   // Handle React routing, return all requests to React app
   app.get('*', function (req, res) {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
