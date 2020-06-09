@@ -28,6 +28,7 @@ app.use(passport.initialize());
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+console.log(req.protocol, 'first???');
 app.use((req, res, next) => {
   if (req.protocol === 'https') {
     console.log(req.protocol, 'HERE???');
