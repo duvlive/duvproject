@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/duvproject
     docker:
-      - image: circleci/node:8
+      - image: circleci/node:13
     steps:
       - checkout
       - run:
