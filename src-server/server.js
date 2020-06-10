@@ -29,6 +29,7 @@ app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use((req, res, next) => {
+  console.log(req.headers.host + req.url, 'tire');
   console.log(req.secure, 'first???', req.url);
   if (req.secure) {
     return next();
