@@ -35,7 +35,6 @@ const RegisteredUsers = () => {
         }
       })
       .catch(function (error) {
-        console.log(error.response.data.message);
         setData({ users: [], pagination: {} });
       });
   }, [currPage]);
