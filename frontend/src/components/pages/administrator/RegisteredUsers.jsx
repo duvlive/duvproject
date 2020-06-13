@@ -14,6 +14,10 @@ import { Link } from '@reach/router';
 
 const userTypes = Object.keys(USER_TYPES);
 
+// 1. add url
+// 2. name of page -> users
+// 3. change all instances of users to result
+
 const RegisteredUsers = () => {
   const inActiveData = { users: null, pagination: {} };
   const [data, setData] = React.useState(inActiveData);
@@ -101,6 +105,7 @@ UsersTable.propTypes = {
   users: PropTypes.array.isRequired,
 };
 
+// only thing needed
 const UsersRow = ({
   id,
   number,
