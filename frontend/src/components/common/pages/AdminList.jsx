@@ -6,17 +6,32 @@ import { getTokenFromStore } from 'utils/localStorage';
 import LoadItems from 'components/common/utils/LoadItems';
 import NoContent from 'components/common/utils/NoContent';
 import Humanize from 'humanize-plus';
+import { SlideDown } from 'react-slidedown';
+import 'react-slidedown/lib/slidedown.css';
 
-const AdminList = ({ apiData, pageName, apiUrl, tableRow }) => {
+const AdminList = ({
+  apiData,
+  pageName,
+  apiUrl,
+  tableRow,
+  FilterComponent,
+}) => {
   const inActiveData = { result: null, pagination: {} };
   const [data, setData] = React.useState(inActiveData);
   const [currPage, setCurrPage] = React.useState(0);
+  const [openFilter, setOpenFilter] = React.useState(false);
+  const [filter, setFilter] = React.useState({});
+
+  const setFilterTerms = (terms) => {
+    console.log(terms);
+    setFilter(terms);
+  };
 
   React.useEffect(() => {
     const LIMIT = 10;
     axios
       .get(apiUrl, {
-        params: { offset: currPage * LIMIT, limit: LIMIT },
+        params: { offset: currPage * LIMIT, limit: LIMIT, ...filter },
         headers: {
           'x-access-token': getTokenFromStore(),
         },
@@ -32,7 +47,7 @@ const AdminList = ({ apiData, pageName, apiUrl, tableRow }) => {
       .catch(function (error) {
         setData({ results: [], pagination: {} });
       });
-  }, [currPage, apiUrl]);
+  }, [currPage, apiUrl, filter]);
 
   const noOfResults = data.pagination.total || 0;
   const pluralizePageName = Humanize.pluralize(2, pageName);
@@ -40,13 +55,6 @@ const AdminList = ({ apiData, pageName, apiUrl, tableRow }) => {
   return (
     <div className="main-app">
       <section className="app-content">
-        <div className="row mt-3 mb-2">
-          <div className="col-sm-6">
-            <h3 className="main-app__title">
-              {`${noOfResults} ${Humanize.pluralize(noOfResults, pageName)}`}
-            </h3>
-          </div>
-        </div>
         <LoadItems
           items={data[apiData]}
           loadingText={`Loading ${pluralizePageName}`}
@@ -54,25 +62,46 @@ const AdminList = ({ apiData, pageName, apiUrl, tableRow }) => {
             <NoContent isButton text={`No ${pluralizePageName} found`} />
           }
         >
+          <div className="row mt-3 mb-2">
+            <div className="col-sm-12">
+              <p
+                className="text-link text-right"
+                onClick={() => setOpenFilter((openFilter) => !openFilter)}
+              >
+                <span className="icon icon-align-justify"></span> &nbsp;
+                {openFilter ? 'Close Filter' : 'Filter'}
+              </p>
+              <h3 className="main-app__title">
+                {`${noOfResults} ${Humanize.pluralize(noOfResults, pageName)}`}
+              </h3>
+            </div>
+          </div>
+
+          <SlideDown className={''}>
+            {openFilter && <FilterComponent setFilterTerms={setFilterTerms} />}
+          </SlideDown>
+
           <ResultsTable
             offset={data.pagination.offset || 0}
             results={data[apiData] || []}
             Row={tableRow}
           />
           <div className="text-right">
-            <ReactPaginate
-              activeClassName={'active'}
-              breakClassName={'break-me'}
-              breakLabel={'...'}
-              containerClassName={'pagination'}
-              marginPagesDisplayed={3} // ending point list
-              nextLabel={'Next'}
-              onPageChange={(data) => setCurrPage(data.selected)}
-              pageCount={data.pagination.totalPage} // number of pages
-              pageRangeDisplayed={3} // start point
-              previousLabel={'Prev'}
-              subContainerClassName={'page-item'}
-            />
+            {data.pagination.totalPage > 1 && (
+              <ReactPaginate
+                activeClassName={'active'}
+                breakClassName={'break-me'}
+                breakLabel={'...'}
+                containerClassName={'pagination'}
+                marginPagesDisplayed={3} // ending point list
+                nextLabel={'Next'}
+                onPageChange={(data) => setCurrPage(data.selected)}
+                pageCount={data.pagination.totalPage} // number of pages
+                pageRangeDisplayed={3} // start point
+                previousLabel={'Prev'}
+                subContainerClassName={'page-item'}
+              />
+            )}
           </div>
         </LoadItems>
       </section>
@@ -81,10 +110,15 @@ const AdminList = ({ apiData, pageName, apiUrl, tableRow }) => {
 };
 
 AdminList.propTypes = {
+  FilterComponent: PropTypes.any,
   apiData: PropTypes.string.isRequired,
   apiUrl: PropTypes.string.isRequired,
   pageName: PropTypes.string.isRequired,
   tableRow: PropTypes.any.isRequired,
+};
+
+AdminList.defaultProps = {
+  FilterComponent: () => null,
 };
 
 const ResultsTable = ({ results, offset, Row }) => (

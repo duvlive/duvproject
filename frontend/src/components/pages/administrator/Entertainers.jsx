@@ -6,6 +6,15 @@ import ProfileAvatar from 'assets/img/avatar/profile.png';
 import { Link } from '@reach/router';
 import AdminList from 'components/common/pages/AdminList';
 import { twoDigitNumber } from 'utils/helpers';
+import { Formik, Form } from 'formik';
+import Button from 'components/forms/Button';
+import { feedback } from 'components/forms/form-helper';
+import { LANGUAGE, BUDGET, SELECT_ENTERTAINERS_TYPE } from 'utils/constants';
+import Select from 'components/forms/Select';
+import MultiSelect from 'components/forms/MultiSelect';
+import { recommendEntertainerSchema } from 'components/forms/schema/entertainerSchema';
+import { setInitialValues } from 'components/forms/form-helper';
+import { getStates } from 'data/naija-states-and-lgas';
 
 const Entertainers = () => {
   return (
@@ -13,6 +22,7 @@ const Entertainers = () => {
       <AdminList
         apiData="entertainers"
         apiUrl="/api/v1/entertainers-all"
+        FilterComponent={EntertainerFilter}
         pageName="Entertainer"
         tableRow={EntertainersRow}
       />
@@ -42,31 +52,40 @@ const EntertainersRow = ({
       />
     </td>
     <td className="align-middle">
-      <span className="table__title">{stageName}</span>
+      <small className="small--4 text-muted">Stage Name</small>
+      <span className="table__title">{stageName || '-'}</span>
     </td>
 
     <td className="align-middle text-left">
-      <span className="text-muted-light-2">{entertainerType}</span>
+      <small className="small--4 text-muted">Entertainer Type</small>
+      <span className="text-muted-light-2">{entertainerType || '-'}</span>
     </td>
 
     <td className="align-middle text-left">
-      <span className="text-muted-light-2">{location}</span>
+      <small className="small--4 text-muted">Location</small>
+      <span className="text-muted-light-2">{location || '-'}</span>
     </td>
 
     <td className="align-middle">
+      <small className="small--4 text-muted">Willing To Travel</small>
       {willingToTravel ? (
         <span className="text-muted-light text-uppercase">
           <i className="icon icon-ok-circled"></i> Yes{' '}
         </span>
       ) : (
         <span className="text-red text-uppercase">
-          <i className="icon icon-help"></i> No{' '}
+          <i className="icon icon-cancel"></i> No{' '}
         </span>
       )}
     </td>
 
     <td className="align-middle">
-      <Link to={`/admin/entertainers/${id}`}>Manage</Link>
+      <Link
+        className="btn btn-wide btn-transparent btn-danger"
+        to={`/admin/entertainers/${id}`}
+      >
+        Manage
+      </Link>
     </td>
   </tr>
 );
@@ -87,6 +106,91 @@ EntertainersRow.propTypes = {
   profileImageURL: PropTypes.string,
   stageName: PropTypes.string,
   willingToTravel: PropTypes.bool,
+};
+
+export const EntertainerFilter = ({ setFilterTerms }) => {
+  const noBudget = { label: 'None', value: '0' };
+  const anyState = { label: 'Any', value: 'Any' };
+  return (
+    <Formik
+      initialValues={setInitialValues(recommendEntertainerSchema)}
+      onSubmit={(value, actions) => {
+        setFilterTerms({ ...value, language: JSON.stringify(value.language) });
+        actions.setSubmitting(false);
+      }}
+      render={({ isSubmitting, handleSubmit }) => (
+        <Form className="card card-custom card-black card-form p-4">
+          <>
+            <div className="form-row">
+              <Select
+                blankOption="Choose your preferred Entertainer Type"
+                formGroupClassName="col-md-6"
+                label="Entertainer Type"
+                name="entertainerType"
+                options={SELECT_ENTERTAINERS_TYPE}
+                placeholder="Entertainer Type"
+                showFeedback={feedback.ERROR}
+              />
+              <MultiSelect
+                formGroupClassName="col-md-6"
+                label="Language"
+                name="language"
+                optional
+                options={LANGUAGE}
+                placeholder="Preferred Language"
+                showFeedback={feedback.ERROR}
+              />
+            </div>
+            <div className="form-row">
+              <Select
+                formGroupClassName="col-md-6"
+                label="Lowest Budget (in Naira)"
+                name="lowestBudget"
+                optional
+                options={[noBudget, ...BUDGET]}
+                placeholder="Lowest Budget"
+                showFeedback={feedback.ERROR}
+              />
+              <Select
+                formGroupClassName="col-md-6"
+                label="Highest Budget (in Naira)"
+                name="highestBudget"
+                optional
+                options={[noBudget, ...BUDGET]}
+                placeholder="Highest Budget"
+                showFeedback={feedback.ERROR}
+              />
+            </div>
+            <div className="form-row">
+              <Select
+                blankOption="Select State"
+                formGroupClassName="col-md-6"
+                label="Location"
+                name="location"
+                optional
+                options={[anyState, ...getStates()]}
+                placeholder="State"
+                showFeedback={feedback.ERROR}
+              />
+            </div>
+            <div className="form-group">
+              <Button
+                color="danger"
+                loading={isSubmitting}
+                onClick={handleSubmit}
+              >
+                Filter Entertainer
+              </Button>
+            </div>
+          </>
+        </Form>
+      )}
+    />
+  );
+};
+
+Entertainers.propTypes = {
+  setFilterTerms: PropTypes.func.isRequired,
 };
 
 export default Entertainers;
