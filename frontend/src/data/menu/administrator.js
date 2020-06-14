@@ -8,11 +8,6 @@ export default [
         icon: 'gauge',
       },
       {
-        title: 'Notifications',
-        to: '/admin/notifications',
-        icon: 'megaphone',
-      },
-      {
         title: 'Entertainers',
         to: '/admin/entertainers',
         icon: 'entertainers',
