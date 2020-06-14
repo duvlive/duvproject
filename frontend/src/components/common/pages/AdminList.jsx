@@ -13,9 +13,10 @@ const AdminList = ({ apiData, pageName, apiUrl, tableRow }) => {
   const [currPage, setCurrPage] = React.useState(0);
 
   React.useEffect(() => {
+    const LIMIT = 10;
     axios
       .get(apiUrl, {
-        params: { offset: currPage },
+        params: { offset: currPage * LIMIT, limit: LIMIT },
         headers: {
           'x-access-token': getTokenFromStore(),
         },
@@ -25,6 +26,7 @@ const AdminList = ({ apiData, pageName, apiUrl, tableRow }) => {
         // handle success
         if (status === 200) {
           setData(data);
+          console.log(data);
         }
       })
       .catch(function (error) {
@@ -82,7 +84,7 @@ AdminList.propTypes = {
   apiData: PropTypes.string.isRequired,
   apiUrl: PropTypes.string.isRequired,
   pageName: PropTypes.string.isRequired,
-  tableRow: PropTypes.node.isRequired,
+  tableRow: PropTypes.any.isRequired,
 };
 
 const ResultsTable = ({ results, offset, Row }) => (
@@ -90,7 +92,11 @@ const ResultsTable = ({ results, offset, Row }) => (
     <table className="table table-dark table__no-border table__with-bg">
       <tbody>
         {results.map((result, index) => (
-          <Row key={index} number={offset + index + 1} {...result} />
+          <Row
+            key={index}
+            number={parseInt(offset, 10) + index + 1}
+            {...result}
+          />
         ))}
       </tbody>
     </table>
@@ -99,8 +105,8 @@ const ResultsTable = ({ results, offset, Row }) => (
 );
 
 ResultsTable.propTypes = {
-  Row: PropTypes.node.isRequired,
-  offset: PropTypes.number.isRequired,
+  Row: PropTypes.any.isRequired,
+  offset: PropTypes.any.isRequired,
   results: PropTypes.array.isRequired,
 };
 

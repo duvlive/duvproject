@@ -1,164 +1,92 @@
 import React from 'react';
-import TopMessage from 'components/common/layout/TopMessage';
+import PropTypes from 'prop-types';
 import BackEndPage from 'components/common/layout/BackEndPage';
+import Image from 'components/common/utils/Image';
+import ProfileAvatar from 'assets/img/avatar/profile.png';
 import { Link } from '@reach/router';
+import AdminList from 'components/common/pages/AdminList';
+import { twoDigitNumber } from 'utils/helpers';
 
-const Entertainers = () => (
-  <BackEndPage title="All Entertainers">
-    <div className="main-app">
-      <TopMessage message="All Entertainers" />
+const Entertainers = () => {
+  return (
+    <BackEndPage title="Entertainers">
+      <AdminList
+        apiData="entertainers"
+        apiUrl="/api/v1/entertainers-all"
+        pageName="Entertainer"
+        tableRow={EntertainersRow}
+      />
+    </BackEndPage>
+  );
+};
 
-      <section className="app-content">
-        <div className="table-responsive">
-          <table className="table table-dark">
-            <tbody>
-              <tr>
-                <th>S/N</th>
-                <th>Name</th>
-                <th>Stage Name</th>
-                <th>Type</th>
-                <th>Location</th>
-                <th>Verified</th>
-                <th></th>
-              </tr>
-              <tr>
-                <td>01.</td>
-                <td>Yomi Ogunmola</td>
-                <td>DJ Yummy</td>
-                <td>DJ</td>
-                <td>Lagos</td>
-                <td>NO</td>
-                <td>
-                  <Link to="#">Manage</Link>
-                </td>
-              </tr>
-              <tr>
-                <td>02.</td>
-                <td>Precious Jewel</td>
-                <td>Holy Guys</td>
-                <td>Live Band</td>
-                <td>Lagos</td>
-                <td>NO</td>
-                <td>
-                  <Link to="#">Manage</Link>
-                </td>
-              </tr>
-              <tr>
-                <td>03.</td>
-                <td>Olawale Adebisi</td>
-                <td>Sweet Mouth</td>
-                <td>MC</td>
-                <td>Abuja</td>
-                <td>YES</td>
-                <td>
-                  <Link to="#">Manage</Link>
-                </td>
-              </tr>
-              <tr>
-                <td>04.</td>
-                <td>Olawale Adebisi</td>
-                <td>DJ Proton</td>
-                <td>DJ</td>
-                <td>Lagos</td>
-                <td>NO</td>
-                <td>
-                  <Link to="#">Manage</Link>
-                </td>
-              </tr>
-              <tr>
-                <td>05.</td>
-                <td>Precious Jewel</td>
-                <td>Holy Guys</td>
-                <td>Live Band</td>
-                <td>Ogun</td>
-                <td>NO</td>
-                <td>
-                  <Link to="#">Manage</Link>
-                </td>
-              </tr>
-              <tr>
-                <td>06.</td>
-                <td>Femi Adebayo</td>
-                <td>Uncle MC</td>
-                <td>MC</td>
-                <td>Port Harcourt</td>
-                <td>YES</td>
-                <td>
-                  <Link to="#">Manage</Link>
-                </td>
-              </tr>
-              <tr>
-                <td>07.</td>
-                <td>Olawale Adebisi</td>
-                <td>DJ Proton</td>
-                <td>DJ</td>
-                <td>Lagos</td>
-                <td>NO</td>
-                <td>
-                  <Link to="#">Manage</Link>
-                </td>
-              </tr>
-              <tr>
-                <td>08.</td>
-                <td>Precious Jewel</td>
-                <td>Holy Guys</td>
-                <td>Live Band</td>
-                <td>Kaduna</td>
-                <td>NO</td>
-                <td>
-                  <Link to="#">Manage</Link>
-                </td>
-              </tr>
-              <tr>
-                <td>09.</td>
-                <td>David Ogbeneghe</td>
-                <td>Sweet Mouth</td>
-                <td>MC</td>
-                <td>Port Harcourt</td>
-                <td>YES</td>
-                <td>
-                  <Link to="#">Manage</Link>
-                </td>
-              </tr>
-              <tr>
-                <td>10.</td>
-                <td>Sister Agnes</td>
-                <td>DJ Agnes</td>
-                <td>DJ</td>
-                <td>Oyo</td>
-                <td>NO</td>
-                <td>
-                  <Link to="#">Manage</Link>
-                </td>
-              </tr>
-              <tr>
-                <td>11.</td>
-                <td>Precious Jewel</td>
-                <td>Holy Guys</td>
-                <td>Live Band</td>
-                <td>Lagos</td>
-                <td>NO</td>
-                <td>
-                  <Link to="#">Manage</Link>
-                </td>
-              </tr>
-              <tr>
-                <td>12.</td>
-                <td>Olawale Adebisi</td>
-                <td>Sweet Mouth</td>
-                <td>MC</td>
-                <td>Port Harcourt</td>
-                <td>YES</td>
-                <td>
-                  <Link to="#">Manage</Link>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-    </div>
-  </BackEndPage>
+const EntertainersRow = ({
+  id,
+  number,
+  stageName,
+  entertainerType,
+  profileImageURL,
+  location,
+  willingToTravel,
+}) => (
+  <tr>
+    <th className="table__number align-middle" scope="row">
+      {twoDigitNumber(number)}
+    </th>
+    <td className=" align-middle">
+      <Image
+        className="avatar--medium--small"
+        name={`${number}-entertainer`}
+        responsiveImage={false}
+        src={profileImageURL || ProfileAvatar}
+      />
+    </td>
+    <td className="align-middle">
+      <span className="table__title">{stageName}</span>
+    </td>
+
+    <td className="align-middle text-left">
+      <span className="text-muted-light-2">{entertainerType}</span>
+    </td>
+
+    <td className="align-middle text-left">
+      <span className="text-muted-light-2">{location}</span>
+    </td>
+
+    <td className="align-middle">
+      {willingToTravel ? (
+        <span className="text-muted-light text-uppercase">
+          <i className="icon icon-ok-circled"></i> Yes{' '}
+        </span>
+      ) : (
+        <span className="text-red text-uppercase">
+          <i className="icon icon-help"></i> No{' '}
+        </span>
+      )}
+    </td>
+
+    <td className="align-middle">
+      <Link to={`/admin/entertainers/${id}`}>Manage</Link>
+    </td>
+  </tr>
 );
+
+EntertainersRow.defaultProps = {
+  entertainerType: null,
+  location: null,
+  profileImageURL: null,
+  stageName: null,
+  willingToTravel: false,
+};
+
+EntertainersRow.propTypes = {
+  entertainerType: PropTypes.string,
+  id: PropTypes.any.isRequired,
+  location: PropTypes.string,
+  number: PropTypes.any.isRequired,
+  profileImageURL: PropTypes.string,
+  stageName: PropTypes.string,
+  willingToTravel: PropTypes.bool,
+};
 
 export default Entertainers;
