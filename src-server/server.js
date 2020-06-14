@@ -6,6 +6,7 @@ import https from 'https';
 import logger from 'morgan';
 import passport from 'passport';
 import path from 'path';
+import secure from 'express-force-https';
 
 import router from './server/routes';
 
@@ -28,15 +29,7 @@ app.use(passport.initialize());
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use((req, res, next) => {
-  console.log(req.headers.host + req.url, 'tireeeee');
-  console.log(req.secure, 'first???', req.url);
-  if (req.secure) {
-    return next();
-  } else {
-    return res.redirect('https://' + req.headers.host + req.url);
-  }
-});
+app.use(secure);
 router(app);
 
 // set the view engine to ejs
