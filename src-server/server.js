@@ -6,7 +6,6 @@ import https from 'https';
 import logger from 'morgan';
 import passport from 'passport';
 import path from 'path';
-import secure from 'express-force-https';
 
 import router from './server/routes';
 
@@ -20,7 +19,7 @@ if (process.env.NODE_ENV === 'development') {
   };
 }
 
-const port = parseInt(process.env.PORT, 10) || 8080;
+const port = parseInt(process.env.PORT, 10) || 4000;
 
 const app = express();
 
@@ -29,7 +28,22 @@ app.use(passport.initialize());
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(secure);
+
+app.use(function (req, res, next) {
+  if (req.secure) {
+    next();
+  } else {
+    const [add, port] = req.headers.host.split(':');
+    console.log(port, 'port we are in');
+    res.redirect('https://' + add + req.url);
+  }
+});
+
+if (process.env.NODE_ENV == 'production') {
+  app.use(secure);
+  console.log('forcing secure');
+}
+
 router(app);
 
 // set the view engine to ejs
@@ -43,12 +57,10 @@ app.get('/email-logo.png', function (req, res) {
   res.sendFile(path.join(__dirname, 'server', 'email-template', 'logo.png'));
 });
 
-if (process.env.NODE_ENV === 'production') {
-  // Handle React routing, return all requests to React app
-  app.get('*', function (req, res) {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
-  });
-}
+app.get('*', function (req, res) {
+  console.log('do we ever get here?');
+  res.sendFile(path.join(__dirname, `build`, 'index.html'));
+});
 
 app.listen(port, () => {
   console.info(`Started up the server at port ${port}`);
