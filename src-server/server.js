@@ -30,6 +30,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use(function (req, res, next) {
+  console.log(req.protocol, req.secure, 'what do we have?');
   if (req.secure) {
     next();
   } else {
