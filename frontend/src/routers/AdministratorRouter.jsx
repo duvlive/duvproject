@@ -4,6 +4,7 @@ import Dashboard from 'components/pages/administrator/Dashboard';
 import Entertainers from 'components/pages/administrator/Entertainers';
 import SingleUser from 'components/pages/administrator/SingleUser';
 import SingleEntertainer from 'components/pages/administrator/SingleEntertainer';
+import SingleBadge from 'components/pages/administrator/SingleBadge';
 import EntertainersPayment from 'components/pages/administrator/EntertainersPayment';
 import RegisteredUsers from 'components/pages/administrator/RegisteredUsers';
 import Auctions from 'components/pages/administrator/Auctions';
@@ -37,6 +38,7 @@ const AdministratorRouter = () => (
     <Gallery path="/gallery" />
     <Video path="/videos" />
     <Badges path="/badges" />
+    <SingleBadge path="/badges/:id" />
     <BandMembers path="/band-members" />
     <Events path="/events" />
     <InviteFriends path="/invite-friends" />

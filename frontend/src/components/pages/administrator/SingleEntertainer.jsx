@@ -4,12 +4,9 @@ import PropTypes from 'prop-types';
 import TopMessage from 'components/common/layout/TopMessage';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import Image from 'components/common/utils/Image';
-import { USER_TYPES } from 'utils/constants';
 import classNames from 'classnames';
 import Button from 'components/forms/Button';
 import ProfileAvatar from 'assets/img/avatar/profile.png';
-
-const entertainerTypes = Object.keys(USER_TYPES);
 
 const SingleEntertainer = ({ slug }) => {
   const [entertainer, setEntertainer] = React.useState(null);
