@@ -31,6 +31,7 @@ app.use(bodyParser.json());
 
 app.use(function (req, res, next) {
   console.log(req.protocol, req.secure, 'what do we have?');
+  console.log(req.url, 'another one');
   if (req.secure) {
     next();
   } else {
