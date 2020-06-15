@@ -29,19 +29,6 @@ app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use(function (req, res, next) {
-  console.log(req.protocol, req.secure, 'what do we have?');
-  console.log(req.url, 'another one');
-  console.log(req.headers.host, 'so we are sure');
-  if (req.secure) {
-    next();
-  } else {
-    const [add, port] = req.headers.host.split(':');
-    console.log(port, 'port we are in');
-    res.redirect('https://' + add + req.url);
-  }
-});
-
 router(app);
 
 // set the view engine to ejs
