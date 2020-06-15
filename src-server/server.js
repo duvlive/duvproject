@@ -39,11 +39,6 @@ app.use(function (req, res, next) {
   }
 });
 
-if (process.env.NODE_ENV == 'production') {
-  app.use(secure);
-  console.log('forcing secure');
-}
-
 router(app);
 
 // set the view engine to ejs
