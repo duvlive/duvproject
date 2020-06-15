@@ -24,7 +24,40 @@ const badgeRoutes = (router) => {
     Authentication.verifyToken,
     Authentication.isActiveUser,
     Authentication.validateEntertainer,
-    BadgeController.getBadges
+    BadgeController.getUserBadges
+  );
+
+  router
+    .route('/api/v1/badges')
+    .all(
+      Authentication.verifyToken,
+      Authentication.isActiveUser,
+      Authentication.validateAdmin
+    )
+    .get(BadgeController.getAllBadges);
+
+  router.get(
+    '/api/v1/badges',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    Authentication.validateAdmin,
+    BadgeController.getAllBadges
+  );
+
+  router.get(
+    '/api/v1/badges',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    Authentication.validateAdmin,
+    BadgeController.getAllBadges
+  );
+
+  router.get(
+    '/api/v1/badge-users',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    Authentication.validateAdmin,
+    BadgeController.getAllBadgeUsers
   );
 };
 

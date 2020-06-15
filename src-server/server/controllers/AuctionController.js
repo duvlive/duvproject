@@ -13,7 +13,7 @@ const EventEntertainerController = {
     const { startTime, eventDuration, minimumAmount, eventId, id } = req.body;
 
     const error = {
-      ...validString(minimumAmount)
+      ...validString(minimumAmount),
     };
     if (Object.keys(error).length > 1) {
       return res.status(400).json({ message: error.message.join('') });
@@ -24,24 +24,24 @@ const EventEntertainerController = {
         eventDuration,
         minimumAmount,
         eventId,
-        userId: req.user.id
+        userId: req.user.id,
       })
         .then(() => {
           return req.user.getEvents({
             where: { id: eventId },
             include: {
               model: Auction,
-              as: 'auction'
-            }
+              as: 'auction',
+            },
           });
         })
-        .then(event => {
+        .then((event) => {
           return res.status(200).json({
             message: 'Auction created successfully',
-            event: event[0]
+            event: event[0],
           });
         })
-        .catch(error => {
+        .catch((error) => {
           const status = error.status || 500;
           const errorMessage =
             (error.parent && error.parent.detail) || error.message || error;
@@ -53,26 +53,26 @@ const EventEntertainerController = {
         where: { id: eventId },
         include: {
           model: Auction,
-          as: 'auction'
-        }
+          as: 'auction',
+        },
       })
-      .then(event => {
+      .then((event) => {
         if (event && event.length > 0) {
           return event[0].auction.update({
             startTime,
             eventDuration,
-            minimumAmount
+            minimumAmount,
           });
         }
         throw `No Event with id ${id}`;
       })
-      .then(event => {
+      .then((event) => {
         return res.status(200).json({
           message: 'Auction updated successfully',
-          event
+          event,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         const status = error.status || 500;
         const errorMessage = error.message || error;
         return res.status(status).json({ message: errorMessage });
@@ -91,16 +91,16 @@ const EventEntertainerController = {
       .getEvents({
         include: {
           model: Auction,
-          as: 'auction'
-        }
+          as: 'auction',
+        },
       })
-      .then(events => {
+      .then((events) => {
         if (!events || events.length === 0) {
           return res.status(404).json({ message: 'Event Auctions not found' });
         }
         return res.status(200).json({ events });
       });
-  }
+  },
 };
 
 export default EventEntertainerController;

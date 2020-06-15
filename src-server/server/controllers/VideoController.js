@@ -1,5 +1,5 @@
-import { Video } from '../models';
-import { validString } from '../utils';
+import { User, Video } from '../models';
+import { getAll, validString } from '../utils';
 
 const VideoController = {
   /**
@@ -112,6 +112,49 @@ const VideoController = {
       .catch((error) => {
         res.status(412).json({ msg: error.message });
       });
+  },
+
+  /**
+   * get videos
+   * @param {object} req - The request sent to the route
+   * @param {object} res - The response sent back
+   * @return {object} json response
+   */
+  async getVideos(req, res) {
+    const { userId } = req.params;
+    const { offset, limit } = req.query;
+    try {
+      let videoQuery = {};
+      if (userId) {
+        videoQuery.userId = userId;
+      }
+      const options = {
+        offset: offset || 0,
+        limit: limit || 10,
+        where: videoQuery,
+        // include: [
+        //   {
+        //     model: User,
+        //     as: 'user',
+        //   },
+        // ],
+      };
+      try {
+        const { result, pagination } = await getAll(Video, options);
+        return res.status(200).json({
+          result,
+          pagination,
+        });
+      } catch (error) {
+        const status = error.status || 500;
+        const errorMessage = error.message || error;
+        return res.status(status).json({ message: errorMessage });
+      }
+    } catch (error) {
+      const status = error.status || 500;
+      const errorMessage = error.message || error;
+      return res.status(status).json({ message: errorMessage });
+    }
   },
 };
 

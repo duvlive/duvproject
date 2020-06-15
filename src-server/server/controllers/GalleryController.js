@@ -1,5 +1,6 @@
 require('dotenv').config();
 import { Gallery, User } from '../models';
+import { getAll } from '../utils';
 
 const cloudinary = require('cloudinary');
 const multer = require('multer');
@@ -188,6 +189,46 @@ const GalleryController = {
       .catch((error) => {
         res.status(412).json({ msg: error.message });
       });
+  },
+
+  /**
+   * @desc get gallery
+   * @param {object} req - The request sent to the route
+   * @param {object} res - The response sent back
+   * @return {object} json response
+   */
+  async getGallery(req, res) {
+    const { userId, approved } = req.params;
+    const { offset, limit } = req.query;
+    try {
+      let galleryQuery = {};
+      if (userId) {
+        galleryQuery.userId = userId;
+      }
+      if (approved) {
+        galleryQuery.approved = approved;
+      }
+      const options = {
+        offset: offset || 0,
+        limit: limit || 10,
+        where: galleryQuery,
+      };
+      try {
+        const { result, pagination } = await getAll(Gallery, options);
+        return res.status(200).json({
+          result,
+          pagination,
+        });
+      } catch (error) {
+        const status = error.status || 500;
+        const errorMessage = error.message || error;
+        return res.status(status).json({ message: errorMessage });
+      }
+    } catch (error) {
+      const status = error.status || 500;
+      const errorMessage = error.message || error;
+      return res.status(status).json({ message: errorMessage });
+    }
   },
 };
 
