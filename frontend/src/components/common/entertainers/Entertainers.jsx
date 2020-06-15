@@ -7,7 +7,13 @@ const Entertainers = ({ stageName, image, type, slug }) => (
   <Col sm={4}>
     <Link to={`/entertainers/${slug}`}>
       <Card className="entertainer-card">
-        <CardImg alt={stageName} className="img-fluid" src={image} top />
+        <CardImg
+          alt={stageName}
+          className="img-fluid"
+          src={image}
+          title={stageName}
+          top
+        />
         <CardImgOverlay>
           <CardTitle>{stageName}</CardTitle>
           <div className="entertainer_type">{type}</div>

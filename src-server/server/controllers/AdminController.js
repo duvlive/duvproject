@@ -12,7 +12,7 @@ const AdminController = {
 
   async getAllUsers(req, res) {
     const limit = 10;
-    const offset = parseInt(req.query.offset, 10) * limit || 0;
+    const offset = parseInt(req.query.offset, 10) || 0;
     try {
       const { result, pagination } = await getAll(User, {
         limit,

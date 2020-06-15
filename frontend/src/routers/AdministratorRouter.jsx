@@ -3,6 +3,7 @@ import { Router } from '@reach/router';
 import Dashboard from 'components/pages/administrator/Dashboard';
 import Entertainers from 'components/pages/administrator/Entertainers';
 import SingleUser from 'components/pages/administrator/SingleUser';
+import SingleEntertainer from 'components/pages/administrator/SingleEntertainer';
 import EntertainersPayment from 'components/pages/administrator/EntertainersPayment';
 import RegisteredUsers from 'components/pages/administrator/RegisteredUsers';
 import Auctions from 'components/pages/administrator/Auctions';
@@ -28,6 +29,7 @@ const AdministratorRouter = () => (
     <RegisteredUsers path="/registered-users" />
     <Auctions path="/auctions" />
     <SingleUser path="/users/:id" />
+    <SingleEntertainer path="/entertainers/:slug" />
     <UsersPayment path="/users-payment" />
     <Notifications path="/notifications" />
     <UpcomingEvents path="/upcoming-events" />

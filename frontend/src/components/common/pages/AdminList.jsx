@@ -23,7 +23,6 @@ const AdminList = ({
   const [filter, setFilter] = React.useState({});
 
   const setFilterTerms = (terms) => {
-    console.log(terms);
     setFilter(terms);
   };
 
@@ -41,7 +40,6 @@ const AdminList = ({
         // handle success
         if (status === 200) {
           setData(data);
-          console.log(data);
         }
       })
       .catch(function (error) {
@@ -51,6 +49,16 @@ const AdminList = ({
 
   const noOfResults = data.pagination.total || 0;
   const pluralizePageName = Humanize.pluralize(2, pageName);
+  const currentFilters = () => {
+    if (Object.keys(filter).length === 0) return 'None';
+    let output;
+    for (let item in filter) {
+      if (filter[item] && Object.prototype.hasOwnProperty.call(filter, item)) {
+        output += filter[item] + ' ';
+      }
+    }
+    return output;
+  };
 
   return (
     <div className="main-app">
@@ -73,6 +81,10 @@ const AdminList = ({
               </p>
               <h3 className="main-app__title">
                 {`${noOfResults} ${Humanize.pluralize(noOfResults, pageName)}`}
+                <br />
+                <small className="small--2 text-muted">
+                  Filters: {currentFilters()}
+                </small>
               </h3>
             </div>
           </div>

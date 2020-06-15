@@ -437,6 +437,20 @@ const PaymentController = {
         offset: offset || 0,
         limit: limit || 10,
         where: paymentQuery,
+        include: [
+          {
+            attributes: ['id', 'placeOfEvent'],
+            model: EventEntertainer,
+            as: 'eventPaidFor',
+            include: [
+              {
+                model: Event,
+                as: 'event',
+                attributes: ['id', 'eventType', 'eventDate'],
+              },
+            ],
+          },
+        ],
       };
       try {
         const { result, pagination } = await getAll(Payment, options);

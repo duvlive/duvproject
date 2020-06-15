@@ -34,6 +34,7 @@ const EntertainersRow = ({
   id,
   number,
   stageName,
+  slug,
   entertainerType,
   profileImageURL,
   location,
@@ -80,12 +81,25 @@ const EntertainersRow = ({
     </td>
 
     <td className="align-middle">
-      <Link
-        className="btn btn-wide btn-transparent btn-danger"
-        to={`/admin/entertainers/${id}`}
-      >
-        Manage
-      </Link>
+      {slug && (
+        <>
+          <a
+            className="btn btn-info btn-sm btn-transparent"
+            href={`/entertainers/${slug}`}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            Profile
+          </a>
+          &nbsp;&nbsp;
+          <Link
+            className="btn btn-sm btn-transparent btn-danger"
+            to={`/admin/entertainers/${slug}`}
+          >
+            Manage
+          </Link>
+        </>
+      )}
     </td>
   </tr>
 );
@@ -94,6 +108,7 @@ EntertainersRow.defaultProps = {
   entertainerType: null,
   location: null,
   profileImageURL: null,
+  slug: null,
   stageName: null,
   willingToTravel: false,
 };
@@ -104,6 +119,7 @@ EntertainersRow.propTypes = {
   location: PropTypes.string,
   number: PropTypes.any.isRequired,
   profileImageURL: PropTypes.string,
+  slug: PropTypes.string,
   stageName: PropTypes.string,
   willingToTravel: PropTypes.bool,
 };
@@ -189,7 +205,7 @@ export const EntertainerFilter = ({ setFilterTerms }) => {
   );
 };
 
-Entertainers.propTypes = {
+EntertainerFilter.propTypes = {
   setFilterTerms: PropTypes.func.isRequired,
 };
 
