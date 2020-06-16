@@ -42,16 +42,16 @@ export default [
         to: '/admin/upcoming-events',
         icon: 'calendar',
       },
-      // {
-      //   title: 'Gallery',
-      //   to: '/admin/gallery',
-      //   icon: 'gallery'
-      // },
-      // {
-      //   title: 'Videos',
-      //   to: '/admin/videos',
-      //   icon: 'video'
-      // }
+      {
+        title: 'Gallery',
+        to: '/admin/gallery',
+        icon: 'gallery',
+      },
+      {
+        title: 'Videos',
+        to: '/admin/videos',
+        icon: 'video',
+      },
     ],
   },
   {
