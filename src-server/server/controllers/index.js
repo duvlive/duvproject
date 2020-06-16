@@ -18,8 +18,10 @@ import RatingController from './RatingController';
 import ReviewController from './ReviewController';
 import UserController from './UserController';
 import VideoController from './VideoController';
+import AdminController from './AdminController';
 
 export {
+  AdminController,
   ApplicationController,
   ApproveCommentController,
   AuctionController,

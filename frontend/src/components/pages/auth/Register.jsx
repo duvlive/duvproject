@@ -97,7 +97,7 @@ const RegisterForm = ({ type }) => {
             if (status === 200) {
               setMessage({
                 type: 'success',
-                message: `Your registration is successful. Kindly confirm your email by clicking on the confirmation link`,
+                message: `Your registration is successful. Kindly activate your account by clicking on the confirmation link sent to your inbox (${values.email}).`,
               });
               actions.resetForm();
             }
@@ -137,7 +137,9 @@ const RegisterForm = ({ type }) => {
             </Link>
             <p className="auth__social-media--text mt-0 mb-5">OR</p>
           </section>
-          <AlertMessage {...message} />
+          <div className="mt-3 d-none d-md-block">
+            <AlertMessage {...message} />
+          </div>
           <div className="form-row">
             <Input
               formGroupClassName="col-md-6"
@@ -196,6 +198,9 @@ const RegisterForm = ({ type }) => {
               options={[{ label: agreementText, value: true }]}
             />
             <label className="form-check-label" htmlFor="agreement"></label>
+          </div>
+          <div className="mt-3 d-block d-md-none">
+            <AlertMessage {...message} />
           </div>
           <Button
             className="btn-danger btn-wide btn-transparent mt-4"

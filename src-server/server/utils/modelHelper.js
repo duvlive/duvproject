@@ -16,6 +16,8 @@ export const getAll = async (Model, options) => {
   const where = options.where || {};
   const order = options.order || [['updatedAt', 'DESC']];
   const include = options.include || null;
+  const attributes = options.attributes || null;
+  const group = options.group || null;
   /**
    * Calculate the pagination
    * if the limits or offset is given in the request
@@ -34,6 +36,9 @@ export const getAll = async (Model, options) => {
         offset,
         order,
         include,
+        attributes,
+        distinct: true,
+        group,
       });
       const total = data.count;
       const result = data.rows;

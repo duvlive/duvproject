@@ -46,7 +46,6 @@ const Sidebar = ({ showSidebar, closeSidebar, ...props }) => {
     userState.entertainerProfile &&
     !userState.entertainerProfile.approved;
 
-  console.log('userState', userState);
   const LiveBandEntertainer =
     currentUserType === USER_TYPES.entertainer &&
     userState.entertainerProfile.entertainerType === ENTERTAINER.LIVEBAND;

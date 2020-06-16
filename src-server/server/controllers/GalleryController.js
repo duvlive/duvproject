@@ -1,5 +1,5 @@
 require('dotenv').config();
-import { Gallery, User } from '../models';
+import { Gallery, User, EntertainerProfile } from '../models';
 import { getAll } from '../utils';
 
 const cloudinary = require('cloudinary');
@@ -212,6 +212,20 @@ const GalleryController = {
         offset: offset || 0,
         limit: limit || 10,
         where: galleryQuery,
+        include: [
+          {
+            model: User,
+            as: 'user',
+            attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+            include: [
+              {
+                model: EntertainerProfile,
+                as: 'profile',
+                attributes: ['stageName', 'slug'],
+              },
+            ],
+          },
+        ],
       };
       try {
         const { result, pagination } = await getAll(Gallery, options);

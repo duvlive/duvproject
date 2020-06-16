@@ -27,17 +27,8 @@ const badgeRoutes = (router) => {
     BadgeController.getUserBadges
   );
 
-  router
-    .route('/api/v1/badges')
-    .all(
-      Authentication.verifyToken,
-      Authentication.isActiveUser,
-      Authentication.validateAdmin
-    )
-    .get(BadgeController.getAllBadges);
-
   router.get(
-    '/api/v1/badges',
+    '/api/v1/badges-all',
     Authentication.verifyToken,
     Authentication.isActiveUser,
     Authentication.validateAdmin,
@@ -45,11 +36,11 @@ const badgeRoutes = (router) => {
   );
 
   router.get(
-    '/api/v1/badges',
+    '/api/v1/admin/badge',
     Authentication.verifyToken,
     Authentication.isActiveUser,
     Authentication.validateAdmin,
-    BadgeController.getAllBadges
+    BadgeController.getOneBadge
   );
 
   router.get(

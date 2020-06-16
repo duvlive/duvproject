@@ -1,5 +1,5 @@
 import { Op } from 'sequelize';
-import { Badge, BadgeUser } from '../models';
+import { Badge, BadgeUser, User, EntertainerProfile } from '../models';
 import { validString, getAll } from '../utils';
 
 const BadgeController = {
@@ -120,6 +120,17 @@ const BadgeController = {
         offset: offset || 0,
         limit: limit || 10,
         where: badgeQuery,
+        include: [
+          {
+            model: User,
+            as: 'creator',
+            attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+          },
+          {
+            model: BadgeUser,
+            as: 'userBadges',
+          },
+        ],
       };
       try {
         const { result, pagination } = await getAll(Badge, options);
@@ -162,6 +173,53 @@ const BadgeController = {
       } catch (error) {
         return res.status(500).json({ error: error.message });
       }
+    } catch (error) {
+      const status = error.status || 500;
+      const errorMessage = error.message || error;
+      return res.status(status).json({ message: errorMessage });
+    }
+  },
+
+  /**
+   * @desc Get a Single Badge
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+
+  async getOneBadge(req, res) {
+    const id = req.query.id;
+    try {
+      const badge = await Badge.findOne({
+        where: { id },
+        include: [
+          {
+            model: User,
+            as: 'creator',
+            attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+          },
+          {
+            model: BadgeUser,
+            as: 'userBadges',
+            include: [
+              {
+                model: User,
+                as: 'badgeUser',
+                attributes: ['id', 'profileImageURL'],
+                include: [
+                  {
+                    model: EntertainerProfile,
+                    as: 'profile',
+                    attributes: ['stageName', 'slug'],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      });
+      return res.status(200).json({ badge });
     } catch (error) {
       const status = error.status || 500;
       const errorMessage = error.message || error;

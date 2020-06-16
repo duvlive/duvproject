@@ -106,6 +106,11 @@ db.Video.belongsTo(db.User, {
   as: 'user',
 });
 
+db.Gallery.belongsTo(db.User, {
+  foreignKey: 'userId',
+  as: 'user',
+});
+
 db.User.hasMany(db.Notification, {
   foreignKey: 'userId',
   as: 'notifications',

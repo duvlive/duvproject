@@ -19,8 +19,10 @@ import userRoutes from './userRoutes';
 import videoRoutes from './videoRoutes';
 import badgeRoutes from './badgeRoutes';
 import welcomeRoute from './welcomeRoute';
+import adminRoute from './adminRoute';
 
 const routes = (app) => {
+  adminRoute(app);
   applicationRoutes(app);
   approveCommentRoutes(app);
   bankDetailsRoutes(app);

@@ -1,70 +1,93 @@
 import React from 'react';
-import TopMessage from 'components/common/layout/TopMessage';
+import PropTypes from 'prop-types';
 import BackEndPage from 'components/common/layout/BackEndPage';
+import Image from 'components/common/utils/Image';
+import ProfileAvatar from 'assets/img/avatar/profile.png';
+import { USER_TYPES } from 'utils/constants';
 import { Link } from '@reach/router';
+import AdminList from 'components/common/pages/AdminList';
 
-const RegisteredUsers = () => (
-  <BackEndPage title="Registered Users">
-    <div className="main-app">
-      <TopMessage message="Registered Users" />
+const userTypes = Object.keys(USER_TYPES);
 
-      <section className="app-content">
-        <div className="table-responsive">
-          <table className="table table-dark">
-            <tbody>
-              <tr>
-                <th>S/N</th>
-                <th>Name</th>
-                <th></th>
-              </tr>
-              <tr>
-                <td>01.</td>
-                <td>Olawale Adebisi</td>
-                <td>
-                  <Link to="#">Manage</Link>
-                </td>
-              </tr>
-              <tr>
-                <td>02.</td>
-                <td>Adewale Ayuba</td>
-                <td>
-                  <Link to="#">Manage</Link>
-                </td>
-              </tr>
-              <tr>
-                <td>03.</td>
-                <td>Nnamdi Emeka</td>
-                <td>
-                  <Link to="#">Manage</Link>
-                </td>
-              </tr>
-              <tr>
-                <td>04.</td>
-                <td>Olawale Adebisi</td>
-                <td>
-                  <Link to="#">Manage</Link>
-                </td>
-              </tr>
-              <tr>
-                <td>05.</td>
-                <td>Adewale Ayuba</td>
-                <td>
-                  <Link to="#">Manage</Link>
-                </td>
-              </tr>
-              <tr>
-                <td>06.</td>
-                <td>Nnamdi Emeka</td>
-                <td>
-                  <Link to="#">Manage</Link>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-    </div>
-  </BackEndPage>
+const RegisteredUsers = () => {
+  return (
+    <BackEndPage title="Registered Users">
+      <AdminList
+        apiData="users"
+        apiUrl="/api/v1/admin/users"
+        pageName="User"
+        tableRow={UsersRow}
+      />
+    </BackEndPage>
+  );
+};
+
+// only thing needed
+const UsersRow = ({
+  id,
+  number,
+  firstName,
+  lastName,
+  profileImageURL,
+  type,
+  isActive,
+}) => (
+  <tr>
+    <th className="table__number align-middle" scope="row">
+      {number}
+    </th>
+    <td className=" align-middle">
+      <Image
+        className="avatar--medium--small"
+        name={firstName + number}
+        responsiveImage={false}
+        src={profileImageURL || ProfileAvatar}
+      />
+    </td>
+    <td className="align-middle">
+      <span className="table__title">
+        {firstName} {lastName}
+      </span>
+    </td>
+
+    <td className="align-middle text-left">
+      <span className="text-muted-light-2">
+        {type > USER_TYPES.bandMember
+          ? 'UNKNOWN'
+          : userTypes[type].toUpperCase()}
+      </span>
+    </td>
+
+    <td className="align-middle">
+      {isActive ? (
+        <span className="text-muted-light text-uppercase">
+          <i className="icon icon-ok-circled"></i> Activated{' '}
+        </span>
+      ) : (
+        <span className="text-red text-uppercase">
+          <i className="icon icon-help"></i> Not Verified{' '}
+        </span>
+      )}
+    </td>
+
+    <td className="align-middle">
+      <Link to={`/admin/users/${id}`}>Manage</Link>
+    </td>
+  </tr>
 );
+
+UsersRow.defaultProps = {
+  profileImageURL: '',
+};
+
+UsersRow.propTypes = {
+  firstName: PropTypes.string.isRequired,
+  id: PropTypes.any.isRequired,
+  isActive: PropTypes.bool.isRequired,
+  lastName: PropTypes.string.isRequired,
+  number: PropTypes.any.isRequired,
+  profileImageURL: PropTypes.string,
+  type: PropTypes.any.isRequired,
+};
 
 export default RegisteredUsers;

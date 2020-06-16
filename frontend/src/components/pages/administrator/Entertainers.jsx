@@ -1,164 +1,212 @@
 import React from 'react';
-import TopMessage from 'components/common/layout/TopMessage';
+import PropTypes from 'prop-types';
 import BackEndPage from 'components/common/layout/BackEndPage';
+import Image from 'components/common/utils/Image';
+import ProfileAvatar from 'assets/img/avatar/profile.png';
 import { Link } from '@reach/router';
+import AdminList from 'components/common/pages/AdminList';
+import { twoDigitNumber } from 'utils/helpers';
+import { Formik, Form } from 'formik';
+import Button from 'components/forms/Button';
+import { feedback } from 'components/forms/form-helper';
+import { LANGUAGE, BUDGET, SELECT_ENTERTAINERS_TYPE } from 'utils/constants';
+import Select from 'components/forms/Select';
+import MultiSelect from 'components/forms/MultiSelect';
+import { recommendEntertainerSchema } from 'components/forms/schema/entertainerSchema';
+import { setInitialValues } from 'components/forms/form-helper';
+import { getStates } from 'data/naija-states-and-lgas';
 
-const Entertainers = () => (
-  <BackEndPage title="All Entertainers">
-    <div className="main-app">
-      <TopMessage message="All Entertainers" />
+const Entertainers = () => {
+  return (
+    <BackEndPage title="Entertainers">
+      <AdminList
+        apiData="entertainers"
+        apiUrl="/api/v1/entertainers-all"
+        FilterComponent={EntertainerFilter}
+        pageName="Entertainer"
+        tableRow={EntertainersRow}
+      />
+    </BackEndPage>
+  );
+};
 
-      <section className="app-content">
-        <div className="table-responsive">
-          <table className="table table-dark">
-            <tbody>
-              <tr>
-                <th>S/N</th>
-                <th>Name</th>
-                <th>Stage Name</th>
-                <th>Type</th>
-                <th>Location</th>
-                <th>Verified</th>
-                <th></th>
-              </tr>
-              <tr>
-                <td>01.</td>
-                <td>Yomi Ogunmola</td>
-                <td>DJ Yummy</td>
-                <td>DJ</td>
-                <td>Lagos</td>
-                <td>NO</td>
-                <td>
-                  <Link to="#">Manage</Link>
-                </td>
-              </tr>
-              <tr>
-                <td>02.</td>
-                <td>Precious Jewel</td>
-                <td>Holy Guys</td>
-                <td>Live Band</td>
-                <td>Lagos</td>
-                <td>NO</td>
-                <td>
-                  <Link to="#">Manage</Link>
-                </td>
-              </tr>
-              <tr>
-                <td>03.</td>
-                <td>Olawale Adebisi</td>
-                <td>Sweet Mouth</td>
-                <td>MC</td>
-                <td>Abuja</td>
-                <td>YES</td>
-                <td>
-                  <Link to="#">Manage</Link>
-                </td>
-              </tr>
-              <tr>
-                <td>04.</td>
-                <td>Olawale Adebisi</td>
-                <td>DJ Proton</td>
-                <td>DJ</td>
-                <td>Lagos</td>
-                <td>NO</td>
-                <td>
-                  <Link to="#">Manage</Link>
-                </td>
-              </tr>
-              <tr>
-                <td>05.</td>
-                <td>Precious Jewel</td>
-                <td>Holy Guys</td>
-                <td>Live Band</td>
-                <td>Ogun</td>
-                <td>NO</td>
-                <td>
-                  <Link to="#">Manage</Link>
-                </td>
-              </tr>
-              <tr>
-                <td>06.</td>
-                <td>Femi Adebayo</td>
-                <td>Uncle MC</td>
-                <td>MC</td>
-                <td>Port Harcourt</td>
-                <td>YES</td>
-                <td>
-                  <Link to="#">Manage</Link>
-                </td>
-              </tr>
-              <tr>
-                <td>07.</td>
-                <td>Olawale Adebisi</td>
-                <td>DJ Proton</td>
-                <td>DJ</td>
-                <td>Lagos</td>
-                <td>NO</td>
-                <td>
-                  <Link to="#">Manage</Link>
-                </td>
-              </tr>
-              <tr>
-                <td>08.</td>
-                <td>Precious Jewel</td>
-                <td>Holy Guys</td>
-                <td>Live Band</td>
-                <td>Kaduna</td>
-                <td>NO</td>
-                <td>
-                  <Link to="#">Manage</Link>
-                </td>
-              </tr>
-              <tr>
-                <td>09.</td>
-                <td>David Ogbeneghe</td>
-                <td>Sweet Mouth</td>
-                <td>MC</td>
-                <td>Port Harcourt</td>
-                <td>YES</td>
-                <td>
-                  <Link to="#">Manage</Link>
-                </td>
-              </tr>
-              <tr>
-                <td>10.</td>
-                <td>Sister Agnes</td>
-                <td>DJ Agnes</td>
-                <td>DJ</td>
-                <td>Oyo</td>
-                <td>NO</td>
-                <td>
-                  <Link to="#">Manage</Link>
-                </td>
-              </tr>
-              <tr>
-                <td>11.</td>
-                <td>Precious Jewel</td>
-                <td>Holy Guys</td>
-                <td>Live Band</td>
-                <td>Lagos</td>
-                <td>NO</td>
-                <td>
-                  <Link to="#">Manage</Link>
-                </td>
-              </tr>
-              <tr>
-                <td>12.</td>
-                <td>Olawale Adebisi</td>
-                <td>Sweet Mouth</td>
-                <td>MC</td>
-                <td>Port Harcourt</td>
-                <td>YES</td>
-                <td>
-                  <Link to="#">Manage</Link>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-    </div>
-  </BackEndPage>
+const EntertainersRow = ({
+  id,
+  number,
+  stageName,
+  slug,
+  entertainerType,
+  profileImageURL,
+  location,
+  willingToTravel,
+}) => (
+  <tr>
+    <th className="table__number align-middle" scope="row">
+      {twoDigitNumber(number)}
+    </th>
+    <td className=" align-middle">
+      <Image
+        className="avatar--medium--small"
+        name={`${number}-entertainer`}
+        responsiveImage={false}
+        src={profileImageURL || ProfileAvatar}
+      />
+    </td>
+    <td className="align-middle">
+      <small className="small--4 text-muted">Stage Name</small>
+      <span className="table__title">{stageName || '-'}</span>
+    </td>
+
+    <td className="align-middle text-left">
+      <small className="small--4 text-muted">Entertainer Type</small>
+      <span className="text-muted-light-2">{entertainerType || '-'}</span>
+    </td>
+
+    <td className="align-middle text-left">
+      <small className="small--4 text-muted">Location</small>
+      <span className="text-muted-light-2">{location || '-'}</span>
+    </td>
+
+    <td className="align-middle">
+      <small className="small--4 text-muted">Willing To Travel</small>
+      {willingToTravel ? (
+        <span className="text-muted-light text-uppercase">
+          <i className="icon icon-ok-circled"></i> Yes{' '}
+        </span>
+      ) : (
+        <span className="text-red text-uppercase">
+          <i className="icon icon-cancel"></i> No{' '}
+        </span>
+      )}
+    </td>
+
+    <td className="align-middle">
+      {slug && (
+        <>
+          <a
+            className="btn btn-info btn-sm btn-transparent"
+            href={`/entertainers/${slug}`}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            Profile
+          </a>
+          &nbsp;&nbsp;
+          <Link
+            className="btn btn-sm btn-transparent btn-danger"
+            to={`/admin/entertainers/${slug}`}
+          >
+            Manage
+          </Link>
+        </>
+      )}
+    </td>
+  </tr>
 );
+
+EntertainersRow.defaultProps = {
+  entertainerType: null,
+  location: null,
+  profileImageURL: null,
+  slug: null,
+  stageName: null,
+  willingToTravel: false,
+};
+
+EntertainersRow.propTypes = {
+  entertainerType: PropTypes.string,
+  id: PropTypes.any.isRequired,
+  location: PropTypes.string,
+  number: PropTypes.any.isRequired,
+  profileImageURL: PropTypes.string,
+  slug: PropTypes.string,
+  stageName: PropTypes.string,
+  willingToTravel: PropTypes.bool,
+};
+
+export const EntertainerFilter = ({ setFilterTerms }) => {
+  const noBudget = { label: 'None', value: '0' };
+  const anyState = { label: 'Any', value: 'Any' };
+  return (
+    <Formik
+      initialValues={setInitialValues(recommendEntertainerSchema)}
+      onSubmit={(value, actions) => {
+        setFilterTerms({ ...value, language: JSON.stringify(value.language) });
+        actions.setSubmitting(false);
+      }}
+      render={({ isSubmitting, handleSubmit }) => (
+        <Form className="card card-custom card-black card-form p-4">
+          <>
+            <div className="form-row">
+              <Select
+                blankOption="Choose your preferred Entertainer Type"
+                formGroupClassName="col-md-6"
+                label="Entertainer Type"
+                name="entertainerType"
+                options={SELECT_ENTERTAINERS_TYPE}
+                placeholder="Entertainer Type"
+                showFeedback={feedback.ERROR}
+              />
+              <MultiSelect
+                formGroupClassName="col-md-6"
+                label="Language"
+                name="language"
+                optional
+                options={LANGUAGE}
+                placeholder="Preferred Language"
+                showFeedback={feedback.ERROR}
+              />
+            </div>
+            <div className="form-row">
+              <Select
+                formGroupClassName="col-md-6"
+                label="Lowest Budget (in Naira)"
+                name="lowestBudget"
+                optional
+                options={[noBudget, ...BUDGET]}
+                placeholder="Lowest Budget"
+                showFeedback={feedback.ERROR}
+              />
+              <Select
+                formGroupClassName="col-md-6"
+                label="Highest Budget (in Naira)"
+                name="highestBudget"
+                optional
+                options={[noBudget, ...BUDGET]}
+                placeholder="Highest Budget"
+                showFeedback={feedback.ERROR}
+              />
+            </div>
+            <div className="form-row">
+              <Select
+                blankOption="Select State"
+                formGroupClassName="col-md-6"
+                label="Location"
+                name="location"
+                optional
+                options={[anyState, ...getStates()]}
+                placeholder="State"
+                showFeedback={feedback.ERROR}
+              />
+            </div>
+            <div className="form-group">
+              <Button
+                color="danger"
+                loading={isSubmitting}
+                onClick={handleSubmit}
+              >
+                Filter Entertainer
+              </Button>
+            </div>
+          </>
+        </Form>
+      )}
+    />
+  );
+};
+
+EntertainerFilter.propTypes = {
+  setFilterTerms: PropTypes.func.isRequired,
+};
 
 export default Entertainers;

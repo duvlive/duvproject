@@ -23,7 +23,7 @@ const App = () => {
           <UserRouter path="user/*" />
           <EntertainerRouter path="entertainer/*" />
           <BandMemberRouter path="band-member/*" />
-          <AdministratorRouter path="administrator/*" />
+          <AdministratorRouter path="admin/*" />
         </HomeKeeping>
       </Router>
     </UserContextProvider>
