@@ -9,7 +9,7 @@ import {
   Notification,
   Payment,
 } from '../models';
-import { validString } from '../utils';
+import { validString, getAll } from '../utils';
 import { NOTIFICATIONS, NOTIFICATION_TYPE } from '../constant';
 import sendMail from '../MailSender';
 import EMAIL_CONTENT from '../email-template/content';
@@ -384,13 +384,85 @@ const PaymentController = {
    * @return {object} json response
    */
   getPayments(req, res) {
-    const { entertainerId } = req.user.profile.id;
+    const entertainerId = req.user.profile.id;
     return Payment.findAll({
       where: { entertainerId },
       order: [['updatedAt', 'DESC']],
+      include: [
+        {
+          attributes: ['id', 'placeOfEvent'],
+          model: EventEntertainer,
+          as: 'eventPaidFor',
+          include: [
+            {
+              model: Event,
+              as: 'event',
+              attributes: ['id', 'eventType', 'eventDate'],
+            },
+          ],
+        },
+      ],
     })
       .then((payments) => res.json({ payments }))
-      .catch((error) => res.status(412).json({ msg: error.message }));
+      .catch((error) => res.status(412).json({ message: error.message }));
+  },
+
+  /**
+   * get All Payments
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  async getAllPayments(req, res) {
+    const {
+      amount,
+      entertainerId,
+      eventEntertainerId,
+      offset,
+      limit,
+    } = req.query;
+    try {
+      let paymentQuery = {};
+      if (entertainerId) {
+        paymentQuery.entertainerId = entertainerId;
+      }
+      if (amount) {
+        paymentQuery.amount = amount;
+      }
+      if (eventEntertainerId) {
+        paymentQuery.eventEntertainerId = eventEntertainerId;
+      }
+      const options = {
+        offset: offset || 0,
+        limit: limit || 10,
+        where: paymentQuery,
+        include: [
+          {
+            attributes: ['id', 'placeOfEvent'],
+            model: EventEntertainer,
+            as: 'eventPaidFor',
+            include: [
+              {
+                model: Event,
+                as: 'event',
+                attributes: ['id', 'eventType', 'eventDate'],
+              },
+            ],
+          },
+        ],
+      };
+      try {
+        const { result, pagination } = await getAll(Payment, options);
+        return res.status(200).json({ payments: result, pagination });
+      } catch (error) {
+        return res.status(500).json({ error: error.message });
+      }
+    } catch (error) {
+      const status = error.status || 500;
+      const errorMessage = error.message || error;
+      return res.status(status).json({ message: errorMessage });
+    }
   },
 };
 

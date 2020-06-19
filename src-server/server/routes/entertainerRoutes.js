@@ -54,6 +54,12 @@ const entertainerRoutes = (router) => {
   router
     .route('/api/v1/entertainers/total')
     .get(EntertainerProfileController.getTotalEntertainers);
+
+  // Admin Routes
+  router
+    .route('/api/v1/entertainers-all')
+    .all(Authentication.verifyToken, Authentication.validateAdmin)
+    .get(EntertainerProfileController.getAllEntertainers);
 };
 
 export default entertainerRoutes;

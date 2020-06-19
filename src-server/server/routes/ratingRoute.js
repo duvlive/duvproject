@@ -38,6 +38,14 @@ const ratingRoutes = (router) => {
     Authentication.validateEntertainer,
     RatingController.getOneEntertainerRating
   );
+
+  router.get(
+    '/api/v1/ratings',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    Authentication.validateAdmin,
+    RatingController.getRatings
+  );
 };
 
 export default ratingRoutes;

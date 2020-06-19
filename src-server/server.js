@@ -19,7 +19,7 @@ if (process.env.NODE_ENV === 'development') {
   };
 }
 
-const port = parseInt(process.env.PORT, 10) || 8080;
+const port = parseInt(process.env.PORT, 10) || 4000;
 
 const app = express();
 
@@ -28,6 +28,15 @@ app.use(passport.initialize());
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+if (process.env.NODE_ENV === 'production') {
+  app.use((req, res, next) => {
+    if (req.header('x-forwarded-proto') !== 'https')
+      res.redirect(`https://${req.header('host')}${req.url}`);
+    else next();
+  });
+}
+
 router(app);
 
 // set the view engine to ejs
@@ -41,12 +50,10 @@ app.get('/email-logo.png', function (req, res) {
   res.sendFile(path.join(__dirname, 'server', 'email-template', 'logo.png'));
 });
 
-if (process.env.NODE_ENV === 'production') {
-  // Handle React routing, return all requests to React app
-  app.get('*', function (req, res) {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
-  });
-}
+app.get('*', function (req, res) {
+  console.log('do we ever get here?');
+  res.sendFile(path.join(__dirname, `build`, 'index.html'));
+});
 
 app.listen(port, () => {
   console.info(`Started up the server at port ${port}`);

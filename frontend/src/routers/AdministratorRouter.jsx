@@ -2,6 +2,9 @@ import React from 'react';
 import { Router } from '@reach/router';
 import Dashboard from 'components/pages/administrator/Dashboard';
 import Entertainers from 'components/pages/administrator/Entertainers';
+import SingleUser from 'components/pages/administrator/SingleUser';
+import SingleEntertainer from 'components/pages/administrator/SingleEntertainer';
+import SingleBadge from 'components/pages/administrator/SingleBadge';
 import EntertainersPayment from 'components/pages/administrator/EntertainersPayment';
 import RegisteredUsers from 'components/pages/administrator/RegisteredUsers';
 import Auctions from 'components/pages/administrator/Auctions';
@@ -26,6 +29,8 @@ const AdministratorRouter = () => (
     <EntertainersPayment path="/entertainers-payment" />
     <RegisteredUsers path="/registered-users" />
     <Auctions path="/auctions" />
+    <SingleUser path="/users/:id" />
+    <SingleEntertainer path="/entertainers/:slug" />
     <UsersPayment path="/users-payment" />
     <Notifications path="/notifications" />
     <UpcomingEvents path="/upcoming-events" />
@@ -33,6 +38,7 @@ const AdministratorRouter = () => (
     <Gallery path="/gallery" />
     <Video path="/videos" />
     <Badges path="/badges" />
+    <SingleBadge path="/badges/:id" />
     <BandMembers path="/band-members" />
     <Events path="/events" />
     <InviteFriends path="/invite-friends" />

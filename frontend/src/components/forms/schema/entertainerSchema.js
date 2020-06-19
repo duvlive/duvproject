@@ -25,8 +25,8 @@ export const entertainerDetailsSchema = {
   location: stringValidation('Location'),
   entertainerType: stringValidation('Entertainer Type'),
   city: required('City'),
-  baseCharges: required('Base Charges'),
-  preferredCharges: required('Preferred Charges'),
+  baseCharges: required('Minimum Charges'),
+  preferredCharges: optionalValidation(required('Preferred Charge')),
   yearStarted: required('Started Year'),
   willingToTravel: stringValidation('Willing to travel'),
   availableFor: optionalValidation(autocompleteValidation('Available for')),
@@ -95,10 +95,14 @@ export const recommendEntertainerSchema = {
   entertainerType: stringValidation('Entertainer Type'),
   language: multiSelectValidation('Language'),
   location: optionalValidation(stringValidation('Location')),
-  lowestBudget: positiveNumberValidation('Base Budget', 'budget'),
-  highestBudget: positiveNumberValidation('Highest Budget', 'budget').moreThan(
-    yup.ref('lowestBudget'),
-    'Highest Budget should be greater than the Base Budget'
+  lowestBudget: optionalValidation(
+    positiveNumberValidation('Base Budget', 'budget')
+  ),
+  highestBudget: optionalValidation(
+    positiveNumberValidation('Highest Budget', 'budget').moreThan(
+      yup.ref('lowestBudget'),
+      'Highest Budget should be greater than the Base Budget'
+    )
   ),
 };
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import PropTypes from 'prop-types';
 import TopMessage from 'components/common/layout/TopMessage';
 import BackEndPage from 'components/common/layout/BackEndPage';
@@ -6,12 +7,31 @@ import { Link } from '@reach/router';
 import { moneyFormat } from 'utils/helpers';
 import { getShortDate } from 'utils/date-helpers';
 import LoadingScreen from 'components/common/layout/LoadingScreen';
-import { UserContext } from 'context/UserContext';
+import { getTokenFromStore } from 'utils/localStorage';
 import NoContent from 'components/common/utils/NoContent';
 
 const Payments = () => {
-  const { userState } = React.useContext(UserContext);
-  const payments = userState.entertainerProfile.payments;
+  const [payments, setPayments] = React.useState(null);
+  React.useEffect(() => {
+    axios
+      .get('/api/v1/payments/entertainers', {
+        headers: {
+          'x-access-token': getTokenFromStore(),
+        },
+      })
+      .then(function (response) {
+        const { status, data } = response;
+        // handle success
+        if (status === 200) {
+          console.log('data', data);
+          setPayments(data.payments);
+        }
+      })
+      .catch(function (error) {
+        console.log(error.response.data.message);
+        setPayments([]);
+      });
+  }, []);
 
   return (
     <BackEndPage title="Payments History">
@@ -61,7 +81,7 @@ Payments.Card = ({ color, payment }) => (
       >
         <div className="card-body">
           <h4 className="subtitle--2 white mb-0">
-            NGN {moneyFormat(payment.amount / 100)}
+            NGN {moneyFormat(payment.amount)}
           </h4>
           <div className="small--1 text-gray">
             Paid on {getShortDate(payment.createdAt)}
@@ -72,15 +92,15 @@ Payments.Card = ({ color, payment }) => (
           <div className="row">
             <div className="col-8">
               <h5 className="subtitle--3 mt-2 mb-0 gray">
-                {/* {payment.authorization.bank} */}DKASFLADS
+                {payment.eventPaidFor.event.eventType}
               </h5>
               <div className="small--3 text-gray">
-                {/* {payment.authorization.card_type} */} card type
+                {getShortDate(payment.eventPaidFor.event.eventDate)}
               </div>
             </div>
             <div className="col-4">
               <div className="text-muted text-right h1">
-                <span className="icon icon-credit-card"></span>
+                <span className="icon icon-wallet"></span>
               </div>
             </div>
           </div>

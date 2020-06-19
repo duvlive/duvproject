@@ -1,5 +1,5 @@
 import { EntertainerProfile, Event, Rating, Review, User } from '../models';
-import { validString } from '../utils';
+import { getAll, validString } from '../utils';
 
 const ReviewController = {
   /**
@@ -256,6 +256,55 @@ const ReviewController = {
         const errorMessage = error.message || error;
         return res.status(412).json({ message: errorMessage });
       });
+  },
+
+  /**
+   * @desc get reviews
+   * @param {object} req - The request sent to the route
+   * @param {object} res - The response sent back
+   * @return {object} json response
+   */
+  async getReviews(req, res) {
+    const { userId, entertainerId, ratingId } = req.params;
+    const { offset, limit } = req.query;
+    try {
+      let reviewQuery = {};
+      if (userId) {
+        reviewQuery.userId = userId;
+      }
+      if (entertainerId) {
+        reviewQuery.entertainerId = entertainerId;
+      }
+      if (ratingId) {
+        reviewQuery.ratingId = ratingId;
+      }
+      const options = {
+        offset: offset || 0,
+        limit: limit || 10,
+        where: reviewQuery,
+        // include: [
+        //   {
+        //     model: User,
+        //     as: 'reviews',
+        //   },
+        // ],
+      };
+      try {
+        const { result, pagination } = await getAll(Review, options);
+        return res.status(200).json({
+          result,
+          pagination,
+        });
+      } catch (error) {
+        const status = error.status || 500;
+        const errorMessage = error.message || error;
+        return res.status(status).json({ message: errorMessage });
+      }
+    } catch (error) {
+      const status = error.status || 500;
+      const errorMessage = error.message || error;
+      return res.status(status).json({ message: errorMessage });
+    }
   },
 };
 

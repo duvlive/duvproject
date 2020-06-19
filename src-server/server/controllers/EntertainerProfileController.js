@@ -43,18 +43,19 @@ const formatSearchEntertainers = (result) =>
   result.reduce((acc, user) => {
     const entertainer = {
       id: user.id,
-      entertainerType: user.profile.entertainerType,
-      profileImageURL: user.profileImageURL,
-      stageName: user.profile.stageName,
       about: user.profile.about,
-      location: user.profile.location,
-      yearnStarted: user.profile.yearnStarted,
-      willingToTravel: user.profile.willingToTravel,
-      baseCharges: user.profile.baseCharges,
-      preferredCharges: user.profile.preferredCharges,
-      slug: user.profile.slug,
+      approved: user.profile.approved,
       availableFor: user.profile.availableFor,
+      baseCharges: user.profile.baseCharges,
+      entertainerType: user.profile.entertainerType,
+      location: user.profile.location,
+      preferredCharges: user.profile.preferredCharges,
+      profileImageURL: user.profileImageURL,
       ratings: user.profile.ratings,
+      slug: user.profile.slug,
+      stageName: user.profile.stageName,
+      willingToTravel: user.profile.willingToTravel,
+      yearnStarted: user.profile.yearnStarted,
     };
     return [...acc, entertainer];
   }, []);
@@ -155,14 +156,14 @@ const EntertainerProfileController = {
   transformEntertainer(entertainer, updatedValues = {}) {
     const transformEntertainer = {
       id: entertainer.personalDetails.id,
+      about: entertainer.about,
+      entertainerType: entertainer.entertainerType,
       firstName: entertainer.personalDetails.firstName,
       lastName: entertainer.personalDetails.lastName,
-      type: entertainer.personalDetails.type,
-      about: entertainer.about,
       profileImg: entertainer.personalDetails.profileImageURL,
-      stageName: entertainer.stageName,
-      entertainerType: entertainer.entertainerType,
       slug: entertainer.slug,
+      stageName: entertainer.stageName,
+      type: entertainer.personalDetails.type,
     };
 
     return { ...transformEntertainer, ...updatedValues };
@@ -503,11 +504,11 @@ const EntertainerProfileController = {
         entertainerType: { [Op.eq]: entertainerType },
       };
 
-      if (lowestBudget) {
+      if (lowestBudget && parseInt(lowestBudget, 10) > 0) {
         entertainerQuery.baseCharges = { [Op.gte]: lowestBudget };
       }
 
-      if (highestBudget) {
+      if (highestBudget && parseInt(highestBudget, 10) > 0) {
         entertainerQuery.preferredCharges = { [Op.lte]: highestBudget };
       }
 
@@ -525,7 +526,7 @@ const EntertainerProfileController = {
         };
       }
 
-      if (location) {
+      if (location && location !== 'Any') {
         entertainerQuery.location = { [Op.eq]: location };
       }
 
@@ -599,6 +600,85 @@ const EntertainerProfileController = {
         const errorMessage = error.message || error;
         return res.status(status).json({ message: errorMessage });
       });
+  },
+
+  /**
+   * get-all-entertainers
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  async getAllEntertainers(req, res) {
+    let entertainerQuery = {};
+    const {
+      entertainerType,
+      lowestBudget,
+      highestBudget,
+      language,
+      location,
+      limit,
+      offset,
+    } = req.query;
+
+    try {
+      if (entertainerType) {
+        entertainerQuery.entertainerType = entertainerType;
+      }
+
+      if (lowestBudget && parseInt(lowestBudget, 10) > 0) {
+        entertainerQuery.baseCharges = { [Op.gte]: lowestBudget };
+      }
+
+      if (highestBudget && parseInt(highestBudget, 10) > 0) {
+        entertainerQuery.preferredCharges = { [Op.lte]: highestBudget };
+      }
+
+      if (language) {
+        const languages = JSON.parse(language);
+
+        let languageQuery = [];
+        for (const lang of languages) {
+          languageQuery.push({
+            [Op.substring]: lang,
+          });
+        }
+        entertainerQuery.preferredLanguage = {
+          [Op.and]: languageQuery,
+        };
+      }
+
+      if (location && location !== 'Any') {
+        entertainerQuery.location = { [Op.eq]: location };
+      }
+
+      const include = [
+        {
+          model: EntertainerProfile,
+          as: 'profile',
+          where: entertainerQuery,
+        },
+      ];
+
+      try {
+        const { result, pagination } = await getAll(User, {
+          include,
+          offset: offset || 0,
+          limit: limit || 10,
+        });
+        return res
+          .status(200)
+          .json({ entertainers: formatSearchEntertainers(result), pagination });
+      } catch (error) {
+        const status = error.status || 500;
+        const errorMessage = error.message || error;
+        return res.status(status).json({ message: errorMessage });
+      }
+    } catch (error) {
+      const status = error.status || 500;
+      const errorMessage = error.message || error;
+      return res.status(status).json({ message: errorMessage });
+    }
   },
 };
 

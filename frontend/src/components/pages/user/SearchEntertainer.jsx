@@ -44,25 +44,6 @@ export const SearchEntertainerForm = ({ selectedSearchedEntertainer }) => {
   const [entertainers, setEntertainers] = React.useState([]);
   const [searchTerm, setSearchTerm] = React.useState(null);
 
-  // React.useEffect(() => {
-  //   eventEntertainerId &&
-  //     axios
-  //       .get(`/api/v1/entertainers/search/pastEvents/${eventEntertainerId}`, {
-  //         headers: {
-  //           'x-access-token': getTokenFromStore(),
-  //         },
-  //       })
-  //       .then(function (response) {
-  //         const { status, data } = response;
-  //         // handle success
-  //         if (status === 200) {
-  //           setEntertainers(data.entertainers);
-  //
-  //           setLoading(false);
-  //         }
-  //       });
-  // }, [eventEntertainerId]);
-
   return (
     <div>
       <Formik

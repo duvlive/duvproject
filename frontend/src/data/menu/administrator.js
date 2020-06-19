@@ -4,119 +4,114 @@ export default [
     menus: [
       {
         title: 'Dashboard',
-        to: '/administrator/dashboard',
-        icon: 'gauge'
-      },
-      {
-        title: 'Notifications',
-        to: '/administrator/notifications',
-        icon: 'megaphone'
+        to: '/admin/dashboard',
+        icon: 'gauge',
       },
       {
         title: 'Entertainers',
-        to: '/administrator/entertainers',
-        icon: 'entertainers'
+        to: '/admin/entertainers',
+        icon: 'entertainers',
       },
       {
         title: 'Entertainers Payment',
-        to: '/administrator/entertainers-payment',
-        icon: 'credit-card'
-      }
-    ]
+        to: '/admin/entertainers-payment',
+        icon: 'credit-card',
+      },
+    ],
   },
   {
     name: 'Users',
     menus: [
       {
         title: 'Registered Users',
-        to: '/administrator/registered-users',
-        icon: 'badge'
+        to: '/admin/registered-users',
+        icon: 'badge',
       },
       {
         title: 'Auctions',
-        to: '/administrator/auctions',
-        icon: 'auction'
+        to: '/admin/auctions',
+        icon: 'auction',
       },
       {
         title: 'Users Payment',
-        to: '/administrator/users-payment',
-        icon: 'credit-card'
+        to: '/admin/users-payment',
+        icon: 'credit-card',
       },
       {
         title: 'Upcoming events',
-        to: '/administrator/upcoming-events',
-        icon: 'calendar'
-      }
-      // {
-      //   title: 'Gallery',
-      //   to: '/administrator/gallery',
-      //   icon: 'gallery'
-      // },
-      // {
-      //   title: 'Videos',
-      //   to: '/administrator/videos',
-      //   icon: 'video'
-      // }
-    ]
+        to: '/admin/upcoming-events',
+        icon: 'calendar',
+      },
+      {
+        title: 'Gallery',
+        to: '/admin/gallery',
+        icon: 'gallery',
+      },
+      {
+        title: 'Videos',
+        to: '/admin/videos',
+        icon: 'video',
+      },
+    ],
   },
   {
     name: 'Miscelleneous',
     menus: [
       {
         title: 'Events',
-        to: '/administrator/events',
-        icon: 'calendar'
+        to: '/admin/events',
+        icon: 'calendar',
       },
       {
         title: 'Badges',
-        to: '/administrator/badges',
-        icon: 'badge'
-      }
-    ]
+        to: '/admin/badges',
+        icon: 'badge',
+      },
+    ],
   },
   {
     name: 'Others',
     menus: [
       {
         title: 'Edit Profile',
-        to: '/administrator/edit-profile',
-        icon: 'user-circle'
+        to: '/admin/edit-profile',
+        icon: 'user-circle',
       },
       {
         title: 'Invite Friends',
-        to: '/administrator/invite-friends',
-        icon: 'invite-friend'
+        to: '/admin/invite-friends',
+        icon: 'invite-friend',
       },
       {
         title: 'Switch to User Account',
         to: '/user/dashboard',
-        icon: 'loop'
+        icon: 'loop',
       },
       {
         title: 'Help',
-        to: '/administrator/help',
-        icon: 'help'
+        to: '/admin/help',
+        icon: 'help',
       },
       {
         title: 'Logout',
         to: '/logout',
-        icon: 'logout'
-      }
-    ]
-  }
+        icon: 'logout',
+      },
+    ],
+  },
 ];
 
 export const administratorTopMenu = [
   {
     title: "Recent Entertainers'  Payment",
-    to: '/entertainer/entertainer-payment'
+    to: '/entertainer/entertainer-payment',
   },
   {
     title: 'Login as User',
-    to: '/user/dashboard'
+    to: '/user/dashboard',
   },
   {
     title: 'Change Password',
-    to: '/administrator/change-password'
-  }
+    to: '/admin/change-password',
+  },
 ];

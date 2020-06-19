@@ -33,7 +33,10 @@ const EntertainerDetailsForm = ({ moveToNextStep }) => {
       })}
       onSubmit={(values, actions) => {
         const availableFor = JSON.stringify(values.availableFor);
-        const payload = { ...values, availableFor };
+        const preferredCharges =
+          values.preferredCharges || BUDGET[BUDGET.length - 1].value;
+        const payload = { ...values, availableFor, preferredCharges };
+        console.log('payload', payload);
         axios
           .put('/api/v1/users/updateEntertainerProfile', payload, {
             headers: { 'x-access-token': getTokenFromStore() },
@@ -94,20 +97,20 @@ const EntertainerDetailsForm = ({ moveToNextStep }) => {
                   placeholder="Location (in Nigeria)"
                 />
                 <DynamicSelect
-                  blankOption="Select City"
+                  blankOption="Select LGA / City"
                   dependentOn="location"
                   formGroupClassName="col-md-6"
-                  label="City"
+                  label="LGA / City"
                   name="city"
                   options={getLgas}
-                  placeholder="City"
+                  placeholder="LGA / City"
                 />
               </div>
               <div className="form-row">
                 <Select
                   blankOption="Choose your base charges"
                   formGroupClassName="col-md-6"
-                  label="Base Charges (in Naira)"
+                  label="Minimum Charges (in Naira)"
                   name="baseCharges"
                   options={BUDGET}
                   placeholder="Base Charges"
@@ -115,7 +118,7 @@ const EntertainerDetailsForm = ({ moveToNextStep }) => {
                 <Select
                   blankOption="Choose your highest charges"
                   formGroupClassName="col-md-6"
-                  label="Preferred Charges (in Naira)"
+                  label="Preferred Charge (in Naira)"
                   name="preferredCharges"
                   options={BUDGET}
                   placeholder="Preferred Charges"

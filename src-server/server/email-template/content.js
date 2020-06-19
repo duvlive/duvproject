@@ -10,6 +10,53 @@ const EMAIL_CONTENT = {
     copyright: `You are receiving this email because you signed up to DUV LIVE, the No 1 Promoter of Premium Live Entertainment. If you did not make this request, please contact DUV LIVE support.
     Please do not reply to this email. Emails sent to this address will not be answered.`,
   },
+  ACTIVATE_YOUR_BAND_ACCOUNT: {
+    subject: 'Band Member Invite',
+    title: 'Band Member Invite',
+    contentTop:
+      'Thanks for signing up to DUV LIVE. To complete your account set up, please confirm your email address by clicking the button below',
+    buttonText: 'Join Now',
+    contentFooter:
+      'We look forward to you having a richer and more rewarding experience on our platform.',
+  },
+  APPROVED_BID: {
+    title: 'Your Bids has been approved',
+    subject: 'Your Bid has been approved',
+    buttonText: 'Decline',
+  },
+  CHANGE_PASSWORD: {
+    subject: 'Your password has been changed!',
+    title: 'Password Changed!',
+    contentTop: 'Your password has been successfully changed.',
+    contentBottom:
+      'If this change was not done by you, then your DUV LIVE account might have been compromised. We strongly advise that you reset your password as soon as possible.',
+    contentFooter:
+      'If you are in need of technical assistance, kindly contact DUV LIVE Support.',
+  },
+  CONTACT_US: {
+    subject: 'CONTACT US',
+    title: 'CONTACT US',
+  },
+  ENTERTAINER_REQUEST: {
+    subject: 'YIPPEE!!! You have a new event request',
+    buttonText: 'Accept Request',
+  },
+  FAQ: {
+    subject: 'FAQ',
+    title: 'FAQ',
+  },
+  INVITE_FRIEND: {
+    subject: 'INVITE FRIEND',
+    title: 'INVITE FRIEND',
+    contentTop:
+      'You have been invited to join the D.U.V LIVE online platform that supports and promotes the best in live entertainment. Join now!',
+    buttonText: 'JOIN NOW',
+  },
+  PAID_REQUEST: {
+    title: 'Congratulations!!! Your Performance Has Been Fully Paid For',
+    subject: 'Congratulations!!! Your Performance Has Been Fully Paid For',
+    buttonText: 'Check it out!',
+  },
   PASSWORD_RESET: {
     subject: 'Password Reset',
     title: 'Password Reset',
@@ -22,43 +69,19 @@ const EMAIL_CONTENT = {
     copyright:
       'Please do not reply to this email. Emails sent to this address will not be answered.',
   },
-  CHANGE_PASSWORD: {
-    subject: 'Your password has been changed!',
-    title: 'Password Changed!',
-    contentTop: 'Your password has been successfully changed.',
-    contentBottom:
-      'If this change was not done by you, then your DUV LIVE account might have been compromised. We strongly advise that you reset your password as soon as possible.',
-    contentFooter:
-      'If you are in need of technical assistance, kindly contact DUV LIVE Support.',
+  USER_CANCELLED_EVENT: {
+    subject: 'Cancelled Event',
   },
-  FAQ: {
-    subject: 'FAQ',
-    title: 'FAQ',
-  },
-  CONTACT_US: {
-    subject: 'CONTACT US',
-    title: 'CONTACT US',
-  },
-  INVITE_FRIEND: {
-    subject: 'INVITE FRIEND',
-    title: 'INVITE FRIEND',
-    contentTop:
-      'You have been invited to join the D.U.V LIVE online platform that supports and promotes the best in live entertainment. Join now!',
-    buttonText: 'JOIN NOW',
-  },
-  APPROVED_BID: {
-    title: 'Your Bids has been approved',
-    subject: 'Your Bid has been approved',
-    buttonText: 'Decline',
-  },
-  PAID_REQUEST: {
-    title: 'Congratulations!!! Your Performance Has Been Fully Paid For',
-    subject: 'Congratulations!!! Your Performance Has Been Fully Paid For',
-    buttonText: 'Check it out!',
-  },
-  ENTERTAINER_REQUEST: {
-    subject: 'YIPPEE!!! You have a new event request',
-    buttonText: 'Accept Request',
+  WELCOME_MAIL: {
+    subject: 'Welcome to DUV LIVE!',
+    title: 'Welcome to DUV LIVE!',
+    contentTop: `We are excited to have you as a part of the <strong>fastest</strong> growing online platform for live <strong>entertainment</strong>, poised to deliver <strong>fun and excitement</strong> to <strong>audiences</strong> near and far, all year round.
+    <br><br>
+    From <strong>Entertainers</strong> to Event <strong>Hosts</strong>, Talent <strong>Managers</strong> and <strong>Promoters</strong> alike, we <strong>connect</strong> the best quality performers, to those who desire to <strong>create positively unforgettable memories</strong>.
+    <br><br>
+    As the leading <strong>promoter</strong> of premium live entertainment, we invite you to join us in our mission to <strong>maximize value</strong> for the <strong>creative works</strong> of live <strong>performers</strong>, and for the money paid by those who hire them.
+
+    `,
   },
 };
 

@@ -13,6 +13,14 @@ const eventEntertainerRoutes = (router) => {
     '/api/v1/eventEntertainer/:id',
     EventEntertainerController.getOneEventEntertainer
   );
+
+  router.post(
+    '/api/v1/evententertainer/not-available/:id',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    Authentication.validateEntertainer,
+    EventEntertainerController.entertainerNotAvailable
+  );
 };
 
 export default eventEntertainerRoutes;

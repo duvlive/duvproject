@@ -6,14 +6,21 @@ import { Link } from '@reach/router';
 import Timeago from 'react-timeago';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import { UserContext } from 'context/UserContext';
-import { getEventDate, getTime, getTimeOfDay } from 'utils/date-helpers';
+import {
+  getEventDate,
+  getTime,
+  getTimeOfDay,
+  getShortDate,
+} from 'utils/date-helpers';
 import { groupEvents } from 'utils/event-helpers';
 import NoContent from 'components/common/utils/NoContent';
 import { countOccurences } from 'utils/helpers';
 import { userCanAddEntertainer } from 'utils/event-helpers';
+import AlertMessage from 'components/common/utils/AlertMessage';
 
 const Events = () => {
-  const { userState } = React.useContext(UserContext);
+  const { userState, userDispatch } = React.useContext(UserContext);
+  const [message, setMessage] = React.useState({ msg: null, type: null });
   const events = (userState && userState.events) || [];
   const [showPastEvents, setShowPastEvents] = React.useState(false);
   // Sort event according - Today, Upcoming and Past
@@ -23,6 +30,17 @@ const Events = () => {
 
   const hasActiveEvents =
     allEvents.today.length > 0 || allEvents.upcoming.length > 0;
+
+  if (userState && userState.alert === 'cancel-event-success') {
+    !message.msg &&
+      setMessage({
+        msg: 'Your event has been successfully cancelled',
+        type: 'danger',
+      });
+    userDispatch({
+      type: 'remove-alert',
+    });
+  }
 
   return (
     <BackEndPage title="My Events">
@@ -38,6 +56,9 @@ const Events = () => {
               <span className="icon icon-events"></span> New Event
             </Link>
           </div>
+          <div className="mt-4">
+            <AlertMessage message={message.msg} type={message.type} />
+          </div>
           {events.length > 0 ? (
             <div className="table-responsive">
               <table className="table table-dark table__no-border table__with-bg">
@@ -49,6 +70,10 @@ const Events = () => {
                   <Events.CardList
                     events={allEvents.upcoming}
                     title="Upcoming Events"
+                  />
+                  <Events.CardList
+                    events={allEvents.cancelled}
+                    title="Cancelled Events"
                   />
                   {(showPastEvents || !hasActiveEvents) && (
                     <Events.CardList
@@ -117,6 +142,8 @@ Events.CardList.defaultProps = {
 
 Events.Card = ({
   id,
+  cancelled,
+  cancelledDate,
   eventType,
   eventDate,
   startTime,
@@ -147,13 +174,13 @@ Events.Card = ({
   return (
     <>
       <tr className="transparent">
-        <td colSpan="5">
+        <td colSpan="6">
           <h4 className="main-app__subtitle">
             <Timeago date={eventDate} />
           </h4>
         </td>
       </tr>
-      <tr>
+      <tr className={cancelled ? 'strikethrough' : ''}>
         <td className="pl-4">
           <span className="subtitle--2 text-red text-uppercase">
             {getEventDate(eventDate)}
@@ -189,18 +216,31 @@ Events.Card = ({
           </span>
         </td>
         <td className="text-right pr-5">
-          <Avatars entertainers={entertainersAvatars} />
-        </td>
-        <td className="text-right">
-          {userCanAddEntertainer(eventDate) && (
-            <Link
-              className="btn btn-danger btn-transparent"
-              to={`/user/events/${id}/add-entertainer`}
-            >
-              Add Entertainer
-            </Link>
+          {cancelled ? (
+            <div className="no-strikethrough d-inline-block">
+              <span className="subtitle--2 text-red">
+                <i className="icon icon-cancel-circled"></i> Cancelled Event
+              </span>
+              <span className="small--3 text-gray">
+                on {getShortDate(cancelledDate)}
+              </span>
+            </div>
+          ) : (
+            <Avatars entertainers={entertainersAvatars} />
           )}
-          &nbsp; &nbsp; &nbsp;
+        </td>
+        <td className="text-right no-strikethrough">
+          {userCanAddEntertainer(eventDate) && !cancelled && (
+            <>
+              <Link
+                className="btn btn-danger btn-transparent"
+                to={`/user/events/${id}/add-entertainer`}
+              >
+                Add Entertainer
+              </Link>
+              &nbsp; &nbsp; &nbsp;
+            </>
+          )}
           <Link
             className="btn btn-info btn-transparent"
             to={`/user/events/view/${id}`}
@@ -214,6 +254,8 @@ Events.Card = ({
 };
 
 Events.Card.propTypes = {
+  cancelled: PropTypes.bool,
+  cancelledDate: PropTypes.string,
   entertainers: PropTypes.array,
   eventDate: PropTypes.string,
   eventDuration: PropTypes.string,
@@ -225,6 +267,8 @@ Events.Card.propTypes = {
 };
 
 Events.Card.defaultProps = {
+  cancelled: false,
+  cancelledDate: null,
   id: '0',
   eventDuration: null,
   entertainers: [],

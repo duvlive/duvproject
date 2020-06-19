@@ -132,7 +132,6 @@ const BidsForm = ({ eventEntertainer }) => {
               eventId: eventEntertainer.eventId,
               eventEntertainerId: eventEntertainer.id,
             };
-            console.log('payload', payload);
             axios
               .post('/api/v1/application', payload, {
                 headers: { 'x-access-token': getTokenFromStore() },

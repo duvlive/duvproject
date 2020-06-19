@@ -5,6 +5,7 @@ import commissionRoutes from './commissionRoute';
 import contactRoutes from './contactRoutes';
 import emailRoutes from './emailRoutes';
 import entertainerRoutes from './entertainerRoutes';
+import bandMemberRoutes from './bandMemberRoutes';
 import eventEntertainerRoutes from './eventEntertainerRoute';
 import eventRoutes from './eventRoutes';
 import galleryRoutes from './galleryRoutes';
@@ -16,9 +17,12 @@ import ratingRoutes from './ratingRoute';
 import reviewRoutes from './reviewRoutes';
 import userRoutes from './userRoutes';
 import videoRoutes from './videoRoutes';
+import badgeRoutes from './badgeRoutes';
 import welcomeRoute from './welcomeRoute';
+import adminRoute from './adminRoute';
 
 const routes = (app) => {
+  adminRoute(app);
   applicationRoutes(app);
   approveCommentRoutes(app);
   bankDetailsRoutes(app);
@@ -38,6 +42,8 @@ const routes = (app) => {
   userRoutes(app);
   videoRoutes(app);
   welcomeRoute(app);
+  bandMemberRoutes(app);
+  badgeRoutes(app);
 };
 
 export default routes;

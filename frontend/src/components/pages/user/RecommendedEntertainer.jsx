@@ -47,13 +47,13 @@ export const RecommendedEntertainerForm = ({
   const [languages, setLanguages] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
   const [entertainers, setEntertainers] = React.useState([]);
+  const noBudget = { label: 'None', value: '0' };
+  const anyState = { label: 'Any', value: 'Any' };
 
   return (
     <div>
       <Formik
         initialValues={setInitialValues(recommendEntertainerSchema, {
-          lowestBudget: BUDGET[0].value,
-          highestBudget: BUDGET[BUDGET.length - 2].value,
           location,
         })}
         onSubmit={(
@@ -133,7 +133,7 @@ export const RecommendedEntertainerForm = ({
                   label="Lowest Budget (in Naira)"
                   name="lowestBudget"
                   optional
-                  options={BUDGET}
+                  options={[noBudget, ...BUDGET]}
                   placeholder="Lowest Budget"
                   showFeedback={feedback.ERROR}
                 />
@@ -142,7 +142,7 @@ export const RecommendedEntertainerForm = ({
                   label="Highest Budget (in Naira)"
                   name="highestBudget"
                   optional
-                  options={BUDGET}
+                  options={[noBudget, ...BUDGET]}
                   placeholder="Highest Budget"
                   showFeedback={feedback.ERROR}
                 />
@@ -154,7 +154,7 @@ export const RecommendedEntertainerForm = ({
                   label="Location"
                   name="location"
                   optional
-                  options={getStates()}
+                  options={[anyState, ...getStates()]}
                   placeholder="State"
                   showFeedback={feedback.ERROR}
                 />

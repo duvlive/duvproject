@@ -75,30 +75,39 @@ const navigation = {
   ],
 };
 
-const gems = {
-  name: 'Gems',
-  menus: [
-    {
-      title: 'Badges',
-      to: '/entertainer/badges',
-      icon: 'badge',
-    },
-    {
-      title: 'Gallery',
-      to: '/entertainer/gallery',
-      icon: 'gallery',
-    },
-    {
-      title: 'Videos',
-      to: '/entertainer/videos',
-      icon: 'video',
-    },
-    // {
-    //   title: 'Band Members',
-    //   to: '/entertainer/band-members',
-    //   icon: 'band-members',
-    // },
-  ],
+const gems = (showLiveBand = false) => {
+  const bandMembers = {
+    title: 'Band Members',
+    to: '/entertainer/band-members',
+    icon: 'band-members',
+  };
+
+  let createdGem = {
+    name: 'Gems',
+    menus: [
+      {
+        title: 'Badges',
+        to: '/entertainer/badges',
+        icon: 'badge',
+      },
+      {
+        title: 'Gallery',
+        to: '/entertainer/gallery',
+        icon: 'gallery',
+      },
+      {
+        title: 'Videos',
+        to: '/entertainer/videos',
+        icon: 'video',
+      },
+    ],
+  };
+
+  if (showLiveBand) {
+    createdGem.menus.push(bandMembers);
+  }
+
+  return createdGem;
 };
 
 const othersMenu = {
@@ -132,7 +141,9 @@ const othersMenu = {
   ],
 };
 
-export const entertainerSideMenu = [navigation, gems, othersMenu];
+export const entertainerSideMenu = [navigation, gems(), othersMenu];
+
+export const liveBandSideMenu = [navigation, gems(true), othersMenu];
 
 export const unApprovedEntertainerSideMenu = [accountSetup, othersMenu];
 

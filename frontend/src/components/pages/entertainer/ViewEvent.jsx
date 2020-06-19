@@ -20,7 +20,15 @@ import {
   defaultEventEntertainer,
   eventIsOngoing,
 } from 'utils/event-helpers';
+import { navigate } from '@reach/router';
 import AlertMessage from 'components/common/utils/AlertMessage';
+import { UserContext } from 'context/UserContext';
+import { Formik, Form } from 'formik';
+import Button from 'components/forms/Button';
+import { cancelEventSchema } from 'components/forms/schema/eventSchema';
+import { createSchema } from 'components/forms/schema/schema-helpers';
+import { setInitialValues } from 'components/forms/form-helper';
+import TextArea from 'components/forms/TextArea';
 
 const ViewEvent = ({ eventEntertainerId }) => {
   const [eventEntertainer, setEventEntertainer] = React.useState({});
@@ -115,6 +123,7 @@ const ViewEvent = ({ eventEntertainerId }) => {
                 <ViewEvent.EventEntertainerDetailsCard
                   eventEntertainer={eventEntertainer}
                 />
+                <ViewEvent.CancelEvent eventEntertainer={eventEntertainer} />
               </div>
             </aside>
           </section>
@@ -601,6 +610,106 @@ ViewEvent.PendingEntertainersRow.propTypes = {
 };
 ViewEvent.PendingEntertainersRow.defaultProps = {
   eventEntertainer: {},
+};
+
+ViewEvent.CancelEvent = ({ eventEntertainer }) => {
+  return (
+    <div className="text-right cancel-event__text mt-3 mb-5">
+      <DuvLiveModal
+        body={<CancelEventForm eventEntertainerId={eventEntertainer.id} />}
+        closeModalText="Cancel"
+        title="Cancel Event"
+      >
+        <>
+          <i className="icon icon-cancel"></i> Cancel Event
+        </>
+      </DuvLiveModal>
+    </div>
+  );
+};
+
+ViewEvent.CancelEvent.propTypes = {
+  eventEntertainer: PropTypes.object,
+};
+
+ViewEvent.CancelEvent.defaultProps = {
+  eventEntertainer: {},
+};
+
+const CancelEventForm = ({ eventEntertainerId }) => {
+  const [message, setMessage] = React.useState({});
+  let { userDispatch } = React.useContext(UserContext);
+
+  return (
+    <Formik
+      initialValues={setInitialValues(cancelEventSchema)}
+      onSubmit={(values, actions) => {
+        axios
+          .post(
+            `/api/v1/evententertainer/not-available/${eventEntertainerId}`,
+            values,
+            {
+              headers: { 'x-access-token': getTokenFromStore() },
+            }
+          )
+          .then(function (response) {
+            const { status, data } = response;
+            console.log('data', data);
+            if (status === 200) {
+              userDispatch({
+                type: 'add-alert',
+                alert: 'cancel-event-success',
+              });
+              navigate('/entertainer/events');
+              actions.resetForm();
+              actions.setSubmitting(false);
+            }
+          })
+          .catch(function (error) {
+            setMessage({ msg: error.response.data.message });
+            actions.setSubmitting(false);
+          });
+      }}
+      render={({ isSubmitting, handleSubmit }) => (
+        <>
+          <Form>
+            <AlertMessage
+              message={message && message.msg}
+              type={message && message.type}
+            />
+
+            <TextArea
+              label="Reason"
+              name="cancelledReason"
+              placeholder="Enter the reason for cancelling the event"
+              rows="3"
+            />
+            <div className="small--2 mt-n3 mb-3 text-muted-light">
+              Inform the event host and DUV LIVE of any cancellation at least
+              48hrs before the event date. Failure to do so (except due to
+              reasons considered under Force Majeure) shall result in the
+              removal of the entertainer's account, the blacklisting of the
+              User's Personal Details on the DUV LIVE online platform, and any
+              other legal action deemed reasonably necessary by the affected
+              persons.Do you wish to proceed with the cancellation?
+            </div>
+            <Button
+              className="btn-info btn-wide btn-transparent mt-2"
+              loading={isSubmitting}
+              onClick={handleSubmit}
+            >
+              Yes, Cancel Event
+            </Button>
+          </Form>
+        </>
+      )}
+      validationSchema={createSchema(cancelEventSchema)}
+    />
+  );
+};
+
+CancelEventForm.propTypes = {
+  eventEntertainerId: PropTypes.any.isRequired,
 };
 
 export default ViewEvent;

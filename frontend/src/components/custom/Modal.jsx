@@ -4,14 +4,16 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import Image from 'components/common/utils/Image';
 
 const DuvLiveModal = ({
+  actionButtonColor,
   actionText,
   actionFn,
   body,
+  cancelButtonColor,
   children,
   childrenClassName,
   className,
   closeModalText,
-  title
+  title,
 }) => {
   const [modal, setModal] = useState(false);
   const handleAction = () => {
@@ -35,14 +37,14 @@ const DuvLiveModal = ({
         <ModalFooter>
           {actionText && (
             <Button
-              color="btn btn-success btn-transparent"
+              color={`btn btn-${actionButtonColor} btn-transparent`}
               onClick={handleAction}
             >
               {actionText}
             </Button>
           )}
           <Button
-            color="btn btn-danger btn-transparent"
+            color={`btn btn-${cancelButtonColor} btn-transparent`}
             onClick={() => setModal(!modal)}
           >
             {closeModalText}
@@ -54,23 +56,27 @@ const DuvLiveModal = ({
 };
 
 DuvLiveModal.propTypes = {
+  actionButtonColor: PropTypes.string,
   actionFn: PropTypes.func,
   actionText: PropTypes.string,
   body: PropTypes.node.isRequired,
+  cancelButtonColor: PropTypes.string,
   children: PropTypes.node.isRequired,
   childrenClassName: PropTypes.string,
   className: PropTypes.string,
   closeModalText: PropTypes.string,
-  title: PropTypes.node
+  title: PropTypes.node,
 };
 
 DuvLiveModal.defaultProps = {
+  actionButtonColor: 'success',
   actionFn: () => {},
   actionText: '',
+  cancelButtonColor: 'danger',
   childrenClassName: 'duvlive-modal',
   className: '',
   closeModalText: 'Close',
-  title: null
+  title: null,
 };
 
 DuvLiveModal.ViewEntertainerProfile = ({ entertainer }) => (
@@ -101,7 +107,7 @@ DuvLiveModal.ViewEntertainerProfile = ({ entertainer }) => (
 );
 
 DuvLiveModal.ViewEntertainerProfile.propTypes = {
-  entertainer: PropTypes.object.isRequired
+  entertainer: PropTypes.object.isRequired,
 };
 
 export default DuvLiveModal;
