@@ -224,7 +224,6 @@ const RatingController = {
         return res.status(200).json({ avgRatings });
       })
       .catch((error) => {
-        console.log('=====>', error);
         const errorMessage = error.message || error;
         return res.status(412).json({ message: errorMessage });
       });
@@ -260,34 +259,10 @@ const RatingController = {
       ],
     })
       .then((ratings) => {
-        if (!ratings) {
-          return res.status(404).json({ message: 'Rating not found' });
+        if (!ratings || ratings.length === 0) {
+          return res.status(404).json({ message: 'Ratings not found' });
         }
-        const ratingLength = ratings.length;
-        const averageRatings = ratings.reduce(
-          (acc, rate) => {
-            acc['professionalism'] += rate.professionalism;
-            acc['accommodating'] += rate.accommodating;
-            acc['overallTalent'] += rate.overallTalent;
-            acc['recommend'] += rate.recommend;
-            return acc;
-          },
-          {
-            professionalism: 0,
-            accommodating: 0,
-            overallTalent: 0,
-            recommend: 0,
-          }
-        );
-        const jj = Object.keys(averageRatings).forEach((item) => {
-          averageRatings;
-        });
-        console.log(averageRatings, jj);
-        return res.status(200).json({
-          ratings,
-          averageRatings,
-          ratingLength,
-        });
+        return res.status(200).json({ ratings });
       })
       .catch((error) => {
         const errorMessage = error.message || error;
