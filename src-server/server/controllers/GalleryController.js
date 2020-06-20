@@ -206,7 +206,10 @@ const GalleryController = {
       if (userId) {
         galleryQuery.userId = userId;
       }
-      if (approved && MEDIA_TYPES[approved]) {
+      if (
+        approved &&
+        Object.prototype.hasOwnProperty.call(MEDIA_TYPES, approved)
+      ) {
         galleryQuery.approved = MEDIA_TYPES[approved];
       }
       const options = {
