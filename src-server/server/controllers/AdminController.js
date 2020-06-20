@@ -57,6 +57,7 @@ const AdminController = {
       return res.status(status).json({ message: errorMessage });
     }
   },
+
 };
 
 export default AdminController;

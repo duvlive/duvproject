@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import PropTypes from 'prop-types';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import Image from 'components/common/utils/Image';
@@ -8,24 +9,20 @@ import AdminList from 'components/common/pages/AdminList';
 import { twoDigitNumber } from 'utils/helpers';
 import { approval, getStatus } from 'components/pages/entertainer/Gallery';
 
-// import { Formik, Form } from 'formik';
-// import Button from 'components/forms/Button';
-// import { feedback } from 'components/forms/form-helper';
-// import { LANGUAGE, BUDGET, SELECT_ENTERTAINERS_TYPE } from 'utils/constants';
-// import Select from 'components/forms/Select';
-// import MultiSelect from 'components/forms/MultiSelect';
-// import { recommendGallerySchema } from 'components/forms/schema/gallerySchema';
-// import { setInitialValues } from 'components/forms/form-helper';
-// import { getStates } from 'data/naija-states-and-lgas';
+import { Formik, Form } from 'formik';
+import Button from 'components/forms/Button';
+import Select from 'components/forms/Select';
+import { getTokenFromStore } from 'utils/localStorage';
 
 const Gallery = () => {
   return (
     <BackEndPage title="Gallery">
       <AdminList
+        FilterComponent={GalleryFilter}
         apiData="result"
         apiUrl="/api/v1/gallery-all"
-        // FilterComponent={GalleryFilter}
         pageName="Gallery"
+        pluralPageName="Gallery"
         tableRow={GalleryRow}
       />
     </BackEndPage>
@@ -93,89 +90,78 @@ GalleryRow.propTypes = {
   user: PropTypes.object,
 };
 
-// export const GalleryFilter = ({ setFilterTerms }) => {
-//   const noBudget = { label: 'None', value: '0' };
-//   const anyState = { label: 'Any', value: 'Any' };
-//   return (
-//     <Formik
-//       initialValues={setInitialValues(recommendGallerySchema)}
-//       onSubmit={(value, actions) => {
-//         setFilterTerms({ ...value, language: JSON.stringify(value.language) });
-//         actions.setSubmitting(false);
-//       }}
-//       render={({ isSubmitting, handleSubmit }) => (
-//         <Form className="card card-custom card-black card-form p-4">
-//           <>
-//             <div className="form-row">
-//               <Select
-//                 blankOption="Choose your preferred Gallery Type"
-//                 formGroupClassName="col-md-6"
-//                 label="Gallery Type"
-//                 name="galleryType"
-//                 options={SELECT_ENTERTAINERS_TYPE}
-//                 placeholder="Gallery Type"
-//                 showFeedback={feedback.ERROR}
-//               />
-//               <MultiSelect
-//                 formGroupClassName="col-md-6"
-//                 label="Language"
-//                 name="language"
-//                 optional
-//                 options={LANGUAGE}
-//                 placeholder="Preferred Language"
-//                 showFeedback={feedback.ERROR}
-//               />
-//             </div>
-//             <div className="form-row">
-//               <Select
-//                 formGroupClassName="col-md-6"
-//                 label="Lowest Budget (in Naira)"
-//                 name="lowestBudget"
-//                 optional
-//                 options={[noBudget, ...BUDGET]}
-//                 placeholder="Lowest Budget"
-//                 showFeedback={feedback.ERROR}
-//               />
-//               <Select
-//                 formGroupClassName="col-md-6"
-//                 label="Highest Budget (in Naira)"
-//                 name="highestBudget"
-//                 optional
-//                 options={[noBudget, ...BUDGET]}
-//                 placeholder="Highest Budget"
-//                 showFeedback={feedback.ERROR}
-//               />
-//             </div>
-//             <div className="form-row">
-//               <Select
-//                 blankOption="Select State"
-//                 formGroupClassName="col-md-6"
-//                 label="Location"
-//                 name="location"
-//                 optional
-//                 options={[anyState, ...getStates()]}
-//                 placeholder="State"
-//                 showFeedback={feedback.ERROR}
-//               />
-//             </div>
-//             <div className="form-group">
-//               <Button
-//                 color="danger"
-//                 loading={isSubmitting}
-//                 onClick={handleSubmit}
-//               >
-//                 Filter Gallery
-//               </Button>
-//             </div>
-//           </>
-//         </Form>
-//       )}
-//     />
-//   );
-// };
+export const GalleryFilter = ({ setFilterTerms }) => {
+  const [entertainers, setEntertainers] = React.useState([]);
+  React.useEffect(() => {
+    axios.get(`/api/v1/admin/entertainers-list`, {
+      headers: {
+        'x-access-token': getTokenFromStore(),
+      }
+    }).then(function (response) {
+      const { status, data } = response;
+      // handle success
+      if (status === 200) {
+        setEntertainers(data.entertainers);
+      }
+    })
+      .catch(function (error) {
+        setEntertainers([]);
+      });
+  }, []);
+  const GALLERY_STATE = [
+    { label: 'Any' },
+    { label: 'Pending' },
+    { label: 'Approved' },
+    { label: 'Rejected' }
+  ];
+  return (
+    <Formik
+      initialValues={{
+        approved: 'Any',
+        userId: ''
+      }}
+      onSubmit={({ approved, userId }, actions) => {
+        setFilterTerms({ approved, userId });
+        actions.setSubmitting(false);
+      }}
+      render={({ isSubmitting, handleSubmit }) => (
+        <Form className="card card-custom card-black card-form p-4">
+          <>
+            <div className="form-row">
+              <Select
+                formGroupClassName="col-md-6"
+                label="Approval State"
+                name="approved"
+                options={GALLERY_STATE}
+                placeholder="Gallery Type"
+              />
+              <Select
+                blankOption="Select Entertainer"
+                formGroupClassName="col-md-6"
+                label="Entertainer"
+                name="userId"
+                options={entertainers}
+                placeholder="Select Entertainer"
+              />
+            </div>
+            <div className="form-group">
+              <Button
+                color="danger"
+                loading={isSubmitting}
+                onClick={handleSubmit}
+              >
+                Filter Gallery
+              </Button>
+            </div>
+          </>
+        </Form>
+      )}
+    />
+  );
+};
 
-// GalleryFilter.propTypes = {
-//   setFilterTerms: PropTypes.func.isRequired,
-// };
+GalleryFilter.propTypes = {
+  setFilterTerms: PropTypes.func.isRequired,
+};
 
 export default Gallery;

@@ -13,6 +13,7 @@ const AdminList = ({
   apiData,
   pageName,
   apiUrl,
+  pluralPageName,
   tableRow,
   FilterComponent,
 }) => {
@@ -48,7 +49,7 @@ const AdminList = ({
   }, [currPage, apiUrl, filter]);
 
   const noOfResults = data.pagination.total || 0;
-  const pluralizePageName = Humanize.pluralize(2, pageName);
+  const pluralizePageName = pluralPageName || Humanize.pluralize(2, pageName);
   const currentFilters = () => {
     if (Object.keys(filter).length === 0) return 'None';
     let output;
@@ -60,6 +61,31 @@ const AdminList = ({
     return output;
   };
 
+  const TOP_FILTER = <>
+    <div className="row mt-3 mb-2">
+      <div className="col-sm-12">
+        <p
+          className="text-link text-right"
+          onClick={() => setOpenFilter((openFilter) => !openFilter)}
+        >
+          <span className="icon icon-align-justify"></span> &nbsp;
+      {openFilter ? 'Close Filter' : 'Filter'}
+        </p>
+        <h3 className="main-app__title">
+          {`${noOfResults} ${pluralizePageName}`}
+          <br />
+          <small className="small--2 text-muted">
+            Filters: {currentFilters()}
+          </small>
+        </h3>
+      </div>
+    </div>
+
+    <SlideDown className={''}>
+      {openFilter && <FilterComponent setFilterTerms={setFilterTerms} />}
+    </SlideDown>
+  </>;
+
   return (
     <div className="main-app">
       <section className="app-content">
@@ -67,36 +93,18 @@ const AdminList = ({
           items={data[apiData]}
           loadingText={`Loading ${pluralizePageName}`}
           noContent={
-            <NoContent isButton text={`No ${pluralizePageName} found`} />
+            <>
+              {TOP_FILTER}
+              <NoContent isButton text={`No ${pluralizePageName} found`} />
+            </>
           }
         >
-          <div className="row mt-3 mb-2">
-            <div className="col-sm-12">
-              <p
-                className="text-link text-right"
-                onClick={() => setOpenFilter((openFilter) => !openFilter)}
-              >
-                <span className="icon icon-align-justify"></span> &nbsp;
-                {openFilter ? 'Close Filter' : 'Filter'}
-              </p>
-              <h3 className="main-app__title">
-                {`${noOfResults} ${Humanize.pluralize(noOfResults, pageName)}`}
-                <br />
-                <small className="small--2 text-muted">
-                  Filters: {currentFilters()}
-                </small>
-              </h3>
-            </div>
-          </div>
-
-          <SlideDown className={''}>
-            {openFilter && <FilterComponent setFilterTerms={setFilterTerms} />}
-          </SlideDown>
+          {TOP_FILTER}
 
           <ResultsTable
+            Row={tableRow}
             offset={data.pagination.offset || 0}
             results={data[apiData] || []}
-            Row={tableRow}
           />
           <div className="text-right">
             {data.pagination.totalPage > 1 && (
@@ -126,11 +134,13 @@ AdminList.propTypes = {
   apiData: PropTypes.string.isRequired,
   apiUrl: PropTypes.string.isRequired,
   pageName: PropTypes.string.isRequired,
+  pluralPageName: PropTypes.string,
   tableRow: PropTypes.any.isRequired,
 };
 
 AdminList.defaultProps = {
   FilterComponent: () => null,
+  pluralPageName: null
 };
 
 const ResultsTable = ({ results, offset, Row }) => (

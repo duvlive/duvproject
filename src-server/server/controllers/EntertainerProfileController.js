@@ -153,6 +153,42 @@ const EntertainerProfileController = {
       });
   },
 
+
+  /**
+   * Get All Approved Entertainers List
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+
+  async getApprovedEntertainersList(req, res) {
+    User.findAll({
+      where: {
+        type: USER_TYPES.ENTERTAINER,
+        [Op.and]: Sequelize.literal('"profile"."approved" is TRUE'),
+      },
+      include: userAssociatedModels,
+      order: [[{ model: EntertainerProfile, as: 'profile' }, 'stageName', 'ASC']],
+    })
+      .then((entertainers) => {
+        return res.status(200).json({
+          message: 'Entertainers List',
+          entertainers: entertainers.map((entertainer) =>
+            ({
+              value: entertainer.id,
+              label: entertainer.profile.stageName,
+            })
+          ),
+        });
+      })
+      .catch((error) => {
+        const status = error.status || 500;
+        const errorMessage = error.message || error;
+        return res.status(status).json({ message: errorMessage });
+      });
+  },
+
   transformEntertainer(entertainer, updatedValues = {}) {
     const transformEntertainer = {
       id: entertainer.personalDetails.id,
