@@ -20,9 +20,9 @@ const Entertainers = () => {
   return (
     <BackEndPage title="Entertainers">
       <AdminList
+        FilterComponent={EntertainerFilter}
         apiData="entertainers"
         apiUrl="/api/v1/entertainers-all"
-        FilterComponent={EntertainerFilter}
         pageName="Entertainer"
         tableRow={EntertainersRow}
       />

@@ -1,5 +1,6 @@
-import { User, Video } from '../models';
+import { Video, User, EntertainerProfile } from '../models';
 import { getAll, validString } from '../utils';
+import { MEDIA_TYPES } from '../constant';
 
 const VideoController = {
   /**
@@ -121,23 +122,37 @@ const VideoController = {
    * @return {object} json response
    */
   async getVideos(req, res) {
-    const { userId } = req.params;
-    const { offset, limit } = req.query;
+    const { offset, limit, userId, approved } = req.query;
+
     try {
       let videoQuery = {};
       if (userId) {
         videoQuery.userId = userId;
       }
+      if (
+        approved &&
+        Object.prototype.hasOwnProperty.call(MEDIA_TYPES, approved)
+      ) {
+        videoQuery.approved = MEDIA_TYPES[approved];
+      }
       const options = {
         offset: offset || 0,
         limit: limit || 10,
         where: videoQuery,
-        // include: [
-        //   {
-        //     model: User,
-        //     as: 'user',
-        //   },
-        // ],
+        include: [
+          {
+            model: User,
+            as: 'user',
+            attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+            include: [
+              {
+                model: EntertainerProfile,
+                as: 'profile',
+                attributes: ['stageName', 'slug'],
+              },
+            ],
+          },
+        ],
       };
       try {
         const { result, pagination } = await getAll(Video, options);

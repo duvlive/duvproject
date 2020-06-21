@@ -10,10 +10,16 @@ const videoRoutes = (router) => {
     Authentication.validateEntertainer,
     VideoController.saveVideo
   );
-  router.put('/api/v1/video/:approve/:id', VideoController.approveVideo); //TODO: add administrator middleware
   router.delete('/api/v1/video/delete/:id', VideoController.deleteVideo);
+  router.put(
+    '/api/v1/video/:approve/:id',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    Authentication.validateAdmin,
+    VideoController.approveVideo
+  );
   router.get(
-    '/api/v1/video',
+    '/api/v1/video-all',
     Authentication.verifyToken,
     Authentication.isActiveUser,
     Authentication.validateAdmin,
