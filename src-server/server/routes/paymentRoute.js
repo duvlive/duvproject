@@ -52,7 +52,7 @@ const paymentRoutes = (router) => {
   );
 
   router.get(
-    '/api/v1/payments-all',
+    '/api/v1/entertainers-payments-all',
     Authentication.verifyToken,
     Authentication.isActiveUser,
     Authentication.validateAdmin,

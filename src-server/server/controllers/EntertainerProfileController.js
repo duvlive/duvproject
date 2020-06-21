@@ -153,7 +153,6 @@ const EntertainerProfileController = {
       });
   },
 
-
   /**
    * Get All Approved Entertainers List
    * @function
@@ -163,23 +162,24 @@ const EntertainerProfileController = {
    */
 
   async getApprovedEntertainersList(req, res) {
+    const id = req.query.id || 'userId';
     User.findAll({
       where: {
         type: USER_TYPES.ENTERTAINER,
         [Op.and]: Sequelize.literal('"profile"."approved" is TRUE'),
       },
       include: userAssociatedModels,
-      order: [[{ model: EntertainerProfile, as: 'profile' }, 'stageName', 'ASC']],
+      order: [
+        [{ model: EntertainerProfile, as: 'profile' }, 'stageName', 'ASC'],
+      ],
     })
       .then((entertainers) => {
         return res.status(200).json({
           message: 'Entertainers List',
-          entertainers: entertainers.map((entertainer) =>
-            ({
-              value: entertainer.id,
-              label: entertainer.profile.stageName,
-            })
-          ),
+          entertainers: entertainers.map((entertainer) => ({
+            value: id === 'userId' ? entertainer.id : entertainer.profile.id,
+            label: entertainer.profile.stageName,
+          })),
         });
       })
       .catch((error) => {

@@ -328,8 +328,10 @@ const PaymentController = {
     const entertainerId = eventDetails.entertainer.id;
 
     const paymentExists = await Payment.findOne({
-      entertainerId,
-      eventEntertainerId,
+      where: {
+        entertainerId,
+        eventEntertainerId,
+      },
     });
 
     if (paymentExists) {
@@ -448,7 +450,35 @@ const PaymentController = {
                 as: 'event',
                 attributes: ['id', 'eventType', 'eventDate'],
               },
+              {
+                model: EntertainerProfile,
+                as: 'entertainer',
+                attributes: [
+                  'id',
+                  'stageName',
+                  'entertainerType',
+                  'location',
+                  'slug',
+                ],
+                include: [
+                  {
+                    model: User,
+                    as: 'personalDetails',
+                    attributes: [
+                      'id',
+                      'firstName',
+                      'lastName',
+                      'profileImageURL',
+                    ],
+                  },
+                ],
+              },
             ],
+          },
+          {
+            model: User,
+            as: 'paidBy',
+            attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
           },
         ],
       };

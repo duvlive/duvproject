@@ -13,6 +13,7 @@ import Select from 'components/forms/Select';
 import { getTokenFromStore } from 'utils/localStorage';
 import DuvLiveModal from 'components/custom/Modal';
 import Video from 'components/pages/entertainer/Video';
+import { useEntertainerSelect } from 'utils/useHooks';
 
 const Videos = () => {
   return (
@@ -150,25 +151,8 @@ VideoRow.propTypes = {
 };
 
 export const VideoFilter = ({ setFilterTerms }) => {
-  const [entertainers, setEntertainers] = React.useState([]);
-  React.useEffect(() => {
-    axios
-      .get(`/api/v1/admin/entertainers-list`, {
-        headers: {
-          'x-access-token': getTokenFromStore(),
-        },
-      })
-      .then(function (response) {
-        const { status, data } = response;
-        // handle success
-        if (status === 200) {
-          setEntertainers(data.entertainers);
-        }
-      })
-      .catch(function (error) {
-        setEntertainers([]);
-      });
-  }, []);
+  const entertainers = useEntertainerSelect();
+
   const VIDEO_STATE = [
     { label: 'Any' },
     { label: 'Pending' },

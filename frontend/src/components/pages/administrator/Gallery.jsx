@@ -12,6 +12,7 @@ import Button from 'components/forms/Button';
 import Select from 'components/forms/Select';
 import { getTokenFromStore } from 'utils/localStorage';
 import DuvLiveModal from 'components/custom/Modal';
+import { useEntertainerSelect } from 'utils/useHooks';
 
 const Gallery = () => {
   return (
@@ -146,25 +147,7 @@ GalleryRow.propTypes = {
 };
 
 export const GalleryFilter = ({ setFilterTerms }) => {
-  const [entertainers, setEntertainers] = React.useState([]);
-  React.useEffect(() => {
-    axios
-      .get(`/api/v1/admin/entertainers-list`, {
-        headers: {
-          'x-access-token': getTokenFromStore(),
-        },
-      })
-      .then(function (response) {
-        const { status, data } = response;
-        // handle success
-        if (status === 200) {
-          setEntertainers(data.entertainers);
-        }
-      })
-      .catch(function (error) {
-        setEntertainers([]);
-      });
-  }, []);
+  const entertainers = useEntertainerSelect();
   const GALLERY_STATE = [
     { label: 'Any' },
     { label: 'Pending' },
