@@ -47,6 +47,7 @@ const formatSearchEntertainers = (result) =>
       approved: user.profile.approved,
       availableFor: user.profile.availableFor,
       baseCharges: user.profile.baseCharges,
+      entertainerId: user.profile.id,
       entertainerType: user.profile.entertainerType,
       location: user.profile.location,
       preferredCharges: user.profile.preferredCharges,

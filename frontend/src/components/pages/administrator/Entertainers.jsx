@@ -31,10 +31,10 @@ const Entertainers = () => {
 };
 
 const EntertainersRow = ({
-  id,
   number,
   stageName,
   slug,
+  entertainerId,
   entertainerType,
   profileImageURL,
   location,
@@ -81,23 +81,23 @@ const EntertainersRow = ({
     </td>
 
     <td className="align-middle">
+      <Link
+        className="btn btn-sm btn-transparent btn-danger"
+        to={`/admin/entertainers/${entertainerId}`}
+      >
+        Manage
+      </Link>
       {slug && (
         <>
+          &nbsp;&nbsp;
           <a
             className="btn btn-info btn-sm btn-transparent"
             href={`/entertainers/${slug}`}
             rel="noopener noreferrer"
             target="_blank"
           >
-            Profile
+            View Profile
           </a>
-          &nbsp;&nbsp;
-          <Link
-            className="btn btn-sm btn-transparent btn-danger"
-            to={`/admin/entertainers/${slug}`}
-          >
-            Manage
-          </Link>
         </>
       )}
     </td>
@@ -114,8 +114,8 @@ EntertainersRow.defaultProps = {
 };
 
 EntertainersRow.propTypes = {
+  entertainerId: PropTypes.any.isRequired,
   entertainerType: PropTypes.string,
-  id: PropTypes.any.isRequired,
   location: PropTypes.string,
   number: PropTypes.any.isRequired,
   profileImageURL: PropTypes.string,

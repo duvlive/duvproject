@@ -30,7 +30,7 @@ const AdministratorRouter = () => (
     <RegisteredUsers path="/registered-users" />
     <Auctions path="/auctions" />
     <SingleUser path="/users/:id" />
-    <SingleEntertainer path="/entertainers/:slug" />
+    <SingleEntertainer path="/entertainers/:id" />
     <UsersPayment path="/users-payment" />
     <Notifications path="/notifications" />
     <UpcomingEvents path="/upcoming-events" />
