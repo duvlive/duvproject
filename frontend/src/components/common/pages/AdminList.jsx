@@ -29,6 +29,7 @@ const AdminList = ({
   const setFilterTerms = (terms, filterInWords) => {
     setFilter(terms);
     setFilterInWords(filterInWords);
+    setOpenFilter(false);
   };
 
   const removeFilterTerm = (property) => {
@@ -67,10 +68,14 @@ const AdminList = ({
       );
     let output = [];
     for (let item in filter) {
-      if (filter[item] && Object.prototype.hasOwnProperty.call(filter, item)) {
+      if (
+        filter[item] &&
+        Object.prototype.hasOwnProperty.call(filter, item) &&
+        filter[item] !== JSON.stringify('')
+      ) {
         output.push(
           <button className="btn badge badge-filters" key={item}>
-            {filterInWords[item]}{' '}
+            {filterInWords[item] || filter[item]}{' '}
             <span
               className="icon icon-cancel"
               onClick={() => removeFilterTerm(item)}
@@ -134,7 +139,7 @@ const AdminList = ({
             results={data[apiData] || []}
             setMessage={(options) => {
               setMessage(options);
-              setFilter({ ...filter, [new Date().toISOString()]: null });
+              setFilter({ ...filter, [new Date().toISOString()]: null }); //force reload
             }}
           />
           <div className="text-right">

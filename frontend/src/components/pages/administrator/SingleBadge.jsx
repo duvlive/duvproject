@@ -4,15 +4,11 @@ import PropTypes from 'prop-types';
 import TopMessage from 'components/common/layout/TopMessage';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import { getTokenFromStore } from 'utils/localStorage';
-// import Image from 'components/common/utils/Image';
-// import classNames from 'classnames';
-// import Button from 'components/forms/Button';
 import AwardCard from 'components/common/utils/AwardCard';
 import { getShortDate } from 'utils/date-helpers';
 import Humanize from 'humanize-plus';
 import Image from 'components/common/utils/Image';
 import ProfileAvatar from 'assets/img/avatar/profile.png';
-import { twoDigitNumber } from 'utils/helpers';
 
 const SingleBadge = ({ id }) => {
   const [badge, setBadge] = React.useState(null);
@@ -59,56 +55,45 @@ SingleBadge.defaultProps = {
 };
 
 const BadgeDetails = ({ badge }) => (
-  <>
-    <section className="row">
+  <section>
+    <div className="row">
       <AwardCard
         color={badge.color}
         date={getShortDate(badge.createdAt)}
         title={badge.title}
       />
       <div className="col-lg-9 col-md-8 col-6">
-        <h3 className="font-weight-normal">{badge.description}</h3>
-        <p>
-          Added By:{' '}
-          <Image
-            className="avatar--small"
-            name={`${badge.id}-badge`}
-            responsiveImage={false}
-            src={badge.creator.profileImageURL || ProfileAvatar}
-          />
-          {badge.creator.firstName} {badge.creator.lastName}
-        </p>
-        <p>
+        <h3 className="font-weight-normal mb-1">{badge.title}</h3>
+        <small className="small--2">
           Assigned To: {badge.userBadges.length}{' '}
           {Humanize.pluralize(badge.userBadges.length, 'Entertainer')}
-        </p>
-        <p>Created On: {getShortDate(badge.createdAt)}</p>
+        </small>
+        <p className="">{badge.description}</p>
       </div>
-    </section>
-    <section className="row">
-      <table className="table">
-        {badge.userBadges.map(({ badgeUser }, index) => (
-          <tr>
-            <th className="table__number align-middle" scope="row">
-              {twoDigitNumber(index + 1)}
-            </th>
-            <td className=" align-middle">
+    </div>
+
+    <div className="row">
+      <h4 className="col-sm-12 pt-4 pb-3 font-weight-normal">
+        Assigned Entertainers
+      </h4>
+      {badge.userBadges.map(({ badgeUser }, index) => (
+        <div className="col-lg-3 col-md-4 col-6" key={index}>
+          <div
+            className={`card card-custom card-tiles card-black card__no-hover`}
+          >
+            <div className="text-center mt-3">
               <Image
-                className="avatar--medium--small"
+                className="avatar--medium"
                 name={`${index}-entertainer`}
                 responsiveImage={false}
                 src={badgeUser.profileImageURL || ProfileAvatar}
               />
-            </td>
-            <td className="align-middle">
-              <small className="small--4 text-muted">Stage Name</small>
-              <span className="table__title">
-                {badgeUser.profile.stageName || '-'}
-              </span>
-            </td>
-
-            <td className="align-middle">
-              <>
+              <h6 className="small--2 text-muted-light-2 mt-2">
+                {badgeUser.profile.stageName}
+              </h6>
+            </div>
+            <div className="card-body m-0 fh-3 text-center">
+              <div className="small--3 text-gray">
                 <a
                   className="btn btn-info btn-sm btn-transparent"
                   href={`/entertainers/${badgeUser.profile.slug}`}
@@ -117,13 +102,13 @@ const BadgeDetails = ({ badge }) => (
                 >
                   Profile
                 </a>
-              </>
-            </td>
-          </tr>
-        ))}
-      </table>
-    </section>
-  </>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
 );
 
 BadgeDetails.propTypes = {
