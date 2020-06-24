@@ -615,7 +615,11 @@ const EntertainerProfileController = {
   },
 
   getTotalEntertainers(req, res) {
-    EntertainerProfile.findAll()
+    EntertainerProfile.findAll({
+      where: {
+        approved: true,
+      },
+    })
       .then((entertainers) => {
         return res.status(200).json({
           message: 'Total Entertainers',
