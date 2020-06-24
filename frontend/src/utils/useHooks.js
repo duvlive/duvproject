@@ -23,6 +23,6 @@ export const useEntertainerSelect = (id = 'userId') => {
       .catch(function (error) {
         setEntertainers([]);
       });
-  }, []);
+  }, [id]);
   return entertainers;
 };

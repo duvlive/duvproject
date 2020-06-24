@@ -85,7 +85,11 @@ const EntertainerProfileController = {
       youTubeChannel,
     } = req.body;
 
-    const slug = await slugify(stageName, req.user.dataValues.id);
+    const currentSlug = req.user.profile.slug;
+
+    const slug = currentSlug
+      ? currentSlug
+      : await slugify(stageName, req.user.dataValues.id);
 
     const entertainerProfileData = {
       about,

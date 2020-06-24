@@ -68,12 +68,12 @@ const Content = ({ redirectTo, sid, token }) => {
                 >
                   <span className="icon-google" />
                 </a>
-                <Link
+                {/* <a
                   className="auth__social-media--icons"
-                  to="/api/v1/auth/facebook"
+                  href={`${getProxy()}/api/v1/auth/facebook`}
                 >
                   <span className="icon-facebook-official" />
-                </Link>
+                </a> */}
               </section>
               <section className="auth__footer">
                 <div className="register mt-4 text-center">

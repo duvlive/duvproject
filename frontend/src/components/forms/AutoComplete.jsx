@@ -24,7 +24,7 @@ const AutoComplete = ({
   suggestions,
   tooltipText,
   tooltipPosition,
-  value
+  value,
 }) => {
   return (
     <div className={classNames('form-group', formGroupClassName)}>
@@ -47,11 +47,11 @@ const AutoComplete = ({
                 className={className}
                 delimiters={['Enter', 'Tab', ',']}
                 maxSuggestionsLength={18}
-                onAddition={tag => {
+                onAddition={(tag) => {
                   const tags = [...fieldValue, tag];
                   form.setFieldValue(name, tags);
                 }}
-                onDelete={index => {
+                onDelete={(index) => {
                   // debugger;
                   const tags = fieldValue.slice(0);
                   tags.splice(index, 1);
@@ -93,13 +93,13 @@ AutoComplete.propTypes = {
   suggestions: PropTypes.array,
   tooltipPosition: PropTypes.string,
   tooltipText: PropTypes.string,
-  value: PropTypes.array
+  value: PropTypes.array,
 };
 
 AutoComplete.defaultProps = {
   className: null,
   formGroupClassName: null,
-  helpText: null,
+  helpText: 'Please separate each value with a comma',
   isValidMessage: '',
   label: null,
   labelClassName: null,
@@ -110,7 +110,7 @@ AutoComplete.defaultProps = {
   suggestions: [],
   tooltipPosition: 'right',
   tooltipText: null,
-  value: []
+  value: [],
 };
 
 export default connect(AutoComplete);
