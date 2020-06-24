@@ -47,6 +47,7 @@ const formatSearchEntertainers = (result) =>
       approved: user.profile.approved,
       availableFor: user.profile.availableFor,
       baseCharges: user.profile.baseCharges,
+      entertainerId: user.profile.id,
       entertainerType: user.profile.entertainerType,
       location: user.profile.location,
       preferredCharges: user.profile.preferredCharges,
@@ -84,7 +85,11 @@ const EntertainerProfileController = {
       youTubeChannel,
     } = req.body;
 
-    const slug = await slugify(stageName, req.user.dataValues.id);
+    const currentSlug = req.user.profile.slug;
+
+    const slug = currentSlug
+      ? currentSlug
+      : await slugify(stageName, req.user.dataValues.id);
 
     const entertainerProfileData = {
       about,
@@ -144,6 +149,42 @@ const EntertainerProfileController = {
           entertainers: entertainers.map((entertainer) =>
             EntertainerProfileController.transformEntertainers(entertainer)
           ),
+        });
+      })
+      .catch((error) => {
+        const status = error.status || 500;
+        const errorMessage = error.message || error;
+        return res.status(status).json({ message: errorMessage });
+      });
+  },
+
+  /**
+   * Get All Approved Entertainers List
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+
+  async getApprovedEntertainersList(req, res) {
+    const id = req.query.id || 'userId';
+    User.findAll({
+      where: {
+        type: USER_TYPES.ENTERTAINER,
+        [Op.and]: Sequelize.literal('"profile"."approved" is TRUE'),
+      },
+      include: userAssociatedModels,
+      order: [
+        [{ model: EntertainerProfile, as: 'profile' }, 'stageName', 'ASC'],
+      ],
+    })
+      .then((entertainers) => {
+        return res.status(200).json({
+          message: 'Entertainers List',
+          entertainers: entertainers.map((entertainer) => ({
+            value: id === 'userId' ? entertainer.id : entertainer.profile.id,
+            label: entertainer.profile.stageName,
+          })),
         });
       })
       .catch((error) => {

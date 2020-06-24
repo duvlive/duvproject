@@ -1037,7 +1037,6 @@ const UserController = {
       );
       return res.status(200).json({ message: 'Thanks for contacting us' });
     } catch (error) {
-      console.log(error);
       return res.status(400).json({ message: 'Something went wrong', error });
     }
   },
@@ -1088,6 +1087,11 @@ const UserController = {
    */
   async inviteFriend(req, res) {
     const { email, recommendAs } = req.body;
+    const addPreposition = (word) => {
+      const isVowel =
+        ['a', 'e', 'i', 'o', 'u'].indexOf(word[0].toLowerCase()) !== -1;
+      return isVowel ? `an ${word}` : `a ${word}`;
+    };
 
     const errors = {
       ...UserValidation.emailValidation(email),
@@ -1101,13 +1105,15 @@ const UserController = {
 
     try {
       const link = `${process.env.HOST}`;
-      const contentBottom = `You have been recommended as a ${
+      const user = req.user;
+      const contentTop = `You have been invited to join DUV LIVE, the No 1 Promoter of Premium Live Entertainment as ${addPreposition(
         recommendAs || 'Friend'
-      }. Live your best Life today and let your dreams come true.`;
+      )}. `;
+      const contentBottom = `Your Invitation came by the request of ${user.firstName} ${user.lastName}.`;
       await sendMail(
         EMAIL_CONTENT.INVITE_FRIEND,
         { email },
-        { link, contentBottom }
+        { link, contentBottom, contentTop }
       );
       return res.status(200).json({ message: 'Invite sent successfully' });
     } catch (error) {

@@ -1,6 +1,7 @@
 require('dotenv').config();
 import { Gallery, User, EntertainerProfile } from '../models';
 import { getAll } from '../utils';
+import { MEDIA_TYPES } from '../constant';
 
 const cloudinary = require('cloudinary');
 const multer = require('multer');
@@ -198,15 +199,18 @@ const GalleryController = {
    * @return {object} json response
    */
   async getGallery(req, res) {
-    const { userId, approved } = req.params;
-    const { offset, limit } = req.query;
+    const { offset, limit, userId, approved } = req.query;
+
     try {
       let galleryQuery = {};
       if (userId) {
         galleryQuery.userId = userId;
       }
-      if (approved) {
-        galleryQuery.approved = approved;
+      if (
+        approved &&
+        Object.prototype.hasOwnProperty.call(MEDIA_TYPES, approved)
+      ) {
+        galleryQuery.approved = MEDIA_TYPES[approved];
       }
       const options = {
         offset: offset || 0,

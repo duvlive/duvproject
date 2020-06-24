@@ -96,10 +96,10 @@ export const recommendEntertainerSchema = {
   language: multiSelectValidation('Language'),
   location: optionalValidation(stringValidation('Location')),
   lowestBudget: optionalValidation(
-    positiveNumberValidation('Base Budget', 'budget')
+    positiveNumberValidation('Base Charge', 'budget')
   ),
   highestBudget: optionalValidation(
-    positiveNumberValidation('Highest Budget', 'budget').moreThan(
+    positiveNumberValidation('Preferred Charges', 'budget').moreThan(
       yup.ref('lowestBudget'),
       'Highest Budget should be greater than the Base Budget'
     )

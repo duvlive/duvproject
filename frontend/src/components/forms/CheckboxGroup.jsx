@@ -16,7 +16,7 @@ const Checkbox = ({
   inputClassName,
   name,
   label,
-  value
+  value,
 }) => {
   const checkBoxId = genId(name, value);
   return (
@@ -37,17 +37,17 @@ const Checkbox = ({
               className={classNames(
                 inputClassName,
                 {
-                  'form-check-input': !custom
+                  'form-check-input': !custom,
                 },
                 {
-                  'custom-control-input': custom
+                  'custom-control-input': custom,
                 }
               )}
               id={checkBoxId}
               name={name}
               onChange={() => {
                 if (fieldValue.includes(value)) {
-                  const nextValue = fieldValue.filter(val => val !== value);
+                  const nextValue = fieldValue.filter((val) => val !== value);
                   form.setFieldValue(name, nextValue);
                 } else {
                   const nextValue = fieldValue.concat(value);
@@ -64,10 +64,10 @@ const Checkbox = ({
         className={classNames(
           formGroupLabelClassName,
           {
-            'custom-control-label': custom
+            'custom-control-label': custom,
           },
           {
-            'form-check-label': !custom
+            'form-check-label': !custom,
           }
         )}
         htmlFor={checkBoxId}
@@ -86,12 +86,12 @@ Checkbox.propTypes = {
   inputClassName: PropTypes.string.isRequired,
   label: PropTypes.node,
   name: PropTypes.string.isRequired,
-  value: PropTypes.any
+  value: PropTypes.any,
 };
 
 Checkbox.defaultProps = {
   label: null,
-  value: null
+  value: null,
 };
 
 const CheckboxGroup = ({
@@ -109,7 +109,7 @@ const CheckboxGroup = ({
   checkboxSizeClassName,
   showFeedback,
   tooltipPosition,
-  tooltipText
+  tooltipText,
 }) => {
   const checkedGroup = options.map(({ label, value }) => {
     if (!(label || value)) return null;
@@ -134,7 +134,7 @@ const CheckboxGroup = ({
   return (
     <>
       {label ? (
-        <CheckboxGroup.withLabel
+        <CheckboxGroup.WithLabel
           checkboxSizeClassName={checkboxSizeClassName}
           label={label}
           labelSizeClassName={labelSizeClassName}
@@ -143,7 +143,7 @@ const CheckboxGroup = ({
           tooltipText={tooltipText}
         >
           {checkedGroup}
-        </CheckboxGroup.withLabel>
+        </CheckboxGroup.WithLabel>
       ) : (
         checkedGroup
       )}
@@ -173,7 +173,7 @@ CheckboxGroup.propTypes = {
   options: PropTypes.array.isRequired,
   showFeedback: PropTypes.oneOf(Object.keys(feedback)),
   tooltipPosition: PropTypes.string,
-  tooltipText: PropTypes.string
+  tooltipText: PropTypes.string,
 };
 
 CheckboxGroup.defaultProps = {
@@ -188,17 +188,17 @@ CheckboxGroup.defaultProps = {
   checkboxSizeClassName: 'col-sm-10',
   showFeedback: feedback.ALL,
   tooltipPosition: 'right',
-  tooltipText: null
+  tooltipText: null,
 };
 
-CheckboxGroup.withLabel = ({
+CheckboxGroup.WithLabel = ({
   children,
   label,
   labelSizeClassName,
   name,
   checkboxSizeClassName,
   tooltipText,
-  tooltipPosition
+  tooltipPosition,
 }) => {
   return (
     <fieldset className="form-group">
@@ -213,18 +213,18 @@ CheckboxGroup.withLabel = ({
   );
 };
 
-CheckboxGroup.withLabel.propTypes = {
+CheckboxGroup.WithLabel.propTypes = {
   checkboxSizeClassName: PropTypes.string.isRequired,
   children: PropTypes.array.isRequired,
   label: PropTypes.node.isRequired,
   labelSizeClassName: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   tooltipPosition: PropTypes.string.isRequired,
-  tooltipText: PropTypes.string
+  tooltipText: PropTypes.string,
 };
 
-CheckboxGroup.withLabel.defaultProps = {
-  tooltipText: null
+CheckboxGroup.WithLabel.defaultProps = {
+  tooltipText: null,
 };
 
 export default connect(CheckboxGroup);

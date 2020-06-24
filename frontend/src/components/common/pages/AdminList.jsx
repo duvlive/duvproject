@@ -8,22 +8,34 @@ import NoContent from 'components/common/utils/NoContent';
 import Humanize from 'humanize-plus';
 import { SlideDown } from 'react-slidedown';
 import 'react-slidedown/lib/slidedown.css';
+import AlertMessage from '../utils/AlertMessage';
 
 const AdminList = ({
   apiData,
   pageName,
   apiUrl,
+  pluralPageName,
   tableRow,
   FilterComponent,
 }) => {
+  const [message, setMessage] = React.useState(null);
   const inActiveData = { result: null, pagination: {} };
   const [data, setData] = React.useState(inActiveData);
   const [currPage, setCurrPage] = React.useState(0);
   const [openFilter, setOpenFilter] = React.useState(false);
   const [filter, setFilter] = React.useState({});
+  const [filterInWords, setFilterInWords] = React.useState({});
 
-  const setFilterTerms = (terms) => {
+  const setFilterTerms = (terms, filterInWords) => {
     setFilter(terms);
+    setFilterInWords(filterInWords);
+    setOpenFilter(false);
+  };
+
+  const removeFilterTerm = (property) => {
+    setFilter({ ...filter, [property]: null });
+    setFilterInWords({ ...filterInWords, [property]: null });
+    setOpenFilter(false);
   };
 
   React.useEffect(() => {
@@ -48,17 +60,61 @@ const AdminList = ({
   }, [currPage, apiUrl, filter]);
 
   const noOfResults = data.pagination.total || 0;
-  const pluralizePageName = Humanize.pluralize(2, pageName);
+  const pluralizePageName = pluralPageName || Humanize.pluralize(2, pageName);
   const currentFilters = () => {
-    if (Object.keys(filter).length === 0) return 'None';
-    let output;
+    if (Object.keys(filter).length === 0)
+      return (
+        <button className="btn badge badge-filters">No Filter applied</button>
+      );
+    let output = [];
     for (let item in filter) {
-      if (filter[item] && Object.prototype.hasOwnProperty.call(filter, item)) {
-        output += filter[item] + ' ';
+      if (
+        filter[item] &&
+        Object.prototype.hasOwnProperty.call(filter, item) &&
+        filter[item] !== JSON.stringify('')
+      ) {
+        output.push(
+          <button className="btn badge badge-filters" key={item}>
+            {filterInWords[item] || filter[item]}{' '}
+            <span
+              className="icon icon-cancel"
+              onClick={() => removeFilterTerm(item)}
+            ></span>
+          </button>
+        );
       }
     }
     return output;
   };
+
+  const TOP_FILTER = (
+    <>
+      <div className="row mt-3 mb-2">
+        <div className="col-sm-12">
+          <div className="text-right">
+            <p
+              className="d-inline-block filter-text"
+              onClick={() => setOpenFilter((openFilter) => !openFilter)}
+            >
+              <span className="icon icon-align-justify"></span> &nbsp;
+              {openFilter ? 'Close Filter' : 'Filter'}
+            </p>
+          </div>
+          <h3 className="main-app__title">
+            {`${noOfResults} ${pluralizePageName}`}
+            <br />
+            <small className="small--2 text-muted mt-3 d-block">
+              {currentFilters()}
+            </small>
+          </h3>
+        </div>
+      </div>
+
+      <SlideDown className={''}>
+        {openFilter && <FilterComponent setFilterTerms={setFilterTerms} />}
+      </SlideDown>
+    </>
+  );
 
   return (
     <div className="main-app">
@@ -67,36 +123,24 @@ const AdminList = ({
           items={data[apiData]}
           loadingText={`Loading ${pluralizePageName}`}
           noContent={
-            <NoContent isButton text={`No ${pluralizePageName} found`} />
+            <>
+              {TOP_FILTER}
+              <NoContent isButton text={`No ${pluralizePageName} found`} />
+            </>
           }
         >
-          <div className="row mt-3 mb-2">
-            <div className="col-sm-12">
-              <p
-                className="text-link text-right"
-                onClick={() => setOpenFilter((openFilter) => !openFilter)}
-              >
-                <span className="icon icon-align-justify"></span> &nbsp;
-                {openFilter ? 'Close Filter' : 'Filter'}
-              </p>
-              <h3 className="main-app__title">
-                {`${noOfResults} ${Humanize.pluralize(noOfResults, pageName)}`}
-                <br />
-                <small className="small--2 text-muted">
-                  Filters: {currentFilters()}
-                </small>
-              </h3>
-            </div>
-          </div>
+          {TOP_FILTER}
 
-          <SlideDown className={''}>
-            {openFilter && <FilterComponent setFilterTerms={setFilterTerms} />}
-          </SlideDown>
+          <AlertMessage {...message} />
 
           <ResultsTable
+            Row={tableRow}
             offset={data.pagination.offset || 0}
             results={data[apiData] || []}
-            Row={tableRow}
+            setMessage={(options) => {
+              setMessage(options);
+              setFilter({ ...filter, [new Date().toISOString()]: null }); //force reload
+            }}
           />
           <div className="text-right">
             {data.pagination.totalPage > 1 && (
@@ -126,14 +170,16 @@ AdminList.propTypes = {
   apiData: PropTypes.string.isRequired,
   apiUrl: PropTypes.string.isRequired,
   pageName: PropTypes.string.isRequired,
+  pluralPageName: PropTypes.string,
   tableRow: PropTypes.any.isRequired,
 };
 
 AdminList.defaultProps = {
   FilterComponent: () => null,
+  pluralPageName: null,
 };
 
-const ResultsTable = ({ results, offset, Row }) => (
+const ResultsTable = ({ results, offset, Row, setMessage }) => (
   <div className="table-responsive">
     <table className="table table-dark table__no-border table__with-bg">
       <tbody>
@@ -141,6 +187,7 @@ const ResultsTable = ({ results, offset, Row }) => (
           <Row
             key={index}
             number={parseInt(offset, 10) + index + 1}
+            setMessage={setMessage}
             {...result}
           />
         ))}
@@ -154,6 +201,11 @@ ResultsTable.propTypes = {
   Row: PropTypes.any.isRequired,
   offset: PropTypes.any.isRequired,
   results: PropTypes.array.isRequired,
+  setMessage: PropTypes.func,
+};
+
+ResultsTable.defaultProps = {
+  setMessage: () => {},
 };
 
 export default AdminList;
