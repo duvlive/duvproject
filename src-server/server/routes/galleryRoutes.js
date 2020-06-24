@@ -25,8 +25,16 @@ const galleryRoutes = (router) => {
     GalleryController.setAsProfileImage
   );
 
-  router.put('/api/v1/gallery/:approve/:id', GalleryController.approveImage); //TODO: add administrator middleware
   router.delete('/api/v1/gallery/delete/:id', GalleryController.deleteImage);
+
+  router.put(
+    '/api/v1/gallery/:approve/:id',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    Authentication.validateAdmin,
+    GalleryController.approveImage
+  );
+
   router.get(
     '/api/v1/gallery-all',
     Authentication.verifyToken,

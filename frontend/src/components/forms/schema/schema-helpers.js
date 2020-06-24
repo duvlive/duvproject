@@ -7,7 +7,10 @@ export const required = (label) =>
 
 export const optionalValidation = (validation) =>
   yup.lazy((value) => {
-    if (value) {
+    if (value && value !== JSON.stringify('') && !Array.isArray(value)) {
+      return validation;
+    }
+    if (Array.isArray(value) && value.length > 0) {
       return validation;
     }
     return yup.mixed().notRequired();

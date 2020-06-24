@@ -15,6 +15,8 @@ import {
   WhatsappIcon,
 } from 'react-share';
 
+const CONTENT_BODY = `Hi there! I use DUV LIVE to hire the best Entertainers for my parties and to find upcoming events I would love to attend. Join @ https://www.duvlive.com/`;
+
 const Sharer = ({ shareUrl, title }) => (
   <ul className="list-unstyled list-inline sharer__icons">
     <li>
@@ -23,27 +25,30 @@ const Sharer = ({ shareUrl, title }) => (
       </FacebookShareButton>
     </li>
     <li>
-      <TwitterShareButton title={title} url={shareUrl}>
+      <TwitterShareButton title={title} url={shareUrl} via={shareUrl}>
         <TwitterIcon round width="48" />
       </TwitterShareButton>
     </li>
     <li>
-      <LinkedinShareButton url={shareUrl}>
+      <LinkedinShareButton source={shareUrl} summary={title} title="DUV Live">
         <LinkedinIcon round width="48" />
       </LinkedinShareButton>
     </li>
     <li>
-      <WhatsappShareButton separator=":: " title={title} url={shareUrl}>
+      <WhatsappShareButton separator=":: " title={title}>
         <WhatsappIcon round width="48" />
       </WhatsappShareButton>
     </li>
     <li>
-      <TelegramShareButton title={title} url={shareUrl}>
+      <TelegramShareButton title={title}>
         <TelegramIcon round width="48" />
       </TelegramShareButton>
     </li>
     <li>
-      <EmailShareButton subject={`Hey Friend! Check out DUV Live ${shareUrl}`}>
+      <EmailShareButton
+        body={CONTENT_BODY}
+        subject={`Hey Friend! Check out DUV Live ${shareUrl}`}
+      >
         <EmailIcon round width="48" />
       </EmailShareButton>
     </li>
@@ -57,6 +62,6 @@ Sharer.propTypes = {
 
 Sharer.defaultProps = {
   shareUrl: 'https://duvlive.com',
-  title: 'Live your Best Live',
+  title: CONTENT_BODY,
 };
 export default Sharer;

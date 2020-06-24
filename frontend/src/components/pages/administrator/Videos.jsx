@@ -12,37 +12,36 @@ import Button from 'components/forms/Button';
 import Select from 'components/forms/Select';
 import { getTokenFromStore } from 'utils/localStorage';
 import DuvLiveModal from 'components/custom/Modal';
+import Video from 'components/pages/entertainer/Video';
 import { useEntertainerSelect } from 'utils/useHooks';
 
-const Gallery = () => {
+const Videos = () => {
   return (
-    <BackEndPage title="Gallery">
+    <BackEndPage title="Video">
       <AdminList
-        FilterComponent={GalleryFilter}
+        FilterComponent={VideoFilter}
         apiData="result"
-        apiUrl="/api/v1/gallery-all"
-        pageName="Gallery"
-        pluralPageName="Galleries"
-        tableRow={GalleryRow}
+        apiUrl="/api/v1/video-all"
+        pageName="Video"
+        tableRow={VideoRow}
       />
     </BackEndPage>
   );
 };
 
-const GalleryRow = ({ approved, id, number, imageURL, user, setMessage }) => {
-  const modalImage = (
-    <Image.Big
-      className="img-fluid"
-      name={`gallery-${number}-${user.profile.stageName}`}
-      rounded={false}
-      src={imageURL}
-    />
-  );
-
-  const processImage = (id, approvalStatus) => {
+const VideoRow = ({
+  approved,
+  id,
+  number,
+  youtubeID,
+  title,
+  user,
+  setMessage,
+}) => {
+  const processVideo = (id, approvalStatus) => {
     axios
       .put(
-        `/api/v1/gallery/${approvalStatus}/${id}`,
+        `/api/v1/video/${approvalStatus}/${id}`,
         {},
         {
           headers: { 'x-access-token': getTokenFromStore() },
@@ -53,7 +52,7 @@ const GalleryRow = ({ approved, id, number, imageURL, user, setMessage }) => {
         if (status === 200) {
           setMessage({
             type: 'success',
-            message: `Image has successfully been ${approvalStatus}d`,
+            message: `Video has successfully been ${approvalStatus}d`,
           });
         }
       })
@@ -65,16 +64,18 @@ const GalleryRow = ({ approved, id, number, imageURL, user, setMessage }) => {
         });
       });
   };
-  const actionFn = () => processImage(id, approved ? 'disapprove' : 'approve');
-  const actionText = approved ? 'Disapprove Image' : 'Approve Image';
+  const actionFn = () => processVideo(id, approved ? 'disapprove' : 'approve');
+  const actionText = approved ? 'Disapprove Video' : 'Approve Video';
   const buttonColor = `btn btn-sm btn-transparent ${
     approved ? 'btn-danger' : 'btn-success'
   }`;
 
   const modalProps = {
-    body: modalImage,
+    body: <Video.ModalCard title={title} youtubeID={youtubeID} />,
     actionFn,
     actionText,
+    className: 'modal-full',
+    title: title,
     cancelButtonColor: 'btn btn-sm btn-transparent btn-info',
     actionButtonColor: buttonColor,
   };
@@ -86,14 +87,15 @@ const GalleryRow = ({ approved, id, number, imageURL, user, setMessage }) => {
       </th>
       <td className=" align-middle">
         <DuvLiveModal {...modalProps}>
-          <Image
-            className="avatar--medium"
-            name={`gallery-${number}`}
-            responsiveImage={false}
-            rounded={false}
-            src={imageURL}
-          />
+          <div className="position-relative youtube-video-thumbnail">
+            <Video.YoutubeImage title={title} youtubeID={youtubeID} />
+          </div>
         </DuvLiveModal>
+      </td>
+
+      <td className="align-middle">
+        <small className="small--4 text-muted">Title</small>
+        <span className="table__title">{title}</span>
       </td>
 
       <td className="align-middle text-left">
@@ -118,7 +120,7 @@ const GalleryRow = ({ approved, id, number, imageURL, user, setMessage }) => {
       <td className="align-middle">
         <DuvLiveModal {...modalProps}>
           <button className="btn btn-sm btn-transparent btn-info">
-            View Image
+            Watch Video
           </button>
         </DuvLiveModal>
         &nbsp; &nbsp; &nbsp;
@@ -130,25 +132,28 @@ const GalleryRow = ({ approved, id, number, imageURL, user, setMessage }) => {
   );
 };
 
-GalleryRow.defaultProps = {
+VideoRow.defaultProps = {
   approved: null,
   number: null,
-  imageURL: null,
+  title: null,
+  youtubeID: null,
   user: null,
 };
 
-GalleryRow.propTypes = {
+VideoRow.propTypes = {
   approved: PropTypes.bool,
   id: PropTypes.any.isRequired,
-  imageURL: PropTypes.string,
   number: PropTypes.any.isRequired,
   setMessage: PropTypes.func.isRequired,
+  title: PropTypes.string,
   user: PropTypes.object,
+  youtubeID: PropTypes.string,
 };
 
-export const GalleryFilter = ({ setFilterTerms }) => {
+export const VideoFilter = ({ setFilterTerms }) => {
   const entertainers = useEntertainerSelect();
-  const GALLERY_STATE = [
+
+  const VIDEO_STATE = [
     { label: 'Any' },
     { label: 'Pending' },
     { label: 'Approved' },
@@ -184,8 +189,8 @@ export const GalleryFilter = ({ setFilterTerms }) => {
                 label="Approval State"
                 name="approved"
                 optional
-                options={GALLERY_STATE}
-                placeholder="Gallery Type"
+                options={VIDEO_STATE}
+                placeholder="Video Type"
               />
               <Select
                 blankOption="Select Entertainer"
@@ -203,7 +208,7 @@ export const GalleryFilter = ({ setFilterTerms }) => {
                 loading={isSubmitting}
                 onClick={handleSubmit}
               >
-                Filter Gallery
+                Filter Video
               </Button>
             </div>
           </>
@@ -213,8 +218,8 @@ export const GalleryFilter = ({ setFilterTerms }) => {
   );
 };
 
-GalleryFilter.propTypes = {
+VideoFilter.propTypes = {
   setFilterTerms: PropTypes.func.isRequired,
 };
 
-export default Gallery;
+export default Videos;

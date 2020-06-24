@@ -48,8 +48,8 @@ const EMAIL_CONTENT = {
   INVITE_FRIEND: {
     subject: 'INVITE FRIEND',
     title: 'INVITE FRIEND',
-    contentTop:
-      'You have been invited to join the D.U.V LIVE online platform that supports and promotes the best in live entertainment. Join now!',
+    contentFooter:
+      'We look forward to having you as part of those seeking a richer experience on our platform.',
     buttonText: 'JOIN NOW',
   },
   PAID_REQUEST: {

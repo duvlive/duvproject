@@ -20,9 +20,9 @@ const Entertainers = () => {
   return (
     <BackEndPage title="Entertainers">
       <AdminList
+        FilterComponent={EntertainerFilter}
         apiData="entertainers"
         apiUrl="/api/v1/entertainers-all"
-        FilterComponent={EntertainerFilter}
         pageName="Entertainer"
         tableRow={EntertainersRow}
       />
@@ -31,10 +31,10 @@ const Entertainers = () => {
 };
 
 const EntertainersRow = ({
-  id,
   number,
   stageName,
   slug,
+  entertainerId,
   entertainerType,
   profileImageURL,
   location,
@@ -81,23 +81,23 @@ const EntertainersRow = ({
     </td>
 
     <td className="align-middle">
+      <Link
+        className="btn btn-sm btn-transparent btn-danger"
+        to={`/admin/entertainers/${entertainerId}`}
+      >
+        Manage
+      </Link>
       {slug && (
         <>
+          &nbsp;&nbsp;
           <a
             className="btn btn-info btn-sm btn-transparent"
             href={`/entertainers/${slug}`}
             rel="noopener noreferrer"
             target="_blank"
           >
-            Profile
+            View Profile
           </a>
-          &nbsp;&nbsp;
-          <Link
-            className="btn btn-sm btn-transparent btn-danger"
-            to={`/admin/entertainers/${slug}`}
-          >
-            Manage
-          </Link>
         </>
       )}
     </td>
@@ -114,8 +114,8 @@ EntertainersRow.defaultProps = {
 };
 
 EntertainersRow.propTypes = {
+  entertainerId: PropTypes.any.isRequired,
   entertainerType: PropTypes.string,
-  id: PropTypes.any.isRequired,
   location: PropTypes.string,
   number: PropTypes.any.isRequired,
   profileImageURL: PropTypes.string,
@@ -131,7 +131,21 @@ export const EntertainerFilter = ({ setFilterTerms }) => {
     <Formik
       initialValues={setInitialValues(recommendEntertainerSchema)}
       onSubmit={(value, actions) => {
-        setFilterTerms({ ...value, language: JSON.stringify(value.language) });
+        setFilterTerms(
+          { ...value, language: JSON.stringify(value.language) },
+          {
+            entertainerType: `Entertainer Type: ${value.entertainerType}`,
+            language: `Language: ${value.language}`,
+            lowestBudget: `Base Charge: ${value.lowestBudget}`,
+            highestBudget: `Preferred Charge: ${value.highestBudget}`,
+            location: `Location: ${value.location}`,
+          }
+        );
+        console.log(
+          'JSON.stringify(value.language) value.language',
+          JSON.stringify(value.language)
+        );
+        console.log('value.language', value.language);
         actions.setSubmitting(false);
       }}
       render={({ isSubmitting, handleSubmit }) => (
@@ -160,20 +174,18 @@ export const EntertainerFilter = ({ setFilterTerms }) => {
             <div className="form-row">
               <Select
                 formGroupClassName="col-md-6"
-                label="Lowest Budget (in Naira)"
+                label="Base Charge (in Naira)"
                 name="lowestBudget"
                 optional
                 options={[noBudget, ...BUDGET]}
-                placeholder="Lowest Budget"
                 showFeedback={feedback.ERROR}
               />
               <Select
                 formGroupClassName="col-md-6"
-                label="Highest Budget (in Naira)"
+                label="Preferred Charges (in Naira)"
                 name="highestBudget"
                 optional
                 options={[noBudget, ...BUDGET]}
-                placeholder="Highest Budget"
                 showFeedback={feedback.ERROR}
               />
             </div>
@@ -185,7 +197,6 @@ export const EntertainerFilter = ({ setFilterTerms }) => {
                 name="location"
                 optional
                 options={[anyState, ...getStates()]}
-                placeholder="State"
                 showFeedback={feedback.ERROR}
               />
             </div>

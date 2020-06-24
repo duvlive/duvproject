@@ -129,12 +129,12 @@ const RegisterForm = ({ type }) => {
             >
               <span className="icon-google" />
             </a>
-            <Link
+            {/* <a
               className="auth__social-media--icons"
-              to="/api/v1/auth/facebook"
+              href={`${getProxy()}/api/v1/auth/facebook`}
             >
               <span className="icon-facebook-official" />
-            </Link>
+            </a> */}
             <p className="auth__social-media--text mt-0 mb-5">OR</p>
           </section>
           <div className="mt-3 d-none d-md-block">

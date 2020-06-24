@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import {
   getValidityClass,
   FeedbackMessage,
-  feedback
+  feedback,
 } from 'components/forms/form-helper';
 import Humanize from 'humanize-plus';
 // import { dashedLowerCase } from 'utils/helpers';
@@ -29,7 +29,7 @@ const Select = ({
   blankOption,
   showFeedback,
   tooltipText,
-  tooltipPosition
+  tooltipPosition,
 }) => {
   return (
     <div
@@ -61,7 +61,7 @@ const Select = ({
               {blankOption}
             </option>
           )}
-          {<Select.options options={options} />}
+          {<Select.Options options={options} />}
         </Field>
       </div>
       <FeedbackMessage
@@ -92,7 +92,7 @@ Select.defaultProps = {
   optional: false,
   showFeedback: feedback.ALL,
   tooltipText: null,
-  tooltipPosition: 'right'
+  tooltipPosition: 'right',
 };
 
 Select.propTypes = {
@@ -109,17 +109,17 @@ Select.propTypes = {
   labelLink: PropTypes.shape({
     to: PropTypes.string,
     text: PropTypes.string,
-    onClick: PropTypes.func
+    onClick: PropTypes.func,
   }),
   name: PropTypes.string,
   optional: PropTypes.bool,
   options: PropTypes.array.isRequired,
   showFeedback: PropTypes.oneOf(Object.keys(feedback)),
   tooltipPosition: PropTypes.string,
-  tooltipText: PropTypes.string
+  tooltipText: PropTypes.string,
 };
 
-Select.options = ({ options }) => {
+Select.Options = ({ options }) => {
   return options.map(({ label, value }) => {
     if (!(label || value)) return null;
     // const optionValue = value || dashedLowerCase(label);

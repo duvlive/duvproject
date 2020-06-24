@@ -60,6 +60,14 @@ const entertainerRoutes = (router) => {
     .route('/api/v1/entertainers-all')
     .all(Authentication.verifyToken, Authentication.validateAdmin)
     .get(EntertainerProfileController.getAllEntertainers);
+
+  router.get(
+    '/api/v1/admin/entertainers-list',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    Authentication.validateAdmin,
+    EntertainerProfileController.getApprovedEntertainersList
+  );
 };
 
 export default entertainerRoutes;

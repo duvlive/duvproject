@@ -1,7 +1,7 @@
 const statesAndLga = [
   {
     state: 'Abuja',
-    lgas: ['Abaji', 'Abuja Municipal', 'Gwagwalada', 'Kuje', 'Bwari', 'Kwali']
+    lgas: ['Abaji', 'Abuja Municipal', 'Gwagwalada', 'Kuje', 'Bwari', 'Kwali'],
   },
   {
     state: 'Abia',
@@ -28,8 +28,8 @@ const statesAndLga = [
       'Umuahia',
       'Umuahia North',
       'Umuahia South',
-      'Umunneochi'
-    ]
+      'Umunneochi',
+    ],
   },
   {
     state: 'Adamawa',
@@ -54,8 +54,8 @@ const statesAndLga = [
       'Shelleng',
       'Song',
       'Toungo',
-      'Yola'
-    ]
+      'Yola',
+    ],
   },
   {
     state: 'Akwa Ibom',
@@ -92,8 +92,8 @@ const statesAndLga = [
       'Uru Offong Oruko',
       'Uruan',
       'Uruk-Anam',
-      'Uyo'
-    ]
+      'Uyo',
+    ],
   },
   {
     state: 'Anambra',
@@ -127,8 +127,8 @@ const statesAndLga = [
       'Oti',
       'Otu-Ocha',
       'Ubuluizor Ihiala',
-      'Uyi'
-    ]
+      'Uyi',
+    ],
   },
   {
     state: 'Bauchi',
@@ -152,8 +152,8 @@ const statesAndLga = [
       'Tafawa-Balewa',
       'Toro',
       'Warji',
-      'Zaki'
-    ]
+      'Zaki',
+    ],
   },
   {
     state: 'Benue',
@@ -180,8 +180,8 @@ const statesAndLga = [
       'Tarka',
       'Ukum',
       'Ushongo',
-      'Vandeikya'
-    ]
+      'Vandeikya',
+    ],
   },
   {
     state: 'Borno',
@@ -212,8 +212,8 @@ const statesAndLga = [
       'Mongunu',
       'Ngala',
       'Nganzai',
-      'Shani'
-    ]
+      'Shani',
+    ],
   },
   {
     state: 'Bayelsa',
@@ -229,8 +229,8 @@ const statesAndLga = [
       'Sagbama',
       'Southern-Ijaw',
       'Toru-Abubo',
-      'Yenegoa'
-    ]
+      'Yenegoa',
+    ],
   },
   {
     state: 'Cross River',
@@ -254,8 +254,8 @@ const statesAndLga = [
       'Ogoja',
       'Ugep-North',
       'Yakurr',
-      'Yala'
-    ]
+      'Yala',
+    ],
   },
   {
     state: 'Delta',
@@ -304,8 +304,8 @@ const statesAndLga = [
       'Uwvie',
       'Warri-Central',
       'Warri-North',
-      'Warri-South'
-    ]
+      'Warri-South',
+    ],
   },
   {
     state: 'Ebonyi',
@@ -324,8 +324,8 @@ const statesAndLga = [
       'Obaukwu',
       'Ohakwu',
       'Onicha',
-      'Ukaba'
-    ]
+      'Ukaba',
+    ],
   },
   {
     state: 'Edo',
@@ -358,8 +358,8 @@ const statesAndLga = [
       'Owan East',
       'Owan-East',
       'Owan-West',
-      'Uhunmwonde'
-    ]
+      'Uhunmwonde',
+    ],
   },
   {
     state: 'Ekiti',
@@ -381,8 +381,8 @@ const statesAndLga = [
       'Irepodun/Ifelodun',
       'Ise-Orun',
       'Moba',
-      'Oye'
-    ]
+      'Oye',
+    ],
   },
   {
     state: 'Enugu',
@@ -404,8 +404,8 @@ const statesAndLga = [
       'Oji-River',
       'Udenu',
       'Udi',
-      'Uzo-Uwani'
-    ]
+      'Uzo-Uwani',
+    ],
   },
   {
     state: 'Gombe',
@@ -420,8 +420,8 @@ const statesAndLga = [
       'Kwami',
       'Nafada/Bajoga',
       'Shomgom',
-      'Yamaltu/Deba'
-    ]
+      'Yamaltu/Deba',
+    ],
   },
   {
     state: 'Imo',
@@ -461,8 +461,8 @@ const statesAndLga = [
       'Ugiri-Ike Ikeduru',
       'Ugiri-Ikedikeduru',
       'Unbano',
-      'Zinihitte'
-    ]
+      'Zinihitte',
+    ],
   },
   {
     state: 'Jigawa',
@@ -493,8 +493,8 @@ const statesAndLga = [
       'Roni',
       'Sule-Tankarkar',
       'Taura',
-      'Yankwashi'
-    ]
+      'Yankwashi',
+    ],
   },
   {
     state: 'Kebbi',
@@ -520,8 +520,8 @@ const statesAndLga = [
       'Suru',
       'Wasagu',
       'Yauri',
-      'Zuru'
-    ]
+      'Zuru',
+    ],
   },
   {
     state: 'Kaduna',
@@ -550,8 +550,8 @@ const statesAndLga = [
       'Soba',
       'Tudun-Wada/Makera',
       'Zango-Kataf',
-      'Zaria'
-    ]
+      'Zaria',
+    ],
   },
   {
     state: 'Kano',
@@ -598,8 +598,8 @@ const statesAndLga = [
       'Tudun-Wada',
       'Ungogo',
       'Warawa',
-      'Wudil'
-    ]
+      'Wudil',
+    ],
   },
   {
     state: 'Kogi',
@@ -627,8 +627,8 @@ const statesAndLga = [
       'Oru',
       'Oyi',
       'Yagba-East',
-      'Yagba-West'
-    ]
+      'Yagba-West',
+    ],
   },
   {
     state: 'Katsina',
@@ -666,8 +666,8 @@ const statesAndLga = [
       'Sabuwa',
       'Safana',
       'Sandamu',
-      'Zango'
-    ]
+      'Zango',
+    ],
   },
   {
     state: 'Kwara',
@@ -687,8 +687,8 @@ const statesAndLga = [
       'Offa',
       'Oke ero',
       'Oyun',
-      'Pategi'
-    ]
+      'Pategi',
+    ],
   },
   {
     state: 'Lagos',
@@ -713,10 +713,9 @@ const statesAndLga = [
       'Ojo',
       'Oshodi-Isolo',
       'Shomolu',
-      'Somolu',
       'Suru-Lere',
-      'Yewa-South'
-    ]
+      'Yewa-South',
+    ],
   },
   {
     state: 'Nassarawa',
@@ -732,8 +731,8 @@ const statesAndLga = [
       'Nassawara',
       'Nassawara Eggon',
       'Obi',
-      'Wambu'
-    ]
+      'Wambu',
+    ],
   },
   {
     state: 'Niger',
@@ -762,8 +761,8 @@ const statesAndLga = [
       'Shiroro',
       'Suleja',
       'Tafa',
-      'Wushishi'
-    ]
+      'Wushishi',
+    ],
   },
   {
     state: 'Ogun',
@@ -796,8 +795,8 @@ const statesAndLga = [
       'Remo-North',
       'Sagamu',
       'Shagamu',
-      'Yewa'
-    ]
+      'Yewa',
+    ],
   },
   {
     state: 'Ondo',
@@ -827,8 +826,8 @@ const statesAndLga = [
       'Ondo West',
       'Ondo-East',
       'Ose',
-      'Owo'
-    ]
+      'Owo',
+    ],
   },
   {
     state: 'Osun',
@@ -864,8 +863,8 @@ const statesAndLga = [
       'Olorunda',
       'Ori-Ade',
       'Orolu',
-      'Osogbo'
-    ]
+      'Osogbo',
+    ],
   },
   {
     state: 'Oyo',
@@ -902,8 +901,8 @@ const statesAndLga = [
       'Oyo-West',
       'Saki-East',
       'Saki-West',
-      'Surulere'
-    ]
+      'Surulere',
+    ],
   },
   {
     state: 'Plateau',
@@ -924,8 +923,8 @@ const statesAndLga = [
       "Quan'Anpan",
       'Riyom',
       'Shendam',
-      'Wase'
-    ]
+      'Wase',
+    ],
   },
   {
     state: 'Rivers',
@@ -955,8 +954,8 @@ const statesAndLga = [
       'Opobo/Nkoro',
       'Oyigbo',
       'Port-Harcourt',
-      'Tai'
-    ]
+      'Tai',
+    ],
   },
   {
     state: 'Sokoto',
@@ -982,8 +981,8 @@ const statesAndLga = [
       'Tureta',
       'Wamakko',
       'Wurno',
-      'Yabo'
-    ]
+      'Yabo',
+    ],
   },
   {
     state: 'Taraba',
@@ -1004,8 +1003,8 @@ const statesAndLga = [
       'Ussa',
       'Wukari',
       'Yorro',
-      'Zing'
-    ]
+      'Zing',
+    ],
   },
   {
     state: 'Yobe',
@@ -1027,8 +1026,8 @@ const statesAndLga = [
       'Potiskum',
       'Tarmua',
       'Yunusari',
-      'Yusufari'
-    ]
+      'Yusufari',
+    ],
   },
   {
     state: 'Zamfara',
@@ -1047,15 +1046,15 @@ const statesAndLga = [
       'Shinkafi',
       'Talata-Mafara',
       'Tsafe',
-      'Zurmi'
-    ]
-  }
+      'Zurmi',
+    ],
+  },
 ];
 
 export const getStates = () =>
   statesAndLga.map(({ state }) => ({ label: state, value: state }));
 
-export const getLgas = currentState => {
+export const getLgas = (currentState) => {
   if (!currentState) return [];
 
   const stateWithLga = statesAndLga.find(
@@ -1064,5 +1063,5 @@ export const getLgas = currentState => {
   );
 
   if (!stateWithLga) return [];
-  return stateWithLga['lgas'].map(lga => ({ label: lga, value: lga }));
+  return stateWithLga['lgas'].map((lga) => ({ label: lga, value: lga }));
 };

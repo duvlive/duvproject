@@ -171,76 +171,72 @@ EntertainerSection.propTypes = {
   entertainer: PropTypes.object.isRequired,
 };
 
-const EntertainerSectionInfo = ({ entertainer }) => {
+export const EntertainerSectionInfo = ({ entertainer, showContentOnly }) => {
   const avgRatings = entertainer.avgRatings[0];
   const totalShows = entertainer.profile.hired
     ? entertainer.profile.hired.length
     : 0;
+
+  const content = (
+    <Row>
+      {!showContentOnly && (
+        <h4 className="text-uppercase col-12 font-weight-normal mb-5">
+          Information
+        </h4>
+      )}
+      <Col sm="4">
+        <InfoList title="Stage Name">{entertainer.profile.stageName}</InfoList>
+        <InfoList title="Speciality">
+          {entertainer.profile.entertainerType}
+        </InfoList>
+        <InfoList title="Years of Experience">
+          {parseInt(getYear(Date.now()), 10) -
+            parseInt(entertainer.profile.yearStarted, 10)}{' '}
+          years
+        </InfoList>
+        <InfoList title="Total Shows">
+          {totalShows} {Humanize.pluralize(totalShows, 'Show')}
+        </InfoList>
+      </Col>
+      <Col sm="4">
+        <InfoList title="Member Since">
+          {getYear(entertainer.profile.createdAt)}
+        </InfoList>
+        <InfoList title="Location"> {entertainer.profile.location}</InfoList>
+        <InfoList title="Average Charges">
+          {commaNumber(entertainer.profile.baseCharges)} -{' '}
+          {commaNumber(entertainer.profile.preferredCharges)}
+        </InfoList>
+        <InfoList title="Willing to Travel for Shows">
+          {entertainer.profile.willing_to_travel ? 'YES' : 'NO'}
+        </InfoList>
+      </Col>
+      <Col sm="4">
+        <InfoStar rating={avgRatings.professionalism} title="Professionalism" />
+        <InfoStar rating={avgRatings.accommodating} title="Accommodating" />
+        <InfoStar rating={avgRatings.overallTalent} title="Overall Talent" />
+        <InfoStar rating={avgRatings.recommend} title="Recommend" />
+      </Col>
+    </Row>
+  );
+
+  if (showContentOnly) return content;
   return (
     <section
       className={`entertainer-info ${entertainer.profile.entertainerType.toLowerCase()} mt-5`}
     >
-      <div className="container-fluid">
-        <Row>
-          <h4 className="text-uppercase col-12 font-weight-normal mb-5">
-            Information
-          </h4>
-          <Col sm="4">
-            <InfoList title="Stage Name">
-              {entertainer.profile.stageName}
-            </InfoList>
-            <InfoList title="Speciality">
-              {entertainer.profile.entertainerType}
-            </InfoList>
-            <InfoList title="Years of Experience">
-              {parseInt(getYear(Date.now()), 10) -
-                parseInt(entertainer.profile.yearStarted, 10)}{' '}
-              years
-            </InfoList>
-            <InfoList title="Total Shows">
-              {totalShows} {Humanize.pluralize(totalShows, 'Show')}
-            </InfoList>
-          </Col>
-          <Col sm="4">
-            <InfoList title="Member Since">
-              {getYear(entertainer.profile.createdAt)}
-            </InfoList>
-            <InfoList title="Location">
-              {' '}
-              {entertainer.profile.location}
-            </InfoList>
-            <InfoList title="Average Charges">
-              {commaNumber(entertainer.profile.baseCharges)} -{' '}
-              {commaNumber(entertainer.profile.preferredCharges)}
-            </InfoList>
-            <InfoList title="Willing to Travel for Shows">
-              {entertainer.profile.willing_to_travel ? 'YES' : 'NO'}
-            </InfoList>
-          </Col>
-          <Col sm="4">
-            <InfoStar
-              rating={avgRatings.professionalism}
-              title="Professionalism"
-            />
-            <InfoStar rating={avgRatings.accommodating} title="Accommodating" />
-            <InfoStar
-              rating={avgRatings.overallTalent}
-              title="Overall Talent"
-            />
-            <InfoStar rating={avgRatings.recommend} title="Recommend" />
-          </Col>
-        </Row>
-      </div>
+      <div className="container-fluid">{content}</div>
     </section>
   );
 };
 
 EntertainerSectionInfo.propTypes = {
   entertainer: PropTypes.object.isRequired,
+  showContentOnly: PropTypes.bool,
 };
 
-EntertainerSectionInfo.propTypes = {
-  entertainer: PropTypes.object.isRequired,
+EntertainerSectionInfo.defaultProps = {
+  showContentOnly: false,
 };
 
 const InfoList = ({ title, children }) => (
@@ -281,7 +277,7 @@ InfoStar.defaultProps = {
   rating: null,
 };
 
-const Awards = ({ badges }) => {
+export const Awards = ({ badges }) => {
   return (
     <section className="my-5 py-5">
       <div className="container-fluid">
@@ -300,7 +296,11 @@ Awards.propTypes = {
   badges: PropTypes.array.isRequired,
 };
 
-const Gallery = ({ galleries }) => {
+export const Gallery = ({ galleries, showContentOnly }) => {
+  const galleryContent = galleries.map(({ imageURL, id, approved }, index) => (
+    <GalleryImage key={id} name={'gallery' + index} src={imageURL} />
+  ));
+  if (showContentOnly) return galleryContent;
   return (
     <section className="my-5 py-5">
       <div className="container-fluid">
@@ -308,9 +308,7 @@ const Gallery = ({ galleries }) => {
           <h4 className="text-uppercase col-12 font-weight-normal mb-3">
             Gallery
           </h4>
-          {galleries.map(({ imageURL, id, approved }, index) => (
-            <GalleryImage key={id} name={'gallery' + index} src={imageURL} />
-          ))}
+          {galleryContent}
         </div>
       </div>
     </section>
@@ -319,6 +317,11 @@ const Gallery = ({ galleries }) => {
 
 Gallery.propTypes = {
   galleries: PropTypes.array.isRequired,
+  showContentOnly: PropTypes.bool,
+};
+
+Gallery.defaultProps = {
+  showContentOnly: false,
 };
 
 const GalleryImage = ({ name, src }) => (
@@ -351,7 +354,11 @@ GalleryImage.propTypes = {
   src: PropTypes.string.isRequired,
 };
 
-const Videos = ({ videos }) => {
+export const Videos = ({ videos, showContentOnly }) => {
+  const videoContent = videos.map(({ title, youtubeID }, index) => (
+    <YoutubeVideo key={index} title={title} youtubeID={youtubeID} />
+  ));
+  if (showContentOnly) return videoContent;
   return (
     <section className="my-5 py-5">
       <div className="container-fluid">
@@ -359,9 +366,7 @@ const Videos = ({ videos }) => {
           <h4 className="text-uppercase col-12 font-weight-normal mb-3">
             Videos
           </h4>
-          {videos.map(({ title, youtubeID }, index) => (
-            <YoutubeVideo key={index} title={title} youtubeID={youtubeID} />
-          ))}
+          {videoContent}
         </div>
       </div>
     </section>
@@ -369,7 +374,12 @@ const Videos = ({ videos }) => {
 };
 
 Videos.propTypes = {
+  showContentOnly: PropTypes.bool,
   videos: PropTypes.array.isRequired,
+};
+
+Videos.defaultProps = {
+  showContentOnly: false,
 };
 
 const YoutubeVideo = ({ title, youtubeID }) => (
@@ -392,7 +402,7 @@ YoutubeVideo.propTypes = {
   youtubeID: PropTypes.any.isRequired,
 };
 
-const ReviewSection = ({ ratings }) => {
+export const ReviewSection = ({ ratings }) => {
   return (
     <section className="my-5 py-5">
       <div className="container-fluid">

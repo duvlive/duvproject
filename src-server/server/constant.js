@@ -1,3 +1,10 @@
+
+export const MEDIA_TYPES = {
+  Approved: true,
+  Pending: null,
+  Rejected: false,
+};
+
 export const USER_TYPES = {
   ADMINISTRATOR: 0,
   USER: 1,
