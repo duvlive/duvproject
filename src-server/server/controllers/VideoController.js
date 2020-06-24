@@ -122,22 +122,19 @@ const VideoController = {
    */
   async getVideos(req, res) {
     const { userId } = req.params;
-    const { offset, limit } = req.query;
+    const { offset, limit, approved } = req.query;
     try {
       let videoQuery = {};
       if (userId) {
         videoQuery.userId = userId;
       }
+      if (approved) {
+        videoQuery.approved = approved;
+      }
       const options = {
         offset: offset || 0,
         limit: limit || 10,
         where: videoQuery,
-        // include: [
-        //   {
-        //     model: User,
-        //     as: 'user',
-        //   },
-        // ],
       };
       try {
         const { result, pagination } = await getAll(Video, options);

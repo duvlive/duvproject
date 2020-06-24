@@ -1,6 +1,6 @@
 import Sequelize, { Op } from 'sequelize';
 import { Event } from '../models';
-import { validString, getLongDate, getTime } from '../utils';
+import { validString, getLongDate, getTime, getAll } from '../utils';
 import {
   EventEntertainer,
   User,
@@ -845,6 +845,77 @@ const EventController = {
         const errorMessage = error.message || error;
         return res.status(412).json({ message: errorMessage });
       });
+  },
+
+  async getAllEvents(req, res) {
+    const {
+      cancelled,
+      cancelledDate,
+      eventDate,
+      eventType,
+      startTime,
+      state,
+      userId,
+      offset,
+      limit,
+    } = req.query;
+    try {
+      let eventQuery = {};
+      if (cancelled) {
+        eventQuery.cancelled = cancelled;
+      }
+      if (eventType) {
+        eventQuery.eventType = eventType;
+      }
+      if (state) {
+        eventQuery.state = state;
+      }
+      if (userId) {
+        eventQuery.userId = userId;
+      }
+      if (cancelledDate) {
+        eventQuery.cancelledDate = { [Op.eq]: cancelledDate };
+      }
+      if (eventDate) {
+        eventQuery.eventDate = { [Op.eq]: eventDate };
+      }
+      if (startTime) {
+        eventQuery.startTime = { [Op.eq]: startTime };
+      }
+      if (offset) {
+        eventQuery.offset = offset;
+      }
+      if (limit) {
+        eventQuery.limit = limit;
+      }
+      const options = {
+        offset: offset || 0,
+        limit: limit || 10,
+        where: eventQuery,
+        include: reviewsInclude,
+        // include: [
+        //   {
+        //     model: User,
+        //     as: 'creator',
+        //     attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+        //   },
+        //   {
+        //     model: BadgeUser,
+        //     as: 'userBadges',
+        //   },
+        // ],
+      };
+      try {
+        const { result, pagination } = await getAll(Event, options);
+        return res.status(200).json({ events: result, pagination });
+      } catch (error) {
+        return res.status(500).json({ error: error.message });
+      }
+    } catch (error) {
+      const status = error.status || 500;
+      const errorMessage = error.message || error;
+      return res.status(status).json({ message: errorMessage });
+    }
   },
   // update event details
   // inform entertainer

@@ -81,6 +81,15 @@ const eventRoutes = (router) => {
     Authentication.isActiveUser,
     EventController.cancelEvent
   );
+
+  // Admin routes
+  router.get(
+    '/api/v1/events-all',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    Authentication.validateAdmin,
+    EventController.getAllEvents
+  );
 };
 
 export default eventRoutes;
