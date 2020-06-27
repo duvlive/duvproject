@@ -20,14 +20,6 @@ const EVENT_DATE = [
   addDays(new Date(), 60),
 ];
 
-const START_TIME = [
-  '2020-04-05 11:00:00.125+01',
-  '2020-04-05 11:00:00.125+01',
-  '2020-04-05 11:00:00.125+01',
-  '2020-04-05 11:00:00.125+01',
-  '2020-04-05 11:00:00.125+01',
-];
-
 const EVENT_DURATION = ['1 hour', '5 hours', '9 hours', '14 hours', '20 hours'];
 
 const lorem = new LoremIpsum({
@@ -52,7 +44,7 @@ module.exports = new Factory()
     return EVENT_DATE[id % 5];
   })
   .sequence('startTime', function (id) {
-    return START_TIME[id % 5];
+    return EVENT_DATE[id % 5];
   })
   .attr('eventDuration', function () {
     return `${Math.floor(Math.random() * 20)} hours`;

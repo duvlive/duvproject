@@ -180,7 +180,7 @@ export const ContactsForm = ({
                     label="Relationship"
                     name="relationship"
                     options={[
-                      { label: 'Aunts' },
+                      { label: 'Aunt' },
                       { label: 'Brother' },
                       { label: 'Cousin' },
                       { label: 'Family' },
