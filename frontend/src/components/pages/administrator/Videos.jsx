@@ -124,9 +124,27 @@ const VideoRow = ({
           </button>
         </DuvLiveModal>
         &nbsp; &nbsp; &nbsp;
-        <button className={buttonColor} onClick={actionFn}>
-          {actionText}
-        </button>
+        {approved === null ? (
+          <>
+            <button
+              className="btn btn-sm btn-transparent btn-success"
+              onClick={() => processVideo(id, 'approve')}
+            >
+              <span className="icon icon-ok"></span>
+            </button>
+            &nbsp; &nbsp; &nbsp;
+            <button
+              className="btn btn-sm btn-transparent btn-danger"
+              onClick={() => processVideo(id, 'disapprove')}
+            >
+              <span className="icon icon-cancel"></span>
+            </button>
+          </>
+        ) : (
+          <button className={buttonColor} onClick={actionFn}>
+            {actionText}
+          </button>
+        )}
       </td>
     </tr>
   );

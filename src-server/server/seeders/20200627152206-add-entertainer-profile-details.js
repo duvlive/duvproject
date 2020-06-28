@@ -2,6 +2,20 @@
 const bankDetailsFactory = require('../../../factories/bankDetailsFactory');
 const identificationFactory = require('../../../factories/identificationFactory');
 const contactFactory = require('../../../factories/contactFactory');
+const randomItem = (items) => items[Math.floor(Math.random() * items.length)];
+
+const YOUTUBE_ID = [
+  '-L8hLkg21MQ',
+  'KErqMcZR0KA',
+  'hYx5ukr_YWw',
+  '_Q6Rixmvujc',
+  'OC93pNSrRP8',
+  'NlyzO7dJ0YY',
+  'zUU1bIWpH5c',
+  'Ecl8Aod0Tl0',
+  'haA7DpK9Z4k',
+  'SbHx9Ps7B4g',
+];
 
 module.exports = {
   up: async (queryInterface) => {
@@ -16,6 +30,8 @@ module.exports = {
     const allIdentifications = [];
     const allContacts = [];
     const allApprovalComments = [];
+    const allGalleries = [];
+    const allVideos = [];
 
     users.forEach((user) => {
       allIdentifications.push(
@@ -45,6 +61,20 @@ module.exports = {
             userId: user.id,
           })
         );
+        allGalleries.push({
+          userId: user.id,
+          imageURL: user.profileImageURL,
+          imageID: `linked-profile`,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        });
+        allVideos.push({
+          userId: user.id,
+          title: `${user.firstName} ${user.lastName} youtube video`,
+          youtubeID: randomItem(YOUTUBE_ID),
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        });
       }
 
       if (user.id <= 16) {
@@ -78,20 +108,24 @@ module.exports = {
       }
     });
 
-    await queryInterface.bulkInsert('BankDetails', allBankDetails, {});
-    await queryInterface.bulkInsert('Contacts', allContacts, {});
     await queryInterface.bulkInsert(
       'ApprovalComments',
       allApprovalComments,
       {}
     );
-    return queryInterface.bulkInsert('Identifications', allIdentifications, {});
+    await queryInterface.bulkInsert('BankDetails', allBankDetails, {});
+    await queryInterface.bulkInsert('Contacts', allContacts, {});
+    await queryInterface.bulkInsert('Galleries', allGalleries, {});
+    await queryInterface.bulkInsert('Identifications', allIdentifications, {});
+    return queryInterface.bulkInsert('Videos', allVideos, {});
   },
 
   down: async (queryInterface) => {
+    await queryInterface.bulkDelete('ApprovalComments', null, {});
     await queryInterface.bulkDelete('BankDetails', null, {});
     await queryInterface.bulkDelete('Contacts', null, {});
-    await queryInterface.bulkDelete('ApprovalComments', null, {});
-    return queryInterface.bulkDelete('Identifications', null, {});
+    await queryInterface.bulkDelete('Galleries', null, {});
+    await queryInterface.bulkDelete('Identifications', null, {});
+    return queryInterface.bulkDelete('Videos', null, {});
   },
 };

@@ -83,11 +83,18 @@ const formatAllEntertainers = (result) =>
       stageName: user.profile.stageName,
       willingToTravel: user.profile.willingToTravel,
       yearStarted: user.profile.yearStarted,
-      bankDetail: !!user.bankDetail,
-      contacts: !!user.contacts,
+      // bankDetail: user.bankDetail,
+      // contacts: user.contacts,
       approvalComment: user.approvalComment,
-      identification: !!user.identification,
-      youtubeChannel: !!user.profile.youTubeChannel,
+      // identification: !!user.identification,
+      // youtubeChannel: !!user.profile.youTubeChannel,
+      profileInfo: [
+        !!user.profileImageURL && !!user.profile.stageName,
+        !!user.bankDetail.accountNumber,
+        !!user.contacts[0] && !!user.contacts[0].firstName,
+        !!user.profile.youTubeChannel,
+        !!user.identification.idType,
+      ].filter((e) => e).length,
     };
     return [...acc, entertainer];
   }, []);
@@ -689,6 +696,7 @@ const EntertainerProfileController = {
       highestBudget,
       language,
       location,
+      approved,
       limit,
       offset,
     } = req.query;
@@ -722,6 +730,12 @@ const EntertainerProfileController = {
 
       if (location && location !== 'Any') {
         entertainerQuery.location = { [Op.eq]: location };
+      }
+
+      if (approved) {
+        entertainerQuery.approved = {
+          [Op.eq]: approved === 'YES' ? true : false,
+        };
       }
 
       const include = [

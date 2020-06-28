@@ -1,5 +1,5 @@
 const Factory = require('rosie').Factory;
-const LoremIpsum = require('lorem-ipsum').LoremIpsum;
+// const LoremIpsum = require('lorem-ipsum').LoremIpsum;
 const randomItem = (items) => items[Math.floor(Math.random() * items.length)];
 
 // const lorem = new LoremIpsum({
@@ -61,11 +61,18 @@ module.exports = new Factory()
   .sequence('userId', ['offset'], function (id, offset) {
     return offset + id - 1;
   })
+  .sequence('approved', ['offset'], function (id, offset) {
+    const userId = offset + id - 1;
+    return userId <= 16 ? true : false;
+  })
   .sequence('stageName', function (id) {
     return STAGE_NAME[id % 18];
   })
   .sequence('slug', function (id) {
     return generateSlug(STAGE_NAME[id % 18]);
+  })
+  .sequence('youTubeChannel', function (id) {
+    return `https://youtube.com/${generateSlug(STAGE_NAME[id % 18])}`;
   })
   .sequence('entertainerType', function (id) {
     return ENTERTAINER_TYPE[id % 3];
@@ -95,9 +102,7 @@ module.exports = new Factory()
     return `${entertainerType} ${stageName} is a professional ${typeInFull}.`;
   })
   .attrs({
-    approved: true,
     willingToTravel: true,
-    youTubeChannel: 'https://youtube.com',
     createdAt: new Date(),
     updatedAt: new Date(),
   });

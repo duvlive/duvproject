@@ -92,6 +92,7 @@ export const addEntertainerSchema = (type, entertainer) => {
 };
 
 export const recommendEntertainerSchema = {
+  approved: optionalValidation(stringValidation('Approved')),
   entertainerType: stringValidation('Entertainer Type'),
   language: multiSelectValidation('Language'),
   location: optionalValidation(stringValidation('Location')),
