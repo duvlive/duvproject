@@ -3,10 +3,18 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import TopMessage from 'components/common/layout/TopMessage';
 import BackEndPage from 'components/common/layout/BackEndPage';
-import { Row, Col } from 'reactstrap';
 import Image from 'components/common/utils/Image';
 import Badges from 'components/pages/entertainer/Badges';
-// import classNames from 'classnames';
+import {
+  TabContent,
+  TabPane,
+  Nav,
+  NavItem,
+  NavLink,
+  Row,
+  Col,
+} from 'reactstrap';
+import classnames from 'classnames';
 // import Button from 'components/forms/Button';
 import ProfileAvatar from 'assets/img/avatar/profile.png';
 import { getTokenFromStore } from 'utils/localStorage';
@@ -15,6 +23,7 @@ import {
   Gallery,
   Videos,
   ReviewSection,
+  InfoList,
 } from 'components/pages/frontend/SingleEntertainer';
 
 const SingleEntertainer = ({ id }) => {
@@ -36,7 +45,6 @@ const SingleEntertainer = ({ id }) => {
         }
       })
       .catch(function (error) {
-        console.log(error.response.data.message);
         setEntertainer([]);
       });
   }, [id]);
@@ -70,7 +78,7 @@ EntertainerProfile.propTypes = {
 const ApprovedEntertainerInfo = ({ entertainer }) => (
   <section>
     <div className="mt-5">
-      <EntertainerSectionInfo entertainer={entertainer} showContentOnly />
+      <EntertainerTab entertainer={entertainer} />
     </div>
 
     {entertainer.badges && entertainer.badges.length > 0 && (
@@ -152,4 +160,193 @@ Awards.propTypes = {
   badges: PropTypes.array.isRequired,
 };
 
+const BankDetails = ({ bankDetail }) => (
+  <div className="row">
+    <Col sm={12}>
+      <InfoList title="Account Number">{bankDetail.accountNumber}</InfoList>
+      <InfoList title="Account Name">{bankDetail.accountName}</InfoList>
+      <InfoList title="Bank">{bankDetail.bankName}</InfoList>
+    </Col>
+    {/* <Col lg={4} md={6} sm={12}>
+    </Col> */}
+  </div>
+);
+
+BankDetails.propTypes = {
+  bankDetail: PropTypes.object.isRequired,
+};
+
+const YouTubeChannel = ({ profile }) => (
+  <div className="row">
+    <Col sm={12}>
+      <InfoList title="Channel">{profile.youTubeChannel}</InfoList>
+    </Col>
+  </div>
+);
+
+YouTubeChannel.propTypes = {
+  profile: PropTypes.object.isRequired,
+};
+
+const ContactDetails = ({ contacts }) =>
+  contacts.map((contact) => (
+    <div className="row mt-5">
+      <Col sm={12}>
+        <Row>
+          <Col md={4} sm={6}>
+            <InfoList title="First Name">{contact.firstName}</InfoList>
+          </Col>
+          <Col md={4} sm={6}>
+            <InfoList title="Last Name">{contact.lastName}</InfoList>
+          </Col>
+        </Row>
+      </Col>
+
+      <Col sm={12}>
+        <Row>
+          <Col md={4} sm={6}>
+            <InfoList title="Phone Number">{contact.phoneNumber}</InfoList>
+          </Col>
+          <Col md={6} sm={6}>
+            <InfoList title="Email">{contact.email}</InfoList>
+          </Col>
+        </Row>
+      </Col>
+
+      <Col sm={12}>
+        <Row>
+          <Col md={4} sm={6}>
+            <InfoList title="Relationship">{contact.relationship}</InfoList>
+          </Col>
+          <Col md={4} sm={6}>
+            <InfoList title="Type">
+              {contact.type === 2 ? 'Professional' : 'Next of Kin'}
+            </InfoList>
+          </Col>
+        </Row>
+      </Col>
+    </div>
+  ));
+
+ContactDetails.propTypes = {
+  contacts: PropTypes.array.isRequired,
+};
+
+const Identification = ({ identification }) => (
+  <div className="row">
+    <Col sm={12}>
+      <Row>
+        <Col md={4} sm={6}>
+          <InfoList title="ID Number">{identification.idNumber}</InfoList>
+        </Col>
+        <Col md={4} sm={6}>
+          <InfoList title="Type">{identification.idType}</InfoList>
+        </Col>
+      </Row>
+    </Col>
+
+    <Col sm={12}>
+      <Row>
+        <Col md={4} sm={6}>
+          <InfoList title="Issue Date">{identification.issueDate}</InfoList>
+        </Col>
+        <Col md={6} sm={6}>
+          <InfoList title="Expirt Date">{identification.expiryDate}</InfoList>
+        </Col>
+      </Row>
+    </Col>
+  </div>
+);
+
+Identification.propTypes = {
+  identification: PropTypes.object.isRequired,
+};
+
+const ENTERTAINER_TAB_LIST = [
+  {
+    name: 'Profile',
+    content: (entertainer) => (
+      <>
+        <h4 className="tab-header">Profile</h4>
+        <EntertainerSectionInfo entertainer={entertainer} showContentOnly />
+      </>
+    ),
+  },
+  {
+    name: 'Bank Details',
+    content: (entertainer) => (
+      <>
+        <h4 className="tab-header">Bank Details</h4>
+        <BankDetails bankDetail={entertainer.bankDetail} />
+      </>
+    ),
+  },
+  {
+    name: 'Contact Details',
+    content: (entertainer) => (
+      <>
+        <h4 className="tab-header">Contact Details</h4>
+        <ContactDetails contacts={entertainer.contacts} />
+      </>
+    ),
+  },
+  {
+    name: 'Youtube Channel',
+    content: (entertainer) => (
+      <>
+        <h4 className="tab-header">Youtube Channel</h4>
+        <YouTubeChannel profile={entertainer.profile} />{' '}
+      </>
+    ),
+  },
+  {
+    name: 'Identification',
+    content: (entertainer) => (
+      <>
+        <h4 className="tab-header">Identification</h4>
+        <Identification identification={entertainer.identification} />
+      </>
+    ),
+  },
+];
+
+const EntertainerTab = ({ entertainer }) => {
+  const [activeTab, setActiveTab] = React.useState(0);
+
+  const toggle = (tab) => {
+    if (activeTab !== tab) setActiveTab(tab);
+  };
+
+  return (
+    <div>
+      <Nav tabs>
+        {ENTERTAINER_TAB_LIST.map((tab, index) => (
+          <NavItem>
+            <NavLink
+              className={classnames({ active: activeTab === index })}
+              onClick={() => {
+                toggle(index);
+              }}
+            >
+              {tab.name}
+            </NavLink>
+          </NavItem>
+        ))}
+      </Nav>
+      <TabContent activeTab={activeTab}>
+        {ENTERTAINER_TAB_LIST.map((tab, index) => (
+          <TabPane tabId={index}>
+            <Row>
+              <Col sm="12">{tab.content(entertainer)}</Col>
+            </Row>
+          </TabPane>
+        ))}
+      </TabContent>
+    </div>
+  );
+};
+
+EntertainerTab.propTypes = {
+  entertainer: PropTypes.object.isRequired,
+};
 export default SingleEntertainer;

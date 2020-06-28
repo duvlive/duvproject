@@ -65,11 +65,13 @@ module.exports = {
           userId: user.id,
           imageURL: user.profileImageURL,
           imageID: `linked-profile`,
+          approved: user.id <= 7 ? true : null,
           createdAt: new Date(),
           updatedAt: new Date(),
         });
         allVideos.push({
           userId: user.id,
+          approved: user.id <= 7 ? true : null,
           title: `${user.firstName} ${user.lastName} youtube video`,
           youtubeID: randomItem(YOUTUBE_ID),
           createdAt: new Date(),
