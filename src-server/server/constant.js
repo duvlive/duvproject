@@ -1,4 +1,3 @@
-
 export const MEDIA_TYPES = {
   Approved: true,
   Pending: null,
@@ -52,7 +51,22 @@ export const NOTIFICATION_TYPE = {
 
 export const REQUEST_ACTION = {
   APPROVED: 'Approved',
+  CANCELLED: 'Cancelled',
+  EMPTY: null,
+  PAID: 'Paid',
+  PENDING: 'Pending',
   REJECTED: 'Rejected',
   INCREMENT: 'Increment',
-  PAID: 'Paid',
+};
+
+export const ENTERTAINER_APPROVAL = {
+  APPROVED: true,
+  DISAPPROVED: false,
+};
+
+export const EVENT_HIRETYPE = {
+  SEARCH: 'Search',
+  AUCTION: 'Auction',
+  RECOMMENDATION: 'Recommendation',
+  EMPTY: null,
 };

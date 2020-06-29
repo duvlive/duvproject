@@ -274,7 +274,7 @@ const PaymentController = {
    * @param {object} res is res object
    * @return {object} returns res object
    */
-  async PayEntertainer(req, res) {
+  async payEntertainer(req, res) {
     const adminId = req.user.id;
     const { amount, eventEntertainerId } = req.body;
     if (!amount || !eventEntertainerId) {
