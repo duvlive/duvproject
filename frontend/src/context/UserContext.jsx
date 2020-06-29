@@ -71,6 +71,7 @@ const INITIAL_STATE = {
   isLoggedIn: false,
   firstTimeLogin: null,
   ...DEFAULT_ENTERTAINER_STATE,
+  notifications: [],
   galleries: [],
   events: null,
   badges: null,
@@ -143,6 +144,8 @@ let reducer = (state, action) => {
       return { ...state, alert: null };
     case 'add-alert':
       return { ...state, alert: action.alert };
+    case 'notifications':
+      return { ...state, notifications: [] };
     default:
       return state;
   }

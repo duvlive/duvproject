@@ -43,6 +43,9 @@ const TopBar = ({ showSidebar }) => {
     [USER_TYPES.bandMember]: userState.firstName,
   };
 
+  const userHasPendingNotifications =
+    userState.notifications && userState.notifications.length > 0;
+
   return (
     <div className="topbar">
       <Navbar color="transparent" expand>
@@ -65,7 +68,7 @@ const TopBar = ({ showSidebar }) => {
                 to={`/${DASHBOARD_PAGE[userState.type]}/notifications`}
               >
                 <i className="icon icon-notification" />
-                <span className="dot" />
+                {userHasPendingNotifications && <span className="dot" />}
               </NavLink>
             </NavItem>
 
