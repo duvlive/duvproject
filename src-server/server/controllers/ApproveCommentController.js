@@ -70,17 +70,19 @@ const ApproveCommentController = {
             ),
           ])
             .then(async ([newApprovalComment, profile]) => {
-              await BadgeUser.create({
-                badgeId: 1,
-                userId: userId,
-              });
-              await Notification.create({
-                userId: userId,
-                title: NOTIFICATIONS.NEW_AWARD,
-                description: `You have been awarded the DUV CERTIFIED Award`,
-                type: NOTIFICATION_TYPE.SUCCESS,
-                actionId: 1,
-              });
+              if (approved) {
+                await BadgeUser.create({
+                  badgeId: 1,
+                  userId: userId,
+                });
+                await Notification.create({
+                  userId: userId,
+                  title: NOTIFICATIONS.NEW_AWARD,
+                  description: `You have been awarded the DUV CERTIFIED Award`,
+                  type: NOTIFICATION_TYPE.SUCCESS,
+                  actionId: 1,
+                });
+              }
               return res.status(200).json({
                 message,
                 approvalComments: newApprovalComment,

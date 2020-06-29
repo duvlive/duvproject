@@ -25,6 +25,9 @@ import {
   ReviewSection,
   InfoList,
 } from 'components/pages/frontend/SingleEntertainer';
+import AlertMessage from 'components/common/utils/AlertMessage';
+import Button from 'components/forms/Button';
+import NoContent from 'components/common/utils/NoContent';
 
 const SingleEntertainer = ({ id }) => {
   const [entertainer, setEntertainer] = React.useState(null);
@@ -45,7 +48,7 @@ const SingleEntertainer = ({ id }) => {
         }
       })
       .catch(function (error) {
-        setEntertainer([]);
+        setEntertainer({});
       });
   }, [id]);
 
@@ -54,16 +57,27 @@ const SingleEntertainer = ({ id }) => {
       <div className="main-app">
         <TopMessage message="Entertainer Profile" />
         <section className="app-content">
-          {entertainer && <EntertainerProfile entertainer={entertainer} />}
-          {entertainer &&
-            entertainer.profile &&
-            entertainer.profile.approved && (
-              <ApprovedEntertainerInfo entertainer={entertainer} />
-            )}
+          {entertainer && !entertainer.firstName ? (
+            <NoContent isButton text="Entertainer Not Found" />
+          ) : (
+            <>
+              {entertainer && <EntertainerProfile entertainer={entertainer} />}
+              {entertainer && entertainer.profile && (
+                <ApprovedEntertainerInfo entertainer={entertainer} />
+              )}
+            </>
+          )}
         </section>
       </div>
     </BackEndPage>
   );
+};
+
+SingleEntertainer.propTypes = {
+  id: PropTypes.any,
+};
+SingleEntertainer.defaultProps = {
+  id: '',
 };
 
 const EntertainerProfile = ({ entertainer }) => (
@@ -114,13 +128,6 @@ ApprovedEntertainerInfo.propTypes = {
   entertainer: PropTypes.object.isRequired,
 };
 
-SingleEntertainer.propTypes = {
-  slug: PropTypes.any,
-};
-SingleEntertainer.defaultProps = {
-  slug: '',
-};
-
 export const EntertainerSection = ({ entertainer }) => (
   <Row>
     <Col sm="12">
@@ -133,13 +140,16 @@ export const EntertainerSection = ({ entertainer }) => (
       />
       <section className="entertainer__summary">
         <h4 className="text-capitalize">
-          {entertainer.profile.stageName ||
+          {(entertainer.profile && entertainer.profile.stageName) ||
             `${entertainer.firstName} ${entertainer.lastName}`}
         </h4>
         <div className="text-red">
-          {entertainer.profile.entertainerType || 'NONE'}
+          {(entertainer.profile && entertainer.profile.entertainerType) ||
+            'NONE'}
         </div>
-        <article>{entertainer.profile.about || '-'}</article>
+        <article>
+          {(entertainer.profile && entertainer.profile.about) || '-'}
+        </article>
       </section>
     </Col>
   </Row>
@@ -264,6 +274,7 @@ Identification.propTypes = {
 
 const ENTERTAINER_TAB_LIST = [
   {
+    id: 'entertainerProfile',
     name: 'Profile',
     content: (entertainer) => (
       <>
@@ -273,6 +284,7 @@ const ENTERTAINER_TAB_LIST = [
     ),
   },
   {
+    id: 'bankAccount',
     name: 'Bank Details',
     content: (entertainer) => (
       <>
@@ -282,6 +294,7 @@ const ENTERTAINER_TAB_LIST = [
     ),
   },
   {
+    id: 'contact',
     name: 'Contact Details',
     content: (entertainer) => (
       <>
@@ -291,6 +304,7 @@ const ENTERTAINER_TAB_LIST = [
     ),
   },
   {
+    id: 'youTube',
     name: 'Youtube Channel',
     content: (entertainer) => (
       <>
@@ -300,6 +314,7 @@ const ENTERTAINER_TAB_LIST = [
     ),
   },
   {
+    id: 'identification',
     name: 'Identification',
     content: (entertainer) => (
       <>
@@ -312,6 +327,35 @@ const ENTERTAINER_TAB_LIST = [
 
 const EntertainerTab = ({ entertainer }) => {
   const [activeTab, setActiveTab] = React.useState(0);
+  const [message, setMessage] = React.useState(null);
+
+  const addSingleComment = (userId, comments) => {
+    console.log('userId, comments', userId, comments);
+    axios
+      .put(
+        '/api/v1/approveEntertainer',
+        { userId, ...comments },
+        {
+          headers: { 'x-access-token': getTokenFromStore() },
+        }
+      )
+      .then(function (response) {
+        const { status } = response;
+        if (status === 200) {
+          setMessage({
+            type: 'success',
+            message: `Your comment has been successfully submitted`,
+          });
+        }
+      })
+      .catch(function (error) {
+        console.log('error', error);
+        setMessage({
+          type: 'danger',
+          message: error.response.message,
+        });
+      });
+  };
 
   const toggle = (tab) => {
     if (activeTab !== tab) setActiveTab(tab);
@@ -319,25 +363,45 @@ const EntertainerTab = ({ entertainer }) => {
 
   return (
     <div>
+      <AlertMessage {...message} />
       <Nav tabs>
         {ENTERTAINER_TAB_LIST.map((tab, index) => (
-          <NavItem>
+          <NavItem key={index}>
             <NavLink
               className={classnames({ active: activeTab === index })}
               onClick={() => {
                 toggle(index);
               }}
             >
-              {tab.name}
+              {tab.name}{' '}
+              {entertainer.approvalComment[tab.id] === 'YES' ? (
+                <span className="icon icon-ok-circled"></span>
+              ) : (
+                <span className="icon icon-help"></span>
+              )}
             </NavLink>
           </NavItem>
         ))}
       </Nav>
       <TabContent activeTab={activeTab}>
         {ENTERTAINER_TAB_LIST.map((tab, index) => (
-          <TabPane tabId={index}>
+          <TabPane key={index} tabId={index}>
             <Row>
               <Col sm="12">{tab.content(entertainer)}</Col>
+              {entertainer.approvalComment[tab.id] === 'YES' ? (
+                <h4 className="text-success">
+                  <span className="icon icon-ok-circled"></span> Approved
+                </h4>
+              ) : (
+                <Button
+                  className="btn-danger btn-wide btn-transparent"
+                  onClick={() =>
+                    addSingleComment(entertainer.id, { [tab.id]: 'YES' })
+                  }
+                >
+                  Approve {tab.name}
+                </Button>
+              )}
             </Row>
           </TabPane>
         ))}
