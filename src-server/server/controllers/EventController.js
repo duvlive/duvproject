@@ -862,6 +862,7 @@ const EventController = {
       language,
       lowestBudget,
       offset,
+      paid,
       startTime,
       state,
       status,
