@@ -927,13 +927,13 @@ const EventController = {
       }
       let applicationQuery = {};
       if (status) {
-        eventEntertainerQuery.status = status || EVENT_HIRETYPE.AUCTION;
+        applicationQuery.status = status || EVENT_HIRETYPE.AUCTION;
       }
       if (paid) {
-        eventEntertainerQuery.paid = paid;
+        applicationQuery.paid = paid;
       }
       if (applicationType) {
-        eventEntertainerQuery.applicationType = applicationType;
+        applicationQuery.applicationType = applicationType;
       }
 
       const eventInclude = [
