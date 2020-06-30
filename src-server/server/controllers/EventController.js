@@ -1,6 +1,6 @@
 import Sequelize, { Op } from 'sequelize';
 import { Event } from '../models';
-import { validString, getLongDate, getTime } from '../utils';
+import { validString, getLongDate, getTime, getAll } from '../utils';
 import {
   EventEntertainer,
   User,
@@ -12,7 +12,7 @@ import {
 } from '../models';
 import sendMail from '../MailSender';
 import EMAIL_CONTENT from '../email-template/content';
-import { NOTIFICATIONS, NOTIFICATION_TYPE } from '../constant';
+import { EVENT_HIRETYPE, NOTIFICATIONS, NOTIFICATION_TYPE } from '../constant';
 
 const reviewsInclude = [
   {
@@ -247,7 +247,7 @@ const EventController = {
   getUserAuctions(req, res) {
     EventEntertainer.findAll({
       where: {
-        hireType: 'Auction',
+        hireType: EVENT_HIRETYPE.AUCTION,
         userId: req.user.id,
         hiredEntertainer: null, // shown auctions with no hired Entertainer
       },
@@ -346,7 +346,7 @@ const EventController = {
   getAvailableAuctions(req, res) {
     EventEntertainer.findAll({
       where: {
-        hireType: 'Auction',
+        hireType: EVENT_HIRETYPE.AUCTION,
         auctionStartDate: { [Op.lte]: Sequelize.literal('NOW()') },
         auctionEndDate: { [Op.gte]: Sequelize.literal('NOW()') },
         entertainerType: {
@@ -845,6 +845,165 @@ const EventController = {
         const errorMessage = error.message || error;
         return res.status(412).json({ message: errorMessage });
       });
+  },
+
+  async getAllEvents(req, res) {
+    const {
+      applicationType,
+      auctionStartDate,
+      auctionEndDate,
+      cancelled,
+      cancelledDate,
+      eventDate,
+      eventType,
+      highestBudget,
+      hireType,
+      limit,
+      language,
+      lowestBudget,
+      offset,
+      startTime,
+      state,
+      status,
+      userId,
+    } = req.query;
+
+    eventEntertainerQuery;
+    try {
+      let eventEntertainerQuery = {};
+      if (hireType) {
+        eventEntertainerQuery.hireType = hireType || EVENT_HIRETYPE.AUCTION;
+      }
+      if (cancelled) {
+        eventEntertainerQuery.cancelled = cancelled;
+      }
+      if (lowestBudget && parseInt(lowestBudget, 10) > 0) {
+        eventEntertainerQuery.lowestBudget = { [Op.gte]: lowestBudget };
+      }
+      if (highestBudget && parseInt(highestBudget, 10) > 0) {
+        eventEntertainerQuery.highestBudget = { [Op.lte]: highestBudget };
+      }
+      if (language) {
+        const languages = JSON.parse(language);
+
+        let languageQuery = [];
+        for (const lang of languages) {
+          languageQuery.push({
+            [Op.substring]: lang,
+          });
+        }
+        eventEntertainerQuery.preferredLanguage = {
+          [Op.and]: languageQuery,
+        };
+      }
+      if (auctionStartDate) {
+        eventEntertainerQuery.auctionStartDate = auctionStartDate;
+      }
+      if (auctionEndDate) {
+        eventEntertainerQuery.auctionEndDate = auctionEndDate;
+      }
+
+      let eventQuery = {};
+      if (cancelled) {
+        eventQuery.cancelled = cancelled;
+      }
+      if (eventType) {
+        eventQuery.eventType = eventType;
+      }
+      if (state) {
+        eventQuery.state = state;
+      }
+      if (userId) {
+        eventQuery.userId = userId;
+      }
+      if (cancelledDate) {
+        eventQuery.cancelledDate = { [Op.eq]: cancelledDate };
+      }
+      if (eventDate) {
+        eventQuery.eventDate = { [Op.eq]: eventDate };
+      }
+      if (startTime) {
+        eventQuery.startTime = { [Op.eq]: startTime };
+      }
+      if (offset) {
+        eventQuery.offset = offset;
+      }
+      if (limit) {
+        eventQuery.limit = limit;
+      }
+
+      let applicationQuery = {};
+      if (status) {
+        eventEntertainerQuery.status = status || EVENT_HIRETYPE.AUCTION;
+      }
+      if (paid) {
+        eventEntertainerQuery.paid = paid;
+      }
+      if (applicationType) {
+        eventEntertainerQuery.applicationType = applicationType;
+      }
+
+      const eventInclude = [
+        {
+          model: EventEntertainer,
+          as: 'entertainers',
+          where: eventEntertainerQuery,
+          include: [
+            {
+              model: EntertainerProfile,
+              as: 'entertainer',
+              attributes: [
+                'id',
+                'stageName',
+                'entertainerType',
+                'location',
+                'about',
+              ],
+              include: [
+                {
+                  model: User,
+                  as: 'personalDetails',
+                  attributes: [
+                    'id',
+                    'firstName',
+                    'lastName',
+                    'profileImageURL',
+                  ],
+                },
+              ],
+            },
+            {
+              model: Application,
+              as: 'applications',
+              where: applicationQuery,
+            },
+          ],
+        },
+        {
+          model: User,
+          as: 'owner',
+          attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+        },
+      ];
+
+      const options = {
+        offset: offset || 0,
+        limit: limit || 10,
+        where: eventQuery,
+        include: eventInclude,
+      };
+
+      try {
+        const { result, pagination } = await getAll(Event, options);
+        return res.status(200).json({ events: result, pagination });
+      } catch (error) {
+        return res.status(500).json({ error: error.message });
+      }
+    } catch (error) {
+      const status = error.status || 500;
+      const errorMessage = error.message || error;
+      return res.status(status).json({ message: errorMessage });
+    }
   },
   // update event details
   // inform entertainer

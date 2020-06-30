@@ -247,7 +247,7 @@ const ApplicationController = {
               },
               {
                 [Op.and]: Sequelize.literal(
-                  `"applications"."status" = 'Pending'`
+                  `"applications"."status" = ${REQUEST_ACTION.PENDING}`
                 ),
               },
               {
@@ -272,7 +272,7 @@ const ApplicationController = {
               },
               {
                 [Op.and]: Sequelize.literal(
-                  `"applications"."status" = 'Pending'`
+                  `"applications"."status" = ${REQUEST_ACTION.PENDING}`
                 ),
               },
               {

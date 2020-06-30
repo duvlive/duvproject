@@ -41,7 +41,7 @@ const paymentRoutes = (router) => {
     '/api/v1/pay/entertainer',
     Authentication.verifyToken,
     Authentication.validateAdmin,
-    PaymentController.PayEntertainer
+    PaymentController.payEntertainer
   );
 
   router.get(

@@ -12,7 +12,7 @@ import {
   EventEntertainer,
   Application,
 } from '../models';
-import { USER_TYPES } from '../constant';
+import { ENTERTAINER_APPROVAL, USER_TYPES } from '../constant';
 import { getAll } from '../utils/modelHelper';
 
 export const userAssociatedModels = [
@@ -615,7 +615,11 @@ const EntertainerProfileController = {
   },
 
   getTotalEntertainers(req, res) {
-    EntertainerProfile.findAll()
+    EntertainerProfile.findAll({
+      where: {
+        approved: ENTERTAINER_APPROVAL['APPROVED'],
+      },
+    })
       .then((entertainers) => {
         return res.status(200).json({
           message: 'Total Entertainers',
