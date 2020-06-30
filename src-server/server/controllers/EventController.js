@@ -849,6 +849,7 @@ const EventController = {
 
   async getAllEvents(req, res) {
     const {
+      applicationType,
       auctionStartDate,
       auctionEndDate,
       cancelled,
@@ -863,6 +864,7 @@ const EventController = {
       offset,
       startTime,
       state,
+      status,
       userId,
     } = req.query;
 
@@ -930,6 +932,17 @@ const EventController = {
         eventQuery.limit = limit;
       }
 
+      let applicationQuery = {};
+      if (status) {
+        eventEntertainerQuery.status = status || EVENT_HIRETYPE.AUCTION;
+      }
+      if (paid) {
+        eventEntertainerQuery.paid = paid;
+      }
+      if (applicationType) {
+        eventEntertainerQuery.applicationType = applicationType;
+      }
+
       const eventInclude = [
         {
           model: EventEntertainer,
@@ -962,6 +975,7 @@ const EventController = {
             {
               model: Application,
               as: 'applications',
+              where: applicationQuery,
             },
           ],
         },
