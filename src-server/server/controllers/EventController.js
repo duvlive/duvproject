@@ -925,13 +925,6 @@ const EventController = {
       if (startTime) {
         eventQuery.startTime = { [Op.eq]: startTime };
       }
-      if (offset) {
-        eventQuery.offset = offset;
-      }
-      if (limit) {
-        eventQuery.limit = limit;
-      }
-
       let applicationQuery = {};
       if (status) {
         eventEntertainerQuery.status = status || EVENT_HIRETYPE.AUCTION;
