@@ -868,7 +868,6 @@ const EventController = {
       userId,
     } = req.query;
 
-    eventEntertainerQuery;
     try {
       let eventEntertainerQuery = {};
       if (hireType) {
