@@ -848,41 +848,30 @@ const EventController = {
   },
 
   async getAllEvents(req, res) {
-    const {
-      applicationType,
-      auctionStartDate,
-      auctionEndDate,
-      cancelled,
-      cancelledDate,
-      eventDate,
-      eventType,
-      highestBudget,
-      hireType,
-      limit,
-      language,
-      lowestBudget,
-      offset,
-      paid,
-      startTime,
-      state,
-      status,
-      userId,
-    } = req.query;
+    const { highestBudget, language, limit, lowestBudget, offset } = req.query;
 
     try {
       let eventEntertainerQuery = {};
-      if (hireType) {
-        eventEntertainerQuery.hireType = hireType || EVENT_HIRETYPE.AUCTION;
-      }
-      if (cancelled) {
-        eventEntertainerQuery.cancelled = cancelled;
-      }
+      const eventEntertainerStaticKeys = [
+        'auctionEndDate',
+        'auctionStartDate',
+        'cancelled',
+        'hireType',
+      ];
+
+      eventEntertainerStaticKeys.forEach((key) => {
+        if (req.query[key]) {
+          eventEntertainerQuery[key] = req.query[key];
+        }
+      });
+
       if (lowestBudget && parseInt(lowestBudget, 10) > 0) {
         eventEntertainerQuery.lowestBudget = { [Op.gte]: lowestBudget };
       }
       if (highestBudget && parseInt(highestBudget, 10) > 0) {
         eventEntertainerQuery.highestBudget = { [Op.lte]: highestBudget };
       }
+
       if (language) {
         const languages = JSON.parse(language);
 
@@ -896,45 +885,28 @@ const EventController = {
           [Op.and]: languageQuery,
         };
       }
-      if (auctionStartDate) {
-        eventEntertainerQuery.auctionStartDate = auctionStartDate;
-      }
-      if (auctionEndDate) {
-        eventEntertainerQuery.auctionEndDate = auctionEndDate;
-      }
 
+      const staticKeys = ['cancelled', 'eventType', 'state', 'userId'];
+      const dateKeys = ['cancelledDate', 'eventDate', 'startTime'];
       let eventQuery = {};
-      if (cancelled) {
-        eventQuery.cancelled = cancelled;
-      }
-      if (eventType) {
-        eventQuery.eventType = eventType;
-      }
-      if (state) {
-        eventQuery.state = state;
-      }
-      if (userId) {
-        eventQuery.userId = userId;
-      }
-      if (cancelledDate) {
-        eventQuery.cancelledDate = { [Op.eq]: cancelledDate };
-      }
-      if (eventDate) {
-        eventQuery.eventDate = { [Op.eq]: eventDate };
-      }
-      if (startTime) {
-        eventQuery.startTime = { [Op.eq]: startTime };
-      }
+      staticKeys.forEach((key) => {
+        if (req.query[key]) {
+          eventQuery[key] = req.query[key];
+        }
+      });
+      dateKeys.forEach((key) => {
+        if (req.query[key]) {
+          eventQuery[key] = { [Op.eq]: req.query[key] };
+        }
+      });
+
+      const applicationKeys = ['applicationType', 'paid', 'status'];
       let applicationQuery = {};
-      if (status) {
-        applicationQuery.status = status || EVENT_HIRETYPE.AUCTION;
-      }
-      if (paid) {
-        applicationQuery.paid = paid;
-      }
-      if (applicationType) {
-        applicationQuery.applicationType = applicationType;
-      }
+      applicationKeys.forEach((key) => {
+        if (req.query[key]) {
+          applicationQuery[key] = req.query[key];
+        }
+      });
 
       const eventInclude = [
         {
