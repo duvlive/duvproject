@@ -38,7 +38,7 @@ const Notifications = () => {
         console.log(error.response.data.message);
         setNotifications([]);
       });
-  }, []);
+  }, [userDispatch]);
   return (
     <BackEndPage title="Notifications">
       <div className="main-app">

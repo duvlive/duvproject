@@ -282,6 +282,7 @@ const ENTERTAINER_TAB_LIST = [
         <EntertainerSectionInfo entertainer={entertainer} showContentOnly />
       </>
     ),
+      entertainer.profileImageURL && entertainer.profile.stageName,
   },
   {
     id: 'bankAccount',
@@ -292,6 +293,7 @@ const ENTERTAINER_TAB_LIST = [
         <BankDetails bankDetail={entertainer.bankDetail} />
       </>
     ),
+    completed: (entertainer) => !!entertainer.bankDetail.accountName,
   },
   {
     id: 'contact',
@@ -302,6 +304,7 @@ const ENTERTAINER_TAB_LIST = [
         <ContactDetails contacts={entertainer.contacts} />
       </>
     ),
+    completed: (entertainer) => !!entertainer.contacts[0].email,
   },
   {
     id: 'youTube',
@@ -312,6 +315,7 @@ const ENTERTAINER_TAB_LIST = [
         <YouTubeChannel profile={entertainer.profile} />{' '}
       </>
     ),
+    completed: (entertainer) => !!entertainer.profile.youTubeChannel,
   },
   {
     id: 'identification',
@@ -322,6 +326,7 @@ const ENTERTAINER_TAB_LIST = [
         <Identification identification={entertainer.identification} />
       </>
     ),
+    completed: (entertainer) => !!entertainer.identification.idNumber,
   },
 ];
 
@@ -375,7 +380,9 @@ const EntertainerTab = ({ entertainer }) => {
             >
               {tab.name}{' '}
               {entertainer.approvalComment[tab.id] === 'YES' ? (
-                <span className="icon icon-ok-circled"></span>
+                <span className="icon icon-ok-circled text-green"></span>
+              ) : tab.completed(entertainer) ? (
+                <span className="icon icon-ok"></span>
               ) : (
                 <span className="icon icon-help"></span>
               )}
@@ -393,14 +400,16 @@ const EntertainerTab = ({ entertainer }) => {
                   <span className="icon icon-ok-circled"></span> Approved
                 </h4>
               ) : (
-                <Button
-                  className="btn-danger btn-wide btn-transparent"
-                  onClick={() =>
-                    addSingleComment(entertainer.id, { [tab.id]: 'YES' })
-                  }
-                >
-                  Approve {tab.name}
-                </Button>
+                tab.completed(entertainer) && (
+                  <Button
+                    className="btn-danger btn-wide btn-transparent"
+                    onClick={() =>
+                      addSingleComment(entertainer.id, { [tab.id]: 'YES' })
+                    }
+                  >
+                    Approve {tab.name}
+                  </Button>
+                )
               )}
             </Row>
           </TabPane>
