@@ -417,24 +417,17 @@ const PaymentController = {
    * @return {object} returns res object
    */
   async getAllPayments(req, res) {
-    const {
-      amount,
-      entertainerId,
-      eventEntertainerId,
-      offset,
-      limit,
-    } = req.query;
+    const { offset, limit } = req.query;
     try {
       let paymentQuery = {};
-      if (entertainerId) {
-        paymentQuery.entertainerId = entertainerId;
-      }
-      if (amount) {
-        paymentQuery.amount = amount;
-      }
-      if (eventEntertainerId) {
-        paymentQuery.eventEntertainerId = eventEntertainerId;
-      }
+      const paymentKeys = ['amount', 'entertainerId', 'eventEntertainerId'];
+
+      paymentKeys.forEach((key) => {
+        if (req.query[key]) {
+          paymentQuery[key] = { [Op.eq]: req.query[key] };
+        }
+      });
+
       const options = {
         offset: offset || 0,
         limit: limit || 10,

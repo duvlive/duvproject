@@ -153,15 +153,15 @@ const BadgeController = {
    * @return {object} returns res object
    */
   async getAllBadgeUsers(req, res) {
-    const { badgeId, userId, offset, limit } = req.query;
+    const { offset, limit } = req.query;
     try {
+      const badgeKeys = ['badgeId', 'userId'];
       let badgeUserQuery = {};
-      if (badgeId) {
-        badgeUserQuery.badgeId = badgeId;
-      }
-      if (userId) {
-        badgeUserQuery.userId = userId;
-      }
+      badgeKeys.forEach((key) => {
+        if (req.query[key]) {
+          badgeUserQuery[key] = { [Op.eq]: req.query[key] };
+        }
+      });
       const options = {
         offset: offset || 0,
         limit: limit || 10,

@@ -265,19 +265,16 @@ const ReviewController = {
    * @return {object} json response
    */
   async getReviews(req, res) {
-    const { userId, entertainerId, ratingId } = req.params;
     const { offset, limit } = req.query;
     try {
       let reviewQuery = {};
-      if (userId) {
-        reviewQuery.userId = userId;
-      }
-      if (entertainerId) {
-        reviewQuery.entertainerId = entertainerId;
-      }
-      if (ratingId) {
-        reviewQuery.ratingId = ratingId;
-      }
+      const reviewKeys = ['entertainerId', 'ratingId', 'userId'];
+      reviewKeys.forEach((key) => {
+        if (req.query[key]) {
+          reviewQuery[key] = { [Op.eq]: req.query[key] };
+        }
+      });
+
       const options = {
         offset: offset || 0,
         limit: limit || 10,
@@ -289,17 +286,11 @@ const ReviewController = {
         //   },
         // ],
       };
-      try {
-        const { result, pagination } = await getAll(Review, options);
-        return res.status(200).json({
-          result,
-          pagination,
-        });
-      } catch (error) {
-        const status = error.status || 500;
-        const errorMessage = error.message || error;
-        return res.status(status).json({ message: errorMessage });
-      }
+      const { result, pagination } = await getAll(Review, options);
+      return res.status(200).json({
+        result,
+        pagination,
+      });
     } catch (error) {
       const status = error.status || 500;
       const errorMessage = error.message || error;

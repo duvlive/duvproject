@@ -320,19 +320,17 @@ const RatingController = {
    * @return {object} json response
    */
   async getRatings(req, res) {
-    const { userId, entertainerId, eventEntertainerId } = req.params;
     const { offset, limit } = req.query;
     try {
+      const ratingKeys = ['entertainerId', 'eventEntertainerId', 'userId'];
       let ratingQuery = {};
-      if (userId) {
-        ratingQuery.userId = userId;
-      }
-      if (entertainerId) {
-        ratingQuery.entertainerId = entertainerId;
-      }
-      if (eventEntertainerId) {
-        ratingQuery.eventEntertainerId = eventEntertainerId;
-      }
+
+      ratingKeys.forEach((key) => {
+        if (req.query[key]) {
+          ratingQuery[key] = { [Op.eq]: req.query[key] };
+        }
+      });
+
       const options = {
         offset: offset || 0,
         limit: limit || 10,
