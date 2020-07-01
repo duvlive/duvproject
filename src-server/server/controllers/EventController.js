@@ -892,7 +892,7 @@ const EventController = {
             [Op.substring]: lang,
           });
         }
-        eventEntertainerQuery.preferredLanguage = {
+        eventEntertainerQuery.language = {
           [Op.and]: languageQuery,
         };
       }
