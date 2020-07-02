@@ -956,7 +956,7 @@ const EventController = {
             {
               model: Application,
               as: 'applications',
-              // where: applicationQuery,
+              where: applicationQuery,
             },
           ],
         },
