@@ -131,6 +131,10 @@ export const identificationSchema = {
   expiryDate: required('Expiry Date'),
 };
 
+export const entertainerCommentSchema = {
+  comments: required('Comments')
+};
+
 export const bidSchema = (minAuctionPrice = 0, maxAuctionPrice = 0) => {
   return {
     askingPrice: positiveNumberValidation('Your Bid')

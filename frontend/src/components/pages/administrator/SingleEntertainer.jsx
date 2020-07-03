@@ -28,6 +28,12 @@ import {
 import AlertMessage from 'components/common/utils/AlertMessage';
 import Button from 'components/forms/Button';
 import NoContent from 'components/common/utils/NoContent';
+import DuvLiveModal from 'components/custom/Modal';
+import TextArea from 'components/forms/TextArea';
+import { setInitialValues } from 'components/forms/form-helper';
+import { entertainerCommentSchema } from 'components/forms/schema/entertainerSchema';
+import { Formik, Form } from 'formik';
+import { createSchema } from 'components/forms/schema/schema-helpers';
 
 const SingleEntertainer = ({ id }) => {
   const [entertainer, setEntertainer] = React.useState(null);
@@ -60,13 +66,13 @@ const SingleEntertainer = ({ id }) => {
           {entertainer && !entertainer.firstName ? (
             <NoContent isButton text="Entertainer Not Found" />
           ) : (
-            <>
-              {entertainer && <EntertainerProfile entertainer={entertainer} />}
-              {entertainer && entertainer.profile && (
-                <ApprovedEntertainerInfo entertainer={entertainer} />
-              )}
-            </>
-          )}
+              <>
+                {entertainer && <EntertainerProfile entertainer={entertainer} />}
+                {entertainer && entertainer.profile && (
+                  <ApprovedEntertainerInfo entertainer={entertainer} />
+                )}
+              </>
+            )}
         </section>
       </div>
     </BackEndPage>
@@ -282,7 +288,7 @@ const ENTERTAINER_TAB_LIST = [
         <EntertainerSectionInfo entertainer={entertainer} showContentOnly />
       </>
     ),
-      entertainer.profileImageURL && entertainer.profile.stageName,
+    completed: (entertainer) => entertainer.profileImageURL && entertainer.profile.stageName,
   },
   {
     id: 'bankAccount',
@@ -304,7 +310,7 @@ const ENTERTAINER_TAB_LIST = [
         <ContactDetails contacts={entertainer.contacts} />
       </>
     ),
-    completed: (entertainer) => !!entertainer.contacts[0].email,
+    completed: (entertainer) => entertainer.contacts[0] && !!entertainer.contacts[0].email,
   },
   {
     id: 'youTube',
@@ -333,6 +339,7 @@ const ENTERTAINER_TAB_LIST = [
 const EntertainerTab = ({ entertainer }) => {
   const [activeTab, setActiveTab] = React.useState(0);
   const [message, setMessage] = React.useState(null);
+  const [forceClose, setForceClose] = React.useState(false)
 
   const addSingleComment = (userId, comments) => {
     console.log('userId, comments', userId, comments);
@@ -347,6 +354,8 @@ const EntertainerTab = ({ entertainer }) => {
       .then(function (response) {
         const { status } = response;
         if (status === 200) {
+          setForceClose(true);
+          // user dispatch the approved stuff
           setMessage({
             type: 'success',
             message: `Your comment has been successfully submitted`,
@@ -380,12 +389,12 @@ const EntertainerTab = ({ entertainer }) => {
             >
               {tab.name}{' '}
               {entertainer.approvalComment[tab.id] === 'YES' ? (
-                <span className="icon icon-ok-circled text-green"></span>
+                <span className="icon icon-ok-circled"></span>
               ) : tab.completed(entertainer) ? (
-                <span className="icon icon-ok"></span>
+                <span className="icon icon-help "></span>
               ) : (
-                <span className="icon icon-help"></span>
-              )}
+                    <span className="icon icon-cancel-circled "></span>
+                  )}
             </NavLink>
           </NavItem>
         ))}
@@ -400,17 +409,36 @@ const EntertainerTab = ({ entertainer }) => {
                   <span className="icon icon-ok-circled"></span> Approved
                 </h4>
               ) : (
-                tab.completed(entertainer) && (
-                  <Button
-                    className="btn-danger btn-wide btn-transparent"
-                    onClick={() =>
-                      addSingleComment(entertainer.id, { [tab.id]: 'YES' })
-                    }
-                  >
-                    Approve {tab.name}
-                  </Button>
-                )
-              )}
+                  tab.completed(entertainer) && (
+                    <>
+                      {entertainer.approvalComment[tab.id] && <div className="row col-sm-12 mb-4">
+                        <AlertMessage message={entertainer.approvalComment[tab.id]} type="info" />
+                      </div>}
+                      <Button
+                        className="btn btn-danger btn-wide btn-transparent"
+                        onClick={() =>
+                          addSingleComment(entertainer.id, { [tab.id]: 'YES' })
+                        }
+                      >
+                        Approve {tab.name}
+                      </Button>
+                        &nbsp;&nbsp;&nbsp;
+                      <DuvLiveModal
+                        body={<AddCommentsForm addSingleComment={addSingleComment} entertainerId={entertainer.id} name={tab.name} tabId={tab.id} />}
+                        closeModalText="Cancel"
+                        forceCloseModal={forceClose}
+                        title="Add Comments"
+                      >
+                        <button
+                          className="btn btn-info btn-wide btn-transparent"
+                        >
+                          Reject {tab.name}
+                        </button>
+                      </DuvLiveModal>
+
+                    </>
+                  )
+                )}
             </Row>
           </TabPane>
         ))}
@@ -422,4 +450,41 @@ const EntertainerTab = ({ entertainer }) => {
 EntertainerTab.propTypes = {
   entertainer: PropTypes.object.isRequired,
 };
+
+const AddCommentsForm = ({ addSingleComment, entertainerId, name, tabId }) => (
+  <Formik
+    initialValues={setInitialValues(entertainerCommentSchema)}
+    onSubmit={({ comments }) => { addSingleComment(entertainerId, { [tabId]: comments }) }}
+    render={({ isSubmitting, handleSubmit }) => (
+      <>
+        <Form>
+          <TextArea
+            label="Comment"
+            name="comments"
+            placeholder="Reason for rejecting application"
+            rows="2"
+          />
+
+          <Button
+            className="btn-info btn-wide btn-transparent mt-2"
+            loading={isSubmitting}
+            onClick={handleSubmit}
+          >
+            Reject {name}
+          </Button>
+        </Form>
+      </>
+    )}
+    validationSchema={createSchema(entertainerCommentSchema)}
+  />
+);
+
+
+AddCommentsForm.propTypes = {
+  addSingleComment: PropTypes.func.isRequired,
+  entertainerId: PropTypes.any.isRequired,
+  name: PropTypes.string.isRequired,
+  tabId: PropTypes.string.isRequired,
+};
+
 export default SingleEntertainer;
