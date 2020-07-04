@@ -424,6 +424,7 @@ const EntertainerTab = ({ entertainer }) => {
                       </Button>
                         &nbsp;&nbsp;&nbsp;
                       <DuvLiveModal
+                        beforeModalOpen={() => setForceClose(false)}
                         body={<AddCommentsForm addSingleComment={addSingleComment} entertainerId={entertainer.id} name={tab.name} tabId={tab.id} />}
                         closeModalText="Cancel"
                         forceCloseModal={forceClose}
