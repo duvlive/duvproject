@@ -8,11 +8,14 @@ import NoContent from 'components/common/utils/NoContent';
 import { getLongDate } from 'utils/date-helpers';
 import { getTokenFromStore } from 'utils/localStorage';
 import LoadItems from 'components/common/utils/LoadItems';
+import { UserContext } from 'context/UserContext';
 
 const NOTIFICATIONS_COLOR = ['red', 'yellow', 'blue', 'green'];
 
 const Notifications = () => {
   const [notifications, setNotifications] = React.useState(null);
+  const { userDispatch } = React.useContext(UserContext);
+
   React.useEffect(() => {
     axios
       .get('/api/v1/notifications', {
@@ -25,6 +28,9 @@ const Notifications = () => {
         console.log('status,data', status, data);
         // handle success
         if (status === 200) {
+          userDispatch({
+            type: 'notifications',
+          });
           setNotifications(data.notifications);
         }
       })
@@ -32,7 +38,7 @@ const Notifications = () => {
         console.log(error.response.data.message);
         setNotifications([]);
       });
-  }, []);
+  }, [userDispatch]);
   return (
     <BackEndPage title="Notifications">
       <div className="main-app">

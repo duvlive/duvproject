@@ -36,7 +36,24 @@ const NotificationController = {
       where: { userId },
       order: [['updatedAt', 'DESC']],
     })
-      .then((notifications) => res.json({ notifications }))
+      .then((notifications) => {
+        return Notification.update(
+          {
+            status: 1,
+          },
+          {
+            where: { userId },
+          }
+        )
+          .then(() => {
+            return res.json({ notifications });
+          })
+          .catch((error) => {
+            const status = error.status || 500;
+            const errorMessage = error.message || error;
+            return res.status(status).json({ message: errorMessage });
+          });
+      })
       .catch((error) => res.status(412).json({ msg: error.message }));
   },
 };

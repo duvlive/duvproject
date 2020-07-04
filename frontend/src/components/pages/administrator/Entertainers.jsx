@@ -31,6 +31,7 @@ const Entertainers = () => {
 };
 
 const EntertainersRow = ({
+  approved,
   number,
   stageName,
   slug,
@@ -38,6 +39,7 @@ const EntertainersRow = ({
   entertainerType,
   profileImageURL,
   location,
+  profileInfo,
   willingToTravel,
 }) => (
   <tr>
@@ -81,13 +83,31 @@ const EntertainersRow = ({
     </td>
 
     <td className="align-middle">
+      <small className="small--4 text-muted">Approved</small>
+      {approved ? (
+        <span className="text-green text-uppercase">
+          <i className="icon icon-ok-circled"></i> Yes{' '}
+        </span>
+      ) : (
+        <span className="text-red text-uppercase">
+          <i className="icon icon-cancel"></i> No{' '}
+        </span>
+      )}
+    </td>
+
+    <td className="align-middle text-left">
+      <small className="small--4 text-muted">Profile</small>
+      <span className="text-muted-light-2">{profileInfo}/5</span>
+    </td>
+
+    <td className="align-middle">
       <Link
         className="btn btn-sm btn-transparent btn-danger"
         to={`/admin/entertainers/${entertainerId}`}
       >
         Manage
       </Link>
-      {slug && (
+      {/* {slug && (
         <>
           &nbsp;&nbsp;
           <a
@@ -99,26 +119,30 @@ const EntertainersRow = ({
             View Profile
           </a>
         </>
-      )}
+      )} */}
     </td>
   </tr>
 );
 
 EntertainersRow.defaultProps = {
+  approved: null,
   entertainerType: null,
   location: null,
   profileImageURL: null,
+  profileInfo: '0',
   slug: null,
   stageName: null,
   willingToTravel: false,
 };
 
 EntertainersRow.propTypes = {
+  approved: PropTypes.bool,
   entertainerId: PropTypes.any.isRequired,
   entertainerType: PropTypes.string,
   location: PropTypes.string,
   number: PropTypes.any.isRequired,
   profileImageURL: PropTypes.string,
+  profileInfo: PropTypes.any,
   slug: PropTypes.string,
   stageName: PropTypes.string,
   willingToTravel: PropTypes.bool,
@@ -134,6 +158,7 @@ export const EntertainerFilter = ({ setFilterTerms }) => {
         setFilterTerms(
           { ...value, language: JSON.stringify(value.language) },
           {
+            approved: `Approved : ${value.approved}`,
             entertainerType: `Entertainer Type: ${value.entertainerType}`,
             language: `Language: ${value.language}`,
             lowestBudget: `Base Charge: ${value.lowestBudget}`,
@@ -141,11 +166,6 @@ export const EntertainerFilter = ({ setFilterTerms }) => {
             location: `Location: ${value.location}`,
           }
         );
-        console.log(
-          'JSON.stringify(value.language) value.language',
-          JSON.stringify(value.language)
-        );
-        console.log('value.language', value.language);
         actions.setSubmitting(false);
       }}
       render={({ isSubmitting, handleSubmit }) => (
@@ -160,14 +180,17 @@ export const EntertainerFilter = ({ setFilterTerms }) => {
                 options={SELECT_ENTERTAINERS_TYPE}
                 placeholder="Entertainer Type"
                 showFeedback={feedback.ERROR}
-              />
-              <MultiSelect
+              />{' '}
+              <Select
+                blankOption="Select Approval"
                 formGroupClassName="col-md-6"
-                label="Language"
-                name="language"
+                label="Approved"
+                name="approved"
                 optional
-                options={LANGUAGE}
-                placeholder="Preferred Language"
+                options={[
+                  { label: 'Approved Entertainers', value: 'YES' },
+                  { label: 'Unapproved Entertainers', value: 'NO' },
+                ]}
                 showFeedback={feedback.ERROR}
               />
             </div>
@@ -197,6 +220,15 @@ export const EntertainerFilter = ({ setFilterTerms }) => {
                 name="location"
                 optional
                 options={[anyState, ...getStates()]}
+                showFeedback={feedback.ERROR}
+              />
+              <MultiSelect
+                formGroupClassName="col-md-6"
+                label="Language"
+                name="language"
+                optional
+                options={LANGUAGE}
+                placeholder="Preferred Language"
                 showFeedback={feedback.ERROR}
               />
             </div>

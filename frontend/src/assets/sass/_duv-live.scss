@@ -661,3 +661,11 @@ a:hover {
     }
   }
 }
+
+.tab-pane {
+  border: 1px solid $text-muted-light;
+  border-top-color: transparent;
+  margin-top: -1px;
+  border-radius: 3px;
+  padding: 2rem 3rem;
+}

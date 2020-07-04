@@ -83,6 +83,14 @@ export const userAssociatedModels = [
     as: 'identification',
   },
   {
+    model: Notification,
+    as: 'notifications',
+    required: false,
+    where: {
+      status: 0,
+    },
+  },
+  {
     model: Event,
     as: 'events',
     include: [
@@ -135,6 +143,7 @@ const UserController = {
       bankDetail: user.bankDetail,
       contacts: user.contacts,
       events: user.events,
+      notifications: user.notifications,
       galleries: user.galleries,
       identification: user.identification,
       ratings: user.ratings,

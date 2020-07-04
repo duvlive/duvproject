@@ -75,7 +75,7 @@ $theme-colors: map-merge(
     'warning': $warning,
     'danger': $danger,
     'light': $light,
-    'dark': $dark
+    'dark': $dark,
   ),
   $theme-colors
 );
@@ -89,6 +89,9 @@ $sidebar-width: 18rem;
 $text-color: #86939e;
 $text-muted: #585963;
 $text-color-secondary: #575757;
+
+$text-muted-light: lighten($text-muted, 15);
+$text-muted-light-2: lighten($text-muted, 50);
 
 $body-bg: $black;
 $body-color: $text-color;
@@ -384,3 +387,11 @@ $badge-border-radius: 0.1rem;
 $list-group-color: $white;
 $list-group-bg: rgba($blue, 0.1);
 $list-group-border-color: rgba($blue, 0.2);
+
+// Nav Tabs
+$nav-tabs-border-color: $text-muted-light;
+$nav-tabs-border-radius: 3px;
+$nav-tabs-link-hover-border-color: $text-muted;
+$nav-tabs-link-active-color: $text-muted-light;
+$nav-tabs-link-active-border-color: $text-muted-light $text-muted-light
+  transparent;

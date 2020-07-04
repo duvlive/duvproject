@@ -46,8 +46,8 @@ const EMAIL_CONTENT = {
     title: 'FAQ',
   },
   INVITE_FRIEND: {
-    subject: 'INVITE FRIEND',
-    title: 'INVITE FRIEND',
+    subject: 'FRIEND INVITE',
+    title: 'FRIEND INVITE',
     contentFooter:
       'We look forward to having you as part of those seeking a richer experience on our platform.',
     buttonText: 'JOIN NOW',

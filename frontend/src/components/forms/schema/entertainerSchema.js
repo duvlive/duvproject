@@ -92,6 +92,7 @@ export const addEntertainerSchema = (type, entertainer) => {
 };
 
 export const recommendEntertainerSchema = {
+  approved: optionalValidation(stringValidation('Approved')),
   entertainerType: stringValidation('Entertainer Type'),
   language: multiSelectValidation('Language'),
   location: optionalValidation(stringValidation('Location')),
@@ -128,6 +129,10 @@ export const identificationSchema = {
   idNumber: stringValidation('ID Number'),
   issueDate: required('Issue Date'),
   expiryDate: required('Expiry Date'),
+};
+
+export const entertainerCommentSchema = {
+  comments: required('Comments')
 };
 
 export const bidSchema = (minAuctionPrice = 0, maxAuctionPrice = 0) => {

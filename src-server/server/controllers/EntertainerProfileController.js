@@ -11,6 +11,10 @@ import {
   Video,
   EventEntertainer,
   Application,
+  BankDetail,
+  Contact,
+  Identification,
+  ApprovalComment,
 } from '../models';
 import { ENTERTAINER_APPROVAL, USER_TYPES } from '../constant';
 import { getAll } from '../utils/modelHelper';
@@ -56,7 +60,41 @@ const formatSearchEntertainers = (result) =>
       slug: user.profile.slug,
       stageName: user.profile.stageName,
       willingToTravel: user.profile.willingToTravel,
-      yearnStarted: user.profile.yearnStarted,
+      yearStarted: user.profile.yearStarted,
+    };
+    return [...acc, entertainer];
+  }, []);
+
+const formatAllEntertainers = (result) =>
+  result.reduce((acc, user) => {
+    const entertainer = {
+      id: user.id,
+      about: user.profile.about,
+      approved: user.profile.approved,
+      availableFor: user.profile.availableFor,
+      baseCharges: user.profile.baseCharges,
+      entertainerId: user.profile.id,
+      entertainerType: user.profile.entertainerType,
+      location: user.profile.location,
+      preferredCharges: user.profile.preferredCharges,
+      profileImageURL: user.profileImageURL,
+      ratings: user.profile.ratings,
+      slug: user.profile.slug,
+      stageName: user.profile.stageName,
+      willingToTravel: user.profile.willingToTravel,
+      yearStarted: user.profile.yearStarted,
+      // bankDetail: user.bankDetail,
+      // contacts: user.contacts,
+      approvalComment: user.approvalComment,
+      // identification: !!user.identification,
+      // youtubeChannel: !!user.profile.youTubeChannel,
+      profileInfo: [
+        !!user.profileImageURL && !!user.profile.stageName,
+        !!user.bankDetail.accountNumber,
+        !!user.contacts[0] && !!user.contacts[0].firstName,
+        !!user.profile.youTubeChannel,
+        !!user.identification.idType,
+      ].filter((e) => e).length,
     };
     return [...acc, entertainer];
   }, []);
@@ -662,6 +700,7 @@ const EntertainerProfileController = {
       highestBudget,
       language,
       location,
+      approved,
       limit,
       offset,
     } = req.query;
@@ -697,11 +736,40 @@ const EntertainerProfileController = {
         entertainerQuery.location = { [Op.eq]: location };
       }
 
+      if (approved) {
+        entertainerQuery.approved = {
+          [Op.eq]: approved === 'YES' ? true : false,
+        };
+      }
+
       const include = [
         {
           model: EntertainerProfile,
           as: 'profile',
           where: entertainerQuery,
+        },
+        {
+          model: BankDetail,
+          as: 'bankDetail',
+        },
+        {
+          model: Contact,
+          as: 'contacts',
+        },
+        {
+          model: ApprovalComment,
+          as: 'approvalComment',
+          attributes: [
+            'entertainerProfile',
+            'bankAccount',
+            'contact',
+            'identification',
+            'youTube',
+          ],
+        },
+        {
+          model: Identification,
+          as: 'identification',
         },
       ];
 
@@ -713,7 +781,7 @@ const EntertainerProfileController = {
         });
         return res
           .status(200)
-          .json({ entertainers: formatSearchEntertainers(result), pagination });
+          .json({ entertainers: formatAllEntertainers(result), pagination });
       } catch (error) {
         const status = error.status || 500;
         const errorMessage = error.message || error;

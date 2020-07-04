@@ -239,7 +239,7 @@ EntertainerSectionInfo.defaultProps = {
   showContentOnly: false,
 };
 
-const InfoList = ({ title, children }) => (
+export const InfoList = ({ title, children }) => (
   <div className="entertainer-info__list">
     <h6>{title}</h6>
     <h3>{children}</h3>

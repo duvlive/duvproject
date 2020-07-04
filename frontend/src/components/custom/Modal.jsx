@@ -7,12 +7,14 @@ const DuvLiveModal = ({
   actionButtonColor,
   actionText,
   actionFn,
+  beforeModalOpen,
   body,
   cancelButtonColor,
   children,
   childrenClassName,
   className,
   closeModalText,
+  forceCloseModal,
   title,
 }) => {
   const [modal, setModal] = useState(false);
@@ -20,9 +22,17 @@ const DuvLiveModal = ({
     actionFn();
     setModal(!modal);
   };
+
+  React.useEffect(() => {
+    if (forceCloseModal && modal) {
+      setModal(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [forceCloseModal])
+
   return (
     <Fragment>
-      <span className={childrenClassName} onClick={() => setModal(!modal)}>
+      <span className={childrenClassName} onClick={() => { beforeModalOpen(); setModal(!modal) }}>
         {children}
       </span>
       <Modal
@@ -59,23 +69,27 @@ DuvLiveModal.propTypes = {
   actionButtonColor: PropTypes.string,
   actionFn: PropTypes.func,
   actionText: PropTypes.string,
+  beforeModalOpen: PropTypes.func,
   body: PropTypes.node.isRequired,
   cancelButtonColor: PropTypes.string,
   children: PropTypes.node.isRequired,
   childrenClassName: PropTypes.string,
   className: PropTypes.string,
   closeModalText: PropTypes.string,
+  forceCloseModal: PropTypes.bool,
   title: PropTypes.node,
 };
 
 DuvLiveModal.defaultProps = {
   actionButtonColor: 'success',
-  actionFn: () => {},
+  actionFn: () => { },
   actionText: '',
+  beforeModalOpen: () => { },
   cancelButtonColor: 'danger',
   childrenClassName: 'duvlive-modal',
   className: '',
   closeModalText: 'Close',
+  forceCloseModal: false,
   title: null,
 };
 

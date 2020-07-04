@@ -126,11 +126,11 @@ label {
 }
 
 .text-muted-light {
-  color: lighten($text-muted, 12);
+  color: $text-muted-light;
 }
 
 .text-muted-light-2 {
-  color: lighten($text-muted, 40);
+  color: $text-muted-light-2;
 }
 
 .text-font {
@@ -149,4 +149,11 @@ label {
   &:hover {
     color: $red-300;
   }
+}
+
+.tab-header {
+  color: $red-100;
+  margin: 2rem 0;
+  font-size: 2rem;
+  font-weight: normal;
 }
