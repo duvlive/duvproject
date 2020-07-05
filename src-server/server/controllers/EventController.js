@@ -13,6 +13,7 @@ import {
 import sendMail from '../MailSender';
 import EMAIL_CONTENT from '../email-template/content';
 import { EVENT_HIRETYPE, NOTIFICATIONS, NOTIFICATION_TYPE } from '../constant';
+import { addDays, isValid, parse } from 'date-fns';
 
 const reviewsInclude = [
   {
@@ -886,7 +887,13 @@ const EventController = {
         };
       }
 
-      const staticKeys = ['cancelled', 'eventType', 'state', 'userId'];
+      const staticKeys = [
+        'cancelled',
+        'eventType',
+        'state',
+        'userId',
+        'eventDuration',
+      ];
       const dateKeys = ['cancelledDate', 'eventDate', 'startTime'];
       let eventQuery = {};
       staticKeys.forEach((key) => {
@@ -895,10 +902,19 @@ const EventController = {
         }
       });
       dateKeys.forEach((key) => {
-        if (req.query[key]) {
-          eventQuery[key] = { [Op.eq]: req.query[key] };
+        if (req.query[key] && isValid(parse(req.query[key]))) {
+          eventQuery[key] = {
+            [Op.gte]: parse(req.query[key]),
+            [Op.lte]: addDays(parse(req.query[key]), 1),
+          };
         }
       });
+
+      if (req.query['cancelled']) {
+        eventQuery.cancelled = {
+          [Op.eq]: req.query['cancelled'] === 'YES' ? true : false,
+        };
+      }
 
       const applicationKeys = ['applicationType', 'paid', 'status'];
       let applicationQuery = {};
@@ -913,6 +929,7 @@ const EventController = {
           model: EventEntertainer,
           as: 'entertainers',
           where: eventEntertainerQuery,
+          required: false,
           include: [
             {
               model: EntertainerProfile,
@@ -941,6 +958,7 @@ const EventController = {
               model: Application,
               as: 'applications',
               where: applicationQuery,
+              required: false,
             },
           ],
         },
@@ -950,7 +968,6 @@ const EventController = {
           attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
         },
       ];
-
       const options = {
         offset: offset || 0,
         limit: limit || 10,

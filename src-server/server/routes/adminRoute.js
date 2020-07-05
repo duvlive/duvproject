@@ -25,6 +25,14 @@ const adminRoutes = (router) => {
     Authentication.validateAdmin,
     AdminController.getOneEntertainer
   );
+
+  router.get(
+    '/api/v1/admin/event/:id',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    Authentication.validateAdmin,
+    AdminController.getOneEvent
+  );
 };
 
 export default adminRoutes;
