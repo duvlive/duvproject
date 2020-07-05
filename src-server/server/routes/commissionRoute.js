@@ -14,10 +14,12 @@ const commissionRoutes = (router) => {
     CommissionController.getDefaultCommission
   );
 
-  router
-    .route('/api/v1/currentCommission/:id')
-    .all(Authentication.verifyToken, Authentication.validateAdmin)
-    .delete(CommissionController.getDefaultCommission);
+  router.delete(
+    '/api/v1/commissions/delete/:id',
+    Authentication.verifyToken,
+    Authentication.validateAdmin,
+    CommissionController.deleteOneCommission
+  );
 };
 
 export default commissionRoutes;

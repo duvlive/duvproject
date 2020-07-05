@@ -147,16 +147,16 @@ const CommissionController = {
    * @return {object} returns res object
    */
   deleteOneCommission(req, res) {
-    Commission.findById(req.params.id)
+    return Commission.findOne({ where: { id: req.params.id } })
       .then((commission) => {
         if (!commission) {
-          return res.status(400).send({
-            message: 'Commission Not Found',
+          return res.status(404).json({
+            message: 'Commission not found',
           });
         } else {
           return commission.destroy().then(() =>
-            res.status(200).send({
-              message: `Commission ${req.params.id} Deleted`,
+            res.status(202).json({
+              message: 'Commission deleted successfully',
             })
           );
         }

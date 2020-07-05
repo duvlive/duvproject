@@ -853,6 +853,13 @@ const EventController = {
       });
   },
 
+  /**
+   * get All Events
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
   async getAllEvents(req, res) {
     const {
       eventTime,
