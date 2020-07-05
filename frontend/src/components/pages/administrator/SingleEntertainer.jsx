@@ -66,13 +66,13 @@ const SingleEntertainer = ({ id }) => {
           {entertainer && !entertainer.firstName ? (
             <NoContent isButton text="Entertainer Not Found" />
           ) : (
-              <>
-                {entertainer && <EntertainerProfile entertainer={entertainer} />}
-                {entertainer && entertainer.profile && (
-                  <ApprovedEntertainerInfo entertainer={entertainer} />
-                )}
-              </>
-            )}
+            <>
+              {entertainer && <EntertainerProfile entertainer={entertainer} />}
+              {entertainer && entertainer.profile && (
+                <ApprovedEntertainerInfo entertainer={entertainer} />
+              )}
+            </>
+          )}
         </section>
       </div>
     </BackEndPage>
@@ -176,12 +176,24 @@ Awards.propTypes = {
   badges: PropTypes.array.isRequired,
 };
 
-const BankDetails = ({ bankDetail }) => (
+const BankDetails = ({ entertainer }) => (
   <div className="row">
     <Col sm={12}>
-      <InfoList title="Account Number">{bankDetail.accountNumber}</InfoList>
-      <InfoList title="Account Name">{bankDetail.accountName}</InfoList>
-      <InfoList title="Bank">{bankDetail.bankName}</InfoList>
+      <InfoList title="Account Number">
+        {entertainer.bankDetail.accountNumber}
+      </InfoList>
+      <InfoList title="Account Name">
+        {entertainer.bankDetail.accountName}
+        {entertainer.approvalComment['bankAccount'] !== 'YES' && (
+          <div className="small-text">
+            {entertainer.firstName} {entertainer.lastName} (
+            {entertainer.profile.entertainerType}{' '}
+            {entertainer.profile.stageName})
+          </div>
+        )}
+      </InfoList>
+
+      <InfoList title="Bank">{entertainer.bankDetail.bankName}</InfoList>
     </Col>
     {/* <Col lg={4} md={6} sm={12}>
     </Col> */}
@@ -189,7 +201,7 @@ const BankDetails = ({ bankDetail }) => (
 );
 
 BankDetails.propTypes = {
-  bankDetail: PropTypes.object.isRequired,
+  entertainer: PropTypes.object.isRequired,
 };
 
 const YouTubeChannel = ({ profile }) => (
@@ -288,7 +300,8 @@ const ENTERTAINER_TAB_LIST = [
         <EntertainerSectionInfo entertainer={entertainer} showContentOnly />
       </>
     ),
-    completed: (entertainer) => entertainer.profileImageURL && entertainer.profile.stageName,
+    completed: (entertainer) =>
+      entertainer.profileImageURL && entertainer.profile.stageName,
   },
   {
     id: 'bankAccount',
@@ -296,7 +309,7 @@ const ENTERTAINER_TAB_LIST = [
     content: (entertainer) => (
       <>
         <h4 className="tab-header">Bank Details</h4>
-        <BankDetails bankDetail={entertainer.bankDetail} />
+        <BankDetails entertainer={entertainer} />
       </>
     ),
     completed: (entertainer) => !!entertainer.bankDetail.accountName,
@@ -310,7 +323,8 @@ const ENTERTAINER_TAB_LIST = [
         <ContactDetails contacts={entertainer.contacts} />
       </>
     ),
-    completed: (entertainer) => entertainer.contacts[0] && !!entertainer.contacts[0].email,
+    completed: (entertainer) =>
+      entertainer.contacts[0] && !!entertainer.contacts[0].email,
   },
   {
     id: 'youTube',
@@ -339,7 +353,10 @@ const ENTERTAINER_TAB_LIST = [
 const EntertainerTab = ({ entertainer }) => {
   const [activeTab, setActiveTab] = React.useState(0);
   const [message, setMessage] = React.useState(null);
-  const [forceClose, setForceClose] = React.useState(false)
+  const [forceClose, setForceClose] = React.useState(false);
+  const [currentEntertainer, setCurrentEntertainer] = React.useState(
+    entertainer
+  );
 
   const addSingleComment = (userId, comments) => {
     console.log('userId, comments', userId, comments);
@@ -355,7 +372,13 @@ const EntertainerTab = ({ entertainer }) => {
         const { status } = response;
         if (status === 200) {
           setForceClose(true);
-          // user dispatch the approved stuff
+          setCurrentEntertainer({
+            ...currentEntertainer,
+            approvalComment: {
+              ...currentEntertainer.approvalComment,
+              ...comments,
+            },
+          });
           setMessage({
             type: 'success',
             message: `Your comment has been successfully submitted`,
@@ -388,13 +411,13 @@ const EntertainerTab = ({ entertainer }) => {
               }}
             >
               {tab.name}{' '}
-              {entertainer.approvalComment[tab.id] === 'YES' ? (
+              {currentEntertainer.approvalComment[tab.id] === 'YES' ? (
                 <span className="icon icon-ok-circled"></span>
-              ) : tab.completed(entertainer) ? (
+              ) : tab.completed(currentEntertainer) ? (
                 <span className="icon icon-help "></span>
               ) : (
-                    <span className="icon icon-cancel-circled "></span>
-                  )}
+                <span className="icon icon-cancel-circled "></span>
+              )}
             </NavLink>
           </NavItem>
         ))}
@@ -403,43 +426,54 @@ const EntertainerTab = ({ entertainer }) => {
         {ENTERTAINER_TAB_LIST.map((tab, index) => (
           <TabPane key={index} tabId={index}>
             <Row>
-              <Col sm="12">{tab.content(entertainer)}</Col>
-              {entertainer.approvalComment[tab.id] === 'YES' ? (
+              <Col sm="12">{tab.content(currentEntertainer)}</Col>
+              {currentEntertainer.approvalComment[tab.id] === 'YES' ? (
                 <h4 className="text-success">
                   <span className="icon icon-ok-circled"></span> Approved
                 </h4>
               ) : (
-                  tab.completed(entertainer) && (
-                    <>
-                      {entertainer.approvalComment[tab.id] && <div className="row col-sm-12 mb-4">
-                        <AlertMessage message={entertainer.approvalComment[tab.id]} type="info" />
-                      </div>}
-                      <Button
-                        className="btn btn-danger btn-wide btn-transparent"
-                        onClick={() =>
-                          addSingleComment(entertainer.id, { [tab.id]: 'YES' })
-                        }
-                      >
-                        Approve {tab.name}
-                      </Button>
-                        &nbsp;&nbsp;&nbsp;
-                      <DuvLiveModal
-                        beforeModalOpen={() => setForceClose(false)}
-                        body={<AddCommentsForm addSingleComment={addSingleComment} entertainerId={entertainer.id} name={tab.name} tabId={tab.id} />}
-                        closeModalText="Cancel"
-                        forceCloseModal={forceClose}
-                        title="Add Comments"
-                      >
-                        <button
-                          className="btn btn-info btn-wide btn-transparent"
-                        >
-                          Reject {tab.name}
-                        </button>
-                      </DuvLiveModal>
-
-                    </>
-                  )
-                )}
+                tab.completed(currentEntertainer) && (
+                  <>
+                    {currentEntertainer.approvalComment[tab.id] && (
+                      <div className="row col-sm-12 mb-4">
+                        <AlertMessage
+                          message={currentEntertainer.approvalComment[tab.id]}
+                          type="info"
+                        />
+                      </div>
+                    )}
+                    <Button
+                      className="btn btn-danger btn-wide btn-transparent"
+                      onClick={() =>
+                        addSingleComment(currentEntertainer.id, {
+                          [tab.id]: 'YES',
+                        })
+                      }
+                    >
+                      Approve {tab.name}
+                    </Button>
+                    &nbsp;&nbsp;&nbsp;
+                    <DuvLiveModal
+                      beforeModalOpen={() => setForceClose(false)}
+                      body={
+                        <AddCommentsForm
+                          addSingleComment={addSingleComment}
+                          entertainerId={currentEntertainer.id}
+                          name={tab.name}
+                          tabId={tab.id}
+                        />
+                      }
+                      closeModalText="Cancel"
+                      forceCloseModal={forceClose}
+                      title="Add Comments"
+                    >
+                      <button className="btn btn-info btn-wide btn-transparent">
+                        Add Comment
+                      </button>
+                    </DuvLiveModal>
+                  </>
+                )
+              )}
             </Row>
           </TabPane>
         ))}
@@ -455,7 +489,9 @@ EntertainerTab.propTypes = {
 const AddCommentsForm = ({ addSingleComment, entertainerId, name, tabId }) => (
   <Formik
     initialValues={setInitialValues(entertainerCommentSchema)}
-    onSubmit={({ comments }) => { addSingleComment(entertainerId, { [tabId]: comments }) }}
+    onSubmit={({ comments }) => {
+      addSingleComment(entertainerId, { [tabId]: comments });
+    }}
     render={({ isSubmitting, handleSubmit }) => (
       <>
         <Form>
@@ -479,7 +515,6 @@ const AddCommentsForm = ({ addSingleComment, entertainerId, name, tabId }) => (
     validationSchema={createSchema(entertainerCommentSchema)}
   />
 );
-
 
 AddCommentsForm.propTypes = {
   addSingleComment: PropTypes.func.isRequired,
