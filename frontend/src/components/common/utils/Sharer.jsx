@@ -16,6 +16,7 @@ import {
 } from 'react-share';
 
 const CONTENT_BODY = `Hi there! I use DUV LIVE to hire the best Entertainers for my parties and to find upcoming events I would love to attend. Join @ https://www.duvlive.com/.`;
+const TWITTER_CONTENT_BODY = `Hi there! I use DUV LIVE to hire the best Entertainers for my parties and to find upcoming events I would love to attend. Join @`;
 
 const Sharer = ({ shareUrl, content }) => (
   <ul className="list-unstyled list-inline sharer__icons">
@@ -25,7 +26,7 @@ const Sharer = ({ shareUrl, content }) => (
       </FacebookShareButton>
     </li>
     <li>
-      <TwitterShareButton title={content} url={shareUrl}>
+      <TwitterShareButton title={TWITTER_CONTENT_BODY} url={shareUrl}>
         <TwitterIcon round width="48" />
       </TwitterShareButton>
     </li>
