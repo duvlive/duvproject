@@ -873,7 +873,9 @@ const EventController = {
       }
 
       if (language) {
-        const languages = JSON.parse(language);
+        // accepts comma seperated languages
+
+        const languages = langugae.split(',');
 
         let languageQuery = [];
         for (const lang of languages) {
@@ -894,9 +896,16 @@ const EventController = {
           eventQuery[key] = req.query[key];
         }
       });
+      // accepts a range of comma seperated dates (2 max) with the first number as the earliest
       dateKeys.forEach((key) => {
         if (req.query[key]) {
-          eventQuery[key] = { [Op.eq]: req.query[key] };
+          let [a, b] = req.query[key].split(',');
+          let x = new Date(a);
+          let y = new Date(x.getTime() + 3599 * 1000 * 24);
+          if (b) {
+            y = new Date(b);
+          }
+          eventQuery[key] = { [Op.between]: [x, y] };
         }
       });
 
@@ -941,13 +950,16 @@ const EventController = {
               model: Application,
               as: 'applications',
               where: applicationQuery,
+              required: false,
             },
           ],
+          required: false,
         },
         {
           model: User,
           as: 'owner',
           attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+          required: false,
         },
       ];
 
