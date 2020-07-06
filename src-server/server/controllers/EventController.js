@@ -12,7 +12,12 @@ import {
 } from '../models';
 import sendMail from '../MailSender';
 import EMAIL_CONTENT from '../email-template/content';
-import { EVENT_HIRETYPE, NOTIFICATIONS, NOTIFICATION_TYPE } from '../constant';
+import {
+  EVENTDATE_FILTER,
+  EVENT_HIRETYPE,
+  NOTIFICATIONS,
+  NOTIFICATION_TYPE,
+} from '../constant';
 
 const reviewsInclude = [
   {
@@ -848,7 +853,15 @@ const EventController = {
   },
 
   async getAllEvents(req, res) {
-    const { highestBudget, language, limit, lowestBudget, offset } = req.query;
+    const {
+      entertainerId,
+      eventTime,
+      highestBudget,
+      language,
+      limit,
+      lowestBudget,
+      offset,
+    } = req.query;
 
     try {
       let eventEntertainerQuery = {};
@@ -888,7 +901,7 @@ const EventController = {
         };
       }
 
-      const staticKeys = ['cancelled', 'eventType', 'state', 'userId'];
+      const staticKeys = ['cancelled', 'eventType', 'id', 'state', 'userId'];
       const dateKeys = ['cancelledDate', 'eventDate', 'startTime'];
       let eventQuery = {};
       staticKeys.forEach((key) => {
@@ -909,6 +922,13 @@ const EventController = {
         }
       });
 
+      if (eventTime && eventTime === EVENTDATE_FILTER.PAST) {
+        eventQuery.eventDate = { [Op.lte]: Sequelize.literal('NOW()') };
+      }
+      if (eventTime && eventTime === EVENTDATE_FILTER.FUTURE) {
+        eventQuery.eventDate = { [Op.gte]: Sequelize.literal('NOW()') };
+      }
+
       const applicationKeys = ['applicationType', 'paid', 'status'];
       let applicationQuery = {};
       applicationKeys.forEach((key) => {
@@ -916,6 +936,11 @@ const EventController = {
           applicationQuery[key] = req.query[key];
         }
       });
+
+      let entertainerProfileQuery = {};
+      if (entertainerId) {
+        entertainerProfileQuery.id = entertainerId;
+      }
 
       const eventInclude = [
         {
@@ -926,6 +951,7 @@ const EventController = {
             {
               model: EntertainerProfile,
               as: 'entertainer',
+              where: entertainerProfileQuery,
               attributes: [
                 'id',
                 'stageName',
@@ -945,6 +971,7 @@ const EventController = {
                   ],
                 },
               ],
+              required: false,
             },
             {
               model: Application,
