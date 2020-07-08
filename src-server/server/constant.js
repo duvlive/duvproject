@@ -70,3 +70,8 @@ export const EVENT_HIRETYPE = {
   RECOMMENDATION: 'Recommendation',
   EMPTY: null,
 };
+
+export const EVENTDATE_FILTER = {
+  FUTURE: 'future',
+  PAST: 'past',
+};

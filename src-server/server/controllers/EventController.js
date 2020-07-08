@@ -12,7 +12,12 @@ import {
 } from '../models';
 import sendMail from '../MailSender';
 import EMAIL_CONTENT from '../email-template/content';
-import { EVENT_HIRETYPE, NOTIFICATIONS, NOTIFICATION_TYPE } from '../constant';
+import {
+  EVENTDATE_FILTER,
+  EVENT_HIRETYPE,
+  NOTIFICATIONS,
+  NOTIFICATION_TYPE,
+} from '../constant';
 import { addDays, isValid, parse } from 'date-fns';
 
 const reviewsInclude = [
@@ -849,7 +854,15 @@ const EventController = {
   },
 
   async getAllEvents(req, res) {
-    const { highestBudget, language, limit, lowestBudget, offset } = req.query;
+    const {
+      entertainerId,
+      eventTime,
+      highestBudget,
+      language,
+      limit,
+      lowestBudget,
+      offset,
+    } = req.query;
 
     try {
       let eventEntertainerQuery = {};
@@ -874,7 +887,8 @@ const EventController = {
       }
 
       if (language) {
-        const languages = JSON.parse(language);
+        // accepts comma seperated languages
+        const languages = language.split(',');
 
         let languageQuery = [];
         for (const lang of languages) {
@@ -887,13 +901,7 @@ const EventController = {
         };
       }
 
-      const staticKeys = [
-        'cancelled',
-        'eventType',
-        'state',
-        'userId',
-        'eventDuration',
-      ];
+      const staticKeys = ['cancelled', 'eventType', 'id', 'state', 'userId'];
       const dateKeys = ['cancelledDate', 'eventDate', 'startTime'];
       let eventQuery = {};
       staticKeys.forEach((key) => {
@@ -901,19 +909,33 @@ const EventController = {
           eventQuery[key] = req.query[key];
         }
       });
+      // accepts a range of comma seperated dates (2 max) with the first number as the earliest
       dateKeys.forEach((key) => {
-        if (req.query[key] && isValid(parse(req.query[key]))) {
-          eventQuery[key] = {
-            [Op.gte]: parse(req.query[key]),
-            [Op.lte]: addDays(parse(req.query[key]), 1),
-          };
+        if (req.query[key]) {
+          let [a, b] = req.query[key].split(',');
+          let x, y, z;
+          if (a && isValid(new Date(a))) {
+            x = new Date(a);
+            y = new Date(x.getTime() + 3599 * 1000 * 24);
+          }
+          if (b && isValid(new Date(b))) {
+            z = new Date(b);
+            y = new Date(z.getTime() + 3599 * 1000 * 24);
+          }
+          eventQuery[key] = { [Op.between]: [x, y] };
         }
       });
 
-      if (req.query['cancelled']) {
-        eventQuery.cancelled = {
-          [Op.eq]: req.query['cancelled'] === 'YES' ? true : false,
-        };
+      if (eventTime && eventTime === EVENTDATE_FILTER.PAST) {
+        eventQuery.eventDate = { [Op.lte]: Sequelize.literal('NOW()') };
+      }
+      if (eventTime && eventTime === EVENTDATE_FILTER.FUTURE) {
+        eventQuery.eventDate = { [Op.gte]: Sequelize.literal('NOW()') };
+        if (req.query['cancelled']) {
+          eventQuery.cancelled = {
+            [Op.eq]: req.query['cancelled'] === 'YES' ? true : false,
+          };
+        }
       }
 
       const applicationKeys = ['applicationType', 'paid', 'status'];
@@ -924,16 +946,22 @@ const EventController = {
         }
       });
 
+      let entertainerProfileQuery = {};
+      if (entertainerId) {
+        entertainerProfileQuery.id = entertainerId;
+      }
+
       const eventInclude = [
         {
           model: EventEntertainer,
           as: 'entertainers',
           where: eventEntertainerQuery,
-          required: false,
+          // required: false,
           include: [
             {
               model: EntertainerProfile,
               as: 'entertainer',
+              where: entertainerProfileQuery,
               attributes: [
                 'id',
                 'stageName',
@@ -953,6 +981,7 @@ const EventController = {
                   ],
                 },
               ],
+              required: false,
             },
             {
               model: Application,
@@ -961,13 +990,16 @@ const EventController = {
               required: false,
             },
           ],
+          required: false,
         },
         {
           model: User,
           as: 'owner',
           attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+          required: false,
         },
       ];
+
       const options = {
         offset: offset || 0,
         limit: limit || 10,
