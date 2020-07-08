@@ -18,6 +18,7 @@ import {
   NOTIFICATIONS,
   NOTIFICATION_TYPE,
 } from '../constant';
+import { addDays, isValid, parse } from 'date-fns';
 
 const reviewsInclude = [
   {
@@ -887,8 +888,7 @@ const EventController = {
 
       if (language) {
         // accepts comma seperated languages
-
-        const languages = langugae.split(',');
+        const languages = language.split(',');
 
         let languageQuery = [];
         for (const lang of languages) {
@@ -913,10 +913,14 @@ const EventController = {
       dateKeys.forEach((key) => {
         if (req.query[key]) {
           let [a, b] = req.query[key].split(',');
-          let x = new Date(a);
-          let y = new Date(x.getTime() + 3599 * 1000 * 24);
-          if (b) {
-            y = new Date(b);
+          let x, y, z;
+          if (a && isValid(new Date(a))) {
+            x = new Date(a);
+            y = new Date(x.getTime() + 3599 * 1000 * 24);
+          }
+          if (b && isValid(new Date(b))) {
+            z = new Date(b);
+            y = new Date(z.getTime() + 3599 * 1000 * 24);
           }
           eventQuery[key] = { [Op.between]: [x, y] };
         }
@@ -927,6 +931,11 @@ const EventController = {
       }
       if (eventTime && eventTime === EVENTDATE_FILTER.FUTURE) {
         eventQuery.eventDate = { [Op.gte]: Sequelize.literal('NOW()') };
+        if (req.query['cancelled']) {
+          eventQuery.cancelled = {
+            [Op.eq]: req.query['cancelled'] === 'YES' ? true : false,
+          };
+        }
       }
 
       const applicationKeys = ['applicationType', 'paid', 'status'];
@@ -947,6 +956,7 @@ const EventController = {
           model: EventEntertainer,
           as: 'entertainers',
           where: eventEntertainerQuery,
+          // required: false,
           include: [
             {
               model: EntertainerProfile,
@@ -1004,6 +1014,7 @@ const EventController = {
         return res.status(500).json({ error: error.message });
       }
     } catch (error) {
+      console.log('errrrrr', error);
       const status = error.status || 500;
       const errorMessage = error.message || error;
       return res.status(status).json({ message: errorMessage });

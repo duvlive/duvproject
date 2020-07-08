@@ -7,7 +7,7 @@ import DatePicker from 'components/forms/DatePicker';
 import Humanize from 'humanize-plus';
 import { addDays } from 'date-fns';
 
-const getEventDuration = () =>
+export const getEventDuration = () =>
   [...Array(24).keys()].map((index) => ({
     label: `${index + 1} ${Humanize.pluralize(index + 1, 'hour')}`,
     value: `${index + 1} hours`,
