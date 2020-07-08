@@ -1014,7 +1014,6 @@ const EventController = {
         return res.status(500).json({ error: error.message });
       }
     } catch (error) {
-      console.log('errrrrr', error);
       const status = error.status || 500;
       const errorMessage = error.message || error;
       return res.status(status).json({ message: errorMessage });
