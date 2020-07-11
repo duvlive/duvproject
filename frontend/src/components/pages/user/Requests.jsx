@@ -157,7 +157,7 @@ const RequestsRow = ({
     <td className="pt-4">
       <a
         className="btn btn-info btn-sm btn-transparent"
-        href={`/entertainers/${slug}`}
+        href={`/entertainers/profile/${slug}`}
         rel="noopener noreferrer"
         target="_blank"
       >

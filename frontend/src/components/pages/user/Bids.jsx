@@ -354,7 +354,7 @@ const BidsApplicationsTableRow = ({ application, number }) => {
       <td className="align-middle text-right td-btn">
         <a
           className="btn btn-info btn-sm btn-transparent"
-          href={`/entertainers/${application.user.profile.slug}`}
+          href={`/entertainers/profile/${application.user.profile.slug}`}
           rel="noopener noreferrer"
           target="_blank"
         >

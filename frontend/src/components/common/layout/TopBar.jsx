@@ -139,7 +139,7 @@ const TopBarNavigation = ({ menus, userName }) => {
               <DropdownItem>
                 <Link
                   className="text-color"
-                  to={`/entertainers/${userState.entertainerProfile.slug}`}
+                  to={`/entertainers/profile/${userState.entertainerProfile.slug}`}
                 >
                   View My Profile
                 </Link>

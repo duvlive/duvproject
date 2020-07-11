@@ -25,8 +25,9 @@ const FrontPageRouter = () => (
     <Home path="/" />
     <HowItWorks path="how-it-works" />
     <UpcomingEvents path="upcoming-events" />
-    <HireEntertainers path="hire-entertainers" />
-    <HireEntertainers path="hire-entertainers/:type" />
+    <SingleEntertainer path="entertainers/profile/:slug" />
+    <HireEntertainers path="entertainers" />
+    <HireEntertainers path="entertainers/:type" />
     <Help path="help" />
     <ContactUs path="contact-us" />
     <TermsOfUse path="terms-of-use" />
@@ -39,7 +40,6 @@ const FrontPageRouter = () => (
     <ResetPassword path="reset-password/:token" />
     <Register path="register" />
     <Register path="register/:type" />
-    <SingleEntertainer path="entertainers/:slug" />
     <SingleEvent path="event/:slug" />
     <CompleteRegistration path="complete-registration/:sid" />
     <ProcessPayments path="/payment" />

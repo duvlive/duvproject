@@ -33,13 +33,13 @@ const Footer = ({ className }) => (
             <ul className="list-unstyled footer__links">
               <li className="footer__header">Communities</li>
               <li>
-                <Link to="/hire-entertainers/dj">DJs</Link>
+                <Link to="/entertainers/djs">DJs</Link>
               </li>
               <li>
-                <Link to="/hire-entertainers/mc">MCs</Link>
+                <Link to="/entertainers/mcs">MCs</Link>
               </li>
               <li>
-                <Link to="/hire-entertainers/liveband">Live Bands</Link>
+                <Link to="/entertainers/livebands">Live Bands</Link>
               </li>
             </ul>
           </Col>

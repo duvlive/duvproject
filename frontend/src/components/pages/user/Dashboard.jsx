@@ -345,7 +345,7 @@ Dashboard.RequestTableRow = ({ application }) => (
     <td className="align-middle text-right td-btn">
       <a
         className="btn btn-info btn-sm btn-transparent"
-        href={`/entertainers/${application.slug}`}
+        href={`/entertainers/profile/${application.slug}`}
         rel="noopener noreferrer"
         target="_blank"
       >

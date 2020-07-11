@@ -88,7 +88,7 @@ EntertainersSearchResult.Card = ({
       <td className="align-middle text-gray">
         <a
           className="btn btn-info btn-sm btn-transparent"
-          href={`/entertainers/${entertainer.slug}`}
+          href={`/entertainers/profile/${entertainer.slug}`}
           rel="noopener noreferrer"
           target="_blank"
         >
