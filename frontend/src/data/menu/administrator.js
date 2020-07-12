@@ -17,6 +17,11 @@ export default [
         to: '/admin/entertainers-payment',
         icon: 'credit-card',
       },
+      {
+        title: 'Commissions',
+        to: '/admin/commission',
+        icon: 'wallet',
+      },
     ],
   },
   {

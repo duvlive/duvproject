@@ -16,6 +16,7 @@ const AdminList = ({
   apiUrl,
   pluralPageName,
   tableRow,
+  AddNewComponent,
   FilterComponent,
 }) => {
   const [message, setMessage] = React.useState(null);
@@ -23,6 +24,7 @@ const AdminList = ({
   const [data, setData] = React.useState(inActiveData);
   const [currPage, setCurrPage] = React.useState(0);
   const [openFilter, setOpenFilter] = React.useState(false);
+  const [openNew, setOpenNew] = React.useState(false);
   const [filter, setFilter] = React.useState({});
   const [filterInWords, setFilterInWords] = React.useState({});
 
@@ -38,6 +40,14 @@ const AdminList = ({
     setOpenFilter(false);
   };
 
+  const addData = (newData) => {
+    setOpenNew(false);
+    setData({
+      ...data,
+      result: [newData, ...data.result],
+      pagination: { ...data.pagination, total: data.pagination.total + 1 },
+    });
+  };
   React.useEffect(() => {
     const LIMIT = 10;
     axios
@@ -49,6 +59,7 @@ const AdminList = ({
       })
       .then(function (response) {
         const { status, data } = response;
+        console.log('response', response);
         // handle success
         if (status === 200) {
           setData(data);
@@ -92,26 +103,48 @@ const AdminList = ({
       <div className="row mt-3 mb-2">
         <div className="col-sm-12">
           <div className="text-right">
-            <p
-              className="d-inline-block filter-text"
-              onClick={() => setOpenFilter((openFilter) => !openFilter)}
-            >
-              <span className="icon icon-align-justify"></span> &nbsp;
-              {openFilter ? 'Close Filter' : 'Filter'}
-            </p>
+            {AddNewComponent && (
+              <p
+                className="d-inline-block add-new-text"
+                onClick={() => {
+                  setOpenFilter(false);
+                  setOpenNew(!openNew);
+                }}
+              >
+                <span className="icon icon-plus"></span> &nbsp;{' '}
+                {openNew ? `- Close New ${pageName} ` : `+ Add New ${pageName}`}
+              </p>
+            )}
+            {FilterComponent && (
+              <p
+                className="d-inline-block filter-text"
+                onClick={() => {
+                  setOpenNew(false);
+                  setOpenFilter((openFilter) => !openFilter);
+                }}
+              >
+                <span className="icon icon-align-justify"></span> &nbsp;
+                {openFilter ? 'Close Filter' : 'Set Filter'}
+              </p>
+            )}
           </div>
           <h3 className="main-app__title">
             {`${noOfResults} ${pluralizePageName}`}
             <br />
-            <small className="small--2 text-muted mt-3 d-block">
-              {currentFilters()}
-            </small>
+            {FilterComponent && (
+              <small className="small--2 text-muted mt-3 d-block">
+                {currentFilters()}
+              </small>
+            )}
           </h3>
         </div>
       </div>
 
       <SlideDown className={''}>
         {openFilter && <FilterComponent setFilterTerms={setFilterTerms} />}
+        {openNew && (
+          <AddNewComponent addData={addData} setMessage={setMessage} />
+        )}
       </SlideDown>
     </>
   );
@@ -134,9 +167,9 @@ const AdminList = ({
           <AlertMessage {...message} />
 
           <ResultsTable
-            Row={tableRow}
             offset={data.pagination.offset || 0}
             results={data[apiData] || []}
+            Row={tableRow}
             setMessage={(options) => {
               setMessage(options);
               setFilter({ ...filter, [new Date().toISOString()]: null }); //force reload
@@ -166,6 +199,7 @@ const AdminList = ({
 };
 
 AdminList.propTypes = {
+  AddNewComponent: PropTypes.any,
   FilterComponent: PropTypes.any,
   apiData: PropTypes.string.isRequired,
   apiUrl: PropTypes.string.isRequired,
@@ -175,7 +209,8 @@ AdminList.propTypes = {
 };
 
 AdminList.defaultProps = {
-  FilterComponent: () => null,
+  FilterComponent: null,
+  AddNewComponent: null,
   pluralPageName: null,
 };
 

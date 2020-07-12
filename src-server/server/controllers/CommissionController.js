@@ -1,5 +1,7 @@
+import { Op } from 'sequelize';
 import { Commission } from '../models';
 import { validString } from '../utils';
+import { getAll } from '../utils';
 
 export const DEFAULT_COMMISSION = {
   id: null,
@@ -108,6 +110,87 @@ const CommissionController = {
       .catch((error) => {
         return res.status(500).json({ message: error.message });
       });
+  },
+
+  /**
+   * set as default Commission
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  setAsDefaultCommission(req, res) {
+    const commissionId = req.body.id;
+    if (commissionId) {
+      Commission.findOne({
+        where: { id: commissionId },
+      })
+        .then((commission) => {
+          if (!commission) {
+            return res.status(404).send({
+              message: 'Commission not found',
+            });
+          }
+          // update profile image in database
+          return commission
+            .update({
+              default: true,
+            })
+            .then(async () => {
+              await Commission.update(
+                {
+                  default: false,
+                },
+                {
+                  where: { id: { [Op.ne]: commissionId } },
+                }
+              );
+              return res.json({
+                message: 'Commission has been successfully set as default',
+              });
+            });
+        })
+        .catch((error) => {
+          return res.status(500).json({ error: error.message });
+        });
+    } else {
+      return res.status(412).json({ message: 'Commission id cannot be empty' });
+    }
+  },
+  /**
+   * @desc get commissions
+   * @param {object} req - The request sent to the route
+   * @param {object} res - The response sent back
+   * @return {object} json response
+   */
+  async getCommission(req, res) {
+    const { offset, limit } = req.query;
+
+    try {
+      const options = {
+        offset: offset || 0,
+        limit: limit || 10,
+        order: [
+          ['default', 'DESC'],
+          ['title', 'ASC'],
+        ],
+      };
+      try {
+        const { result, pagination } = await getAll(Commission, options);
+        return res.status(200).json({
+          result,
+          pagination,
+        });
+      } catch (error) {
+        const status = error.status || 500;
+        const errorMessage = error.message || error;
+        return res.status(status).json({ message: errorMessage });
+      }
+    } catch (error) {
+      const status = error.status || 500;
+      const errorMessage = error.message || error;
+      return res.status(status).json({ message: errorMessage });
+    }
   },
 };
 

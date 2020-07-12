@@ -13,6 +13,7 @@ import UsersPayment from 'components/pages/administrator/UsersPayment';
 import UpcomingEvents from 'components/pages/administrator/UpcomingEvents';
 import EditProfile from 'components/pages/administrator/EditProfile';
 import Gallery from 'components/pages/administrator/Gallery';
+import Commission from 'components/pages/administrator/Commission';
 import Videos from 'components/pages/administrator/Videos';
 import Badges from 'components/pages/administrator/Badges';
 import BandMembers from 'components/pages/administrator/BandMembers';
@@ -42,6 +43,7 @@ const AdministratorRouter = () => (
     <Badges path="/badges" />
     <SingleBadge path="/badges/:id" />
     <BandMembers path="/band-members" />
+    <Commission path="/commission" />
     <Events path="/events" />
     <InviteFriends path="/invite-friends" />
     <ChangePassword path="/change-password" />
