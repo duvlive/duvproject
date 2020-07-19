@@ -1,7 +1,7 @@
 import { CommissionController } from '../controllers';
 import Authentication from '../middleware/authentication';
 
-const commissionRoutes = router => {
+const commissionRoutes = (router) => {
   router
     .route('/api/v1/commissions')
     .all(Authentication.verifyToken, Authentication.validateAdmin)
