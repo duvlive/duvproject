@@ -41,6 +41,7 @@ const AdminList = ({
   };
 
   const addData = (newData) => {
+    console.log('data', data);
     setOpenNew(false);
     setData({
       ...data,

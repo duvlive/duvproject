@@ -138,7 +138,7 @@ const EventEntertainerController = {
         // check if entertainer id is valid -::- who knows
         // use opportunity to get entertainer details at once
         entertainerDetails = await User.findOne({
-          attributes: ['email'],
+          attributes: ['email', 'commissionId'],
           where: { id: entertainerId },
           include: [
             {
@@ -198,12 +198,16 @@ const EventEntertainerController = {
           });
 
           if (hasApplicationRequest) {
+            const commissionQuery = entertainerDetails.commissionId
+              ? { id: entertainerDetails.commissionId }
+              : { default: true };
             const defaultCommission = await Commission.findOne({
-              where: { default: true },
+              where: commissionQuery,
             });
 
             // calculate commission
             const commission = defaultCommission || DEFAULT_COMMISSION;
+
             const { entertainerFee } = priceCalculatorHelper(
               askingPrice,
               commission,
@@ -215,7 +219,7 @@ const EventEntertainerController = {
               userId: entertainerId,
               askingPrice,
               eventId,
-              commission: commission.id,
+              commissionId: commission.id,
               eventEntertainerId: eventEntertainer.id,
               applicationType: 'Request',
               takeHome: entertainerFee,

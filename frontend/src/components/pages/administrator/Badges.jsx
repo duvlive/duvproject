@@ -18,13 +18,14 @@ import { Formik, Form } from 'formik';
 import { getTokenFromStore } from 'utils/localStorage';
 import Select from 'components/forms/Select';
 import TextArea from 'components/forms/TextArea';
+import { UserContext } from 'context/UserContext';
 
 const Badges = () => {
   return (
     <BackEndPage title="Badges">
       <AdminList
         AddNewComponent={AddNewComponent}
-        apiData="badges"
+        apiData="result"
         apiUrl="/api/v1/badges-all"
         pageName="Badge"
         tableRow={BadgesRow}
@@ -108,7 +109,9 @@ BadgesRow.propTypes = {
   title: PropTypes.string,
   userBadges: PropTypes.array,
 };
+
 export const AddNewComponent = ({ addData, setMessage }) => {
+  const { userState } = React.useContext(UserContext);
   return (
     <Formik
       initialValues={setInitialValues(addBadgeObject)}
@@ -120,13 +123,25 @@ export const AddNewComponent = ({ addData, setMessage }) => {
           .then(function (response) {
             const { status, data } = response;
             if (status === 200) {
-              addData(data.badge);
+              console.log('data', data);
+              addData({
+                ...data.badge,
+                creator: {
+                  id: userState.id,
+                  firstName: userState.firstName,
+                  lastName: userState.lastName,
+                  profileImageURL: userState.profileImg,
+                },
+                userBadges: [],
+              });
               setMessage({ message: data.message, type: 'success' });
               actions.setSubmitting(false);
             }
           })
           .catch(function (error) {
-            setMessage({ message: error.response.data.message });
+            console.log('error', error);
+            // console.log('error.response', error.response.data);
+            // setMessage({ message: error.response.data.message });
             actions.setSubmitting(false);
           });
         actions.setSubmitting(false);
@@ -143,8 +158,9 @@ export const AddNewComponent = ({ addData, setMessage }) => {
                 placeholder="Badge Title"
               />
               <Select
+                blankOption="Select Color"
                 formGroupClassName="col-md-6"
-                label="color"
+                label="Color"
                 name="color"
                 options={[
                   { value: 'blue', label: 'Blue Colour' },

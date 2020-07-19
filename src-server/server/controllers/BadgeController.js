@@ -134,7 +134,7 @@ const BadgeController = {
       };
       try {
         const { result, pagination } = await getAll(Badge, options);
-        return res.status(200).json({ badges: result, pagination });
+        return res.status(200).json({ result, pagination });
       } catch (error) {
         return res.status(500).json({ error: error.message });
       }

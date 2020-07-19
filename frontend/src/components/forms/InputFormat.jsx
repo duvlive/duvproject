@@ -26,7 +26,6 @@ const InputFormat = ({
   labelClassName,
   name,
   optional,
-  prefix,
   showFeedback,
   tooltipText,
   tooltipPosition,
@@ -63,7 +62,7 @@ const InputFormat = ({
                 onValueChange={(number) =>
                   form.setFieldValue(name, number.value)
                 }
-                prefix={prefix}
+                prefix="&#8358; "
                 thousandSeparator={true}
                 value={getIn(formik.values, name)}
               />
@@ -96,7 +95,6 @@ InputFormat.defaultProps = {
   labelClassName: null,
   labelLink: null,
   optional: false,
-  prefix: '&#8358; ',
   showFeedback: feedback.ALL,
   tooltipText: null,
   tooltipPosition: 'right',
@@ -121,7 +119,6 @@ InputFormat.propTypes = {
   }),
   name: PropTypes.string.isRequired,
   optional: PropTypes.bool,
-  prefix: PropTypes.string,
   showFeedback: PropTypes.oneOf(Object.keys(feedback)),
   tooltipPosition: PropTypes.string,
   tooltipText: PropTypes.string,
