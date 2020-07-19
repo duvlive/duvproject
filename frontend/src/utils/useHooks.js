@@ -26,3 +26,28 @@ export const useEntertainerSelect = (id = 'userId') => {
   }, [id]);
   return entertainers;
 };
+
+export const useBadgesSelect = () => {
+  const [badges, setBadges] = React.useState([]);
+
+  React.useEffect(() => {
+    axios
+      .get(`/api/v1/badges-list`, {
+        headers: {
+          'x-access-token': getTokenFromStore(),
+        },
+      })
+      .then(function (response) {
+        const { status, data } = response;
+        console.log('data', data);
+        // handle success
+        if (status === 200) {
+          setBadges(data.badges);
+        }
+      })
+      .catch(function (error) {
+        setBadges([]);
+      });
+  }, []);
+  return badges;
+};

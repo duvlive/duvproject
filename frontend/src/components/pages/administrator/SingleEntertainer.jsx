@@ -30,10 +30,16 @@ import Button from 'components/forms/Button';
 import NoContent from 'components/common/utils/NoContent';
 import DuvLiveModal from 'components/custom/Modal';
 import TextArea from 'components/forms/TextArea';
-import { setInitialValues } from 'components/forms/form-helper';
+import {
+  setInitialValues,
+  DisplayFormikState,
+} from 'components/forms/form-helper';
 import { entertainerCommentSchema } from 'components/forms/schema/entertainerSchema';
 import { Formik, Form } from 'formik';
 import { createSchema } from 'components/forms/schema/schema-helpers';
+import { useBadgesSelect } from 'utils/useHooks';
+import Select from 'components/forms/Select';
+import { assignBadgeObject } from 'components/forms/schema/badgeSchema';
 
 const SingleEntertainer = ({ id }) => {
   const [entertainer, setEntertainer] = React.useState(null);
@@ -99,6 +105,18 @@ const ApprovedEntertainerInfo = ({ entertainer }) => (
   <section>
     <div className="mt-5">
       <EntertainerTab entertainer={entertainer} />
+    </div>
+
+    <div className="mt-5">
+      <DuvLiveModal
+        body={<AssignBadgeToUser userId={entertainer.id} />}
+        closeModalText="Cancel"
+        title="Assign Badge"
+      >
+        <button className="btn btn-transparent btn-danger">
+          <strong>+</strong> &nbsp; Assign Badge
+        </button>
+      </DuvLiveModal>
     </div>
 
     <div className="mt-5">
@@ -684,6 +702,79 @@ AddCommentsForm.propTypes = {
   entertainerId: PropTypes.any.isRequired,
   name: PropTypes.string.isRequired,
   tabId: PropTypes.string.isRequired,
+};
+
+const AssignBadgeToUser = ({ userId }) => {
+  const badges = useBadgesSelect();
+  console.log('badges', badges);
+  const [message, setMessage] = React.useState({});
+
+  return (
+    <Formik
+      initialValues={setInitialValues(assignBadgeObject)}
+      onSubmit={({ badgeId }, actions) => {
+        console.log('here');
+        console.log('{ badgeId, userId }', { badgeId, userId });
+        axios
+          .post(
+            `/api/v1/badge/assign`,
+            { badgeId, userId },
+            {
+              headers: { 'x-access-token': getTokenFromStore() },
+            }
+          )
+          .then(function (response) {
+            const { status, data } = response;
+            console.log('data', data);
+            if (status === 200) {
+              setMessage({
+                msg: 'Badge has been successfully assigned to user',
+                type: 'success',
+              });
+              actions.resetForm();
+              actions.setSubmitting(false);
+            }
+          })
+          .catch(function (error) {
+            console.log('error ', error.response.data.message);
+            setMessage({ msg: error.response.data.message });
+            actions.setSubmitting(false);
+          });
+      }}
+      render={({ isSubmitting, handleSubmit, ...props }) => (
+        <>
+          <Form>
+            <AlertMessage
+              message={message && message.msg}
+              type={message && message.type}
+            />
+            <Select
+              blankOption="Badges"
+              label="Select Badge"
+              name="badgeId"
+              options={badges}
+              placeholder="Select Bagde"
+            />
+
+            <DisplayFormikState {...props} />
+
+            <Button
+              className="btn-info btn-wide btn-transparent mt-2"
+              loading={isSubmitting}
+              onClick={handleSubmit}
+            >
+              Assign Badge
+            </Button>
+          </Form>
+        </>
+      )}
+      validationSchema={createSchema(assignBadgeObject)}
+    />
+  );
+};
+
+AssignBadgeToUser.propTypes = {
+  userId: PropTypes.any.isRequired,
 };
 
 export default SingleEntertainer;
