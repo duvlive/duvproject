@@ -10,7 +10,7 @@ import {
   Notification,
   CancelEventEntertainer,
 } from '../models';
-import { validString, getLongDate, getTime, moneyFormat } from '../utils';
+import { getLongDate, getTime, moneyFormat, validString } from '../utils';
 import EMAIL_CONTENT from '../email-template/content';
 import { DEFAULT_COMMISSION } from './CommissionController';
 import { priceCalculatorHelper } from '../utils/priceCalculator';

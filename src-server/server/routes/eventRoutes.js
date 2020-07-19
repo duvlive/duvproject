@@ -90,6 +90,14 @@ const eventRoutes = (router) => {
     Authentication.validateAdmin,
     EventController.getAllEvents
   );
+
+  router.get(
+    '/api/v1/past-events',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    Authentication.validateAdmin,
+    EventController.getPastEvents
+  );
 };
 
 export default eventRoutes;
