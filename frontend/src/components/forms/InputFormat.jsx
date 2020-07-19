@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import {
   getValidityClass,
   FeedbackMessage,
-  feedback
+  feedback,
 } from 'components/forms/form-helper';
 import Label from './Label';
 import NumberFormat from 'react-number-format';
@@ -26,6 +26,7 @@ const InputFormat = ({
   labelClassName,
   name,
   optional,
+  prefix,
   showFeedback,
   tooltipText,
   tooltipPosition,
@@ -59,8 +60,10 @@ const InputFormat = ({
                 id={name}
                 name={name}
                 onBlur={field.onBlur}
-                onValueChange={number => form.setFieldValue(name, number.value)}
-                prefix="&#8358; "
+                onValueChange={(number) =>
+                  form.setFieldValue(name, number.value)
+                }
+                prefix={prefix}
                 thousandSeparator={true}
                 value={getIn(formik.values, name)}
               />
@@ -93,10 +96,11 @@ InputFormat.defaultProps = {
   labelClassName: null,
   labelLink: null,
   optional: false,
+  prefix: '&#8358; ',
   showFeedback: feedback.ALL,
   tooltipText: null,
   tooltipPosition: 'right',
-  type: null
+  type: null,
 };
 
 InputFormat.propTypes = {
@@ -113,14 +117,15 @@ InputFormat.propTypes = {
   labelLink: PropTypes.shape({
     to: PropTypes.string,
     text: PropTypes.string,
-    onClick: PropTypes.func
+    onClick: PropTypes.func,
   }),
   name: PropTypes.string.isRequired,
   optional: PropTypes.bool,
+  prefix: PropTypes.string,
   showFeedback: PropTypes.oneOf(Object.keys(feedback)),
   tooltipPosition: PropTypes.string,
   tooltipText: PropTypes.string,
-  type: PropTypes.string
+  type: PropTypes.string,
 };
 
 export default connect(InputFormat);

@@ -48,6 +48,7 @@ const EntertainerSection = ({ entertainers, loading, type }) => {
       (entertainer) =>
         entertainer &&
         entertainer.entertainerType &&
+        currentFilter &&
         entertainer.entertainerType.toUpperCase() ===
           currentFilter.toUpperCase()
     );

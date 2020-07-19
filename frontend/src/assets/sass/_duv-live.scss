@@ -676,3 +676,12 @@ a:hover {
   border-radius: 3px;
   padding: 2rem 3rem;
 }
+
+.tab-bg-info {
+  color: lighten($blue, 40%) !important;
+  background: rgba($blue, 0.1) !important;
+  border-color: rgba($blue, 0.14) !important;
+  padding: 2rem 2rem 1rem;
+  margin-bottom: 3rem;
+  border-radius: 3px;
+}

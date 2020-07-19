@@ -33,12 +33,16 @@ export const entertainerProfileAssociatedModels = [
   },
 ];
 
-const slugify = async (stageName, id) => {
-  const slug = stageName
+export const slugify = async (stageName, id, entertainerType) => {
+  if (!stageName || !id || !entertainerType) {
+    return '';
+  }
+  const stageNameSlug = stageName
     .toLowerCase()
     .replace(/[^\w ]+/g, '')
     .replace(/ +/g, '-');
 
+  const slug = `${entertainerType.toLowerCase()}-${stageNameSlug}`;
   const slugIsFound = await EntertainerProfile.findOne({ where: { slug } });
   return slugIsFound ? `${slug}${id}` : slug;
 };
@@ -125,9 +129,12 @@ const EntertainerProfileController = {
 
     const currentSlug = req.user.profile.slug;
 
-    const slug = currentSlug
-      ? currentSlug
-      : await slugify(stageName, req.user.dataValues.id);
+    const slug =
+      currentSlug &&
+      stageName &&
+      entertainerType === req.user.profile.entertainerType
+        ? currentSlug
+        : await slugify(stageName, req.user.dataValues.id, entertainerType);
 
     const entertainerProfileData = {
       about,

@@ -52,8 +52,9 @@ const PREFERRED_LANGUAGE = [
   ['Yoruba'],
 ];
 
-function generateSlug(text) {
-  return text.toString().replace(/\s+/g, '-').toLowerCase();
+function generateSlug(text, entertainerType) {
+  const textSlug = text.toString().replace(/\s+/g, '-').toLowerCase();
+  return `${entertainerType}-${textSlug}`;
 }
 
 module.exports = new Factory()
@@ -69,7 +70,10 @@ module.exports = new Factory()
     return STAGE_NAME[id % 18];
   })
   .sequence('slug', function (id) {
-    return generateSlug(STAGE_NAME[id % 18]);
+    return generateSlug(
+      STAGE_NAME[id % 18],
+      ENTERTAINER_TYPE[id % 3].toLowerCase()
+    );
   })
   .sequence('youTubeChannel', function (id) {
     return `https://youtube.com/${generateSlug(STAGE_NAME[id % 18])}`;

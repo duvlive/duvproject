@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import {
   getValidityClass,
   FeedbackMessage,
-  feedback
+  feedback,
 } from 'components/forms/form-helper';
 import Label from './Label';
 
@@ -70,8 +70,6 @@ const TextArea = ({
   );
 };
 
-// NB: Wrap multiple fields in .form-row and give formGroupClassname the size e.g form-group col-md-6
-
 TextArea.defaultProps = {
   autoComplete: '',
   formGroupClassName: null,
@@ -88,7 +86,7 @@ TextArea.defaultProps = {
   showFeedback: feedback.ALL,
   tooltipText: null,
   tooltipPosition: 'right',
-  type: null
+  type: null,
 };
 
 TextArea.propTypes = {
@@ -105,7 +103,7 @@ TextArea.propTypes = {
   labelLink: PropTypes.shape({
     to: PropTypes.string,
     text: PropTypes.string,
-    onClick: PropTypes.func
+    onClick: PropTypes.func,
   }),
   name: PropTypes.string.isRequired,
   optional: PropTypes.bool,
@@ -113,7 +111,7 @@ TextArea.propTypes = {
   showFeedback: PropTypes.oneOf(Object.keys(feedback)),
   tooltipPosition: PropTypes.string,
   tooltipText: PropTypes.string,
-  type: PropTypes.string
+  type: PropTypes.string,
 };
 
 export default connect(TextArea);
