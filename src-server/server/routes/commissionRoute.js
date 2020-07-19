@@ -25,6 +25,20 @@ const commissionRoutes = (router) => {
     Authentication.validateAdmin,
     CommissionController.getCommission
   );
+
+  router.get(
+    '/api/v1/commissions-list',
+    Authentication.verifyToken,
+    Authentication.validateAdmin,
+    CommissionController.getAllCommissionsList
+  );
+
+  router.post(
+    '/api/v1/assign-commission-to-user',
+    Authentication.verifyToken,
+    Authentication.validateAdmin,
+    CommissionController.assignCommissionToUser
+  );
 };
 
 export default commissionRoutes;

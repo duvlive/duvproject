@@ -1,5 +1,5 @@
 import { Op } from 'sequelize';
-import { Commission } from '../models';
+import { Commission, User } from '../models';
 import { validString } from '../utils';
 import { getAll } from '../utils';
 
@@ -191,6 +191,72 @@ const CommissionController = {
       const errorMessage = error.message || error;
       return res.status(status).json({ message: errorMessage });
     }
+  },
+
+  /**
+   * get All Commission List
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  async getAllCommissionsList(req, res) {
+    try {
+      const options = {
+        limit: 0,
+        attributes: ['id', 'title'],
+      };
+      try {
+        const { result } = await getAll(Commission, options);
+        return res.status(200).json({
+          commissions: result.map((commission) => ({
+            value: commission.id,
+            label: commission.title,
+          })),
+        });
+      } catch (error) {
+        return res.status(500).json({ error: error.message });
+      }
+    } catch (error) {
+      const status = error.status || 500;
+      const errorMessage = error.message || error;
+      return res.status(status).json({ message: errorMessage });
+    }
+  },
+
+  /**
+   * assign Commission to User
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  assignCommissionToUser(req, res) {
+    const { userId, commissionId } = req.body;
+
+    if (!userId) {
+      return res.status(400).json({ message: 'UserId needed to process' });
+    }
+
+    return User.update(
+      {
+        commissionId: commissionId || null,
+      },
+      {
+        where: { id: userId },
+      }
+    )
+      .then(() => {
+        return res.status(200).json({
+          message: 'Commission has been succesfully assigned',
+        });
+      })
+      .catch((error) => {
+        const status = error.status || 500;
+        const errorMessage =
+          (error.parent && error.parent.detail) || error.message || error;
+        return res.status(status).json({ message: errorMessage });
+      });
   },
 };
 

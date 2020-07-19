@@ -37,9 +37,10 @@ import {
 import { entertainerCommentSchema } from 'components/forms/schema/entertainerSchema';
 import { Formik, Form } from 'formik';
 import { createSchema } from 'components/forms/schema/schema-helpers';
-import { useBadgesSelect } from 'utils/useHooks';
+import { useBadgesSelect, useCommissionSelect } from 'utils/useHooks';
 import Select from 'components/forms/Select';
 import { assignBadgeObject } from 'components/forms/schema/badgeSchema';
+import { assignCommissionObject } from 'components/forms/schema/commissionSchema';
 
 const SingleEntertainer = ({ id }) => {
   const [entertainer, setEntertainer] = React.useState(null);
@@ -104,10 +105,6 @@ EntertainerProfile.propTypes = {
 const ApprovedEntertainerInfo = ({ entertainer }) => (
   <section>
     <div className="mt-5">
-      <EntertainerTab entertainer={entertainer} />
-    </div>
-
-    <div className="mt-5">
       <DuvLiveModal
         body={<AssignBadgeToUser userId={entertainer.id} />}
         closeModalText="Cancel"
@@ -117,6 +114,20 @@ const ApprovedEntertainerInfo = ({ entertainer }) => (
           <strong>+</strong> &nbsp; Assign Badge
         </button>
       </DuvLiveModal>
+      &nbsp; &nbsp;
+      <DuvLiveModal
+        body={<AssignCommissionToUser userId={entertainer.id} />}
+        closeModalText="Cancel"
+        title="Assign Commission"
+      >
+        <button className="btn btn-transparent btn-info">
+          <strong>+</strong> &nbsp; Assign Commission
+        </button>
+      </DuvLiveModal>
+    </div>
+
+    <div className="mt-5">
+      <EntertainerTab entertainer={entertainer} />
     </div>
 
     <div className="mt-5">
@@ -704,6 +715,77 @@ AddCommentsForm.propTypes = {
   tabId: PropTypes.string.isRequired,
 };
 
+const AssignCommissionToUser = ({ userId }) => {
+  const commissions = useCommissionSelect();
+  console.log('commissions', commissions);
+  const [message, setMessage] = React.useState({});
+
+  return (
+    <Formik
+      initialValues={setInitialValues(assignCommissionObject)}
+      onSubmit={({ commissionId }, actions) => {
+        console.log('here');
+        console.log('{ ommissionId, userId }', { commissionId, userId });
+        axios
+          .post(
+            `/api/v1/assign-commission-to-user`,
+            { commissionId, userId },
+            {
+              headers: { 'x-access-token': getTokenFromStore() },
+            }
+          )
+          .then(function (response) {
+            const { status, data } = response;
+            console.log('data', data);
+            if (status === 200) {
+              setMessage({
+                msg: 'Commision has been successfully assigned to user',
+                type: 'success',
+              });
+              actions.resetForm();
+              actions.setSubmitting(false);
+            }
+          })
+          .catch(function (error) {
+            console.log('error ', error.response.data.message);
+            setMessage({ msg: error.response.data.message });
+            actions.setSubmitting(false);
+          });
+      }}
+      render={({ isSubmitting, handleSubmit, ...props }) => (
+        <>
+          <Form>
+            <AlertMessage
+              message={message && message.msg}
+              type={message && message.type}
+            />
+            <Select
+              blankOption="Commissions"
+              label="Select Commissions"
+              name="commissionId"
+              options={commissions}
+              placeholder="Select Commission"
+            />
+
+            <Button
+              className="btn-info btn-wide btn-transparent mt-2"
+              loading={isSubmitting}
+              onClick={handleSubmit}
+            >
+              Assign Commission
+            </Button>
+          </Form>
+        </>
+      )}
+      validationSchema={createSchema(assignCommissionObject)}
+    />
+  );
+};
+
+AssignCommissionToUser.propTypes = {
+  userId: PropTypes.any.isRequired,
+};
+
 const AssignBadgeToUser = ({ userId }) => {
   const badges = useBadgesSelect();
   console.log('badges', badges);
@@ -755,8 +837,6 @@ const AssignBadgeToUser = ({ userId }) => {
               options={badges}
               placeholder="Select Bagde"
             />
-
-            <DisplayFormikState {...props} />
 
             <Button
               className="btn-info btn-wide btn-transparent mt-2"

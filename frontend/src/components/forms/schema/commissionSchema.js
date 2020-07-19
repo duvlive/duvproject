@@ -2,6 +2,7 @@ import {
   stringValidation,
   positiveNumberValidation,
   percentageValidation,
+  required,
 } from './schema-helpers';
 
 export const addCommissionObject = {
@@ -11,4 +12,8 @@ export const addCommissionObject = {
   bidsCommission: percentageValidation('Bids Commission'),
   handlingPercent: percentageValidation('Handling Percent'),
   handlingPlus: positiveNumberValidation('Handling Plus'),
+};
+
+export const assignCommissionObject = {
+  commissionId: required('Commissions'),
 };
