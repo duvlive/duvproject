@@ -134,7 +134,38 @@ const BadgeController = {
       };
       try {
         const { result, pagination } = await getAll(Badge, options);
-        return res.status(200).json({ badges: result, pagination });
+        return res.status(200).json({ result, pagination });
+      } catch (error) {
+        return res.status(500).json({ error: error.message });
+      }
+    } catch (error) {
+      const status = error.status || 500;
+      const errorMessage = error.message || error;
+      return res.status(status).json({ message: errorMessage });
+    }
+  },
+
+  /**
+   * get All Badge List
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  async getAllBadgesList(req, res) {
+    try {
+      const options = {
+        limit: 0,
+        attributes: ['id', 'title'],
+      };
+      try {
+        const { result } = await getAll(Badge, options);
+        return res.status(200).json({
+          badges: result.map((badge) => ({
+            value: badge.id,
+            label: badge.title,
+          })),
+        });
       } catch (error) {
         return res.status(500).json({ error: error.message });
       }

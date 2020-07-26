@@ -184,7 +184,7 @@ const ViewRequest = ({ applicationId }) => {
                     <div className="mt-4">
                       <a
                         className="btn btn-info btn-transparent"
-                        href={`/entertainers/${application.user.profile.slug}`}
+                        href={`/entertainers/profile/${application.user.profile.slug}`}
                         rel="noopener noreferrer"
                         target="_blank"
                       >

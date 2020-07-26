@@ -92,6 +92,9 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         defaultValue: true,
       },
+      commissionId: {
+        type: DataTypes.INTEGER,
+      },
     },
     {
       hooks: {

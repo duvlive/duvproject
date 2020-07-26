@@ -40,14 +40,18 @@ const Badges = () => {
 };
 
 Badges.CardLists = ({ badges }) => {
-  return badges.map(({ badge }, index) => (
-    <AwardCard
-      color={badge.color}
-      date={getShortDate(badge.createdAt)}
-      key={index}
-      title={badge.title}
-    />
-  ));
+  return badges.map(
+    ({ badge }, index) =>
+      badge &&
+      badge.color && (
+        <AwardCard
+          color={badge.color}
+          date={getShortDate(badge.createdAt)}
+          key={index}
+          title={badge.title}
+        />
+      )
+  );
 };
 
 Badges.CardLists.propTypes = {
