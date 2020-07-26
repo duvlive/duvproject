@@ -864,6 +864,8 @@ const EventController = {
       offset,
     } = req.query;
 
+    // let applicationIsRequired = false;
+
     try {
       let eventEntertainerQuery = {};
       const eventEntertainerStaticKeys = [
@@ -881,6 +883,7 @@ const EventController = {
 
       if (lowestBudget && parseInt(lowestBudget, 10) > 0) {
         eventEntertainerQuery.lowestBudget = { [Op.gte]: lowestBudget };
+        // applicationIsRequired = true;
       }
       if (highestBudget && parseInt(highestBudget, 10) > 0) {
         eventEntertainerQuery.highestBudget = { [Op.lte]: highestBudget };
@@ -901,7 +904,14 @@ const EventController = {
         };
       }
 
-      const staticKeys = ['cancelled', 'eventType', 'id', 'state', 'userId'];
+      const staticKeys = [
+        'cancelled',
+        'eventType',
+        'eventDuration',
+        'id',
+        'state',
+        'userId',
+      ];
       const dateKeys = ['cancelledDate', 'eventDate', 'startTime'];
       let eventQuery = {};
       staticKeys.forEach((key) => {
@@ -956,7 +966,6 @@ const EventController = {
           model: EventEntertainer,
           as: 'entertainers',
           where: eventEntertainerQuery,
-          // required: false,
           include: [
             {
               model: EntertainerProfile,

@@ -16,8 +16,6 @@ import {
 } from 'utils/constants';
 import Select from 'components/forms/Select';
 import MultiSelect from 'components/forms/MultiSelect';
-import { recommendEntertainerSchema } from 'components/forms/schema/entertainerSchema';
-import { setInitialValues } from 'components/forms/form-helper';
 import { getStates } from 'data/naija-states-and-lgas';
 import Timeago from 'react-timeago';
 import ProfileAvatar from 'assets/img/avatar/profile.png';
@@ -26,13 +24,18 @@ import {
   getTime,
   getTimeOfDay,
   getShortDate,
-  getURLTime,
 } from 'utils/date-helpers';
 import { countOccurences } from 'utils/helpers';
 import Image from 'components/common/utils/Image';
 import Input from 'components/forms/Input';
 import DatePicker from 'components/forms/DatePicker';
 import { getEventDuration } from 'components/common/events/EventDetails';
+import { useEntertainerSelect } from 'utils/useHooks';
+
+const EVENTDATE_FILTER = {
+  FUTURE: 'future',
+  PAST: 'past',
+};
 
 const UpcomingEvents = () => {
   return (
@@ -185,6 +188,7 @@ EventsCard.defaultProps = {
   startTime: null,
   state: null,
 };
+
 export const EntertainerFilter = ({ setFilterTerms }) => {
   const noBudget = { label: 'None', value: '0' };
   const anyState = { label: 'Any', value: 'Any' };
@@ -194,17 +198,33 @@ export const EntertainerFilter = ({ setFilterTerms }) => {
   };
 
   const EVENT_DURATION = getEventDuration();
+  const entertainers = useEntertainerSelect('entertainerId');
   return (
     <Formik
       initialValues={{
         eventType: '',
         eventDate: '',
-        startTime: '',
         eventDuration: '',
-        cancelled: '',
-        cancelledDate: '',
+        eventTime: '',
+        entertainerId: '', //
+        lowestBudget: '', //
+        highestBudget: '', //
+        language: '', //
+        auctionEndDate: '', //
+        auctionStartDate: '', //
+        hireType: '', //
+        state: '', //
+        startTime: '', //
+        cancelled: '', //
+        cancelledDate: '', //
+        applicationType: '', //
+        paid: '', //
+        status: '', //
       }}
       onSubmit={(value, actions) => {
+        const selectedEntertainer = entertainers.filter(
+          (entertainer) => entertainer.value.toString() === value.entertainerId
+        );
         setFilterTerms(
           {
             ...value,
@@ -227,6 +247,9 @@ export const EntertainerFilter = ({ setFilterTerms }) => {
             cancelledDate: `Cancelled Date: ${getShortDate(
               value.cancelledDate.date
             )}`,
+            entertainerId: `Entertainer: '${
+              (selectedEntertainer[0] && selectedEntertainer[0].label) || 'None'
+            }'`,
           }
         );
         actions.setSubmitting(false);
@@ -302,7 +325,28 @@ export const EntertainerFilter = ({ setFilterTerms }) => {
                 placeholder="Cancelled Date"
               />
             </div>
-            {/* <div className="form-row">
+            <div className="form-row">
+              <Select
+                blankOption="Select Filter"
+                formGroupClassName="col-md-6"
+                label="Filter By Period"
+                name="eventTime"
+                options={[
+                  { value: EVENTDATE_FILTER.PAST },
+                  { value: EVENTDATE_FILTER.FUTURE },
+                ]}
+              />
+              <Select
+                blankOption="Select Entertainer"
+                formGroupClassName="col-md-6"
+                label="Entertainer"
+                name="entertainerId"
+                optional
+                options={entertainers}
+                placeholder="Select Entertainer"
+              />
+            </div>
+            <div className="form-row">
               <Select
                 blankOption="Choose your preferred Entertainer Type"
                 formGroupClassName="col-md-6"
@@ -328,7 +372,7 @@ export const EntertainerFilter = ({ setFilterTerms }) => {
             <div className="form-row">
               <Select
                 formGroupClassName="col-md-6"
-                label="Base Charge (in Naira)"
+                label="Lowest Charge (in Naira)"
                 name="lowestBudget"
                 optional
                 options={[noBudget, ...BUDGET]}
@@ -336,7 +380,7 @@ export const EntertainerFilter = ({ setFilterTerms }) => {
               />
               <Select
                 formGroupClassName="col-md-6"
-                label="Preferred Charges (in Naira)"
+                label="Highest Charges (in Naira)"
                 name="highestBudget"
                 optional
                 options={[noBudget, ...BUDGET]}
@@ -362,7 +406,7 @@ export const EntertainerFilter = ({ setFilterTerms }) => {
                 placeholder="Preferred Language"
                 showFeedback={feedback.ERROR}
               />
-            </div> */}
+            </div>
             <div className="form-group">
               <Button
                 color="danger"
