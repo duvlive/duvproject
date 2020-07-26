@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import TopMessage from 'components/common/layout/TopMessage';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import { getTokenFromStore } from 'utils/localStorage';
-import { getShortDate, getLongDate } from 'utils/date-helpers';
-import { moneyFormat, twoDigitNumber, commaNumber } from 'utils/helpers';
-import { Link } from '@reach/router';
+import { getLongDate } from 'utils/date-helpers';
+import { moneyFormat, twoDigitNumber } from 'utils/helpers';
+// import { Link } from '@reach/router';
 import LoadingScreen from 'components/common/layout/LoadingScreen';
 import NoContent from 'components/common/utils/NoContent';
 
@@ -83,7 +83,7 @@ const UserPaymentsRow = ({ amount, gateway_response, number, paid_at }) => (
     <td className="align-middle">
       <small className="small--4 text-muted">Amount</small>
       <span className="text-muted-light-2">
-        NGN {commaNumber(amount) || '-'}
+        NGN {moneyFormat(amount) || '-'}
       </span>
     </td>
 

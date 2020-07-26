@@ -226,6 +226,20 @@ export const EntertainerSectionInfo = ({ entertainer, showContentOnly }) => {
       className={`entertainer-info ${entertainer.profile.entertainerType.toLowerCase()} mt-5`}
     >
       <div className="container-fluid">{content}</div>
+
+      {/* Show cancel events only when available */}
+      {entertainer &&
+        entertainer.cancelledEvents &&
+        entertainer.cancelledEvents.length > 0 && (
+          <section className="mt-5">
+            <div className="container-fluid">
+              <CancelledEvents
+                events={entertainer.cancelledEvents.length}
+                stageName={entertainer.profile.stageName}
+              />
+            </div>
+          </section>
+        )}
     </section>
   );
 };
@@ -294,6 +308,22 @@ export const Awards = ({ badges }) => {
 
 Awards.propTypes = {
   badges: PropTypes.array.isRequired,
+};
+
+export const CancelledEvents = ({ events, stageName }) => {
+  return (
+    <div className="row w-100 card card-custom card-red p-4">
+      <h5 className="font-weight-normal">
+        <span className="icon icon-cancel-circled"></span> {stageName} has{' '}
+        {events} cancelled {Humanize.pluralize(events, 'event')}.
+      </h5>
+    </div>
+  );
+};
+
+CancelledEvents.propTypes = {
+  events: PropTypes.number.isRequired,
+  stageName: PropTypes.string.isRequired,
 };
 
 export const Gallery = ({ galleries, showContentOnly }) => {

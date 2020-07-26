@@ -32,7 +32,7 @@ import DuvLiveModal from 'components/custom/Modal';
 import TextArea from 'components/forms/TextArea';
 import {
   setInitialValues,
-  DisplayFormikState,
+  // DisplayFormikState,
 } from 'components/forms/form-helper';
 import { entertainerCommentSchema } from 'components/forms/schema/entertainerSchema';
 import { Formik, Form } from 'formik';
@@ -41,6 +41,8 @@ import { useBadgesSelect, useCommissionSelect } from 'utils/useHooks';
 import Select from 'components/forms/Select';
 import { assignBadgeObject } from 'components/forms/schema/badgeSchema';
 import { assignCommissionObject } from 'components/forms/schema/commissionSchema';
+import { CancelledEvents } from '../frontend/SingleEntertainer';
+import { UserContext } from 'context/UserContext';
 
 const SingleEntertainer = ({ id }) => {
   const [entertainer, setEntertainer] = React.useState(null);
@@ -126,6 +128,18 @@ const ApprovedEntertainerInfo = ({ entertainer }) => (
       </DuvLiveModal>
     </div>
 
+    {/* Show cancel events only when available */}
+    {entertainer && entertainer.userCommission && (
+      <section className="mt-5">
+        <div className="w-100 card card-custom card-green p-4">
+          <h5 className="font-weight-normal">
+            <span className="icon icon-money"></span> Commission:{' '}
+            {entertainer.userCommission.title}.
+          </h5>
+        </div>
+      </section>
+    )}
+
     <div className="mt-5">
       <EntertainerTab entertainer={entertainer} />
     </div>
@@ -133,6 +147,18 @@ const ApprovedEntertainerInfo = ({ entertainer }) => (
     <div className="mt-5">
       <MediaTab entertainer={entertainer} />
     </div>
+
+    {/* Show cancel events only when available */}
+    {entertainer &&
+      entertainer.cancelledEvents &&
+      entertainer.cancelledEvents.length > 0 && (
+        <div className="col-12 mt-4">
+          <CancelledEvents
+            events={entertainer.cancelledEvents.length}
+            stageName={entertainer.profile.stageName}
+          />
+        </div>
+      )}
   </section>
 );
 
@@ -717,15 +743,13 @@ AddCommentsForm.propTypes = {
 
 const AssignCommissionToUser = ({ userId }) => {
   const commissions = useCommissionSelect();
-  console.log('commissions', commissions);
   const [message, setMessage] = React.useState({});
+  let { userDispatch } = React.useContext(UserContext);
 
   return (
     <Formik
       initialValues={setInitialValues(assignCommissionObject)}
       onSubmit={({ commissionId }, actions) => {
-        console.log('here');
-        console.log('{ ommissionId, userId }', { commissionId, userId });
         axios
           .post(
             `/api/v1/assign-commission-to-user`,
@@ -741,6 +765,10 @@ const AssignCommissionToUser = ({ userId }) => {
               setMessage({
                 msg: 'Commision has been successfully assigned to user',
                 type: 'success',
+              });
+              userDispatch({
+                type: 'add-user-commission',
+                commission: data.commission,
               });
               actions.resetForm();
               actions.setSubmitting(false);
@@ -795,8 +823,6 @@ const AssignBadgeToUser = ({ userId }) => {
     <Formik
       initialValues={setInitialValues(assignBadgeObject)}
       onSubmit={({ badgeId }, actions) => {
-        console.log('here');
-        console.log('{ badgeId, userId }', { badgeId, userId });
         axios
           .post(
             `/api/v1/badge/assign`,

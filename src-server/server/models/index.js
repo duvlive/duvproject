@@ -118,6 +118,16 @@ db.User.hasMany(db.Notification, {
   hooks: true,
 });
 
+db.User.belongsTo(db.Commission, {
+  foreignKey: 'commissionId',
+  as: 'userCommission',
+});
+
+db.User.hasMany(db.CancelEventEntertainer, {
+  foreignKey: 'userId',
+  as: 'cancelledEvents',
+});
+
 db.Event.hasMany(db.EventEntertainer, {
   foreignKey: 'eventId',
   as: 'entertainers',

@@ -15,6 +15,7 @@ import {
   Contact,
   Identification,
   ApprovalComment,
+  CancelEventEntertainer,
 } from '../models';
 import { ENTERTAINER_APPROVAL, USER_TYPES } from '../constant';
 import { getAll } from '../utils/modelHelper';
@@ -343,6 +344,14 @@ const EntertainerProfileController = {
               as: 'badge',
             },
           ],
+        },
+        {
+          model: CancelEventEntertainer,
+          as: 'cancelledEvents',
+          required: false,
+          where: {
+            cancelledBy: 'Entertainer',
+          },
         },
       ],
     })
