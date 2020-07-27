@@ -39,15 +39,16 @@ HireEntertainers.defaultProps = {
 };
 
 const EntertainerSection = ({ entertainers, loading, type }) => {
-  console.log('entertainers', entertainers);
+  const ENTERTAINER_TYPE = { djs: 'dj', mcs: 'mc', livebands: 'liveband' };
   const [allEntertainers, setAllEntertainers] = React.useState([]);
-  const [currentFilter, setFilter] = React.useState(type);
+  const [currentFilter, setFilter] = React.useState(ENTERTAINER_TYPE[type]);
 
   React.useEffect(() => {
     const filteredEntertainer = entertainers.filter(
       (entertainer) =>
         entertainer &&
         entertainer.entertainerType &&
+        currentFilter &&
         entertainer.entertainerType.toUpperCase() ===
           currentFilter.toUpperCase()
     );

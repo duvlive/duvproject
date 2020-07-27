@@ -96,7 +96,7 @@ const BadgeDetails = ({ badge }) => (
               <div className="small--3 text-gray">
                 <a
                   className="btn btn-info btn-sm btn-transparent"
-                  href={`/entertainers/${badgeUser.profile.slug}`}
+                  href={`/entertainers/profile/${badgeUser.profile.slug}`}
                   rel="noopener noreferrer"
                   target="_blank"
                 >

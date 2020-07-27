@@ -546,7 +546,7 @@ SingleEvent.HireEntertainersRow = ({ entertainer }) => {
         {entertainer && (
           <a
             className="btn btn-info btn-sm btn-transparent"
-            href={`/entertainers/${entertainer.slug}`}
+            href={`/entertainers/profile/${entertainer.slug}`}
             rel="noopener noreferrer"
             target="_blank"
           >

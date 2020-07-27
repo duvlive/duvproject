@@ -127,7 +127,6 @@ const GalleryController = {
    */
   setAsProfileImage(req, res) {
     const { profileImageURL } = req.body;
-    res.json({ profileImageURL });
     if (profileImageURL) {
       const { userId } = req.decoded;
       User.findOne({

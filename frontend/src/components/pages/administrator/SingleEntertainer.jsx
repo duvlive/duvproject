@@ -30,10 +30,17 @@ import Button from 'components/forms/Button';
 import NoContent from 'components/common/utils/NoContent';
 import DuvLiveModal from 'components/custom/Modal';
 import TextArea from 'components/forms/TextArea';
-import { setInitialValues } from 'components/forms/form-helper';
+import {
+  setInitialValues,
+  DisplayFormikState,
+} from 'components/forms/form-helper';
 import { entertainerCommentSchema } from 'components/forms/schema/entertainerSchema';
 import { Formik, Form } from 'formik';
 import { createSchema } from 'components/forms/schema/schema-helpers';
+import { useBadgesSelect, useCommissionSelect } from 'utils/useHooks';
+import Select from 'components/forms/Select';
+import { assignBadgeObject } from 'components/forms/schema/badgeSchema';
+import { assignCommissionObject } from 'components/forms/schema/commissionSchema';
 
 const SingleEntertainer = ({ id }) => {
   const [entertainer, setEntertainer] = React.useState(null);
@@ -98,35 +105,34 @@ EntertainerProfile.propTypes = {
 const ApprovedEntertainerInfo = ({ entertainer }) => (
   <section>
     <div className="mt-5">
+      <DuvLiveModal
+        body={<AssignBadgeToUser userId={entertainer.id} />}
+        closeModalText="Cancel"
+        title="Assign Badge"
+      >
+        <button className="btn btn-transparent btn-danger">
+          <strong>+</strong> &nbsp; Assign Badge
+        </button>
+      </DuvLiveModal>
+      &nbsp; &nbsp;
+      <DuvLiveModal
+        body={<AssignCommissionToUser userId={entertainer.id} />}
+        closeModalText="Cancel"
+        title="Assign Commission"
+      >
+        <button className="btn btn-transparent btn-info">
+          <strong>+</strong> &nbsp; Assign Commission
+        </button>
+      </DuvLiveModal>
+    </div>
+
+    <div className="mt-5">
       <EntertainerTab entertainer={entertainer} />
     </div>
 
-    {entertainer.badges && entertainer.badges.length > 0 && (
-      <Awards badges={entertainer.badges} />
-    )}
-
-    {entertainer.galleries && entertainer.galleries.length > 0 && (
-      <>
-        <h4 className="mt-5 text-uppercase col-12 font-weight-normal mb-3">
-          Gallery
-        </h4>
-        <Gallery galleries={entertainer.galleries} showContentOnly />
-      </>
-    )}
-
-    {entertainer.videos && entertainer.videos.length > 0 && (
-      <>
-        <h4 className="mt-5 text-uppercase col-12 font-weight-normal mb-3">
-          Videos
-        </h4>
-        <Videos showContentOnly videos={entertainer.videos} />
-      </>
-    )}
-    {entertainer.profile &&
-      entertainer.profile.ratings &&
-      entertainer.profile.ratings.length > 0 && (
-        <ReviewSection ratings={entertainer.profile.ratings} />
-      )}
+    <div className="mt-5">
+      <MediaTab entertainer={entertainer} />
+    </div>
   </section>
 );
 
@@ -195,8 +201,6 @@ const BankDetails = ({ entertainer }) => (
 
       <InfoList title="Bank">{entertainer.bankDetail.bankName}</InfoList>
     </Col>
-    {/* <Col lg={4} md={6} sm={12}>
-    </Col> */}
   </div>
 );
 
@@ -398,9 +402,69 @@ const EntertainerTab = ({ entertainer }) => {
     if (activeTab !== tab) setActiveTab(tab);
   };
 
+  const ApprovalButton = ({ entertainer }) => {
+    // Entertainer is already approved
+    if (
+      entertainer.approvalComment['entertainerProfile'] === 'YES' &&
+      entertainer.approvalComment['bankAccount'] === 'YES' &&
+      entertainer.approvalComment['contact'] === 'YES' &&
+      entertainer.approvalComment['youTube'] === 'YES' &&
+      entertainer.approvalComment['identification'] === 'YES'
+    ) {
+      return null;
+    }
+
+    console.log('ENTERTAIENR_TAB_LIST', ENTERTAINER_TAB_LIST);
+
+    // Show button only when entertainer has completed all sections
+    if (
+      !(
+        ENTERTAINER_TAB_LIST[0].completed(entertainer) &&
+        ENTERTAINER_TAB_LIST[1].completed(entertainer) &&
+        ENTERTAINER_TAB_LIST[2].completed(entertainer) &&
+        ENTERTAINER_TAB_LIST[3].completed(entertainer) &&
+        ENTERTAINER_TAB_LIST[4].completed(entertainer)
+      )
+    ) {
+      return null;
+    }
+
+    return (
+      <div className="my-5">
+        <DuvLiveModal
+          actionButtonColor="btn btn-danger btn-wide btn-transparent"
+          actionFn={() =>
+            addSingleComment(currentEntertainer.id, {
+              entertainerProfile: 'YES',
+              bankAccount: 'YES',
+              contact: 'YES',
+              youTube: 'YES',
+              identification: 'YES',
+            })
+          }
+          actionText="Yes, I am 100% Sure"
+          body={
+            <>
+              <h5>Are you sure you have verified all entertainer details</h5>
+              <p className="text-muted-light-2">
+                This will approve all the entertainer account
+              </p>
+            </>
+          }
+          cancelButtonColor="btn btn-sm btn-transparent btn-info"
+        >
+          <button className="btn btn-danger btn-wide btn-transparent">
+            Approve Entertainer
+          </button>
+        </DuvLiveModal>
+      </div>
+    );
+  };
+
   return (
     <div>
       <AlertMessage {...message} />
+      <ApprovalButton entertainer={entertainer} />
       <Nav tabs>
         {ENTERTAINER_TAB_LIST.map((tab, index) => (
           <NavItem key={index}>
@@ -435,11 +499,11 @@ const EntertainerTab = ({ entertainer }) => {
                 tab.completed(currentEntertainer) && (
                   <>
                     {currentEntertainer.approvalComment[tab.id] && (
-                      <div className="row col-sm-12 mb-4">
-                        <AlertMessage
-                          message={currentEntertainer.approvalComment[tab.id]}
-                          type="info"
-                        />
+                      <div className="col-sm-12 tab-bg-info">
+                        <h6>Comment</h6>
+                        <p className="text-muted-light">
+                          {currentEntertainer.approvalComment[tab.id]}
+                        </p>
                       </div>
                     )}
                     <Button
@@ -486,6 +550,134 @@ EntertainerTab.propTypes = {
   entertainer: PropTypes.object.isRequired,
 };
 
+const MediaTab = ({ entertainer }) => {
+  const [activeTab, setActiveTab] = React.useState('1');
+  console.log('entertainer', entertainer);
+
+  const toggle = (tab) => {
+    if (activeTab !== tab) setActiveTab(tab);
+  };
+
+  return (
+    <div>
+      <Nav tabs>
+        <NavItem>
+          <NavLink
+            className={classnames({ active: activeTab === '1' })}
+            onClick={() => {
+              toggle('1');
+            }}
+          >
+            Gallery
+          </NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink
+            className={classnames({ active: activeTab === '2' })}
+            onClick={() => {
+              toggle('2');
+            }}
+          >
+            Videos
+          </NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink
+            className={classnames({ active: activeTab === '3' })}
+            onClick={() => {
+              toggle('3');
+            }}
+          >
+            Awards
+          </NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink
+            className={classnames({ active: activeTab === '4' })}
+            onClick={() => {
+              toggle('4');
+            }}
+          >
+            Reviews
+          </NavLink>
+        </NavItem>
+      </Nav>
+      <TabContent activeTab={activeTab}>
+        <TabPane tabId="1">
+          <Row>
+            <Col sm="12">
+              {entertainer.galleries && entertainer.galleries.length > 0 ? (
+                <>
+                  <h4 className="mt-5 text-uppercase col-12 font-weight-normal mb-3">
+                    Gallery
+                  </h4>
+                  <Gallery galleries={entertainer.galleries} showContentOnly />
+                </>
+              ) : (
+                <div className="text-center mt-5">
+                  <span className="icon icon-gallery display-1"></span>
+                  <NoContent text="Entertainer has no gallery" />
+                </div>
+              )}
+            </Col>
+          </Row>
+        </TabPane>
+        <TabPane tabId="2">
+          <Row>
+            {entertainer.videos && entertainer.videos.length > 0 ? (
+              <>
+                <h4 className="mt-5 text-uppercase col-12 font-weight-normal mb-3">
+                  Videos
+                </h4>
+                <Videos showContentOnly videos={entertainer.videos} />
+              </>
+            ) : (
+              <div className="text-center mt-5">
+                <span className="icon icon-video display-1"></span>
+                <NoContent text="Entertainer has no videos" />
+              </div>
+            )}
+          </Row>
+        </TabPane>
+        <TabPane tabId="3">
+          <Row>
+            <Col sm="12">
+              {entertainer.badges && entertainer.badges.length > 0 ? (
+                <Awards badges={entertainer.badges} />
+              ) : (
+                <div className="text-center mt-5">
+                  <span className="icon icon-badge display-1"></span>
+                  <NoContent text="Entertainer has no Awards" />
+                </div>
+              )}
+            </Col>
+          </Row>
+        </TabPane>
+        <TabPane tabId="4">
+          <Row>
+            <Col sm="12">
+              {entertainer.profile &&
+              entertainer.profile.ratings &&
+              entertainer.profile.ratings.length > 0 ? (
+                <ReviewSection ratings={entertainer.profile.ratings} />
+              ) : (
+                <div className="text-center mt-5">
+                  <span className="icon icon-vcard display-1"></span>
+                  <NoContent text="Entertainer has no Reviews" />
+                </div>
+              )}
+            </Col>
+          </Row>
+        </TabPane>
+      </TabContent>
+    </div>
+  );
+};
+
+MediaTab.propTypes = {
+  entertainer: PropTypes.object.isRequired,
+};
+
 const AddCommentsForm = ({ addSingleComment, entertainerId, name, tabId }) => (
   <Formik
     initialValues={setInitialValues(entertainerCommentSchema)}
@@ -521,6 +713,148 @@ AddCommentsForm.propTypes = {
   entertainerId: PropTypes.any.isRequired,
   name: PropTypes.string.isRequired,
   tabId: PropTypes.string.isRequired,
+};
+
+const AssignCommissionToUser = ({ userId }) => {
+  const commissions = useCommissionSelect();
+  console.log('commissions', commissions);
+  const [message, setMessage] = React.useState({});
+
+  return (
+    <Formik
+      initialValues={setInitialValues(assignCommissionObject)}
+      onSubmit={({ commissionId }, actions) => {
+        console.log('here');
+        console.log('{ ommissionId, userId }', { commissionId, userId });
+        axios
+          .post(
+            `/api/v1/assign-commission-to-user`,
+            { commissionId, userId },
+            {
+              headers: { 'x-access-token': getTokenFromStore() },
+            }
+          )
+          .then(function (response) {
+            const { status, data } = response;
+            console.log('data', data);
+            if (status === 200) {
+              setMessage({
+                msg: 'Commision has been successfully assigned to user',
+                type: 'success',
+              });
+              actions.resetForm();
+              actions.setSubmitting(false);
+            }
+          })
+          .catch(function (error) {
+            console.log('error ', error.response.data.message);
+            setMessage({ msg: error.response.data.message });
+            actions.setSubmitting(false);
+          });
+      }}
+      render={({ isSubmitting, handleSubmit, ...props }) => (
+        <>
+          <Form>
+            <AlertMessage
+              message={message && message.msg}
+              type={message && message.type}
+            />
+            <Select
+              blankOption="Commissions"
+              label="Select Commissions"
+              name="commissionId"
+              options={commissions}
+              placeholder="Select Commission"
+            />
+
+            <Button
+              className="btn-info btn-wide btn-transparent mt-2"
+              loading={isSubmitting}
+              onClick={handleSubmit}
+            >
+              Assign Commission
+            </Button>
+          </Form>
+        </>
+      )}
+      validationSchema={createSchema(assignCommissionObject)}
+    />
+  );
+};
+
+AssignCommissionToUser.propTypes = {
+  userId: PropTypes.any.isRequired,
+};
+
+const AssignBadgeToUser = ({ userId }) => {
+  const badges = useBadgesSelect();
+  console.log('badges', badges);
+  const [message, setMessage] = React.useState({});
+
+  return (
+    <Formik
+      initialValues={setInitialValues(assignBadgeObject)}
+      onSubmit={({ badgeId }, actions) => {
+        console.log('here');
+        console.log('{ badgeId, userId }', { badgeId, userId });
+        axios
+          .post(
+            `/api/v1/badge/assign`,
+            { badgeId, userId },
+            {
+              headers: { 'x-access-token': getTokenFromStore() },
+            }
+          )
+          .then(function (response) {
+            const { status, data } = response;
+            console.log('data', data);
+            if (status === 200) {
+              setMessage({
+                msg: 'Badge has been successfully assigned to user',
+                type: 'success',
+              });
+              actions.resetForm();
+              actions.setSubmitting(false);
+            }
+          })
+          .catch(function (error) {
+            console.log('error ', error.response.data.message);
+            setMessage({ msg: error.response.data.message });
+            actions.setSubmitting(false);
+          });
+      }}
+      render={({ isSubmitting, handleSubmit, ...props }) => (
+        <>
+          <Form>
+            <AlertMessage
+              message={message && message.msg}
+              type={message && message.type}
+            />
+            <Select
+              blankOption="Badges"
+              label="Select Badge"
+              name="badgeId"
+              options={badges}
+              placeholder="Select Bagde"
+            />
+
+            <Button
+              className="btn-info btn-wide btn-transparent mt-2"
+              loading={isSubmitting}
+              onClick={handleSubmit}
+            >
+              Assign Badge
+            </Button>
+          </Form>
+        </>
+      )}
+      validationSchema={createSchema(assignBadgeObject)}
+    />
+  );
+};
+
+AssignBadgeToUser.propTypes = {
+  userId: PropTypes.any.isRequired,
 };
 
 export default SingleEntertainer;

@@ -35,6 +35,10 @@ const PriceCalculator = ({ askingPrice, commission, hireType }) => {
               <table className="table table-dark">
                 <tbody>
                   <tr>
+                    <td>Name</td>
+                    <td className="text-right">{commission.title}</td>
+                  </tr>
+                  <tr>
                     <td>Your Bid</td>
                     <td className="text-right">
                       {getNairaSymbol()}

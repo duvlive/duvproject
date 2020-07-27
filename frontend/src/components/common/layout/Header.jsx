@@ -23,7 +23,7 @@ import { getUserTypeFromStore } from 'utils/localStorage';
 const menus = [
   { name: 'Home', to: '/' },
   { name: 'How it Works', to: '/how-it-works' },
-  { name: 'Hire Entertainers', to: '/hire-entertainers' },
+  { name: 'Hire Entertainers', to: '/entertainers' },
   { name: 'Upcoming Events', to: '/upcoming-events' },
   { name: 'Help', to: '/help' },
 ];

@@ -509,7 +509,7 @@ const SelectedEntertainer = ({ entertainer, selectedSearchedEntertainer }) => (
           <td className="align-middle">
             <a
               className="btn btn-info btn-sm btn-transparent"
-              href={`/entertainers/${entertainer.slug}`}
+              href={`/entertainers/profile/${entertainer.slug}`}
               rel="noopener noreferrer"
               target="_blank"
             >

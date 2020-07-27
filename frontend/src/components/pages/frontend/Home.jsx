@@ -179,14 +179,16 @@ const EntertainerSection = ({ entertainers, loading }) => (
           />
         )}
       </Row>
-      <Row className="pt-3">
-        <Link
-          className="btn btn-danger btn-transparent btn-lg btn-wide"
-          to="/hire-entertainers"
-        >
-          View More Entertainers
-        </Link>
-      </Row>
+      {entertainers && entertainers.length > 6 && (
+        <Row className="pt-3">
+          <Link
+            className="btn btn-danger btn-transparent btn-lg btn-wide"
+            to="/entertainers"
+          >
+            View More Entertainers
+          </Link>
+        </Row>
+      )}
     </div>
   </section>
 );
