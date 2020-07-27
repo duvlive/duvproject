@@ -1035,7 +1035,7 @@ const EventController = {
       let entertainerProfileQuery = {};
 
       if (entertainerType) {
-        eventEntertainerQuery.entertainerType = entertainerType;
+        eventEntertainerQuery.entertainerType = { [Op.eq]: entertainerType };
       }
       if (entertainerId) {
         eventEntertainerQuery.hiredEntertainer = entertainerId;
