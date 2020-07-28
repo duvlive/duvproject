@@ -1032,22 +1032,13 @@ const EventController = {
 
     try {
       let eventEntertainerQuery = {};
-      let entertainerProfileQuery = {};
 
       if (entertainerType) {
-        eventEntertainerQuery.entertainerType = { [Op.eq]: entertainerType };
+        eventEntertainerQuery.entertainerType = entertainerType;
       }
       if (entertainerId) {
         eventEntertainerQuery.hiredEntertainer = entertainerId;
-        entertainerProfileQuery.id = entertainerId;
       }
-
-      let eventQuery = {};
-      eventQuery.eventDate = { [Op.lte]: Sequelize.literal('NOW()') };
-
-      // eventQuery.cancelled = {
-      //   [Op.eq]: req.query['cancelled'] === 'YES' ? true : false,
-      // };
 
       const eventKeys = ['id', 'userId'];
 
@@ -1057,23 +1048,22 @@ const EventController = {
         }
       });
 
-      let ratingsQuery = {};
-      if (review) {
-        ratingsQuery.review =
-          review === 'YES' ? { [Op.ne]: null } : { [Op.eq]: null };
-      }
+      let reviewQuery = {};
+      reviewQuery.review =
+        review === 'YES' ? { [Op.ne]: null } : { [Op.eq]: null };
 
       const eventInclude = [
         {
           model: EventEntertainer,
           as: 'entertainers',
           where: eventEntertainerQuery,
-          required: false,
+          required: !!entertainerType,
           include: [
             {
               model: EntertainerProfile,
               as: 'entertainer',
-              // where: entertainerProfileQuery,
+              required: !!entertainerId,
+              duplicating: !!entertainerId,
               attributes: [
                 'id',
                 'stageName',
@@ -1093,24 +1083,16 @@ const EventController = {
                   ],
                 },
               ],
-              required: false,
             },
             {
               model: Rating,
               as: 'eventRating',
-              where: ratingsQuery,
-              required: false,
-              attributes: ['review'],
-              include: [
-                {
-                  model: User,
-                  as: 'rater',
-                  attributes: ['firstName', 'profileImageURL'],
-                },
-              ],
+              where: reviewQuery,
+              required: review === 'YES',
+              duplicating: review === 'YES',
+              attributes: ['review', 'overallTalent', 'recommend'],
             },
           ],
-          // required: false,
         },
         {
           model: User,
@@ -1119,17 +1101,20 @@ const EventController = {
           required: false,
         },
       ];
-
+      console.log('======', eventInclude, '----', eventInclude[0].include);
       const options = {
         offset: offset || 0,
         limit: limit || 10,
-        where: eventQuery,
+        where: { eventDate: { [Op.lte]: Sequelize.literal('NOW()') } },
         include: eventInclude,
       };
 
       try {
         const { result, pagination } = await getAll(Event, options);
-        return res.status(200).json({ events: result, pagination });
+        return res.status(200).json({
+          events: result,
+          pagination,
+        });
       } catch (error) {
         return res.status(500).json({ error: error.message });
       }
