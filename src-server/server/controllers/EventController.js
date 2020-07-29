@@ -1101,7 +1101,6 @@ const EventController = {
           required: false,
         },
       ];
-      console.log('======', eventInclude, '----', eventInclude[0].include);
       const options = {
         offset: offset || 0,
         limit: limit || 10,
