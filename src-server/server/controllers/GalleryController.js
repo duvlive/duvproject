@@ -49,7 +49,7 @@ const GalleryController = {
     if (req.file) {
       const gallery = {};
       gallery.userId = req.decoded.userId;
-      gallery.imageURL = req.file.url;
+      gallery.imageURL = req.file.url.replace(/^http:\/\//i, 'https://');
       gallery.imageID = req.file.public_id;
 
       return Gallery.create(gallery)
