@@ -50,6 +50,10 @@ app.get('/email-logo.png', function (req, res) {
   res.sendFile(path.join(__dirname, 'server', 'email-template', 'logo.png'));
 });
 
+app.get('/view-our-work', function (req, res) {
+  res.redirect('/');
+});
+
 app.get('*', function (req, res) {
   res.sendFile(path.join(__dirname, `build`, 'index.html'));
 });

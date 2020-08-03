@@ -177,6 +177,8 @@ export const EntertainerSectionInfo = ({ entertainer, showContentOnly }) => {
     ? entertainer.profile.hired.length
     : 0;
 
+  const cancelledShows = entertainer.cancelledEvents.length;
+
   const content = (
     <Row>
       {!showContentOnly && (
@@ -185,9 +187,9 @@ export const EntertainerSectionInfo = ({ entertainer, showContentOnly }) => {
         </h4>
       )}
       <Col sm="4">
-        <InfoList title="Stage Name">{entertainer.profile.stageName}</InfoList>
-        <InfoList title="Speciality">
-          {entertainer.profile.entertainerType}
+        <InfoList title="Stage Name">
+          {entertainer.profile.stageName} ({entertainer.profile.entertainerType}
+          )
         </InfoList>
         <InfoList title="Years of Experience">
           {parseInt(getYear(Date.now()), 10) -
@@ -196,6 +198,9 @@ export const EntertainerSectionInfo = ({ entertainer, showContentOnly }) => {
         </InfoList>
         <InfoList title="Total Shows">
           {totalShows} {Humanize.pluralize(totalShows, 'Show')}
+        </InfoList>
+        <InfoList title="Cancelled Shows">
+          {cancelledShows} {Humanize.pluralize(cancelledShows, 'Show')}
         </InfoList>
       </Col>
       <Col sm="4">
@@ -294,6 +299,22 @@ export const Awards = ({ badges }) => {
 
 Awards.propTypes = {
   badges: PropTypes.array.isRequired,
+};
+
+export const CancelledEvents = ({ events, stageName }) => {
+  return (
+    <div className="row w-100 card card-custom card-red p-4">
+      <h5 className="font-weight-normal">
+        <span className="icon icon-cancel-circled"></span> {stageName} has{' '}
+        {events} cancelled {Humanize.pluralize(events, 'event')}.
+      </h5>
+    </div>
+  );
+};
+
+CancelledEvents.propTypes = {
+  events: PropTypes.number.isRequired,
+  stageName: PropTypes.string.isRequired,
 };
 
 export const Gallery = ({ galleries, showContentOnly }) => {

@@ -22,11 +22,11 @@ const SingleEvent = ({ slug }) => {
 };
 
 SingleEvent.propTypes = {
-  slug: PropTypes.string
+  slug: PropTypes.string,
 };
 
 SingleEvent.defaultProps = {
-  slug: null
+  slug: null,
 };
 
 const EventSection = ({ event }) => (
@@ -51,7 +51,7 @@ const EventSection = ({ event }) => (
           <h2 className="header font-weight-light pb-3">
             ABOUT <span>EVENT</span>
           </h2>
-          <div dangerouslySetInnerHTML={createMarkup(event.description)} />
+          {event.description}
         </Col>
         <Col sm="4">
           <div className={`card card-custom card-tiles card-blue no-br`}>
@@ -76,7 +76,7 @@ const EventSection = ({ event }) => (
 );
 
 EventSection.propTypes = {
-  event: PropTypes.object.isRequired
+  event: PropTypes.object.isRequired,
 };
 
 const OtherEventsSection = ({ events }) => (
@@ -93,7 +93,7 @@ const OtherEventsSection = ({ events }) => (
 );
 
 OtherEventsSection.propTypes = {
-  events: PropTypes.array.isRequired
+  events: PropTypes.array.isRequired,
 };
 
 const BackToHireEvents = () => (
@@ -109,7 +109,7 @@ const BackToHireEvents = () => (
   </section>
 );
 
-const getEventDateTime = event => {
+const getEventDateTime = (event) => {
   const eventDate = parse(event.start_date);
   return format(eventDate, 'DD MMMM') + ' ' + event.startTime;
 };
@@ -125,6 +125,6 @@ SingleEvent.Details = ({ title, details }) => (
 );
 SingleEvent.Details.propTypes = {
   details: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired
+  title: PropTypes.string.isRequired,
 };
 export default SingleEvent;

@@ -5,6 +5,7 @@ import {
   Badge,
   BadgeUser,
   BankDetail,
+  CancelEventEntertainer,
   Contact,
   EntertainerProfile,
   Event,
@@ -91,6 +92,14 @@ export const userAssociatedModels = [
     },
   },
   {
+    model: CancelEventEntertainer,
+    as: 'cancelledEvents',
+    required: false,
+    where: {
+      cancelledBy: 'Entertainer',
+    },
+  },
+  {
     model: Event,
     as: 'events',
     include: [
@@ -143,6 +152,7 @@ const UserController = {
       bankDetail: user.bankDetail,
       contacts: user.contacts,
       events: user.events,
+      cancelledEvents: user.cancelledEvents,
       notifications: user.notifications,
       galleries: user.galleries,
       identification: user.identification,

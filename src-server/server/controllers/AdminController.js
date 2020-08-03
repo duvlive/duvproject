@@ -14,6 +14,8 @@ import {
   Contact,
   Identification,
   ApprovalComment,
+  CancelEventEntertainer,
+  Commission,
 } from '../models';
 import { getAll } from '../utils/modelHelper';
 
@@ -94,6 +96,10 @@ const AdminController = {
         attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
         include: [
           {
+            model: Commission,
+            as: 'userCommission',
+          },
+          {
             model: EntertainerProfile,
             as: 'profile',
             where: { id },
@@ -142,6 +148,14 @@ const AdminController = {
                 attributes: ['placeOfEvent'],
               },
             ],
+          },
+          {
+            model: CancelEventEntertainer,
+            as: 'cancelledEvents',
+            required: false,
+            where: {
+              cancelledBy: 'Entertainer',
+            },
           },
           {
             model: Gallery,
