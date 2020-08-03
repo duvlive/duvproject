@@ -128,7 +128,7 @@ const ApprovedEntertainerInfo = ({ entertainer }) => (
       </DuvLiveModal>
     </div>
 
-    {/* Show cancel events only when available */}
+    {/* Show commission only when available */}
     {entertainer && entertainer.userCommission && (
       <section className="mt-5">
         <div className="w-100 card card-custom card-green p-4">
@@ -147,18 +147,6 @@ const ApprovedEntertainerInfo = ({ entertainer }) => (
     <div className="mt-5">
       <MediaTab entertainer={entertainer} />
     </div>
-
-    {/* Show cancel events only when available */}
-    {entertainer &&
-      entertainer.cancelledEvents &&
-      entertainer.cancelledEvents.length > 0 && (
-        <div className="col-12 mt-4">
-          <CancelledEvents
-            events={entertainer.cancelledEvents.length}
-            stageName={entertainer.profile.stageName}
-          />
-        </div>
-      )}
   </section>
 );
 
@@ -309,7 +297,7 @@ const Identification = ({ identification }) => (
           <InfoList title="Issue Date">{identification.issueDate}</InfoList>
         </Col>
         <Col md={6} sm={6}>
-          <InfoList title="Expirt Date">{identification.expiryDate}</InfoList>
+          <InfoList title="Expiry Date">{identification.expiryDate}</InfoList>
         </Col>
       </Row>
     </Col>

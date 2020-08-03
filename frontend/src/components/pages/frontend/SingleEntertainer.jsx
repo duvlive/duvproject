@@ -177,6 +177,8 @@ export const EntertainerSectionInfo = ({ entertainer, showContentOnly }) => {
     ? entertainer.profile.hired.length
     : 0;
 
+  const cancelledShows = entertainer.cancelledEvents.length;
+
   const content = (
     <Row>
       {!showContentOnly && (
@@ -185,9 +187,9 @@ export const EntertainerSectionInfo = ({ entertainer, showContentOnly }) => {
         </h4>
       )}
       <Col sm="4">
-        <InfoList title="Stage Name">{entertainer.profile.stageName}</InfoList>
-        <InfoList title="Speciality">
-          {entertainer.profile.entertainerType}
+        <InfoList title="Stage Name">
+          {entertainer.profile.stageName} ({entertainer.profile.entertainerType}
+          )
         </InfoList>
         <InfoList title="Years of Experience">
           {parseInt(getYear(Date.now()), 10) -
@@ -196,6 +198,9 @@ export const EntertainerSectionInfo = ({ entertainer, showContentOnly }) => {
         </InfoList>
         <InfoList title="Total Shows">
           {totalShows} {Humanize.pluralize(totalShows, 'Show')}
+        </InfoList>
+        <InfoList title="Cancelled Shows">
+          {cancelledShows} {Humanize.pluralize(cancelledShows, 'Show')}
         </InfoList>
       </Col>
       <Col sm="4">
@@ -226,20 +231,6 @@ export const EntertainerSectionInfo = ({ entertainer, showContentOnly }) => {
       className={`entertainer-info ${entertainer.profile.entertainerType.toLowerCase()} mt-5`}
     >
       <div className="container-fluid">{content}</div>
-
-      {/* Show cancel events only when available */}
-      {entertainer &&
-        entertainer.cancelledEvents &&
-        entertainer.cancelledEvents.length > 0 && (
-          <section className="mt-5">
-            <div className="container-fluid">
-              <CancelledEvents
-                events={entertainer.cancelledEvents.length}
-                stageName={entertainer.profile.stageName}
-              />
-            </div>
-          </section>
-        )}
     </section>
   );
 };
