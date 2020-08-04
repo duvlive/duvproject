@@ -6,8 +6,10 @@ import https from 'https';
 import logger from 'morgan';
 import passport from 'passport';
 import path from 'path';
+import cron from 'node-cron';
 
 import router from './server/routes';
+import { createRatingandReview } from './server/utils/ratingsReminderHelper';
 
 dotenv.config();
 
@@ -28,6 +30,12 @@ app.use(passport.initialize());
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+cron.schedule('* * * * *', async function () {
+  console.log('running a task every minute seyi');
+  await createRatingandReview();
+  console.log('enddddd');
+});
 
 if (process.env.NODE_ENV === 'production') {
   app.use((req, res, next) => {

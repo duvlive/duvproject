@@ -18,7 +18,8 @@ module.exports = function (sequelize, DataTypes) {
       },
       professionalism: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        // allowNull: false,
+        defaultValue: null,
         validate: {
           max: RATINGS.UPPER_BOUND,
           min: RATINGS.LOWER_BOUND,
@@ -26,7 +27,8 @@ module.exports = function (sequelize, DataTypes) {
       },
       accommodating: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        // allowNull: false,
+        defaultValue: null,
         validate: {
           max: RATINGS.UPPER_BOUND,
           min: RATINGS.LOWER_BOUND,
@@ -34,7 +36,8 @@ module.exports = function (sequelize, DataTypes) {
       },
       overallTalent: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        // allowNull: false,
+        defaultValue: null,
         validate: {
           max: RATINGS.UPPER_BOUND,
           min: RATINGS.LOWER_BOUND,
@@ -42,7 +45,8 @@ module.exports = function (sequelize, DataTypes) {
       },
       recommend: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        // allowNull: false,
+        defaultValue: null,
         validate: {
           max: RATINGS.UPPER_BOUND,
           min: RATINGS.LOWER_BOUND,
