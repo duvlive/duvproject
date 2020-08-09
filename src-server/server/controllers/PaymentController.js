@@ -13,6 +13,7 @@ import { validString, getAll } from '../utils';
 import { NOTIFICATIONS, NOTIFICATION_TYPE } from '../constant';
 import sendMail from '../MailSender';
 import EMAIL_CONTENT from '../email-template/content';
+import { Op } from 'sequelize';
 
 const PaymentController = {
   async initializeTransaction(req, res) {
@@ -148,16 +149,23 @@ const PaymentController = {
 
   // get all transcations
   getSuccessTransactions(req, res) {
-    const { amount, from, limit, offset, to } = req.query;
+    const { amount, from, limit, offset, to, status } = req.query;
 
-    let url = new URL(`${process.env.PAYSTACK_TRANSACT_ALL}?status=success`);
-    let params = new URLSearchParams(url.search.slice(1));
+    const ALL_STATUSES = ['failed', 'success', 'abandoned'];
+
+    // let url = new URL(`${process.env.PAYSTACK_TRANSACT_ALL}?status=success`);
+    let params = new URLSearchParams();
 
     amount && params.append('amount', amount);
     from && params.append('from', from);
     limit ? params.append('perPage', limit) : params.append('perPage', 10);
-    offset && params.append('page', offset);
+    offset && params.append('page', parseInt(offset, 10) + 1);
     to && params.append('to', to);
+    ALL_STATUSES.includes(status)
+      ? params.append('status', status)
+      : params.append('status', ALL_STATUSES[1]);
+
+    // return res.json({ params: params.toString() });
 
     axios
       .get(`${process.env.PAYSTACK_TRANSACT_ALL}?${params.toString()}`, {
@@ -168,6 +176,7 @@ const PaymentController = {
       })
       .then(function (response) {
         const { data, meta } = response.data;
+
         return res
           .status(200)
           .json({ message: 'success', payments: data, pagination: meta });

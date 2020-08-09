@@ -14,6 +14,7 @@ const AdminList = ({
   apiData,
   pageName,
   apiUrl,
+  limit,
   pluralPageName,
   tableRow,
   AddNewComponent,
@@ -41,7 +42,6 @@ const AdminList = ({
   };
 
   const addData = (newData) => {
-    console.log('data', data);
     setOpenNew(false);
     setData({
       ...data,
@@ -50,17 +50,15 @@ const AdminList = ({
     });
   };
   React.useEffect(() => {
-    const LIMIT = 10;
     axios
       .get(apiUrl, {
-        params: { offset: currPage * LIMIT, limit: LIMIT, ...filter },
+        params: { offset: currPage * limit, limit, ...filter },
         headers: {
           'x-access-token': getTokenFromStore(),
         },
       })
       .then(function (response) {
         const { status, data } = response;
-        console.log('response', response);
         // handle success
         if (status === 200) {
           setData(data);
@@ -69,7 +67,7 @@ const AdminList = ({
       .catch(function (error) {
         setData({ results: [], pagination: {} });
       });
-  }, [currPage, apiUrl, filter]);
+  }, [currPage, apiUrl, limit, filter]);
 
   const noOfResults = data.pagination.total || 0;
   const pluralizePageName = pluralPageName || Humanize.pluralize(2, pageName);
@@ -204,6 +202,7 @@ AdminList.propTypes = {
   FilterComponent: PropTypes.any,
   apiData: PropTypes.string.isRequired,
   apiUrl: PropTypes.string.isRequired,
+  limit: PropTypes.number,
   pageName: PropTypes.string.isRequired,
   pluralPageName: PropTypes.string,
   tableRow: PropTypes.any.isRequired,
@@ -213,6 +212,7 @@ AdminList.defaultProps = {
   FilterComponent: null,
   AddNewComponent: null,
   pluralPageName: null,
+  limit: 10,
 };
 
 const ResultsTable = ({ results, offset, Row, setMessage }) => (
