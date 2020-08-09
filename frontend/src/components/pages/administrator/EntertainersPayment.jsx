@@ -143,7 +143,7 @@ export const EntertainerFilter = ({ setFilterTerms }) => {
                 loading={isSubmitting}
                 onClick={handleSubmit}
               >
-                Filter Gallery
+                Filter Payment
               </Button>
             </div>
           </>
