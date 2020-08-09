@@ -144,10 +144,10 @@ const ViewEvent = ({ id }) => {
                     )}
 
                   <ViewEventEntertainersTable event={event} />
-                  {userCanAddEntertainer() && (
+                  {userCanAddEntertainer(event.eventDate) && (
                     <Link
                       className="btn btn-danger btn-transparent"
-                      to={`/user/events/${id}/add-entertainer/Auction`}
+                      to={`/user/events/${id}/add-entertainer`}
                     >
                       Add Entertainer
                     </Link>

@@ -62,6 +62,8 @@
   display: block;
   left: 0;
   top: -3rem;
+  object-fit: cover;
+  width: 100%;
   @include media-breakpoint-up(sm) {
     position: absolute;
   }

@@ -9,9 +9,19 @@ import { addHours } from 'date-fns';
 export const auctionIsVoid = (eventDate) =>
   Date.now() > subtractDays(eventDate, 4);
 
-export const userCanAddEntertainer = (eventDate) =>
-  Date.now() < subtractDays(eventDate, 3);
-
+export const userCanAddEntertainer = (eventDate) => {
+  console.log('eventDate', eventDate);
+  console.log(
+    'Date.now(), subtractDays(eventDate, 3)',
+    Date.now(),
+    subtractDays(eventDate, 3)
+  );
+  console.log(
+    'Date.now() < subtractDays(eventDate, 3)',
+    Date.now() < subtractDays(eventDate, 3)
+  );
+  return Date.now() < subtractDays(eventDate, 3);
+};
 export const eventIsVoid = (eventDate) =>
   Date.now() >= subtractDays(eventDate, 2);
 

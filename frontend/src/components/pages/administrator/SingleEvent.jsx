@@ -144,7 +144,7 @@ const SingleEvent = ({ id }) => {
                     )}
 
                   <SingleEventEntertainersTable event={event} />
-                  {userCanAddEntertainer() && (
+                  {userCanAddEntertainer(event.eventDate) && (
                     <Link
                       className="btn btn-danger btn-transparent"
                       to={`/user/events/${id}/add-entertainer/Auction`}
