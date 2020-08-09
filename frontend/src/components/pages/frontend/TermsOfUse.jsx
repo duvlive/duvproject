@@ -17,36 +17,18 @@ const Content = () => (
             Welcome <span>to DUV Live</span>
           </h2>
           <p>
-            Thanks for using our products and services. The Services are
-            provided by DUV LIVE Entertainment, located at 46,Omoruyi Street,
-            Aduwawa, Edo,Nigeria.
-          </p>
-
-          <p>
-            By using our Services, you are agreeing to these terms and
-            conditions. Please read them carefully.
-          </p>
-          <p>
-            Our Services are very diverse, so sometimes additional terms or
-            product requirements (including age requirements) may apply.
-            Additional terms will be available with the relevant Services, and
-            those additional terms become part of your agreement with us if you
-            use those Services.
-          </p>
-
-          <h5>Using our Services</h5>
-          <p>
-            You must follow any policies made available to you within the
+            Thanks for using DUVLIVE. Henceforth referred to as 'The Platform',
+            ‘DUVLIVE’ refers to the entertainment services company that operates
+            the above named website. The range of services we provide on The
+            Platform will henceforth be referred to as The Services or Our
             Services.
           </p>
+
+          <h4>Using our Platform</h4>
+
           <p>
-            Don’t misuse our Services. For example, don’t interfere with our
-            Services or try to access them using a method other than the
-            interface and the instructions that we provide. You may use our
-            Services only as permitted by control laws and regulations. We may
-            suspend or stop providing our Services to you if you do not comply
-            with our terms or policies or if we are investigating suspected
-            misconduct.
+            In order to continue enjoying the use of our services, you must
+            follow any policies made available to you within the Platform.
           </p>
           <p>
             Using our Services does not give you ownership of any intellectual
@@ -66,18 +48,14 @@ const Content = () => (
             But that does not necessarily mean that we review content, so please
             don’t assume that we do.
           </p>
+
           <p>
             In connection with your use of the Services, we may send you service
-            announcements, administrative messages, and other information. You
-            may opt-out of some of those communications.
-          </p>
-          <p>
-            Some of our Services are available on mobile devices. Do not use
-            such Services in a way that distracts you and prevents you from
-            obeying traffic or safety laws.
+            announcements and other information. You may opt-out of some of
+            those communications.
           </p>
 
-          <h5>Your DUV LIVE Account</h5>
+          <h4>Your DUV LIVE Account</h4>
           <p>
             You may need a DUV LIVE Account in order to use some of our
             Services. You may create your own User or Entertainer Account.{' '}
@@ -86,24 +64,25 @@ const Content = () => (
             To protect your Account, keep your password confidential. You are
             responsible for the activity that happens on or through your
             Account. Try not to reuse your Account password on third-party
-            applications. If you learn of any unauthorized use of your password
-            or DUV LIVE Account, follow these instructions.
+            applications.
           </p>
 
-          <h5>Privacy and Copyright Protection</h5>
-          <p>
-            DUV LIVE’s privacy policies explain how we treat your personal data
-            and protect your privacy when you use our Services. By using our
-            Services, you agree that DUV LIVE can use such data in accordance
-            with our privacy policies.
-          </p>
+          <h4>Copyright Protection</h4>
           <p>
             We respond to notices of alleged copyright infringement and
             terminate accounts of repeat infringers according to the process set
-            out in the operating country's Copyright Act.
+            out in the operating jurisdiction's Copyright Act.
           </p>
 
-          <h5>Modifying and Terminating our Services</h5>
+          <h4>Your Content in our Services</h4>
+          <p>
+            Some of our Services allow you to upload, submit, store and share
+            content. You retain ownership of any intellectual property rights
+            that you hold in that content. In short, what belongs to you stays
+            yours.
+          </p>
+
+          <h4>Modifying and Terminating our Services</h4>
           <p>
             We are constantly changing and improving our Services. We may add or
             remove functionalities or features, and we may suspend or stop a
@@ -115,7 +94,7 @@ const Content = () => (
             add or create new limits to our Services at any time.
           </p>
 
-          <h5>Our Warranties and Disclaimers</h5>
+          <h4>Our Warranties and Disclaimers</h4>
           <p>
             We provide our Services using a commercially reasonable level of
             skill and care and we hope that you will enjoy using them. But there
@@ -125,12 +104,10 @@ const Content = () => (
             Other than as expressly set out in these terms or additional terms,
             neither DUV LIVE nor its affiliates make any specific promises about
             the Services. For example, we don’t make any commitments about the
-            content within the Services, the specific functions of the Services,
-            or their reliability, availability, or ability to meet your needs.
-            We provide the Services “as is”.
+            content within the Services, since We provide the Services “as is”.
           </p>
 
-          <h5>Liability for our Services</h5>
+          <h4>Liability for our Services</h4>
           <p>
             When permitted by law, DUV LIVE will not be responsible for lost
             profits, revenues, or data, financial losses or indirect, special,
@@ -139,34 +116,45 @@ const Content = () => (
           <p>
             To the extent permitted by law, the total liability of DUV LIVE, for
             any claims under these terms, including for any implied warranties,
-            is limited to the amount you paid us to use the Services (or, if we
-            choose, to supplying you the Services again).
+            is limited to the amount you paid us to use the Services.
           </p>
           <p>
             In all cases, DUV LIVE will not be liable for any loss or damage
-            that is not reasonably foreseeable. We recognize that in some
-            countries, you might have legal rights as a consumer. If you are
-            using the Services for a personal purpose, then nothing in these
-            terms or any additional terms limits any consumer legal rights which
-            may not be waived by contract.
+            that is not reasonably foreseeable.
           </p>
+          <p>
+            We recognize that in some countries, you might have legal rights as
+            a consumer. If you are using the Services for a personal purpose,
+            then nothing in these terms or any additional terms limits any
+            consumer legal rights which may not be waived by contract.
+          </p>
+          <p>
+            It is hereby provided that the platform shall be exempted from all
+            forms of liability
+          </p>
+          <ol>
+            <li>
+              It shall not be vicariously liable for criminal acts arising from
+              the violations of the copyright legislation brought about by the
+              act of the Entertainer.
+            </li>
+          </ol>
 
-          <h5>Business uses of our Services</h5>
+          <h4>Business uses of our Services</h4>
           <p>
             If you are using our Services on behalf of a business, that business
             accepts these terms. It will hold harmless and indemnify DUV LIVE
             and its affiliates, officers, agents, and employees from any claim,
-            suit or action arising from or related to the use of the Services or
-            violation of these terms, including any liability or expense arising
-            from claims, losses, damages, suits, judgments, litigation costs and
-            attorneys’ fees.
+            suit or action arising from or related to the use of the Services,
+            including any liability or expense arising from claims, losses,
+            damages, suits, judgments, litigation costs and attorneys’ fees.
           </p>
           <p>
             If there is a conflict between these terms and the additional terms,
             the additional terms will control for that conflict.
           </p>
           <p>
-            These terms control the relationship between DUV LIVE and you. They
+            These terms control the relationship between DUV LIVE and YOU. They
             do not create any third party beneficiary rights.
           </p>
           <p>
