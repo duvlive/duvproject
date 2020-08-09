@@ -23,21 +23,23 @@ const CommissionController = {
    */
   updateCommission(req, res) {
     const {
-      title,
-      recommendationsCommission,
-      directHireCommission,
       bidsCommission,
+      deactivated,
+      directHireCommission,
       handlingPercent,
       handlingPlus,
       id,
+      recommendationsCommission,
+      title,
     } = req.body;
 
     const error = {
+      ...validString(bidsCommission),
+      ...validString(deactivated),
+      ...validString(directHireCommission),
+      ...validString(handlingPercent),
       ...validString(title),
       ...validString(recommendationsCommission),
-      ...validString(directHireCommission),
-      ...validString(bidsCommission),
-      ...validString(handlingPercent),
     };
     if (Object.keys(error).length > 1) {
       return res.status(400).json({ message: error.message.join('') });
@@ -67,12 +69,13 @@ const CommissionController = {
     }
     return Commission.update(
       {
-        title,
-        recommendationsCommission,
-        directHireCommission,
         bidsCommission,
+        deactivated,
+        directHireCommission,
         handlingPercent,
         handlingPlus,
+        recommendationsCommission,
+        title,
       },
       {
         where: { id },

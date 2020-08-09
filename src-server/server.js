@@ -55,7 +55,6 @@ app.get('/view-our-work', function (req, res) {
 });
 
 app.get('*', function (req, res) {
-  console.log('do we ever get here?');
   res.sendFile(path.join(__dirname, `build`, 'index.html'));
 });
 

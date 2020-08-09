@@ -136,9 +136,8 @@ const PaymentController = {
         },
       })
       .then(function (response) {
-        return res
-          .status(200)
-          .json({ message: 'success', payment: response.data.data });
+        const { data } = response.data;
+        return res.status(200).json({ message: 'success', payment: data });
       })
       .catch(function (error) {
         const status = error.status || 500;
@@ -149,17 +148,29 @@ const PaymentController = {
 
   // get all transcations
   getSuccessTransactions(req, res) {
+    const { amount, from, limit, offset, to } = req.query;
+
+    let url = new URL(`${process.env.PAYSTACK_TRANSACT_ALL}?status=success`);
+    let params = new URLSearchParams(url.search.slice(1));
+
+    amount && params.append('amount', amount);
+    from && params.append('from', from);
+    limit ? params.append('perPage', limit) : params.append('perPage', 10);
+    offset && params.append('page', offset);
+    to && params.append('to', to);
+
     axios
-      .get(`${process.env.PAYSTACK_TRANSACT_ALL}?status=success`, {
+      .get(`${process.env.PAYSTACK_TRANSACT_ALL}?${params.toString()}`, {
         headers: {
           authorization: `Bearer ${process.env.PAYSTACK_TEST_SECRET}`,
           'content-type': 'application/json',
         },
       })
       .then(function (response) {
+        const { data, meta } = response.data;
         return res
           .status(200)
-          .json({ message: 'success', payments: response.data.data });
+          .json({ message: 'success', payments: data, pagination: meta });
       })
       .catch(function (error) {
         const status = error.status || 500;
@@ -171,6 +182,19 @@ const PaymentController = {
   // get paystack customer
   getPaystackCustomer(req, res) {
     const { email } = req.user;
+
+    const { from, limit, offset, to } = req.query;
+
+    let url = new URL(
+      `${process.env.PAYSTACK_CUSTOMER_ALL}?${params.toString()}`
+    );
+    let params = new URLSearchParams(url.search.slice(1));
+
+    from && params.append('from', from);
+    limit ? params.append('perPage', limit) : params.append('perPage', 10);
+    offset && params.append('page', offset);
+    to && params.append('to', to);
+
     axios
       .get(`${process.env.PAYSTACK_CUSTOMER_ALL}`, {
         headers: {
@@ -185,6 +209,7 @@ const PaymentController = {
         if (customer.length === 0) {
           return res.status(404).json({ message: 'User does not exist' });
         }
+        // add pagination result
         return res
           .status(200)
           .json({ message: 'Success', customer: customer[0] });
@@ -198,21 +223,33 @@ const PaymentController = {
 
   // get success transactions by user id
   getSuccessTransactionsByUserId(req, res) {
-    const { id } = req.query;
+    // from, to are Datetime timestamp from which to start and stop listing transaction e.g. 2016-09-24T00:00:05.000Z, 2016-09-21
+    // amount in kobo
+    const { amount, from, id, limit, offset, to } = req.query;
+
+    let url = new URL(
+      `${process.env.PAYSTACK_TRANSACT_ALL}?status=success&&customer=${id}`
+    );
+    let params = new URLSearchParams(url.search.slice(1));
+
+    amount && params.append('amount', amount);
+    from && params.append('from', from);
+    limit ? params.append('perPage', limit) : params.append('perPage', 10);
+    offset && params.append('page', offset);
+    to && params.append('to', to);
+
     axios
-      .get(
-        `${process.env.PAYSTACK_TRANSACT_ALL}?status=success&&customer=${id}`,
-        {
-          headers: {
-            authorization: `Bearer ${process.env.PAYSTACK_TEST_SECRET}`,
-            'content-type': 'application/json',
-          },
-        }
-      )
+      .get(`${process.env.PAYSTACK_TRANSACT_ALL}?${params.toString()}`, {
+        headers: {
+          authorization: `Bearer ${process.env.PAYSTACK_TEST_SECRET}`,
+          'content-type': 'application/json',
+        },
+      })
       .then(function (response) {
+        const { data, meta } = response.data;
         return res
           .status(200)
-          .json({ message: 'success', payments: response.data.data });
+          .json({ message: 'success', payments: data, pagination: meta });
       })
       .catch(function (error) {
         const status = error.status || 500;
@@ -223,6 +260,7 @@ const PaymentController = {
 
   getAllUserPayments(req, res) {
     const { email } = req.user;
+
     axios
       .get(`${process.env.PAYSTACK_CUSTOMER_ALL}`, {
         headers: {
@@ -239,20 +277,34 @@ const PaymentController = {
         }
 
         const id = customer[0].id;
+
+        // from, to are Datetime timestamp from which to start and stop listing transaction e.g. 2016-09-24T00:00:05.000Z, 2016-09-21
+        // amount in kobo
+        const { amount, from, limit, offset, to } = req.query;
+
+        let url = new URL(
+          `${process.env.PAYSTACK_TRANSACT_ALL}?status=success&&customer=${id}`
+        );
+        let params = new URLSearchParams(url.search.slice(1));
+
+        amount && params.append('amount', amount);
+        from && params.append('from', from);
+        limit ? params.append('perPage', limit) : params.append('perPage', 10);
+        offset && params.append('page', offset);
+        to && params.append('to', to);
+
         axios
-          .get(
-            `${process.env.PAYSTACK_TRANSACT_ALL}?status=success&&customer=${id}`,
-            {
-              headers: {
-                authorization: `Bearer ${process.env.PAYSTACK_TEST_SECRET}`,
-                'content-type': 'application/json',
-              },
-            }
-          )
+          .get(`${process.env.PAYSTACK_TRANSACT_ALL}?${params.toString()}`, {
+            headers: {
+              authorization: `Bearer ${process.env.PAYSTACK_TEST_SECRET}`,
+              'content-type': 'application/json',
+            },
+          })
           .then(function (response) {
+            const { data, meta } = response.data;
             return res
               .status(200)
-              .json({ message: 'success', payments: response.data.data });
+              .json({ message: 'success', payments: data, pagination: meta });
           })
           .catch(function (error) {
             const status = error.status || 500;

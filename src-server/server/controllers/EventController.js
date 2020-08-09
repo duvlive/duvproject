@@ -1028,6 +1028,110 @@ const EventController = {
       return res.status(status).json({ message: errorMessage });
     }
   },
+
+  async getPastEvents(req, res) {
+    const {
+      avgRating,
+      entertainerId,
+      entertainerType,
+      limit,
+      offset,
+      review,
+    } = req.query;
+
+    try {
+      let eventEntertainerQuery = {};
+
+      if (entertainerType) {
+        eventEntertainerQuery.entertainerType = entertainerType;
+      }
+      if (entertainerId) {
+        eventEntertainerQuery.hiredEntertainer = entertainerId;
+      }
+
+      const eventKeys = ['id', 'userId'];
+
+      eventKeys.forEach((key) => {
+        if (req.query[key]) {
+          applicationQuery[key] = req.query[key];
+        }
+      });
+
+      let reviewQuery = {};
+      reviewQuery.review =
+        review === 'YES' ? { [Op.ne]: null } : { [Op.eq]: null };
+
+      const eventInclude = [
+        {
+          model: EventEntertainer,
+          as: 'entertainers',
+          where: eventEntertainerQuery,
+          required: !!entertainerType,
+          include: [
+            {
+              model: EntertainerProfile,
+              as: 'entertainer',
+              required: !!entertainerId,
+              duplicating: !!entertainerId,
+              attributes: [
+                'id',
+                'stageName',
+                'entertainerType',
+                'location',
+                'about',
+              ],
+              include: [
+                {
+                  model: User,
+                  as: 'personalDetails',
+                  attributes: [
+                    'id',
+                    'firstName',
+                    'lastName',
+                    'profileImageURL',
+                  ],
+                },
+              ],
+            },
+            {
+              model: Rating,
+              as: 'eventRating',
+              where: reviewQuery,
+              required: review === 'YES',
+              duplicating: review === 'YES',
+              attributes: ['review', 'overallTalent', 'recommend'],
+            },
+          ],
+        },
+        {
+          model: User,
+          as: 'owner',
+          attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+          required: false,
+        },
+      ];
+      const options = {
+        offset: offset || 0,
+        limit: limit || 10,
+        where: { eventDate: { [Op.lte]: Sequelize.literal('NOW()') } },
+        include: eventInclude,
+      };
+
+      try {
+        const { result, pagination } = await getAll(Event, options);
+        return res.status(200).json({
+          events: result,
+          pagination,
+        });
+      } catch (error) {
+        return res.status(500).json({ error: error.message });
+      }
+    } catch (error) {
+      const status = error.status || 500;
+      const errorMessage = error.message || error;
+      return res.status(status).json({ message: errorMessage });
+    }
+  },
   // update event details
   // inform entertainer
   // add to admin (how do I process)
