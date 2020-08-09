@@ -38,6 +38,11 @@ export default [
         icon: 'auction',
       },
       {
+        title: 'Requests',
+        to: '/admin/requests',
+        icon: 'vcard',
+      },
+      {
         title: 'Users Payment',
         to: '/admin/users-payment',
         icon: 'credit-card',

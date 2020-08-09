@@ -9,6 +9,7 @@ import SingleEvent from 'components/pages/administrator/SingleEvent';
 import EntertainersPayment from 'components/pages/administrator/EntertainersPayment';
 import RegisteredUsers from 'components/pages/administrator/RegisteredUsers';
 import Auctions from 'components/pages/administrator/Auctions';
+import Requests from 'components/pages/administrator/Requests';
 import UsersPayment from 'components/pages/administrator/UsersPayment';
 import UpcomingEvents from 'components/pages/administrator/UpcomingEvents';
 import EditProfile from 'components/pages/administrator/EditProfile';
@@ -31,6 +32,9 @@ const AdministratorRouter = () => (
     <EntertainersPayment path="/entertainers-payment" />
     <RegisteredUsers path="/registered-users" />
     <Auctions path="/auctions" />
+    <Auctions path="/auctions/:id" />
+    <Requests path="/requests" />
+    <Requests path="/requests/:id" />
     <SingleUser path="/users/:id" />
     <SingleEntertainer path="/entertainers/:id" />
     <UsersPayment path="/users-payment" />

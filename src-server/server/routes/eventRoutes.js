@@ -90,6 +90,22 @@ const eventRoutes = (router) => {
     Authentication.validateAdmin,
     EventController.getAllEvents
   );
+
+  router.get(
+    '/api/v1/available-auctions-all',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    Authentication.validateAdmin,
+    EventController.getAvailableAuctionsForAdmin
+  );
+
+  // Requests
+  router.get(
+    '/api/v1/requests-all',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    EventController.getAdminRequests
+  );
 };
 
 export default eventRoutes;

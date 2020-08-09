@@ -41,7 +41,6 @@ import { useBadgesSelect, useCommissionSelect } from 'utils/useHooks';
 import Select from 'components/forms/Select';
 import { assignBadgeObject } from 'components/forms/schema/badgeSchema';
 import { assignCommissionObject } from 'components/forms/schema/commissionSchema';
-import { CancelledEvents } from '../frontend/SingleEntertainer';
 import { UserContext } from 'context/UserContext';
 
 const SingleEntertainer = ({ id }) => {

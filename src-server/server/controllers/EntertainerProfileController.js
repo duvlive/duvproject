@@ -135,7 +135,7 @@ const EntertainerProfileController = {
       stageName &&
       entertainerType === req.user.profile.entertainerType
         ? currentSlug
-        : await slugify(stageName, req.user.dataValues.id, entertainerType);
+        : await slugify(stageName, req.user.id, entertainerType);
 
     const entertainerProfileData = {
       about,
@@ -368,7 +368,7 @@ const EntertainerProfileController = {
             {
               where: {
                 [Op.and]: [
-                  { entertainerType },
+                  { entertainerType, approved: true },
                   {
                     slug: { [Op.ne]: slug },
                   },

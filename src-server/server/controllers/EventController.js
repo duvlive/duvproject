@@ -1033,6 +1033,92 @@ const EventController = {
   // add to admin (how do I process)
   // refund entertainer
   // refund user
+
+  /**
+   * get Available Auctions For Admin
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  getAvailableAuctionsForAdmin(req, res) {
+    EventEntertainer.findAll({
+      where: {
+        hireType: EVENT_HIRETYPE.AUCTION,
+        auctionStartDate: { [Op.lte]: Sequelize.literal('NOW()') },
+        auctionEndDate: { [Op.gte]: Sequelize.literal('NOW()') },
+      },
+      include: [
+        {
+          model: Event,
+          as: 'event',
+          include: [
+            {
+              model: User,
+              as: 'owner',
+              attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+            },
+          ],
+        },
+        {
+          model: Application,
+          as: 'applications',
+          where: { userId: req.user.id },
+          required: false,
+        },
+      ],
+    }).then((events) => {
+      if (!events || events.length === 0) {
+        return res.status(404).json({ message: 'Event not found' });
+      }
+      return res.status(200).json({ events });
+    });
+  },
+
+  /**
+   * get Admin Requests
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  getAdminRequests(req, res) {
+    Application.findAll({
+      where: {
+        applicationType: 'Request',
+      },
+      include: [
+        {
+          model: Event,
+          as: 'event',
+        },
+        {
+          model: EventEntertainer,
+          as: 'eventEntertainerInfo',
+          where: {
+            hiredEntertainer: null, // shown requests with no hired Entertainer
+          },
+        },
+        {
+          model: User,
+          as: 'user',
+          attributes: ['id', 'email', 'profileImageURL'],
+          include: [
+            {
+              model: EntertainerProfile,
+              as: 'profile',
+              attributes: ['id', 'stageName', 'slug'],
+            },
+          ],
+        },
+      ],
+    }).then((requests) => {
+      if (!requests || requests.length === 0) {
+        return res.status(404).json({ message: 'No request found' });
+      }
+      return res.status(200).json({ requests });
+    });
+  },
 };
 
 export default EventController;
