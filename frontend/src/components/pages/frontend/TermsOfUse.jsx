@@ -10,18 +10,20 @@ const TermsOfUse = () => (
 );
 
 const Content = () => (
-  <section className="text-only_content spacer">
+  <section className="text-only_content mt-5 pt-5">
     <div className="container-fluid terms-of-use">
       <Row>
         <Col sm={{ size: 8, offset: 2 }}>
-          <p>This Agreement was last modified on June 30, 2020.</p>
+          <p className="text-white">
+            This Agreement was last modified on June 30, 2020.
+          </p>
           <p>
             This Terms of Use Agreement describes the terms and conditions which
             you accept by signing up to DUV LIVE. It contains the rules and
             restrictions that govern your use of Our Website and Our Services
-            sometimes referred to as simply 'The Platform','The Website','We' or
-            'Us', and provides information about the Services we render. In This
-            Terms of Use Agreement, the following words are used in their
+            sometimes referred to as simply 'The Platform', 'The Website', 'We'
+            or 'Us', and provides information about the Services we render. In
+            This Terms of Use Agreement, the following words are used in their
             respective sense;
           </p>
           <p>
