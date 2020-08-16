@@ -803,7 +803,6 @@ AssignCommissionToUser.propTypes = {
 
 const AssignBadgeToUser = ({ userId }) => {
   const badges = useBadgesSelect();
-  console.log('badges', badges);
   const [message, setMessage] = React.useState({});
 
   return (

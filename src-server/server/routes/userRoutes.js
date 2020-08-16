@@ -192,6 +192,30 @@ const userRoutes = (router) => {
     Authentication.validateAdmin,
     UserController.updateAccountStatus
   );
+
+  router.put(
+    '/api/v1/admin/user/update-email',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    Authentication.validateAdmin,
+    UserController.updateUserEmailAddress
+  );
+
+  router.post(
+    '/api/v1/admin/user/resend-verification-mail',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    Authentication.validateAdmin,
+    UserController.resendVerificationMail
+  );
+
+  router.post(
+    '/api/v1/admin/user/activate',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    Authentication.validateAdmin,
+    UserController.activateUserAccount
+  );
 };
 
 export default userRoutes;

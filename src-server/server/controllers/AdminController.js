@@ -29,7 +29,7 @@ const AdminController = {
    */
 
   async getAllUsers(req, res) {
-    const limit = 30;
+    const limit = 10;
     const offset = parseInt(req.query.offset, 10) || 0;
     try {
       const include = [
@@ -85,6 +85,7 @@ const AdminController = {
           'profileImageURL',
           'type',
           'isActive',
+          'accountStatus',
         ],
         include,
         limit,
