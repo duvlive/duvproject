@@ -172,11 +172,50 @@ const userRoutes = (router) => {
     )
   );
 
+  router.put(
+    '/api/v1/user/deactivate',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    UserController.deactivateYourAccount
+  );
+
   // Admin routes
   router
     .route('/api/v1/users')
     .all(Authentication.verifyToken, Authentication.validateAdmin)
     .get(UserController.getAllUsers);
+
+  router.put(
+    '/api/v1/user/:status/:id',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    Authentication.validateAdmin,
+    UserController.updateAccountStatus
+  );
+
+  router.put(
+    '/api/v1/admin/user/update-email',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    Authentication.validateAdmin,
+    UserController.updateUserEmailAddress
+  );
+
+  router.post(
+    '/api/v1/admin/user/resend-verification-mail',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    Authentication.validateAdmin,
+    UserController.resendVerificationMail
+  );
+
+  router.post(
+    '/api/v1/admin/user/activate',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    Authentication.validateAdmin,
+    UserController.activateUserAccount
+  );
 };
 
 export default userRoutes;

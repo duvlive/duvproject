@@ -40,7 +40,7 @@ export const getAll = async (Model, options) => {
         distinct: true,
         group,
       });
-      const total = data.rows.length;
+      const total = data.count;
       const result = data.rows;
       const totalPage = Math.ceil(total / limit);
       let currentPage = Math.floor(offset / limit + 1);

@@ -26,6 +26,7 @@ import LoadItems from 'components/common/utils/LoadItems';
 import WelcomeSlides from 'components/common/utils//WelcomeSlides';
 import welcomeSlide from 'data/firstTimeUser';
 import { InviteFriendsForm } from 'components/common/pages/InviteFriends';
+import ProfileAvatar from 'assets/img/avatar/profile.png';
 
 const Dashboard = () => {
   let { userState } = React.useContext(UserContext);
@@ -318,7 +319,7 @@ Dashboard.RequestTableRow = ({ application }) => (
         className="avatar--medium--small"
         name={application.stageName || 'No name'}
         responsiveImage={false}
-        src={application.profileImageURL || 'No src'}
+        src={application.profileImageURL || ProfileAvatar}
       />
     </td>
     <td className="align-middle text-gray">

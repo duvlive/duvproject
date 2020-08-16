@@ -27,6 +27,7 @@ import {
 } from 'utils/helpers';
 import Stars from 'components/common/utils/Stars';
 import LoadingScreen from 'components/common/layout/LoadingScreen';
+import ProfileAvatar from 'assets/img/avatar/profile.png';
 
 const Bids = ({ eventEntertainerId }) => {
   const [eventEntertainer, setEventEntertainer] = React.useState({});
@@ -275,7 +276,7 @@ const BidsApplicationsTableRow = ({ application, number }) => {
           className="avatar--large"
           name={application.user.profile.stageName || 'No name'}
           responsiveImage={false}
-          src={application.user.profileImageURL || 'No src'}
+          src={application.user.profileImageURL || ProfileAvatar}
         />
         <h4 className="font-weight-normal mt-3">
           {application.user.profile.stageName}
@@ -311,7 +312,7 @@ const BidsApplicationsTableRow = ({ application, number }) => {
             className="avatar--medium--small"
             name={application.user.profile.stageName || 'No name'}
             responsiveImage={false}
-            src={application.user.profileImageURL || 'No src'}
+            src={application.user.profileImageURL || ProfileAvatar}
           />
         )}
       </td>

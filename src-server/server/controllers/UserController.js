@@ -21,7 +21,13 @@ import sendMail from '../MailSender';
 import Authentication from '../middleware/authentication';
 import { UserValidation, updateUser, validString, getAll } from '../utils';
 import EMAIL_CONTENT from '../email-template/content';
-import { USER_TYPES, NOTIFICATIONS, NOTIFICATION_TYPE } from '../constant';
+import {
+  USER_TYPES,
+  NOTIFICATIONS,
+  NOTIFICATION_TYPE,
+  ACCOUNT_STATUS,
+} from '../constant';
+import { Op } from 'sequelize';
 
 export const userAssociatedOrder = [
   // ...we use the same syntax from the include
@@ -135,6 +141,7 @@ const UserController = {
   transformUser(user, updatedValues = {}) {
     const transformedUser = {
       id: user.id,
+      accountStatus: user.accountStatus,
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
@@ -193,7 +200,7 @@ const UserController = {
         .json({ message: 'There are invalid fields in the form', errors });
     }
     return User.findAll({
-      where: { email },
+      where: { email: email.toLowerCase() },
     })
       .then((existingUser) => {
         if (existingUser.length > 0) {
@@ -205,7 +212,7 @@ const UserController = {
         return User.create({
           firstName,
           lastName,
-          email,
+          email: email.toLowerCase(),
           password,
           phoneNumber,
           type,
@@ -310,14 +317,14 @@ const UserController = {
         .json({ error: 'No email found', message: 'No email found' });
     }
     User.findOne({
-      where: { email },
+      where: { email: email.toLowerCase() },
     })
       .then(async (result) => {
         if (!result) {
           const user = await User.create({
             firstName,
             lastName,
-            email,
+            email: email.toLowerCase(),
             phoneNumber: '12345678901',
             password: Date.now().toString(36),
             profileImageURL: picture,
@@ -332,7 +339,7 @@ const UserController = {
           if (result.firstTimeLogin) {
             await User.update(
               { firstTimeLogin: false },
-              { where: { email: result.email } }
+              { where: { email: result.email.toLowerCase() } }
             );
           }
           const token = Authentication.generateToken(result);
@@ -401,7 +408,7 @@ const UserController = {
     }
 
     User.findOne({
-      where: { email },
+      where: { email: email.toLowerCase() },
     })
       .then(async (result) => {
         let bandMember;
@@ -451,7 +458,7 @@ const UserController = {
             firstName,
             lastName,
             userId: adminId,
-            email,
+            email: email.toLowerCase(),
             phoneNumber: '12345678901',
             type: USER_TYPES.UNKNOWN,
             password: Date.now().toString(36),
@@ -679,6 +686,196 @@ const UserController = {
   },
 
   /**
+   * Deactivate your account
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  deactivateYourAccount(req, res) {
+    const id = req.user.id;
+
+    return User.update(
+      { accountStatus: ACCOUNT_STATUS.DEACTIVATED },
+      {
+        where: {
+          id,
+        },
+      }
+    )
+      .then(() => {
+        return res.status(200).json({
+          message: `Your account has been succesfully deactivated.`,
+        });
+      })
+      .catch((error) => {
+        const errorMessage = error.message || error;
+        return res.status(500).json({ message: errorMessage });
+      });
+  },
+
+  /**
+   * Ban / Activate / deactivate user account
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  updateAccountStatus(req, res) {
+    const { id, status } = req.params;
+    const accountStatus = status ? status.toUpperCase() : '`NULL Status`';
+
+    if (!Object.keys(ACCOUNT_STATUS).includes(accountStatus)) {
+      return res
+        .status(412)
+        .json({ message: `${accountStatus} is not recognized` });
+    }
+
+    User.findOne({
+      where: { id },
+    })
+      .then((userFound) => {
+        if (!userFound || userFound.length === 0) {
+          return res.status(404).json({ message: 'User not found' });
+        }
+        if (userFound.accountStatus === accountStatus) {
+          return res
+            .status(403)
+            .json({ message: `Account is already ${accountStatus}` });
+        }
+
+        return userFound.update({ accountStatus: accountStatus }).then(() => {
+          return res.status(200).json({
+            message: `Account is now ${accountStatus}.`,
+          });
+        });
+      })
+      .catch((error) => {
+        const errorMessage = error.message || error;
+        return res.status(500).json({ message: errorMessage });
+      });
+  },
+
+  /**
+   *  update email
+   * @function
+   * @param {object} req is request object
+   * @param {object} res is response object
+   * @return {undefined} returns undefined
+   * */
+  updateUserEmailAddress(req, res) {
+    const { id, email } = req.body;
+
+    if (!id || !email) {
+      return res.status(401).json({ message: 'Email and User id required' });
+    }
+
+    User.findOne({
+      where: { id },
+    })
+      .then((user) => {
+        if (!user) {
+          return res.status(404).json({
+            message: 'User not found',
+          });
+        }
+        return user
+          .update({ email })
+          .then(() => res.status(200).json(UserController.transformUser(user)));
+      })
+      .catch((error) => {
+        return res.status(500).json({ error: error.message });
+      });
+  },
+
+  /**
+   *  Resend Verification Mail
+   * @function
+   * @param {object} req is request object
+   * @param {object} res is response object
+   * @return {undefined} returns undefined
+   * */
+  resendVerificationMail(req, res) {
+    const { id } = req.body;
+
+    if (!id) {
+      return res.status(401).json({ message: 'User id required' });
+    }
+
+    User.findOne({
+      where: { id },
+    })
+      .then((user) => {
+        if (!user) {
+          return res.status(404).send({
+            message: 'User not found',
+          });
+        }
+
+        if (user.isActive) {
+          return res.status(401).json({
+            message: 'Cannot send verification mail. User is already active.',
+          });
+        }
+
+        const link = `${process.env.HOST}/activate/${user.activationToken}`;
+        sendMail(EMAIL_CONTENT.ACTIVATE_YOUR_ACCOUNT, user, {
+          link,
+        });
+        return res
+          .status(200)
+          .json({ message: 'Verification email has been succesfully resent' });
+      })
+      .catch((error) => {
+        return res.status(500).json({ error: error.message });
+      });
+  },
+
+  /**
+   *  Activate User Account
+   * @function
+   * @param {object} req is request object
+   * @param {object} res is response object
+   * @return {undefined} returns undefined
+   * */
+  activateUserAccount(req, res) {
+    const { id } = req.body;
+
+    User.findOne({
+      where: { id },
+    })
+      .then((user) => {
+        if (!user) {
+          return res.status(404).send({
+            message: 'User not found',
+          });
+        }
+
+        if (user.isActive) {
+          return res.status(401).json({
+            message: 'User is already active.',
+          });
+        }
+        return User.update(
+          { isActive: true, activatedAt: new Date().toISOString() },
+          {
+            where: {
+              id,
+            },
+          }
+        ).then(() => {
+          sendMail(EMAIL_CONTENT.WELCOME_MAIL, user);
+          return res
+            .status(200)
+            .json({ message: 'Account activation successful' });
+        });
+      })
+      .catch((error) => {
+        return res.status(500).json({ error: error.message });
+      });
+  },
+
+  /**
    * user login
    * @function
    * @param {object} req is req object
@@ -693,7 +890,7 @@ const UserController = {
         .json({ message: 'Email or password cannot be empty' });
     }
     User.findOne({
-      where: { email },
+      where: { email: email.toLowerCase() },
       include: userAssociatedModels,
       order: userAssociatedOrder,
     })
@@ -705,6 +902,15 @@ const UserController = {
         if (!user.isActive) {
           return res.status(403).json({
             message: 'User needs to activate account.',
+          });
+        }
+
+        if (
+          user.accountStatus === ACCOUNT_STATUS.DEACTIVATED ||
+          user.accountStatus === ACCOUNT_STATUS.BANNED
+        ) {
+          return res.status(403).json({
+            message: `Your account has been ${user.accountStatus}. Kindly contact us if you would like to activate your account.`,
           });
         }
 
@@ -747,7 +953,9 @@ const UserController = {
     }
 
     User.findOne({
-      where: { email },
+      where: {
+        email: email.toLowerCase(),
+      },
     })
       .then((user) => {
         if (!user || user.length === 0) {

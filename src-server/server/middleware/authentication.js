@@ -4,7 +4,7 @@ import {
   userAssociatedModels,
   userAssociatedOrder,
 } from '../controllers/UserController';
-import { USER_TYPES } from '../constant';
+import { USER_TYPES, ACCOUNT_STATUS } from '../constant';
 
 const authentication = {
   verifyToken(request, response, next) {
@@ -34,6 +34,19 @@ const authentication = {
               message: 'User not found',
             });
           } else {
+            if (user.accountStatus === ACCOUNT_STATUS.DEACTIVATED) {
+              return response.status(401).send({
+                message:
+                  'Account has been deactivated. Kindly contact Administrator if you would like to reinstate your account',
+              });
+            }
+
+            if (user.accountStatus !== ACCOUNT_STATUS.ACTIVE) {
+              return response.status(401).send({
+                message:
+                  'Account is currently inactive. Please contact Administrator',
+              });
+            }
             request.user = user;
             next();
           }

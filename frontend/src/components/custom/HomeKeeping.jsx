@@ -2,6 +2,7 @@ import React from 'react';
 import { getTokenFromStore, storeUserType } from 'utils/localStorage';
 import axios from 'axios';
 import { UserContext } from 'context/UserContext';
+import { navigate } from '@reach/router';
 
 export const HomeKeeping = ({ children, location }) => {
   const { userState, userDispatch } = React.useContext(UserContext);
@@ -20,7 +21,9 @@ export const HomeKeeping = ({ children, location }) => {
             storeUserType(data.type);
           }
         })
-        .catch(function (error) {});
+        .catch(function (error) {
+          navigate('/login');
+        });
     }
   }, [userDispatch, userState.isLoggedIn]);
 

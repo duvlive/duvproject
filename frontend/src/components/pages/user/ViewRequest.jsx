@@ -17,6 +17,7 @@ import LoadingScreen from 'components/common/layout/LoadingScreen';
 import Image from 'components/common/utils/Image';
 import { REQUEST_ACTION } from 'utils/constants';
 import DuvLiveModal from 'components/custom/Modal';
+import ProfileAvatar from 'assets/img/avatar/profile.png';
 
 const ViewRequest = ({ applicationId }) => {
   const [message, setMessage] = React.useState({ msg: null, type: 'error' });
@@ -58,7 +59,7 @@ const ViewRequest = ({ applicationId }) => {
           className="avatar--large"
           name={application.user.profile.stageName || 'No name'}
           responsiveImage={false}
-          src={application.user.profileImageURL || 'No src'}
+          src={application.user.profileImageURL || ProfileAvatar}
         />
         <h4 className="font-weight-normal mt-3">
           {application.user.profile.stageName}

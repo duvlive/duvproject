@@ -31,6 +31,7 @@ const UsersRow = ({
   profileImageURL,
   type,
   isActive,
+  accountStatus,
 }) => (
   <tr>
     <th className="table__number align-middle" scope="row">
@@ -60,12 +61,24 @@ const UsersRow = ({
 
     <td className="align-middle">
       {isActive ? (
-        <span className="text-muted-light text-uppercase">
-          <i className="icon icon-ok-circled"></i> Activated{' '}
+        <span className="text-muted text-uppercase">
+          <i className="icon icon-ok-circled"></i> Verified{' '}
         </span>
       ) : (
-        <span className="text-red text-uppercase">
+        <span className="text-danger text-uppercase">
           <i className="icon icon-help"></i> Not Verified{' '}
+        </span>
+      )}
+    </td>
+
+    <td className="align-middle">
+      {accountStatus === 'ACTIVE' ? (
+        <span className="text-muted text-uppercase">
+          <i className="icon icon-help"></i> Active{' '}
+        </span>
+      ) : (
+        <span className="text-warning text-uppercase">
+          <i className="icon icon-help"></i> {accountStatus}{' '}
         </span>
       )}
     </td>
@@ -81,6 +94,7 @@ UsersRow.defaultProps = {
 };
 
 UsersRow.propTypes = {
+  accountStatus: PropTypes.any.isRequired,
   firstName: PropTypes.string.isRequired,
   id: PropTypes.any.isRequired,
   isActive: PropTypes.bool.isRequired,

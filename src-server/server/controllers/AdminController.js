@@ -32,9 +32,51 @@ const AdminController = {
     const limit = 10;
     const offset = parseInt(req.query.offset, 10) || 0;
     try {
+      const include = [
+        {
+          model: Event,
+          as: 'events',
+          include: [
+            {
+              model: EventEntertainer,
+              as: 'entertainers',
+              include: [
+                {
+                  model: EntertainerProfile,
+                  as: 'entertainer',
+                  attributes: [
+                    'id',
+                    'stageName',
+                    'entertainerType',
+                    'location',
+                  ],
+                  include: [
+                    {
+                      model: User,
+                      as: 'personalDetails',
+                      attributes: [
+                        'id',
+                        'firstName',
+                        'lastName',
+                        'profileImageURL',
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          model: CancelEventEntertainer,
+          as: 'cancelledEvents',
+          required: false,
+          where: {
+            cancelledBy: 'User',
+          },
+        },
+      ];
       const { result, pagination } = await getAll(User, {
-        limit,
-        offset,
         attributes: [
           'id',
           'firstName',
@@ -43,7 +85,11 @@ const AdminController = {
           'profileImageURL',
           'type',
           'isActive',
+          'accountStatus',
         ],
+        include,
+        limit,
+        offset,
         order: [['id', 'desc']],
       });
       return res.status(200).json({ users: result, pagination });
