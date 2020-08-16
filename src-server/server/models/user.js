@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import sendMail from '../MailSender';
 import EMAIL_CONTENT from '../email-template/content';
-import { USER_TYPES } from '../constant';
+import { USER_TYPES, ACCOUNT_STATUS } from '../constant';
 
 export const encryptPassword = (password) =>
   bcrypt.hashSync(password, bcrypt.genSaltSync(10));
@@ -94,6 +94,10 @@ module.exports = (sequelize, DataTypes) => {
       },
       commissionId: {
         type: DataTypes.INTEGER,
+      },
+      accountStatus: {
+        type: DataTypes.STRING,
+        defaultValue: ACCOUNT_STATUS.ACTIVE,
       },
     },
     {

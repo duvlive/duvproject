@@ -21,7 +21,13 @@ import sendMail from '../MailSender';
 import Authentication from '../middleware/authentication';
 import { UserValidation, updateUser, validString, getAll } from '../utils';
 import EMAIL_CONTENT from '../email-template/content';
-import { USER_TYPES, NOTIFICATIONS, NOTIFICATION_TYPE } from '../constant';
+import {
+  USER_TYPES,
+  NOTIFICATIONS,
+  NOTIFICATION_TYPE,
+  ACCOUNT_STATUS,
+} from '../constant';
+import { Op } from 'sequelize';
 
 export const userAssociatedOrder = [
   // ...we use the same syntax from the include
@@ -135,6 +141,7 @@ const UserController = {
   transformUser(user, updatedValues = {}) {
     const transformedUser = {
       id: user.id,
+      accountStatus: user.accountStatus,
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
@@ -679,6 +686,77 @@ const UserController = {
   },
 
   /**
+   * Deactivate your account
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  deactivateYourAccount(req, res) {
+    const id = req.user.id;
+
+    return User.update(
+      { accountStatus: ACCOUNT_STATUS.DEACTIVATED },
+      {
+        where: {
+          id,
+        },
+      }
+    )
+      .then(() => {
+        return res.status(200).json({
+          message: `Your account has been succesfully deactivated.`,
+        });
+      })
+      .catch((error) => {
+        const errorMessage = error.message || error;
+        return res.status(500).json({ message: errorMessage });
+      });
+  },
+
+  /**
+   * Ban / Activate / deactivate user account
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  updateAccountStatus(req, res) {
+    const { id, status } = req.params;
+    const accountStatus = status ? status.toUpperCase() : '`NULL Status`';
+
+    if (!Object.keys(ACCOUNT_STATUS).includes(accountStatus)) {
+      return res
+        .status(412)
+        .json({ message: `${accountStatus} is not recognized` });
+    }
+
+    User.findOne({
+      where: { id },
+    })
+      .then((userFound) => {
+        if (!userFound || userFound.length === 0) {
+          return res.status(404).json({ message: 'User not found' });
+        }
+        if (userFound.accountStatus === accountStatus) {
+          return res
+            .status(403)
+            .json({ message: `Account is already ${accountStatus}` });
+        }
+
+        return userFound.update({ accountStatus: accountStatus }).then(() => {
+          return res.status(200).json({
+            message: `Account is now ${accountStatus}.`,
+          });
+        });
+      })
+      .catch((error) => {
+        const errorMessage = error.message || error;
+        return res.status(500).json({ message: errorMessage });
+      });
+  },
+
+  /**
    * user login
    * @function
    * @param {object} req is req object
@@ -705,6 +783,15 @@ const UserController = {
         if (!user.isActive) {
           return res.status(403).json({
             message: 'User needs to activate account.',
+          });
+        }
+
+        if (
+          user.accountStatus === ACCOUNT_STATUS.DEACTIVATED ||
+          user.accountStatus === ACCOUNT_STATUS.BANNED
+        ) {
+          return res.status(403).json({
+            message: `Your account has been ${user.accountStatus}. Kindly contact us if you would like to activate your account.`,
           });
         }
 

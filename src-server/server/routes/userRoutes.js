@@ -172,11 +172,26 @@ const userRoutes = (router) => {
     )
   );
 
+  router.put(
+    '/api/v1/user/deactivate',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    UserController.deactivateYourAccount
+  );
+
   // Admin routes
   router
     .route('/api/v1/users')
     .all(Authentication.verifyToken, Authentication.validateAdmin)
     .get(UserController.getAllUsers);
+
+  router.put(
+    '/api/v1/user/:status/:id',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    Authentication.validateAdmin,
+    UserController.updateAccountStatus
+  );
 };
 
 export default userRoutes;

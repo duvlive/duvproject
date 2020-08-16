@@ -35,6 +35,7 @@ import { cancelEventSchema } from 'components/forms/schema/eventSchema';
 import { createSchema } from 'components/forms/schema/schema-helpers';
 import { setInitialValues } from 'components/forms/form-helper';
 import TextArea from 'components/forms/TextArea';
+import ProfileAvatar from 'assets/img/avatar/profile.png';
 
 const SingleEvent = ({ id }) => {
   const [message, setMessage] = React.useState({ msg: null, type: null });
@@ -512,7 +513,7 @@ SingleEvent.HireEntertainersRow = ({ entertainer }) => {
               (entertainer &&
                 entertainer.personalDetails &&
                 entertainer.personalDetails.profileImageURL) ||
-              'No src'
+              ProfileAvatar
             }
           />
         )}

@@ -434,7 +434,10 @@ const EntertainerProfileController = {
     // };
 
     const entertainerQuery = {
-      stageName: { [Op.iLike]: `%${name.toLowerCase()}%` },
+      [Op.or]: [
+        { stageName: { [Op.iLike]: `%${name.toLowerCase()}%` } },
+        { slug: { [Op.iLike]: `%${name.toLowerCase()}%` } },
+      ],
     };
 
     const include = [
@@ -464,7 +467,7 @@ const EntertainerProfileController = {
       const { result, pagination } = await getAll(User, {
         // where: userQuery,
         include,
-        limit: 6,
+        limit: 10,
       });
       return res
         .status(200)

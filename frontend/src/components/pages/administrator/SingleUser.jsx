@@ -8,6 +8,7 @@ import Image from 'components/common/utils/Image';
 import { USER_TYPES } from 'utils/constants';
 import classNames from 'classnames';
 import Button from 'components/forms/Button';
+import ProfileAvatar from 'assets/img/avatar/profile.png';
 
 const userTypes = Object.keys(USER_TYPES);
 
@@ -47,63 +48,65 @@ const SingleUser = ({ id }) => {
     </BackEndPage>
   );
 };
-
-const UserProfile = ({ user }) => (
-  <div className="col-md-6 offset-md-3 col-sm-8 offset-sm-2">
-    <section className="text-center">
-      <Image
-        className="avatar--large"
-        name={(user && user.firstName) || 'No name'}
-        responsiveImage={false}
-        src={user.profileImageURL || 'No src'}
-      />
-      <h3 className="font-weight-normal">
-        {user.firstName} {user.lastName} <br />
-      </h3>
-      <span className="text-muted">{userTypes[user.type].toUpperCase()}</span>
-    </section>
-    <ul className={classNames('list-group  mt-4', { transparent: true })}>
-      <li className="list-group-item">
-        <small className="small-text__with-icon">
-          <i className="icon icon-user-circle"></i>
-          Full Name
-        </small>
-        <h5 className="event-list-label">
-          {user.firstName} {user.lastName}
-        </h5>
-      </li>
-      <li className="list-group-item">
-        <small className="small-text__with-icon">
-          <i className="icon icon-vcard"></i>
-          Email
-        </small>
-        <h5 className="event-list-label">{user.email}</h5>
-      </li>
-      <li className="list-group-item">
-        <small className="small-text__with-icon">
-          <i className="icon icon-vcard"></i> Phone Number
-        </small>
-        <h5 className="event-list-label text-muted-light-2">
-          {user.phoneNumber}
-        </h5>
-      </li>
-      {user.phoneNumber2 && (
+const UserProfile = ({ user }) => {
+  console.log('user', user);
+  return (
+    <div className="col-md-6 offset-md-3 col-sm-8 offset-sm-2">
+      <section className="text-center">
+        <Image
+          className="avatar--large"
+          name={(user && user.firstName) || 'No name'}
+          responsiveImage={false}
+          src={user.profileImageURL || ProfileAvatar}
+        />
+        <h3 className="font-weight-normal">
+          {user.firstName} {user.lastName} <br />
+        </h3>
+        <span className="text-muted">{userTypes[user.type].toUpperCase()}</span>
+      </section>
+      <ul className={classNames('list-group  mt-4', { transparent: true })}>
+        <li className="list-group-item">
+          <small className="small-text__with-icon">
+            <i className="icon icon-user-circle"></i>
+            Full Name
+          </small>
+          <h5 className="event-list-label">
+            {user.firstName} {user.lastName}
+          </h5>
+        </li>
         <li className="list-group-item">
           <small className="small-text__with-icon">
             <i className="icon icon-vcard"></i>
-            Phone Number 2
+            Email
+          </small>
+          <h5 className="event-list-label">{user.email}</h5>
+        </li>
+        <li className="list-group-item">
+          <small className="small-text__with-icon">
+            <i className="icon icon-vcard"></i> Phone Number
           </small>
           <h5 className="event-list-label text-muted-light-2">
-            {user.phoneNumber2}
+            {user.phoneNumber}
           </h5>
         </li>
-      )}
-    </ul>
-    <div className="mt-4">
-      <Button className="btn-transparent btn-wide">Ban User</Button>
+        {user.phoneNumber2 && (
+          <li className="list-group-item">
+            <small className="small-text__with-icon">
+              <i className="icon icon-vcard"></i>
+              Phone Number 2
+            </small>
+            <h5 className="event-list-label text-muted-light-2">
+              {user.phoneNumber2}
+            </h5>
+          </li>
+        )}
+      </ul>
+      <div className="mt-4">
+        <Button className="btn-transparent btn-wide">Ban User</Button>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 UserProfile.propTypes = {
   user: PropTypes.object.isRequired,
