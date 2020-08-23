@@ -77,9 +77,9 @@ Dashboard.Items = ({
         <div className="row">
           <DashboardOverviewCard
             color="yellow"
-            textLink="View All Users"
-            title="Users"
-            to="/admin/users"
+            textLink="View Registered Users"
+            title="All Users"
+            to="/admin/registered-users"
           >
             <DashboardOverviewCard.List
               color="yellow"
@@ -104,7 +104,7 @@ Dashboard.Items = ({
             color="green"
             textLink="View All Events"
             title="Event Entertainers"
-            to="/admin/events"
+            to="/admin/upcoming-events"
           >
             <DashboardOverviewCard.List
               color="green"
@@ -129,7 +129,7 @@ Dashboard.Items = ({
             color="blue"
             textLink="View User Payments"
             title="Payments"
-            to="/admin/payments"
+            to="/admin/users-payment"
           >
             <DashboardOverviewCard.List
               color="blue"
@@ -155,11 +155,13 @@ Dashboard.Items = ({
 
         <div className="row">
           <div className="col-sm-8">
-            {upcomingEvents && upcomingEvents.length > 0 && (
-              <Dashboard.UpcomingEvents
-                events={getItems(upcomingEvents, 2) || []}
-              />
-            )}
+            <Dashboard.UpcomingEvents
+              events={
+                upcomingEvents && upcomingEvents.length > 0
+                  ? getItems(upcomingEvents, 2)
+                  : []
+              }
+            />
           </div>
           <div className="col-sm-4">
             <Dashboard.PendingPayments pendingPayments={pendingPayments} />
@@ -181,11 +183,19 @@ Dashboard.Items.propTypes = {
 Dashboard.UpcomingEvents = ({ events }) => (
   <div className="card card-custom">
     <div className="card-body">
-      <h5 className="font-weight-normal text-green">Upcoming Events</h5>
+      <h5 className="font-weight-normal text-blue">Upcoming Events</h5>
       <div className="table-responsive">
         <table className="table table-dark table__no-border table__with-bg">
           <tbody>
-            <Events.CardList events={events} />
+            {events.length > 0 ? (
+              <Events.CardList events={events} />
+            ) : (
+              <tr className="transparent">
+                <td>
+                  <NoContent text="No upcoming events" />
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
@@ -201,7 +211,7 @@ Dashboard.PendingPayments = ({ pendingPayments }) => (
   <div className="card card-custom">
     <div className="card-body">
       <h5 className="font-weight-normal text-green">Pending Payments</h5>
-      <small className="text-muted d-block  mb-3">
+      <small className="text-muted d-block mb-3">
         {pendingPayments && pendingPayments.length > 0 && (
           <>
             You have {pendingPayments.length} pending{' '}
@@ -213,7 +223,7 @@ Dashboard.PendingPayments = ({ pendingPayments }) => (
       <div className="table-responsive">
         <LoadItems
           items={pendingPayments}
-          noContent={<NoContent text="You have no pending payments" />}
+          noContent={<NoContent text="No pending payments" />}
         >
           <table className="table table-dark table-border--x">
             <tbody>
@@ -228,7 +238,6 @@ Dashboard.PendingPayments = ({ pendingPayments }) => (
                     payment.applications[0].commission,
                     payment.hireType
                   );
-                  console.log('calculatedPrice', calculatedPrice);
                   return (
                     <Dashboard.PendingPaymentRow
                       event={payment.event.eventType}

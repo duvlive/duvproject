@@ -60,9 +60,7 @@ DashboardOverviewCard.List.propTypes = {
   color: PropTypes.string.isRequired,
   icon: PropTypes.string.isRequired,
   number: PropTypes.any,
-  summary: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  // to: PropTypes.string.isRequired,
 };
 
 DashboardOverviewCard.List.defaultProps = {

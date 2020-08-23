@@ -61,11 +61,11 @@ const UsersRow = ({
 
     <td className="align-middle">
       {isActive ? (
-        <span className="text-muted text-uppercase">
+        <span className="text-muted small text-uppercase">
           <i className="icon icon-ok-circled"></i> Verified{' '}
         </span>
       ) : (
-        <span className="text-danger text-uppercase">
+        <span className="text-red small text-uppercase">
           <i className="icon icon-help"></i> Not Verified{' '}
         </span>
       )}
@@ -84,7 +84,12 @@ const UsersRow = ({
     </td>
 
     <td className="align-middle">
-      <Link to={`/admin/users/${id}`}>Manage</Link>
+      <Link
+        className="btn btn-info btn-sm btn-transparent"
+        to={`/admin/users/${id}`}
+      >
+        Manage
+      </Link>
     </td>
   </tr>
 );
