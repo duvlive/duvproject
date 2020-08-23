@@ -16,7 +16,10 @@ import {
   ApprovalComment,
   CancelEventEntertainer,
   Commission,
+  Payment,
 } from '../models';
+import { REQUEST_ACTION } from '../constant';
+import { addDays } from 'date-fns';
 import { getAll } from '../utils/modelHelper';
 
 const AdminController = {
@@ -350,6 +353,219 @@ const AdminController = {
       .catch((error) => {
         return res.status(500).json({ message: error.message });
       });
+  },
+
+  /**
+   * get Dashboard Auctions, Requests, upcoming Events, pending payments (for entertainers)
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  async getDashboardDetailsForAdmin(req, res) {
+    EventEntertainer.findAll({
+      where: {
+        [Op.or]: [
+          {
+            // Auctions
+            hireType: 'Auction',
+            auctionStartDate: { [Op.lte]: Sequelize.literal('NOW()') },
+            auctionEndDate: { [Op.gte]: Sequelize.literal('NOW()') },
+            [Op.and]: Sequelize.literal('applications.id is null'),
+          },
+          {
+            // Upcoming Events
+            [Op.and]: Sequelize.literal(
+              '"eventEntertainer"."hiredEntertainer" is NOT null'
+            ),
+            [Op.and]: Sequelize.literal('"event"."eventDate" > NOW()'),
+          },
+          {
+            // Requests
+            [Op.and]: [
+              {
+                [Op.and]: Sequelize.literal(
+                  `"applications"."userId" is NOT NULL`
+                ),
+              },
+              {
+                [Op.and]: Sequelize.literal(
+                  `"applications"."status" = '${REQUEST_ACTION.PENDING}'`
+                ),
+              },
+              {
+                [Op.and]: Sequelize.literal(
+                  `"applications"."applicationType" = 'Request'`
+                ),
+              },
+              {
+                [Op.and]: Sequelize.literal(
+                  `"applications"."expiryDate" > NOW()`
+                ),
+              },
+            ],
+          },
+          {
+            // Bids
+            [Op.and]: [
+              {
+                [Op.and]: Sequelize.literal(
+                  `"applications"."userId" is NOT null`
+                ),
+              },
+              {
+                [Op.and]: Sequelize.literal(
+                  `"applications"."status" = '${REQUEST_ACTION.PENDING}'`
+                ),
+              },
+              {
+                [Op.and]: Sequelize.literal(
+                  `"applications"."applicationType" = 'Bid'`
+                ),
+              },
+            ],
+          },
+        ],
+      },
+      // attributes: ['id'],
+      include: [
+        {
+          model: Event,
+          as: 'event',
+          include: [
+            {
+              model: User,
+              as: 'owner',
+              attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+            },
+          ],
+          where: {
+            eventDate: { [Op.gte]: addDays(Date.now(), 3) },
+          },
+        },
+        {
+          model: Application,
+          as: 'applications',
+        },
+      ],
+    }).then(async (eventEntertainers) => {
+      const eventsGroup = await EventEntertainer.findAll({
+        group: ['hireType'],
+        attributes: [
+          'hireType',
+          [Sequelize.fn('COUNT', Sequelize.col('hireType')), 'total'],
+        ],
+      });
+
+      const eventsOverview = eventsGroup.reduce(
+        (acc, value) => ({
+          ...acc,
+          [value.dataValues.hireType]: value.dataValues.total,
+        }),
+        {}
+      );
+
+      const usersGroup = await User.findAll({
+        group: ['type'],
+        attributes: [
+          'type',
+          [Sequelize.fn('COUNT', Sequelize.col('type')), 'total'],
+        ],
+      });
+
+      const usersOverview = usersGroup.reduce(
+        (acc, value) => ({
+          ...acc,
+          [value.dataValues.type]: value.dataValues.total,
+        }),
+        {}
+      );
+
+      const userPayments = await Application.count({
+        where: {
+          paid: true,
+        },
+      });
+      const paidEntertainers = await Payment.count();
+
+      const pendingPayments = await EventEntertainer.findAll({
+        where: {
+          [Op.and]: Sequelize.literal('"eventPayment"."id" is null'),
+        },
+        include: [
+          {
+            model: Event,
+            as: 'event',
+            attributes: ['id', 'eventType', 'eventDate'],
+            where: {
+              eventDate: {
+                [Op.lt]: Date.now(),
+              },
+            },
+          },
+          {
+            model: Payment,
+            as: 'eventPayment',
+          },
+          {
+            model: Application,
+            as: 'applications',
+            required: true,
+            attributes: [
+              'id',
+              'commissionId',
+              'askingPrice',
+              'applicationType',
+              'proposedPrice',
+              'createdAt',
+            ],
+            include: [
+              {
+                model: Commission,
+                as: 'commission',
+              },
+            ],
+          },
+        ],
+      });
+
+      const results = eventEntertainers.reduce(
+        (result, eventEntertainer) => {
+          if (
+            eventEntertainer.applications &&
+            eventEntertainer.applications.length > 0 &&
+            eventEntertainer.applications[0].applicationType === 'Bid'
+          ) {
+            result.bids.push(eventEntertainer);
+          } else if (eventEntertainer.hireType === 'Auction') {
+            result.auctions.push(eventEntertainer);
+          } else if (eventEntertainer.hiredEntertainer) {
+            result.upcomingEvents.push({
+              ...eventEntertainer.event.toJSON(),
+              eventEntertainerId: eventEntertainer.id,
+            });
+          } else {
+            result.requests.push(eventEntertainer);
+          }
+          return result;
+        },
+        { auctions: [], bids: [], requests: [], upcomingEvents: [] }
+      );
+
+      return res.status(200).json({
+        results: {
+          ...results,
+          pendingPayments,
+          eventsOverview,
+          usersOverview,
+          paymentsOverview: {
+            userPayments,
+            paidEntertainers,
+            pendingPayments: pendingPayments.length,
+          },
+        },
+      });
+    });
   },
 };
 

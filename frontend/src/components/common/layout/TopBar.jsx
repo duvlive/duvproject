@@ -63,7 +63,7 @@ const TopBar = ({ showSidebar }) => {
           <Nav className="ml-auto" navbar>
             <NavItem>
               <NavLink
-                className="topbar__notification d-none d-sm-block"
+                className="topbar__notification d-block"
                 tag={Link}
                 to={`/${DASHBOARD_PAGE[userState.type]}/notifications`}
               >
