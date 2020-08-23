@@ -315,6 +315,11 @@ db.Badge.belongsTo(db.User, {
   as: 'creator',
 });
 
+db.User.hasMany(db.GlobalNotification, {
+  foreignKey: 'adminId',
+  as: 'globalNotifications',
+});
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 

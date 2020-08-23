@@ -10,6 +10,7 @@ import EntertainerProfileController from './EntertainerProfileController';
 import EventController from './EventController';
 import EventEntertainerController from './EventEntertainerController';
 import GalleryController from './GalleryController';
+import GlobalNotificationController from './GlobalNotificationController';
 import IdentificationController from './IdentificationController';
 import ImageController from './ImageController';
 import NotificationController from './NotificationController';
@@ -34,6 +35,7 @@ export {
   EventController,
   EventEntertainerController,
   GalleryController,
+  GlobalNotificationController,
   IdentificationController,
   ImageController,
   NotificationController,

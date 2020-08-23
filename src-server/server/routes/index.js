@@ -9,6 +9,7 @@ import bandMemberRoutes from './bandMemberRoutes';
 import eventEntertainerRoutes from './eventEntertainerRoute';
 import eventRoutes from './eventRoutes';
 import galleryRoutes from './galleryRoutes';
+import globalNotificationRoutes from './globalNotificationRoutes';
 import identificationRoutes from './identificationRoutes';
 import imageRoutes from './imageRoutes';
 import otherRoutes from './otherRoutes';
@@ -33,6 +34,7 @@ const routes = (app) => {
   eventEntertainerRoutes(app);
   eventRoutes(app);
   galleryRoutes(app);
+  globalNotificationRoutes(app);
   identificationRoutes(app);
   imageRoutes(app);
   otherRoutes(app);
