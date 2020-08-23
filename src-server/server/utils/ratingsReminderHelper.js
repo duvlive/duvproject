@@ -8,8 +8,9 @@ import {
 } from '../models';
 import { getAll } from './index';
 import sendMail from '../MailSender';
+import EMAIL_CONTENT from '../email-template/content';
 
-const getUnratedEvents = async () => {
+const getUnratedEntainers = async () => {
   try {
     const options = {
       where: {
@@ -75,17 +76,14 @@ const getUnratedEvents = async () => {
   }
 };
 
-export const createRatingandReview = async () => {
+export const getUnRatedAndMailUsers = async () => {
   try {
-    const result = await getUnratedEvents();
+    const result = await getUnratedEntainers();
     return await result.map(async (rating) => {
-      const { id } = rating.dataValues;
       const { user, entertainer, event } = rating.ratedEvent;
-      const content = `${process.env.HOST}/user/events/view/${event.id}`;
-      await sendMail(content, user, {
-        title: 'Whatever',
+      await sendMail(EMAIL_CONTENT.RATE_ENTERTAINER, user, {
         link: `${process.env.HOST}/user/events/view/${event.id}`,
-        subject: 'Update Rating reminder',
+        subject: `Your DUVLIVE ${event.eventType} Event - Please rate ${entertainer.entertainerType} ${entertainer.stageName} that you hired!`,
       });
     });
   } catch (error) {

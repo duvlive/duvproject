@@ -69,6 +69,15 @@ const EMAIL_CONTENT = {
     copyright:
       'Please do not reply to this email. Emails sent to this address will not be answered.',
   },
+  RATE_ENTERTAINER: {
+    title: 'Please rate Entertainer(s) you hired!!!',
+    contentTop: `Thank you for hiring entertainer(s) with DUVLIVE. <br />
+    <br />
+    Please help us improve our service and give all DUVLIVE customers a better understanding about the entertainer(s) your hired! <br/>
+    <br />
+    Thank you for using DUVLIVE for your events!!!`,
+    buttonText: 'Rate Entertainer',
+  },
   USER_CANCELLED_EVENT: {
     subject: 'Cancelled Event',
   },

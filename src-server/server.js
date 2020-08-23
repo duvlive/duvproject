@@ -9,7 +9,7 @@ import path from 'path';
 import cron from 'node-cron';
 
 import router from './server/routes';
-import { createRatingandReview } from './server/utils/ratingsReminderHelper';
+import { getUnRatedAndMailUsers } from './server/utils/ratingsReminderHelper';
 
 dotenv.config();
 
@@ -33,14 +33,12 @@ app.use(bodyParser.json());
 
 // cron.schedule('* * * * *', async function () {
 //   console.log('running a task every minute seyi');
-//   await createRatingandReview();
+//   await getUnRatedAndMailUsers();
 //   console.log('enddddd');
 // });
 
 async function x() {
-  console.log('started');
-  await createRatingandReview();
-  console.log('done');
+  await getUnRatedAndMailUsers();
 }
 x();
 
