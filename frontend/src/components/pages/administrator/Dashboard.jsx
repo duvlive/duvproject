@@ -1,99 +1,170 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import axios from 'axios';
 import TopMessage from 'components/common/layout/TopMessage';
 import BackEndPage from 'components/common/layout/BackEndPage';
-import DashboardCard from 'components/common/utils/DashboardCard';
-import { Link } from '@reach/router';
+import DashboardOverviewCard from 'components/common/utils/DashboardOverviewCard';
+import { getTokenFromStore } from 'utils/localStorage';
+import { UserContext } from 'context/UserContext';
+import LoadingScreen from 'components/common/layout/LoadingScreen';
+import Events from 'components/pages/entertainer/UpcomingEvents';
+import {
+  getItems,
+  moneyFormatInNaira,
+  priceCalculatorHelper,
+} from 'utils/helpers';
+import NoContent from 'components/common/utils/NoContent';
+import LoadItems from 'components/common/utils/LoadItems';
+import Humanize from 'humanize-plus';
 
-const Dashboard = () => (
-  <BackEndPage title="Dashboard">
-    <div className="main-app">
-      <Dashboard.Items />
-    </div>
-  </BackEndPage>
-);
+const Dashboard = () => {
+  const { userState } = React.useContext(UserContext);
+  const [loading, setLoading] = React.useState(true);
+  const [results, setResults] = React.useState({
+    auctions: null,
+    bids: null,
+    requests: null,
+    upcomingEvents: null,
+    eventsOverview: null,
+    userOverview: null,
+  });
+  React.useEffect(() => {
+    axios
+      .get(`/api/v1/applications/dashboard/admin`, {
+        headers: {
+          'x-access-token': getTokenFromStore(),
+        },
+      })
+      .then(function (response) {
+        const { status, data } = response;
+        // handle success
+        if (status === 200) {
+          setResults(data.results);
+          console.log('results', data.results);
+          setLoading(false);
+        }
+      })
+      .catch(function (error) {
+        setResults([]);
+        setLoading(false);
+      });
+  }, []);
 
-Dashboard.Items = () => {
+  return (
+    <BackEndPage title="Dashboard">
+      <div className="main-app">
+        <TopMessage message={`Welcome back ${userState.firstName},`} />
+        {loading ? (
+          <LoadingScreen text="Refreshing your Dashboard" />
+        ) : (
+          <Dashboard.Items {...results} />
+        )}
+      </div>
+    </BackEndPage>
+  );
+};
+
+Dashboard.Items = ({
+  eventsOverview,
+  paymentsOverview,
+  pendingPayments,
+  upcomingEvents,
+  usersOverview,
+}) => {
   return (
     <>
-      <TopMessage message="Welcome back U.V," />
       <section className="app-content">
         <div className="row">
-          <DashboardCard
+          <DashboardOverviewCard
             color="yellow"
-            icon="auction"
-            number="08"
-            summary="31 in last 30days"
-            title="Total Auctions"
-            to="/administrator/auctions"
-          />
-          <DashboardCard
-            color="green"
-            icon="calendar"
-            number="81"
-            summary="15 upcoming events"
-            title="Total Events"
-            to="/administrator/events"
-          />
-          <DashboardCard
-            color="blue"
-            icon="credit-card"
-            number="79"
-            summary="2 pending payments"
-            title="Payments Received"
-            to="/administrator/users-payment"
-          />
-          <DashboardCard
-            color="yellow"
-            icon="entertainers"
-            number="108"
-            summary="15 in last 30days"
-            title="All Entertainers"
-            to="/administrator/entertainers"
-          />
-          <DashboardCard
-            color="green"
-            icon="users"
-            number="123"
-            summary="22 in last 30 days"
+            textLink="View Registered Users"
             title="All Users"
-            to="/administrator/events"
-          />
-          <DashboardCard
+            to="/admin/registered-users"
+          >
+            <DashboardOverviewCard.List
+              color="yellow"
+              icon="user-circle"
+              number={usersOverview && usersOverview[1]}
+              title="Users"
+            />
+            <DashboardOverviewCard.List
+              color="yellow"
+              icon="entertainers"
+              number={usersOverview && usersOverview[2]}
+              title="Entertainers"
+            />
+            <DashboardOverviewCard.List
+              color="yellow"
+              icon="band-members"
+              number={usersOverview && usersOverview[3]}
+              title="Band Members"
+            />
+          </DashboardOverviewCard>
+          <DashboardOverviewCard
+            color="green"
+            textLink="View All Events"
+            title="Event Entertainers"
+            to="/admin/upcoming-events"
+          >
+            <DashboardOverviewCard.List
+              color="green"
+              icon="auction"
+              number={eventsOverview && eventsOverview['Auction']}
+              title="Auctions"
+            />
+            <DashboardOverviewCard.List
+              color="green"
+              icon="hire-entertainers"
+              number={eventsOverview && eventsOverview['Recommendation']}
+              title="Recommendation"
+            />
+            <DashboardOverviewCard.List
+              color="green"
+              icon="vcard"
+              number={eventsOverview && eventsOverview['Search']}
+              title="Search"
+            />
+          </DashboardOverviewCard>
+          <DashboardOverviewCard
             color="blue"
-            icon="circle"
-            number="19"
-            summary="7 pending payments"
-            title="Payments Made"
-            to="/administrator/payments"
-          />
+            textLink="View User Payments"
+            title="Payments"
+            to="/admin/users-payment"
+          >
+            <DashboardOverviewCard.List
+              color="blue"
+              icon="money"
+              number={paymentsOverview && paymentsOverview['userPayments']}
+              title="User Payments"
+            />
+            <DashboardOverviewCard.List
+              color="blue"
+              icon="credit-card"
+              number={paymentsOverview && paymentsOverview['paidEntertainers']}
+              title="Paid Entertainers"
+            />
+            <DashboardOverviewCard.List
+              color="blue"
+              icon="help"
+              number={paymentsOverview && paymentsOverview['pendingPayments']}
+              title="Pending Payments"
+              to="/admin/events"
+            />
+          </DashboardOverviewCard>
         </div>
 
         <div className="row">
           <div className="col-sm-8">
-            <Dashboard.UpcomingEvents />
-            <Dashboard.RecentBids />
+            <Dashboard.UpcomingEvents
+              events={
+                upcomingEvents && upcomingEvents.length > 0
+                  ? getItems(upcomingEvents, 2)
+                  : []
+              }
+            />
           </div>
           <div className="col-sm-4">
-            <Dashboard.RecentPaymentsMade />
-            <Dashboard.RecentBadges />
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col-sm-12">
-            <Dashboard.DuePayments />
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col-sm-12">
-            <Dashboard.RecentEntertainers />
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col-sm-12">
-            <Dashboard.RecentUsers />
+            <Dashboard.PendingPayments pendingPayments={pendingPayments} />
           </div>
         </div>
       </section>
@@ -101,34 +172,30 @@ Dashboard.Items = () => {
   );
 };
 
-Dashboard.UpcomingEvents = () => (
+Dashboard.Items.propTypes = {
+  eventsOverview: PropTypes.object.isRequired,
+  paymentsOverview: PropTypes.object.isRequired,
+  pendingPayments: PropTypes.array.isRequired,
+  upcomingEvents: PropTypes.array.isRequired,
+  usersOverview: PropTypes.object.isRequired,
+};
+
+Dashboard.UpcomingEvents = ({ events }) => (
   <div className="card card-custom">
     <div className="card-body">
-      <h5 className="card-title text-green">Upcoming Events</h5>
+      <h5 className="font-weight-normal text-blue">Upcoming Events</h5>
       <div className="table-responsive">
-        <table className="table table-dark">
+        <table className="table table-dark table__no-border table__with-bg">
           <tbody>
-            <tr>
-              <td className="text-white">3 days to go</td>
-              <td>9:00am</td>
-              <td>Mon, Apr. 17, 2019</td>
-              <td>Wedding DJ</td>
-              <td>Lagos</td>
-            </tr>
-            <tr>
-              <td className="text-white">3 months to go</td>
-              <td>3:00pm</td>
-              <td>Sat, Dec. 3, 2019</td>
-              <td>Birthday DJ</td>
-              <td>Benin</td>
-            </tr>
-            <tr>
-              <td className="text-white">3 months to go</td>
-              <td>3:00pm</td>
-              <td>Sat, Dec. 3, 2019</td>
-              <td>Birthday DJ</td>
-              <td>Benin</td>
-            </tr>
+            {events.length > 0 ? (
+              <Events.CardList events={events} />
+            ) : (
+              <tr className="transparent">
+                <td>
+                  <NoContent text="No upcoming events" />
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
@@ -136,310 +203,75 @@ Dashboard.UpcomingEvents = () => (
   </div>
 );
 
-Dashboard.RecentBids = () => (
+Dashboard.UpcomingEvents.propTypes = {
+  events: PropTypes.array.isRequired,
+};
+
+Dashboard.PendingPayments = ({ pendingPayments }) => (
   <div className="card card-custom">
     <div className="card-body">
-      <h5 className="card-title text-yellow">Recent Bids</h5>
+      <h5 className="font-weight-normal text-green">Pending Payments</h5>
+      <small className="text-muted d-block mb-3">
+        {pendingPayments && pendingPayments.length > 0 && (
+          <>
+            You have {pendingPayments.length} pending{' '}
+            {Humanize.pluralize(pendingPayments.length, 'payment')}
+          </>
+        )}
+      </small>
+
       <div className="table-responsive">
-        <table className="table table-dark">
-          <tbody>
-            <tr>
-              <th className="table__number" scope="row">
-                01
-              </th>
-              <td>
-                <div className="table__title text-white">Wedding Ceremony</div>
-                <span>
-                  <i className="icon icon-location" />
-                  Yaba, Lagos state
-                </span>
-              </td>
-              <td>
-                <span className="text-red">3 days to go</span>
-                <span>
-                  <strong className="text-blue"> DJ Cuppy</strong> (DJ)
-                </span>
-              </td>
-              <td className="text-right">
-                <span>
-                  <i className="icon icon-clock" /> Sun, April 17, 2019
-                </span>
-                <span>9:00am</span>
-              </td>
-            </tr>
-            <tr>
-              <th className="table__number" scope="row">
-                02
-              </th>
-              <td>
-                <div className="table__title text-white">Birthday Party</div>
-                <span>
-                  <i className="icon icon-location" />
-                  Yaba, Lagos state
-                </span>
-              </td>
-              <td>
-                <span className="text-green">2 months to go</span>
-                <span>
-                  <strong className="text-blue"> High Soul</strong> (Live Band)
-                </span>
-              </td>
-              <td className="text-right">
-                <span>
-                  <i className="icon icon-clock" /> Sun, April 17, 2019
-                </span>
-                <span>9:00am</span>
-              </td>
-            </tr>
-            <tr>
-              <th className="table__number" scope="row">
-                02
-              </th>
-              <td>
-                <div className="table__title text-white">Birthday Party</div>
-                <span>
-                  <i className="icon icon-location" />
-                  Yaba, Lagos state
-                </span>
-              </td>
-              <td>
-                <span className="text-green">2 months to go</span>
-                <span>
-                  <strong className="text-blue"> High Soul</strong> (Live Band)
-                </span>
-              </td>
-              <td className="text-right">
-                <span>
-                  <i className="icon icon-clock" /> Sun, April 17, 2019
-                </span>
-                <span>9:00am</span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <LoadItems
+          items={pendingPayments}
+          noContent={<NoContent text="No pending payments" />}
+        >
+          <table className="table table-dark table-border--x">
+            <tbody>
+              {pendingPayments &&
+                pendingPayments.length > 0 &&
+                pendingPayments.map((payment, index) => {
+                  const price = payment.applications[0].proposedPrice
+                    ? payment.applications[0].proposedPrice
+                    : payment.applications[0].askingPrice;
+                  const calculatedPrice = priceCalculatorHelper(
+                    price,
+                    payment.applications[0].commission,
+                    payment.hireType
+                  );
+                  return (
+                    <Dashboard.PendingPaymentRow
+                      event={payment.event.eventType}
+                      key={index}
+                      payment={calculatedPrice.entertainerFee}
+                    />
+                  );
+                })}
+            </tbody>
+          </table>
+        </LoadItems>
       </div>
     </div>
   </div>
 );
 
-Dashboard.RecentPaymentsMade = () => (
-  <div className="card card-custom">
-    <div className="card-body">
-      <h5 className="card-title text-red">Recent Payments</h5>
-      <div className="table-responsive">
-        <table className="table table-dark">
-          <tbody>
-            <tr>
-              <td> YUMMY BAND</td>
-              <td className="text-white">N 50,000</td>
-            </tr>
-            <tr>
-              <td>DJ CUPPY</td>
-              <td className="text-white">N 150,000</td>
-            </tr>
-            <tr>
-              <td>GAGALO</td>
-              <td className="text-white">N 75,000</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
+Dashboard.PendingPayments.propTypes = {
+  pendingPayments: PropTypes.array,
+};
+
+Dashboard.PendingPayments.defaultProps = {
+  pendingPayments: [],
+};
+
+Dashboard.PendingPaymentRow = ({ event, payment }) => (
+  <tr>
+    <td className="pt-3">{event}</td>
+    <td className="text-muted-light-2">{moneyFormatInNaira(payment)}</td>
+  </tr>
 );
 
-Dashboard.RecentBadges = () => (
-  <div className="card card-custom">
-    <div className="card-body">
-      <h5 className="card-title text-blue">Recent Badges</h5>
-      <div className="table-responsive">
-        <table className="table table-dark">
-          <tbody>
-            <tr valign="middle">
-              <td>
-                <i className="icon icon-badge text-yellow icon-sm"></i>{' '}
-              </td>
-              <td className="text-white pt-4">Certified Duv Administrator</td>
-            </tr>
-            <tr>
-              <td>
-                <i className="icon icon-badge text-red icon-sm d-inline-block"></i>{' '}
-              </td>
-              <td className="text-white pt-4">Completed 5 events</td>
-            </tr>
-            <tr>
-              <td>
-                <i className="icon icon-badge text-blue icon-sm d-inline-block"></i>{' '}
-              </td>
-              <td className="text-white pt-4">D.U.V Live AllStar</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-);
-
-Dashboard.DuePayments = () => (
-  <div className="card card-custom">
-    <div className="card-body">
-      <h5 className="card-title text-white">Due Payments</h5>
-      <div className="table-responsive">
-        <table className="table table-dark">
-          <tbody>
-            <tr>
-              <th>S/N</th>
-              <th>Name</th>
-              <th>Price</th>
-              <th>Date</th>
-              <th>Type</th>
-              <th>Location</th>
-              <th>Due Date</th>
-            </tr>
-            <tr>
-              <td>01.</td>
-              <td>DJ Gold</td>
-              <td>50,000</td>
-              <td>Apr 03, 2019</td>
-              <td>Wedding DJ</td>
-              <td>Lagos State</td>
-              <td>Last 3 days</td>
-            </tr>
-            <tr>
-              <td>02.</td>
-              <td>NotJustOK</td>
-              <td>150,000</td>
-              <td>Apr 03, 2019</td>
-              <td>Live Band</td>
-              <td>Lagos State</td>
-              <td>Today</td>
-            </tr>
-            <tr>
-              <td>03.</td>
-              <td>Moses Afaghon</td>
-              <td>80,000</td>
-              <td>Apr 03, 2019</td>
-              <td>MC</td>
-              <td>Port Harcourt</td>
-              <td>Tomorrow</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-);
-
-Dashboard.RecentEntertainers = () => (
-  <div className="card card-custom">
-    <div className="card-body">
-      <h5 className="card-title text-red">Recent Entertainers</h5>
-      <div className="table-responsive">
-        <table className="table table-dark">
-          <tbody>
-            <tr>
-              <th>S/N</th>
-              <th>Name</th>
-              <th>Stage Name</th>
-              <th>Type</th>
-              <th>Location</th>
-              <th>Verified</th>
-              <th></th>
-            </tr>
-            <tr>
-              <td>01.</td>
-              <td>Olawale Adebisi</td>
-              <td>DJ Proton</td>
-              <td>DJ</td>
-              <td>Lagos State</td>
-              <td>NO</td>
-              <td>
-                <Link to="#">Manage</Link>
-              </td>
-            </tr>
-            <tr>
-              <td>02.</td>
-              <td>Precious Jewel</td>
-              <td>Holy Guys</td>
-              <td>Live Band</td>
-              <td>Lagos State</td>
-              <td>NO</td>
-              <td>
-                <Link to="#">Manage</Link>
-              </td>
-            </tr>
-            <tr>
-              <td>03.</td>
-              <td>Olawale Adebisi</td>
-              <td>Sweet Mouth</td>
-              <td>MC</td>
-              <td>Port Harcourt</td>
-              <td>YES</td>
-              <td>
-                <Link to="#">Manage</Link>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-);
-
-Dashboard.RecentUsers = () => (
-  <div className="card card-custom">
-    <div className="card-body">
-      <h5 className="card-title text-blue">Recent Users</h5>
-      <div className="table-responsive">
-        <table className="table table-dark">
-          <tbody>
-            <tr>
-              <th>S/N</th>
-              <th>Name</th>
-              <th>Stage Name</th>
-              <th>Type</th>
-              <th>Location</th>
-              <th>Verified</th>
-              <th></th>
-            </tr>
-            <tr>
-              <td>01.</td>
-              <td>Olawale Adebisi</td>
-              <td>DJ Proton</td>
-              <td>DJ</td>
-              <td>Lagos State</td>
-              <td>NO</td>
-              <td>
-                <Link to="#">Manage</Link>
-              </td>
-            </tr>
-            <tr>
-              <td>02.</td>
-              <td>Precious Jewel</td>
-              <td>Holy Guys</td>
-              <td>Live Band</td>
-              <td>Lagos State</td>
-              <td>NO</td>
-              <td>
-                <Link to="#">Manage</Link>
-              </td>
-            </tr>
-            <tr>
-              <td>03.</td>
-              <td>Olawale Adebisi</td>
-              <td>Sweet Mouth</td>
-              <td>MC</td>
-              <td>Port Harcourt</td>
-              <td>YES</td>
-              <td>
-                <Link to="#">Manage</Link>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-);
+Dashboard.PendingPaymentRow.propTypes = {
+  event: PropTypes.string.isRequired,
+  payment: PropTypes.any.isRequired,
+};
 
 export default Dashboard;

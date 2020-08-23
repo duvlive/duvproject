@@ -530,6 +530,8 @@ const ApplicationController = {
       .getApplications({
         where: {
           applicationType: 'Request',
+          status: REQUEST_ACTION.PENDING,
+          expiryDate: { [Op.gte]: Sequelize.literal('NOW()') },
         },
         include: [
           {

@@ -33,6 +33,14 @@ const adminRoutes = (router) => {
     Authentication.validateAdmin,
     AdminController.getOneEvent
   );
+
+  router.get(
+    '/api/v1/applications/dashboard/admin',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    Authentication.validateAdmin,
+    AdminController.getDashboardDetailsForAdmin
+  );
 };
 
 export default adminRoutes;

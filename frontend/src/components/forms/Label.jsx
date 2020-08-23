@@ -10,7 +10,7 @@ const Label = ({
   text,
   tooltipPosition,
   tooltipText,
-  labelLink
+  labelLink,
 }) => {
   const sanitizedLabelLink = { to: null, text: null, ...labelLink };
   return (
@@ -24,7 +24,7 @@ const Label = ({
       <Tooltip name={name} position={tooltipPosition} text={tooltipText} />
       {/* Label Link is a Link */}
       {sanitizedLabelLink.to && sanitizedLabelLink.text && (
-        <Link className="float-right" to={sanitizedLabelLink.to}>
+        <Link className="float-right text-red" to={sanitizedLabelLink.to}>
           {sanitizedLabelLink.text}
         </Link>
       )}
@@ -46,26 +46,26 @@ Label.propTypes = {
   labelLink: PropTypes.shape({
     to: PropTypes.string,
     text: PropTypes.string.isRequired,
-    onClick: PropTypes.func
+    onClick: PropTypes.func,
   }),
   name: PropTypes.string,
   optional: PropTypes.bool,
   text: PropTypes.string,
   tooltipPosition: PropTypes.string,
-  tooltipText: PropTypes.string
+  tooltipText: PropTypes.string,
 };
 Label.defaultProps = {
   className: null,
   labelLink: {
     to: '',
     text: '',
-    onClick: () => {}
+    onClick: () => {},
   },
   name: null,
   optional: false,
   text: null,
   tooltipText: null,
-  tooltipPosition: 'right'
+  tooltipPosition: 'right',
 };
 
 export default Label;
