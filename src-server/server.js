@@ -37,10 +37,10 @@ app.use(bodyParser.json());
 //   console.log('enddddd');
 // });
 
-async function x() {
-  await getUnRatedAndMailUsers();
-}
-x();
+// async function x() {
+//   await getUnRatedAndMailUsers();
+// }
+// x();
 
 if (process.env.NODE_ENV === 'production') {
   app.use((req, res, next) => {
