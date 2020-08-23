@@ -1,29 +1,70 @@
 import Sequelize, { Op } from 'sequelize';
-import { EventEntertainer, Rating, Reminder } from '../models';
+import {
+  Event,
+  EventEntertainer,
+  EntertainerProfile,
+  User,
+  Rating,
+} from '../models';
 import { getAll } from './index';
-import { reviewsInclude } from '../controllers/EventController';
+import sendMail from '../MailSender';
 
 const getUnratedEvents = async () => {
   try {
     const options = {
       where: {
-        hiredEntertainer: {
-          [Op.ne]: null,
-        },
-        [Op.and]: Sequelize.literal(`"eventRating"."id" is null`),
+        [Op.or]: [
+          {
+            professionalism: {
+              [Op.eq]: null,
+            },
+          },
+          {
+            accommodating: {
+              [Op.eq]: null,
+            },
+          },
+          {
+            overallTalent: {
+              [Op.eq]: null,
+            },
+          },
+          {
+            recommend: {
+              [Op.eq]: null,
+            },
+          },
+        ],
       },
-      attributes: [
-        'id',
-        'userId',
-        'eventId',
-        'hiredEntertainer',
-        'entertainerType',
-      ],
-      include: reviewsInclude,
+      include: {
+        model: EventEntertainer,
+        as: 'ratedEvent',
+        required: true,
+        include: [
+          {
+            model: Event,
+            as: 'event',
+            where: { eventDate: { [Op.lte]: Sequelize.literal('NOW()') } },
+            required: true,
+            attributes: ['eventDate', 'description', 'eventType', 'id'],
+          },
+          {
+            model: EntertainerProfile,
+            as: 'entertainer',
+            attributes: ['stageName', 'entertainerType'],
+          },
+          {
+            model: User,
+            as: 'user',
+            attributes: ['email', 'firstName', 'lastName'],
+          },
+        ],
+      },
+      attributes: ['id'],
     };
 
     try {
-      const { result } = await getAll(EventEntertainer, options);
+      const { result } = await getAll(Rating, options);
       return result;
     } catch (error) {
       return { error: error.message };
@@ -35,43 +76,17 @@ const getUnratedEvents = async () => {
 };
 
 export const createRatingandReview = async () => {
-  console.log('started');
-  let result;
   try {
-    result = await getUnratedEvents();
-    // console.log(result.EventEntertainer.dataValues, '=========');
-    return result.forEach((event) => {
-      const { eventId, hiredEntertainer, id, userId } = event.dataValues;
-      console.log(eventId, hiredEntertainer, id, userId, '*****');
-      const eventEntertainerId = id;
-
-      return Rating.create({
-        entertainerId: hiredEntertainer,
-        eventEntertainerId,
-        userId,
-      })
-        .then((rating) => {
-          console.log('Ratings created!!!!');
-          const { id } = rating;
-
-          return Reminder.create({
-            entertainerId: hiredEntertainer,
-            eventId,
-            eventEntertainerId,
-            userId,
-            ratingId: id,
-          });
-        })
-        .then((reminder) => {
-          console.log('rating and reminder created', rating, reminder);
-        })
-        .catch((error) => {
-          console.log(error, '.........');
-          const status = error.status || 500;
-          const errorMessage =
-            (error.parent && error.parent.detail) || error.message || error;
-          return { message: errorMessage };
-        });
+    const result = await getUnratedEvents();
+    return await result.map(async (rating) => {
+      const { id } = rating.dataValues;
+      const { user, entertainer, event } = rating.ratedEvent;
+      const content = `${process.env.HOST}/user/events/view/${event.id}`;
+      await sendMail(content, user, {
+        title: 'Whatever',
+        link: `${process.env.HOST}/user/events/view/${event.id}`,
+        subject: 'Update Rating reminder',
+      });
     });
   } catch (error) {
     const errorMessage = error.message || error;

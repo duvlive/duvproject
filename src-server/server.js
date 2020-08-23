@@ -31,11 +31,18 @@ app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-cron.schedule('* * * * *', async function () {
-  console.log('running a task every minute seyi');
+// cron.schedule('* * * * *', async function () {
+//   console.log('running a task every minute seyi');
+//   await createRatingandReview();
+//   console.log('enddddd');
+// });
+
+async function x() {
+  console.log('started');
   await createRatingandReview();
-  console.log('enddddd');
-});
+  console.log('done');
+}
+x();
 
 if (process.env.NODE_ENV === 'production') {
   app.use((req, res, next) => {
