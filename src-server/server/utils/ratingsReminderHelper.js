@@ -82,7 +82,7 @@ export const getUnRatedAndMailUsers = async () => {
     return await result.map(async (rating) => {
       const { user, entertainer, event } = rating.ratedEvent;
       await sendMail(EMAIL_CONTENT.RATE_ENTERTAINER, user, {
-        link: `${process.env.HOST}/user/events/view/${event.id}`,
+        link: `${process.env.HOST}/user/review-entertainer/${id}`,
         subject: `Your DUVLIVE ${event.eventType} Event - Please rate ${entertainer.entertainerType} ${entertainer.stageName} that you hired!`,
       });
     });

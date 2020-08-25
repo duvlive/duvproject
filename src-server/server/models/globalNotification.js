@@ -1,6 +1,6 @@
 'use strict';
 module.exports = function (sequelize, DataTypes) {
-  var Notification = sequelize.define(
+  var GlobalNotification = sequelize.define(
     'GlobalNotification',
     {
       adminId: {
@@ -20,11 +20,11 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: false,
       },
       startTime: {
-        type: DataTypes.STRING,
+        type: DataTypes.DATE,
         allowNull: false,
       },
       endTime: {
-        type: DataTypes.STRING,
+        type: DataTypes.DATE,
         allowNull: false,
       },
     },
@@ -32,10 +32,10 @@ module.exports = function (sequelize, DataTypes) {
       classMethods: {
         associate: function (models) {
           // associations can be defined here
-          // Notification.belongsTo(models.User);
+          // GlobalNotification.belongsTo(models.User);
         },
       },
     }
   );
-  return Notification;
+  return GlobalNotification;
 };
