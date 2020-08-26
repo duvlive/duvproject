@@ -47,7 +47,14 @@ const getUnratedEntainers = async () => {
             as: 'event',
             where: { eventDate: { [Op.lte]: Sequelize.literal('NOW()') } },
             required: true,
-            attributes: ['eventDate', 'description', 'eventType', 'id'],
+            attributes: [
+              'description',
+              'eventDate',
+              'eventDuration',
+              'eventType',
+              'id',
+              'startTime',
+            ],
           },
           {
             model: EntertainerProfile,
@@ -80,7 +87,7 @@ export const getUnRatedAndMailUsers = async () => {
   try {
     const result = await getUnratedEntainers();
     return await result.map(async (rating) => {
-      const { user, entertainer, event } = rating.ratedEvent;
+      const { user, entertainer, event, id } = rating.ratedEvent;
       await sendMail(EMAIL_CONTENT.RATE_ENTERTAINER, user, {
         link: `${process.env.HOST}/user/review-entertainer/${id}`,
         subject: `Your DUVLIVE ${event.eventType} Event - Please rate ${entertainer.entertainerType} ${entertainer.stageName} that you hired!`,
