@@ -1,4 +1,7 @@
 'use strict';
+
+import { Rating } from './';
+
 module.exports = function (sequelize, DataTypes) {
   var EventEntertainer = sequelize.define(
     'EventEntertainer',
@@ -79,6 +82,24 @@ module.exports = function (sequelize, DataTypes) {
       cancelledReason: {
         type: DataTypes.TEXT,
         allowNull: true,
+      },
+    },
+    {
+      hooks: {
+        afterCreate(instance) {
+          Rating.create({
+            entertainerId: instance.hiredEntertainer,
+            userId: instance.userId,
+            eventEntertainerId: instance.id,
+          });
+        },
+        afterUpdate(instance) {
+          if (instance.cancelledDate) {
+            Rating.destroy({
+              where: { eventEntertainerId: instance.id },
+            });
+          }
+        },
       },
     },
     {

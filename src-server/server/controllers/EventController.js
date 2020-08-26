@@ -18,9 +18,9 @@ import {
   NOTIFICATIONS,
   NOTIFICATION_TYPE,
 } from '../constant';
-import { addDays, isValid, parse } from 'date-fns';
+import { isValid } from 'date-fns';
 
-const reviewsInclude = [
+export const reviewsInclude = [
   {
     model: Event,
     as: 'event',
@@ -1029,15 +1029,15 @@ const EventController = {
     }
   },
 
+  /**
+   * get Past Events
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
   async getPastEvents(req, res) {
-    const {
-      avgRating,
-      entertainerId,
-      entertainerType,
-      limit,
-      offset,
-      review,
-    } = req.query;
+    const { entertainerId, entertainerType, limit, offset, review } = req.query;
 
     try {
       let eventEntertainerQuery = {};
@@ -1110,6 +1110,7 @@ const EventController = {
           required: false,
         },
       ];
+
       const options = {
         offset: offset || 0,
         limit: limit || 10,
@@ -1119,6 +1120,51 @@ const EventController = {
 
       try {
         const { result, pagination } = await getAll(Event, options);
+        return res.status(200).json({
+          events: result,
+          pagination,
+        });
+      } catch (error) {
+        return res.status(500).json({ error: error.message });
+      }
+    } catch (error) {
+      const status = error.status || 500;
+      const errorMessage = error.message || error;
+      return res.status(status).json({ message: errorMessage });
+    }
+  },
+
+  /**
+   * get All Unrated Events
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  async getAllUnratedEvents(req, res) {
+    const { limit, offset } = req.query;
+    try {
+      const options = {
+        offset: offset || 0,
+        limit: limit || 10,
+        where: {
+          hiredEntertainer: {
+            [Op.ne]: null,
+          },
+          [Op.and]: Sequelize.literal(`"eventRating"."id" is null`),
+        },
+        attributes: [
+          'id',
+          'userId',
+          'eventId',
+          'hiredEntertainer',
+          'entertainerType',
+        ],
+        include: reviewsInclude,
+      };
+
+      try {
+        const { result, pagination } = await getAll(EventEntertainer, options);
         return res.status(200).json({
           events: result,
           pagination,

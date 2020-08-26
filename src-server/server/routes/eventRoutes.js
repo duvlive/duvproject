@@ -114,6 +114,14 @@ const eventRoutes = (router) => {
     Authentication.validateAdmin,
     EventController.getPastEvents
   );
+
+  router.get(
+    '/api/v1/unrated-events',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    Authentication.validateAdmin,
+    EventController.getAllUnratedEvents
+  );
 };
 
 export default eventRoutes;
