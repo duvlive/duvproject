@@ -1,4 +1,4 @@
-import { GlobalNotification } from '../models';
+import { GlobalNotification, User } from '../models';
 import { validString } from '../utils';
 
 const GlobalNotificationController = {
@@ -90,7 +90,13 @@ const GlobalNotificationController = {
    * @return {object} returns res object
    */
   getGlobalNotifications(req, res) {
-    GlobalNotification.findAll().then((globalNotification) => {
+    GlobalNotification.findAll({
+      include: {
+        model: User,
+        as: 'adminUser',
+        attributes: ['id', 'firstName', 'lastName'],
+      },
+    }).then((globalNotification) => {
       if (!globalNotification || globalNotification.length === 0) {
         return res
           .status(404)
