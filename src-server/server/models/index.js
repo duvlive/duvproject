@@ -330,6 +330,11 @@ db.User.hasMany(db.GlobalNotification, {
   as: 'globalNotifications',
 });
 
+db.GlobalNotification.belongsTo(db.User, {
+  foreignKey: 'adminId',
+  as: 'adminUser',
+});
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
