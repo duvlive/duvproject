@@ -1,4 +1,4 @@
-import { globalNotification } from '../models';
+import { GlobalNotification } from '../models';
 import { validString } from '../utils';
 
 const GlobalNotificationController = {
@@ -26,6 +26,7 @@ const GlobalNotificationController = {
     if (Object.keys(error).length > 1) {
       return res.status(400).json({ message: error.message.join('') });
     }
+    let newNotification = {};
     if (!id) {
       return GlobalNotification.create({
         message,
@@ -35,13 +36,14 @@ const GlobalNotificationController = {
         endTime,
         adminId: req.user.id,
       })
-        .then(() => {
-          return req.user.getGlobalNotificatons();
+        .then((notification) => {
+          newNotification = notification;
+          return req.user.addGlobalNotification(notification);
         })
-        .then((globalNotification) => {
+        .then(() => {
           return res.status(200).json({
             message: 'Your notification was created successfully',
-            globalNotification: globalNotification[0],
+            globalNotification: newNotification,
           });
         })
         .catch((error) => {
@@ -88,7 +90,7 @@ const GlobalNotificationController = {
    * @return {object} returns res object
    */
   getGlobalNotifications(req, res) {
-    req.user.globalNotification().then((globalNotification) => {
+    GlobalNotification.findAll().then((globalNotification) => {
       if (!globalNotification || globalNotification.length === 0) {
         return res
           .status(404)
