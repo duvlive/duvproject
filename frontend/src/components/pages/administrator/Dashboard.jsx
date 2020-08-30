@@ -16,6 +16,7 @@ import {
 import NoContent from 'components/common/utils/NoContent';
 import LoadItems from 'components/common/utils/LoadItems';
 import Humanize from 'humanize-plus';
+import { Link } from '@reach/router';
 
 const Dashboard = () => {
   const { userState } = React.useContext(UserContext);
@@ -214,8 +215,11 @@ Dashboard.PendingPayments = ({ pendingPayments }) => (
       <small className="text-muted d-block mb-3">
         {pendingPayments && pendingPayments.length > 0 && (
           <>
-            You have {pendingPayments.length} pending{' '}
-            {Humanize.pluralize(pendingPayments.length, 'payment')}
+            You have{' '}
+            <Link to="/admin/pending-payments">
+              {pendingPayments.length} pending{' '}
+              {Humanize.pluralize(pendingPayments.length, 'payment')}
+            </Link>
           </>
         )}
       </small>
@@ -242,7 +246,10 @@ Dashboard.PendingPayments = ({ pendingPayments }) => (
                     <Dashboard.PendingPaymentRow
                       event={payment.event.eventType}
                       key={index}
-                      payment={calculatedPrice.entertainerFee}
+                      payment={
+                        payment.applications[0].takeHome ||
+                        calculatedPrice.entertainerFee
+                      }
                     />
                   );
                 })}

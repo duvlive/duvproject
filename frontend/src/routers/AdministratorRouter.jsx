@@ -24,6 +24,8 @@ import Logout from 'components/pages/auth/Logout';
 import InviteFriends from 'components/common/pages/InviteFriends';
 import Notifications from 'components/common/pages/Notifications';
 import ChangePassword from 'components/common/pages/ChangePassword';
+import UserPaymentDetails from 'components/pages/administrator/UserPaymentDetails';
+import PendingPayments from 'components/pages/administrator/PendingPayments';
 
 const AdministratorRouter = () => (
   <Router>
@@ -38,6 +40,8 @@ const AdministratorRouter = () => (
     <SingleUser path="/users/:id" />
     <SingleEntertainer path="/entertainers/:id" />
     <UsersPayment path="/users-payment" />
+    <UserPaymentDetails path="/user-payments/:applicationId" />
+    <PendingPayments path="/pending-payments" />
     <Notifications path="/notifications" />
     <UpcomingEvents path="/upcoming-events" />
     <SingleEvent path="/events/:id" />

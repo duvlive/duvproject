@@ -700,3 +700,12 @@ a:hover {
   font-size: 2.5rem;
   opacity: 0.5;
 }
+
+.global-notifications {
+  background: rgba($blue, 0.1);
+  color: $white;
+  font-size: 0.85rem;
+  padding: 2rem;
+  margin-top: 3.5rem;
+  text-align: center;
+}

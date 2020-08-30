@@ -159,7 +159,7 @@ const PaymentController = {
     amount && params.append('amount', amount);
     from && params.append('from', from);
     limit ? params.append('perPage', limit) : params.append('perPage', 10);
-    offset && params.append('page', parseInt(offset, 10) + 1);
+    offset && params.append('page', parseInt(offset / (limit || 10), 10) + 1);
     to && params.append('to', to);
     ALL_STATUSES.includes(status)
       ? params.append('status', status)
@@ -177,9 +177,17 @@ const PaymentController = {
       .then(function (response) {
         const { data, meta } = response.data;
 
-        return res
-          .status(200)
-          .json({ message: 'success', payments: data, pagination: meta });
+        return res.status(200).json({
+          message: 'success',
+          payments: data,
+          pagination: {
+            currentPage: meta.page,
+            limit: meta.perPage,
+            offset: meta.skipped,
+            total: meta.total,
+            totalPage: meta.pageCount,
+          },
+        });
       })
       .catch(function (error) {
         const status = error.status || 500;

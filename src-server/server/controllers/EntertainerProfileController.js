@@ -91,10 +91,10 @@ const formatAllEntertainers = (result) =>
       // youtubeChannel: !!user.profile.youTubeChannel,
       profileInfo: [
         !!user.profileImageURL && !!user.profile.stageName,
-        !!user.bankDetail.accountNumber,
-        !!user.contacts[0] && !!user.contacts[0].firstName,
-        !!user.profile.youTubeChannel,
-        !!user.identification.idType,
+        !!user.bankDetail && !!user.bankDetail.accountNumber,
+        !!user.contacts && !!user.contacts[0] && !!user.contacts[0].firstName,
+        !!user.profile && !!user.profile.youTubeChannel,
+        !!user.identification && !!user.identification.idType,
       ].filter((e) => e).length,
     };
     return [...acc, entertainer];
