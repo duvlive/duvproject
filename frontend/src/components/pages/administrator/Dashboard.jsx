@@ -16,6 +16,7 @@ import {
 import NoContent from 'components/common/utils/NoContent';
 import LoadItems from 'components/common/utils/LoadItems';
 import Humanize from 'humanize-plus';
+import { Link } from '@reach/router';
 
 const Dashboard = () => {
   const { userState } = React.useContext(UserContext);
@@ -214,8 +215,11 @@ Dashboard.PendingPayments = ({ pendingPayments }) => (
       <small className="text-muted d-block mb-3">
         {pendingPayments && pendingPayments.length > 0 && (
           <>
-            You have {pendingPayments.length} pending{' '}
-            {Humanize.pluralize(pendingPayments.length, 'payment')}
+            You have{' '}
+            <Link to="/admin/pending-payments">
+              {pendingPayments.length} pending{' '}
+              {Humanize.pluralize(pendingPayments.length, 'payment')}
+            </Link>
           </>
         )}
       </small>
@@ -241,8 +245,12 @@ Dashboard.PendingPayments = ({ pendingPayments }) => (
                   return (
                     <Dashboard.PendingPaymentRow
                       event={payment.event.eventType}
+                      id={payment.applications[0].id}
                       key={index}
-                      payment={calculatedPrice.entertainerFee}
+                      payment={
+                        payment.applications[0].takeHome ||
+                        calculatedPrice.entertainerFee
+                      }
                     />
                   );
                 })}
@@ -262,15 +270,24 @@ Dashboard.PendingPayments.defaultProps = {
   pendingPayments: [],
 };
 
-Dashboard.PendingPaymentRow = ({ event, payment }) => (
+Dashboard.PendingPaymentRow = ({ event, id, payment }) => (
   <tr>
-    <td className="pt-3">{event}</td>
-    <td className="text-muted-light-2">{moneyFormatInNaira(payment)}</td>
+    <td className="pt-3">
+      <Link className="text-muted-light-2" to={`/admin/pay-entertainer/${id}`}>
+        {event}
+      </Link>
+    </td>
+    <td className="text-muted-light-2">
+      <Link className="text-muted-light-2" to={`/admin/pay-entertainer/${id}`}>
+        {moneyFormatInNaira(payment)}
+      </Link>
+    </td>
   </tr>
 );
 
 Dashboard.PendingPaymentRow.propTypes = {
   event: PropTypes.string.isRequired,
+  id: PropTypes.any.isRequired,
   payment: PropTypes.any.isRequired,
 };
 

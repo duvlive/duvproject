@@ -9,6 +9,7 @@ import { getLongDate, getShortDate } from 'utils/date-helpers';
 import InputFormat from 'components/forms/InputFormat';
 import DatePicker from 'components/forms/DatePicker';
 import Select from 'components/forms/Select';
+import { Link } from '@reach/router';
 
 const UsersPayments = () => {
   return (
@@ -17,7 +18,7 @@ const UsersPayments = () => {
         apiData="payments"
         apiUrl="/api/v1/payments"
         FilterComponent={UsersPaymentFilter}
-        limit={50}
+        limit={20}
         pageName="Users Payment"
         tableRow={UserPaymentsRow}
       />
@@ -31,6 +32,7 @@ const UserPaymentsRow = ({
   number,
   paid_at,
   status,
+  metadata,
 }) => (
   <tr>
     <th className="table__number align-middle" scope="row">
@@ -58,6 +60,17 @@ const UserPaymentsRow = ({
       <small className="small--4 text-muted">Paid At</small>
       <span className="text-muted">{getLongDate(paid_at) || '-'}</span>
     </td>
+
+    <td className="align-middle">
+      {metadata && (
+        <Link
+          className="btn btn-info btn-sm btn-transparent"
+          to={`/admin/user-payments/${metadata.custom_fields[0].value}`}
+        >
+          View Details
+        </Link>
+      )}
+    </td>
   </tr>
 );
 
@@ -71,6 +84,7 @@ UserPaymentsRow.defaultProps = {
 UserPaymentsRow.propTypes = {
   amount: PropTypes.number,
   gateway_response: PropTypes.string,
+  metadata: PropTypes.object.isRequired,
   number: PropTypes.any.isRequired,
   paid_at: PropTypes.string,
   status: PropTypes.string,

@@ -6,6 +6,7 @@ import LandingSection from 'components/common/layout/LandingSection';
 import { getTokenFromStore } from 'utils/localStorage';
 import { UserContext } from 'context/UserContext';
 import LoadingScreen from './LoadingScreen';
+import GlobalNotifications from '../utils/GlobalNotifications';
 
 const BackEndPage = ({ children, title, subtitle }) => {
   let { userDispatch } = React.useContext(UserContext);
@@ -31,12 +32,15 @@ const BackEndPage = ({ children, title, subtitle }) => {
     }
   }, [userDispatch, location]);
 
+  // check if global notification here
+
   return getTokenFromStore() == null ? (
     <LoadingScreen />
   ) : (
     <div>
       <Sidebar closeSidebar={closeSidebar} showSidebar={showSidebar} />
       <div className="content-page">
+        <GlobalNotifications />
         <LandingSection
           isDashboard
           showSidebar={openSidebar}

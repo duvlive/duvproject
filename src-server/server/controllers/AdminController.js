@@ -517,6 +517,7 @@ const AdminController = {
               'askingPrice',
               'applicationType',
               'proposedPrice',
+              'takeHome',
               'createdAt',
             ],
             include: [
@@ -566,6 +567,146 @@ const AdminController = {
         },
       });
     });
+  },
+
+  /**
+   * get Pending payments
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  async getPendingPayments(req, res) {
+    const pendingPayments = await EventEntertainer.findAll({
+      where: {
+        [Op.and]: Sequelize.literal('"eventPayment"."id" is null'),
+      },
+      include: [
+        {
+          model: Event,
+          as: 'event',
+          attributes: ['id', 'eventType', 'eventDate'],
+          where: {
+            eventDate: {
+              [Op.lt]: Date.now(),
+            },
+          },
+        },
+        {
+          model: Payment,
+          as: 'eventPayment',
+        },
+        {
+          model: Application,
+          as: 'applications',
+          required: true,
+          attributes: [
+            'id',
+            'commissionId',
+            'askingPrice',
+            'applicationType',
+            'proposedPrice',
+            'takeHome',
+            'createdAt',
+          ],
+          include: [
+            {
+              model: Commission,
+              as: 'commission',
+            },
+            {
+              model: User,
+              as: 'user',
+              attributes: ['id', 'profileImageURL'],
+              include: [
+                {
+                  model: EntertainerProfile,
+                  as: 'profile',
+                  attributes: [
+                    'id',
+                    'stageName',
+                    'entertainerType',
+                    'slug',
+                    'location',
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+
+    return res.json({ pendingPayments });
+  },
+
+  getOneApplication(req, res) {
+    const id = req.params.id;
+
+    if (!id) {
+      return res.status(404).json({
+        message: 'Application Id needed to view application',
+      });
+    }
+
+    Application.findOne({
+      where: {
+        id,
+      },
+      include: [
+        {
+          model: EventEntertainer,
+          as: 'eventEntertainerInfo',
+          include: {
+            model: Event,
+            as: 'event',
+            include: [
+              {
+                model: User,
+                as: 'owner',
+                attributes: [
+                  'id',
+                  'firstName',
+                  'lastName',
+                  'profileImageURL',
+                  'email',
+                  'phoneNumber',
+                ],
+              },
+            ],
+          },
+        },
+        {
+          model: Commission,
+          as: 'commission',
+        },
+        {
+          model: User,
+          as: 'user',
+          attributes: ['id', 'email', 'profileImageURL'],
+          include: [
+            {
+              model: EntertainerProfile,
+              as: 'profile',
+            },
+            {
+              model: BankDetail,
+              as: 'bankDetail',
+            },
+          ],
+        },
+      ],
+    })
+      .then((application) => {
+        if (!application) {
+          return res.status(404).json({ message: 'Application not found' });
+        }
+        return res.json({ application });
+      })
+      .catch((error) => {
+        const errorMessage = error.message || error;
+        return res.status(412).json({ message: errorMessage });
+      });
   },
 };
 

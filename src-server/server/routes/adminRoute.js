@@ -41,6 +41,22 @@ const adminRoutes = (router) => {
     Authentication.validateAdmin,
     AdminController.getDashboardDetailsForAdmin
   );
+
+  router.get(
+    '/api/v1/admin/pending-payments',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    Authentication.validateAdmin,
+    AdminController.getPendingPayments
+  );
+
+  router.get(
+    '/api/v1/admin/applications/:id',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    Authentication.validateAdmin,
+    AdminController.getOneApplication
+  );
 };
 
 export default adminRoutes;
