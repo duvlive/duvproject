@@ -11,10 +11,12 @@ import { UserContext } from 'context/UserContext';
 import Image from 'components/common/utils/Image';
 import { twoDigitNumber, moneyFormat, getNairaSymbol } from 'utils/helpers';
 import { Link } from '@reach/router';
+import AlertMessage from 'components/common/utils/AlertMessage';
 
 const PendingPayments = () => {
   const [pendingPayments, setPendingPayments] = React.useState(null);
-  const { userDispatch } = React.useContext(UserContext);
+  const [message, setMessage] = React.useState({ msg: null, type: null });
+  const { userState, userDispatch } = React.useContext(UserContext);
 
   React.useEffect(() => {
     axios
@@ -36,6 +38,17 @@ const PendingPayments = () => {
         setPendingPayments([]);
       });
   }, [userDispatch]);
+
+  if (userState && userState.alert === 'payment-success') {
+    !message.msg &&
+      setMessage({
+        msg: 'Your payment has been successfully saved',
+        type: 'success',
+      });
+    userDispatch({
+      type: 'remove-alert',
+    });
+  }
   return (
     <BackEndPage title="PendingPayments">
       <div className="main-app">
@@ -43,6 +56,10 @@ const PendingPayments = () => {
 
         <section className="app-content">
           <h4 className="font-weight-normal">Pending Payments</h4>
+
+          <div className="mt-4">
+            <AlertMessage message={message.msg} type={message.type} />
+          </div>
           <LoadItems
             items={pendingPayments}
             loadingText="Loading Pending Payments"
@@ -127,7 +144,7 @@ const PendingPaymentsRow = ({ pendingpayment, number }) => (
 );
 
 PendingPaymentsRow.propTypes = {
-  number: PropTypes.array.isRequired,
+  number: PropTypes.any.isRequired,
   pendingpayment: PropTypes.object.isRequired,
 };
 

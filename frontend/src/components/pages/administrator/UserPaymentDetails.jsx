@@ -55,7 +55,7 @@ const UserPaymentDetails = ({ applicationId }) => {
               <h3 className="main-app__title">Payment Details</h3>
             </div>
             <div className="col-sm-6">
-              <div className="card card-custom card-black card-form">
+              <div className="card card-custom card-blue card-form">
                 <div className="card-body">
                   <section className="text-center">
                     <Image

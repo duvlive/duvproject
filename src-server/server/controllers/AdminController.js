@@ -689,6 +689,10 @@ const AdminController = {
               model: EntertainerProfile,
               as: 'profile',
             },
+            {
+              model: BankDetail,
+              as: 'bankDetail',
+            },
           ],
         },
       ],

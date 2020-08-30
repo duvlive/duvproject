@@ -47,8 +47,7 @@ const ViewRequest = ({ applicationId }) => {
       })
       .catch(function (error) {
         console.log(error.response.data.message);
-        setMessage({ messagr: error.response.data.message });
-        // TODO: ADD ERROR ALERT HERE
+        setMessage({ msg: error.response.data.message });
       });
   };
 
@@ -170,14 +169,14 @@ const ViewRequest = ({ applicationId }) => {
                       )}
                       {application.status === REQUEST_ACTION.INCREMENT && (
                         <>
-                          {application.user.profile.stageName}} wants you to
+                          {application.user.profile.stageName} wants you to
                           increase your offer to {getNairaSymbol()}
                           {commaNumber(application.askingPrice)}.
                         </>
                       )}
                       {application.status === REQUEST_ACTION.REJECTED && (
                         <>
-                          {application.user.profile.stageName}} has other
+                          {application.user.profile.stageName} has other
                           engagement and will not be available for your event.
                         </>
                       )}
