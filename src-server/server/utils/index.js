@@ -28,9 +28,10 @@ export const getRelevantUnratedEntertainerEvents = (
   startTime,
   eventDuration
 ) => {
-  const ratingStartDate = addHours(startTime, eventDuration);
-  // console.log(ratingStartDate);
-  const ratingEndDate = addHours(ratingStartDate, 48);
+  const durationArray = eventDuration.split(' ');
+  const ratingReminderStartDate = addHours(startTime, durationArray[0]);
+  const ratingReminderEndDate = addHours(ratingReminderStartDate, 48);
+  return { ratingReminderStartDate, ratingReminderEndDate };
 };
 
 export { getAll, updateUser, UserValidation, validString };
