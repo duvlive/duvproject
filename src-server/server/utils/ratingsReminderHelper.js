@@ -6,7 +6,7 @@ import {
   User,
   Rating,
 } from '../models';
-import { getAll } from './index';
+import { getAll, getRelevantUnratedEntertainerEvents } from './index';
 import sendMail from '../MailSender';
 import EMAIL_CONTENT from '../email-template/content';
 
@@ -88,10 +88,22 @@ export const getUnRatedAndMailUsers = async () => {
     const result = await getUnratedEntainers();
     return await result.map(async (rating) => {
       const { user, entertainer, event, id } = rating.ratedEvent;
-      await sendMail(EMAIL_CONTENT.RATE_ENTERTAINER, user, {
-        link: `${process.env.HOST}/user/review-entertainer/${id}`,
-        subject: `Your DUVLIVE ${event.eventType} Event - Please rate ${entertainer.entertainerType} ${entertainer.stageName} that you hired!`,
-      });
+      const {
+        ratingReminderStartDate,
+        ratingReminderEndDate,
+      } = getRelevantUnratedEntertainerEvents(
+        event.startTime,
+        event.eventDuration
+      );
+      if (
+        new Date() == ratingReminderStartDate ||
+        new Date() == ratingReminderEndDate
+      ) {
+        await sendMail(EMAIL_CONTENT.RATE_ENTERTAINER, user, {
+          link: `${process.env.HOST}/user/review-entertainer/${id}`,
+          subject: `Your DUVLIVE ${event.eventType} Event - Please rate ${entertainer.entertainerType} ${entertainer.stageName} that you hired!`,
+        });
+      }
     });
   } catch (error) {
     const errorMessage = error.message || error;
