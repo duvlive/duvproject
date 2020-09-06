@@ -5,7 +5,7 @@ import sgMail from '@sendgrid/mail';
 import textEmailTemplate from './email-template/duv-text-email-template';
 const DUV_LIVE_NO_REPLY_EMAIL = 'DUV LIVE <donotreply@duvlive.com>';
 const DUV_LIVE_INFO_EMAIL = 'DUV LIVE <info@duvlive.com>';
-const emailLogo = `https://duvlive.herokuapp.com/email-logo.png`;
+const emailLogo = `https://duvlive.com/email-logo.png`;
 
 export function generateEmailTemplate(options) {
   return new Promise((resolve, reject) => {

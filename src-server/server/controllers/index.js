@@ -20,6 +20,7 @@ import ReviewController from './ReviewController';
 import UserController from './UserController';
 import VideoController from './VideoController';
 import AdminController from './AdminController';
+import PublicEventController from './PublicEventController';
 
 export {
   AdminController,
@@ -40,6 +41,7 @@ export {
   ImageController,
   NotificationController,
   PaymentController,
+  PublicEventController,
   RatingController,
   ReviewController,
   UserController,
