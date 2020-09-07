@@ -45,6 +45,9 @@ module.exports = function (model, Sequelize) {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      ticket: {
+        type: Sequelize.INTEGER,
+      },
       status: {
         type: Sequelize.BOOLEAN,
         allowNull: true,

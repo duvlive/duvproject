@@ -53,6 +53,11 @@ export default [
         icon: 'calendar',
       },
       {
+        title: 'Public Events',
+        to: '/admin/public-events',
+        icon: 'calendar',
+      },
+      {
         title: 'Gallery',
         to: '/admin/gallery',
         icon: 'gallery',

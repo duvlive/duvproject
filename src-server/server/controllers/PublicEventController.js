@@ -32,6 +32,7 @@ const PublicEventController = {
       mainImage,
       organizer,
       startTime,
+      ticket,
       venue,
     } = req.body;
 
@@ -45,6 +46,7 @@ const PublicEventController = {
       ...validString(organizer),
       ...validString(startTime),
       ...validString(venue),
+      ...validString(ticket),
     };
     if (Object.keys(error).length > 1) {
       return res.status(400).json({ message: error.message.join('') });
@@ -64,6 +66,7 @@ const PublicEventController = {
         mainImage,
         organizer,
         startTime,
+        ticket,
         userId,
         venue,
       })
@@ -92,6 +95,7 @@ const PublicEventController = {
         mainImage,
         organizer,
         startTime,
+        ticket,
         venue,
       },
       { where: { id, userId: req.user.id } }

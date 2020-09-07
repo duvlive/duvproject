@@ -163,7 +163,7 @@ const EntertainerSection = ({ entertainers, loading }) => (
   <section className="entertainers spacer">
     <div className="container-fluid">
       <h2 className="header title-border">
-        OUR <span>ENTERTAINERS</span>
+        <span>ENTERTAINERS</span>
       </h2>
       <Row className="pt-5">
         {loading ? (
