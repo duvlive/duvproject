@@ -85,6 +85,9 @@ const EventSection = ({ event }) => (
             ABOUT <span>EVENT</span>
           </h2>
           {event.description}
+
+          <h5 className="font-weight-normal mt-5">More Information</h5>
+          {event.eventLink}
         </Col>
         <Col sm="4">
           <div className={`card card-custom card-tiles card-blue no-br`}>
@@ -120,7 +123,7 @@ EventSection.propTypes = {
 };
 
 const BackToHireEvents = () => (
-  <section className="mt-">
+  <section className="mt-5">
     <div className="container-fluid">
       <Link
         className="btn btn-info btn-transparent btn-lg"

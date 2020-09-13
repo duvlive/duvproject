@@ -28,6 +28,7 @@ import UserPaymentDetails from 'components/pages/administrator/UserPaymentDetail
 import PendingPayments from 'components/pages/administrator/PendingPayments';
 import PayPendingEntertainer from 'components/pages/administrator/PayPendingEntertainer';
 import PublicEvent from 'components/pages/administrator/PublicEvent';
+import SinglePublicEvent from 'components/pages/administrator/SinglePublicEvent';
 
 const AdministratorRouter = () => (
   <Router>
@@ -43,6 +44,7 @@ const AdministratorRouter = () => (
     <SingleEntertainer path="/entertainers/:id" />
     <UsersPayment path="/users-payment" />
     <PublicEvent path="/public-events" />
+    <SinglePublicEvent path="/public-events/:id" />
     <UserPaymentDetails path="/user-payments/:applicationId" />
     <PayPendingEntertainer path="/pay-entertainer/:applicationId" />
     <PendingPayments path="/pending-payments" />

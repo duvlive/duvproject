@@ -3,7 +3,7 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import Image from 'components/common/utils/Image';
-// import ProfileAvatar from 'assets/img/avatar/profile.png';
+import defaultImage from 'assets/img/events/public-event.jpg';
 import AdminList from 'components/common/pages/AdminList';
 import { twoDigitNumber, getRequestStatusIcon } from 'utils/helpers';
 import { approval, getStatus } from 'components/pages/entertainer/Gallery';
@@ -13,6 +13,8 @@ import Select from 'components/forms/Select';
 import { getTokenFromStore } from 'utils/localStorage';
 import DuvLiveModal from 'components/custom/Modal';
 import { useEntertainerSelect } from 'utils/useHooks';
+import ProfileAvatar from 'assets/img/avatar/profile.png';
+import { Link } from '@reach/router';
 
 const PublicEvent = () => {
   return (
@@ -46,7 +48,7 @@ const PublicEventRow = ({
     />
   );
 
-  const processImage = (id, approvalStatus) => {
+  const processEvent = (id, approvalStatus) => {
     axios
       .put(
         `/api/v1/public-events/${approvalStatus}/${id}`,
@@ -60,7 +62,7 @@ const PublicEventRow = ({
         if (status === 200) {
           setMessage({
             type: 'success',
-            message: `Image has successfully been ${approvalStatus}d`,
+            message: `Event has successfully been ${approvalStatus}d`,
           });
         }
       })
@@ -72,8 +74,8 @@ const PublicEventRow = ({
         });
       });
   };
-  const actionFn = () => processImage(id, status ? 'disapprove' : 'approve');
-  const actionText = status ? 'Disapprove Image' : 'Approve Image';
+  const actionFn = () => processEvent(id, status ? 'disapprove' : 'approve');
+  const actionText = status ? 'Disapprove Event' : 'Approve Event';
   const buttonColor = `btn btn-sm btn-transparent ${
     status ? 'btn-danger' : 'btn-success'
   }`;
@@ -98,7 +100,7 @@ const PublicEventRow = ({
             name={`gallery-${number}`}
             responsiveImage={false}
             rounded={false}
-            src={mainImage}
+            src={mainImage || defaultImage}
           />
         </DuvLiveModal>
       </td>
@@ -112,25 +114,37 @@ const PublicEventRow = ({
 
       <td className="align-middle">{title}</td>
 
+      <td className=" align-middle text-center">
+        <Image
+          className="avatar--small"
+          name={`${number}-user`}
+          src={user.profileImageURL || ProfileAvatar}
+        />
+        <span className="small--3 d-block">
+          {user.firstName} {user.lastName}
+        </span>
+      </td>
+
       <td className="align-middle">
-        <DuvLiveModal {...modalProps}>
-          <button className="btn btn-sm btn-transparent btn-info">
-            View Event
-          </button>
-        </DuvLiveModal>
+        <Link
+          className="btn btn-sm btn-transparent btn-info"
+          to={`/admin/public-events/${id}`}
+        >
+          View Event
+        </Link>
         &nbsp; &nbsp; &nbsp;
         {status === null ? (
           <>
             <button
               className="btn btn-sm btn-transparent btn-success"
-              onClick={() => processImage(id, 'approve')}
+              onClick={() => processEvent(id, 'approve')}
             >
               <span className="icon icon-ok"></span>
             </button>
             &nbsp; &nbsp; &nbsp;
             <button
               className="btn btn-sm btn-transparent btn-danger"
-              onClick={() => processImage(id, 'disapprove')}
+              onClick={() => processEvent(id, 'disapprove')}
             >
               <span className="icon icon-cancel"></span>
             </button>
@@ -150,6 +164,7 @@ PublicEventRow.defaultProps = {
   number: null,
   imageURL: null,
   user: null,
+  title: null,
 };
 
 PublicEventRow.propTypes = {
@@ -158,6 +173,7 @@ PublicEventRow.propTypes = {
   number: PropTypes.any.isRequired,
   setMessage: PropTypes.func.isRequired,
   status: PropTypes.bool,
+  title: PropTypes.string,
   user: PropTypes.object,
 };
 

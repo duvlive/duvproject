@@ -240,7 +240,7 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
                     onClick={handleSubmit}
                     type="button"
                   >
-                    Hire Entertainer
+                    {isAuction ? 'Start Auction' : 'Hire Entertainer'}
                   </button>
                 </div>
               )}
