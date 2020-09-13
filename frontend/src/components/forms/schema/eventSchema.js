@@ -3,7 +3,6 @@ import {
   requiredDate,
   stringValidation,
   optionalValidation,
-  positiveNumberValidation,
   minDateValidation,
 } from './schema-helpers';
 

@@ -269,7 +269,7 @@ const PublicEventController = {
     };
 
     PublicEvent.findOne({
-      where: { status: true },
+      where: { slug },
       include: [userModel],
     })
       .then((event) => {

@@ -11,6 +11,7 @@ import { Col, Card, CardImg, CardImgOverlay } from 'reactstrap';
 import { format, parse } from 'date-fns';
 import { getTime } from 'utils/date-helpers';
 import defaultImage from 'assets/img/events/public-event.jpg';
+import { getStatus } from '../entertainer/Gallery';
 
 const PublicEvents = () => {
   const [publicEvents, setPublicEvents] = React.useState(null);
@@ -81,12 +82,11 @@ PublicEventsRowList.propTypes = {
 };
 
 const SingleEvent = ({
-  eventLink,
   location,
   mainImage,
   slug,
   startTime,
-  // endTime,
+  status,
   title,
 }) => {
   const parsedEventDate = parse(startTime);
@@ -95,7 +95,7 @@ const SingleEvent = ({
 
   return (
     <Col sm={6}>
-      <Link to={`/event/${slug}`}>
+      <Link to={`/user/public-events/view/${slug}`}>
         <Card className="event-card">
           <div className="event-card__image-container">
             <CardImg
@@ -116,7 +116,7 @@ const SingleEvent = ({
               <h6 className="event-card__title text-truncate">{title}</h6>
               <p className="event-card__address">{location}</p>
               <div className="event-card__ticket">
-                More Information: {eventLink}
+                Status: {getStatus(status)}
               </div>
             </div>
           </div>
@@ -134,6 +134,7 @@ SingleEvent.propTypes = {
   mainImage: PropTypes.string.isRequired,
   slug: PropTypes.string.isRequired,
   startTime: PropTypes.string.isRequired,
+  status: PropTypes.any.isRequired,
   title: PropTypes.string.isRequired,
 };
 

@@ -24,6 +24,7 @@ import ChangePassword from 'components/common/pages/ChangePassword';
 import LeaveReview from 'components/pages/user/LeaveReview';
 import NewPublicEvent from 'components/pages/user/NewPublicEvent';
 import PublicEvents from 'components/pages/user/PublicEvents';
+import ViewPublicEvent from 'components/pages/user/ViewPublicEvent';
 
 const UserRouter = () => (
   <Router>
@@ -34,6 +35,7 @@ const UserRouter = () => (
     <ViewRequest path="/request/view/:applicationId" />
     <Events path="/events" />
     <PublicEvents path="/public-events" />
+    <ViewPublicEvent path="public-events/view/:slug" />
     <Notifications path="/notifications" />
     <UserHelp path="/help" />
     <Payments path="/payments-history" />
