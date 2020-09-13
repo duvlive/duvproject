@@ -24,15 +24,12 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      eventDate: {
-        type: Sequelize.DATE,
-      },
       startTime: {
         type: Sequelize.DATE,
         allowNull: false,
       },
-      eventDuration: {
-        type: Sequelize.STRING,
+      endTime: {
+        type: Sequelize.DATE,
         allowNull: false,
       },
       mainImage: {
@@ -46,16 +43,16 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      eventLink: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
       organizer: {
         type: Sequelize.STRING,
         allowNull: false,
       },
       status: {
         type: Sequelize.BOOLEAN,
-        allowNull: true,
-      },
-      ticket: {
-        type: Sequelize.INTEGER,
         allowNull: true,
       },
       createdAt: {

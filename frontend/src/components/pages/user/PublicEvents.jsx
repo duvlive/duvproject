@@ -10,6 +10,7 @@ import { Link } from '@reach/router';
 import { Col, Card, CardImg, CardImgOverlay } from 'reactstrap';
 import { format, parse } from 'date-fns';
 import { getTime } from 'utils/date-helpers';
+import defaultImage from 'assets/img/events/public-event.jpg';
 
 const PublicEvents = () => {
   const [publicEvents, setPublicEvents] = React.useState(null);
@@ -47,6 +48,7 @@ const PublicEvents = () => {
               <span className="icon icon-events"></span> New Public Event
             </Link>
           </div>
+          <h4 className="col-sm-12">Your Public Events</h4>
           <LoadItems
             items={publicEvents}
             loadingText="Loading your PublicEvents"
@@ -79,15 +81,15 @@ PublicEventsRowList.propTypes = {
 };
 
 const SingleEvent = ({
-  eventDate,
-  mainImage,
+  eventLink,
   location,
+  mainImage,
   slug,
   startTime,
-  ticket,
+  // endTime,
   title,
 }) => {
-  const parsedEventDate = parse(eventDate);
+  const parsedEventDate = parse(startTime);
   const weekDay = format(parsedEventDate, 'ddd');
   const fullDate = format(parsedEventDate, 'MMM D');
 
@@ -96,7 +98,12 @@ const SingleEvent = ({
       <Link to={`/event/${slug}`}>
         <Card className="event-card">
           <div className="event-card__image-container">
-            <CardImg alt={title} className="img-fluid" src={mainImage} top />
+            <CardImg
+              alt={title}
+              className="img-fluid"
+              src={mainImage || defaultImage}
+              top
+            />
             <CardImgOverlay />
           </div>
           <div className="event-card__body">
@@ -109,7 +116,7 @@ const SingleEvent = ({
               <h6 className="event-card__title text-truncate">{title}</h6>
               <p className="event-card__address">{location}</p>
               <div className="event-card__ticket">
-                Ticket: {ticket ? `NGN ${ticket}` : 'Free'}
+                More Information: {eventLink}
               </div>
             </div>
           </div>
@@ -120,12 +127,13 @@ const SingleEvent = ({
 };
 
 SingleEvent.propTypes = {
-  image: PropTypes.string.isRequired,
+  endTime: PropTypes.string.isRequired,
+  eventDate: PropTypes.string.isRequired,
+  eventLink: PropTypes.string.isRequired,
   location: PropTypes.string.isRequired,
+  mainImage: PropTypes.string.isRequired,
   slug: PropTypes.string.isRequired,
   startTime: PropTypes.string.isRequired,
-  start_date: PropTypes.string.isRequired,
-  ticket: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
 };
 

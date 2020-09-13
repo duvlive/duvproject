@@ -12,16 +12,11 @@ import { createSchema } from 'components/forms/schema/schema-helpers';
 import axios from 'axios';
 import { getTokenFromStore } from 'utils/localStorage';
 import AlertMessage from 'components/common/utils/AlertMessage';
-import { startOfDay, addHours } from 'date-fns';
-import { getEventDuration } from 'components/common/events/EventDetails';
 import Input from 'components/forms/Input';
-import Select from 'components/forms/Select';
 import TextArea from 'components/forms/TextArea';
 import DatePicker from 'components/forms/DatePicker';
-import { START_TIME } from 'utils/constants';
 import { addDays } from 'date-fns';
 import Button from 'components/forms/Button';
-import InputFormat from 'components/forms/InputFormat';
 
 const NewEvent = () => {
   return (
@@ -44,12 +39,12 @@ const NewEventForm = () => {
     <Formik
       initialValues={setInitialValues(publicEventSchema)}
       onSubmit={(event, actions) => {
-        const eventDate = startOfDay(event.eventDate.date);
-        const startTime = addHours(eventDate, event.startTime);
+        const startTime = event.startTime.date;
+        const endTime = event.endTime.date;
         const payload = {
           ...event,
-          eventDate: startTime,
           startTime: startTime,
+          endTime: endTime,
         };
         console.log('event, payload', event, payload);
         axios
@@ -84,6 +79,7 @@ const NewEventForm = () => {
             >
               Submit Public Event
             </Button>
+            <DisplayFormikState {...props} />
           </div>
         </>
       )}
@@ -93,51 +89,47 @@ const NewEventForm = () => {
 };
 
 const PublicEventDetails = () => {
-  const EVENT_DURATION = getEventDuration();
-
   return (
     <div className="card card-custom card-black card-form ">
       <div className="card-body col-md-10">
         <h4 className="card-title yellow">New Public Event</h4>
         <form>
+          <Input
+            label="Event Name"
+            name="title"
+            placeholder="Type your Event Name"
+          />
+
           <div className="form-row">
-            <Input
+            <DatePicker
+              dateFormat="MMMM d, yyyy h:mm aa"
               formGroupClassName="col-md-6"
-              label="Event Name"
-              name="title"
-              placeholder="Type your Event Name"
+              label="Event Start Date"
+              minDate={addDays(new Date(), 1)}
+              name="startTime"
+              placeholder="Event Start Time"
+              showTimeSelect
+              timeIntervals={15}
             />
 
             <DatePicker
+              dateFormat="MMMM d, yyyy h:mm aa"
               formGroupClassName="col-md-6"
-              label="Event Date"
-              minDate={addDays(new Date(), 4)}
-              name="eventDate"
+              label="Event End Date"
+              minDate={addDays(new Date(), 1)}
+              name="endTime"
               placeholder="Event Date"
+              showTimeSelect
+              timeIntervals={15}
             />
           </div>
           <div className="form-row">
-            <Select
-              blankOption="Approx. Start Time"
+            <Input
               formGroupClassName="col-md-6"
-              label="Start Time"
-              name="startTime"
-              options={START_TIME}
+              label="Organizer"
+              name="organizer"
+              placeholder="Organizer"
             />
-            <Select
-              blankOption="Select Duration"
-              formGroupClassName="col-md-6"
-              label="Duration of Event (Approx.)"
-              name="eventDuration"
-              options={EVENT_DURATION}
-            />
-          </div>
-          <Input
-            label="Event Venue"
-            name="venue"
-            placeholder="Type Venue / Online Events"
-          />
-          <div className="form-row">
             <Input
               formGroupClassName="col-md-6"
               label="Event Location"
@@ -145,21 +137,16 @@ const PublicEventDetails = () => {
               optional
               placeholder="Event Location / Online Event Link"
             />
-            <InputFormat
-              formGroupClassName="col-md-6"
-              label="Ticket Price (NGN)"
-              name="ticket"
-              placeholder="Ticket Price (Leave Blank or type 0 for Free)"
-            />
           </div>
           <Input
-            formGroupClassName="col-md-6"
-            label="Organizer"
-            name="organizer"
-            placeholder="Organizer"
+            label="Name of Venue"
+            name="venue"
+            placeholder="Venue Name / Online Event"
           />
+
+          <Input label="Event Link" name="eventLink" placeholder="Event Link" />
           <TextArea
-            label="More Information"
+            label="Event Description"
             name="description"
             optional
             placeholder="More information about your event"

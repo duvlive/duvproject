@@ -24,29 +24,27 @@ const PublicEventController = {
   updateUserEvent(req, res) {
     const {
       description,
-      eventDate,
-      eventDuration,
       id,
       title,
       location,
       mainImage,
       organizer,
       startTime,
-      ticket,
+      endTime,
+      eventLink,
       venue,
     } = req.body;
 
     const error = {
       ...validString(description),
-      ...validString(eventDate),
-      ...validString(eventDuration),
       ...validString(title),
       ...validString(location),
       ...validString(mainImage),
       ...validString(organizer),
       ...validString(startTime),
+      ...validString(endTime),
       ...validString(venue),
-      ...validString(ticket),
+      ...validString(eventLink),
     };
     if (Object.keys(error).length > 1) {
       return res.status(400).json({ message: error.message.join('') });
@@ -58,15 +56,14 @@ const PublicEventController = {
       const slug = slugify(title);
       return PublicEvent.create({
         description,
-        eventDate,
-        eventDuration,
+        endTime,
         slug,
         title,
         location,
         mainImage,
+        eventLink,
         organizer,
         startTime,
-        ticket,
         userId,
         venue,
       })
@@ -88,14 +85,13 @@ const PublicEventController = {
     return PublicEvent.update(
       {
         description,
-        eventDate,
-        eventDuration,
+        endTime,
         title,
         location,
         mainImage,
+        eventLink,
         organizer,
         startTime,
-        ticket,
         venue,
       },
       { where: { id, userId: req.user.id } }
