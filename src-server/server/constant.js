@@ -9,7 +9,8 @@ export const USER_TYPES = {
   USER: 1,
   ENTERTAINER: 2,
   BAND_MEMBER: 3,
-  UNKNOWN: 999,
+  UNKNOWN: 999, // uncompleted social media signup
+  ALL: 1000, // useful for global notifications only
 };
 
 export const TRANSACTION_STATUSES = {

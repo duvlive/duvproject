@@ -25,6 +25,10 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.DATE,
       allowNull: false,
     },
+    color: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
   });
   return GlobalNotification;
 };

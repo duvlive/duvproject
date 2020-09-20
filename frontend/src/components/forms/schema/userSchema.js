@@ -1,5 +1,9 @@
 import * as yup from 'yup';
-import { stringValidation } from './schema-helpers';
+import {
+  minDateValidation,
+  required,
+  stringValidation,
+} from './schema-helpers';
 import {
   email,
   password,
@@ -85,6 +89,15 @@ const loginSchema = yup.object().shape({
 
 const registerSchema = yup.object().shape(registerObject);
 const forgotPasswordSchema = yup.object().shape({ email });
+
+export const addGlobalNotificationObject = {
+  color: stringValidation('Colour'),
+  // entertainerType: required('Entertainer Type'),
+  endTime: minDateValidation('Notification End Date', new Date()),
+  message: stringValidation('Message'),
+  startTime: minDateValidation('Notification Start Date', new Date()),
+  userType: required('User Type'),
+};
 
 export {
   newBandMemberObject,
