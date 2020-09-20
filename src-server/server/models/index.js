@@ -75,6 +75,11 @@ db.User.hasMany(db.Event, {
   as: 'events',
 });
 
+db.User.hasMany(db.PublicEvent, {
+  foreignKey: 'userId',
+  as: 'publicEvents',
+});
+
 db.User.hasMany(db.Contact, {
   foreignKey: 'userId',
   as: 'contacts',
@@ -333,6 +338,11 @@ db.User.hasMany(db.GlobalNotification, {
 db.GlobalNotification.belongsTo(db.User, {
   foreignKey: 'adminId',
   as: 'adminUser',
+});
+
+db.PublicEvent.belongsTo(db.User, {
+  foreignKey: 'userId',
+  as: 'user',
 });
 
 db.sequelize = sequelize;

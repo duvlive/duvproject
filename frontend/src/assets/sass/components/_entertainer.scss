@@ -64,9 +64,9 @@
   top: -3rem;
   object-fit: cover;
   width: 100%;
-  @include media-breakpoint-up(sm) {
-    position: absolute;
-  }
+  // @include media-breakpoint-up(sm) {
+  //   position: absolute;
+  // }
 }
 
 .entertainer {

@@ -343,7 +343,7 @@ export const START_TIME = [
   { label: '9:00 PM', value: 21 },
   { label: '10:00 PM', value: 22 },
   { label: '11:00 PM', value: 23 },
-  { label: '12:00 PM', value: 0 },
+  { label: '12:00 AM', value: 0 },
   { label: '1:00 AM', value: 1 },
   { label: '2:00 AM', value: 2 },
   { label: '3:00 AM', value: 3 },

@@ -20,9 +20,21 @@ const storage = cloudinaryStorage({
 
 const MAX_IMG_SIZE = 500000; //500kb
 
+const articleStorage = cloudinaryStorage({
+  cloudinary: cloudinary,
+  folder: 'public-event',
+  allowedFormats: ['jpg', 'png'],
+});
+const ARTICLE_MAX_IMG_SIZE = 1000000; // 1MB
+
 export const parser = multer({
   limits: { fileSize: MAX_IMG_SIZE },
   storage: storage,
+}).single('image');
+
+export const parserArticle = multer({
+  limits: { fileSize: ARTICLE_MAX_IMG_SIZE },
+  storage: articleStorage,
 }).single('image');
 
 const ImageController = {
@@ -32,6 +44,25 @@ const ImageController = {
         return res.status(412).json({ message: err.message });
       }
       next();
+    });
+  },
+
+  uploadArticleImage(req, res, next) {
+    parserArticle(req, res, (err) => {
+      if (err) {
+        return res.status(412).json({ message: err.message });
+      }
+      next();
+    });
+  },
+
+  getUploadedImage(req, res) {
+    if (req.file) {
+      return res.json({ file: req.file });
+    }
+    return res.status(412).json({
+      success: false,
+      message: 'Image cannot be uploaded',
     });
   },
 

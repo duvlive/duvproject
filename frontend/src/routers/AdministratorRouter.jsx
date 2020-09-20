@@ -6,6 +6,8 @@ import SingleUser from 'components/pages/administrator/SingleUser';
 import SingleEntertainer from 'components/pages/administrator/SingleEntertainer';
 import SingleBadge from 'components/pages/administrator/SingleBadge';
 import SingleEvent from 'components/pages/administrator/SingleEvent';
+import SingleEventBids from 'components/pages/administrator/SingleEventBids';
+import SingleEventRequest from 'components/pages/administrator/SingleEventRequest';
 import EntertainersPayment from 'components/pages/administrator/EntertainersPayment';
 import RegisteredUsers from 'components/pages/administrator/RegisteredUsers';
 import Auctions from 'components/pages/administrator/Auctions';
@@ -27,6 +29,8 @@ import ChangePassword from 'components/common/pages/ChangePassword';
 import UserPaymentDetails from 'components/pages/administrator/UserPaymentDetails';
 import PendingPayments from 'components/pages/administrator/PendingPayments';
 import PayPendingEntertainer from 'components/pages/administrator/PayPendingEntertainer';
+import PublicEvent from 'components/pages/administrator/PublicEvent';
+import SinglePublicEvent from 'components/pages/administrator/SinglePublicEvent';
 
 const AdministratorRouter = () => (
   <Router>
@@ -41,12 +45,16 @@ const AdministratorRouter = () => (
     <SingleUser path="/users/:id" />
     <SingleEntertainer path="/entertainers/:id" />
     <UsersPayment path="/users-payment" />
+    <PublicEvent path="/public-events" />
+    <SinglePublicEvent path="/public-events/:id" />
     <UserPaymentDetails path="/user-payments/:applicationId" />
     <PayPendingEntertainer path="/pay-entertainer/:applicationId" />
     <PendingPayments path="/pending-payments" />
     <Notifications path="/notifications" />
     <UpcomingEvents path="/upcoming-events" />
     <SingleEvent path="/events/:id" />
+    <SingleEventBids path="/auction/bids/:eventEntertainerId" />
+    <SingleEventRequest path="/request/view/:applicationId" />
     <EditProfile path="/edit-profile" />
     <Gallery path="/gallery" />
     <Videos path="/videos" />

@@ -22,6 +22,9 @@ import InviteFriends from 'components/common/pages/InviteFriends';
 import Notifications from 'components/common/pages/Notifications';
 import ChangePassword from 'components/common/pages/ChangePassword';
 import LeaveReview from 'components/pages/user/LeaveReview';
+import NewPublicEvent from 'components/pages/user/NewPublicEvent';
+import PublicEvents from 'components/pages/user/PublicEvents';
+import ViewPublicEvent from 'components/pages/user/ViewPublicEvent';
 
 const UserRouter = () => (
   <Router>
@@ -31,6 +34,8 @@ const UserRouter = () => (
     <Requests path="/requests" />
     <ViewRequest path="/request/view/:applicationId" />
     <Events path="/events" />
+    <PublicEvents path="/public-events" />
+    <ViewPublicEvent path="public-events/view/:slug" />
     <Notifications path="/notifications" />
     <UserHelp path="/help" />
     <Payments path="/payments-history" />
@@ -38,6 +43,7 @@ const UserRouter = () => (
     <SearchEntertainer path="/entertainer/search/:eventEntertainerId" />
     <RecommendedEntertainers path="/entertainer/recommended/:eventEntertainerId" />
     <NewEvent path="/events/new" />
+    <NewPublicEvent path="/public-events/new" />
     <NewEvent path="/hire-entertainer" />
     <AddEntertainerToEvent path="events/:id/add-entertainer" />
     <AddEntertainerToEvent path="events/:id/add-entertainer/new-event" />

@@ -13,6 +13,8 @@ import {
  * Date and Time
  * @param {*} date
  */
+export const getDateTime = (date) =>
+  format(parse(date), 'ddd, MMM D, YYYY h:mm A');
 export const getEventDate = (date) => format(parse(date), 'MMM. D (ddd)');
 export const getShortDate = (date) => format(parse(date), 'ddd, MMM D, YYYY');
 export const getTinyDate = (date) => format(parse(date), 'MMM D, YYYY');

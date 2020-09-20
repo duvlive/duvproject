@@ -41,6 +41,11 @@ const navigation = {
       to: '/user/review',
       icon: 'star',
     },
+    {
+      title: 'Public Events',
+      to: '/user/public-events',
+      icon: 'events',
+    },
   ],
 };
 const others = (entertainerMenu) => ({
@@ -51,7 +56,6 @@ const others = (entertainerMenu) => ({
       to: '/user/edit-profile',
       icon: 'user-circle',
     },
-
     {
       title: 'Invite Friends',
       to: '/user/invite-friends',

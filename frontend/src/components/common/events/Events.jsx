@@ -11,7 +11,7 @@ const Events = ({
   start_date,
   startTime,
   ticket,
-  title
+  title,
 }) => {
   const eventDate = parse(start_date);
   const weekDay = format(eventDate, 'ddd');
@@ -47,13 +47,13 @@ Events.propTypes = {
   image: PropTypes.string.isRequired,
   location: PropTypes.string.isRequired,
   slug: PropTypes.string.isRequired,
-  start_date: PropTypes.string.isRequired,
   startTime: PropTypes.string.isRequired,
+  start_date: PropTypes.string.isRequired,
   ticket: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired
+  title: PropTypes.string.isRequired,
 };
 
 Events.List = ({ lists }) =>
-  lists.map(props => <Events key={props.title} {...props} />);
+  lists.map((props) => <Events key={props.title} {...props} />);
 
 export default Events;

@@ -20,12 +20,15 @@ import userRoutes from './userRoutes';
 import videoRoutes from './videoRoutes';
 import badgeRoutes from './badgeRoutes';
 import welcomeRoute from './welcomeRoute';
+import publicEventRoutes from './publicEventRoutes';
 import adminRoute from './adminRoute';
 
 const routes = (app) => {
   adminRoute(app);
   applicationRoutes(app);
   approveCommentRoutes(app);
+  badgeRoutes(app);
+  bandMemberRoutes(app);
   bankDetailsRoutes(app);
   commissionRoutes(app);
   contactRoutes(app);
@@ -39,13 +42,12 @@ const routes = (app) => {
   imageRoutes(app);
   otherRoutes(app);
   paymentRoutes(app);
+  publicEventRoutes(app);
   ratingRoutes(app);
   reviewRoutes(app);
   userRoutes(app);
   videoRoutes(app);
   welcomeRoute(app);
-  bandMemberRoutes(app);
-  badgeRoutes(app);
 };
 
 export default routes;

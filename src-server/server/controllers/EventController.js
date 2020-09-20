@@ -17,6 +17,7 @@ import {
   EVENT_HIRETYPE,
   NOTIFICATIONS,
   NOTIFICATION_TYPE,
+  USER_TYPES,
 } from '../constant';
 import { isValid } from 'date-fns';
 
@@ -554,16 +555,19 @@ const EventController = {
    */
   getEventBids(req, res) {
     const eventEntertainerId = req.params.id;
+    const where = { id: eventEntertainerId };
+
+    if (req.user.type !== USER_TYPES.ADMINISTRATOR) {
+      where['userId'] = req.user.id;
+    }
+
     if (!eventEntertainerId) {
       return res
         .status(400)
         .json({ message: 'Kindly provide an event entertainer id' });
     }
     EventEntertainer.findOne({
-      where: {
-        id: eventEntertainerId,
-        userId: req.user.id,
-      },
+      where,
       include: [
         {
           model: Event,

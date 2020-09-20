@@ -1,9 +1,9 @@
-// import * as yup from 'yup';
 import {
   required,
   requiredDate,
   stringValidation,
   optionalValidation,
+  minDateValidation,
 } from './schema-helpers';
 
 /////////////////////////
@@ -12,7 +12,7 @@ import {
 export const eventDetailsSchema = {
   eventType: required('Event Type'),
   eventDate: requiredDate('Event Date'),
-  startTime: requiredDate('Start Time'),
+  startTime: required('Start Time'),
   eventDuration: required('Event Duration'),
   moreInformation: optionalValidation(stringValidation('More Information', 20)),
 };
@@ -36,4 +36,14 @@ export const reviewSchema = {
 
 export const cancelEventSchema = {
   cancelledReason: stringValidation('Reason', 5),
+};
+
+export const publicEventSchema = {
+  title: stringValidation('Event Name'),
+  startTime: minDateValidation('Event Start Date', new Date()),
+  endTime: minDateValidation('Event End Date', new Date()),
+  organizer: required('Event Organizer'),
+  venue: required('Event Venue'),
+  location: optionalValidation(stringValidation('Event Location', 2)),
+  description: optionalValidation(stringValidation('More Information', 20)),
 };

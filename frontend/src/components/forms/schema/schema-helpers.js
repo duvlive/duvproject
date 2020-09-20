@@ -98,8 +98,16 @@ export const yearValidation = (label) =>
 
 export const minDateValidation = (label, minDate) =>
   yup
-    .date(`${label} must be a a valid date`)
-    .min(minDate, `${label} must be greater than ${minDate}`);
+    .object()
+    .transform((value) => {
+      return value.date ? { date: parse(value.date) } : { date: undefined };
+    })
+    .shape({
+      date: yup
+        .date()
+        .required(`${label} is required`)
+        .min(minDate, `${label} must be greater than ${minDate}`),
+    });
 
 export const autocompleteValidation = (label, minSelection = 2) =>
   yup

@@ -59,9 +59,18 @@ const DatePicker = ({
               name={name}
               onChange={(date) => {
                 if (date) {
-                  const dateTime = showTimeSelectOnly
-                    ? date.toLocaleTimeString()
-                    : date.toLocaleDateString();
+                  let dateTime = date.toLocaleDateString();
+
+                  if (showTimeSelectOnly) {
+                    dateTime = date.toLocaleTimeString();
+                  }
+
+                  if (showTimeSelect) {
+                    dateTime = date.toLocaleString();
+                  }
+
+                  console.log('date, dateTime,', date, dateTime);
+
                   form.setFieldValue(name, { date, value: dateTime });
                 } else {
                   form.setFieldValue(name, '');
@@ -130,7 +139,7 @@ DatePicker.defaultProps = {
   showFeedback: feedback.ALL,
   showTimeSelect: false,
   showTimeSelectOnly: false,
-  timeCaption: null,
+  timeCaption: 'Time',
   timeIntervals: 60,
   tooltipText: null,
   tooltipPosition: 'right',

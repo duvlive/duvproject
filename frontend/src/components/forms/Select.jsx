@@ -123,7 +123,7 @@ Select.Options = ({ options }) => {
   return options.map(({ label, value }) => {
     if (!(label || value)) return null;
     // const optionValue = value || dashedLowerCase(label);
-    const optionValue = value || label;
+    const optionValue = value != null ? value : label;
     const optionLabel = label || Humanize.capitalize(value);
     return (
       <option key={optionValue} value={optionValue}>
