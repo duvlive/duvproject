@@ -168,7 +168,7 @@ export const AddNewComponent = ({ addData, setMessage }) => {
                   { value: 'green', label: 'Green Colour' },
                   { value: 'yellow', label: 'Yellow Colour' },
                 ]}
-                placeholder="Commission Title"
+                placeholder="Badge Title"
               />
             </div>
             <TextArea
@@ -183,7 +183,7 @@ export const AddNewComponent = ({ addData, setMessage }) => {
                 loading={isSubmitting}
                 onClick={handleSubmit}
               >
-                Add Commission
+                Add Badge
               </Button>
             </div>
           </>

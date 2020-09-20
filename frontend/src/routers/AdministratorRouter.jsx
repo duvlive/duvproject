@@ -6,6 +6,8 @@ import SingleUser from 'components/pages/administrator/SingleUser';
 import SingleEntertainer from 'components/pages/administrator/SingleEntertainer';
 import SingleBadge from 'components/pages/administrator/SingleBadge';
 import SingleEvent from 'components/pages/administrator/SingleEvent';
+import SingleEventBids from 'components/pages/administrator/SingleEventBids';
+import SingleEventRequest from 'components/pages/administrator/SingleEventRequest';
 import EntertainersPayment from 'components/pages/administrator/EntertainersPayment';
 import RegisteredUsers from 'components/pages/administrator/RegisteredUsers';
 import Auctions from 'components/pages/administrator/Auctions';
@@ -51,6 +53,8 @@ const AdministratorRouter = () => (
     <Notifications path="/notifications" />
     <UpcomingEvents path="/upcoming-events" />
     <SingleEvent path="/events/:id" />
+    <SingleEventBids path="/auction/bids/:eventEntertainerId" />
+    <SingleEventRequest path="/request/view/:applicationId" />
     <EditProfile path="/edit-profile" />
     <Gallery path="/gallery" />
     <Videos path="/videos" />

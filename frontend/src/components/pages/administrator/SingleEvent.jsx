@@ -581,11 +581,11 @@ SingleEvent.PendingEntertainersRow = ({ eventEntertainer }) => {
     eventEntertainer.applications[0].id;
 
   if (isAuction) {
-    entertainerEventUrl = `/user/auction/bids/${eventEntertainer.id}`;
+    entertainerEventUrl = `/admin/auction/bids/${eventEntertainer.id}`;
   } else {
     entertainerEventUrl = hasApplication
-      ? `/user/request/view/${eventEntertainer.applications[0].id}`
-      : `/user/dashboard`;
+      ? `/admin/request/view/${eventEntertainer.applications[0].id}`
+      : `/admin/dashboard`;
   }
 
   return (

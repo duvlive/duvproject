@@ -637,19 +637,21 @@ const MediaTab = ({ entertainer }) => {
         </TabPane>
         <TabPane tabId="2">
           <Row>
-            {entertainer.videos && entertainer.videos.length > 0 ? (
-              <>
-                <h4 className="mt-5 text-uppercase col-12 font-weight-normal mb-3">
-                  Videos
-                </h4>
-                <Videos showContentOnly videos={entertainer.videos} />
-              </>
-            ) : (
-              <div className="text-center mt-5">
-                <span className="icon icon-video display-1"></span>
-                <NoContent text="Entertainer has no videos" />
-              </div>
-            )}
+            <Col sm="12">
+              {entertainer.videos && entertainer.videos.length > 0 ? (
+                <>
+                  <h4 className="mt-5 text-uppercase col-12 font-weight-normal mb-3">
+                    Videos
+                  </h4>
+                  <Videos showContentOnly videos={entertainer.videos} />
+                </>
+              ) : (
+                <div className="text-center mt-5">
+                  <span className="icon icon-video display-1"></span>
+                  <NoContent text="Entertainer has no videos" />
+                </div>
+              )}
+            </Col>
           </Row>
         </TabPane>
         <TabPane tabId="3">

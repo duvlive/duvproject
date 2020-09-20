@@ -772,6 +772,17 @@ const ApplicationController = {
     const id = req.params.id;
     const userId = req.user.id;
 
+    const where = { id };
+
+    if (req.user.type !== USER_TYPES.ADMINISTRATOR) {
+      where[Op.or] = {
+        userId,
+        [Op.and]: Sequelize.literal(
+          `"eventEntertainerInfo"."userId" = ${userId}`
+        ),
+      };
+    }
+
     if (!id) {
       return res.status(404).json({
         message: 'Application Id needed to view application',
@@ -779,15 +790,7 @@ const ApplicationController = {
     }
 
     Application.findOne({
-      where: {
-        id,
-        [Op.or]: {
-          userId,
-          [Op.and]: Sequelize.literal(
-            `"eventEntertainerInfo"."userId" = ${userId}`
-          ),
-        },
-      },
+      where: $where,
       include: [
         {
           model: EventEntertainer,
