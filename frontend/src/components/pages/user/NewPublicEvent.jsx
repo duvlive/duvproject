@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Formik } from 'formik';
 import {
   setInitialValues,
@@ -16,7 +17,10 @@ import Input from 'components/forms/Input';
 import TextArea from 'components/forms/TextArea';
 import DatePicker from 'components/forms/DatePicker';
 import { addDays } from 'date-fns';
+import defaultImage from 'assets/img/events/public-event.jpg';
 import Button from 'components/forms/Button';
+import Image from 'components/common/utils/Image';
+import UploadArticleImage from 'components/common/utils/UploadArticleImage';
 
 const NewEvent = () => {
   return (
@@ -34,6 +38,7 @@ const NewEvent = () => {
 
 const NewEventForm = () => {
   const [message, setMessage] = React.useState(null);
+  const [image, setImage] = React.useState(null);
 
   return (
     <Formik
@@ -45,6 +50,7 @@ const NewEventForm = () => {
           ...event,
           startTime: startTime,
           endTime: endTime,
+          mainImage: image,
         };
         console.log('event, payload', event, payload);
         axios
@@ -67,7 +73,8 @@ const NewEventForm = () => {
       render={({ isSubmitting, handleSubmit, ...props }) => (
         <>
           <AlertMessage {...message} />
-          <PublicEventDetails />
+
+          <PublicEventDetails image={image} setImage={setImage} />
 
           <DisplayFormikState hide {...props} />
           <div className="mt-5">
@@ -88,7 +95,32 @@ const NewEventForm = () => {
   );
 };
 
-const PublicEventDetails = () => {
+const PublicEventImage = ({ image, setImage }) => {
+  console.log('image', image);
+  return (
+    <section>
+      <Image
+        className="uploaded-image uploaded-article-image"
+        name="property image"
+        rounded={false}
+        src={image || defaultImage}
+      />
+      <div className="my-4">
+        <UploadArticleImage
+          afterUpload={(image) => setImage(image)}
+          defaultImage={image}
+        />
+      </div>
+    </section>
+  );
+};
+
+PublicEventImage.propTypes = {
+  image: PropTypes.any.isRequired,
+  setImage: PropTypes.func.isRequired,
+};
+
+const PublicEventDetails = ({ image, setImage }) => {
   return (
     <div className="card card-custom card-black card-form ">
       <div className="card-body col-md-10">
@@ -152,10 +184,19 @@ const PublicEventDetails = () => {
             placeholder="More information about your event"
             rows="8"
           />
+
+          <div className="col-sm-8">
+            <PublicEventImage image={image} setImage={setImage} />
+          </div>
         </form>
       </div>
     </div>
   );
+};
+
+PublicEventDetails.propTypes = {
+  image: PropTypes.any.isRequired,
+  setImage: PropTypes.func.isRequired,
 };
 
 export default NewEvent;

@@ -715,3 +715,8 @@ a:hover {
   letter-spacing: 0.2rem;
   font-size: 2rem;
 }
+
+.custom-file-label::after {
+  margin: 2px;
+  border: none;
+}
