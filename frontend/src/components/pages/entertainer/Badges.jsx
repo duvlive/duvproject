@@ -41,12 +41,12 @@ const Badges = () => {
 
 Badges.CardLists = ({ badges }) => {
   return badges.map(
-    ({ badge }, index) =>
+    ({ badge, createdAt }, index) =>
       badge &&
       badge.color && (
         <AwardCard
           color={badge.color}
-          date={getShortDate(badge.createdAt)}
+          date={getShortDate(createdAt)}
           key={index}
           title={badge.title}
         />
