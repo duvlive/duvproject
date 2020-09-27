@@ -6,7 +6,6 @@ import Header from 'components/common/layout/Header';
 import BorderedListItem from '../../custom/BorderedListItem';
 import Text from '../../common/utils/Text';
 import noGoSpoilYourPartyList from 'data/duvSteps.js';
-import eventLists from 'data/events.js';
 import Footer from 'components/common/layout/Footer';
 import Slideshow from 'components/custom/Slideshow';
 import { SLIDESHOW_TYPE, DASHBOARD_PAGE, USER_TYPES } from 'utils/constants';
@@ -20,24 +19,41 @@ import { getUserTypeFromStore, getTokenFromStore } from 'utils/localStorage';
 
 const Home = () => {
   const [entertainers, setEntertainers] = React.useState([]);
-  const [loading, setLoading] = React.useState(true);
+  const [events, setEvents] = React.useState([]);
+  const [loadingEntertainers, setLoadingEntertainers] = React.useState(true);
+  const [loadingEvents, setLoadingEvents] = React.useState(true);
   React.useEffect(() => {
     axios.get(`/api/v1/entertainers`).then(function (response) {
       const { status, data } = response;
       // handle success
       if (status === 200) {
         setEntertainers(data.entertainers);
-        setLoading(false);
+        setLoadingEntertainers(false);
       }
     });
   }, []);
+
+  React.useEffect(() => {
+    axios.get(`/api/v1/frontend/public-events`).then(function (response) {
+      const { status, data } = response;
+      // handle success
+      if (status === 200) {
+        setEvents(data.result);
+        setLoadingEvents(false);
+      }
+    });
+  }, []);
+
   return (
     <div className="home">
       <LandingSection />
       <IntroSection />
       <LiveYourLifeSection />
-      <EntertainerSection entertainers={entertainers} loading={loading} />
-      <EventSection />
+      <EntertainerSection
+        entertainers={entertainers}
+        loading={loadingEntertainers}
+      />
+      <EventSection events={events} loading={loadingEvents} />
       <Footer />
     </div>
   );
@@ -198,25 +214,34 @@ EntertainerSection.propTypes = {
   loading: PropTypes.bool.isRequired,
 };
 
-const EventSection = () => (
+const EventSection = ({ events, loading }) => (
   <section className="events spacer">
     <div className="container-fluid">
       <h2 className="header title-border">
         UPCOMING <span>EVENTS</span>
       </h2>
       <Row className="pt-5">
-        <Slideshow
-          items={[
-            { list: eventLists.slice(0, 3), id: 1 },
-            { list: eventLists.slice(3, 6), id: 2 },
-            { list: eventLists.slice(6, 9), id: 3 },
-          ]}
-          type={SLIDESHOW_TYPE.events}
-        />
+        {loading ? (
+          <LoadingScreen loading={loading} text="Loading Entertainers" />
+        ) : (
+          <Slideshow
+            items={[
+              { list: events.slice(0, 3), id: 1 },
+              { list: events.slice(3, 6), id: 2 },
+              { list: events.slice(6, 9), id: 3 },
+            ]}
+            type={SLIDESHOW_TYPE.events}
+          />
+        )}
       </Row>
     </div>
   </section>
 );
+
+EventSection.propTypes = {
+  events: PropTypes.array.isRequired,
+  loading: PropTypes.bool.isRequired,
+};
 
 // https://www.internetrix.com.au/blog/how-to-use-youtube-video-as-your-webpage-background-2/
 const VideoSection = () => {

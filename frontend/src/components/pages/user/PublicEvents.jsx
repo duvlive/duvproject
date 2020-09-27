@@ -64,16 +64,10 @@ const PublicEvents = () => {
 };
 
 const PublicEventsRowList = ({ publicEvents }) => (
-  <div className="table-responsive">
-    <table className="table table-dark table__no-border table__with-bg">
-      <tbody>
-        {publicEvents.map((publicEvent, index) => (
-          <SingleEvent key={index} {...publicEvent} />
-        ))}
-      </tbody>
-    </table>
-    <br />
-    <br />
+  <div className="row text-center">
+    {publicEvents.map((publicEvent, index) => (
+      <SingleEvent key={index} {...publicEvent} />
+    ))}
   </div>
 );
 
@@ -94,7 +88,7 @@ const SingleEvent = ({
   const fullDate = format(parsedEventDate, 'MMM D');
 
   return (
-    <Col sm={6}>
+    <Col md={8} sm={10} lg={6}>
       <Link to={`/user/public-events/view/${slug}`}>
         <Card className="event-card">
           <div className="event-card__image-container">
@@ -128,14 +122,18 @@ const SingleEvent = ({
 
 SingleEvent.propTypes = {
   endTime: PropTypes.string.isRequired,
-  eventDate: PropTypes.string.isRequired,
   eventLink: PropTypes.string.isRequired,
   location: PropTypes.string.isRequired,
-  mainImage: PropTypes.string.isRequired,
+  mainImage: PropTypes.string,
   slug: PropTypes.string.isRequired,
   startTime: PropTypes.string.isRequired,
-  status: PropTypes.any.isRequired,
+  status: PropTypes.any,
   title: PropTypes.string.isRequired,
+};
+
+SingleEvent.defaultProps = {
+  mainImage: null,
+  status: null,
 };
 
 export default PublicEvents;
