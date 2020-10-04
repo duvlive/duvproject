@@ -10,7 +10,7 @@ const UpcomingEvents = () => {
   const [events, setEvents] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   React.useEffect(() => {
-    axios.get(`/api/v1/public-events`).then(function (response) {
+    axios.get(`/api/v1/frontend/public-events`).then(function (response) {
       const { status, data } = response;
       // handle success
       if (status === 200) {
@@ -33,7 +33,7 @@ const UpcomingEventsSection = ({ events, loading }) => (
         Upcoming <span>Events</span>
       </h2>
       {loading ? (
-        <LoadingScreen loading={loading} text="Loading Entertainers" />
+        <LoadingScreen loading={loading} text="Loading Public Events" />
       ) : (
         <Row className="pt-5">
           <Events.List lists={events} />
@@ -44,7 +44,7 @@ const UpcomingEventsSection = ({ events, loading }) => (
 );
 
 UpcomingEventsSection.propTypes = {
-  entertainers: PropTypes.array.isRequired,
+  events: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired,
 };
 
