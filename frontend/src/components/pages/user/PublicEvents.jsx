@@ -100,7 +100,7 @@ const SingleEvent = ({
             />
             <CardImgOverlay />
           </div>
-          <div className="event-card__body">
+          <div className="event-card__body text-left">
             <div className="event-card__datetime">
               <span className="event-card__weekday">{weekDay},</span>
               <span className="event-card__date"> {fullDate},</span>

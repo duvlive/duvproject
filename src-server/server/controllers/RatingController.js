@@ -1,12 +1,16 @@
-import Sequelize from 'sequelize';
+import { subHours } from 'date-fns';
+import Sequelize, { Op } from 'sequelize';
+import EMAIL_CONTENT from '../email-template/content';
+import sendMail from '../MailSender';
 import {
   EntertainerProfile,
   EventEntertainer,
   Rating,
   Review,
+  Event,
   User,
 } from '../models';
-import { getAll, validString } from '../utils';
+import { getAll, getEventDate, validString } from '../utils';
 
 const RatingController = {
   /**
@@ -352,6 +356,115 @@ const RatingController = {
       const errorMessage = error.message || error;
       return res.status(status).json({ message: errorMessage });
     }
+  },
+
+  /**
+   * @desc send mail to unrated events
+   * @param {object} req - The request sent to the route
+   * @param {object} res - The response sent back
+   * @return {object} json response
+   */
+  async processUnratedEvents(req, res) {
+    EventEntertainer.findAll({
+      where: {
+        hiredEntertainer: {
+          [Op.ne]: null,
+        },
+      },
+      order: [[{ model: Event, as: 'event' }, 'eventDate', 'DESC']],
+      attributes: ['id', 'placeOfEvent'],
+      include: [
+        {
+          model: Event,
+          as: 'event',
+          where: {
+            [Op.or]: [
+              {
+                [Op.and]: [
+                  {
+                    eventDate: {
+                      [Op.gt]: subHours(new Date(), 1),
+                    },
+                  },
+                  {
+                    eventDate: {
+                      [Op.lte]: subHours(new Date(), 0),
+                    },
+                  },
+                ],
+              },
+              {
+                [Op.and]: [
+                  {
+                    eventDate: { [Op.gt]: subHours(new Date(), 49) },
+                  },
+                  {
+                    eventDate: {
+                      [Op.lte]: subHours(new Date(), 48),
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+          attributes: ['id', 'eventDate', 'eventType', 'eventDuration'],
+        },
+        {
+          model: EntertainerProfile,
+          as: 'entertainer',
+          attributes: [
+            'id',
+            'slug',
+            'stageName',
+            'entertainerType',
+            'location',
+          ],
+        },
+        {
+          model: Rating,
+          as: 'eventRating',
+          where: { id: null },
+          required: false,
+        },
+        {
+          model: User,
+          as: 'user',
+          attributes: ['id', 'firstName', 'lastName', 'email'],
+          required: false,
+        },
+      ],
+    }).then((results) => {
+      let mailSentTo = [];
+
+      if (!results || results.length === 0) {
+        return res.status(200).json({ message: 'No Review Found' });
+      }
+
+      results.map((result) => {
+        mailSentTo.push(result.event.eventDate);
+        sendMail(EMAIL_CONTENT.RATE_ENTERTAINER, result.user, {
+          link: `${process.env.HOST}/user/review-entertainer/${result.id}`,
+          contentTop: `
+          We noticed that you are yet to rate and write a review on the entertainer and the performance delivered at the event with details stated below.<br /><br />
+          <p> <strong>Entertainer : </strong>${
+            result.entertainer.stageName
+          } </p>
+          <p> <strong>Entertainer Type : </strong>${
+            result.entertainer.entertainerType
+          }</p>
+          <p> <strong>Event : </strong>${result.event.eventType}</p>
+          <p> <strong>Place : </strong>${result.placeOfEvent}</p>
+          <p> <strong>Event Date : </strong>${getEventDate(
+            result.event.eventDate
+          )}</p> <br /><br />
+          Kindly help rate and write a review about the entertainer as accurately as you can.
+You can follow this link:
+
+          `,
+        });
+      });
+      return res.status(200).json({ success: true, mailSentTo, results });
+    });
   },
 };
 

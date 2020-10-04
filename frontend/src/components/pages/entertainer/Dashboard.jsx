@@ -262,19 +262,22 @@ Dashboard.RecentBids = ({ bids }) => (
       <div className="table-responsive">
         <table className="table table-dark table__no-border table__with-bg">
           <tbody>
-            {bids.map((bid, index) => (
-              <BidsRow
-                askingPrice={bid.applications[0].askingPrice}
-                auctionEndDate={bid.auctionEndDate}
-                city={bid.event.city}
-                eventType={bid.event.eventType}
-                id={bid.applications[0].id}
-                key={index}
-                number={index + 1}
-                state={bid.event.state}
-                status={bid.applications[0].status}
-              />
-            ))}
+            {bids.map(
+              (bid, index) =>
+                bid.applications[0] && (
+                  <BidsRow
+                    askingPrice={bid.applications[0].askingPrice}
+                    auctionEndDate={bid.auctionEndDate}
+                    city={bid.event.city}
+                    eventType={bid.event.eventType}
+                    id={bid.applications[0].id}
+                    key={index}
+                    number={index + 1}
+                    state={bid.event.state}
+                    status={bid.applications[0].status}
+                  />
+                )
+            )}
           </tbody>
         </table>
       </div>
@@ -293,19 +296,22 @@ Dashboard.RecentRequests = ({ requests }) => (
       <div className="table-responsive">
         <table className="table table-dark table__no-border table__with-bg">
           <tbody>
-            {requests.map((request, index) => (
-              <RequestsRow
-                askingPrice={request.applications[0].askingPrice}
-                city={request.event.city}
-                eventType={request.event.eventType}
-                expiryDate={request.applications[0].expiryDate}
-                id={request.applications[0].id}
-                key={index}
-                number={index + 1}
-                state={request.event.state}
-                status={request.applications[0].status}
-              />
-            ))}
+            {requests.map(
+              (request, index) =>
+                request.applications[0] && (
+                  <RequestsRow
+                    askingPrice={request.applications[0].askingPrice}
+                    city={request.event.city}
+                    eventType={request.event.eventType}
+                    expiryDate={request.applications[0].expiryDate}
+                    id={request.applications[0].id}
+                    key={index}
+                    number={index + 1}
+                    state={request.event.state}
+                    status={request.applications[0].status}
+                  />
+                )
+            )}
           </tbody>
         </table>
       </div>

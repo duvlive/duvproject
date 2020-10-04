@@ -352,10 +352,16 @@ const ApplicationController = {
           if (
             eventEntertainer.applications &&
             eventEntertainer.applications.length > 0 &&
-            eventEntertainer.applications[0].applicationType === 'Bid'
+            eventEntertainer.applications[0].applicationType === 'Bid' &&
+            !eventEntertainer.applications[0].paid
           ) {
             result.bids.push(eventEntertainer);
-          } else if (eventEntertainer.hireType === 'Auction') {
+          } else if (
+            eventEntertainer.hireType === 'Auction' &&
+            eventEntertainer.applications &&
+            eventEntertainer.applications.length > 0 &&
+            !eventEntertainer.applications[0].paid
+          ) {
             result.auctions.push(eventEntertainer);
           } else if (eventEntertainer.hiredEntertainer) {
             result.upcomingEvents.push({
