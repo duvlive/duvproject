@@ -70,7 +70,8 @@ const EMAIL_CONTENT = {
       'Please do not reply to this email. Emails sent to this address will not be answered.',
   },
   RATE_ENTERTAINER: {
-    title: 'Please rate Entertainer(s) you hired!!!',
+    title: 'Rate your entertainer',
+    subject: 'Rete your entertainer',
     contentTop: `Thank you for hiring entertainer(s) with DUVLIVE. <br />
     <br />
     Please help us improve our service and give all DUVLIVE customers a better understanding about the entertainer(s) your hired! <br/>

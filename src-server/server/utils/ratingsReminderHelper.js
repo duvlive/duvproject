@@ -83,6 +83,64 @@ const getUnratedEntainers = async () => {
   }
 };
 
+/**
+ * get All Events Review
+ * @function
+ * @param {object} req is req object
+ * @param {object} res is res object
+ * @return {object} returns res object
+ */
+export const getUnratedEventsReview = () => {
+  EventEntertainer.findAll({
+    where: {
+      hiredEntertainer: {
+        [Op.ne]: null,
+      },
+    },
+    order: [[{ model: Event, as: 'event' }, 'eventDate', 'DESC']],
+    attributes: ['id', 'placeOfEvent'],
+    include: [
+      {
+        model: Event,
+        as: 'event',
+        where: {
+          eventDate: {
+            [Op.lte]: Sequelize.literal('NOW()'),
+          },
+        },
+        attributes: ['id', 'eventDate', 'eventType', 'eventDuration'],
+      },
+      {
+        model: EntertainerProfile,
+        as: 'entertainer',
+        attributes: ['id', 'slug', 'stageName', 'entertainerType', 'location'],
+        include: [
+          {
+            model: User,
+            as: 'personalDetails',
+            attributes: [
+              'id',
+              'profileImageURL',
+              'email',
+              'firstName',
+              'lastName',
+            ],
+          },
+        ],
+      },
+      {
+        model: Rating,
+        as: 'eventRating',
+      },
+    ],
+  }).then((info) => {
+    if (!info || info.length === 0) {
+      return res.status(404).json({ message: 'Event Entertainers not found' });
+    }
+    return res.status(200).json({ info });
+  });
+};
+
 export const getUnRatedAndMailUsers = async () => {
   try {
     const result = await getUnratedEntainers();
