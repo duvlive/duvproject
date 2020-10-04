@@ -468,30 +468,4 @@ You can follow this link:
   },
 };
 
-// {
-//   "id": 18,
-//   "placeOfEvent": "Inside a Room",
-//   "event": {
-//       "id": 7,
-//       "eventDate": "2020-09-09T14:00:00.000Z",
-//       "eventType": "Engagement Party",
-//       "eventDuration": "5 hours"
-//   },
-//   "entertainer": {
-//       "id": 3,
-//       "slug": "mc-high-def",
-//       "stageName": "High Def",
-//       "entertainerType": "MC",
-//       "location": "Kano",
-//       "personalDetails": {
-//           "id": 5,
-//           "profileImageURL": "https://res.cloudinary.com/duvlive/image/upload/v1585938493/entertainers/5.jpg",
-//           "email": "entertainer3@gmail.com",
-//           "firstName": "Rebecca",
-//           "lastName": "Bing"
-//       }
-//   },
-//   "eventRating": null
-// },
-
 export default RatingController;
