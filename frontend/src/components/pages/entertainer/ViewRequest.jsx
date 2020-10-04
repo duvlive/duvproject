@@ -188,7 +188,7 @@ const ViewRequest = ({ applicationId }) => {
                           ) : (
                             <div>
                               <Button
-                                className="btn btn-success btn-transparent"
+                                className="btn btn-success btn-transparent mb-3"
                                 onClick={() =>
                                   processRequest(REQUEST_ACTION.APPROVED)
                                 }
@@ -197,7 +197,7 @@ const ViewRequest = ({ applicationId }) => {
                               </Button>
                               &nbsp;&nbsp;&nbsp;
                               <Button
-                                className="btn btn-danger btn-transparent"
+                                className="btn btn-danger btn-transparent mb-3"
                                 onClick={showRequestForm(
                                   REQUEST_ACTION.REJECTED
                                 )}
@@ -207,7 +207,7 @@ const ViewRequest = ({ applicationId }) => {
                               </Button>
                               &nbsp;&nbsp;
                               <Button
-                                className="btn btn-info btn-transparent"
+                                className="btn btn-info btn-transparent mb-3"
                                 onClick={showRequestForm(
                                   REQUEST_ACTION.INCREMENT
                                 )}

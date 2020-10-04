@@ -210,6 +210,9 @@ Dashboard.PendingPayments = ({ pendingPayments }) => (
               {pendingPayments &&
                 pendingPayments.length > 0 &&
                 pendingPayments.map((payment, index) => {
+                  if (!payment.applications[0]) {
+                    return null;
+                  }
                   const price = payment.applications[0].proposedPrice
                     ? payment.applications[0].proposedPrice
                     : payment.applications[0].askingPrice;
@@ -218,7 +221,6 @@ Dashboard.PendingPayments = ({ pendingPayments }) => (
                     payment.applications[0].commission,
                     payment.hireType
                   );
-                  console.log('calculatedPrice', calculatedPrice);
                   return (
                     <Dashboard.PendingPaymentRow
                       event={payment.event.eventType}
