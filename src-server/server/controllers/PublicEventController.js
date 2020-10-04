@@ -226,8 +226,12 @@ const PublicEventController = {
     try {
       const options = {
         offset: offset || 0,
-        limit: limit || 10,
-        where: { status: true },
+        limit: limit || 15,
+        where: {
+          status: true,
+          endTime: { [Op.gte]: Sequelize.literal('NOW()') },
+        },
+        order: [['startTime', 'ASC']],
         include: [
           {
             model: User,

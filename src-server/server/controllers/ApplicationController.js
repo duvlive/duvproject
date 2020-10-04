@@ -796,7 +796,7 @@ const ApplicationController = {
     }
 
     Application.findOne({
-      where: $where,
+      where,
       include: [
         {
           model: EventEntertainer,
