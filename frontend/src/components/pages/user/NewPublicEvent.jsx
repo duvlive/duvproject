@@ -96,7 +96,6 @@ const NewEventForm = () => {
 };
 
 const PublicEventImage = ({ image, setImage }) => {
-  console.log('image', image);
   return (
     <section>
       <Image

@@ -31,6 +31,7 @@ import PendingPayments from 'components/pages/administrator/PendingPayments';
 import PayPendingEntertainer from 'components/pages/administrator/PayPendingEntertainer';
 import PublicEvent from 'components/pages/administrator/PublicEvent';
 import SinglePublicEvent from 'components/pages/administrator/SinglePublicEvent';
+import GlobalNotifications from 'components/pages/administrator/GlobalNotifications';
 
 const AdministratorRouter = () => (
   <Router>
@@ -52,6 +53,7 @@ const AdministratorRouter = () => (
     <PendingPayments path="/pending-payments" />
     <Notifications path="/notifications" />
     <UpcomingEvents path="/upcoming-events" />
+    <GlobalNotifications path="/global-notifications" />
     <SingleEvent path="/events/:id" />
     <SingleEventBids path="/auction/bids/:eventEntertainerId" />
     <SingleEventRequest path="/request/view/:applicationId" />

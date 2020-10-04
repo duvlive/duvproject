@@ -3,17 +3,11 @@ import PropTypes from 'prop-types';
 import { Link } from '@reach/router';
 import { Col, Card, CardImg, CardImgOverlay } from 'reactstrap';
 import { format, parse } from 'date-fns';
+import defaultImage from 'assets/img/events/public-event.jpg';
+import { getTime } from 'utils/date-helpers';
 
-const Events = ({
-  image,
-  location,
-  slug,
-  start_date,
-  startTime,
-  ticket,
-  title,
-}) => {
-  const eventDate = parse(start_date);
+const Events = ({ mainImage, location, slug, startTime, title }) => {
+  const eventDate = parse(startTime);
   const weekDay = format(eventDate, 'ddd');
   const fullDate = format(eventDate, 'MMM D');
 
@@ -22,19 +16,23 @@ const Events = ({
       <Link to={`/event/${slug}`}>
         <Card className="event-card">
           <div className="event-card__image-container">
-            <CardImg alt={title} className="img-fluid" src={image} top />
+            <CardImg
+              alt={title}
+              className="img-fluid"
+              src={mainImage || defaultImage}
+              top
+            />
             <CardImgOverlay />
           </div>
           <div className="event-card__body">
             <div className="event-card__datetime">
               <span className="event-card__weekday">{weekDay},</span>
               <span className="event-card__date"> {fullDate},</span>
-              <span className="event-card__time">{startTime}</span>
+              <span className="event-card__time">{getTime(startTime)}</span>
             </div>
             <div className="event-card__info">
               <h6 className="event-card__title text-truncate">{title}</h6>
               <p className="event-card__address">{location}</p>
-              <div className="event-card__ticket">Ticket: {ticket}</div>
             </div>
           </div>
         </Card>
@@ -44,13 +42,15 @@ const Events = ({
 };
 
 Events.propTypes = {
-  image: PropTypes.string.isRequired,
   location: PropTypes.string.isRequired,
+  mainImage: PropTypes.string,
   slug: PropTypes.string.isRequired,
   startTime: PropTypes.string.isRequired,
-  start_date: PropTypes.string.isRequired,
-  ticket: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
+};
+
+Events.defaultProps = {
+  mainImage: null,
 };
 
 Events.List = ({ lists }) =>

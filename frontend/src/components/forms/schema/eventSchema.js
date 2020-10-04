@@ -43,6 +43,7 @@ export const publicEventSchema = {
   startTime: minDateValidation('Event Start Date', new Date()),
   endTime: minDateValidation('Event End Date', new Date()),
   organizer: required('Event Organizer'),
+  eventLink: required('Event Link'),
   venue: required('Event Venue'),
   location: optionalValidation(stringValidation('Event Location', 2)),
   description: optionalValidation(stringValidation('More Information', 20)),

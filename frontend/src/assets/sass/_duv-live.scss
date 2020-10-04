@@ -705,9 +705,21 @@ a:hover {
   background: rgba($blue, 0.1);
   color: $white;
   font-size: 0.85rem;
-  padding: 2rem;
+  padding: 1.25rem 2rem;
   margin-top: 3.5rem;
   text-align: center;
+
+  &.red {
+    background: rgba($red, 0.3);
+  }
+
+  &.green {
+    background: rgba($green, 0.3);
+  }
+
+  &.yellow {
+    background: rgba($yellow, 0.1);
+  }
 }
 
 .account-number {

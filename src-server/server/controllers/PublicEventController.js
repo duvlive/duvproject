@@ -110,7 +110,7 @@ const PublicEventController = {
   },
 
   /**
-   * @desc Get all Nofications
+   * @desc Get all Public Events
    * @param {object} req - The request sent to the route
    * @param {object} res - The response sent back
    * @return {object} json response

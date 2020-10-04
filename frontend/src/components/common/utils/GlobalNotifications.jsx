@@ -1,12 +1,36 @@
 import React from 'react';
 
-const GlobalNotifications = () =>
-  true ? null : (
-    <div className="global-notifications">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-      tempor incididunt ut labore et dolore magna aliqua. Ac feugiat sed lectus
-      vestibulum mattis ullamcorper.
-    </div>
-  );
+import axios from 'axios';
+import { getTokenFromStore } from 'utils/localStorage';
 
+const GlobalNotifications = () => {
+  const [notifications, setNotifications] = React.useState(null);
+
+  React.useEffect(() => {
+    axios
+      .get('/api/v1/global/notifications', {
+        headers: {
+          'x-access-token': getTokenFromStore(),
+        },
+      })
+      .then(function (response) {
+        const { status, data } = response;
+        console.log('status,data', status, data);
+        // handle success
+        if (status === 200) {
+          setNotifications(data.globalNotification);
+        }
+      })
+      .catch(function (error) {
+        console.log(error.response.data.message);
+        setNotifications([]);
+      });
+  }, []);
+
+  return notifications ? (
+    <div className={`global-notifications ${notifications.color}`}>
+      {notifications.message}
+    </div>
+  ) : null;
+};
 export default GlobalNotifications;

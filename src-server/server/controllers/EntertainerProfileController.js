@@ -467,7 +467,7 @@ const EntertainerProfileController = {
       const { result, pagination } = await getAll(User, {
         // where: userQuery,
         include,
-        limit: 10,
+        limit: 50,
       });
       return res
         .status(200)

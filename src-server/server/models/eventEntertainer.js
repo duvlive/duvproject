@@ -85,24 +85,6 @@ module.exports = function (sequelize, DataTypes) {
       },
     },
     {
-      hooks: {
-        afterCreate(instance) {
-          Rating.create({
-            entertainerId: instance.hiredEntertainer,
-            userId: instance.userId,
-            eventEntertainerId: instance.id,
-          });
-        },
-        afterUpdate(instance) {
-          if (instance.cancelledDate) {
-            Rating.destroy({
-              where: { eventEntertainerId: instance.id },
-            });
-          }
-        },
-      },
-    },
-    {
       classMethods: {
         associate: function (models) {
           // associations can be defined here

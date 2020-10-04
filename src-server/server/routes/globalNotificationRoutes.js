@@ -10,12 +10,15 @@ const globalNotificationsRoutes = (router) => {
       Authentication.validateAdmin
     )
     .post(GlobalNotificationController.createAndUpdateGlobalNotification)
-    .put(GlobalNotificationController.createAndUpdateGlobalNotification);
-
-  router
-    .route('/api/v1/global/notification')
-    .all(Authentication.verifyToken, Authentication.isActiveUser)
+    .put(GlobalNotificationController.createAndUpdateGlobalNotification)
     .get(GlobalNotificationController.getGlobalNotifications);
+
+  router.get(
+    '/api/v1/global/notifications',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    GlobalNotificationController.getUserGlobalNotification
+  );
 };
 
 export default globalNotificationsRoutes;

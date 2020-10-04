@@ -73,9 +73,9 @@ export default [
     name: 'Miscelleneous',
     menus: [
       {
-        title: 'Events',
-        to: '/admin/events',
-        icon: 'calendar',
+        title: 'Global Notifications',
+        to: '/admin/global-notifications',
+        icon: 'circle',
       },
       {
         title: 'Badges',
