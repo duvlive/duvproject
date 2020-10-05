@@ -707,10 +707,16 @@ a:hover {
 .global-notifications {
   background: rgba($blue, 0.1);
   color: $white;
-  font-size: 0.85rem;
-  padding: 1.25rem 2rem;
-  margin-top: 3.5rem;
   text-align: center;
+  font-size: 0.75rem;
+  padding: 0.75rem 2rem;
+  margin-top: 5.5rem;
+
+  @include media-breakpoint-up(md) {
+    font-size: 0.85rem;
+    padding: 1.25rem 2rem;
+    margin-top: 3.5rem;
+  }
 
   &.red {
     background: rgba($red, 0.3);
