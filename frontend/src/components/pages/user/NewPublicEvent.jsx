@@ -22,7 +22,7 @@ import Button from 'components/forms/Button';
 import Image from 'components/common/utils/Image';
 import UploadArticleImage from 'components/common/utils/UploadArticleImage';
 
-const NewEvent = () => {
+const NewPublicEvent = () => {
   return (
     <BackEndPage title="New Events">
       <div className="main-app">
@@ -149,7 +149,7 @@ const PublicEventDetails = ({ image, setImage }) => {
               label="Event End Date"
               minDate={addDays(new Date(), 1)}
               name="endTime"
-              placeholder="Event Date"
+              placeholder="Event End Time"
               showTimeSelect
               timeIntervals={15}
             />
@@ -163,10 +163,10 @@ const PublicEventDetails = ({ image, setImage }) => {
             />
             <Input
               formGroupClassName="col-md-6"
-              label="Event Location"
+              label="Event Address"
               name="location"
               optional
-              placeholder="Event Location / Online Event Link"
+              placeholder="Type 'Online' for online events"
             />
           </div>
           <Input
@@ -194,8 +194,12 @@ const PublicEventDetails = ({ image, setImage }) => {
 };
 
 PublicEventDetails.propTypes = {
-  image: PropTypes.any.isRequired,
+  image: PropTypes.any,
   setImage: PropTypes.func.isRequired,
 };
 
-export default NewEvent;
+NewPublicEvent.defaultProps = {
+  image: null,
+};
+
+export default NewPublicEvent;
