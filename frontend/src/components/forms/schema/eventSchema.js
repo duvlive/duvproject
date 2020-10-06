@@ -45,6 +45,6 @@ export const publicEventSchema = {
   organizer: required('Event Organizer'),
   eventLink: required('Event Link'),
   venue: required('Event Venue'),
-  location: optionalValidation(stringValidation('Event Location', 2)),
+  location: optionalValidation(stringValidation('Event Address', 2)),
   description: optionalValidation(stringValidation('More Information', 20)),
 };

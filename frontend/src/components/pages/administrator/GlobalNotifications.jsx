@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import Image from 'components/common/utils/Image';
 import ProfileAvatar from 'assets/img/avatar/profile.png';
-import { Link } from '@reach/router';
 import AdminList from 'components/common/pages/AdminList';
 import { twoDigitNumber } from 'utils/helpers';
 import { getDateTime } from 'utils/date-helpers';
@@ -21,6 +20,7 @@ import { USER_TYPES } from 'utils/constants';
 import Humanize from 'humanize-plus';
 import DatePicker from 'components/forms/DatePicker';
 import { addDays } from 'date-fns';
+import DuvLiveModal from 'components/custom/Modal';
 
 const userTypes = Object.keys(USER_TYPES);
 
@@ -102,12 +102,11 @@ const GlobalNotificationsRow = ({
     </td>
 
     <td className="align-middle">
-      <Link
-        className="btn btn-sm btn-transparent btn-danger"
-        to={`/admin/badges/${id}`}
-      >
-        View
-      </Link>
+      <DuvLiveModal body={message} title="Notification">
+        <button className="btn btn-sm btn-transparent btn-danger">
+          View Message
+        </button>
+      </DuvLiveModal>
     </td>
   </tr>
 );
