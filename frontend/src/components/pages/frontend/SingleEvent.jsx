@@ -8,7 +8,7 @@ import Image from 'components/common/utils/Image';
 import { Link } from '@reach/router';
 import LoadingScreen from 'components/common/layout/LoadingScreen';
 import AlertMessage from 'components/common/utils/AlertMessage';
-import { createMarkup } from 'utils/helpers';
+import { createMarkup, generateLink } from 'utils/helpers';
 import { getDateTime, getEventDate } from 'utils/date-helpers';
 import defaultImage from 'assets/img/events/public-event.jpg';
 
@@ -111,7 +111,7 @@ const EventSection = ({ event }) => (
           {event.description}
 
           <h5 className="font-weight-normal mt-5">More Information</h5>
-          {event.eventLink}
+          {generateLink(event.eventLink)}
         </Col>
         <Col sm="4">
           <div className={`card card-custom card-tiles card-blue no-br`}>

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col } from 'reactstrap';
 import axios from 'axios';
-import { createMarkup } from 'utils/helpers';
+import { createMarkup, generateLink } from 'utils/helpers';
 import Image from 'components/common/utils/Image';
 import { Link } from '@reach/router';
 import BackEndPage from 'components/common/layout/BackEndPage';
@@ -87,7 +87,7 @@ const EventSection = ({ event }) => (
           {event.description}
 
           <h5 className="font-weight-normal mt-5">More Information</h5>
-          {event.eventLink}
+          {generateLink(event.eventLink)}
         </Col>
         <Col sm="4">
           <div className={`card card-custom card-tiles card-blue no-br`}>

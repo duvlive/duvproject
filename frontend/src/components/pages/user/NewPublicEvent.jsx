@@ -175,7 +175,11 @@ const PublicEventDetails = ({ image, setImage }) => {
             placeholder="Venue Name / Online Event"
           />
 
-          <Input label="Event Link" name="eventLink" placeholder="Event Link" />
+          <Input
+            label="Event Link"
+            name="eventLink"
+            placeholder="Event Website Link or type 'None'"
+          />
           <TextArea
             label="Event Description"
             name="description"
