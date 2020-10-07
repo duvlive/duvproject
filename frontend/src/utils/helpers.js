@@ -242,3 +242,34 @@ export const priceCalculatorHelper = (
     handlingPlus,
   };
 };
+
+export const isValidURL = (str) => {
+  const pattern = new RegExp(
+    '^(https?:\\/\\/)?' + // protocol
+      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+      '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+      '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+      '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+      '(\\#[-a-z\\d_]*)?$',
+    'i'
+  ); // fragment locator
+  return !!pattern.test(str);
+};
+
+export const generateLink = (link) => {
+  if (!link) {
+    return '';
+  }
+  return isValidURL(link) ? (
+    <a
+      href={link.indexOf('://') === -1 ? `http://${link}` : link}
+      rel="noopener noreferrer"
+      target="_blank"
+      title={link}
+    >
+      {link}
+    </a>
+  ) : (
+    <>{link}</>
+  );
+};
