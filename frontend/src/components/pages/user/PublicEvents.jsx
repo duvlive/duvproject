@@ -50,7 +50,7 @@ const PublicEvents = () => {
               <span className="icon icon-events"></span> New Public Event
             </Link>
           </div>
-          <h4 className="col-sm-12">Your Public Events</h4>
+          <h4 className="mb-3">Your Public Events</h4>
           <LoadItems
             items={publicEvents}
             loadingText="Loading your PublicEvents"
@@ -106,11 +106,6 @@ const SingleEvent = ({
           </Link>
         </div>
         <div className="event-card__body text-left">
-          {/* <div className="event-card__datetime">
-              <span className="event-card__weekday">{weekDay},</span>
-              <span className="event-card__date"> {fullDate},</span>
-              <span className="event-card__time">{getTime(startTime)}</span>
-            </div> */}
           <div className="event-card__info">
             <h6 className="event-card__title text-truncate">{title}</h6>
             <span className="event-card__date">

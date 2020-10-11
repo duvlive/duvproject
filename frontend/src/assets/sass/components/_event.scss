@@ -25,26 +25,6 @@
     background: $white;
   }
 
-  &__datetime {
-    width: 6.5rem;
-    height: 100%;
-    float: left;
-    background: rgba(#111111, 0.8);
-    color: white;
-    font-family: $headings-font-family;
-    font-size: 0.85rem;
-    text-align: center;
-  }
-
-  &__weekday,
-  &__date {
-    display: block;
-  }
-
-  &__weekday {
-    margin-top: 1rem;
-  }
-
   &__status {
     position: absolute;
     right: 1rem;

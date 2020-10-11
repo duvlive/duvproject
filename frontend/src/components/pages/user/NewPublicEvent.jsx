@@ -54,6 +54,18 @@ const NewPublicEvent = ({ id }) => {
       <div className="main-app">
         <TopMessage message="Public Events" />
 
+        {id && event.status !== null && (
+          <AlertMessage
+            message={
+              <span>
+                Updating an approved or rejected event would be reviewed by the
+                administrator for approval.
+              </span>
+            }
+            type="info"
+          />
+        )}
+
         <section className="app-content">
           {id ? (
             <EditEventForm event={event} loading={loading} />

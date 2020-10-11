@@ -92,6 +92,7 @@ const PublicEventController = {
         eventLink,
         organizer,
         startTime,
+        status: null,
         venue,
       },
       { where: { id, userId: req.user.id } }

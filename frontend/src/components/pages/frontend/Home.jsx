@@ -178,9 +178,9 @@ const LiveYourLifeSection = () => {
 const EntertainerSection = ({ entertainers, loading }) => (
   <section className="entertainers spacer">
     <div className="container-fluid">
-      <h2 className="header title-border">
-        <span>ENTERTAINERS</span>
-      </h2>
+      <Link to="/upcoming-events">
+        <h2 className="header title-border">ENTERTAINERS</h2>
+      </Link>
       <Row className="pt-5">
         {loading ? (
           <LoadingScreen loading={loading} text="Loading Entertainers" />
@@ -217,9 +217,11 @@ EntertainerSection.propTypes = {
 const EventSection = ({ events, loading }) => (
   <section className="events spacer">
     <div className="container-fluid">
-      <h2 className="header title-border">
-        UPCOMING <span>EVENTS</span>
-      </h2>
+      <Link to="/upcoming-events">
+        <h2 className="header title-border">
+          UPCOMING <span>EVENTS</span>
+        </h2>
+      </Link>
       <Row className="pt-5">
         {loading ? (
           <LoadingScreen loading={loading} text="Loading Entertainers" />
@@ -234,6 +236,16 @@ const EventSection = ({ events, loading }) => (
           />
         )}
       </Row>
+      {events && events.length > 3 && (
+        <Row className="pt-3">
+          <Link
+            className="btn btn-danger btn-transparent btn-lg btn-wide"
+            to="/upcoming-events"
+          >
+            View More Events
+          </Link>
+        </Row>
+      )}
     </div>
   </section>
 );
