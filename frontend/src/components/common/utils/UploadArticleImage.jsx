@@ -66,7 +66,7 @@ const UploadArticleImage = ({
           onChange={onChangeHandler}
           type="file"
         />
-        <label className="custom-file-label" for="image">
+        <label className="custom-file-label" htmlFor="image">
           {loading ? (
             <>
               <Loading /> &nbsp; &nbsp; Uploading Image

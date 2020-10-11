@@ -45,21 +45,29 @@
     margin-top: 1rem;
   }
 
+  &__status {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+  }
+  &__date {
+    font-size: 0.75rem;
+    color: $red-300;
+  }
+
   &__info {
-    padding-left: 7.5rem;
-    padding-right: 1rem;
+    padding: 0 1.5rem 2rem;
   }
 
   &__title {
-    font-size: 0.9rem;
-    margin-top: 1.25rem;
+    font-size: 1rem;
+    margin: 1rem 0 0;
     font-family: $font-family-sans-serif;
     color: rgba($black, 0.8);
   }
 
   &__address {
-    font-size: 0.8rem;
-    margin: 0.65rem 0 0;
+    font-size: 0.75rem;
     font-family: $headings-font-family;
     color: $text-color;
   }
@@ -80,12 +88,6 @@
       }
       &__datetime {
         background: $blue-400;
-      }
-      &__address {
-        color: $secondary;
-      }
-      &__ticket {
-        color: $red-300;
       }
     }
   }

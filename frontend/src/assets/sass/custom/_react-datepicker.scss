@@ -19,13 +19,15 @@ $datepicker__triangle-size: 8px !default;
 @import '~react-datepicker/src/stylesheets/mixins';
 @import '~react-datepicker/src/stylesheets/datepicker';
 
+.react-datepicker__time-container {
+  @include media-breakpoint-down(sm) {
+    margin-right: -85px;
+  }
+}
+
 .react-datepicker,
 .react-datepicker__time-container .react-datepicker__time {
   background-color: $datepicker__background-color;
-  @include media-breakpoint-down(sm) {
-    margin-left: -2rem;
-    margin-right: -2rem;
-  }
 }
 
 .react-datepicker-popper[data-placement^='top'] .react-datepicker__triangle,

@@ -37,3 +37,17 @@ export const getTimeOfDay = (date) => {
 export const getNumberOfDaysToEvent = (eventDate) =>
   parse(eventDate) > Date.now() &&
   differenceInCalendarDays(eventDate, Date.now()) + ' days';
+
+export const getPublicEventDate = (startTime, endTime) => {
+  const startDate = getShortDate(startTime);
+  const endDate = getShortDate(endTime);
+  const sameDay = startDate === endDate;
+
+  const sameDayFormat = `${format(parse(startTime), 'ddd, MMM. D')}`;
+  const differentDayFormat = `${format(
+    parse(startTime),
+    'ddd, MMM. D'
+  )} - ${format(parse(endTime), 'ddd, MMM. D')}`;
+
+  return sameDay ? sameDayFormat : differentDayFormat;
+};

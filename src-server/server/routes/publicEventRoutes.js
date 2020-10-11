@@ -25,6 +25,12 @@ const publicEventRoutes = (router) => {
     PublicEventController.getPublicEventsForAdmin
   );
   router.get(
+    '/api/v1/public-event/:id',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    PublicEventController.getPublicEventByID
+  );
+  router.get(
     '/api/v1/admin/public-event/:id',
     Authentication.verifyToken,
     Authentication.isActiveUser,

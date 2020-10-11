@@ -35,7 +35,7 @@ const UserRouter = () => (
     <ViewRequest path="/request/view/:applicationId" />
     <Events path="/events" />
     <PublicEvents path="/public-events" />
-    <ViewPublicEvent path="public-events/view/:slug" />
+    <ViewPublicEvent path="public-events/view/:id" />
     <Notifications path="/notifications" />
     <UserHelp path="/help" />
     <Payments path="/payments-history" />
@@ -44,6 +44,7 @@ const UserRouter = () => (
     <RecommendedEntertainers path="/entertainer/recommended/:eventEntertainerId" />
     <NewEvent path="/events/new" />
     <NewPublicEvent path="/public-events/new" />
+    <NewPublicEvent path="/public-events/edit/:id" />
     <NewEvent path="/hire-entertainer" />
     <AddEntertainerToEvent path="events/:id/add-entertainer" />
     <AddEntertainerToEvent path="events/:id/add-entertainer/new-event" />
