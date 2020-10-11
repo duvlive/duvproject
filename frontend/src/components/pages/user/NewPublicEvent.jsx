@@ -22,6 +22,9 @@ import Button from 'components/forms/Button';
 import Image from 'components/common/utils/Image';
 import UploadArticleImage from 'components/common/utils/UploadArticleImage';
 import LoadingScreen from 'components/common/layout/LoadingScreen';
+import { getStates, getLgas } from 'data/naija-states-and-lgas';
+import Select from 'components/forms/Select';
+import DynamicSelect from 'components/forms/DynamicSelect';
 
 const NewPublicEvent = ({ id }) => {
   const [event, setEvent] = React.useState({});
@@ -251,6 +254,27 @@ const PublicEventDetails = ({ image, setImage }) => {
               name="location"
               optional
               placeholder="Type 'Online' for online events"
+            />
+          </div>
+          <div className="form-row">
+            <Select
+              blankOption="Select State"
+              formGroupClassName="col-md-6"
+              label="State"
+              name="state"
+              optional
+              options={getStates()}
+              placeholder="State"
+            />
+            <DynamicSelect
+              blankOption="Select City/LGA"
+              dependentOn="state"
+              formGroupClassName="col-md-6"
+              label="City"
+              name="city"
+              optional
+              options={getLgas}
+              placeholder="City / LGA"
             />
           </div>
           <Input
