@@ -44,7 +44,7 @@ const PublicEventRow = ({
       className="img-fluid"
       name={`gallery-${number}-${title}`}
       rounded={false}
-      src={mainImage}
+      src={mainImage || ''}
     />
   );
 

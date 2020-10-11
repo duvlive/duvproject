@@ -78,7 +78,11 @@ const EventSection = ({ event }) => (
           <h6 className="pt-3 text-muted">Status: {getStatus(event.status)}</h6>
         </Col>
       </Row>
-      <Image.Big className="mt-3" src={event.mainImage || defaultImage} />
+      <Image.Big
+        className="mt-3"
+        name={event.title}
+        src={event.mainImage || defaultImage}
+      />
       <Row className="mt-5">
         <Col sm="8">
           <h2 className="header font-weight-light pb-3">

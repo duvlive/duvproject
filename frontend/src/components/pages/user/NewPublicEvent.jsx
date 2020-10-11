@@ -189,7 +189,7 @@ const PublicEventDetails = ({ image, setImage }) => {
           />
 
           <div className="col-sm-8">
-            <PublicEventImage image={image} setImage={setImage} />
+            <PublicEventImage image={image || ''} setImage={setImage} />
           </div>
         </form>
       </div>
