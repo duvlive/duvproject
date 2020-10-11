@@ -293,6 +293,7 @@ const PublicEventController = {
               {
                 slug: { [Op.ne]: slug },
               },
+              { endTime: { [Op.gte]: Sequelize.literal('NOW()') } },
             ],
           },
           include: [userModel],
