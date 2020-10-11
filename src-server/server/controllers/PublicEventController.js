@@ -33,6 +33,8 @@ const PublicEventController = {
       endTime,
       eventLink,
       venue,
+      city,
+      state,
     } = req.body;
 
     const error = {
@@ -55,6 +57,7 @@ const PublicEventController = {
       // Create Event
       const slug = slugify(title);
       return PublicEvent.create({
+        city,
         description,
         endTime,
         slug,
@@ -64,6 +67,7 @@ const PublicEventController = {
         eventLink,
         organizer,
         startTime,
+        state,
         userId,
         venue,
       })
@@ -84,6 +88,7 @@ const PublicEventController = {
     // Update Event
     return PublicEvent.update(
       {
+        city,
         description,
         endTime,
         title,
@@ -93,6 +98,7 @@ const PublicEventController = {
         organizer,
         startTime,
         status: null,
+        state,
         venue,
       },
       { where: { id, userId: req.user.id } }

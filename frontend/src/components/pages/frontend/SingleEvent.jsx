@@ -126,6 +126,8 @@ const EventSection = ({ event }) => (
                 title="End Time"
               />
               <SingleEvent.Details details={event.venue} title="Venue" />
+              <SingleEvent.Details details={event.state} title="State" />
+              <SingleEvent.Details details={event.city} title="City" />
               <SingleEvent.Details
                 details={event.organizer}
                 title="Organizer"
@@ -173,17 +175,25 @@ const BackToHireEvents = () => (
   </section>
 );
 
-SingleEvent.Details = ({ title, details }) => (
-  <div className="event-details">
-    <p className="event-details__title">{title}</p>
-    <div
-      className="event-details__details"
-      dangerouslySetInnerHTML={createMarkup(details)}
-    />
-  </div>
-);
+SingleEvent.Details = ({ title, details }) => {
+  if (!details) {
+    return null;
+  }
+  return (
+    <div className="event-details">
+      <p className="event-details__title">{title}</p>
+      <div
+        className="event-details__details"
+        dangerouslySetInnerHTML={createMarkup(details)}
+      />
+    </div>
+  );
+};
 SingleEvent.Details.propTypes = {
-  details: PropTypes.string.isRequired,
+  details: PropTypes.string,
   title: PropTypes.string.isRequired,
+};
+SingleEvent.Details.defaultProps = {
+  details: null,
 };
 export default SingleEvent;

@@ -50,6 +50,14 @@ module.exports = function (model, Sequelize) {
         type: Sequelize.BOOLEAN,
         allowNull: true,
       },
+      city: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      state: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
     },
     {
       classMethods: {
