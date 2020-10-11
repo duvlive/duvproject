@@ -13,14 +13,14 @@ import defaultImage from 'assets/img/events/public-event.jpg';
 import LoadingScreen from 'components/common/layout/LoadingScreen';
 import { getStatus } from '../band-member/Gallery';
 
-const ViewPublicEvent = ({ slug }) => {
+const ViewPublicEvent = ({ id }) => {
   const [event, setEvent] = React.useState({});
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    slug &&
+    id &&
       axios
-        .get(`/api/v1/public-events/${slug}`, {
+        .get(`/api/v1/public-event/${id}`, {
           headers: {
             'x-access-token': getTokenFromStore(),
           },
@@ -37,7 +37,7 @@ const ViewPublicEvent = ({ slug }) => {
         .catch(function (error) {
           setLoading(false);
         });
-  }, [slug]);
+  }, [id]);
   return (
     <BackEndPage title="View Public Event">
       <div className="main-app">
@@ -54,71 +54,69 @@ const ViewPublicEvent = ({ slug }) => {
 };
 
 ViewPublicEvent.propTypes = {
-  slug: PropTypes.string,
+  id: PropTypes.any,
 };
 
 ViewPublicEvent.defaultProps = {
-  slug: null,
+  id: null,
 };
 
 const EventSection = ({ event }) => (
   <section className="single-event spacer--4">
-    <div className="container-fluid">
-      <h2 className="single-event__title text-uppercase">{event.title}</h2>
-      <Row>
-        <Col>
-          <div className="single-event__location">
-            <span className="icon-location" />
-            {event.location}
-          </div>
-          <div className="single-event__date-time">
-            <span className="icon-calendar" />
-            {getEventDate(event.startTime)}
-          </div>
-          <h6 className="pt-3 text-muted">Status: {getStatus(event.status)}</h6>
-        </Col>
-      </Row>
-      <Image.Big
-        className="mt-3"
-        name={event.title}
-        src={event.mainImage || defaultImage}
-      />
-      <Row className="mt-5">
-        <Col sm="8">
-          <h2 className="header font-weight-light pb-3">
-            ABOUT <span>EVENT</span>
-          </h2>
-          {event.description}
+    <h2 className="single-event__title text-uppercase">{event.title}</h2>
+    <Row>
+      <Col>
+        <div className="single-event__location">
+          <span className="icon-location" />
+          {event.location}
+        </div>
+        <div className="single-event__date-time">
+          <span className="icon-calendar" />
+          {getEventDate(event.startTime)}
+        </div>
+        <h6 className="pt-3 text-muted">Status: {getStatus(event.status)}</h6>
+      </Col>
+    </Row>
+    <Image.Big
+      className="mt-3"
+      name={event.title}
+      src={event.mainImage || defaultImage}
+    />
+    <Row className="mt-5">
+      <Col sm="8">
+        <h2 className="header font-weight-light pb-3">
+          ABOUT <span>EVENT</span>
+        </h2>
+        {event.description}
 
-          <h5 className="font-weight-normal mt-5">More Information</h5>
-          {generateLink(event.eventLink)}
-        </Col>
-        <Col sm="4">
-          <div className={`card card-custom card-tiles card-blue no-br`}>
-            <div className="card-body">
-              <h4 className="subtitle--3 text-danger mb-3">Details</h4>
-              <ViewPublicEvent.Details
-                details={getDateTime(event.startTime)}
-                title="Start Time"
-              />
-              <ViewPublicEvent.Details
-                details={getDateTime(event.endTime)}
-                title="End Time"
-              />
-              <ViewPublicEvent.Details details={event.venue} title="Venue" />
-              <ViewPublicEvent.Details
-                details={event.organizer}
-                title="Organizer"
-              />
-              <ViewPublicEvent.Details
-                details={event.location}
-                title="Location"
-              />
-            </div>
+        <h5 className="font-weight-normal mt-5">More Information</h5>
+        {generateLink(event.eventLink)}
+      </Col>
+      <Col sm="4">
+        <div className={`card card-custom card-tiles card-blue no-br`}>
+          <div className="card-body">
+            <h4 className="subtitle--3 text-danger mb-3">Details</h4>
+            <ViewPublicEvent.Details
+              details={getDateTime(event.startTime)}
+              title="Start Time"
+            />
+            <ViewPublicEvent.Details
+              details={getDateTime(event.endTime)}
+              title="End Time"
+            />
+            <ViewPublicEvent.Details details={event.venue} title="Venue" />
+            <ViewPublicEvent.Details
+              details={event.organizer}
+              title="Organizer"
+            />
+            <ViewPublicEvent.Details
+              details={event.location}
+              title="Location"
+            />
           </div>
-        </Col>
-      </Row>
-    </div>
+        </div>
+      </Col>
+    </Row>
   </section>
 );
 
@@ -128,14 +126,12 @@ EventSection.propTypes = {
 
 const BackToHireEvents = () => (
   <section className="mt-5">
-    <div className="container-fluid">
-      <Link
-        className="btn btn-info btn-transparent btn-lg"
-        to="/user/public-events"
-      >
-        Back to Public Events
-      </Link>
-    </div>
+    <Link
+      className="btn btn-info btn-transparent btn-lg"
+      to="/user/public-events"
+    >
+      Back to Public Events
+    </Link>
   </section>
 );
 

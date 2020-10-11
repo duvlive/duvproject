@@ -8,10 +8,11 @@ import { getTokenFromStore } from 'utils/localStorage';
 import LoadItems from 'components/common/utils/LoadItems';
 import { Link } from '@reach/router';
 import { Col, Card, CardImg, CardImgOverlay } from 'reactstrap';
-import { format, parse } from 'date-fns';
-import { getTime } from 'utils/date-helpers';
+import { getPublicEventDate } from 'utils/date-helpers';
 import defaultImage from 'assets/img/events/public-event.jpg';
 import { getStatus } from '../entertainer/Gallery';
+import { approval } from '../entertainer/Gallery';
+import { getRequestStatusIcon } from 'utils/helpers';
 
 const PublicEvents = () => {
   const [publicEvents, setPublicEvents] = React.useState(null);
@@ -43,7 +44,7 @@ const PublicEvents = () => {
         <section className="app-content">
           <div className="text-right">
             <Link
-              className="btn btn-danger btn-transparent btn-wide"
+              className="btn btn-danger mb-3 btn-transparent btn-wide"
               to="/user/public-events/new"
             >
               <span className="icon icon-events"></span> New Public Event
@@ -76,46 +77,65 @@ PublicEventsRowList.propTypes = {
 };
 
 const SingleEvent = ({
+  endTime,
+  id,
   location,
   mainImage,
-  slug,
   startTime,
   status,
   title,
 }) => {
-  const parsedEventDate = parse(startTime);
-  const weekDay = format(parsedEventDate, 'ddd');
-  const fullDate = format(parsedEventDate, 'MMM D');
+  const viewEventLink = `/user/public-events/view/${id}`;
 
   return (
-    <Col md={8} sm={10} lg={6}>
-      <Link to={`/user/public-events/view/${slug}`}>
-        <Card className="event-card">
-          <div className="event-card__image-container">
+    <Col lg={6} md={8} sm={10}>
+      <Card className="event-card">
+        <div className="event-card__image-container">
+          <Link to={viewEventLink}>
             <CardImg
               alt={title}
               className="img-fluid"
               src={mainImage || defaultImage}
               top
             />
-            <CardImgOverlay />
-          </div>
-          <div className="event-card__body text-left">
-            <div className="event-card__datetime">
+            <CardImgOverlay>
+              <span className="event-card__status">
+                {getRequestStatusIcon(approval[getStatus(status)].text)}{' '}
+              </span>
+            </CardImgOverlay>
+          </Link>
+        </div>
+        <div className="event-card__body text-left">
+          {/* <div className="event-card__datetime">
               <span className="event-card__weekday">{weekDay},</span>
               <span className="event-card__date"> {fullDate},</span>
               <span className="event-card__time">{getTime(startTime)}</span>
-            </div>
-            <div className="event-card__info">
-              <h6 className="event-card__title text-truncate">{title}</h6>
-              <p className="event-card__address">{location}</p>
-              <div className="event-card__ticket">
-                Status: {getStatus(status)}
-              </div>
+            </div> */}
+          <div className="event-card__info">
+            <h6 className="event-card__title text-truncate">{title}</h6>
+            <span className="event-card__date">
+              {getPublicEventDate(startTime, endTime)}
+            </span>
+            <p className="event-card__address">{location}</p>
+
+            <div className="text-left">
+              <Link
+                className="btn btn-danger btn-sm"
+                to={`/user/public-events/edit/${id}`}
+              >
+                Edit Event
+              </Link>
+              &nbsp;&nbsp;&nbsp;
+              <Link
+                className="btn btn-info btn-sm"
+                to={`/user/public-events/view/${id}`}
+              >
+                View Event
+              </Link>
             </div>
           </div>
-        </Card>
-      </Link>
+        </div>
+      </Card>
     </Col>
   );
 };
@@ -123,9 +143,9 @@ const SingleEvent = ({
 SingleEvent.propTypes = {
   endTime: PropTypes.string.isRequired,
   eventLink: PropTypes.string.isRequired,
+  id: PropTypes.any.isRequired,
   location: PropTypes.string.isRequired,
   mainImage: PropTypes.string,
-  slug: PropTypes.string.isRequired,
   startTime: PropTypes.string.isRequired,
   status: PropTypes.any,
   title: PropTypes.string.isRequired,

@@ -10,7 +10,7 @@ import {
 import Label from './Label';
 import ReactDatePicker from 'react-datepicker';
 import { getIn } from 'formik';
-import { parse } from 'date-fns';
+import { isValid, parse } from 'date-fns';
 
 const DatePicker = ({
   name,
@@ -45,6 +45,21 @@ const DatePicker = ({
       />
       <Field name={name}>
         {({ form }) => {
+          let selectedValue = null;
+
+          if (
+            typeof getIn(formik.values, name) === 'object' &&
+            getIn(formik.values, name).date &&
+            isValid(parse(getIn(formik.values, name).date))
+          ) {
+            selectedValue = parse(getIn(formik.values, name).date);
+          } else if (
+            getIn(formik.values, name) !== '' &&
+            isValid(parse(getIn(formik.values, name)))
+          ) {
+            selectedValue = parse(getIn(formik.values, name));
+          }
+
           return (
             <ReactDatePicker
               {...props}
@@ -77,15 +92,7 @@ const DatePicker = ({
                 }
               }}
               placeholderText={placeholder}
-              selected={
-                getIn(formik.values, name) !== ''
-                  ? parse(
-                      (getIn(formik.values, name) &&
-                        getIn(formik.values, name).date) ||
-                        new Date()
-                    )
-                  : null
-              }
+              selected={selectedValue}
               showTimeSelect={showTimeSelect}
               showTimeSelectOnly={showTimeSelectOnly}
               timeCaption={timeCaption}

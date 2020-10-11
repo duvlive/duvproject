@@ -21,42 +21,106 @@ import defaultImage from 'assets/img/events/public-event.jpg';
 import Button from 'components/forms/Button';
 import Image from 'components/common/utils/Image';
 import UploadArticleImage from 'components/common/utils/UploadArticleImage';
+import LoadingScreen from 'components/common/layout/LoadingScreen';
 
-const NewPublicEvent = () => {
+const NewPublicEvent = ({ id }) => {
+  const [event, setEvent] = React.useState({});
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    id &&
+      axios
+        .get(`/api/v1/public-event/${id}`, {
+          headers: {
+            'x-access-token': getTokenFromStore(),
+          },
+        })
+        .then(function (response) {
+          const { status, data } = response;
+          console.log('data', data);
+          // handle success
+          if (status === 200) {
+            setEvent(data.event);
+            setLoading(false);
+          }
+        })
+        .catch(function (error) {
+          setLoading(false);
+        });
+  }, [id]);
+
   return (
-    <BackEndPage title="New Events">
+    <BackEndPage title={id ? 'Edit Event' : 'New Event'}>
       <div className="main-app">
         <TopMessage message="Public Events" />
 
         <section className="app-content">
-          <NewEventForm />
+          {id ? (
+            <EditEventForm event={event} loading={loading} />
+          ) : (
+            <NewEventForm />
+          )}
         </section>
       </div>
     </BackEndPage>
   );
 };
 
-const NewEventForm = () => {
+NewPublicEvent.propTypes = {
+  id: PropTypes.any,
+};
+
+NewPublicEvent.defaultProps = {
+  id: null,
+};
+
+const EditEventForm = ({ loading, event }) =>
+  loading ? (
+    <LoadingScreen loading={loading} text="Loading Event Details" />
+  ) : (
+    <NewEventForm eventDetails={event} />
+  );
+
+EditEventForm.propTypes = {
+  event: PropTypes.object,
+  loading: PropTypes.bool.isRequired,
+};
+
+EditEventForm.defaultProps = {
+  event: {},
+};
+
+const NewEventForm = ({ eventDetails }) => {
+  const defaultImage = eventDetails.mainImage || null;
   const [message, setMessage] = React.useState(null);
-  const [image, setImage] = React.useState(null);
+  const [image, setImage] = React.useState(defaultImage);
+
+  console.log('eventDetails', eventDetails);
 
   return (
     <Formik
-      initialValues={setInitialValues(publicEventSchema)}
+      initialValues={setInitialValues(publicEventSchema, {
+        ...eventDetails,
+        startTime: { date: eventDetails.startTime },
+        endTime: { date: eventDetails.endTime },
+      })}
       onSubmit={(event, actions) => {
         const startTime = event.startTime.date;
         const endTime = event.endTime.date;
         const payload = {
+          ...eventDetails,
           ...event,
           startTime: startTime,
           endTime: endTime,
           mainImage: image,
         };
         console.log('event, payload', event, payload);
-        axios
-          .post('/api/v1/public-events', payload, {
-            headers: { 'x-access-token': getTokenFromStore() },
-          })
+        axios({
+          method: eventDetails ? 'put' : 'post',
+          url: '/api/v1/public-events',
+          data: payload,
+          headers: { 'x-access-token': getTokenFromStore() },
+        })
           .then(function (response) {
             const { status } = response;
             if (status === 200) {
@@ -84,7 +148,7 @@ const NewEventForm = () => {
               loading={isSubmitting}
               onClick={handleSubmit}
             >
-              Submit Public Event
+              {eventDetails ? 'Update' : 'Submit'} Public Event
             </Button>
             <DisplayFormikState {...props} />
           </div>
@@ -93,6 +157,14 @@ const NewEventForm = () => {
       validationSchema={createSchema(publicEventSchema)}
     />
   );
+};
+
+NewEventForm.propTypes = {
+  eventDetails: PropTypes.object,
+};
+
+NewEventForm.defaultProps = {
+  eventDetails: {},
 };
 
 const PublicEventImage = ({ image, setImage }) => {
@@ -202,7 +274,7 @@ PublicEventDetails.propTypes = {
   setImage: PropTypes.func.isRequired,
 };
 
-NewPublicEvent.defaultProps = {
+PublicEventDetails.defaultProps = {
   image: null,
 };
 
