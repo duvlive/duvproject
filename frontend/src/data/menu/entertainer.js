@@ -129,11 +129,6 @@ const othersMenu = {
       icon: 'loop',
     },
     {
-      title: 'Help',
-      to: '/entertainer/help',
-      icon: 'help',
-    },
-    {
       title: 'Logout',
       to: '/logout',
       icon: 'logout',
