@@ -11,6 +11,7 @@ const Events = ({
   mainImage,
   location,
   slug,
+  state,
   startTime,
   endTime,
   title,
@@ -37,7 +38,7 @@ const Events = ({
               <span className="event-card__date">
                 {getPublicEventDate(startTime, endTime)}
               </span>
-              <p className="event-card__address">{location}</p>
+              <p className="event-card__address">{state || location}</p>
             </div>
           </div>
         </Card>
@@ -47,18 +48,20 @@ const Events = ({
 };
 
 Events.propTypes = {
-  isDashboard: PropTypes.bool,
   endTime: PropTypes.string.isRequired,
+  isDashboard: PropTypes.bool,
   location: PropTypes.string.isRequired,
   mainImage: PropTypes.string,
   slug: PropTypes.string.isRequired,
   startTime: PropTypes.string.isRequired,
+  state: PropTypes.string,
   title: PropTypes.string.isRequired,
 };
 
 Events.defaultProps = {
   isDashboard: false,
   mainImage: null,
+  state: null,
 };
 
 Events.List = ({ lists }) =>

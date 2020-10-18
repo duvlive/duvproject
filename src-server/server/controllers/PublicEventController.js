@@ -277,8 +277,19 @@ const PublicEventController = {
    * @return {object} json response
    */
   async getPublicEventsForFrontend(req, res) {
-    const { offset, limit } = req.query;
+    const { offset, limit, startTime } = req.query;
 
+    let whereQuery = {};
+    const publicEventsStaticKeys = ['state'];
+
+    publicEventsStaticKeys.forEach((key) => {
+      if (req.query[key]) {
+        whereQuery[key] = req.query[key];
+      }
+    });
+    if (startTime) {
+      whereQuery.startTime = { [Op.gte]: startTime };
+    }
     try {
       const options = {
         offset: offset || 0,
@@ -286,6 +297,7 @@ const PublicEventController = {
         where: {
           status: true,
           endTime: { [Op.gte]: Sequelize.literal('NOW()') },
+          ...whereQuery,
         },
         order: [['startTime', 'ASC']],
         include: [
