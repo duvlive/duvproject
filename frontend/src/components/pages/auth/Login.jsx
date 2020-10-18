@@ -59,24 +59,27 @@ const Content = ({ redirectTo, sid, token }) => {
               <section>
                 <h5 className="header font-weight-normal mb-4">Login</h5>
                 <LoginForm redirectTo={redirectTo} sid={sid} token={token} />
-              </section>
-              <section className="auth__social-media">
-                <p className="auth__social-media--text">or login with:</p>
-                <a
-                  className="auth__social-media--icons"
-                  href={`${getProxy()}/api/v1/auth/google`}
-                >
-                  <span className="icon-google" />
-                </a>
-                {/* <a
+
+                <p className="auth__social-media--text text-center">OR:</p>
+                <div className="mt-4 text-center auth__social-media">
+                  <a
+                    className="auth__social-media--icons"
+                    href={`${getProxy()}/api/v1/auth/google`}
+                  >
+                    <span className="icon-google" /> <br />
+                    <small className="small--2">Login with Google</small>
+                  </a>
+                  {/* <a
                   className="auth__social-media--icons"
                   href={`${getProxy()}/api/v1/auth/facebook`}
                 >
                   <span className="icon-facebook-official" />
                 </a> */}
+                </div>
               </section>
+
               <section className="auth__footer">
-                <div className="register mt-4 text-center">
+                <div className="register text-center">
                   Not Registered?{' '}
                   <Link className="auth__link" to="/register">
                     {' '}

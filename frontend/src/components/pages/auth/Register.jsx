@@ -121,13 +121,13 @@ const RegisterForm = ({ type }) => {
             {registrationType[type].subtitle}
           </div>
 
-          <section className="auth__social-media text-center">
-            <p className="auth__social-media--text">Register with:</p>
+          <section className="auth__social-media text-center my-4">
             <a
               className="auth__social-media--icons"
               href={`${getProxy()}/api/v1/auth/google`}
             >
-              <span className="icon-google" />
+              <span className="icon-google" /> <br />
+              <small className="small--2">Register with Google</small>
             </a>
             {/* <a
               className="auth__social-media--icons"
@@ -135,7 +135,7 @@ const RegisterForm = ({ type }) => {
             >
               <span className="icon-facebook-official" />
             </a> */}
-            <p className="auth__social-media--text mt-0 mb-5">OR</p>
+            <p className="auth__social-media--text mt-3 mb-5">OR</p>
           </section>
           <div className="mt-3 d-none d-md-block">
             <AlertMessage {...message} />
