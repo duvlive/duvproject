@@ -5,10 +5,23 @@ import { Col, Card, CardImg, CardImgOverlay } from 'reactstrap';
 import defaultImage from 'assets/img/events/public-event.jpg';
 import { getPublicEventDate } from 'utils/date-helpers';
 
-const Events = ({ mainImage, location, slug, startTime, endTime, title }) => {
+const Events = ({
+  id,
+  isDashboard,
+  mainImage,
+  location,
+  slug,
+  state,
+  startTime,
+  endTime,
+  title,
+}) => {
+  const link = isDashboard
+    ? `/user/public-events/view/${id}`
+    : `/event/${slug}`;
   return (
-    <Col sm={4}>
-      <Link to={`/event/${slug}`}>
+    <Col sm={isDashboard ? 6 : 4}>
+      <Link to={link}>
         <Card className="event-card">
           <div className="event-card__image-container">
             <CardImg
@@ -25,7 +38,7 @@ const Events = ({ mainImage, location, slug, startTime, endTime, title }) => {
               <span className="event-card__date">
                 {getPublicEventDate(startTime, endTime)}
               </span>
-              <p className="event-card__address">{location}</p>
+              <p className="event-card__address">{state || location}</p>
             </div>
           </div>
         </Card>
@@ -36,15 +49,19 @@ const Events = ({ mainImage, location, slug, startTime, endTime, title }) => {
 
 Events.propTypes = {
   endTime: PropTypes.string.isRequired,
+  isDashboard: PropTypes.bool,
   location: PropTypes.string.isRequired,
   mainImage: PropTypes.string,
   slug: PropTypes.string.isRequired,
   startTime: PropTypes.string.isRequired,
+  state: PropTypes.string,
   title: PropTypes.string.isRequired,
 };
 
 Events.defaultProps = {
+  isDashboard: false,
   mainImage: null,
+  state: null,
 };
 
 Events.List = ({ lists }) =>

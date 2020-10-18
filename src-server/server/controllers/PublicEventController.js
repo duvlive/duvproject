@@ -135,6 +135,55 @@ const PublicEventController = {
   },
 
   /**
+   * @desc Get non user  Public Events
+   * @param {object} req - The request sent to the route
+   * @param {object} res - The response sent back
+   * @return {object} json response
+   */
+  async getOtherUsersPublicEvents(req, res) {
+    const { userId } = req.decoded;
+
+    const { offset, limit } = req.query;
+
+    try {
+      const options = {
+        offset: offset || 0,
+        limit: limit || 15,
+        where: {
+          status: true,
+          userId: {
+            [Op.ne]: userId,
+          },
+          endTime: { [Op.gte]: Sequelize.literal('NOW()') },
+        },
+        order: [['startTime', 'ASC']],
+        include: [
+          {
+            model: User,
+            as: 'user',
+            attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+          },
+        ],
+      };
+      try {
+        const { result, pagination } = await getAll(PublicEvent, options);
+        return res.status(200).json({
+          result,
+          pagination,
+        });
+      } catch (error) {
+        const status = error.status || 500;
+        const errorMessage = error.message || error;
+        return res.status(status).json({ message: errorMessage });
+      }
+    } catch (error) {
+      const status = error.status || 500;
+      const errorMessage = error.message || error;
+      return res.status(status).json({ message: errorMessage });
+    }
+  },
+
+  /**
    * approve status
    * @function
    * @param {object} req is req object
@@ -228,8 +277,19 @@ const PublicEventController = {
    * @return {object} json response
    */
   async getPublicEventsForFrontend(req, res) {
-    const { offset, limit } = req.query;
+    const { offset, limit, startTime } = req.query;
 
+    let whereQuery = {};
+    const publicEventsStaticKeys = ['state'];
+
+    publicEventsStaticKeys.forEach((key) => {
+      if (req.query[key]) {
+        whereQuery[key] = req.query[key];
+      }
+    });
+    if (startTime) {
+      whereQuery.startTime = { [Op.gte]: startTime };
+    }
     try {
       const options = {
         offset: offset || 0,
@@ -237,6 +297,7 @@ const PublicEventController = {
         where: {
           status: true,
           endTime: { [Op.gte]: Sequelize.literal('NOW()') },
+          ...whereQuery,
         },
         order: [['startTime', 'ASC']],
         include: [
