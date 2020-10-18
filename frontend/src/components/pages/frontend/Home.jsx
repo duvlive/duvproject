@@ -253,6 +253,7 @@ const VideoSection = () => {
       enablejsapi: 1,
     },
   };
+  const YOUTUBE_VIDEO_ID = 'xyvuCv9KMYM';
 
   return (
     <section className="loading" id="home-banner-box">
@@ -261,12 +262,14 @@ const VideoSection = () => {
           className="video-foreground embed-responsive embed-responsive-16by9"
           id="YouTubeBackgroundVideoPlayer"
         >
-          <YouTube
-            onReady={onReady}
-            onStateChange={onStateChange}
-            opts={opts}
-            videoId="xyvuCv9KMYM"
-          />
+          {!navigator.userAgent.indexOf(' UCBrowser/') >= 0 && (
+            <YouTube
+              onReady={onReady}
+              onStateChange={onStateChange}
+              opts={opts}
+              videoId={YOUTUBE_VIDEO_ID}
+            />
+          )}
         </div>
       </div>
     </section>
