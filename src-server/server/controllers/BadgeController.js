@@ -49,13 +49,26 @@ const BadgeController = {
    * @param {object} res is res object
    * @return {object} returns res object
    */
-  assignBadgeToUser(req, res) {
+  async assignBadgeToUser(req, res) {
     const { userId, badgeId } = req.body;
 
     if (!userId || !badgeId) {
       return res
         .status(400)
         .json({ message: 'Badge ID and UserId needed to process' });
+    }
+
+    const badgeExists = await BadgeUser.findOne({
+      where: {
+        userId,
+        badgeId,
+      },
+    });
+
+    if (badgeExists) {
+      return res.status(412).json({
+        message: 'Badge exist in the databse',
+      });
     }
 
     return BadgeUser.create({
