@@ -10,8 +10,7 @@ import { Link } from '@reach/router';
 import { Col, Card, CardImg, CardImgOverlay } from 'reactstrap';
 import { getPublicEventDate } from 'utils/date-helpers';
 import defaultImage from 'assets/img/events/public-event.jpg';
-import { getStatus } from '../entertainer/Gallery';
-import { approval } from '../entertainer/Gallery';
+import { getStatus, approval } from '../entertainer/Gallery';
 import { getRequestStatusIcon } from 'utils/helpers';
 
 const PublicEvents = () => {
@@ -57,6 +56,12 @@ const PublicEvents = () => {
             noContent={<NoContent isButton text="No PublicEvents found" />}
           >
             <PublicEventsRowList publicEvents={publicEvents || []} />
+            <Link
+              className="btn btn-info mb-3 btn-transparent btn-wide"
+              to="/user/public-events/others"
+            >
+              <span className="icon icon-events"></span> Upcoming Public Events
+            </Link>
           </LoadItems>
         </section>
       </div>

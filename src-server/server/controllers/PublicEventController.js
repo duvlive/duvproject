@@ -135,6 +135,55 @@ const PublicEventController = {
   },
 
   /**
+   * @desc Get non user  Public Events
+   * @param {object} req - The request sent to the route
+   * @param {object} res - The response sent back
+   * @return {object} json response
+   */
+  async getOtherUsersPublicEvents(req, res) {
+    const { userId } = req.decoded;
+
+    const { offset, limit } = req.query;
+
+    try {
+      const options = {
+        offset: offset || 0,
+        limit: limit || 15,
+        where: {
+          status: true,
+          userId: {
+            [Op.ne]: userId,
+          },
+          endTime: { [Op.gte]: Sequelize.literal('NOW()') },
+        },
+        order: [['startTime', 'ASC']],
+        include: [
+          {
+            model: User,
+            as: 'user',
+            attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+          },
+        ],
+      };
+      try {
+        const { result, pagination } = await getAll(PublicEvent, options);
+        return res.status(200).json({
+          result,
+          pagination,
+        });
+      } catch (error) {
+        const status = error.status || 500;
+        const errorMessage = error.message || error;
+        return res.status(status).json({ message: errorMessage });
+      }
+    } catch (error) {
+      const status = error.status || 500;
+      const errorMessage = error.message || error;
+      return res.status(status).json({ message: errorMessage });
+    }
+  },
+
+  /**
    * approve status
    * @function
    * @param {object} req is req object

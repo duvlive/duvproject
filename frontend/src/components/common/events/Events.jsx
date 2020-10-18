@@ -5,10 +5,22 @@ import { Col, Card, CardImg, CardImgOverlay } from 'reactstrap';
 import defaultImage from 'assets/img/events/public-event.jpg';
 import { getPublicEventDate } from 'utils/date-helpers';
 
-const Events = ({ mainImage, location, slug, startTime, endTime, title }) => {
+const Events = ({
+  id,
+  isDashboard,
+  mainImage,
+  location,
+  slug,
+  startTime,
+  endTime,
+  title,
+}) => {
+  const link = isDashboard
+    ? `/user/public-events/view/${id}`
+    : `/event/${slug}`;
   return (
-    <Col sm={4}>
-      <Link to={`/event/${slug}`}>
+    <Col sm={isDashboard ? 6 : 4}>
+      <Link to={link}>
         <Card className="event-card">
           <div className="event-card__image-container">
             <CardImg
@@ -35,6 +47,7 @@ const Events = ({ mainImage, location, slug, startTime, endTime, title }) => {
 };
 
 Events.propTypes = {
+  isDashboard: PropTypes.bool,
   endTime: PropTypes.string.isRequired,
   location: PropTypes.string.isRequired,
   mainImage: PropTypes.string,
@@ -44,6 +57,7 @@ Events.propTypes = {
 };
 
 Events.defaultProps = {
+  isDashboard: false,
   mainImage: null,
 };
 
