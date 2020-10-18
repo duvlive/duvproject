@@ -63,11 +63,6 @@ const others = (entertainerMenu) => ({
     },
     { ...entertainerMenu },
     {
-      title: 'Help',
-      to: '/user/help',
-      icon: 'help',
-    },
-    {
       title: 'Logout',
       to: '/logout',
       icon: 'logout',

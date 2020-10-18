@@ -103,11 +103,6 @@ export default [
         icon: 'loop',
       },
       {
-        title: 'Help',
-        to: '/admin/help',
-        icon: 'help',
-      },
-      {
         title: 'Logout',
         to: '/logout',
         icon: 'logout',

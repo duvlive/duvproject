@@ -63,11 +63,6 @@ export default [
         icon: 'loop',
       },
       {
-        title: 'Help',
-        to: '/band-member/help',
-        icon: 'help',
-      },
-      {
         title: 'Logout',
         to: '/logout',
         icon: 'logout',
