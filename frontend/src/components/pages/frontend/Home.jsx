@@ -299,7 +299,7 @@ const VideoSection = () => {
           className="video-foreground embed-responsive embed-responsive-16by9"
           id="YouTubeBackgroundVideoPlayer"
         >
-          {!navigator.userAgent.indexOf(' UCBrowser/') >= 0 && (
+          {!(navigator.userAgent.indexOf(' UCBrowser/') >= 0) && (
             <YouTube
               onReady={onReady}
               onStateChange={onStateChange}

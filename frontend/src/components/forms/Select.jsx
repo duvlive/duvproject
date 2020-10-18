@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Field, getIn } from 'formik';
+import { Field } from 'formik';
 import { connect } from 'formik';
 import classNames from 'classnames';
 import {
