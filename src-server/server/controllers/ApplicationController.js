@@ -16,6 +16,7 @@ import {
   NOTIFICATIONS,
   NOTIFICATION_TYPE,
   REQUEST_ACTION,
+  EVENT_HIRETYPE,
 } from '../constant';
 import EMAIL_CONTENT from '../email-template/content';
 import { addDays } from 'date-fns';
@@ -218,20 +219,40 @@ const ApplicationController = {
    * @param {object} res is res object
    * @return {object} returns res object
    */
-  getDashboardDetailsForEntertainer(req, res) {
+  async getDashboardDetailsForEntertainer(req, res) {
+    const auctions = await EventEntertainer.findAll({
+      where: {
+        hireType: EVENT_HIRETYPE.AUCTION,
+        auctionStartDate: { [Op.lte]: Sequelize.literal('NOW()') },
+        auctionEndDate: { [Op.gte]: Sequelize.literal('NOW()') },
+        entertainerType: {
+          [Op.eq]: req.user.profile.entertainerType,
+        },
+        [Op.and]: Sequelize.literal('applications.id is null'), // only auctions without applications should be shown
+      },
+      include: [
+        {
+          model: Event,
+          as: 'event',
+          include: [
+            {
+              model: User,
+              as: 'owner',
+              attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+            },
+          ],
+        },
+        {
+          model: Application,
+          as: 'applications',
+          where: { userId: req.user.id },
+          required: false,
+        },
+      ],
+    });
     EventEntertainer.findAll({
       where: {
         [Op.or]: [
-          {
-            // Auctions
-            hireType: 'Auction',
-            auctionStartDate: { [Op.lte]: Sequelize.literal('NOW()') },
-            auctionEndDate: { [Op.gte]: Sequelize.literal('NOW()') },
-            entertainerType: {
-              [Op.eq]: req.user.profile.entertainerType,
-            },
-            [Op.and]: Sequelize.literal('applications.id is null'),
-          },
           {
             // Upcoming Events
             hiredEntertainer: req.user.profile.id,
@@ -347,22 +368,17 @@ const ApplicationController = {
           },
         ],
       });
+
       const results = eventEntertainers.reduce(
         (result, eventEntertainer) => {
           if (
             eventEntertainer.applications &&
             eventEntertainer.applications.length > 0 &&
             eventEntertainer.applications[0].applicationType === 'Bid' &&
+            eventEntertainer.applications[0].userId === req.user.id &&
             !eventEntertainer.applications[0].paid
           ) {
             result.bids.push(eventEntertainer);
-          } else if (
-            eventEntertainer.hireType === 'Auction' &&
-            eventEntertainer.applications &&
-            eventEntertainer.applications.length > 0 &&
-            !eventEntertainer.applications[0].paid
-          ) {
-            result.auctions.push(eventEntertainer);
           } else if (eventEntertainer.hiredEntertainer) {
             result.upcomingEvents.push({
               ...eventEntertainer.event.toJSON(),
@@ -373,10 +389,12 @@ const ApplicationController = {
           }
           return result;
         },
-        { auctions: [], bids: [], requests: [], upcomingEvents: [] }
+        { bids: [], requests: [], upcomingEvents: [] }
       );
 
-      return res.status(200).json({ results: { ...results, pendingPayments } });
+      return res
+        .status(200)
+        .json({ results: { ...results, pendingPayments, auctions } });
     });
   },
   /**

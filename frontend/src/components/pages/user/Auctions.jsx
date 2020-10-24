@@ -12,9 +12,10 @@ import { getTokenFromStore } from 'utils/localStorage';
 import Humanize from 'humanize-plus';
 import { getShortDate } from 'utils/date-helpers';
 import NoContent from 'components/common/utils/NoContent';
+import LoadItems from 'components/common/utils/LoadItems';
 
 const Auctions = () => {
-  const [auctions, setAuctions] = React.useState([]);
+  const [auctions, setAuctions] = React.useState(null);
   React.useEffect(() => {
     axios
       .get('/api/v1/auctions', {
@@ -31,6 +32,7 @@ const Auctions = () => {
       })
       .catch(function (error) {
         console.log(error.response.data.message);
+        setAuctions([]);
         // navigate to all events
       });
   }, []);
@@ -63,23 +65,27 @@ const Auctions = () => {
               )
             }
           </Match>
-          {auctions.length > 0 ? (
-            <AuctionsTable auctions={auctions} />
-          ) : (
-            <NoContent
-              isButton
-              linkText="Add a New Event"
-              linkTo="/user/events/new"
-              text={
-                <>
-                  No Auction Found.
-                  <div className="small  mt-3">
-                    You can create a new Auction after adding a new Event
-                  </div>
-                </>
-              }
-            />
-          )}
+          <LoadItems
+            items={auctions}
+            loadingText="Loading your Auctions"
+            noContent={
+              <NoContent
+                isButton
+                linkText="Add a New Event"
+                linkTo="/user/events/new"
+                text={
+                  <>
+                    No Auction Found.
+                    <div className="small  mt-3">
+                      You can create a new Auction after adding a new Event
+                    </div>
+                  </>
+                }
+              />
+            }
+          >
+            <AuctionsTable auctions={auctions || []} />
+          </LoadItems>
         </section>
       </div>
     </BackEndPage>

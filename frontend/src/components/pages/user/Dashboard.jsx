@@ -333,9 +333,9 @@ Dashboard.RequestTableRow = ({ application }) => (
       &#8358; {moneyFormat(application.askingPrice)}
     </td>
     {application.type === 'Bid' ? (
-      <td className="align-middle text-gray">
-        <span className="text-muted small--4">Location</span>{' '}
-        {application.location}
+      <td className="align-middle text-white">
+        <span className="text-muted small--4">Event Type</span>{' '}
+        {application.eventType}
       </td>
     ) : (
       <td className="align-middle">
