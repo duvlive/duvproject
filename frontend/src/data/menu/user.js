@@ -51,6 +51,7 @@ const navigation = {
 const others = (entertainerMenu) => ({
   name: 'Others',
   menus: [
+    { ...entertainerMenu },
     {
       title: 'Edit Profile',
       to: '/user/edit-profile',
@@ -61,7 +62,6 @@ const others = (entertainerMenu) => ({
       to: '/user/invite-friends',
       icon: 'invite-friend',
     },
-    { ...entertainerMenu },
     {
       title: 'Logout',
       to: '/logout',

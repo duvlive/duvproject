@@ -490,6 +490,7 @@ const AdminController = {
 
       const pendingPayments = await EventEntertainer.findAll({
         where: {
+          cancelled: false,
           [Op.and]: Sequelize.literal('"eventPayment"."id" is null'),
         },
         include: [

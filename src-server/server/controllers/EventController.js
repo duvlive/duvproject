@@ -254,6 +254,7 @@ const EventController = {
   getUserAuctions(req, res) {
     EventEntertainer.findAll({
       where: {
+        cancelled: false,
         hireType: EVENT_HIRETYPE.AUCTION,
         userId: req.user.id,
         hiredEntertainer: null, // shown auctions with no hired Entertainer
@@ -353,6 +354,7 @@ const EventController = {
   getAvailableAuctions(req, res) {
     EventEntertainer.findAll({
       where: {
+        cancelled: false,
         hireType: EVENT_HIRETYPE.AUCTION,
         auctionStartDate: { [Op.lte]: Sequelize.literal('NOW()') },
         auctionEndDate: { [Op.gte]: Sequelize.literal('NOW()') },
@@ -1198,6 +1200,7 @@ const EventController = {
   getAvailableAuctionsForAdmin(req, res) {
     EventEntertainer.findAll({
       where: {
+        cancelled: false,
         hireType: EVENT_HIRETYPE.AUCTION,
         auctionStartDate: { [Op.lte]: Sequelize.literal('NOW()') },
         auctionEndDate: { [Op.gte]: Sequelize.literal('NOW()') },

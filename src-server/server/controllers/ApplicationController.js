@@ -228,6 +228,8 @@ const ApplicationController = {
         entertainerType: {
           [Op.eq]: req.user.profile.entertainerType,
         },
+        hiredEntertainer: null,
+        cancelled: false,
         [Op.and]: Sequelize.literal('applications.id is null'), // only auctions without applications should be shown
       },
       include: [
@@ -252,6 +254,7 @@ const ApplicationController = {
     });
     EventEntertainer.findAll({
       where: {
+        cancelled: false,
         [Op.or]: [
           {
             // Upcoming Events
@@ -409,6 +412,7 @@ const ApplicationController = {
 
     EventEntertainer.findAll({
       where: {
+        cancelled: false,
         [Op.or]: [
           {
             // Upcoming Events
