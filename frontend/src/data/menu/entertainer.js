@@ -114,6 +114,11 @@ const othersMenu = {
   name: 'Others',
   menus: [
     {
+      title: 'Switch to User Account',
+      to: '/user/dashboard',
+      icon: 'loop',
+    },
+    {
       title: 'Edit Profile',
       to: '/entertainer/edit-profile',
       icon: 'user-circle',
@@ -122,11 +127,6 @@ const othersMenu = {
       title: 'Invite Friends',
       to: '/entertainer/invite-friends',
       icon: 'invite-friend',
-    },
-    {
-      title: 'Switch to User Account',
-      to: '/user/dashboard',
-      icon: 'loop',
     },
     {
       title: 'Logout',

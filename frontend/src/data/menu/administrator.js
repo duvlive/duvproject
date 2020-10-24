@@ -88,14 +88,14 @@ export default [
     name: 'Others',
     menus: [
       {
-        title: 'Edit Profile',
-        to: '/admin/edit-profile',
-        icon: 'user-circle',
-      },
-      {
         title: 'Invite Friends',
         to: '/admin/invite-friends',
         icon: 'invite-friend',
+      },
+      {
+        title: 'Edit Profile',
+        to: '/admin/edit-profile',
+        icon: 'user-circle',
       },
       {
         title: 'Switch to User Account',
