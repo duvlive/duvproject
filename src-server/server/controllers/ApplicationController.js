@@ -1045,7 +1045,7 @@ const sendApprovedBidMail = (params) => {
     <strong>Date:</strong> ${params.eventDate} <br>
     <strong>Start Time:</strong> ${params.eventStart} <br>
     <strong>Duration:</strong> ${params.eventDuration} <br>
-    <strong>Take Home Pay:</strong> NGN ${params.takeHome}
+    <strong>Take Home Pay:</strong> ₦${params.takeHome}
   `;
 
   const contentFooter = `
@@ -1079,7 +1079,7 @@ const sendPaidRequestMail = (params) => {
     <strong>Date:</strong> ${params.eventDate} <br>
     <strong>Start Time:</strong> ${params.eventStart} <br>
     <strong>Duration:</strong> ${params.eventDuration} <br>
-    <strong>Take Home Pay:</strong> NGN ${params.takeHome}<br><br>
+    <strong>Take Home Pay:</strong> ₦${params.takeHome}<br><br>
     For More Details on the Upcoming Event, Click the link below
   `;
 
@@ -1121,8 +1121,8 @@ const sendEntertainerResponseToRequestMail = (params) => {
 
     case REQUEST_ACTION.INCREMENT:
       contentTop = `This is to inform you that ${params.entertainerName} has responded to your request to perform/ provide entertainment services at the event with details stated below.`;
-      contentBottom += `<strong>Your Offer Amount:</strong> NGN ${params.askingPrice} <br><br>`;
-      contentBottom += `<strong>${params.entertainerName} Amount:</strong> NGN ${params.proposedPrice} <br>`;
+      contentBottom += `<strong>Your Offer Amount:</strong> ₦${params.askingPrice} <br><br>`;
+      contentBottom += `<strong>${params.entertainerName} Amount:</strong> ₦${params.proposedPrice} <br>`;
       link = `${process.env.HOST}/user/request/view/${params.applicationId}`;
       buttonText = 'Respond';
       break;

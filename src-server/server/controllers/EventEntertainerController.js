@@ -37,8 +37,8 @@ const sendRequestMail = ({
     <strong>Date:</strong> ${getLongDate(event.eventDate)} <br>
     <strong>Start Time:</strong> ${getTime(event.startTime)} <br>
     <strong>Duration:</strong> ${event.eventDuration} <br>
-    <strong>Offer Amount:</strong> NGN ${moneyFormat(askingPrice)} <br>
-    <strong>Take Home Pay:</strong> ${moneyFormat(takeHome)} <br>
+    <strong>Offer Amount:</strong> ₦${moneyFormat(askingPrice)} <br>
+    <strong>Take Home Pay:</strong> ₦${moneyFormat(takeHome)} <br>
   `;
 
   const contentFooter = `
@@ -510,9 +510,7 @@ const EventEntertainerController = {
                 <strong>Duration:</strong> ${
                   eventEntertainerInfo.event.eventDuration
                 } <br>
-                <strong>Charge Amount:</strong> NGN ${moneyFormat(
-                  amount
-                )} <br><br>
+                <strong>Charge Amount:</strong> ₦${moneyFormat(amount)} <br><br>
                 <strong>Reason for Cancellation:</strong><br> ${cancelledReason}
               `,
               contentFooter: `No worries. You can try hiring other entertainers by heading to your dashboard.`,
@@ -669,9 +667,7 @@ const EventEntertainerController = {
                 <strong>Duration:</strong> ${
                   eventEntertainerInfo.event.eventDuration
                 } <br>
-                <strong>Charge Amount:</strong> NGN ${moneyFormat(
-                  amount
-                )} <br><br>
+                <strong>Charge Amount:</strong> ₦${moneyFormat(amount)} <br><br>
                 <strong>Reason for Cancellation:</strong><br> ${cancelledReason}
               `,
               contentFooter: `No worries. You can try hiring other entertainers by heading to your dashboard.`,

@@ -132,7 +132,7 @@ export const identificationSchema = {
 };
 
 export const entertainerCommentSchema = {
-  comments: required('Comments')
+  comments: required('Comments'),
 };
 
 export const bidSchema = (minAuctionPrice = 0, maxAuctionPrice = 0) => {
@@ -140,11 +140,11 @@ export const bidSchema = (minAuctionPrice = 0, maxAuctionPrice = 0) => {
     askingPrice: positiveNumberValidation('Your Bid')
       .min(
         minAuctionPrice,
-        `Your bid must be more than NGN ${commaNumber(minAuctionPrice)}`
+        `Your bid must be more than ₦${commaNumber(minAuctionPrice)}`
       )
       .max(
         maxAuctionPrice,
-        `Your bid must be less than NGN ${commaNumber(maxAuctionPrice)}`
+        `Your bid must be less than ₦${commaNumber(maxAuctionPrice)}`
       ),
   };
 };
