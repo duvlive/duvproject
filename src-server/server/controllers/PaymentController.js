@@ -452,8 +452,8 @@ const PaymentController = {
             firstName: eventDetails.entertainer.stageName,
           },
           {
-            title: `You have a been paid ₦${moneyFormat(amount)}`,
-            subject: `You have a been paid ₦${moneyFormat(amount)}`,
+            title: `You have been paid ₦${moneyFormat(amount)}`,
+            subject: `You have been paid ₦${moneyFormat(amount)}`,
             contentTop,
           }
         );

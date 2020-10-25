@@ -10,12 +10,13 @@ import Badges from 'components/pages/entertainer/Badges';
 import Image from 'components/common/utils/Image';
 import Video from 'components/pages/entertainer/Video';
 import DuvLiveModal from 'components/custom/Modal';
-import { getTokenFromStore } from 'utils/localStorage';
+import { getTokenFromStore, storeHiredEntertainer } from 'utils/localStorage';
 import LoadingScreen from 'components/common/layout/LoadingScreen';
 import { commaNumber } from 'utils/helpers';
 import { getYear } from 'utils/date-helpers';
 import ReactTimeago from 'react-timeago';
 import Humanize from 'humanize-plus';
+import { navigate } from '@reach/router';
 
 const SingleEntertainer = ({ slug }) => {
   const [entertainer, setEntertainer] = React.useState({
@@ -130,42 +131,55 @@ LoadEntertainerInfo.propTypes = {
   otherEntertainers: PropTypes.array.isRequired,
 };
 
-const EntertainerSection = ({ entertainer }) => (
-  <section className="single-entertainer">
-    <div className="container-fluid">
-      <Row>
-        <Col sm="3">
-          <img
-            alt={entertainer.stageName}
-            className="img-fluid img-thumbnail img-entertainer"
-            src={entertainer.profileImageURL}
-          />
-        </Col>
-        <Col sm="9">
-          <section className="entertainer__summary">
-            <h2 className="entertainer__summary--title text-capitalize">
-              {entertainer.profile.stageName}
-            </h2>
-            <div className="text-danger">
-              {entertainer.profile.entertainerType}
-            </div>
-            <section className="entertainer__summary--content">
-              <div className="row">
-                <div className="col-sm-9">{entertainer.profile.about}</div>
+const EntertainerSection = ({ entertainer }) => {
+  const handleHiredEntertainer = () => {
+    storeHiredEntertainer({
+      ...entertainer.profile,
+      id: entertainer.id,
+      profileImageURL: entertainer.profileImageURL,
+    });
+    navigate('/user/events/new');
+  };
+  return (
+    <section className="single-entertainer">
+      <div className="container-fluid">
+        <Row>
+          <Col sm="3">
+            <img
+              alt={entertainer.stageName}
+              className="img-fluid img-thumbnail img-entertainer"
+              src={entertainer.profileImageURL}
+            />
+          </Col>
+          <Col sm="9">
+            <section className="entertainer__summary">
+              <h2 className="entertainer__summary--title text-capitalize">
+                {entertainer.profile.stageName}
+              </h2>
+              <div className="text-danger">
+                {entertainer.profile.entertainerType}
               </div>
+              <section className="entertainer__summary--content">
+                <div className="row">
+                  <div className="col-sm-9">{entertainer.profile.about}</div>
+                </div>
+              </section>
+              {getTokenFromStore() && (
+                <button
+                  className="btn btn-danger btn-transparent btn-lg"
+                  onClick={handleHiredEntertainer}
+                  type="submit"
+                >
+                  Hire {entertainer.profile.stageName}
+                </button>
+              )}
             </section>
-            {/* <button
-              className="btn btn-danger btn-transparent btn-lg"
-              type="submit"
-            >
-              Hire {entertainer.profile.stageName}
-            </button> */}
-          </section>
-        </Col>
-      </Row>
-    </div>
-  </section>
-);
+          </Col>
+        </Row>
+      </div>
+    </section>
+  );
+};
 
 EntertainerSection.propTypes = {
   entertainer: PropTypes.object.isRequired,

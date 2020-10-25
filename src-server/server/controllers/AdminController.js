@@ -18,7 +18,7 @@ import {
   Commission,
   Payment,
 } from '../models';
-import { REQUEST_ACTION } from '../constant';
+import { EVENT_HIRETYPE, REQUEST_ACTION } from '../constant';
 import { addDays } from 'date-fns';
 import { getAll } from '../utils/modelHelper';
 
@@ -363,16 +363,36 @@ const AdminController = {
    * @return {object} returns res object
    */
   async getDashboardDetailsForAdmin(req, res) {
+    const auctions = await EventEntertainer.findAll({
+      where: {
+        hireType: EVENT_HIRETYPE.AUCTION,
+        auctionStartDate: { [Op.lte]: Sequelize.literal('NOW()') },
+        auctionEndDate: { [Op.gte]: Sequelize.literal('NOW()') },
+        hiredEntertainer: null,
+        cancelled: false,
+      },
+      include: [
+        {
+          model: Event,
+          as: 'event',
+          include: [
+            {
+              model: User,
+              as: 'owner',
+              attributes: ['id', 'firstName', 'lastName', 'profileImageURL'],
+            },
+          ],
+        },
+        {
+          model: Application,
+          as: 'applications',
+          required: false,
+        },
+      ],
+    });
     EventEntertainer.findAll({
       where: {
         [Op.or]: [
-          {
-            // Auctions
-            hireType: 'Auction',
-            auctionStartDate: { [Op.lte]: Sequelize.literal('NOW()') },
-            auctionEndDate: { [Op.gte]: Sequelize.literal('NOW()') },
-            [Op.and]: Sequelize.literal('applications.id is null'),
-          },
           {
             // Upcoming Events
             [Op.and]: Sequelize.literal(
@@ -539,8 +559,6 @@ const AdminController = {
             eventEntertainer.applications[0].applicationType === 'Bid'
           ) {
             result.bids.push(eventEntertainer);
-          } else if (eventEntertainer.hireType === 'Auction') {
-            result.auctions.push(eventEntertainer);
           } else if (eventEntertainer.hiredEntertainer) {
             result.upcomingEvents.push({
               ...eventEntertainer.event.toJSON(),
@@ -551,12 +569,13 @@ const AdminController = {
           }
           return result;
         },
-        { auctions: [], bids: [], requests: [], upcomingEvents: [] }
+        { bids: [], requests: [], upcomingEvents: [] }
       );
 
       return res.status(200).json({
         results: {
           ...results,
+          auctions,
           pendingPayments,
           eventsOverview,
           usersOverview,

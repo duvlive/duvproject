@@ -12,23 +12,40 @@ import {
 } from 'components/forms/schema/eventSchema';
 import { createSchema } from 'components/forms/schema/schema-helpers';
 import axios from 'axios';
-import { getTokenFromStore } from 'utils/localStorage';
+import {
+  getHiredEntertainerFromStore,
+  getTokenFromStore,
+} from 'utils/localStorage';
 import { UserContext } from 'context/UserContext';
 import AlertMessage from 'components/common/utils/AlertMessage';
 import { Link, Match } from '@reach/router';
 import { startOfDay, addHours } from 'date-fns';
+import { HiredEntertainerCard } from './AddEntertainerToEvent';
 
 const NewEvent = () => {
+  const hiredEntertainer = getHiredEntertainerFromStore();
   return (
     <BackEndPage title="New Events">
       <div className="main-app">
         <TopMessage message="Enter a New Event" />
 
         <section className="app-content">
+          {hiredEntertainer && (
+            <>
+              <HiredEntertainerCard />
+              <Link
+                className="btn btn-success btn-transparent btn-xs mb-5"
+                to="/user/events"
+              >
+                Hire for an exisiting event
+              </Link>
+            </>
+          )}
           <Match path="/user/hire-entertainer">
             {(props) =>
               // eslint-disable-next-line react/prop-types
-              props.match && (
+              props.match &&
+              !hiredEntertainer && (
                 <AlertMessage
                   message={
                     <span>
