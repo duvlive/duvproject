@@ -14,7 +14,11 @@ import Button from 'components/forms/Button';
 import { loginSchema } from 'components/forms/schema/userSchema';
 import { navigate } from '@reach/router';
 import { DASHBOARD_PAGE, USER_TYPES } from 'utils/constants';
-import { storeToken, storeUserType } from 'utils/localStorage';
+import {
+  getTokenFromStore,
+  storeToken,
+  storeUserType,
+} from 'utils/localStorage';
 import AlertMessage from 'components/common/utils/AlertMessage';
 import { UserContext } from 'context/UserContext';
 import { getProxy } from 'utils/helpers';
@@ -103,6 +107,7 @@ Content.propTypes = {
 };
 
 const LoginForm = ({ redirectTo, sid, token }) => {
+  const savedToken = getTokenFromStore();
   const [message, setMessage] = useState(null);
   const { userState, userDispatch } = React.useContext(UserContext);
 
@@ -158,6 +163,30 @@ const LoginForm = ({ redirectTo, sid, token }) => {
           });
         });
   }, [sid, userDispatch]);
+
+  // Check if User has previously signed in
+  useEffect(() => {
+    savedToken &&
+      axios
+        .get('/api/v1/who-am-i', {
+          headers: {
+            'x-access-token': savedToken,
+          },
+        })
+        .then(function (response) {
+          const { status, data } = response;
+
+          // handle success
+          if (status === 200) {
+            userDispatch({ type: 'user-info', user: data });
+          }
+        })
+        .catch(function (error) {
+          setMessage({
+            message: error.response.data.message,
+          });
+        });
+  }, [savedToken, userDispatch]);
 
   // CHECK IF USER HAS SIGNED IN
   useEffect(() => {
