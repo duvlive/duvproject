@@ -23,14 +23,12 @@ const SingleBadge = ({ id }) => {
       })
       .then(function (response) {
         const { status, data } = response;
-        console.log('data', data);
         // handle success
         if (status === 200) {
           setBadge(data.badge);
         }
       })
       .catch(function (error) {
-        console.log(error.response.data.message);
         setBadge([]);
       });
   }, [id]);

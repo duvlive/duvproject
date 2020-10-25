@@ -34,7 +34,6 @@ const WelcomeSlides = ({ items }) => {
         }
       })
       .catch(function (error) {
-        console.log('error', error);
         setLoading(false);
       });
   };

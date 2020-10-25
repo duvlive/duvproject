@@ -10,7 +10,6 @@ const Accordion = ({ children, active, title }) => {
         className={`accordion__title ${currentState}`}
         onClick={() => {
           setShowAccordion(!showAccordion);
-          console.log(showAccordion);
         }}
       >
         {title}{' '}
@@ -26,10 +25,10 @@ const Accordion = ({ children, active, title }) => {
 Accordion.propTypes = {
   active: PropTypes.bool,
   children: PropTypes.any.isRequired,
-  title: PropTypes.string.isRequired
+  title: PropTypes.string.isRequired,
 };
 
 Accordion.defaultProps = {
-  active: false
+  active: false,
 };
 export default Accordion;

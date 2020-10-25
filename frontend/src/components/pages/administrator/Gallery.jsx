@@ -58,7 +58,6 @@ const GalleryRow = ({ approved, id, number, imageURL, user, setMessage }) => {
         }
       })
       .catch(function (error) {
-        console.log('error', error);
         setMessage({
           type: 'danger',
           message: error.response.message,

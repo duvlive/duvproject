@@ -44,7 +44,6 @@ const UploadArticleImage = ({
         .then(function (response) {
           const { status, data } = response;
           if (status === 200) {
-            console.log('data', data);
             setImage(data.file.secure_url);
             afterUpload(data.file.secure_url);
             setLoading(false);

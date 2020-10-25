@@ -31,7 +31,6 @@ const SingleUser = ({ id }) => {
       })
       .then(function (response) {
         const { status, data } = response;
-        console.log('data', data);
         // handle success
         if (status === 200) {
           setUser(data.user);
@@ -298,7 +297,6 @@ const CorrectEmailAddressForm = ({ user }) => {
     <Formik
       initialValues={{ email: '' }}
       onSubmit={({ email }, actions) => {
-        console.log('email', email);
         axios
           .put(
             `/api/v1/admin/user/update-email`,
@@ -309,7 +307,6 @@ const CorrectEmailAddressForm = ({ user }) => {
           )
           .then(function (response) {
             const { status, data } = response;
-            console.log('data', data);
             if (status === 200) {
               setMessage({
                 msg: data.message,

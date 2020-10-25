@@ -74,7 +74,6 @@ const SingleEvent = ({ id }) => {
       type: 'remove-alert',
     });
   }
-  console.log('event', event);
 
   return (
     <BackEndPage title="View Event">
@@ -680,7 +679,6 @@ const CancelEventForm = ({ eventId }) => {
           })
           .then(function (response) {
             const { status, data } = response;
-            console.log('data', data);
             if (status === 200) {
               userDispatch({
                 type: 'cancel-event',
@@ -697,7 +695,6 @@ const CancelEventForm = ({ eventId }) => {
             }
           })
           .catch(function (error) {
-            console.log('error ', error.response.data.message);
             setMessage({ msg: error.response.data.message });
             actions.setSubmitting(false);
           });

@@ -143,14 +143,12 @@ export const AddNewComponent = ({ addData, setMessage }) => {
           endTime: value.endTime.date,
           startTime: value.startTime.date,
         };
-        console.log('payload', payload);
         axios
           .post('/api/v1/admin/global/notification', payload, {
             headers: { 'x-access-token': getTokenFromStore() },
           })
           .then(function (response) {
             const { status, data } = response;
-            console.log('response', response);
             if (status === 200) {
               addData({
                 ...data.globalNotification,
@@ -166,7 +164,6 @@ export const AddNewComponent = ({ addData, setMessage }) => {
             }
           })
           .catch(function (error) {
-            console.log('error', error);
             // console.log('error.response', error.response.data);
             // setMessage({ message: error.response.data.message });
             actions.setSubmitting(false);

@@ -157,7 +157,6 @@ const LoginForm = ({ redirectTo, sid, token }) => {
           }
         })
         .catch(function (error) {
-          console.log('error', error);
           setMessage({
             message: error.response.data.message,
           });

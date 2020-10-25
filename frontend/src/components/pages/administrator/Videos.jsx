@@ -57,7 +57,6 @@ const VideoRow = ({
         }
       })
       .catch(function (error) {
-        console.log('error', error);
         setMessage({
           type: 'danger',
           message: error.response.message,

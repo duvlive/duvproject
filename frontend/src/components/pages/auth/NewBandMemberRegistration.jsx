@@ -36,7 +36,6 @@ NewBandMemberRegistration.defaultProps = {
 };
 
 const NewBandMemberRegistrationForm = ({ token }) => {
-  console.log('token', token);
   const [message, setMessage] = useState(null);
   const [user, setUser] = useState({});
   const agreementText = (
@@ -97,13 +96,10 @@ const NewBandMemberRegistrationForm = ({ token }) => {
           .then(function (response) {
             const { data, status } = response;
             if (status === 200) {
-              console.log('status', status);
-              console.log('data', data);
               navigate(`/login/${token}`);
             }
           })
           .catch(function (error) {
-            console.log('error', error);
             setMessage({
               message: error.response.data.message,
               lists:

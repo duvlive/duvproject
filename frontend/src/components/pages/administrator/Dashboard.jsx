@@ -41,7 +41,6 @@ const Dashboard = () => {
         // handle success
         if (status === 200) {
           setResults(data.results);
-          console.log('results', data.results);
           setLoading(false);
         }
       })

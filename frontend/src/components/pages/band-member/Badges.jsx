@@ -20,15 +20,12 @@ const Badges = () => {
       })
       .then(function (response) {
         const { status, data } = response;
-        console.log('status,data', status, data);
         // handle success
         if (status === 200) {
-          console.log('data', data);
           setBadges(data.badges);
         }
       })
       .catch(function (error) {
-        console.log(error.response.data.message);
         setBadges([]);
       });
   }, []);

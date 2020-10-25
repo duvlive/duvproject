@@ -18,7 +18,6 @@ const Events = () => {
   const [message, setMessage] = React.useState({ msg: null, type: null });
   const [showPastEvents, setShowPastEvents] = React.useState(false);
   const [events, setEvents] = React.useState(null);
-  console.log('Im dalfjaslfjdsaf a');
 
   React.useEffect(() => {
     axios

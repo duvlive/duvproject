@@ -123,7 +123,6 @@ export const AddNewComponent = ({ addData, setMessage }) => {
           .then(function (response) {
             const { status, data } = response;
             if (status === 200) {
-              console.log('data', data);
               addData({
                 ...data.badge,
                 creator: {
@@ -139,7 +138,6 @@ export const AddNewComponent = ({ addData, setMessage }) => {
             }
           })
           .catch(function (error) {
-            console.log('error', error);
             // console.log('error.response', error.response.data);
             // setMessage({ message: error.response.data.message });
             actions.setSubmitting(false);

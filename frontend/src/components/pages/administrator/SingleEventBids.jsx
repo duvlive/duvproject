@@ -60,8 +60,6 @@ const SingleEventBids = ({ eventEntertainerId }) => {
     // TODO
   }
 
-  console.log('eventEntertainer', eventEntertainer);
-
   const eventDate = eventEntertainer.event.eventDate;
   return (
     <BackEndPage title="All Bids">

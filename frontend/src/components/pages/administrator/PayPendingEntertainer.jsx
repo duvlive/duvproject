@@ -48,7 +48,6 @@ const PayPendingEntertainer = ({ applicationId }) => {
         }
       })
       .catch(function (error) {
-        console.log(error.response.data.message);
         setMessage({ msg: error.response.data.message });
       });
   };
@@ -99,7 +98,7 @@ const PayPendingEntertainer = ({ applicationId }) => {
           }
         })
         .catch(function (error) {
-          console.log(error.response.data.message);
+          setApplication([]);
           // TODO: navigate to all events
         });
   }, [applicationId]);

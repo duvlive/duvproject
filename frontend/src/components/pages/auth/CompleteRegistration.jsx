@@ -92,13 +92,10 @@ const CompleteRegistrationForm = ({ token }) => {
           .then(function (response) {
             const { data, status } = response;
             if (status === 200) {
-              console.log('status', status);
-              console.log('data', data);
               navigate(`/login/${token}`);
             }
           })
           .catch(function (error) {
-            console.log('error', error);
             setMessage({
               message: error.response.data.message,
               lists:

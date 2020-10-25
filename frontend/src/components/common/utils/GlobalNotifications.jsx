@@ -15,14 +15,12 @@ const GlobalNotifications = () => {
       })
       .then(function (response) {
         const { status, data } = response;
-        console.log('status,data', status, data);
         // handle success
         if (status === 200) {
           setNotifications(data.globalNotification);
         }
       })
       .catch(function (error) {
-        console.log(error.response.data.message);
         setNotifications([]);
       });
   }, []);

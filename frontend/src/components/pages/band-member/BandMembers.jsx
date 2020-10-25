@@ -27,7 +27,6 @@ const BandMembers = () => {
         }
       })
       .catch(function (error) {
-        console.log(error.response.data.message);
         setBandMembers([]);
       });
   }, []);

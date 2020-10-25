@@ -20,14 +20,14 @@ const Auctions = () => {
       })
       .then(function (response) {
         const { status, data } = response;
-        console.log('data', data);
         // handle success
         if (status === 200) {
           setAuctions(data.events);
         }
       })
       .catch(function (error) {
-        console.log(error.response.data.message);
+        // console.log(error.response.data.message);
+        setAuctions([]);
         // navigate to all events
       });
   }, []);

@@ -27,14 +27,12 @@ const PendingPayments = () => {
       })
       .then(function (response) {
         const { status, data } = response;
-        console.log('status,data', status, data);
         // handle success
         if (status === 200) {
           setPendingPayments(data.pendingPayments);
         }
       })
       .catch(function (error) {
-        console.log(error.response.data.message);
         setPendingPayments([]);
       });
   }, [userDispatch]);

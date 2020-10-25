@@ -50,7 +50,6 @@ const DashboardItems = () => {
         // handle success
         if (status === 200) {
           setApplications(data.results);
-          console.log('results', data.results);
         }
       })
       .catch(function (error) {

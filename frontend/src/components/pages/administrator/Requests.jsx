@@ -29,7 +29,7 @@ const Requests = () => {
         }
       })
       .catch(function (error) {
-        console.log(error.response.data.message);
+        setRequests([]);
         // navigate to all events
       });
   }, []);

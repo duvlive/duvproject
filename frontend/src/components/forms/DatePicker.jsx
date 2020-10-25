@@ -84,8 +84,6 @@ const DatePicker = ({
                     dateTime = date.toLocaleString();
                   }
 
-                  console.log('date, dateTime,', date, dateTime);
-
                   form.setFieldValue(name, { date, value: dateTime });
                 } else {
                   form.setFieldValue(name, '');

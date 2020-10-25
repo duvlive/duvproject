@@ -22,7 +22,6 @@ const ProcessExistingUserAsBandMember = ({ bandToken }) => {
           }
         })
         .catch(function (error) {
-          console.log('error', error);
           setMessage({
             message: error.response.data.message,
             lists:

@@ -55,7 +55,6 @@ const SingleEntertainer = ({ id }) => {
       })
       .then(function (response) {
         const { status, data } = response;
-        console.log('data', data);
         // handle success
         if (status === 200) {
           setEntertainer(data.entertainer);
@@ -376,7 +375,6 @@ const EntertainerTab = ({ entertainer }) => {
   );
 
   const addSingleComment = (userId, comments) => {
-    console.log('userId, comments', userId, comments);
     axios
       .put(
         '/api/v1/approveEntertainer',
@@ -403,7 +401,6 @@ const EntertainerTab = ({ entertainer }) => {
         }
       })
       .catch(function (error) {
-        console.log('error', error);
         setMessage({
           type: 'danger',
           message: error.response.message,
@@ -426,8 +423,6 @@ const EntertainerTab = ({ entertainer }) => {
     ) {
       return null;
     }
-
-    console.log('ENTERTAIENR_TAB_LIST', ENTERTAINER_TAB_LIST);
 
     // Show button only when entertainer has completed all sections
     if (
@@ -565,7 +560,6 @@ EntertainerTab.propTypes = {
 
 const MediaTab = ({ entertainer }) => {
   const [activeTab, setActiveTab] = React.useState('1');
-  console.log('entertainer', entertainer);
 
   const toggle = (tab) => {
     if (activeTab !== tab) setActiveTab(tab);
@@ -749,7 +743,6 @@ const AssignCommissionToUser = ({ userId }) => {
           )
           .then(function (response) {
             const { status, data } = response;
-            console.log('data', data);
             if (status === 200) {
               setMessage({
                 msg: 'Commision has been successfully assigned to user',
@@ -764,7 +757,6 @@ const AssignCommissionToUser = ({ userId }) => {
             }
           })
           .catch(function (error) {
-            console.log('error ', error.response.data.message);
             setMessage({ msg: error.response.data.message });
             actions.setSubmitting(false);
           });
@@ -821,7 +813,6 @@ const AssignBadgeToUser = ({ userId }) => {
           )
           .then(function (response) {
             const { status, data } = response;
-            console.log('data', data);
             if (status === 200) {
               setMessage({
                 msg: 'Badge has been successfully assigned to user',
@@ -832,7 +823,6 @@ const AssignBadgeToUser = ({ userId }) => {
             }
           })
           .catch(function (error) {
-            console.log('error ', error.response.data.message);
             setMessage({ msg: error.response.data.message });
             actions.setSubmitting(false);
           });
