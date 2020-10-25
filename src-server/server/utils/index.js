@@ -14,6 +14,11 @@ const validString = (data) => {
 export const moneyFormat = (number) =>
   number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
 
+export const encodeAccountNumber = (number) =>
+  number
+    ? `${number.toString().slice(0, 2)}******${number.toString().slice(0 - 2)}`
+    : null;
+
 /**
  * Date and Time
  * @param {*} date

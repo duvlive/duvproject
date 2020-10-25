@@ -81,7 +81,7 @@ Payments.Card = ({ color, payment }) => (
       >
         <div className="card-body">
           <h4 className="subtitle--2 white mb-0">
-            NGN {moneyFormat(payment.amount)}
+            ₦{moneyFormat(payment.amount)}
           </h4>
           <div className="small--1 text-gray">
             Paid on {getShortDate(payment.createdAt)}

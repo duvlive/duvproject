@@ -17,6 +17,8 @@ import NoContent from 'components/common/utils/NoContent';
 import { countOccurences } from 'utils/helpers';
 import { userCanAddEntertainer } from 'utils/event-helpers';
 import AlertMessage from 'components/common/utils/AlertMessage';
+import { getHiredEntertainerFromStore } from 'utils/localStorage';
+import { HiredEntertainerCard } from './AddEntertainerToEvent';
 
 const Events = () => {
   const { userState, userDispatch } = React.useContext(UserContext);
@@ -41,6 +43,7 @@ const Events = () => {
       type: 'remove-alert',
     });
   }
+  const hiredEntertainer = getHiredEntertainerFromStore();
 
   return (
     <BackEndPage title="My Events">
@@ -48,14 +51,28 @@ const Events = () => {
         <TopMessage message="All Events" />
 
         <section className="app-content">
-          <div className="text-right">
-            <Link
-              className="btn btn-danger btn-transparent btn-wide"
-              to="/user/events/new"
-            >
-              <span className="icon icon-events"></span> New Event
-            </Link>
-          </div>
+          {!hiredEntertainer && (
+            <div className="text-right">
+              <Link
+                className="btn btn-danger btn-transparent btn-wide"
+                to="/user/events/new"
+              >
+                <span className="icon icon-events"></span> New Event
+              </Link>
+            </div>
+          )}
+
+          {hiredEntertainer && (
+            <>
+              <HiredEntertainerCard />
+              <Link
+                className="btn btn-success btn-transparent btn-xs mb-5"
+                to="/user/events/new"
+              >
+                Hire in a New Event
+              </Link>
+            </>
+          )}
           <div className="mt-4">
             <AlertMessage message={message.msg} type={message.type} />
           </div>
@@ -236,7 +253,9 @@ Events.Card = ({
                 className="btn btn-danger btn-transparent"
                 to={`/user/events/${id}/add-entertainer`}
               >
-                Add Entertainer
+                {getHiredEntertainerFromStore()
+                  ? `Hire ${getHiredEntertainerFromStore().stageName}`
+                  : 'Add Entertainer'}
               </Link>
               &nbsp; &nbsp; &nbsp;
             </>

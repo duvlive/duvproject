@@ -41,6 +41,10 @@ const EMAIL_CONTENT = {
     subject: 'YIPPEE!!! You have a new event request',
     buttonText: 'Accept Request',
   },
+  ENTERTAINER_PAYMENT: {
+    subject: 'You have been paid [amount]',
+    buttonText: 'View Payment',
+  },
   FAQ: {
     subject: 'FAQ',
     title: 'FAQ',

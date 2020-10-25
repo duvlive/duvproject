@@ -10,7 +10,11 @@ import {
 } from 'components/forms/form-helper';
 import { addEntertainerSchema } from 'components/forms/schema/entertainerSchema';
 import { UserContext } from 'context/UserContext';
-import { getTokenFromStore } from 'utils/localStorage';
+import {
+  getHiredEntertainerFromStore,
+  getTokenFromStore,
+  removeHiredEntertainerFromStore,
+} from 'utils/localStorage';
 import { createSchema } from 'components/forms/schema/schema-helpers';
 import AlertMessage from '../../common/utils/AlertMessage';
 import BackEndPage from '../../common/layout/BackEndPage';
@@ -63,7 +67,10 @@ const AddEntertainerDetails = ({ id }) => {
         });
   }, [id]);
 
-  if (event && auctionIsVoid(event.eventDate)) {
+  if (
+    event &&
+    (getHiredEntertainerFromStore() || auctionIsVoid(event.eventDate))
+  ) {
     auctionIsDisabled = true;
     type = 'Recommend';
   }
@@ -123,9 +130,15 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
   const [loading, setLoading] = React.useState(false);
   const [message, setMessage] = React.useState({ message: null });
   const [hireType, setHireType] = React.useState(type);
+  const hiredEntertainerFromStore = {
+    ...getHiredEntertainerFromStore(),
+    type: 'Recommend',
+  };
   const [selectedEntertainer, setSelectedEntertainer] = React.useState({
-    entertainer: null,
-    type: '',
+    entertainer: getHiredEntertainerFromStore()
+      ? hiredEntertainerFromStore
+      : null,
+    type,
     language: '',
   });
 
@@ -199,6 +212,7 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
                 alert: 'add-entertainer-details-success',
               });
               actions.setSubmitting(false);
+              removeHiredEntertainerFromStore();
 
               navigate(`/user/events/view/${id}`);
             } else {
@@ -233,7 +247,9 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
               {/* show on auction or if entertainer is selected */}
               {(isAuction ||
                 (selectedEntertainer.entertainer &&
-                  selectedEntertainer.type === hireType.toLowerCase())) && (
+                  selectedEntertainer.type &&
+                  selectedEntertainer.type.toLowerCase() ===
+                    hireType.toLowerCase())) && (
                 <div className="mt-5">
                   <button
                     className="btn btn-transparent btn-primary text-right btn-lg"
@@ -281,7 +297,8 @@ const AddEntertainerDetailsForm = ({
 
   const hasSelectedEntertainer =
     currentlySelectedEntertainer.entertainer &&
-    currentlySelectedEntertainer.type === type.toLowerCase();
+    currentlySelectedEntertainer.type &&
+    currentlySelectedEntertainer.type.toLowerCase() === type.toLowerCase();
 
   return (
     <div className="card card-custom card-black card-form">
@@ -316,7 +333,9 @@ const AddEntertainerDetailsForm = ({
                 type.toLowerCase() === 'search' ? 'info' : 'success'
               } h6`}
             >
-              Selected Entertainer (from {type})
+              {getHiredEntertainerFromStore()
+                ? 'Hired Entertainer (from Profile)'
+                : `Selected Entertainer (from ${type})`}
             </h3>
             <SelectedEntertainer
               entertainer={currentlySelectedEntertainer.entertainer}
@@ -465,7 +484,46 @@ const ExpiredEvent = () => (
   </section>
 );
 
-const SelectedEntertainer = ({ entertainer, selectedSearchedEntertainer }) => (
+export const HiredEntertainerCard = ({ hideTitle }) => {
+  const [entertainer, setEntertainer] = React.useState(
+    getHiredEntertainerFromStore()
+  );
+  const handleEntertainerRemoval = () => {
+    removeHiredEntertainerFromStore();
+    setEntertainer(null);
+  };
+
+  if (!entertainer) {
+    return null;
+  }
+
+  return (
+    <>
+      {!hideTitle && (
+        <h6 className="text-yellow small font-weight-normal">
+          Currently Hired Entertainer
+        </h6>
+      )}
+      <SelectedEntertainer
+        entertainer={entertainer}
+        selectedSearchedEntertainer={handleEntertainerRemoval}
+      />
+    </>
+  );
+};
+
+HiredEntertainerCard.propTypes = {
+  hideTitle: PropTypes.bool,
+};
+
+HiredEntertainerCard.propTypes = {
+  hideTitle: false,
+};
+
+export const SelectedEntertainer = ({
+  entertainer,
+  selectedSearchedEntertainer,
+}) => (
   <div className="table-responsive">
     <table className="table table-dark table__no-border table__with-bg">
       <tbody>
@@ -518,9 +576,10 @@ const SelectedEntertainer = ({ entertainer, selectedSearchedEntertainer }) => (
             &nbsp;&nbsp;
             <button
               className="btn btn-danger btn-sm btn-transparent"
-              onClick={() =>
-                selectedSearchedEntertainer({ entertainer: null, type: null })
-              }
+              onClick={() => {
+                removeHiredEntertainerFromStore();
+                selectedSearchedEntertainer({ entertainer: null, type: null });
+              }}
             >
               Remove
             </button>

@@ -163,7 +163,7 @@ const ViewRequest = ({ applicationId }) => {
                     <div className="mt-2 text-muted-light-2 px-5 line-height-2">
                       {application.status === REQUEST_ACTION.APPROVED && (
                         <>
-                          Your offer of NGN {getNairaSymbol()}
+                          Your offer of {getNairaSymbol()}
                           {commaNumber(application.askingPrice)} was accepted.
                         </>
                       )}

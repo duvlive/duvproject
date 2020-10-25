@@ -110,19 +110,21 @@ Dashboard.Items = ({
             <DashboardOverviewCard.List
               color="green"
               icon="auction"
-              number={eventsOverview && eventsOverview['Auction']}
+              number={(eventsOverview && eventsOverview['Auction']) || '0'}
               title="Auctions"
             />
             <DashboardOverviewCard.List
               color="green"
               icon="hire-entertainers"
-              number={eventsOverview && eventsOverview['Recommendation']}
+              number={
+                eventsOverview && (eventsOverview['Recommendation'] || '0')
+              }
               title="Recommendation"
             />
             <DashboardOverviewCard.List
               color="green"
               icon="vcard"
-              number={eventsOverview && eventsOverview['Search']}
+              number={eventsOverview && (eventsOverview['Search'] || '0')}
               title="Search"
             />
           </DashboardOverviewCard>

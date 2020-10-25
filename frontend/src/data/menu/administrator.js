@@ -88,9 +88,9 @@ export default [
     name: 'Others',
     menus: [
       {
-        title: 'Edit Profile',
-        to: '/admin/edit-profile',
-        icon: 'user-circle',
+        title: 'Switch to User Account',
+        to: '/user/dashboard',
+        icon: 'loop',
       },
       {
         title: 'Invite Friends',
@@ -98,9 +98,9 @@ export default [
         icon: 'invite-friend',
       },
       {
-        title: 'Switch to User Account',
-        to: '/user/dashboard',
-        icon: 'loop',
+        title: 'Edit Profile',
+        to: '/admin/edit-profile',
+        icon: 'user-circle',
       },
       {
         title: 'Logout',

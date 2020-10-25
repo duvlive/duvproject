@@ -2,14 +2,21 @@ import axios from 'axios';
 import crypto from 'crypto';
 import {
   Application,
+  BankDetail,
   EntertainerProfile,
   Event,
-  User,
   EventEntertainer,
   Notification,
   Payment,
+  User,
 } from '../models';
-import { validString, getAll } from '../utils';
+import {
+  validString,
+  getAll,
+  getShortDate,
+  moneyFormat,
+  encodeAccountNumber,
+} from '../utils';
 import { NOTIFICATIONS, NOTIFICATION_TYPE } from '../constant';
 import sendMail from '../MailSender';
 import EMAIL_CONTENT from '../email-template/content';
@@ -90,7 +97,7 @@ const PaymentController = {
         await Notification.create({
           userId: req.user.id,
           title: NOTIFICATIONS.PAYMENT_INITIATED,
-          description: `A payment of NGN ${amount} was initiated`,
+          description: `A payment of ₦${amount} was initiated`,
           type: NOTIFICATION_TYPE.CONTENT,
         });
         return res.status(200).json({
@@ -381,6 +388,7 @@ const PaymentController = {
                 'email',
                 'profileImageURL',
               ],
+              include: [{ model: BankDetail, as: 'bankDetail' }],
             },
           ],
           required: true,
@@ -416,15 +424,36 @@ const PaymentController = {
       eventEntertainerId,
     })
       .then(async (payment) => {
-        const contentTop = `Congratulations!!! Your have a been paid NGN ${amount} for the completion of ${eventDetails.event.eventType}.`;
+        const contentTop = `We are pleased to inform you that your pay for performing at the event with details below, has been credited to your bank account provided.<br /><br />
+                     <strong>Event: </strong><${
+                       eventDetails.event.eventType
+                     }br />
+                     <strong>Place: </strong>${eventDetails.placeOfEvent}<br />
+                     <strong>Date: </strong>${getShortDate(
+                       eventDetails.event.eventDate
+                     )}<br />
+                     <strong>Take-Home Pay: </strong>₦${moneyFormat(
+                       amount
+                     )}<br />
+                     <strong>Bank: </strong>${
+                       eventDetails.entertainer.personalDetails.bankDetail
+                         .bankName
+                     }<br />
+                     <strong>Account No.: </strong>${encodeAccountNumber(
+                       eventDetails.entertainer.personalDetails.bankDetail
+                         .accountNumber
+                     )}<br />
+        `;
 
         sendMail(
-          EMAIL_CONTENT.ENTERTAINER_REQUEST,
-          { email: eventDetails.entertainer.personalDetails.email },
+          EMAIL_CONTENT.ENTERTAINER_PAYMENT,
           {
+            email: eventDetails.entertainer.personalDetails.email,
             firstName: eventDetails.entertainer.stageName,
-            title: `You have a been paid NGN ${amount}`,
-            link: '#',
+          },
+          {
+            title: `You have been paid ₦${moneyFormat(amount)}`,
+            subject: `You have been paid ₦${moneyFormat(amount)}`,
             contentTop,
           }
         );

@@ -81,7 +81,7 @@ const GlobalNotificationsRow = ({
     </td>
 
     <td className="align-middle text-left">
-      <small className="small--4 text-muted">Start Time</small>
+      <small className="small--4 text-muted">End Time</small>
       <span className="text-muted-light-2">{getDateTime(endTime)}</span>
     </td>
 

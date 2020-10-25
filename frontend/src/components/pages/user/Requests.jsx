@@ -11,9 +11,10 @@ import { moneyFormat, getRequestStatusIcon } from 'utils/helpers';
 import NoContent from 'components/common/utils/NoContent';
 import Image from 'components/common/utils/Image';
 import { REQUEST_ACTION } from 'utils/constants';
+import LoadItems from 'components/common/utils/LoadItems';
 
 const Requests = () => {
-  const [requests, setRequests] = React.useState([]);
+  const [requests, setRequests] = React.useState(null);
   React.useEffect(() => {
     axios
       .get('/api/v1/user/requests', {
@@ -30,6 +31,7 @@ const Requests = () => {
       })
       .catch(function (error) {
         console.log(error.response.data.message);
+        setRequests([]);
         // navigate to all events
       });
   }, []);
@@ -39,23 +41,27 @@ const Requests = () => {
         <TopMessage message="Requests" />
 
         <section className="app-content">
-          {requests.length > 0 ? (
-            <RequestsTable requests={requests} />
-          ) : (
-            <NoContent
-              isButton
-              linkText="Add a New Event"
-              linkTo="/user/events/new"
-              text={
-                <>
-                  No Request Found.
-                  <div className="small  mt-3">
-                    You can create a new Request after adding a new Event
-                  </div>
-                </>
-              }
-            />
-          )}
+          <LoadItems
+            items={requests}
+            loadingText="Loading your Requests"
+            noContent={
+              <NoContent
+                isButton
+                linkText="Add a New Event"
+                linkTo="/user/events/new"
+                text={
+                  <>
+                    No Request Found.
+                    <div className="small mt-3">
+                      You can create a new Request after adding a new Event
+                    </div>
+                  </>
+                }
+              />
+            }
+          >
+            <RequestsTable requests={requests || []} />
+          </LoadItems>
         </section>
       </div>
     </BackEndPage>
