@@ -1,6 +1,7 @@
 import { GlobalNotification, User } from '../models';
 import { validString, getAll } from '../utils';
 import { Op } from 'sequelize';
+import { Sequelize } from 'sequelize';
 
 const GlobalNotificationController = {
   /**
@@ -11,15 +12,7 @@ const GlobalNotificationController = {
    * @return {object} returns res object
    */
   createAndUpdateGlobalNotification(req, res) {
-    const {
-      color,
-      message,
-      entertainerType,
-      userType,
-      startTime,
-      endTime,
-      id,
-    } = req.body;
+    const { color, message, userType, startTime, endTime, id } = req.body;
 
     const error = {
       ...validString(message),
@@ -27,7 +20,6 @@ const GlobalNotificationController = {
       ...validString(color),
     };
 
-    console.log('req.body', req.body);
     if (Object.keys(error).length > 1) {
       return res.status(400).json({ message: error.message.join('') });
     }
@@ -140,12 +132,14 @@ const GlobalNotificationController = {
    */
   getUserGlobalNotification(req, res) {
     let where = {
+      startTime: { [Op.lte]: Sequelize.literal('NOW()') },
+      endTime: { [Op.gte]: Sequelize.literal('NOW()') },
       [Op.or]: [
         {
           userType: req.user.type,
         },
         {
-          userType: 1000,
+          userType: 1000, // 1000 is used for all user types
         },
       ],
     };
