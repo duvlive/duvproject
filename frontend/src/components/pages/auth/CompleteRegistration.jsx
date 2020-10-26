@@ -90,7 +90,7 @@ const CompleteRegistrationForm = ({ token }) => {
             }
           )
           .then(function (response) {
-            const { data, status } = response;
+            const { status } = response;
             if (status === 200) {
               navigate(`/login/${token}`);
             }

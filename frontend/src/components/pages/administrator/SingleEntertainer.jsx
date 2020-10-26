@@ -812,7 +812,7 @@ const AssignBadgeToUser = ({ userId }) => {
             }
           )
           .then(function (response) {
-            const { status, data } = response;
+            const { status } = response;
             if (status === 200) {
               setMessage({
                 msg: 'Badge has been successfully assigned to user',

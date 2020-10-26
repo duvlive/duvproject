@@ -184,7 +184,7 @@ export const AddNewComponent = ({ addData, setMessage }) => {
                 dateFormat="MMMM d, yyyy h:mm aa"
                 formGroupClassName="col-md-6"
                 label="Notification Starts"
-                minDate={addDays(new Date(), 1)}
+                minDate={addDays(new Date(), 0)}
                 name="startTime"
                 placeholder="Event Start Time"
                 showTimeSelect
