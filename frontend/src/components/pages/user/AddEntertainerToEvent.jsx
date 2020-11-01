@@ -517,7 +517,7 @@ HiredEntertainerCard.propTypes = {
   hideTitle: PropTypes.bool,
 };
 
-HiredEntertainerCard.propTypes = {
+HiredEntertainerCard.defaultProps = {
   hideTitle: false,
 };
 

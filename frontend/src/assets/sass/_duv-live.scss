@@ -710,6 +710,24 @@ a:hover {
   font-size: 0.75rem;
   padding: 0.75rem 2rem;
   margin-top: 5.5rem;
+  position: relative;
+
+  &__close {
+    position: absolute;
+    font-size: 1.5rem;
+    right: 3rem;
+    top: 0.25rem;
+    @include media-breakpoint-up(md) {
+      top: 0.75rem;
+    }
+    opacity: 0.2;
+    cursor: pointer;
+    transition: opacity 0.3s ease-out;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
 
   @include media-breakpoint-up(md) {
     font-size: 0.85rem;
