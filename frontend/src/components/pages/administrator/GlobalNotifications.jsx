@@ -41,7 +41,6 @@ const GlobalNotifications = () => {
 const GlobalNotificationsRow = ({
   color,
   adminUser,
-  entertainerType,
   id,
   message,
   number,
@@ -102,9 +101,24 @@ const GlobalNotificationsRow = ({
     </td>
 
     <td className="align-middle">
-      <DuvLiveModal body={message} title="Notification">
+      <DuvLiveModal
+        body={
+          <ViewGlobalNotification
+            notification={{
+              id,
+              color,
+              message,
+              startTime,
+              endTime,
+              userType,
+            }}
+          />
+        }
+        className="modal-large"
+        title="Notification"
+      >
         <button className="btn btn-sm btn-transparent btn-danger">
-          View Message
+          View Notification
         </button>
       </DuvLiveModal>
     </td>
@@ -177,76 +191,7 @@ export const AddNewComponent = ({ addData, setMessage }) => {
         <Form className="card card-custom card-black card-form p-4">
           <>
             <h5 className="sub-title py-3">New Global Notification</h5>
-            <TextArea
-              label="Message"
-              name="message"
-              placeholder="Notification message"
-            />
-            <div className="row">
-              <DatePicker
-                dateFormat="MMMM d, yyyy h:mm aa"
-                formGroupClassName="col-md-6"
-                label="Notification Starts"
-                minDate={addDays(new Date(), 1)}
-                name="startTime"
-                placeholder="Event Start Time"
-                showTimeSelect
-                timeIntervals={15}
-              />
-
-              <DatePicker
-                dateFormat="MMMM d, yyyy h:mm aa"
-                formGroupClassName="col-md-6"
-                label="Notification Ends"
-                minDate={addDays(new Date(), 1)}
-                name="endTime"
-                placeholder="Event Date"
-                showTimeSelect
-                timeIntervals={15}
-              />
-            </div>
-            <div className="row">
-              <Select
-                blankOption="Select User Type"
-                formGroupClassName="col-md-6"
-                label="User Type"
-                name="userType"
-                options={[
-                  { value: 1000, label: 'All' },
-                  { value: 0, label: 'Admin' },
-                  { value: 1, label: 'Users' },
-                  { value: 2, label: 'Entertainers' },
-                  { value: 3, label: 'Band Members' },
-                ]}
-                placeholder="GlobalNotification Title"
-              />
-              <Select
-                blankOption="Select Color"
-                formGroupClassName="col-md-6"
-                label="Color"
-                name="color"
-                options={[
-                  { value: 'blue', label: 'Information' },
-                  { value: 'red', label: 'Danger' },
-                  { value: 'green', label: 'Success' },
-                  { value: 'yellow', label: 'Warning' },
-                ]}
-                placeholder="GlobalNotification Title"
-              />
-              {/* <Select
-                blankOption="Select Entertainer Type"
-                formGroupClassName="col-md-6"
-                label="Entertainer Type"
-                name="entertainerType"
-                options={[
-                  { value: 'All' },
-                  { value: 'DJ' },
-                  { value: 'MC' },
-                  { value: 'LiveBand' },
-                ]}
-                placeholder="Entertainer Type"
-              /> */}
-            </div>
+            <GlobalNotificationsForm />
 
             <div className="form-group">
               <Button
@@ -264,6 +209,176 @@ export const AddNewComponent = ({ addData, setMessage }) => {
     />
   );
 };
+
+const ViewGlobalNotification = ({ notification }) => {
+  const [editNotification, setEditNotification] = React.useState(false);
+
+  const ViewNotification = ({ notification }) => (
+    <section>
+      <p className={`text-normal mt-3 text-${notification.color}`}>
+        {notification.message}
+      </p>
+
+      <button
+        className="mt-5 btn btn-sm btn-transparent btn-info"
+        onClick={() => setEditNotification(true)}
+      >
+        Edit Notification
+      </button>
+    </section>
+  );
+  return editNotification ? (
+    <EditGlobalNotification
+      backToView={() => setEditNotification(false)}
+      notification={notification}
+    />
+  ) : (
+    <ViewNotification notification={notification} />
+  );
+};
+
+ViewGlobalNotification.propTypes = {
+  notification: PropTypes.object.isRequired,
+};
+
+const EditGlobalNotification = ({ notification, backToView }) => {
+  return (
+    <Formik
+      initialValues={setInitialValues(addGlobalNotificationObject, {
+        ...notification,
+      })}
+      onSubmit={(value, actions) => {
+        const payload = {
+          ...value,
+          id: notification.id,
+          endTime: value.endTime.date,
+          startTime: value.startTime.date,
+        };
+        console.log('payload', payload);
+        axios
+          .put('/api/v1/admin/global/notification', payload, {
+            headers: { 'x-access-token': getTokenFromStore() },
+          })
+          .then(function (response) {
+            const { status, data } = response;
+            console.log('response', response);
+            if (status === 200) {
+              // setMessage({ message: data.message, type: 'success' });
+              actions.setSubmitting(false);
+            }
+          })
+          .catch(function (error) {
+            console.log('error', error);
+            actions.setSubmitting(false);
+          });
+        actions.setSubmitting(false);
+      }}
+      render={({ isSubmitting, handleSubmit }) => (
+        <Form>
+          <>
+            <h5 className="sub-title py-3">Edit Notification</h5>
+            <GlobalNotificationsForm />
+
+            <div className="form-group">
+              <Button
+                color="info"
+                loading={isSubmitting}
+                onClick={handleSubmit}
+              >
+                Edit Notification
+              </Button>
+              &nbsp;&nbsp;
+              <Button color="danger" onClick={backToView}>
+                Back to View
+              </Button>
+            </div>
+          </>
+        </Form>
+      )}
+      validationSchema={createSchema(addGlobalNotificationObject)}
+    />
+  );
+};
+
+EditGlobalNotification.propTypes = {
+  backToView: PropTypes.func.isRequired,
+  notification: PropTypes.object.isRequired,
+};
+
+const GlobalNotificationsForm = () => (
+  <>
+    <TextArea
+      label="Message"
+      name="message"
+      placeholder="Notification message"
+    />
+    <div className="row">
+      <DatePicker
+        dateFormat="MMMM d, yyyy h:mm aa"
+        formGroupClassName="col-md-6"
+        label="Notification Starts"
+        minDate={addDays(new Date(), 1)}
+        name="startTime"
+        placeholder="Event Start Time"
+        showTimeSelect
+        timeIntervals={15}
+      />
+
+      <DatePicker
+        dateFormat="MMMM d, yyyy h:mm aa"
+        formGroupClassName="col-md-6"
+        label="Notification Ends"
+        minDate={addDays(new Date(), 1)}
+        name="endTime"
+        placeholder="Event Date"
+        showTimeSelect
+        timeIntervals={15}
+      />
+    </div>
+    <div className="row">
+      <Select
+        blankOption="Select User Type"
+        formGroupClassName="col-md-6"
+        label="User Type"
+        name="userType"
+        options={[
+          { value: 1000, label: 'All' },
+          { value: 0, label: 'Admin' },
+          { value: 1, label: 'Users' },
+          { value: 2, label: 'Entertainers' },
+          { value: 3, label: 'Band Members' },
+        ]}
+        placeholder="GlobalNotification Title"
+      />
+      <Select
+        blankOption="Select Color"
+        formGroupClassName="col-md-6"
+        label="Color"
+        name="color"
+        options={[
+          { value: 'blue', label: 'Information' },
+          { value: 'red', label: 'Danger' },
+          { value: 'green', label: 'Success' },
+          { value: 'yellow', label: 'Warning' },
+        ]}
+        placeholder="GlobalNotification Title"
+      />
+      {/* <Select
+    blankOption="Select Entertainer Type"
+    formGroupClassName="col-md-6"
+    label="Entertainer Type"
+    name="entertainerType"
+    options={[
+      { value: 'All' },
+      { value: 'DJ' },
+      { value: 'MC' },
+      { value: 'LiveBand' },
+    ]}
+    placeholder="Entertainer Type"
+  /> */}
+    </div>
+  </>
+);
 
 AddNewComponent.propTypes = {
   addData: PropTypes.func.isRequired,

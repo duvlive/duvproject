@@ -164,15 +164,13 @@ const EntertainerSection = ({ entertainer }) => {
                   <div className="col-sm-9">{entertainer.profile.about}</div>
                 </div>
               </section>
-              {getTokenFromStore() && (
-                <button
-                  className="btn btn-danger btn-transparent btn-lg"
-                  onClick={handleHiredEntertainer}
-                  type="submit"
-                >
-                  Hire {entertainer.profile.stageName}
-                </button>
-              )}
+              <button
+                className="btn btn-danger btn-transparent btn-lg"
+                onClick={handleHiredEntertainer}
+                type="submit"
+              >
+                Hire {entertainer.profile.stageName}
+              </button>
             </section>
           </Col>
         </Row>

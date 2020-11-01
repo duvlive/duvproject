@@ -88,12 +88,20 @@ const GlobalNotificationController = {
    * @return {object} json response
    */
   async getGlobalNotifications(req, res) {
-    const { offset, limit } = req.query;
+    const { offset, limit, showAll } = req.query;
+    let where = {};
+
+    if (!showAll) {
+      where = {
+        endTime: { [Op.gte]: Sequelize.literal('NOW()') },
+      };
+    }
 
     try {
       const options = {
         offset: offset || 0,
         limit: limit || 10,
+        where,
         include: [
           {
             model: User,

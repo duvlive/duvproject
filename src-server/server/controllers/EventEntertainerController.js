@@ -22,6 +22,7 @@ const sendRequestMail = ({
   askingPrice,
   takeHome,
   email,
+  placeOfEvent,
   stageName,
   event,
   id,
@@ -33,7 +34,7 @@ const sendRequestMail = ({
     'We are pleased to inform you are requested to perform at an event with the details stated below by an event host.';
   const contentBottom = `
     <strong>Event:</strong> ${event.eventType} <br>
-    <strong>Place:</strong> ${event.eventPlace} <br>
+    <strong>Place:</strong> ${placeOfEvent} <br>
     <strong>Date:</strong> ${getLongDate(event.eventDate)} <br>
     <strong>Start Time:</strong> ${getTime(event.startTime)} <br>
     <strong>Duration:</strong> ${event.eventDuration} <br>
@@ -233,6 +234,7 @@ const EventEntertainerController = {
                 askingPrice,
                 takeHome: entertainerFee,
                 email: entertainerDetails.email,
+                placeOfEvent,
                 stageName: entertainerDetails.profile.stageName,
                 event,
               });

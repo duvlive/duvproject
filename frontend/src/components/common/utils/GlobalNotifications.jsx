@@ -1,10 +1,14 @@
 import React from 'react';
 
 import axios from 'axios';
-import { getTokenFromStore } from 'utils/localStorage';
+import {
+  getCancelledNotificationFromStore,
+  getTokenFromStore,
+  storeCancelledNotification,
+} from 'utils/localStorage';
 
 const GlobalNotifications = () => {
-  const [notifications, setNotifications] = React.useState(null);
+  const [notification, setNotification] = React.useState(null);
 
   React.useEffect(() => {
     axios
@@ -18,18 +22,29 @@ const GlobalNotifications = () => {
         console.log('status,data', status, data);
         // handle success
         if (status === 200) {
-          setNotifications(data.globalNotification);
+          setNotification(data.globalNotification);
         }
       })
       .catch(function (error) {
-        console.log(error.response.data.message);
-        setNotifications([]);
+        setNotification({});
       });
   }, []);
 
-  return notifications ? (
-    <div className={`global-notifications ${notifications.color}`}>
-      {notifications.message}
+  const closeNotification = (notificationId) => {
+    setNotification(null);
+    storeCancelledNotification(notificationId);
+  };
+
+  return notification &&
+    notification.id !== getCancelledNotificationFromStore() ? (
+    <div className={`global-notifications ${notification.color}`}>
+      {notification.message}
+      <div
+        className="global-notifications__close"
+        onClick={() => closeNotification(notification.id)}
+      >
+        <span className="icon-cancel-circled icon"></span>
+      </div>
     </div>
   ) : null;
 };
