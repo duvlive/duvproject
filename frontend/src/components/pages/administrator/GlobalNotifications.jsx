@@ -41,7 +41,6 @@ const GlobalNotifications = () => {
 const GlobalNotificationsRow = ({
   color,
   adminUser,
-  entertainerType,
   id,
   message,
   number,
@@ -102,9 +101,24 @@ const GlobalNotificationsRow = ({
     </td>
 
     <td className="align-middle">
-      <DuvLiveModal body={message} title="Notification">
+      <DuvLiveModal
+        body={
+          <ViewGlobalNotification
+            notification={{
+              id,
+              color,
+              message,
+              startTime,
+              endTime,
+              userType,
+            }}
+          />
+        }
+        className="modal-large"
+        title="Notification"
+      >
         <button className="btn btn-sm btn-transparent btn-danger">
-          View Message
+          View Notification
         </button>
       </DuvLiveModal>
     </td>
@@ -194,6 +208,101 @@ export const AddNewComponent = ({ addData, setMessage }) => {
       validationSchema={createSchema(addGlobalNotificationObject)}
     />
   );
+};
+
+const ViewGlobalNotification = ({ notification }) => {
+  const [editNotification, setEditNotification] = React.useState(false);
+
+  const ViewNotification = ({ notification }) => (
+    <section>
+      <p className={`text-normal mt-3 text-${notification.color}`}>
+        {notification.message}
+      </p>
+
+      <button
+        className="mt-5 btn btn-sm btn-transparent btn-info"
+        onClick={() => setEditNotification(true)}
+      >
+        Edit Notification
+      </button>
+    </section>
+  );
+  return editNotification ? (
+    <EditGlobalNotification
+      backToView={() => setEditNotification(false)}
+      notification={notification}
+    />
+  ) : (
+    <ViewNotification notification={notification} />
+  );
+};
+
+ViewGlobalNotification.propTypes = {
+  notification: PropTypes.object.isRequired,
+};
+
+const EditGlobalNotification = ({ notification, backToView }) => {
+  return (
+    <Formik
+      initialValues={setInitialValues(addGlobalNotificationObject, {
+        ...notification,
+      })}
+      onSubmit={(value, actions) => {
+        const payload = {
+          ...value,
+          id: notification.id,
+          endTime: value.endTime.date,
+          startTime: value.startTime.date,
+        };
+        console.log('payload', payload);
+        axios
+          .put('/api/v1/admin/global/notification', payload, {
+            headers: { 'x-access-token': getTokenFromStore() },
+          })
+          .then(function (response) {
+            const { status, data } = response;
+            console.log('response', response);
+            if (status === 200) {
+              // setMessage({ message: data.message, type: 'success' });
+              actions.setSubmitting(false);
+            }
+          })
+          .catch(function (error) {
+            console.log('error', error);
+            actions.setSubmitting(false);
+          });
+        actions.setSubmitting(false);
+      }}
+      render={({ isSubmitting, handleSubmit }) => (
+        <Form>
+          <>
+            <h5 className="sub-title py-3">Edit Notification</h5>
+            <GlobalNotificationsForm />
+
+            <div className="form-group">
+              <Button
+                color="info"
+                loading={isSubmitting}
+                onClick={handleSubmit}
+              >
+                Edit Notification
+              </Button>
+              &nbsp;&nbsp;
+              <Button color="danger" onClick={backToView}>
+                Back to View
+              </Button>
+            </div>
+          </>
+        </Form>
+      )}
+      validationSchema={createSchema(addGlobalNotificationObject)}
+    />
+  );
+};
+
+EditGlobalNotification.propTypes = {
+  backToView: PropTypes.func.isRequired,
+  notification: PropTypes.object.isRequired,
 };
 
 const GlobalNotificationsForm = () => (
