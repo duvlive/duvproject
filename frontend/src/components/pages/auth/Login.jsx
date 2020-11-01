@@ -15,6 +15,7 @@ import { loginSchema } from 'components/forms/schema/userSchema';
 import { navigate } from '@reach/router';
 import { DASHBOARD_PAGE, USER_TYPES } from 'utils/constants';
 import {
+  getHiredEntertainerFromStore,
   getTokenFromStore,
   storeToken,
   storeUserType,
@@ -61,6 +62,16 @@ const Content = ({ redirectTo, sid, token }) => {
           <Col sm={{ size: 5 }}>
             <div className="auth__container">
               <section>
+                {redirectTo === '/user/events/new' && (
+                  <AlertMessage
+                    message={`You need to sign in to hire ${
+                      (getHiredEntertainerFromStore() &&
+                        getHiredEntertainerFromStore().stageName) ||
+                      'entertainer'
+                    }`}
+                    type="info"
+                  />
+                )}
                 <h5 className="header font-weight-normal mb-4">Login</h5>
                 <LoginForm redirectTo={redirectTo} sid={sid} token={token} />
 
