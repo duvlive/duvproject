@@ -67,12 +67,13 @@ const AddEntertainerDetails = ({ id }) => {
         });
   }, [id]);
 
-  if (
-    event &&
-    (getHiredEntertainerFromStore() || auctionIsVoid(event.eventDate))
-  ) {
+  if (event && auctionIsVoid(event.eventDate)) {
     auctionIsDisabled = true;
     type = 'Recommend';
+  }
+
+  if (event && getHiredEntertainerFromStore()) {
+    type = 'Search';
   }
 
   return (
@@ -132,7 +133,7 @@ const AddEntertainerToEvent = ({ auctionIsDisabled, event, id, type }) => {
   const [hireType, setHireType] = React.useState(type);
   const hiredEntertainerFromStore = {
     ...getHiredEntertainerFromStore(),
-    type: 'Recommend',
+    type: 'Search',
   };
   const [selectedEntertainer, setSelectedEntertainer] = React.useState({
     entertainer: getHiredEntertainerFromStore()
