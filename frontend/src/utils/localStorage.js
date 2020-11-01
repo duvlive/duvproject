@@ -24,4 +24,7 @@ export const storeCancelledNotification = (notification) =>
   store(NOTIFICATION, notification);
 export const getCancelledNotificationFromStore = () => store(NOTIFICATION);
 
-export const clearStorage = () => store(false);
+export const clearStorage = () => {
+  store.remove(TOKEN);
+  store.remove(USER_TYPE);
+};
