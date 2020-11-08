@@ -146,7 +146,15 @@ export const getRequestStatusIcon = (status, rejectedText = null) => {
     case REQUEST_ACTION.INCREMENT:
       return (
         <div className="text-white">
-          <span className="icon icon icon-up-big"></span>
+          <span className="icon icon-up-big"></span>
+          {status}
+        </div>
+      );
+
+    case REQUEST_ACTION.EXPIRED:
+      return (
+        <div className="text-warning">
+          <span className="icon icon-dot-circled"></span>
           {status}
         </div>
       );
@@ -154,7 +162,7 @@ export const getRequestStatusIcon = (status, rejectedText = null) => {
     case REQUEST_ACTION.REJECTED:
       return (
         <div className="text-red">
-          <span className="icon icon icon-cancel-circled"></span>
+          <span className="icon icon-cancel-circled"></span>
           {rejectedText || status}
         </div>
       );

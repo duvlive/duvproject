@@ -12,8 +12,9 @@ import {
   getRequestStatusIcon,
 } from 'utils/helpers';
 import PriceCalculator from 'components/common/utils/PriceCalculator';
-import { DEFAULT_COMMISSION } from 'utils/constants';
+import { DEFAULT_COMMISSION, REQUEST_ACTION } from 'utils/constants';
 import { navigate } from '@reach/router';
+import { eventHasExpired } from 'utils/event-helpers';
 
 const ViewBid = ({ applicationId }) => {
   const [application, setApplication] = React.useState(null);
@@ -45,6 +46,12 @@ const ViewBid = ({ applicationId }) => {
 
   const eventEntertainer = application.eventEntertainerInfo;
 
+  const updatedStatus =
+    eventHasExpired(application.eventEntertainerInfo.auctionEndDate) &&
+    application.status === REQUEST_ACTION.PENDING
+      ? REQUEST_ACTION.EXPIRED
+      : application.status;
+
   return (
     <BackEndPage title="Placed Bid">
       <div className="main-app">
@@ -67,7 +74,7 @@ const ViewBid = ({ applicationId }) => {
                   Your Bid: {getNairaSymbol()}
                   {commaNumber(application.askingPrice)}
                   <small className="float-right">
-                    {getRequestStatusIcon(application.status, 'Closed')}
+                    {getRequestStatusIcon(updatedStatus, 'Closed')}
                   </small>
                 </h5>
                 <hr className="d-block mb-4" />

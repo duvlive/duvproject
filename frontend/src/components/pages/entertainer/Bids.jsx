@@ -15,6 +15,8 @@ import NoContent from 'components/common/utils/NoContent';
 import { Link } from '@reach/router';
 import { UserContext } from 'context/UserContext';
 import AlertMessage from 'components/common/utils/AlertMessage';
+import { eventHasExpired } from 'utils/event-helpers';
+import { REQUEST_ACTION } from 'utils/constants';
 
 const Bids = () => {
   const [message, setMessage] = React.useState({ msg: null, type: null });
@@ -106,45 +108,51 @@ export const BidsRow = ({
   number,
   state,
   status,
-}) => (
-  <tr>
-    <th className="table__number" scope="row">
-      {twoDigitNumber(number)}
-    </th>
-    <td>
-      <div className="table__title text-muted-light-2">{eventType}</div>
-      <span>
-        <i className="icon icon-location" />
-        {city}, {state} state
-      </span>
-    </td>
-    <td>
-      <span className="text-muted-light-2">Bidding closes on </span>
-      <span>
-        <i className="icon icon-clock" /> {getShortDate(auctionEndDate)}
-      </span>
-    </td>
-    <td>
-      <span className="text-muted-light-2">Asking Price</span>
-      <span className="text-yellow">
-        {getNairaSymbol()}
-        {commaNumber(askingPrice)}
-      </span>
-    </td>
-    <td>
-      <span className="text-muted-light-2 small--2">Status</span>
-      <span>{getRequestStatusIcon(status, 'Closed')}</span>
-    </td>
-    <td className="text-right">
-      <Link
-        className="btn btn-info btn-transparent"
-        to={`/entertainer/bid/view/${id}`}
-      >
-        View Bid
-      </Link>
-    </td>
-  </tr>
-);
+}) => {
+  const updatedStatus =
+    eventHasExpired(auctionEndDate) && status === REQUEST_ACTION.PENDING
+      ? REQUEST_ACTION.EXPIRED
+      : status;
+  return (
+    <tr>
+      <th className="table__number" scope="row">
+        {twoDigitNumber(number)}
+      </th>
+      <td>
+        <div className="table__title text-muted-light-2">{eventType}</div>
+        <span>
+          <i className="icon icon-location" />
+          {city}, {state} state
+        </span>
+      </td>
+      <td>
+        <span className="text-muted-light-2">Bidding closes on </span>
+        <span>
+          <i className="icon icon-clock" /> {getShortDate(auctionEndDate)}
+        </span>
+      </td>
+      <td>
+        <span className="text-muted-light-2">Asking Price</span>
+        <span className="text-yellow">
+          {getNairaSymbol()}
+          {commaNumber(askingPrice)}
+        </span>
+      </td>
+      <td>
+        <span className="text-muted-light-2 small--2">Status</span>
+        <span>{getRequestStatusIcon(updatedStatus, 'Closed')}</span>
+      </td>
+      <td className="text-right">
+        <Link
+          className="btn btn-info btn-transparent"
+          to={`/entertainer/bid/view/${id}`}
+        >
+          View Bid
+        </Link>
+      </td>
+    </tr>
+  );
+};
 
 BidsRow.propTypes = {
   askingPrice: PropTypes.string,
