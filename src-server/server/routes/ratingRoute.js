@@ -46,11 +46,6 @@ const ratingRoutes = (router) => {
     Authentication.validateAdmin,
     RatingController.getRatings
   );
-
-  router.get(
-    '/api/v1/process-unrated-events',
-    RatingController.processUnratedEvents
-  );
 };
 
 export default ratingRoutes;

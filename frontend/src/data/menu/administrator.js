@@ -82,6 +82,11 @@ export default [
         to: '/admin/badges',
         icon: 'badge',
       },
+      {
+        title: 'Cron Job',
+        to: '/admin/cron',
+        icon: 'hourglass',
+      },
     ],
   },
   {

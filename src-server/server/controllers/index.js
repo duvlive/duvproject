@@ -5,6 +5,7 @@ import BadgeController from './BadgeController';
 import BankDetailController from './BankDetailController';
 import CommissionController from './CommissionController';
 import ContactController from './ContactController';
+import CronController from './CronController';
 import EmailController from './EmailController';
 import EntertainerProfileController from './EntertainerProfileController';
 import EventController from './EventController';
@@ -31,6 +32,7 @@ export {
   BankDetailController,
   CommissionController,
   ContactController,
+  CronController,
   EmailController,
   EntertainerProfileController,
   EventController,
