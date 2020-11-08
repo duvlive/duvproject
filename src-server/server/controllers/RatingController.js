@@ -11,7 +11,7 @@ import {
   Event,
   User,
 } from '../models';
-import { getAll, getEventDate, validString } from '../utils';
+import { getAll, getEventDate, getDateTime, validString } from '../utils';
 
 const RatingController = {
   /**
@@ -366,6 +366,7 @@ const RatingController = {
    * @return {object} json response
    */
   async processUnratedEvents(req, res) {
+    const TWO_DAYS = 48; // HOURS
     EventEntertainer.findAll({
       where: {
         hiredEntertainer: {
@@ -397,11 +398,11 @@ const RatingController = {
               {
                 [Op.and]: [
                   {
-                    eventDate: { [Op.gt]: subHours(new Date(), 49) },
+                    eventDate: { [Op.gt]: subHours(new Date(), TWO_DAYS + 1) },
                   },
                   {
                     eventDate: {
-                      [Op.lte]: subHours(new Date(), 48),
+                      [Op.lte]: subHours(new Date(), TWO_DAYS),
                     },
                   },
                 ],
@@ -439,11 +440,24 @@ const RatingController = {
 
       if (!results || results.length === 0) {
         await Cron.create();
-        return res.status(200).json({ message: 'No Review Found' });
+        return res.status(200).json({
+          message: 'No Review Found',
+          currentTime: getDateTime(new Date()),
+          condition: {
+            greater_than: subHours(new Date(), 1),
+            or_less_than_or_equal_to: subHours(new Date(), 0),
+            or_greater_than: subHours(new Date(), TWO_DAYS + 1),
+            or_less_or_equal_to: subHours(new Date(), TWO_DAYS),
+          },
+        });
       }
 
       results.map((result) => {
-        mailSentTo.push(result.event.eventDate);
+        mailSentTo.push(
+          `${result.user.email} (${result.event.eventType} - ${getDateTime(
+            result.event.eventDate
+          )})`
+        );
         sendMail(EMAIL_CONTENT.RATE_ENTERTAINER, result.user, {
           link: `${process.env.HOST}/user/review-entertainer/${result.id}`,
           contentTop: `
@@ -466,7 +480,7 @@ You can follow this link:
         });
       });
 
-      await Cron.create({ message: `Sent to ${mailSentTo.join(' ')}` });
+      await Cron.create({ message: `Sent to ${mailSentTo.join(', ')}` });
       return res.status(200).json({ success: true, mailSentTo, results });
     });
   },

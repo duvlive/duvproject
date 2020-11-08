@@ -206,9 +206,6 @@ export const AddNewComponent = ({ addData, setMessage }) => {
             }
           })
           .catch(function (error) {
-            console.log('error', error);
-            // console.log('error.response', error.response.data);
-            // setMessage({ message: error.response.data.message });
             actions.setSubmitting(false);
           });
         actions.setSubmitting(false);
@@ -407,7 +404,7 @@ AddNewComponent.propTypes = {
   setMessage: PropTypes.func.isRequired,
 };
 
-const ShowMore = ({ showAll }) => {
+export const ShowMore = ({ showAll }) => {
   return showAll ? (
     <Link
       className="btn btn-transparent btn-wide btn-success mb-5"

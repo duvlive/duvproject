@@ -54,14 +54,13 @@ const AdminList = ({
   React.useEffect(() => {
     axios
       .get(apiUrl, {
-        params: { offset: currPage * limit, limit, ...filter },
+        params: { offset: currPage * limit, limit, showAll, ...filter },
         headers: {
           'x-access-token': getTokenFromStore(),
         },
       })
       .then(function (response) {
         const { status, data } = response;
-        console.log('data', data);
         // handle success
         if (status === 200) {
           setData(data);
@@ -161,7 +160,9 @@ const AdminList = ({
             <>
               {TOP_FILTER}
               <NoContent isButton text={`No ${pluralizePageName} found`} />
-              {/* <OtherContentComponent /> */}
+              {OtherContentComponent && (
+                <OtherContentComponent showAll={showAll} />
+              )}
             </>
           }
         >
@@ -178,7 +179,7 @@ const AdminList = ({
               setFilter({ ...filter, [new Date().toISOString()]: null }); //force reload
             }}
           />
-          {/* <OtherContentComponent /> */}
+          {OtherContentComponent && <OtherContentComponent showAll={showAll} />}
           <div className="text-right">
             {data.pagination.totalPage > 1 && (
               <ReactPaginate
