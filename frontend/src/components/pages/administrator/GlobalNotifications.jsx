@@ -19,23 +19,38 @@ import { UserContext } from 'context/UserContext';
 import { USER_TYPES } from 'utils/constants';
 import Humanize from 'humanize-plus';
 import DatePicker from 'components/forms/DatePicker';
-import { addDays } from 'date-fns';
+import { addDays, isFuture, isPast } from 'date-fns';
 import DuvLiveModal from 'components/custom/Modal';
+import { Link } from '@reach/router';
 
 const userTypes = Object.keys(USER_TYPES);
 
-const GlobalNotifications = () => {
+const GlobalNotifications = ({ showAll }) => {
+  const title = showAll
+    ? 'Global Notifications'
+    : 'Active Global Notifications';
+
   return (
-    <BackEndPage title="Global Notifications">
+    <BackEndPage title={`${title}`}>
       <AdminList
         AddNewComponent={AddNewComponent}
         apiData="result"
         apiUrl="/api/v1/admin/global/notification"
-        pageName="Global Notification"
+        OtherContentComponent={ShowMore}
+        pageName={'Global Notification'}
+        showAll={showAll}
         tableRow={GlobalNotificationsRow}
       />
     </BackEndPage>
   );
+};
+
+GlobalNotifications.propTypes = {
+  showAll: PropTypes.string,
+};
+
+GlobalNotifications.defaultProps = {
+  showAll: null,
 };
 
 const GlobalNotificationsRow = ({
@@ -47,83 +62,96 @@ const GlobalNotificationsRow = ({
   startTime,
   endTime,
   userType,
-}) => (
-  <tr>
-    <th className="table__number align-middle" scope="row">
-      {twoDigitNumber(number)}
-    </th>
-    <td className="align-middle">
-      <small className="small--4 text-muted">Message</small>
-      <span className={`table__title text-${color}-100`}>
-        {Humanize.truncate(message, 19)}
-      </span>
-    </td>
+}) => {
+  const isActiveNotification = () => isPast(startTime) && isFuture(endTime);
+  const isPastNotification = () => isPast(endTime);
+  const isFutureNotification = () => isFuture(startTime);
+  return (
+    <tr>
+      <th className="table__number align-middle" scope="row">
+        {twoDigitNumber(number)}
+      </th>
+      <td className="align-middle">
+        <small className="small--4 text-muted">Message</small>
+        <span className={`table__title text-${color}-100`}>
+          {Humanize.truncate(message, 19)}
+        </span>
+      </td>
 
-    <td className="align-middle text-left">
-      <small className="small--4 text-muted">User </small>
-      <span className="text-muted-light-2">
-        {' '}
-        {userType > USER_TYPES.bandMember
-          ? 'All'
-          : userTypes[userType].toUpperCase()}
-      </span>
-    </td>
+      <td className="align-middle text-left">
+        <small className="small--4 text-muted">User </small>
+        <span className="text-muted-light-2">
+          {' '}
+          {userType > USER_TYPES.bandMember
+            ? 'All'
+            : userTypes[userType].toUpperCase()}
+        </span>
+      </td>
 
-    {/* <td className="align-middle text-left">
-      <small className="small--4 text-muted">Entertainer </small>
-      <span className="text-muted-light-2">{entertainerType}</span>
-    </td> */}
+      <td className="align-middle text-left">
+        <small className="small--4 text-muted">Start Time</small>
+        <span className="text-muted-light-2">{getDateTime(startTime)}</span>
+      </td>
 
-    <td className="align-middle text-left">
-      <small className="small--4 text-muted">Start Time</small>
-      <span className="text-muted-light-2">{getDateTime(startTime)}</span>
-    </td>
+      <td className="align-middle text-left">
+        <small className="small--4 text-muted">End Time</small>
+        <span className="text-muted-light-2">{getDateTime(endTime)}</span>
+      </td>
 
-    <td className="align-middle text-left">
-      <small className="small--4 text-muted">End Time</small>
-      <span className="text-muted-light-2">{getDateTime(endTime)}</span>
-    </td>
+      <td className=" align-middle">
+        <Image
+          className="avatar--small"
+          name={`${number}-badge`}
+          responsiveImage={false}
+          src={adminUser.profileImageURL || ProfileAvatar}
+        />
+      </td>
 
-    <td className=" align-middle">
-      <Image
-        className="avatar--small"
-        name={`${number}-badge`}
-        responsiveImage={false}
-        src={adminUser.profileImageURL || ProfileAvatar}
-      />
-    </td>
+      <td className="align-middle text-left">
+        <small className="small--4 text-muted">Added By</small>
+        <span className="text-muted-light-2">
+          {adminUser.firstName} {adminUser.lastName}
+        </span>
+      </td>
 
-    <td className="align-middle text-left">
-      <small className="small--4 text-muted">Added By</small>
-      <span className="text-muted-light-2">
-        {adminUser.firstName} {adminUser.lastName}
-      </span>
-    </td>
+      <td className="align-middle text-left">
+        <small className="small--4 text-muted">Status</small>
+        {isActiveNotification() && (
+          <span className={'icon-ok-circled text-green'}></span>
+        )}
+        {isFutureNotification() && (
+          <span className={'icon-hourglass text-yellow'}></span>
+        )}
+        {isPastNotification() && (
+          <span className={'icon-cancel-circled text-red'}></span>
+        )}
+      </td>
 
-    <td className="align-middle">
-      <DuvLiveModal
-        body={
-          <ViewGlobalNotification
-            notification={{
-              id,
-              color,
-              message,
-              startTime,
-              endTime,
-              userType,
-            }}
-          />
-        }
-        className="modal-large"
-        title="Notification"
-      >
-        <button className="btn btn-sm btn-transparent btn-danger">
-          View Notification
-        </button>
-      </DuvLiveModal>
-    </td>
-  </tr>
-);
+      <td className="align-middle">
+        <DuvLiveModal
+          body={
+            <ViewGlobalNotification
+              notification={{
+                id,
+                color,
+                message,
+                startTime,
+                endTime,
+                userType,
+              }}
+            />
+          }
+          className="modal-large"
+          title="Notification"
+        >
+          <button className="btn btn-sm btn-transparent btn-danger">
+            View Notification
+          </button>
+        </DuvLiveModal>
+      </td>
+    </tr>
+  );
+};
 
 GlobalNotificationsRow.defaultProps = {
   color: null,
@@ -157,7 +185,6 @@ export const AddNewComponent = ({ addData, setMessage }) => {
           endTime: value.endTime.date,
           startTime: value.startTime.date,
         };
-        console.log('payload', payload);
         axios
           .post('/api/v1/admin/global/notification', payload, {
             headers: { 'x-access-token': getTokenFromStore() },
@@ -253,7 +280,6 @@ const EditGlobalNotification = ({ notification, backToView }) => {
           endTime: value.endTime.date,
           startTime: value.startTime.date,
         };
-        console.log('payload', payload);
         axios
           .put('/api/v1/admin/global/notification', payload, {
             headers: { 'x-access-token': getTokenFromStore() },
@@ -261,15 +287,13 @@ const EditGlobalNotification = ({ notification, backToView }) => {
           .then(function (response) {
             const { status } = response;
             if (status === 200) {
-              // setMessage({ message: data.message, type: 'success' });
               actions.setSubmitting(false);
+              window.location.reload();
             }
           })
           .catch(function (error) {
-            console.log('error', error);
             actions.setSubmitting(false);
           });
-        actions.setSubmitting(false);
       }}
       render={({ isSubmitting, handleSubmit }) => (
         <Form>
@@ -315,7 +339,7 @@ const GlobalNotificationsForm = () => (
         dateFormat="MMMM d, yyyy h:mm aa"
         formGroupClassName="col-md-6"
         label="Notification Starts"
-        minDate={addDays(new Date(), 1)}
+        minDate={addDays(new Date(), 0)}
         name="startTime"
         placeholder="Event Start Time"
         showTimeSelect
@@ -326,7 +350,7 @@ const GlobalNotificationsForm = () => (
         dateFormat="MMMM d, yyyy h:mm aa"
         formGroupClassName="col-md-6"
         label="Notification Ends"
-        minDate={addDays(new Date(), 1)}
+        minDate={addDays(new Date(), 0)}
         name="endTime"
         placeholder="Event Date"
         showTimeSelect
@@ -381,6 +405,31 @@ const GlobalNotificationsForm = () => (
 AddNewComponent.propTypes = {
   addData: PropTypes.func.isRequired,
   setMessage: PropTypes.func.isRequired,
+};
+
+const ShowMore = ({ showAll }) => {
+  return showAll ? (
+    <Link
+      className="btn btn-transparent btn-wide btn-success mb-5"
+      to="/admin/global-notifications"
+    >
+      Show Active Notifications
+    </Link>
+  ) : (
+    <Link
+      className="btn btn-transparent btn-wide btn-info mb-5"
+      to="/admin/global-notifications/showAll"
+    >
+      Show All Notifications
+    </Link>
+  );
+};
+
+ShowMore.propTypes = {
+  showAll: PropTypes.string,
+};
+ShowMore.defaultProps = {
+  showAll: null,
 };
 
 export default GlobalNotifications;

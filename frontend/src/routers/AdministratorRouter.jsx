@@ -55,6 +55,7 @@ const AdministratorRouter = () => (
     <Notifications path="/notifications" />
     <UpcomingEvents path="/upcoming-events" />
     <GlobalNotifications path="/global-notifications" />
+    <GlobalNotifications path="/global-notifications/:showAll" />
     <CronJobNotifications path="/cron" />
     <SingleEvent path="/events/:id" />
     <SingleEventBids path="/auction/bids/:eventEntertainerId" />

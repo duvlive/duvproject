@@ -16,9 +16,11 @@ const AdminList = ({
   apiUrl,
   limit,
   pluralPageName,
+  showAll,
   tableRow,
   AddNewComponent,
   FilterComponent,
+  OtherContentComponent,
 }) => {
   const [message, setMessage] = React.useState(null);
   const inActiveData = { result: null, pagination: {} };
@@ -52,7 +54,7 @@ const AdminList = ({
   React.useEffect(() => {
     axios
       .get(apiUrl, {
-        params: { offset: currPage * limit, limit, ...filter },
+        params: { offset: currPage * limit, limit, showAll, ...filter },
         headers: {
           'x-access-token': getTokenFromStore(),
         },
@@ -67,7 +69,7 @@ const AdminList = ({
       .catch(function (error) {
         setData({ results: [], pagination: {} });
       });
-  }, [currPage, apiUrl, limit, filter]);
+  }, [currPage, apiUrl, limit, showAll, filter]);
 
   const noOfResults = data.pagination.total || 0;
   const pluralizePageName = pluralPageName || Humanize.pluralize(2, pageName);
@@ -158,6 +160,7 @@ const AdminList = ({
             <>
               {TOP_FILTER}
               <NoContent isButton text={`No ${pluralizePageName} found`} />
+              <OtherContentComponent showAll={showAll} />
             </>
           }
         >
@@ -174,6 +177,7 @@ const AdminList = ({
               setFilter({ ...filter, [new Date().toISOString()]: null }); //force reload
             }}
           />
+          <OtherContentComponent showAll={showAll} />
           <div className="text-right">
             {data.pagination.totalPage > 1 && (
               <ReactPaginate
@@ -200,18 +204,22 @@ const AdminList = ({
 AdminList.propTypes = {
   AddNewComponent: PropTypes.any,
   FilterComponent: PropTypes.any,
+  OtherContentComponent: PropTypes.any,
   apiData: PropTypes.string.isRequired,
   apiUrl: PropTypes.string.isRequired,
   limit: PropTypes.number,
   pageName: PropTypes.string.isRequired,
   pluralPageName: PropTypes.string,
+  showAll: PropTypes.any,
   tableRow: PropTypes.any.isRequired,
 };
 
 AdminList.defaultProps = {
   FilterComponent: null,
   AddNewComponent: null,
+  OtherContentComponent: null,
   pluralPageName: null,
+  showAll: null,
   limit: 10,
 };
 
