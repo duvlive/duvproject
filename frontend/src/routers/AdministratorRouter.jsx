@@ -32,6 +32,7 @@ import PayPendingEntertainer from 'components/pages/administrator/PayPendingEnte
 import PublicEvent from 'components/pages/administrator/PublicEvent';
 import SinglePublicEvent from 'components/pages/administrator/SinglePublicEvent';
 import GlobalNotifications from 'components/pages/administrator/GlobalNotifications';
+import CronJobNotifications from 'components/pages/administrator/CronJobNotifications';
 
 const AdministratorRouter = () => (
   <Router>
@@ -54,6 +55,7 @@ const AdministratorRouter = () => (
     <Notifications path="/notifications" />
     <UpcomingEvents path="/upcoming-events" />
     <GlobalNotifications path="/global-notifications" />
+    <CronJobNotifications path="/cron" />
     <SingleEvent path="/events/:id" />
     <SingleEventBids path="/auction/bids/:eventEntertainerId" />
     <SingleEventRequest path="/request/view/:applicationId" />

@@ -26,7 +26,7 @@ const userTypes = Object.keys(USER_TYPES);
 
 const GlobalNotifications = () => {
   return (
-    <BackEndPage title="GlobalNotifications">
+    <BackEndPage title="Global Notifications">
       <AdminList
         AddNewComponent={AddNewComponent}
         apiData="result"
@@ -164,7 +164,6 @@ export const AddNewComponent = ({ addData, setMessage }) => {
           })
           .then(function (response) {
             const { status, data } = response;
-            console.log('response', response);
             if (status === 200) {
               addData({
                 ...data.globalNotification,
@@ -260,8 +259,7 @@ const EditGlobalNotification = ({ notification, backToView }) => {
             headers: { 'x-access-token': getTokenFromStore() },
           })
           .then(function (response) {
-            const { status, data } = response;
-            console.log('response', response);
+            const { status } = response;
             if (status === 200) {
               // setMessage({ message: data.message, type: 'success' });
               actions.setSubmitting(false);

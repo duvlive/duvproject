@@ -321,10 +321,11 @@ export const DEFAULT_COMMISSION = {
 
 export const REQUEST_ACTION = {
   APPROVED: 'Approved',
-  REJECTED: 'Rejected',
+  EXPIRED: 'Expired',
   INCREMENT: 'Increment',
   PAID: 'Paid',
   PENDING: 'Pending',
+  REJECTED: 'Rejected',
 };
 
 export const START_TIME = [

@@ -3,6 +3,7 @@ import Sequelize, { Op } from 'sequelize';
 import EMAIL_CONTENT from '../email-template/content';
 import sendMail from '../MailSender';
 import {
+  Cron,
   EntertainerProfile,
   EventEntertainer,
   Rating,
@@ -433,10 +434,11 @@ const RatingController = {
           required: false,
         },
       ],
-    }).then((results) => {
+    }).then(async (results) => {
       let mailSentTo = [];
 
       if (!results || results.length === 0) {
+        await Cron.create();
         return res.status(200).json({ message: 'No Review Found' });
       }
 
@@ -463,6 +465,8 @@ You can follow this link:
           `,
         });
       });
+
+      await Cron.create({ message: `Sent to ${mailSentTo.join(' ')}` });
       return res.status(200).json({ success: true, mailSentTo, results });
     });
   },

@@ -22,6 +22,7 @@ import badgeRoutes from './badgeRoutes';
 import welcomeRoute from './welcomeRoute';
 import publicEventRoutes from './publicEventRoutes';
 import adminRoute from './adminRoute';
+import cronRoutes from './cronRoute';
 
 const routes = (app) => {
   adminRoute(app);
@@ -32,6 +33,7 @@ const routes = (app) => {
   bankDetailsRoutes(app);
   commissionRoutes(app);
   contactRoutes(app);
+  cronRoutes(app);
   emailRoutes(app);
   entertainerRoutes(app);
   eventEntertainerRoutes(app);
