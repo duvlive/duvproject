@@ -49,17 +49,19 @@ const OtherPublicEvents = () => {
           <LoadItems
             items={publicEvents}
             loadingText="Loading your PublicEvents"
-            noContent={<NoContent isButton text="No PublicEvents found" />}
+            noContent={
+              <NoContent isButton text="No Upcoming Public Events found" />
+            }
           >
             <PublicEventsRowList publicEvents={publicEvents || []} />
-            <Link
-              className="btn btn-info mb-3 btn-transparent btn-wide"
-              to="/user/public-events/others"
-            >
-              <span className="icon icon-events"></span> Back to Your Public
-              Events
-            </Link>
           </LoadItems>
+          <Link
+            className="btn btn-success mb-3 btn-transparent btn-wide"
+            to="/user/public-events"
+          >
+            <span className="icon icon-events"></span> Back to Your Public
+            Events
+          </Link>
         </section>
       </div>
     </BackEndPage>
