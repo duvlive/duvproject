@@ -1,6 +1,12 @@
 import Sequelize, { Op } from 'sequelize';
 import { Event } from '../models';
-import { validString, getLongDate, getTime, getAll } from '../utils';
+import {
+  validString,
+  getLongDate,
+  getTime,
+  getAll,
+  subtractDays,
+} from '../utils';
 import {
   EventEntertainer,
   User,
@@ -13,13 +19,14 @@ import {
 import sendMail from '../MailSender';
 import EMAIL_CONTENT from '../email-template/content';
 import {
+  ENTERTAINER_DISCOUNT,
   EVENTDATE_FILTER,
   EVENT_HIRETYPE,
   NOTIFICATIONS,
   NOTIFICATION_TYPE,
   USER_TYPES,
 } from '../constant';
-import { isValid } from 'date-fns';
+import { isPast, isValid } from 'date-fns';
 
 export const reviewsInclude = [
   {
@@ -767,6 +774,11 @@ const EventController = {
             .status(401)
             .json({ message: 'Event has already been cancelled' });
         }
+        if (isPast(event.eventDate)) {
+          return res
+            .status(401)
+            .json({ message: 'You cannot cancel a past event' });
+        }
 
         // update event details
         event.update({
@@ -789,6 +801,10 @@ const EventController = {
         const title = `${event.owner.firstName} Cancelled ${event.eventType}`;
 
         event.entertainers.map((eventEntertainer) => {
+          if (eventEntertainer.cancelled) {
+            return null;
+          }
+
           EventEntertainer.update(
             {
               hiredEntertainer: null,
@@ -808,6 +824,15 @@ const EventController = {
               eventEntertainer.applications[0].proposedPrice ||
               eventEntertainer.applications[0].askingPrice;
 
+            let refundEventOwner = amount;
+            let payEntertainerDiscount = 0;
+
+            // calculate amount to refund the user and compensation to entertainer
+            if (Date.now() > subtractDays(event.startTime, 2)) {
+              payEntertainerDiscount = Math.ceil(ENTERTAINER_DISCOUNT * amount);
+              refundEventOwner = amount - payEntertainerDiscount;
+            }
+
             await CancelEventEntertainer.create({
               userId,
               amount,
@@ -815,6 +840,8 @@ const EventController = {
               cancelledBy: 'User',
               cancelledDate: Date.now(),
               cancelledReason,
+              refundEventOwner,
+              payEntertainerDiscount,
             });
 
             // add entertainer notification
@@ -850,6 +877,35 @@ const EventController = {
             );
           });
         });
+
+        // Cancel all applications
+        await Application.update(
+          {
+            status: 'Cancelled',
+          },
+          {
+            where: {
+              eventId: event.id,
+            },
+          }
+        );
+
+        // Cancel Event Entertainers for events that haven't been paid for
+        await EventEntertainer.update(
+          {
+            hiredEntertainer: null,
+            hiredDate: null,
+            cancelled: true,
+            cancelledDate: Date.now(),
+            cancelledReason,
+          },
+          {
+            where: {
+              eventId: event.id,
+              cancelled: false,
+            },
+          }
+        );
 
         return res.json({ event });
       })
@@ -1059,7 +1115,7 @@ const EventController = {
 
       eventKeys.forEach((key) => {
         if (req.query[key]) {
-          applicationQuery[key] = req.query[key];
+          eventEntertainerQuery[key] = req.query[key];
         }
       });
 

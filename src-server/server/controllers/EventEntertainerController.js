@@ -527,6 +527,7 @@ const EventEntertainerController = {
       });
   },
 
+  // TODO: add this to route and test in frontend.
   userRemoveEntertainer(req, res) {
     // get evententertainer id
     // get user id

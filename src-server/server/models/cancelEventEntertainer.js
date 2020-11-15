@@ -31,6 +31,7 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.TEXT,
       },
       refundEventOwner: {
+        // amount to refund event owner
         type: DataTypes.STRING,
       },
       eventOwnerRefunded: {
@@ -40,6 +41,7 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.DATE,
       },
       payEntertainerDiscount: {
+        // amount to refund entertainer
         type: DataTypes.STRING,
       },
       entertainerPaid: {

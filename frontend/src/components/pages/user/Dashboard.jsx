@@ -312,49 +312,63 @@ Dashboard.RecentApplications.defaultProps = {
   requests: null,
 };
 
-Dashboard.RequestTableRow = ({ application }) => (
-  <tr>
-    <td className="align-middle">
-      <Image
-        className="avatar--medium--small"
-        name={application.stageName || 'No name'}
-        responsiveImage={false}
-        src={application.profileImageURL || ProfileAvatar}
-      />
-    </td>
-    <td className="align-middle text-gray">
-      <span className="text-muted small--4">Stage name</span>{' '}
-      {application.stageName}
-    </td>
-    <td className="align-middle text-yellow">
-      <span className="text-muted small--4">
-        {application.type === 'Bid' ? 'Asking Price' : 'Your Offer'}
-      </span>{' '}
-      &#8358; {moneyFormat(application.askingPrice)}
-    </td>
-    {application.type === 'Bid' ? (
-      <td className="align-middle text-white">
-        <span className="text-muted small--4">Event Type</span>{' '}
-        {application.eventType}
-      </td>
-    ) : (
+Dashboard.RequestTableRow = ({ application }) => {
+  const isBid = application.type === 'Bid';
+  return (
+    <tr>
       <td className="align-middle">
-        <span className="text-muted small--4">Status</span>
-        <small>{getRequestStatusIcon(application.status)}</small>
+        <Image
+          className="avatar--medium--small"
+          name={application.stageName || 'No name'}
+          responsiveImage={false}
+          src={application.profileImageURL || ProfileAvatar}
+        />
       </td>
-    )}
-    <td className="align-middle text-right td-btn">
-      <a
-        className="btn btn-info btn-sm btn-transparent"
-        href={`/entertainers/profile/${application.slug}`}
-        rel="noopener noreferrer"
-        target="_blank"
-      >
-        View Profile
-      </a>
-    </td>
-  </tr>
-);
+      <td className="align-middle text-gray">
+        <span className="text-muted small--4">Stage name</span>{' '}
+        {application.stageName}
+      </td>
+      <td className="align-middle text-yellow">
+        <span className="text-muted small--4">
+          {isBid ? 'Asking Price' : 'Your Offer'}
+        </span>{' '}
+        &#8358; {moneyFormat(application.askingPrice)}
+      </td>
+      {isBid ? (
+        <td className="align-middle text-white">
+          <span className="text-muted small--4">Event Type</span>{' '}
+          {application.eventType}
+        </td>
+      ) : (
+        <td className="align-middle">
+          <span className="text-muted small--4">Status</span>
+          <small>{getRequestStatusIcon(application.status)}</small>
+        </td>
+      )}
+      <td className="align-middle text-right td-btn">
+        <Link
+          className="btn btn-danger btn-sm btn-transparent"
+          to={
+            isBid
+              ? `/user/request/view/${application.eventEntertainerId}`
+              : `/user/request/view/${application.applicationId}`
+          }
+        >
+          View Details
+        </Link>
+        &nbsp;&nbsp;&nbsp;
+        <a
+          className="btn btn-info btn-sm btn-transparent"
+          href={`/entertainers/profile/${application.slug}`}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          View Profile
+        </a>
+      </td>
+    </tr>
+  );
+};
 
 Dashboard.RequestTableRow.propTypes = {
   application: PropTypes.object.isRequired,

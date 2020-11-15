@@ -43,6 +43,10 @@ const ViewEvent = ({ id }) => {
   const [loading, setLoading] = React.useState(true);
   const { userState, userDispatch } = React.useContext(UserContext);
 
+  if (!id) {
+    navigate('/user/dashboard');
+  }
+
   React.useEffect(() => {
     id &&
       axios
@@ -74,7 +78,6 @@ const ViewEvent = ({ id }) => {
       type: 'remove-alert',
     });
   }
-  console.log('event', event);
 
   return (
     <BackEndPage title="View Event">
@@ -145,7 +148,7 @@ const ViewEvent = ({ id }) => {
                     )}
 
                   <ViewEventEntertainersTable event={event} />
-                  {userCanAddEntertainer(event.eventDate) && (
+                  {userCanAddEntertainer(event.eventDate) && !event.cancelled && (
                     <Link
                       className="btn btn-danger btn-transparent"
                       to={`/user/events/${id}/add-entertainer`}
@@ -483,7 +486,7 @@ ViewEvent.CancelledEvent = ({ event }) => (
       {getShortDate(event.cancelledDate)}
     </h4>
     <hr />
-    <h5 className="font-weight-normal mt-5">Reason</h5>
+    <h5 className="font-weight-normal mt-5 text-yellow">Your Reason</h5>
     <p className="">{event.cancelledReason}</p>
   </>
 );
@@ -614,7 +617,6 @@ ViewEvent.PendingEntertainersRow = ({ eventEntertainer }) => {
         </span>
       </td>
       <td className="align-middle text-right td-btn">
-        {/* TODO Add for other types e.g search and recommendation  */}
         <Link
           className="btn btn-info btn-sm btn-transparent"
           to={entertainerEventUrl}

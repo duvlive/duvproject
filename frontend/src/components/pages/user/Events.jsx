@@ -274,10 +274,10 @@ Events.Card = ({
 
 Events.Card.propTypes = {
   cancelled: PropTypes.bool,
-  cancelledDate: PropTypes.string,
+  cancelledDate: PropTypes.any,
   entertainers: PropTypes.array,
-  eventDate: PropTypes.string,
-  eventDuration: PropTypes.string,
+  eventDate: PropTypes.any,
+  eventDuration: PropTypes.any,
   eventType: PropTypes.string,
   id: PropTypes.number,
   lga: PropTypes.string,

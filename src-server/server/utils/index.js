@@ -1,4 +1,10 @@
-import { format, parse, addHours } from 'date-fns';
+import {
+  format,
+  parse,
+  addHours,
+  getTime as getElapsedTime,
+  subDays,
+} from 'date-fns';
 import { getAll, updateUser } from './modelHelper';
 import UserValidation from './userValidation';
 
@@ -31,6 +37,8 @@ export const getTinyDate = (date) => format(parse(date), 'MMM D, YYYY');
 export const getLongDate = (date) => format(parse(date), 'dddd, Do MMMM YYYY');
 export const getYear = (date) => format(parse(date), 'YYYY');
 export const getTime = (date) => format(parse(date), 'h:mm A');
+export const subtractDays = (date, numOfDays) =>
+  getElapsedTime(subDays(date, numOfDays));
 export const getRelevantUnratedEntertainerEvents = (
   startTime,
   eventDuration
