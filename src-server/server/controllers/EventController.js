@@ -842,6 +842,7 @@ const EventController = {
               cancelledReason,
               refundEventOwner,
               payEntertainerDiscount,
+              applicationId: eventEntertainer.applications[0].id,
             });
 
             // add entertainer notification

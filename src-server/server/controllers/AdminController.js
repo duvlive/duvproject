@@ -575,6 +575,12 @@ const AdminController = {
         { bids: [], requests: [], upcomingEvents: [] }
       );
 
+      const unresolvedEvents = await CancelEventEntertainer.count({
+        where: {
+          resolved: false,
+        },
+      });
+
       return res.status(200).json({
         results: {
           ...results,
@@ -587,6 +593,7 @@ const AdminController = {
             paidEntertainers,
             pendingPayments: pendingPayments.length,
           },
+          unresolvedEvents,
         },
       });
     });
