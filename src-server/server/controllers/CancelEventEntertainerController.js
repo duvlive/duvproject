@@ -106,6 +106,91 @@ const CancelEventEntertainerController = {
       return res.status(status).json({ message: errorMessage });
     }
   },
+
+  async getOneCancelEventEntertainers(req, res) {
+    const id = req.params.id;
+
+    if (!id) {
+      return res.status(404).json({
+        message: 'Id needed to view details',
+      });
+    }
+
+    CancelEventEntertainer.findOne({
+      where: {
+        id,
+      },
+      include: [
+        {
+          model: EventEntertainer,
+          as: 'eventEntertainer',
+          include: [
+            {
+              model: Event,
+              as: 'event',
+              include: [
+                {
+                  model: User,
+                  as: 'owner',
+                  attributes: [
+                    'id',
+                    'firstName',
+                    'lastName',
+                    'email',
+                    'profileImageURL',
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          model: Application,
+          as: 'eventApplication',
+          required: true,
+          attributes: [
+            'id',
+            'commissionId',
+            'askingPrice',
+            'applicationType',
+            'proposedPrice',
+            'takeHome',
+            'createdAt',
+          ],
+          include: [
+            {
+              model: User,
+              as: 'user',
+              attributes: ['id', 'profileImageURL'],
+              include: [
+                {
+                  model: EntertainerProfile,
+                  as: 'profile',
+                  attributes: [
+                    'id',
+                    'stageName',
+                    'entertainerType',
+                    'slug',
+                    'location',
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    })
+      .then((event) => {
+        if (!event) {
+          return res.status(404).json({ message: 'Event not found' });
+        }
+        return res.json({ event });
+      })
+      .catch((error) => {
+        const errorMessage = error.message || error;
+        return res.status(412).json({ message: errorMessage });
+      });
+  },
 };
 
 export default CancelEventEntertainerController;

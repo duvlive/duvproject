@@ -888,7 +888,9 @@ const EventController = {
           {
             where: {
               eventId: event.id,
-              status: REQUEST_ACTION.PENDING,
+              status: {
+                [Op.ne]: REQUEST_ACTION.REJECTED,
+              },
             },
           }
         );

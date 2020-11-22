@@ -398,7 +398,6 @@ const EventEntertainerController = {
         .json({ message: 'Kindly provide an event entertainer info id' });
     }
 
-    // return res.json({ eventEntertainerId, entertainerId, cancelledReason });
     EventEntertainer.findOne({
       where: { id: eventEntertainerId, hiredEntertainer: entertainerId },
       include: [
@@ -462,6 +461,9 @@ const EventEntertainerController = {
             eventEntertainerInfo.applications[0].proposedPrice ||
             eventEntertainerInfo.applications[0].askingPrice;
 
+          let refundEventOwner = amount;
+          let payEntertainerDiscount = 0;
+
           await CancelEventEntertainer.create({
             userId,
             amount,
@@ -469,6 +471,9 @@ const EventEntertainerController = {
             cancelledBy: 'Entertainer',
             cancelledDate: Date.now(),
             cancelledReason,
+            refundEventOwner,
+            payEntertainerDiscount,
+            applicationId: eventEntertainerInfo.applications[0].id,
           });
 
           // Update cancelled event
