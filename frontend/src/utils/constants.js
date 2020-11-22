@@ -78,7 +78,7 @@ export const HIRE_ENTERTAINERS_TYPE = {
 export const ENTERTAINER_TYPE = {
   MC: 'MC',
   DJ: 'DJ',
-  LiveBand: 'LIVE BAND',
+  Liveband: 'Live Band',
 };
 
 export const DASHBOARD_PAGE = {

@@ -42,6 +42,7 @@ const AutoComplete = ({
             const fieldValue = field.value || value || [];
             return (
               <ReactTags
+                addOnBlur
                 allowBackspace={false}
                 allowNew
                 className={className}
