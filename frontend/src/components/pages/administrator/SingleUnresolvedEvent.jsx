@@ -13,7 +13,7 @@ import Image from 'components/common/utils/Image';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import { getTokenFromStore } from 'utils/localStorage';
 import { Link } from '@reach/router';
-import { listJsonItems } from 'utils/helpers';
+import { listJsonItems, moneyFormatInNaira } from 'utils/helpers';
 import { getRequestStatusIcon } from 'utils/helpers';
 import {
   eventHasExpired,
@@ -55,6 +55,7 @@ const SingleUnresolvedEvent = ({ id }) => {
 
   console.log('event', event);
   const eventDetails = event.eventEntertainer.event;
+  const owner = event.eventEntertainer.event.owner;
 
   return (
     <BackEndPage title="View Event">
@@ -67,6 +68,10 @@ const SingleUnresolvedEvent = ({ id }) => {
             <div className="col-sm-12">
               <h3 className="main-app__title">
                 {eventDetails.eventType} <br />{' '}
+                <small className="small--2 text-muted">
+                  Cancelled By: {event.cancelledBy} on{' '}
+                  {getShortDate(event.createdAt)}
+                </small>
               </h3>
             </div>
           </section>
@@ -83,6 +88,63 @@ const SingleUnresolvedEvent = ({ id }) => {
               <aside className="row">
                 <div className="col-md-8 mt-3">
                   <SingleUnresolvedEventEntertainersTable event={event} />
+
+                  <ul className={classNames('list-group transparent')}>
+                    <li className="list-group-item">
+                      <small className="small-text__with-icon">
+                        <i className="icon icon-events"></i>
+                        Event Owner
+                      </small>
+                      <h5 className="event-list-label">
+                        {owner.firstName} {owner.lastName}
+                      </h5>
+                    </li>
+                    <li className="list-group-item">
+                      <small className="small-text__with-icon">
+                        <i className="icon icon-events"></i>
+                        Phone
+                      </small>
+                      <h5 className="event-list-label">
+                        {owner.phoneNumber} <br />
+                        {owner.phoneNumber2}
+                      </h5>
+                    </li>
+                    <li className="list-group-item">
+                      <small className="small-text__with-icon">
+                        <i className="icon icon-events"></i>
+                        Email
+                      </small>
+                      <h5 className="event-list-label">{owner.email}</h5>
+                    </li>
+                    <li className="list-group-item">
+                      <small className="small-text__with-icon">
+                        <i className="icon icon-events"></i>
+                        Amount to Refund
+                      </small>
+                      <h5 className="event-list-label">
+                        {moneyFormatInNaira(event.amount)} <br />
+                        <small className="small--2 text-muted">
+                          Amount Paid -{' '}
+                          {moneyFormatInNaira(
+                            event.eventApplication.proposedPrice ||
+                              event.eventApplication.askingPrice
+                          )}
+                        </small>
+                      </h5>
+                    </li>
+                    <li className="list-group-item">
+                      <small className="small-text__with-icon">
+                        <i className="icon icon-events"></i>
+                        Bank Details
+                      </small>
+                      <h5 className="event-list-label">
+                        {owner.bankName} - {owner.accountNumber} <br />
+                        <small className="small--2 text-muted">
+                          {owner.accountName}
+                        </small>
+                      </h5>
+                    </li>
+                  </ul>
                 </div>
                 <div className="col-md-4">
                   <SingleUnresolvedEvent.EventDetailsCard
@@ -299,12 +361,6 @@ const SingleUnresolvedEventEntertainersTable = ({ event }) => {
     ...event.eventApplication.user.profile,
   };
 
-  // create avenue to refund entertainers
-
-  // create avenue to refund users
-
-  // add account details for users via edit profile
-
   return (
     <div className="table-responsive">
       <table className="table table-dark  table__no-border table__with-bg">
@@ -317,13 +373,12 @@ const SingleUnresolvedEventEntertainersTable = ({ event }) => {
             </td>
           </tr>
         </thead>
-        {!event.cancelled && (
-          <tbody>
-            <SingleUnresolvedEvent.HireEntertainersRow
-              entertainer={entertainer}
-            />
-          </tbody>
-        )}
+        <tbody>
+          <SingleUnresolvedEvent.HireEntertainersRow
+            entertainer={entertainer}
+            payEntertainerDiscount={event.payEntertainerDiscount}
+          />
+        </tbody>
       </table>
     </div>
   );
@@ -367,7 +422,10 @@ SingleUnresolvedEvent.CancelledEvent.propTypes = {
   event: {},
 };
 
-SingleUnresolvedEvent.HireEntertainersRow = ({ entertainer }) => {
+SingleUnresolvedEvent.HireEntertainersRow = ({
+  entertainer,
+  payEntertainerDiscount,
+}) => {
   if (!entertainer) {
     return null;
   }
@@ -403,23 +461,10 @@ SingleUnresolvedEvent.HireEntertainersRow = ({ entertainer }) => {
         </span>
       </td>
       <td className="align-middle text-yellow">
-        <span className="text-muted small--4">Status</span>
+        <span className="text-muted small--4">Discount</span>
         <span className="text-green">
-          <span className="icon icon-ok-circled"></span>
-          PAID
+          {moneyFormatInNaira(payEntertainerDiscount)}
         </span>
-      </td>
-      <td className="align-middle td-btn">
-        {entertainer && (
-          <a
-            className="btn btn-info btn-sm btn-transparent"
-            href={`/entertainers/profile/${entertainer.slug}`}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            View Profile
-          </a>
-        )}
       </td>
     </tr>
   );

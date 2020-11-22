@@ -23,8 +23,8 @@ const EditProfile = () => {
 
         <section className="app-content">
           <UserProfileForm />
-          <ChangePasswordForm />
           <BankDetailsForm />
+          <ChangePasswordForm />
         </section>
       </div>
     </BackEndPage>

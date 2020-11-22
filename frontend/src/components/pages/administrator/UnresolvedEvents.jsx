@@ -82,7 +82,7 @@ const VideoRow = ({
           className="btn btn-info btn-sm btn-transparent"
           to={`/admin/unresolved-event/${id}`}
         >
-          Manage
+          Resolve
         </Link>
       </td>
     </tr>
