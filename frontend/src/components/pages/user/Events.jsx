@@ -43,6 +43,17 @@ const Events = () => {
       type: 'remove-alert',
     });
   }
+
+  if (userState && userState.alert === 'remove-event-entertainer-success') {
+    !message.msg &&
+      setMessage({
+        msg: 'The entertainer has been successfully removed',
+        type: 'danger',
+      });
+    userDispatch({
+      type: 'remove-alert',
+    });
+  }
   const hiredEntertainer = getHiredEntertainerFromStore();
 
   return (

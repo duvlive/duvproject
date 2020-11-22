@@ -24,6 +24,7 @@ import {
   EVENT_HIRETYPE,
   NOTIFICATIONS,
   NOTIFICATION_TYPE,
+  REQUEST_ACTION,
   USER_TYPES,
 } from '../constant';
 import { isPast, isValid } from 'date-fns';
@@ -887,6 +888,7 @@ const EventController = {
           {
             where: {
               eventId: event.id,
+              status: REQUEST_ACTION.PENDING,
             },
           }
         );

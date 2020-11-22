@@ -21,6 +21,13 @@ const eventEntertainerRoutes = (router) => {
     Authentication.validateEntertainer,
     EventEntertainerController.entertainerNotAvailable
   );
+
+  router.post(
+    '/api/v1/evententertainer/remove/:id',
+    Authentication.verifyToken,
+    Authentication.isActiveUser,
+    EventEntertainerController.userRemoveEntertainer
+  );
 };
 
 export default eventEntertainerRoutes;
