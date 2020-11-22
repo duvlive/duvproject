@@ -111,6 +111,14 @@ const userRoutes = (router) => {
       Authentication.isActiveUser,
       UserController.editUser
     );
+
+  router
+    .route('/api/v1/user/bankDetail')
+    .put(
+      Authentication.verifyToken,
+      Authentication.isActiveUser,
+      UserController.updateUserBankDetails
+    );
   router
     .route('/api/v1/users/editEntertainer')
     .put(
