@@ -180,6 +180,7 @@ const userRoutes = (router) => {
     )
   );
 
+  // TODO: Add to the frontend
   router.put(
     '/api/v1/user/deactivate',
     Authentication.verifyToken,

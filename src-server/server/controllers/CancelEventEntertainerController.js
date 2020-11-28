@@ -196,6 +196,127 @@ const CancelEventEntertainerController = {
         return res.status(412).json({ message: errorMessage });
       });
   },
+
+  /**
+   * Resolve User refund
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  resolveUserRefund(req, res) {
+    const id = req.params.id;
+    const userId = req.user.id;
+
+    CancelEventEntertainer.findOne({
+      where: { id },
+    })
+      .then((eventFound) => {
+        if (!eventFound || eventFound.length === 0) {
+          return res
+            .status(404)
+            .json({ message: 'Event Entertainer not found' });
+        }
+        if (eventFound.resolved || eventFound.eventOwnerRefunded) {
+          return res.status(403).json({
+            message:
+              'Event has already been  resolved as event owner has been refunded',
+          });
+        }
+
+        const resolvedOptions =
+          parseInt(eventFound.payEntertainerDiscount, 10) === 0
+            ? {
+                resolved: true,
+                resolvedBy: userId,
+              }
+            : {};
+
+        return CancelEventEntertainer.update(
+          {
+            eventOwnerRefunded: true,
+            refundEventOwnerDate: new Date().toISOString(),
+            ...resolvedOptions,
+          },
+          {
+            where: {
+              id,
+            },
+          }
+        ).then(() => {
+          // sendMail(EMAIL_CONTENT.WELCOME_MAIL, userFound);
+          return res
+            .status(200)
+            .json({ message: 'Event has been successfully resolved' });
+        });
+      })
+      .catch((error) => {
+        const errorMessage = error.message || error;
+        return res.status(500).json({ message: errorMessage });
+      });
+  },
+
+  /**
+   * Resolve Entertainer refund
+   * @function
+   * @param {object} req is req object
+   * @param {object} res is res object
+   * @return {object} returns res object
+   */
+  resolveEntertainerRefund(req, res) {
+    const id = req.params.id;
+    const userId = req.user.id;
+
+    CancelEventEntertainer.findOne({
+      where: { id },
+    })
+      .then((eventFound) => {
+        if (!eventFound || eventFound.length === 0) {
+          return res
+            .status(404)
+            .json({ message: 'Event Entertainer not found' });
+        }
+        if (
+          eventFound.resolved ||
+          parseInt(eventFound.payEntertainerDiscount, 10) === 0
+        ) {
+          return res.status(403).json({
+            message: 'Event has already been resolved for the entertainer',
+          });
+        }
+
+        const resolvedOptions = eventFound.eventOwnerRefunded
+          ? {
+              resolved: true,
+              resolvedBy: userId,
+            }
+          : {};
+
+        // TODO:
+        // Cancel Performance --> For entertainers
+        return CancelEventEntertainer.update(
+          {
+            entertainerPaid: true,
+            paidEntertainerOn: new Date().toISOString(),
+            ...resolvedOptions,
+          },
+          {
+            where: {
+              id,
+            },
+          }
+        ).then(() => {
+          // sendMail(EMAIL_CONTENT.WELCOME_MAIL, userFound);
+          return res
+            .status(200)
+            .json({ message: 'Event has been successfully resolved' });
+        });
+      })
+      .catch((error) => {
+        const errorMessage = error.message || error;
+        return res.status(500).json({ message: errorMessage });
+      });
+  },
 };
 
 export default CancelEventEntertainerController;
