@@ -345,6 +345,16 @@ db.PublicEvent.belongsTo(db.User, {
   as: 'user',
 });
 
+db.CancelEventEntertainer.belongsTo(db.EventEntertainer, {
+  foreignKey: 'eventEntertainerId',
+  as: 'eventEntertainer',
+});
+
+db.CancelEventEntertainer.belongsTo(db.Application, {
+  foreignKey: 'applicationId',
+  as: 'eventApplication',
+});
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 

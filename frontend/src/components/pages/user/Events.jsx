@@ -43,6 +43,17 @@ const Events = () => {
       type: 'remove-alert',
     });
   }
+
+  if (userState && userState.alert === 'remove-event-entertainer-success') {
+    !message.msg &&
+      setMessage({
+        msg: 'The entertainer has been successfully removed',
+        type: 'danger',
+      });
+    userDispatch({
+      type: 'remove-alert',
+    });
+  }
   const hiredEntertainer = getHiredEntertainerFromStore();
 
   return (
@@ -274,10 +285,10 @@ Events.Card = ({
 
 Events.Card.propTypes = {
   cancelled: PropTypes.bool,
-  cancelledDate: PropTypes.string,
+  cancelledDate: PropTypes.any,
   entertainers: PropTypes.array,
-  eventDate: PropTypes.string,
-  eventDuration: PropTypes.string,
+  eventDate: PropTypes.any,
+  eventDuration: PropTypes.any,
   eventType: PropTypes.string,
   id: PropTypes.number,
   lga: PropTypes.string,

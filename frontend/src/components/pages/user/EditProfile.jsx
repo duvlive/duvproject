@@ -13,6 +13,7 @@ import { getTokenFromStore } from 'utils/localStorage';
 import AlertMessage from 'components/common/utils/AlertMessage';
 import { ChangePasswordForm } from 'components/pages/user/ChangePassword';
 import { createSchema } from 'components/forms/schema/schema-helpers';
+import { bankDetailsSchema } from 'components/forms/schema/entertainerSchema';
 
 const EditProfile = () => {
   return (
@@ -22,6 +23,7 @@ const EditProfile = () => {
 
         <section className="app-content">
           <UserProfileForm />
+          <BankDetailsForm />
           <ChangePasswordForm />
         </section>
       </div>
@@ -118,6 +120,71 @@ export const UserProfileForm = () => {
         </div>
       )}
       validationSchema={createSchema(personalInfoObject)}
+    />
+  );
+};
+
+export const BankDetailsForm = () => {
+  const [message, setMessage] = React.useState(null);
+  const { userState } = React.useContext(UserContext);
+
+  return (
+    <Formik
+      enableReinitialize={true}
+      initialValues={setInitialValues(bankDetailsSchema, userState)}
+      onSubmit={(values, actions) => {
+        axios
+          .put('/api/v1/user/bankDetail', values, {
+            headers: { 'x-access-token': getTokenFromStore() },
+          })
+          .then(function (response) {
+            const { status } = response;
+            if (status === 200) {
+              setMessage({
+                type: 'info',
+                message: `Your bank has been successfully submitted.`,
+              });
+              actions.setSubmitting(false);
+            }
+          })
+          .catch(function (error) {
+            setMessage({ message: error.response.data.message });
+            actions.setSubmitting(false);
+          });
+      }}
+      render={({ isSubmitting, handleSubmit, ...props }) => (
+        <div className="card card-custom card-black card-form ">
+          <div className="card-body col-md-10">
+            <h4 className="card-title text-blue">Account Details</h4>
+            <Form>
+              <AlertMessage {...message} />
+              <Input
+                label="Account Name"
+                name="accountName"
+                placeholder="Account Name"
+              />
+              <Input
+                label="Bank Name"
+                name="bankName"
+                placeholder="Bank Name"
+              />
+              <Input
+                label="Account Number"
+                name="accountNumber"
+                placeholder="Account Number"
+              />
+              <Button
+                className="btn-danger btn-wide btn-transparent"
+                loading={isSubmitting}
+                onClick={handleSubmit}
+              >
+                Update Bank Details
+              </Button>
+            </Form>
+          </div>
+        </div>
+      )}
+      validationSchema={createSchema(bankDetailsSchema)}
     />
   );
 };

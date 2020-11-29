@@ -153,6 +153,9 @@ const UserController = {
       bandRole: user.bandRole,
       referral: user.referral,
       profileImg: user.profileImageURL,
+      accountName: user.accountName,
+      bankName: user.bankName,
+      accountNumber: user.accountNumber,
       entertainerProfile: user.profile,
       approvalComment: user.approvalComment,
       badges: user.badges,
@@ -1122,6 +1125,38 @@ const UserController = {
         }
         return user
           .update({ firstName, lastName, phoneNumber, phoneNumber2 })
+          .then(() => res.status(200).json(UserController.transformUser(user)));
+      })
+      .catch((error) => {
+        return res.status(500).json({ error: error.message });
+      });
+  },
+
+  /**
+   *  update user bank account details
+   * @function
+   * @param {object} req is request object
+   * @param {object} res is response object
+   * @return {undefined} returns undefined
+   * */
+  updateUserBankDetails(req, res) {
+    const { userId } = req.decoded;
+    const { accountName, bankName, accountNumber } = req.body;
+    User.findOne({
+      where: { id: userId },
+    })
+      .then((user) => {
+        const error = { ...UserValidation.isUserActive(user.isActive) };
+        if (Object.keys(error).length) {
+          return res.status(403).json(error);
+        }
+        if (!user) {
+          return res.status(404).send({
+            message: 'User not found',
+          });
+        }
+        return user
+          .update({ accountName, bankName, accountNumber })
           .then(() => res.status(200).json(UserController.transformUser(user)));
       })
       .catch((error) => {

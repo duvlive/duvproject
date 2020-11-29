@@ -1,3 +1,5 @@
+export const ENTERTAINER_DISCOUNT = 0.35;
+
 export const MEDIA_TYPES = {
   Approved: true,
   Pending: null,

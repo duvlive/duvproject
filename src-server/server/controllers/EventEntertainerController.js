@@ -14,9 +14,14 @@ import { getLongDate, getTime, moneyFormat, validString } from '../utils';
 import EMAIL_CONTENT from '../email-template/content';
 import { DEFAULT_COMMISSION } from './CommissionController';
 import { priceCalculatorHelper } from '../utils/priceCalculator';
-import { NOTIFICATIONS, NOTIFICATION_TYPE } from '../constant';
+import {
+  ENTERTAINER_DISCOUNT,
+  NOTIFICATIONS,
+  NOTIFICATION_TYPE,
+} from '../constant';
 import sendMail from '../MailSender';
 import { addDays } from 'date-fns';
+import { differenceInHours, parse } from 'date-fns';
 
 const sendRequestMail = ({
   askingPrice,
@@ -388,7 +393,6 @@ const EventEntertainerController = {
         .json({ message: 'Kindly provide an event entertainer info id' });
     }
 
-    // return res.json({ eventEntertainerId, entertainerId, cancelledReason });
     EventEntertainer.findOne({
       where: { id: eventEntertainerId, hiredEntertainer: entertainerId },
       include: [
@@ -452,13 +456,26 @@ const EventEntertainerController = {
             eventEntertainerInfo.applications[0].proposedPrice ||
             eventEntertainerInfo.applications[0].askingPrice;
 
+          let refundEventOwner = amount;
+          let payEntertainerDiscount = 0;
+
+          // calculate amount to refund the user and compensation to entertainer
+          const hoursDiff = differenceInHours(
+            parse(eventEntertainerInfo.event.eventDate),
+            parse(Date.now())
+          );
+
           await CancelEventEntertainer.create({
             userId,
             amount,
+            hoursDiff,
             eventEntertainerId: eventEntertainerInfo.id,
             cancelledBy: 'Entertainer',
             cancelledDate: Date.now(),
             cancelledReason,
+            refundEventOwner,
+            payEntertainerDiscount,
+            applicationId: eventEntertainerInfo.applications[0].id,
           });
 
           // Update cancelled event
@@ -528,15 +545,8 @@ const EventEntertainerController = {
   },
 
   userRemoveEntertainer(req, res) {
-    // get evententertainer id
-    // get user id
-    // get remove reason
-    // set to null in entertainer event table
-    // add to cancel table
-    // send mail to entertainer
     const eventEntertainerId = req.params.id;
     const userId = req.user.id;
-    const entertainerId = req.user.profile.id;
     const cancelledReason = req.body.cancelledReason;
 
     if (!eventEntertainerId) {
@@ -545,9 +555,15 @@ const EventEntertainerController = {
         .json({ message: 'Kindly provide an event entertainer info id' });
     }
 
-    // return res.json({ eventEntertainerId, entertainerId, cancelledReason });
     EventEntertainer.findOne({
-      where: { id: eventEntertainerId, hiredEntertainer: entertainerId },
+      where: {
+        id: eventEntertainerId,
+        userId,
+        cancelled: false,
+        hiredEntertainer: {
+          [Op.ne]: null,
+        },
+      },
       include: [
         {
           model: Event,
@@ -571,6 +587,31 @@ const EventEntertainerController = {
           as: 'applications',
           attributes: ['id', 'proposedPrice', 'askingPrice'],
         },
+        {
+          required: true,
+          model: EntertainerProfile,
+          as: 'entertainer',
+          attributes: [
+            'id',
+            'stageName',
+            'entertainerType',
+            'location',
+            'about',
+          ],
+          include: [
+            {
+              model: User,
+              as: 'personalDetails',
+              attributes: [
+                'id',
+                'firstName',
+                'lastName',
+                'email',
+                'profileImageURL',
+              ],
+            },
+          ],
+        },
       ],
     })
       .then((eventEntertainerInfo) => {
@@ -580,15 +621,21 @@ const EventEntertainerController = {
             .json({ message: 'Event Entertainer Info not found' });
         }
 
+        const event = eventEntertainerInfo.event;
+        const entertainer = eventEntertainerInfo.entertainer;
+
         // update event details
         EventEntertainer.update(
           {
             hiredEntertainer: null,
             hiredDate: null,
+            cancelled: true,
+            cancelledDate: Date.now(),
+            cancelledReason,
           },
           {
             where: {
-              id: eventEntertainerInfo.id,
+              id: eventEntertainerId,
             },
           }
         ).then(async () => {
@@ -609,70 +656,78 @@ const EventEntertainerController = {
             eventEntertainerInfo.applications[0].proposedPrice ||
             eventEntertainerInfo.applications[0].askingPrice;
 
+          const handlingFee =
+            (amount * DEFAULT_COMMISSION.handlingPercent) / 100 +
+            DEFAULT_COMMISSION.handlingPlus;
+
+          let refundEventOwner = amount - handlingFee;
+          let payEntertainerDiscount = 0;
+
+          // calculate amount to refund the user and compensation to entertainer
+          const hoursDiff = differenceInHours(
+            parse(event.eventDate),
+            parse(Date.now())
+          );
+
+          if (hoursDiff < 48) {
+            payEntertainerDiscount = Math.ceil(ENTERTAINER_DISCOUNT * amount);
+            refundEventOwner = amount - payEntertainerDiscount - handlingFee;
+          }
+
           await CancelEventEntertainer.create({
             userId,
             amount,
+            hoursDiff,
             eventEntertainerId: eventEntertainerInfo.id,
-            cancelledBy: 'Entertainer',
+            cancelledBy: 'User',
             cancelledDate: Date.now(),
             cancelledReason,
+            refundEventOwner,
+            payEntertainerDiscount,
+            applicationId: eventEntertainerInfo.applications[0].id,
           });
 
-          // Update cancelled event
-          // add to entertainer notification
-          const stageName = req.user.profile.stageName;
-          const title = `${stageName} Cancelled Performance At ${eventEntertainerInfo.event.eventType}`;
+          // set mail title
+          const title = `${event.owner.firstName} Cancelled ${event.eventType}`;
 
           // add to entertainer notification
           await Notification.create({
-            userId,
-            title: NOTIFICATIONS.ENTERTAINER_NOT_AVAILABLE,
-            description: `You CANCELLED Performance At ${eventEntertainerInfo.event.eventType}`,
+            userId: entertainer.id,
+            title: NOTIFICATIONS.USER_REMOVE_ENTERTAINER,
+            description: title,
             type: NOTIFICATION_TYPE.DANGER,
             actionId: eventEntertainerInfo.id,
           });
 
           // add to user notification
           await Notification.create({
-            userId: eventEntertainerInfo.event.owner.id,
-            title: NOTIFICATIONS.ENTERTAINER_NOT_AVAILABLE,
-            description: title,
+            userId,
+            title: NOTIFICATIONS.USER_REMOVE_ENTERTAINER,
+            description: `You CANCELLED ${event.eventType}`,
             type: NOTIFICATION_TYPE.DANGER,
             actionId: eventEntertainerInfo.id,
           });
 
           sendMail(
-            EMAIL_CONTENT.ENTERTAINER_CANCELLED_EVENT,
+            EMAIL_CONTENT.USER_CANCELLED_EVENT,
             {
-              email: eventEntertainerInfo.event.owner.email,
-              firstName: eventEntertainerInfo.event.owner.firstName,
+              email: entertainer.personalDetails.email,
+              firstName: entertainer.stageName,
             },
             {
               title,
-              buttonText: 'Proceed To Dashboard',
-              link: `${process.env.HOST}/user/dashboard`,
               subject: title,
-              contentTop: `We regret to inform you that ${stageName} has cancelled his performance/entertainment service meant to be provided at the event with details stated below.`,
+              contentTop: `We regret to inform you that ${event.owner.firstName} has cancelled corporate event and therefore, no longer requires your performance/entertainment services to be provided at the event with details stated below.`,
               contentBottom: `
-                <strong>Event:</strong> ${
-                  eventEntertainerInfo.event.eventType
-                } <br>
-                <strong>Place:</strong> ${
-                  eventEntertainerInfo.placeOfEvent
-                } <br>
-                <strong>Date:</strong> ${getLongDate(
-                  eventEntertainerInfo.event.eventDate
-                )} <br>
-                <strong>Start Time:</strong> ${getTime(
-                  eventEntertainerInfo.event.startTime
-                )} <br>
-                <strong>Duration:</strong> ${
-                  eventEntertainerInfo.event.eventDuration
-                } <br>
-                <strong>Charge Amount:</strong> ₦${moneyFormat(amount)} <br><br>
-                <strong>Reason for Cancellation:</strong><br> ${cancelledReason}
+              <strong>Event:</strong> ${event.eventType} <br>
+              <strong>Place:</strong> ${eventEntertainerInfo.placeOfEvent} <br>
+              <strong>Date:</strong> ${getLongDate(event.eventDate)} <br>
+              <strong>Start Time:</strong> ${getTime(event.startTime)} <br>
+              <strong>Duration:</strong> ${event.eventDuration} <br>
+              <strong>Reason for Cancellation:</strong><br> ${cancelledReason}
+            `,
+              contentFooter: `Compensation Due: 35% of Take-Home Amount (You are entitled to compensation only If cancellation is done less than 48hrs to event date)
               `,
-              contentFooter: `No worries. You can try hiring other entertainers by heading to your dashboard.`,
             }
           );
 

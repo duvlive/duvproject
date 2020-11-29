@@ -22,6 +22,7 @@ import UserController from './UserController';
 import VideoController from './VideoController';
 import AdminController from './AdminController';
 import PublicEventController from './PublicEventController';
+import CancelEventEntertainerController from './CancelEventEntertainerController';
 
 export {
   AdminController,
@@ -30,6 +31,7 @@ export {
   AuctionController,
   BadgeController,
   BankDetailController,
+  CancelEventEntertainerController,
   CommissionController,
   ContactController,
   CronController,

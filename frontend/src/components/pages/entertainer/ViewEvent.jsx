@@ -619,10 +619,10 @@ ViewEvent.CancelEvent = ({ eventEntertainer }) => {
       <DuvLiveModal
         body={<CancelEventForm eventEntertainerId={eventEntertainer.id} />}
         closeModalText="Cancel"
-        title="Cancel Event"
+        title="Cancel Performance"
       >
         <>
-          <i className="icon icon-cancel"></i> Cancel Event
+          <i className="icon icon-cancel"></i> Cancel Performance
         </>
       </DuvLiveModal>
     </div>
@@ -699,7 +699,7 @@ const CancelEventForm = ({ eventEntertainerId }) => {
               loading={isSubmitting}
               onClick={handleSubmit}
             >
-              Yes, Cancel Event
+              Yes, Cancel Performance
             </Button>
           </Form>
         </>

@@ -43,6 +43,10 @@ const ViewEvent = ({ id }) => {
   const [loading, setLoading] = React.useState(true);
   const { userState, userDispatch } = React.useContext(UserContext);
 
+  if (!id) {
+    navigate('/user/dashboard');
+  }
+
   React.useEffect(() => {
     id &&
       axios
@@ -74,7 +78,6 @@ const ViewEvent = ({ id }) => {
       type: 'remove-alert',
     });
   }
-  console.log('event', event);
 
   return (
     <BackEndPage title="View Event">
@@ -145,7 +148,7 @@ const ViewEvent = ({ id }) => {
                     )}
 
                   <ViewEventEntertainersTable event={event} />
-                  {userCanAddEntertainer(event.eventDate) && (
+                  {userCanAddEntertainer(event.eventDate) && !event.cancelled && (
                     <Link
                       className="btn btn-danger btn-transparent"
                       to={`/user/events/${id}/add-entertainer`}
@@ -414,9 +417,10 @@ const ViewEventEntertainersTable = ({ event }) => {
         </thead>
         {!event.cancelled && (
           <tbody>
-            {hiredEntertainers.map(({ entertainer }, index) => (
+            {hiredEntertainers.map(({ id, entertainer }, index) => (
               <ViewEvent.HireEntertainersRow
                 entertainer={entertainer}
+                id={id}
                 key={index}
               />
             ))}
@@ -483,7 +487,7 @@ ViewEvent.CancelledEvent = ({ event }) => (
       {getShortDate(event.cancelledDate)}
     </h4>
     <hr />
-    <h5 className="font-weight-normal mt-5">Reason</h5>
+    <h5 className="font-weight-normal mt-5 text-yellow">Your Reason</h5>
     <p className="">{event.cancelledReason}</p>
   </>
 );
@@ -496,7 +500,7 @@ ViewEvent.CancelledEvent.propTypes = {
   event: {},
 };
 
-ViewEvent.HireEntertainersRow = ({ entertainer }) => {
+ViewEvent.HireEntertainersRow = ({ id, entertainer }) => {
   if (!entertainer) {
     return null;
   }
@@ -521,7 +525,14 @@ ViewEvent.HireEntertainersRow = ({ entertainer }) => {
       <td className="align-middle">
         <span className="text-muted small--4">Stage Name</span>{' '}
         <span className="text-white">
-          {entertainer && entertainer.stageName}
+          <a
+            className="text-white"
+            href={`/entertainers/profile/${entertainer.slug}`}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            {entertainer && entertainer.stageName}
+          </a>
         </span>
       </td>
       <td className="align-middle text-yellow">
@@ -543,26 +554,26 @@ ViewEvent.HireEntertainersRow = ({ entertainer }) => {
           PAID
         </span>
       </td>
-      <td className="align-middle td-btn">
-        {entertainer && (
-          <a
-            className="btn btn-info btn-sm btn-transparent"
-            href={`/entertainers/profile/${entertainer.slug}`}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            View Profile
-          </a>
-        )}
+      <td className="align-middle text-muted text-right">
+        <span className="text-muted small--4"></span>
+        <DuvLiveModal
+          body={<CancelSingleEventForm eventEntertainerId={id} />}
+          closeModalText="Cancel"
+          title="Remove Entertainer"
+        >
+          <span className="icon icon-cancel"></span>
+        </DuvLiveModal>
       </td>
     </tr>
   );
 };
 ViewEvent.HireEntertainersRow.propTypes = {
   entertainer: PropTypes.object,
+  id: PropTypes.any,
 };
 ViewEvent.HireEntertainersRow.defaultProps = {
   entertainer: {},
+  id: null,
 };
 
 ViewEvent.PendingEntertainersRow = ({ eventEntertainer }) => {
@@ -614,7 +625,6 @@ ViewEvent.PendingEntertainersRow = ({ eventEntertainer }) => {
         </span>
       </td>
       <td className="align-middle text-right td-btn">
-        {/* TODO Add for other types e.g search and recommendation  */}
         <Link
           className="btn btn-info btn-sm btn-transparent"
           to={entertainerEventUrl}
@@ -697,6 +707,81 @@ const CancelEventForm = ({ eventId }) => {
             }
           })
           .catch(function (error) {
+            setMessage({ msg: error.response.data.message });
+            actions.setSubmitting(false);
+          });
+      }}
+      render={({ isSubmitting, handleSubmit }) => (
+        <>
+          <Form>
+            <AlertMessage
+              message={message && message.msg}
+              type={message && message.type}
+            />
+
+            <TextArea
+              label="Reason"
+              name="cancelledReason"
+              placeholder="Enter the reason for cancelling the event"
+              rows="3"
+            />
+            <div className="small--2 mt-n3 mb-3 text-muted-light">
+              Late Cancellations (i.e cancellations done less than 48hrs to
+              event date) attract a{' '}
+              <strong className="text-info">penalty</strong> in the form of a
+              compensation charge which is 35% of the Principal Amount Paid, and
+              is Payable to the Entertainer hired. Refunds will be made only to
+              a bank account with details matching the personal profile of the
+              User. Do you wish to proceed with the cancellation?
+            </div>
+            <Button
+              className="btn-info btn-wide btn-transparent mt-2"
+              loading={isSubmitting}
+              onClick={handleSubmit}
+            >
+              Yes, Cancel Event
+            </Button>
+          </Form>
+        </>
+      )}
+      validationSchema={createSchema(cancelEventSchema)}
+    />
+  );
+};
+
+CancelEventForm.propTypes = {
+  eventId: PropTypes.any.isRequired,
+};
+
+const CancelSingleEventForm = ({ eventEntertainerId }) => {
+  const [message, setMessage] = React.useState({});
+  let { userDispatch } = React.useContext(UserContext);
+
+  return (
+    <Formik
+      initialValues={setInitialValues(cancelEventSchema)}
+      onSubmit={(values, actions) => {
+        axios
+          .post(
+            `/api/v1/evententertainer/remove/${eventEntertainerId}`,
+            values,
+            {
+              headers: { 'x-access-token': getTokenFromStore() },
+            }
+          )
+          .then(function (response) {
+            const { status } = response;
+            if (status === 200) {
+              userDispatch({
+                type: 'add-alert',
+                alert: 'remove-event-entertainer-success',
+              });
+              navigate('/user/events');
+              actions.resetForm();
+              actions.setSubmitting(false);
+            }
+          })
+          .catch(function (error) {
             console.log('error ', error.response.data.message);
             setMessage({ msg: error.response.data.message });
             actions.setSubmitting(false);
@@ -723,15 +808,14 @@ const CancelEventForm = ({ eventId }) => {
               compensation charge which is 35% of the Principal Amount Paid, and
               is Payable to the Entertainer hired. Refunds will be made only to
               a bank account with details matching the personal profile of the
-              User. Do you wish to proceed with the cancellation of Corporate
-              Event?
+              User. Do you wish to proceed with the removal of this entertainer?
             </div>
             <Button
               className="btn-info btn-wide btn-transparent mt-2"
               loading={isSubmitting}
               onClick={handleSubmit}
             >
-              Yes, Cancel Event
+              Yes, Remove Entertainer
             </Button>
           </Form>
         </>
@@ -741,8 +825,8 @@ const CancelEventForm = ({ eventId }) => {
   );
 };
 
-CancelEventForm.propTypes = {
-  eventId: PropTypes.any.isRequired,
+CancelSingleEventForm.propTypes = {
+  eventEntertainerId: PropTypes.any.isRequired,
 };
 
 export default ViewEvent;

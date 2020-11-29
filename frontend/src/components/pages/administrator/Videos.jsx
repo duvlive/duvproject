@@ -19,9 +19,9 @@ const Videos = () => {
   return (
     <BackEndPage title="Video">
       <AdminList
-        FilterComponent={VideoFilter}
         apiData="result"
         apiUrl="/api/v1/video-all"
+        FilterComponent={VideoFilter}
         pageName="Video"
         tableRow={VideoRow}
       />

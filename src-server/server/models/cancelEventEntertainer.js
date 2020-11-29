@@ -7,6 +7,10 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
+      applicationId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
       amount: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -31,15 +35,21 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.TEXT,
       },
       refundEventOwner: {
+        // amount to refund event owner
         type: DataTypes.STRING,
       },
       eventOwnerRefunded: {
         type: DataTypes.BOOLEAN,
       },
+      hoursDiff: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
       refundEventOwnerDate: {
         type: DataTypes.DATE,
       },
       payEntertainerDiscount: {
+        // amount to refund entertainer
         type: DataTypes.STRING,
       },
       entertainerPaid: {
@@ -50,6 +60,7 @@ module.exports = function (sequelize, DataTypes) {
       },
       resolved: {
         type: DataTypes.BOOLEAN,
+        defaultValue: false,
       },
       resolvedBy: {
         type: DataTypes.INTEGER,

@@ -17,6 +17,7 @@ import NoContent from 'components/common/utils/NoContent';
 import LoadItems from 'components/common/utils/LoadItems';
 import Humanize from 'humanize-plus';
 import { Link } from '@reach/router';
+import AlertMessage from 'components/common/utils/AlertMessage';
 
 const Dashboard = () => {
   const { userState } = React.useContext(UserContext);
@@ -28,6 +29,7 @@ const Dashboard = () => {
     upcomingEvents: null,
     eventsOverview: null,
     userOverview: null,
+    unresolvedEvents: 0,
   });
   React.useEffect(() => {
     axios
@@ -71,10 +73,28 @@ Dashboard.Items = ({
   pendingPayments,
   upcomingEvents,
   usersOverview,
+  unresolvedEvents,
 }) => {
   return (
     <>
       <section className="app-content">
+        {unresolvedEvents > 0 && (
+          <section className="row">
+            <div className="col-sm-12">
+              <div className="card card-custom text-red py-2 px-4">
+                <h6 className="text-red font-weight-normal mt-3">
+                  You have {unresolvedEvents} unresolved events.{' '}
+                  <Link
+                    className="btn btn-transparent btn-danger float-right"
+                    to="/admin/unresolved-events"
+                  >
+                    Resolve Now
+                  </Link>
+                </h6>
+              </div>
+            </div>
+          </section>
+        )}
         <div className="row">
           <DashboardOverviewCard
             color="yellow"
@@ -179,6 +199,7 @@ Dashboard.Items.propTypes = {
   eventsOverview: PropTypes.object.isRequired,
   paymentsOverview: PropTypes.object.isRequired,
   pendingPayments: PropTypes.array.isRequired,
+  unresolvedEvents: PropTypes.number.isRequired,
   upcomingEvents: PropTypes.array.isRequired,
   usersOverview: PropTypes.object.isRequired,
 };

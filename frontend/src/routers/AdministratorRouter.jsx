@@ -33,6 +33,8 @@ import PublicEvent from 'components/pages/administrator/PublicEvent';
 import SinglePublicEvent from 'components/pages/administrator/SinglePublicEvent';
 import GlobalNotifications from 'components/pages/administrator/GlobalNotifications';
 import CronJobNotifications from 'components/pages/administrator/CronJobNotifications';
+import UnresolvedEvents from 'components/pages/administrator/UnresolvedEvents';
+import SingleUnresolvedEvent from 'components/pages/administrator/SingleUnresolvedEvent';
 
 const AdministratorRouter = () => (
   <Router>
@@ -70,6 +72,8 @@ const AdministratorRouter = () => (
     <Events path="/events" />
     <InviteFriends path="/invite-friends" />
     <ChangePassword path="/change-password" />
+    <UnresolvedEvents path="/unresolved-events" />
+    <SingleUnresolvedEvent path="/unresolved-event/:id" />
     <Help path="/help" />
     <Logout path="/logout" />
   </Router>

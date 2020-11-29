@@ -23,6 +23,7 @@ import welcomeRoute from './welcomeRoute';
 import publicEventRoutes from './publicEventRoutes';
 import adminRoute from './adminRoute';
 import cronRoutes from './cronRoute';
+import cancelEventEntertainerRoutes from './cancelEventEntertainerRoute';
 
 const routes = (app) => {
   adminRoute(app);
@@ -31,6 +32,7 @@ const routes = (app) => {
   badgeRoutes(app);
   bandMemberRoutes(app);
   bankDetailsRoutes(app);
+  cancelEventEntertainerRoutes(app);
   commissionRoutes(app);
   contactRoutes(app);
   cronRoutes(app);
