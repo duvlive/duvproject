@@ -5,6 +5,7 @@ import {
   EventEntertainer,
   User,
   EntertainerProfile,
+  BankDetail,
 } from '../models';
 import { getAll } from '../utils';
 
@@ -166,7 +167,12 @@ const CancelEventEntertainerController = {
             {
               model: User,
               as: 'user',
-              attributes: ['id', 'profileImageURL'],
+              attributes: [
+                'id',
+                'profileImageURL',
+                'phoneNumber',
+                'phoneNumber2',
+              ],
               include: [
                 {
                   model: EntertainerProfile,
@@ -178,6 +184,10 @@ const CancelEventEntertainerController = {
                     'slug',
                     'location',
                   ],
+                },
+                {
+                  model: BankDetail,
+                  as: 'bankDetail',
                 },
               ],
             },
@@ -276,12 +286,15 @@ const CancelEventEntertainerController = {
             .status(404)
             .json({ message: 'Event Entertainer not found' });
         }
-        if (
-          eventFound.resolved ||
-          parseInt(eventFound.payEntertainerDiscount, 10) === 0
-        ) {
+        if (eventFound.resolved || eventFound.entertainerPaid) {
           return res.status(403).json({
-            message: 'Event has already been resolved for the entertainer',
+            message: 'Event has already been resolved',
+          });
+        }
+        if (parseInt(eventFound.payEntertainerDiscount, 10) === 0) {
+          return res.status(403).json({
+            message:
+              'Entertainer has no refund, hence, the event can only be resolved for the event owner',
           });
         }
 
