@@ -1,12 +1,6 @@
 import Sequelize, { Op } from 'sequelize';
 import { Event } from '../models';
-import {
-  validString,
-  getLongDate,
-  getTime,
-  getAll,
-  subtractDays,
-} from '../utils';
+import { validString, getLongDate, getTime, getAll } from '../utils';
 import {
   EventEntertainer,
   User,
@@ -28,6 +22,8 @@ import {
   USER_TYPES,
 } from '../constant';
 import { isPast, isValid } from 'date-fns';
+import { differenceInHours, parse } from 'date-fns';
+import { DEFAULT_COMMISSION } from './CommissionController';
 
 export const reviewsInclude = [
   {
@@ -825,13 +821,22 @@ const EventController = {
               eventEntertainer.applications[0].proposedPrice ||
               eventEntertainer.applications[0].askingPrice;
 
-            let refundEventOwner = amount;
+            const handlingFee =
+              (amount * DEFAULT_COMMISSION.handlingPercent) / 100 +
+              DEFAULT_COMMISSION.handlingPlus;
+
+            let refundEventOwner = amount - handlingFee;
             let payEntertainerDiscount = 0;
 
             // calculate amount to refund the user and compensation to entertainer
-            if (Date.now() > subtractDays(event.startTime, 2)) {
+            const hoursDiff = differenceInHours(
+              parse(event.eventDate),
+              parse(Date.now())
+            );
+
+            if (hoursDiff < 48) {
               payEntertainerDiscount = Math.ceil(ENTERTAINER_DISCOUNT * amount);
-              refundEventOwner = amount - payEntertainerDiscount;
+              refundEventOwner = amount - payEntertainerDiscount - handlingFee;
             }
 
             await CancelEventEntertainer.create({
@@ -843,6 +848,7 @@ const EventController = {
               cancelledReason,
               refundEventOwner,
               payEntertainerDiscount,
+              hoursDiff,
               applicationId: eventEntertainer.applications[0].id,
             });
 

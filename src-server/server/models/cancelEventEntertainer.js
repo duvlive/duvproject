@@ -41,6 +41,10 @@ module.exports = function (sequelize, DataTypes) {
       eventOwnerRefunded: {
         type: DataTypes.BOOLEAN,
       },
+      hoursDiff: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
       refundEventOwnerDate: {
         type: DataTypes.DATE,
       },

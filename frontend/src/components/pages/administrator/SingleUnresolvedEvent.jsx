@@ -25,7 +25,6 @@ import LoadingScreen from 'components/common/layout/LoadingScreen';
 import { HIRE_ENTERTAINERS_TYPE } from 'utils/constants';
 import ProfileAvatar from 'assets/img/avatar/profile.png';
 import DuvLiveModal from 'components/custom/Modal';
-import { differenceInHours, parse } from 'date-fns';
 
 const SingleUnresolvedEvent = ({ id }) => {
   const [message, setMessage] = React.useState({ msg: null, type: null });
@@ -72,25 +71,24 @@ const SingleUnresolvedEvent = ({ id }) => {
                 {eventDetails.eventType} <br />{' '}
                 <small className="small--2 text-muted">
                   Cancelled By: {event.cancelledBy} on{' '}
-                  {getShortDate(event.createdAt)} (
-                  {differenceInHours(
-                    parse(eventDetails.eventDate),
-                    parse(event.cancelledDate)
-                  )}{' '}
-                  hours before event)
+                  {getShortDate(event.createdAt)} ({event.hoursDiff} hours
+                  before event)
                 </small>
               </h3>
             </div>
           </section>
 
           <div className="mt-4">
-            <AlertMessage
-              message={
-                event.resolved
-                  ? `Event has been resolved on ${getShortDate(
-                      event.updatedAt
-                    )}`
-                  : `Pending Refund to resolve event -
+            {message.msg ? (
+              <AlertMessage message={message.msg} type={message.type} />
+            ) : (
+              <AlertMessage
+                message={
+                  event.resolved
+                    ? `Event has been resolved on ${getShortDate(
+                        event.updatedAt
+                      )}`
+                    : `Pending Refund to resolve event -
                 ${!event.eventOwnerRefunded ? 'Event Owner' : ''}
                 ${
                   !event.eventOwnerRefunded &&
@@ -105,10 +103,10 @@ const SingleUnresolvedEvent = ({ id }) => {
                     ? 'Entertainer'
                     : ''
                 }`
-              }
-              type={event.resolved ? 'success' : 'warning'}
-            />
-            <AlertMessage message={message.msg} type={message.type} />
+                }
+                type={event.resolved ? 'success' : 'warning'}
+              />
+            )}
           </div>
 
           {loading ? (
@@ -162,7 +160,7 @@ SingleUnresolvedEvent.defaultProps = {
 const EventOwnerCard = ({ event, owner, setMessage, setEvent }) => {
   const refundUserNow = () => {
     axios
-      .get(`api/v1/cancel-evententertainer/resolve/owner/${event.id}`, {
+      .get(`/api/v1/cancel-evententertainer/resolve/owner/${event.id}`, {
         headers: {
           'x-access-token': getTokenFromStore(),
         },
@@ -324,7 +322,7 @@ const EventEntertainerCard = ({ event, setMessage, setEvent }) => {
 
   const refundEntertainerNow = () => {
     axios
-      .get(`api/v1/cancel-evententertainer/resolve/entertainer/${event.id}`, {
+      .get(`/api/v1/cancel-evententertainer/resolve/entertainer/${event.id}`, {
         headers: {
           'x-access-token': getTokenFromStore(),
         },
@@ -335,11 +333,9 @@ const EventEntertainerCard = ({ event, setMessage, setEvent }) => {
         if (status === 200) {
           setEvent({
             ...event,
-            eventOwnerRefunded: true,
-            refundEventOwnerDate: Date.now(),
-            resolved:
-              parseInt(event.payEntertainerDiscount, 10) === 0 ||
-              !!event.entertainerPaid,
+            entertainerPaid: true,
+            paidEntertainerOn: Date.now(),
+            resolved: !!event.eventOwnerRefunded,
           });
           setMessage({
             msg: 'Entertainer Payment has been successfully resolved',

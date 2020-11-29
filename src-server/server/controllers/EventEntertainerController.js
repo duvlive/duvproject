@@ -10,13 +10,7 @@ import {
   Notification,
   CancelEventEntertainer,
 } from '../models';
-import {
-  getLongDate,
-  getTime,
-  moneyFormat,
-  subtractDays,
-  validString,
-} from '../utils';
+import { getLongDate, getTime, moneyFormat, validString } from '../utils';
 import EMAIL_CONTENT from '../email-template/content';
 import { DEFAULT_COMMISSION } from './CommissionController';
 import { priceCalculatorHelper } from '../utils/priceCalculator';
@@ -27,6 +21,7 @@ import {
 } from '../constant';
 import sendMail from '../MailSender';
 import { addDays } from 'date-fns';
+import { differenceInHours, parse } from 'date-fns';
 
 const sendRequestMail = ({
   askingPrice,
@@ -464,9 +459,16 @@ const EventEntertainerController = {
           let refundEventOwner = amount;
           let payEntertainerDiscount = 0;
 
+          // calculate amount to refund the user and compensation to entertainer
+          const hoursDiff = differenceInHours(
+            parse(eventEntertainerInfo.event.eventDate),
+            parse(Date.now())
+          );
+
           await CancelEventEntertainer.create({
             userId,
             amount,
+            hoursDiff,
             eventEntertainerId: eventEntertainerInfo.id,
             cancelledBy: 'Entertainer',
             cancelledDate: Date.now(),
@@ -654,18 +656,28 @@ const EventEntertainerController = {
             eventEntertainerInfo.applications[0].proposedPrice ||
             eventEntertainerInfo.applications[0].askingPrice;
 
-          let refundEventOwner = amount;
+          const handlingFee =
+            (amount * DEFAULT_COMMISSION.handlingPercent) / 100 +
+            DEFAULT_COMMISSION.handlingPlus;
+
+          let refundEventOwner = amount - handlingFee;
           let payEntertainerDiscount = 0;
 
           // calculate amount to refund the user and compensation to entertainer
-          if (Date.now() > subtractDays(event.startTime, 2)) {
+          const hoursDiff = differenceInHours(
+            parse(event.eventDate),
+            parse(Date.now())
+          );
+
+          if (hoursDiff < 48) {
             payEntertainerDiscount = Math.ceil(ENTERTAINER_DISCOUNT * amount);
-            refundEventOwner = amount - payEntertainerDiscount;
+            refundEventOwner = amount - payEntertainerDiscount - handlingFee;
           }
 
           await CancelEventEntertainer.create({
             userId,
             amount,
+            hoursDiff,
             eventEntertainerId: eventEntertainerInfo.id,
             cancelledBy: 'User',
             cancelledDate: Date.now(),

@@ -8,7 +8,7 @@ import {
   // getRequestStatusIcon,
   moneyFormatInNaira,
 } from 'utils/helpers';
-import { getShortDate, remainingDays } from 'utils/date-helpers';
+import { getShortDate } from 'utils/date-helpers';
 import { Link } from '@reach/router';
 
 const UnresolvedEvents = () => {
@@ -32,7 +32,7 @@ const VideoRow = ({
   refundEventOwner,
   payEntertainerDiscount,
   eventEntertainer,
-  eventApplication,
+  hoursDiff,
 }) => {
   return (
     <tr>
@@ -46,10 +46,8 @@ const VideoRow = ({
       </td>
 
       <td className="align-middle text-left">
-        <small className="small--4 text-muted">Day to Event</small>
-        <span className="text-muted-light-2">
-          {remainingDays(eventEntertainer.event.startTime)}
-        </span>
+        <small className="small--4 text-muted">Hours Diff</small>
+        <span className="text-muted-light-2">{hoursDiff} Hours</span>
       </td>
 
       <td className="align-middle text-left">
@@ -95,6 +93,7 @@ VideoRow.defaultProps = {
   cancelledReason: null,
   eventApplication: {},
   eventEntertainer: {},
+  hoursDiff: null,
   payEntertainerDiscount: null,
   refundEventOwner: null,
 };
@@ -105,6 +104,7 @@ VideoRow.propTypes = {
   cancelledReason: PropTypes.string,
   eventApplication: PropTypes.object,
   eventEntertainer: PropTypes.object,
+  hoursDiff: PropTypes.any,
   id: PropTypes.any.isRequired,
   number: PropTypes.any.isRequired,
   payEntertainerDiscount: PropTypes.string,
