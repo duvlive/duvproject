@@ -17,10 +17,10 @@ const CancelEventEntertainerController = {
    * @return {object} json response
    */
   async getCancelEventEntertainers(req, res) {
-    const { offset, limit } = req.query;
+    const { offset, limit, resolved } = req.query;
     try {
       const where = {
-        resolved: false,
+        resolved: !!resolved,
       };
       const include = [
         {
