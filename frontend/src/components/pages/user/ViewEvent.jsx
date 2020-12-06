@@ -14,7 +14,11 @@ import Image from 'components/common/utils/Image';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import { getTokenFromStore } from 'utils/localStorage';
 import { Link, Match, navigate } from '@reach/router';
-import { listJsonItems, getBudgetRange } from 'utils/helpers';
+import {
+  listJsonItems,
+  getBudgetRange,
+  moneyFormatInNaira,
+} from 'utils/helpers';
 import { getRequestStatusIcon } from 'utils/helpers';
 import {
   userCanAddEntertainer,
@@ -156,6 +160,8 @@ const ViewEvent = ({ id }) => {
                       Add Entertainer
                     </Link>
                   )}
+
+                  <CancelledEntertainersTable event={event} />
                 </div>
                 <div className="col-md-4">
                   <ViewEvent.EventDetailsCard event={event} />
@@ -446,12 +452,15 @@ const ViewEventEntertainersTable = ({ event }) => {
               </thead>
 
               <tbody>
-                {pendingEntertainers.map((event, index) => (
-                  <ViewEvent.PendingEntertainersRow
-                    eventEntertainer={event}
-                    key={index}
-                  />
-                ))}
+                {pendingEntertainers.map(
+                  (event, index) =>
+                    event.cancellationDetails?.length === 0 && (
+                      <ViewEvent.PendingEntertainersRow
+                        eventEntertainer={event}
+                        key={index}
+                      />
+                    )
+                )}
               </tbody>
             </table>
           </>
@@ -467,6 +476,44 @@ ViewEventEntertainersTable.propTypes = {
 };
 
 ViewEventEntertainersTable.defaultProps = {
+  event: {},
+};
+
+const CancelledEntertainersTable = ({ event }) => {
+  const eventEntertainers = event.entertainers || [];
+
+  const cancelledEvents = eventEntertainers.filter(
+    (eventEntertainer) =>
+      !eventEntertainer.entertainer &&
+      eventEntertainer.cancellationDetails?.length > 0
+  );
+
+  return cancelledEvents.length > 0 ? (
+    <div className="table-responsive">
+      <hr className="mt-6 mb-4" />
+      <h3 className="main-app__subtitle font-weight-normal text-red mb-n3 mt-4">
+        Cancelled Entertainer Performance
+      </h3>
+      <table className="table table-dark table__no-border table__with-bg">
+        <tbody>
+          {cancelledEvents.map((event, index) => (
+            <ViewEvent.CancellationRow
+              event={event}
+              index={index + 1}
+              key={index}
+            />
+          ))}
+        </tbody>
+      </table>
+    </div>
+  ) : null;
+};
+
+CancelledEntertainersTable.propTypes = {
+  event: PropTypes.object,
+};
+
+CancelledEntertainersTable.defaultProps = {
   event: {},
 };
 
@@ -574,6 +621,77 @@ ViewEvent.HireEntertainersRow.propTypes = {
 ViewEvent.HireEntertainersRow.defaultProps = {
   entertainer: {},
   id: null,
+};
+
+ViewEvent.CancellationRow = ({ event, index }) => {
+  if (event?.cancellationDetails?.length === 0) {
+    return null;
+  }
+
+  return (
+    <>
+      <tr className="tr__transparent  tr__condensed">
+        <td className="text-muted small" colSpan="5">
+          {index}. {event.cancellationDetails[0].cancelledReason}
+        </td>
+      </tr>
+      <tr>
+        <td className="align-middle">
+          <span className="text-muted small--4">Type</span>{' '}
+          <span className="text-white">{event.entertainerType}</span>
+        </td>
+        <td className="align-middle text-yellow">
+          <span className="text-muted small--4">Location</span>
+          <span className="text-white">{event.placeOfEvent}</span>
+        </td>
+        <td className="align-middle text-yellow">
+          <span className="text-muted small--4">Refund</span>
+          <span className="text-white">
+            {moneyFormatInNaira(event.cancellationDetails[0].refundEventOwner)}
+          </span>
+        </td>
+        <td className="align-middle text-yellow">
+          <span className="text-muted small--4">Status</span>
+          {event.cancellationDetails[0].eventOwnerRefunded ? (
+            <span className="text-green">
+              <span className="icon icon-ok-circled"></span>
+              PAID
+            </span>
+          ) : (
+            <span className="text-red">
+              <span className="icon icon-help"></span>
+              PENDING
+            </span>
+          )}
+        </td>
+
+        <td className="align-middle">
+          <span className="text-muted small--4">Cancelled By</span>
+          {event.cancellationDetails[0].cancelledBy === 'User' ? (
+            <span className="text-green">You</span>
+          ) : (
+            <span className="text-red">Entertainer</span>
+          )}
+        </td>
+        <td className="align-middle text-yellow">
+          <span className="text-muted small--4">Paid On</span>
+          <span className="text-white">
+            {event.cancellationDetails[0].refundEventOwnerDate
+              ? getShortDate(event.cancellationDetails[0].refundEventOwnerDate)
+              : '-'}
+          </span>
+        </td>
+      </tr>
+    </>
+  );
+};
+ViewEvent.CancellationRow.propTypes = {
+  event: PropTypes.object,
+  index: PropTypes.any,
+};
+ViewEvent.HireEntertainersRow.defaultProps = {
+  event: {},
+  index: 0,
 };
 
 ViewEvent.PendingEntertainersRow = ({ eventEntertainer }) => {

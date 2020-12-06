@@ -17,7 +17,6 @@ import NoContent from 'components/common/utils/NoContent';
 import LoadItems from 'components/common/utils/LoadItems';
 import Humanize from 'humanize-plus';
 import { Link } from '@reach/router';
-import AlertMessage from 'components/common/utils/AlertMessage';
 
 const Dashboard = () => {
   const { userState } = React.useContext(UserContext);

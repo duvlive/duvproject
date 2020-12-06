@@ -211,6 +211,15 @@ const EventController = {
               as: 'applications',
               attributes: ['id', 'status'],
             },
+            {
+              model: Application,
+              as: 'applications',
+              attributes: ['id', 'status'],
+            },
+            {
+              model: CancelEventEntertainer,
+              as: 'cancellationDetails',
+            },
           ],
         },
         {
