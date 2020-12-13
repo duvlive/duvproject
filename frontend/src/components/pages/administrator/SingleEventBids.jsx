@@ -50,7 +50,7 @@ const SingleEventBids = ({ eventEntertainerId }) => {
           }
         })
         .catch(function (error) {
-          navigate('/user/auctions/status/error');
+          navigate('/admin/dashboard');
           setLoading(false);
         });
   }, [eventEntertainerId]);

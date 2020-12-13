@@ -9,7 +9,7 @@ import axios from 'axios';
 import { setInitialValues, feedback } from 'components/forms/form-helper';
 import UploadImage from 'components/common/utils/UploadImage';
 import { UserContext } from 'context/UserContext';
-import { getTokenFromStore } from 'utils/localStorage';
+import { clearStorage, getTokenFromStore } from 'utils/localStorage';
 import AlertMessage from 'components/common/utils/AlertMessage';
 import { ChangePasswordForm } from 'components/pages/user/ChangePassword';
 import { createSchema, email } from 'components/forms/schema/schema-helpers';
@@ -203,7 +203,7 @@ export const BankDetailsForm = () => {
 
 export const DeactivateAccount = () => {
   const [message, setMessage] = React.useState(null);
-  const { userState } = React.useContext(UserContext);
+  const { userState, userDispatch } = React.useContext(UserContext);
 
   return (
     <Formik
@@ -228,7 +228,13 @@ export const DeactivateAccount = () => {
           .then(function (response) {
             const { status } = response;
             if (status === 200) {
-              navigate('/logout');
+              userDispatch({ type: 'user-logout' });
+              userDispatch({
+                type: 'add-alert',
+                alert: 'account-deactivation',
+              });
+              clearStorage();
+              navigate('/login');
               actions.setSubmitting(false);
             }
           })

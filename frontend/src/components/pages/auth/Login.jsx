@@ -52,6 +52,32 @@ Login.defaultProps = {
 };
 
 const Content = ({ redirectTo, sid, token }) => {
+  const { userState, userDispatch } = React.useContext(UserContext);
+  const [message, setMessage] = React.useState({ msg: null, type: null });
+
+  if (userState && userState.alert === 'account-deactivation') {
+    !message.msg &&
+      setMessage({
+        msg:
+          'Your account has been DEACTIVATED. Kindly contact us if you would like to activate your account.',
+        type: 'error',
+      });
+    userDispatch({
+      type: 'remove-alert',
+    });
+  }
+
+  if (redirectTo === '/user/events/new' && !message.msg) {
+    setMessage({
+      msg: `You need to sign in to hire ${
+        (getHiredEntertainerFromStore() &&
+          getHiredEntertainerFromStore().stageName) ||
+        'entertainer'
+      }`,
+      type: 'info',
+    });
+  }
+
   return (
     <section>
       <div className="container-fluid">
@@ -62,16 +88,7 @@ const Content = ({ redirectTo, sid, token }) => {
           <Col sm={{ size: 5 }}>
             <div className="auth__container">
               <section>
-                {redirectTo === '/user/events/new' && (
-                  <AlertMessage
-                    message={`You need to sign in to hire ${
-                      (getHiredEntertainerFromStore() &&
-                        getHiredEntertainerFromStore().stageName) ||
-                      'entertainer'
-                    }`}
-                    type="info"
-                  />
-                )}
+                <AlertMessage message={message.msg} type={message.type} />
                 <h5 className="header font-weight-normal mb-4">Login</h5>
                 <LoginForm redirectTo={redirectTo} sid={sid} token={token} />
 
