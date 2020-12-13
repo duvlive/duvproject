@@ -844,13 +844,15 @@ const CancelEventForm = ({ eventId }) => {
               rows="3"
             />
             <div className="small--2 mt-n3 mb-3 text-muted-light">
-              Late Cancellations (i.e cancellations done less than 48hrs to
-              event date) attract a{' '}
-              <strong className="text-info">penalty</strong> in the form of a
-              compensation charge which is 35% of the Principal Amount Paid, and
-              is Payable to the Entertainer hired. Refunds will be made only to
-              a bank account with details matching the personal profile of the
-              User. Do you wish to proceed with the cancellation?
+              Late Cancellations (i.e cancellations done less than 48hrs to Late
+              Cancellations (i.e any cancellation done less than 48hrs to the
+              event time) attract a deduction of the sum of{' '}
+              <strong className="text-info">35% of the Fee Paid</strong> (which
+              will be remitted to the cancelled Entertainer as a compensation)
+              and the handling fee. <br />
+              When cancellations occur before 48hrs to the event date, the only
+              deduction will be the handling fee. Do you wish to proceed with
+              the cancellation?
             </div>
             <Button
               className="btn-info btn-wide btn-transparent mt-2"
@@ -900,7 +902,6 @@ const CancelSingleEventForm = ({ eventEntertainerId }) => {
             }
           })
           .catch(function (error) {
-            console.log('error ', error.response.data.message);
             setMessage({ msg: error.response.data.message });
             actions.setSubmitting(false);
           });
@@ -920,13 +921,14 @@ const CancelSingleEventForm = ({ eventEntertainerId }) => {
               rows="3"
             />
             <div className="small--2 mt-n3 mb-3 text-muted-light">
-              Late Cancellations (i.e cancellations done less than 48hrs to
-              event date) attract a{' '}
-              <strong className="text-info">penalty</strong> in the form of a
-              compensation charge which is 35% of the Principal Amount Paid, and
-              is Payable to the Entertainer hired. Refunds will be made only to
-              a bank account with details matching the personal profile of the
-              User. Do you wish to proceed with the removal of this entertainer?
+              Late Cancellations (i.e any cancellation done less than 48hrs to
+              the event time) attract a deduction of the sum of{' '}
+              <strong className="text-info">35% of the Fee Paid</strong> (which
+              will be remitted to the cancelled Entertainer as a compensation)
+              and the handling fee. <br />
+              When cancellations occur before 48hrs to the event date, the only
+              deduction will be the handling fee. Do you wish to proceed with
+              the removal of this entertainer?
             </div>
             <Button
               className="btn-info btn-wide btn-transparent mt-2"

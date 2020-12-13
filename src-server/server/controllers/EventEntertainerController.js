@@ -652,13 +652,14 @@ const EventEntertainerController = {
           );
 
           // Add to cancellation table
-          const amount =
+          const amount = parseFloat(
             eventEntertainerInfo.applications[0].proposedPrice ||
-            eventEntertainerInfo.applications[0].askingPrice;
+              eventEntertainerInfo.applications[0].askingPrice
+          );
 
           const handlingFee =
             (amount * DEFAULT_COMMISSION.handlingPercent) / 100 +
-            DEFAULT_COMMISSION.handlingPlus;
+            parseFloat(DEFAULT_COMMISSION.handlingPlus);
 
           let refundEventOwner = amount - handlingFee;
           let payEntertainerDiscount = 0;

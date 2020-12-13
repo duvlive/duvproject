@@ -18,7 +18,10 @@ const validString = (data) => {
 };
 
 export const moneyFormat = (number) =>
-  number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+  parseFloat(number)
+    .toFixed(2)
+    .toString()
+    .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
 
 export const encodeAccountNumber = (number) =>
   number
