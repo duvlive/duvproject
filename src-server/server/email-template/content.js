@@ -114,3 +114,6 @@ export default EMAIL_CONTENT;
 // Check your inbox for the email address associated with your Pinterest account.
 // Look for a message with the subject line "Please confirm your email"
 // Open the email and click Confirm your email.
+
+// allow admin to view auctions.
+// homepage wrong link

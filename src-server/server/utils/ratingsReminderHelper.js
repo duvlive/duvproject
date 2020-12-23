@@ -90,7 +90,7 @@ const getUnratedEntainers = async () => {
  * @param {object} res is res object
  * @return {object} returns res object
  */
-export const getUnratedEventsReview = () => {
+export const getUnratedEventsReview = (req, res) => {
   EventEntertainer.findAll({
     where: {
       hiredEntertainer: {
