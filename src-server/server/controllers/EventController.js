@@ -211,6 +211,15 @@ const EventController = {
               as: 'applications',
               attributes: ['id', 'status'],
             },
+            {
+              model: Application,
+              as: 'applications',
+              attributes: ['id', 'status'],
+            },
+            {
+              model: CancelEventEntertainer,
+              as: 'cancellationDetails',
+            },
           ],
         },
         {
@@ -817,13 +826,14 @@ const EventController = {
             }
           ).then(async () => {
             // add to cancelled
-            const amount =
+            const amount = parseFloat(
               eventEntertainer.applications[0].proposedPrice ||
-              eventEntertainer.applications[0].askingPrice;
+                eventEntertainer.applications[0].askingPrice
+            );
 
             const handlingFee =
               (amount * DEFAULT_COMMISSION.handlingPercent) / 100 +
-              DEFAULT_COMMISSION.handlingPlus;
+              parseFloat(DEFAULT_COMMISSION.handlingPlus);
 
             let refundEventOwner = amount - handlingFee;
             let payEntertainerDiscount = 0;

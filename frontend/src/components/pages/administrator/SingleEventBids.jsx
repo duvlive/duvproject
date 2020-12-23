@@ -50,7 +50,7 @@ const SingleEventBids = ({ eventEntertainerId }) => {
           }
         })
         .catch(function (error) {
-          navigate('/user/auctions/status/error');
+          navigate('/admin/dashboard');
           setLoading(false);
         });
   }, [eventEntertainerId]);
@@ -338,19 +338,6 @@ const BidsApplicationsTableRow = ({ application, number }) => {
       <td className="align-middle text-gray">
         <span className="text-muted small--4">Location</span>{' '}
         {application.user.profile.location}
-      </td>
-      <td className="align-middle text-right td-btn">
-        <DuvLiveModal
-          actionFn={approveApplication}
-          actionText="Approve Bid"
-          body={approveBidModalBody()}
-          closeModalText="Cancel"
-          title="Approve Bid"
-        >
-          <button className="btn btn-success btn-sm btn-transparent">
-            Approve Bid
-          </button>
-        </DuvLiveModal>
       </td>
       <td className="align-middle text-right td-btn">
         <a

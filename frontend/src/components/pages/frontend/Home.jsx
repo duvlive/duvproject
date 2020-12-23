@@ -178,7 +178,7 @@ const LiveYourLifeSection = () => {
 const EntertainerSection = ({ entertainers, loading }) => (
   <section className="entertainers spacer">
     <div className="container-fluid">
-      <Link to="/upcoming-events">
+      <Link to="/entertainers">
         <h2 className="header title-border">ENTERTAINERS</h2>
       </Link>
       <Row className="pt-5">

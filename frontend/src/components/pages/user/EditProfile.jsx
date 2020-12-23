@@ -9,11 +9,13 @@ import axios from 'axios';
 import { setInitialValues, feedback } from 'components/forms/form-helper';
 import UploadImage from 'components/common/utils/UploadImage';
 import { UserContext } from 'context/UserContext';
-import { getTokenFromStore } from 'utils/localStorage';
+import { clearStorage, getTokenFromStore } from 'utils/localStorage';
 import AlertMessage from 'components/common/utils/AlertMessage';
 import { ChangePasswordForm } from 'components/pages/user/ChangePassword';
-import { createSchema } from 'components/forms/schema/schema-helpers';
+import { createSchema, email } from 'components/forms/schema/schema-helpers';
 import { bankDetailsSchema } from 'components/forms/schema/entertainerSchema';
+import { navigate } from '@reach/router';
+import DuvLiveModal from 'components/custom/Modal';
 
 const EditProfile = () => {
   return (
@@ -25,6 +27,16 @@ const EditProfile = () => {
           <UserProfileForm />
           <BankDetailsForm />
           <ChangePasswordForm />
+          <div className="text-right">
+            <DuvLiveModal
+              body={<DeactivateAccount />}
+              title="Deactivate Your Account"
+            >
+              <button className="btn btn-link text-muted">
+                Deactivate Your account
+              </button>
+            </DuvLiveModal>
+          </div>
         </section>
       </div>
     </BackEndPage>
@@ -185,6 +197,75 @@ export const BankDetailsForm = () => {
         </div>
       )}
       validationSchema={createSchema(bankDetailsSchema)}
+    />
+  );
+};
+
+export const DeactivateAccount = () => {
+  const [message, setMessage] = React.useState(null);
+  const { userState, userDispatch } = React.useContext(UserContext);
+
+  return (
+    <Formik
+      enableReinitialize={true}
+      initialValues={setInitialValues({ email })}
+      onSubmit={({ email }, actions) => {
+        if (email !== userState.email) {
+          setMessage({
+            message:
+              'Invalid email. You need to enter your email address to deactivate your account',
+          });
+          return;
+        }
+        axios
+          .put(
+            '/api/v1/user/deactivate',
+            {},
+            {
+              headers: { 'x-access-token': getTokenFromStore() },
+            }
+          )
+          .then(function (response) {
+            const { status } = response;
+            if (status === 200) {
+              userDispatch({ type: 'user-logout' });
+              userDispatch({
+                type: 'add-alert',
+                alert: 'account-deactivation',
+              });
+              clearStorage();
+              navigate('/login');
+              actions.setSubmitting(false);
+            }
+          })
+          .catch(function (error) {
+            setMessage({ message: error.response.data.message });
+            actions.setSubmitting(false);
+          });
+      }}
+      render={({ isSubmitting, handleSubmit, ...props }) => (
+        <Form>
+          <AlertMessage {...message} />
+
+          <p className="text-muted">
+            To deactivate your account, you would need to enter the email
+            address associated with this account below.
+          </p>
+          <Input
+            label="Email"
+            name="email"
+            placeholder="Your Registered Email Address"
+          />
+          <Button
+            className="btn-danger btn-wide btn-transparent"
+            loading={isSubmitting}
+            onClick={handleSubmit}
+          >
+            Deactivate Your Account
+          </Button>
+        </Form>
+      )}
+      validationSchema={createSchema({ email })}
     />
   );
 };

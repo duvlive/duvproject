@@ -17,7 +17,6 @@ import NoContent from 'components/common/utils/NoContent';
 import LoadItems from 'components/common/utils/LoadItems';
 import Humanize from 'humanize-plus';
 import { Link } from '@reach/router';
-import AlertMessage from 'components/common/utils/AlertMessage';
 
 const Dashboard = () => {
   const { userState } = React.useContext(UserContext);
@@ -83,7 +82,7 @@ Dashboard.Items = ({
             <div className="col-sm-12">
               <div className="card card-custom text-red py-2 px-4">
                 <h6 className="text-red font-weight-normal mt-3">
-                  You have {unresolvedEvents} unresolved events.{' '}
+                  You have {unresolvedEvents} unresolved cases.{' '}
                   <Link
                     className="btn btn-transparent btn-danger float-right"
                     to="/admin/unresolved-events"

@@ -43,9 +43,6 @@ const Requests = () => {
             <RequestsTable requests={requests} />
           ) : (
             <NoContent
-              isButton
-              linkText="Add a New Event"
-              linkTo="/user/events/new"
               text={
                 <>
                   No Request Found.
@@ -166,7 +163,7 @@ const RequestsRow = ({
       &nbsp;&nbsp;&nbsp;&nbsp;
       <Link
         className="btn btn-danger btn-sm btn-transparent"
-        to={`/user/request/view/${applicationId}`}
+        to={`/admin/request/view/${applicationId}`}
       >
         View Request
       </Link>

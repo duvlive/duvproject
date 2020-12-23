@@ -83,6 +83,16 @@ const EMAIL_CONTENT = {
     Thank you for using DUVLIVE for your events!!!`,
     buttonText: 'Rate Entertainer',
   },
+  REFUND_ENTERTAINER: {
+    title: 'You have been compensated with N70,000',
+    subject: 'You have been compensated with N70,000',
+    contentTop: `We are pleased to inform you that after the cancellation of the event with details below, you have been compensated the amount stated which has been credited to the bank account number you provided.`,
+  },
+  REFUND_USER: {
+    title: 'You have been compensated with N70,000',
+    subject: 'You have been compensated with N70,000',
+    contentTop: `We are pleased to inform you that after the cancellation of the event with details below, you have been compensated the amount stated which has been credited to the bank account number you provided.`,
+  },
   USER_CANCELLED_EVENT: {
     subject: 'Cancelled Event',
   },
@@ -104,3 +114,6 @@ export default EMAIL_CONTENT;
 // Check your inbox for the email address associated with your Pinterest account.
 // Look for a message with the subject line "Please confirm your email"
 // Open the email and click Confirm your email.
+
+// allow admin to view auctions.
+// homepage wrong link

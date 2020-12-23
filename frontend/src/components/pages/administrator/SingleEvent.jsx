@@ -97,20 +97,6 @@ const SingleEvent = ({ id }) => {
             </div>
           </section>
 
-          <Match path={`/user/events/view/${id}/success`}>
-            {(props) =>
-              // eslint-disable-next-line react/prop-types
-              props.match && (
-                <div className="mt-3 mb-4">
-                  <AlertMessage
-                    message="Your Auction has been successfully approved"
-                    type="success"
-                  />
-                </div>
-              )
-            }
-          </Match>
-
           <div className="mt-4">
             <AlertMessage message={message.msg} type={message.type} />
           </div>
@@ -145,14 +131,6 @@ const SingleEvent = ({ id }) => {
                     )}
 
                   <SingleEventEntertainersTable event={event} />
-                  {userCanAddEntertainer(event.eventDate) && (
-                    <Link
-                      className="btn btn-danger btn-transparent"
-                      to={`/user/events/${id}/add-entertainer/Auction`}
-                    >
-                      Add Entertainer
-                    </Link>
-                  )}
                 </div>
                 <div className="col-md-4">
                   <SingleEvent.EventDetailsCard event={event} />
@@ -691,7 +669,7 @@ const CancelEventForm = ({ eventId }) => {
                 },
                 alert: 'cancel-event-success',
               });
-              navigate('/user/events');
+              navigate('/admin/events');
               actions.resetForm();
               actions.setSubmitting(false);
             }

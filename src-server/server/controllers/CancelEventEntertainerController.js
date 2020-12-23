@@ -1,3 +1,5 @@
+import EMAIL_CONTENT from '../email-template/content';
+import sendMail from '../MailSender';
 import {
   Application,
   CancelEventEntertainer,
@@ -7,7 +9,88 @@ import {
   EntertainerProfile,
   BankDetail,
 } from '../models';
-import { getAll } from '../utils';
+import {
+  encodeAccountNumber,
+  getAll,
+  getDateTime,
+  moneyFormat,
+} from '../utils';
+
+const CANCEL_EVENT_INCLUDE = [
+  {
+    model: EventEntertainer,
+    as: 'eventEntertainer',
+    include: [
+      {
+        model: Event,
+        as: 'event',
+        include: [
+          {
+            model: User,
+            as: 'owner',
+            attributes: [
+              'id',
+              'firstName',
+              'lastName',
+              'phoneNumber',
+              'phoneNumber2',
+              'email',
+              'profileImageURL',
+              'accountName',
+              'accountNumber',
+              'bankName',
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    model: Application,
+    as: 'eventApplication',
+    required: true,
+    attributes: [
+      'id',
+      'commissionId',
+      'askingPrice',
+      'applicationType',
+      'proposedPrice',
+      'takeHome',
+      'createdAt',
+    ],
+    include: [
+      {
+        model: User,
+        as: 'user',
+        attributes: [
+          'id',
+          'profileImageURL',
+          'phoneNumber',
+          'phoneNumber2',
+          'email',
+          'firstName',
+        ],
+        include: [
+          {
+            model: EntertainerProfile,
+            as: 'profile',
+            attributes: [
+              'id',
+              'stageName',
+              'entertainerType',
+              'slug',
+              'location',
+            ],
+          },
+          {
+            model: BankDetail,
+            as: 'bankDetail',
+          },
+        ],
+      },
+    ],
+  },
+];
 
 const CancelEventEntertainerController = {
   /**
@@ -17,10 +100,10 @@ const CancelEventEntertainerController = {
    * @return {object} json response
    */
   async getCancelEventEntertainers(req, res) {
-    const { offset, limit } = req.query;
+    const { offset, limit, resolved } = req.query;
     try {
       const where = {
-        resolved: false,
+        resolved: !!resolved,
       };
       const include = [
         {
@@ -121,79 +204,7 @@ const CancelEventEntertainerController = {
       where: {
         id,
       },
-      include: [
-        {
-          model: EventEntertainer,
-          as: 'eventEntertainer',
-          include: [
-            {
-              model: Event,
-              as: 'event',
-              include: [
-                {
-                  model: User,
-                  as: 'owner',
-                  attributes: [
-                    'id',
-                    'firstName',
-                    'lastName',
-                    'phoneNumber',
-                    'phoneNumber2',
-                    'email',
-                    'profileImageURL',
-                    'accountName',
-                    'accountNumber',
-                    'bankName',
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-        {
-          model: Application,
-          as: 'eventApplication',
-          required: true,
-          attributes: [
-            'id',
-            'commissionId',
-            'askingPrice',
-            'applicationType',
-            'proposedPrice',
-            'takeHome',
-            'createdAt',
-          ],
-          include: [
-            {
-              model: User,
-              as: 'user',
-              attributes: [
-                'id',
-                'profileImageURL',
-                'phoneNumber',
-                'phoneNumber2',
-              ],
-              include: [
-                {
-                  model: EntertainerProfile,
-                  as: 'profile',
-                  attributes: [
-                    'id',
-                    'stageName',
-                    'entertainerType',
-                    'slug',
-                    'location',
-                  ],
-                },
-                {
-                  model: BankDetail,
-                  as: 'bankDetail',
-                },
-              ],
-            },
-          ],
-        },
-      ],
+      include: CANCEL_EVENT_INCLUDE,
     })
       .then((event) => {
         if (!event) {
@@ -220,6 +231,7 @@ const CancelEventEntertainerController = {
 
     CancelEventEntertainer.findOne({
       where: { id },
+      include: CANCEL_EVENT_INCLUDE,
     })
       .then((eventFound) => {
         if (!eventFound || eventFound.length === 0) {
@@ -254,7 +266,55 @@ const CancelEventEntertainerController = {
             },
           }
         ).then(() => {
-          // sendMail(EMAIL_CONTENT.WELCOME_MAIL, userFound);
+          const emailContent = {
+            title: `You have been refunded ₦${moneyFormat(
+              eventFound.refundEventOwner
+            )}`,
+            event: eventFound.eventEntertainer.event.eventType,
+            place: eventFound.eventEntertainer.placeOfEvent,
+            date: getDateTime(eventFound.eventEntertainer.event.eventDate),
+            cancelledReason: eventFound.cancelledReason,
+            cancelledTime: getDateTime(eventFound.createdAt),
+            initialPay: moneyFormat(eventFound.amount),
+            amountDeducted: moneyFormat(
+              eventFound.amount - eventFound.refundEventOwner
+            ),
+            amountRefunded: moneyFormat(eventFound.refundEventOwner),
+            bank: eventFound.eventEntertainer.event.owner.bankName,
+            accountNumber: encodeAccountNumber(
+              eventFound.eventEntertainer.event.owner.accountNumber
+            ),
+            user: {
+              email: eventFound.eventEntertainer.event.owner.email,
+              firstName: eventFound.eventEntertainer.event.owner.firstName,
+            },
+          };
+          sendMail(
+            EMAIL_CONTENT.REFUND_USER,
+            {
+              ...emailContent.user,
+            },
+            {
+              title: emailContent.title,
+              subject: emailContent.title,
+              contentTop: `We are pleased to inform you that after the cancellation of the event with details below, you have been refunded the amount stated which has been credited to the bank account number you provided.`,
+              contentBottom: `
+              <strong>Event:</strong> ${emailContent.event} <br>
+              <strong>Place:</strong> ${emailContent.place} <br>
+              <strong>Date & Time:</strong> ${emailContent.date} <br><br>
+
+              <strong>Time of Cancellation:</strong> ${emailContent.cancelledTime}<br>
+              <strong>Reason for Cancellation:</strong><br> ${emailContent.cancelledReason}<br><br>
+
+              <strong>Initial Pay:</strong> ₦${emailContent.initialPay} <br>
+              <strong>Amount Deducted:</strong> ₦${emailContent.amountDeducted} <br>
+              <strong>Amount Refunded:</strong> ₦${emailContent.amountRefunded} <br><br>
+
+              <strong>Bank:</strong> ${emailContent.bank} <br>
+              <strong>Account Number:</strong> ${emailContent.accountNumber} <br><br>
+            `,
+            }
+          );
           return res
             .status(200)
             .json({ message: 'Event has been successfully resolved' });
@@ -279,6 +339,7 @@ const CancelEventEntertainerController = {
 
     CancelEventEntertainer.findOne({
       where: { id },
+      include: CANCEL_EVENT_INCLUDE,
     })
       .then((eventFound) => {
         if (!eventFound || eventFound.length === 0) {
@@ -305,7 +366,6 @@ const CancelEventEntertainerController = {
             }
           : {};
 
-        // TODO:
         // Cancel Performance --> For entertainers
         return CancelEventEntertainer.update(
           {
@@ -319,7 +379,52 @@ const CancelEventEntertainerController = {
             },
           }
         ).then(() => {
-          // sendMail(EMAIL_CONTENT.WELCOME_MAIL, userFound);
+          const emailContent = {
+            title: `You have been compensated with ₦${moneyFormat(
+              eventFound.payEntertainerDiscount
+            )}`,
+            event: eventFound.eventEntertainer.event.eventType,
+            place: eventFound.eventEntertainer.placeOfEvent,
+            date: getDateTime(eventFound.eventEntertainer.event.eventDate),
+            cancelledReason: eventFound.cancelledReason,
+            cancelledTime: getDateTime(eventFound.createdAt),
+            initialTakeHome: moneyFormat(eventFound.eventApplication.takeHome),
+            amountCompensated: moneyFormat(eventFound.payEntertainerDiscount),
+            bank: eventFound.eventApplication.user.bankDetail.bankName,
+            accountNumber: encodeAccountNumber(
+              eventFound.eventApplication.user.bankDetail.accountNumber
+            ),
+            user: {
+              email: eventFound.eventApplication.user.email,
+              firstName: eventFound.eventApplication.user.profile.stageName,
+            },
+          };
+          sendMail(
+            EMAIL_CONTENT.REFUND_ENTERTAINER,
+            {
+              ...emailContent.user,
+            },
+            {
+              title: emailContent.title,
+              subject: emailContent.title,
+              contentTop: `We are pleased to inform you that after the cancellation of the event with details below, you have been compensated the amount stated which has been credited to the bank account number you provided.
+              `,
+              contentBottom: `
+              <strong>Event:</strong> ${emailContent.event} <br>
+              <strong>Place:</strong> ${emailContent.place} <br>
+              <strong>Date & Time:</strong> ${emailContent.date} <br><br>
+
+              <strong>Time of Cancellation:</strong> ${emailContent.cancelledTime}<br>
+              <strong>Reason for Cancellation:</strong><br> ${emailContent.cancelledReason}<br><br>
+
+              <strong>Initial Take-Home Pay:</strong> ₦${emailContent.initialTakeHome} <br>
+              <strong>Amount Compensated:</strong> ₦${emailContent.amountCompensated} <br><br>
+
+              <strong>Bank:</strong> ${emailContent.bank} <br>
+              <strong>Account Number:</strong> ${emailContent.accountNumber} <br><br>
+            `,
+            }
+          );
           return res
             .status(200)
             .json({ message: 'Event has been successfully resolved' });

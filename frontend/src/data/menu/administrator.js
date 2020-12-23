@@ -22,6 +22,11 @@ export default [
         to: '/admin/commission',
         icon: 'wallet',
       },
+      {
+        title: 'Events Refund',
+        to: '/admin/resolved-events',
+        icon: 'money',
+      },
     ],
   },
   {

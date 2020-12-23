@@ -350,6 +350,11 @@ db.CancelEventEntertainer.belongsTo(db.EventEntertainer, {
   as: 'eventEntertainer',
 });
 
+db.EventEntertainer.hasMany(db.CancelEventEntertainer, {
+  foreignKey: 'eventEntertainerId',
+  as: 'cancellationDetails',
+});
+
 db.CancelEventEntertainer.belongsTo(db.Application, {
   foreignKey: 'applicationId',
   as: 'eventApplication',

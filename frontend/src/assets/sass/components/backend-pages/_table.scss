@@ -176,3 +176,11 @@ tr.strikethrough {
     text-decoration: none !important;
   }
 }
+
+tr.tr__transparent {
+  background-color: transparent !important;
+}
+
+.tr__condensed td {
+  padding: 1.5rem 0 0 !important;
+}

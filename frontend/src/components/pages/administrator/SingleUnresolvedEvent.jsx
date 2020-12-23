@@ -47,6 +47,9 @@ const SingleUnresolvedEvent = ({ id }) => {
           if (status === 200) {
             setEvent(data.event);
             setLoading(false);
+          } else {
+            setLoading(false);
+            navigate('/admin/dashboard');
           }
         })
         .catch(function (error) {
@@ -212,7 +215,7 @@ const EventOwnerCard = ({ event, owner, setMessage, setEvent }) => {
         Confirming this will <strong>notify</strong> the user that they have
         been refunded their outstanding payment of{' '}
         <strong className="text-yellow">
-          &#8358; {moneyFormatInNaira(event.refundEventOwner)}
+          {moneyFormatInNaira(event.refundEventOwner)}
         </strong>{' '}
         . Kindly ensure that this has been paid to their account before clicking
         on the CONFIRM button.
@@ -669,10 +672,15 @@ SingleUnresolvedEvent.EventEntertainerDetailsCard.propTypes = {
 
 const SingleUnresolvedEventEntertainersTable = ({ event }) => {
   const eventDetails = event.eventEntertainer.event;
+
+  if (!event.eventApplication) {
+    return null;
+  }
+
   // show entertainer details
   const entertainer = {
-    ...event.eventApplication.user,
-    ...event.eventApplication.user.profile,
+    ...event.eventApplication?.user,
+    ...event.eventApplication?.user?.profile,
   };
 
   return (
