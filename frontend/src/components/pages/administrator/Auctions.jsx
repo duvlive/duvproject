@@ -8,6 +8,7 @@ import { getTokenFromStore } from 'utils/localStorage';
 import { twoDigitNumber, getBudgetRange } from 'utils/helpers';
 import { getShortDate } from 'utils/date-helpers';
 import NoContent from 'components/common/utils/NoContent';
+import { Link } from '@reach/router';
 
 const Auctions = () => {
   const [auctions, setAuctions] = React.useState([]);
@@ -101,14 +102,14 @@ export const AuctionsRow = ({
         {getBudgetRange(lowestBudget, highestBudget)}{' '}
       </span>
     </td>
-    {/* <td className="text-right">
+    <td className="text-right">
       <Link
         className="btn btn-info btn-transparent"
-        to={`/admin/auctions/${id}`}
+        to={`/admin/auction/bids/${id}`}
       >
-        View Auction
+        View Bids
       </Link>
-    </td> */}
+    </td>
   </tr>
 );
 

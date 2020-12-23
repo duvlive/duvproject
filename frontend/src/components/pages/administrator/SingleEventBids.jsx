@@ -340,19 +340,6 @@ const BidsApplicationsTableRow = ({ application, number }) => {
         {application.user.profile.location}
       </td>
       <td className="align-middle text-right td-btn">
-        <DuvLiveModal
-          actionFn={approveApplication}
-          actionText="Approve Bid"
-          body={approveBidModalBody()}
-          closeModalText="Cancel"
-          title="Approve Bid"
-        >
-          <button className="btn btn-success btn-sm btn-transparent">
-            Approve Bid
-          </button>
-        </DuvLiveModal>
-      </td>
-      <td className="align-middle text-right td-btn">
         <a
           className="btn btn-info btn-sm btn-transparent"
           href={`/entertainers/profile/${application.user.profile.slug}`}
