@@ -13,11 +13,10 @@ import {
 import Image from 'components/common/utils/Image';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import { getTokenFromStore } from 'utils/localStorage';
-import { Link, Match, navigate } from '@reach/router';
+import { Link, navigate } from '@reach/router';
 import { listJsonItems, getBudgetRange } from 'utils/helpers';
 import { getRequestStatusIcon } from 'utils/helpers';
 import {
-  userCanAddEntertainer,
   eventIsVoid,
   eventHasExpired,
   defaultEvent,

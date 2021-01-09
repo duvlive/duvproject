@@ -383,6 +383,18 @@
       "css": "down-big",
       "code": 59430,
       "src": "fontawesome"
+    },
+    {
+      "uid": "51fb22f9ff9d7f60c95ef31e4c59502d",
+      "css": "message",
+      "code": 62636,
+      "src": "mfglabs"
+    },
+    {
+      "uid": "21e7025c85a7eeae71fd3539855afe2b",
+      "css": "usb",
+      "code": 62087,
+      "src": "fontawesome"
     }
   ]
 }

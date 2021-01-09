@@ -90,7 +90,12 @@ export default [
       {
         title: 'Cron Job',
         to: '/admin/cron',
-        icon: 'hourglass',
+        icon: 'usb',
+      },
+      {
+        title: 'SMS Reports',
+        to: '/admin/sms-reports',
+        icon: 'message',
       },
     ],
   },
