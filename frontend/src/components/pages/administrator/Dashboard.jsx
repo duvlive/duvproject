@@ -55,7 +55,6 @@ const Dashboard = () => {
       });
   }, []);
   React.useEffect(() => {
-    console.log('SMS_USER', process.env.REACT_APP_SMS_USERNAME);
     axios
       .post(buildKudiSMSActionUrl('balance'))
       .then(function (response) {
