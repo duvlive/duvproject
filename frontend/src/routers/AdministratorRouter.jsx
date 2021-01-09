@@ -36,6 +36,7 @@ import CronJobNotifications from 'components/pages/administrator/CronJobNotifica
 import UnresolvedEvents from 'components/pages/administrator/UnresolvedEvents';
 import ResolvedEvents from 'components/pages/administrator/ResolvedEvents';
 import SingleUnresolvedEvent from 'components/pages/administrator/SingleUnresolvedEvent';
+import SMSReports from 'components/pages/administrator/SMSReports';
 
 const AdministratorRouter = () => (
   <Router>
@@ -76,6 +77,7 @@ const AdministratorRouter = () => (
     <ResolvedEvents path="/resolved-events" />
     <UnresolvedEvents path="/unresolved-events" />
     <SingleUnresolvedEvent path="/unresolved-event/:id" />
+    <SMSReports path="/sms-reports" />
     <Help path="/help" />
     <Logout path="/logout" />
   </Router>

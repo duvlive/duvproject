@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'duvlive';
-  src: url('../font/duvlive.eot?85165451');
-  src: url('../font/duvlive.eot?85165451#iefix') format('embedded-opentype'),
-    url('../font/duvlive.woff2?85165451') format('woff2'),
-    url('../font/duvlive.woff?85165451') format('woff'),
-    url('../font/duvlive.ttf?85165451') format('truetype'),
-    url('../font/duvlive.svg?85165451#duvlive') format('svg');
+  src: url('../font/duvlive.eot?51959004');
+  src: url('../font/duvlive.eot?51959004#iefix') format('embedded-opentype'),
+    url('../font/duvlive.woff2?51959004') format('woff2'),
+    url('../font/duvlive.woff?51959004') format('woff'),
+    url('../font/duvlive.ttf?51959004') format('truetype'),
+    url('../font/duvlive.svg?51959004#duvlive') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -15,7 +15,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: 'duvlive';
-    src: url('../font/duvlive.svg?85165451#duvlive') format('svg');
+    src: url('../font/duvlive.svg?51959004#duvlive') format('svg');
   }
 }
 */
@@ -25,7 +25,7 @@
   font-family: 'duvlive';
   font-style: normal;
   font-weight: normal;
-  speak: none;
+  speak: never;
 
   display: inline-block;
   text-decoration: inherit;
@@ -239,9 +239,15 @@
 .icon-credit-card:before {
   content: '\f283';
 } /* '' */
+.icon-usb:before {
+  content: '\f287';
+} /* '' */
 .icon-user-circle:before {
   content: '\f2bd';
 } /* '' */
 .icon-instagram:before {
   content: '\f32d';
 } /* '' */
+.icon-message:before {
+  content: '\f4ac';
+} /* '' */

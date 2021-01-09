@@ -18,7 +18,6 @@ import {
 } from 'utils/event-helpers';
 import AlertMessage from 'components/common/utils/AlertMessage';
 import Image from 'components/common/utils/Image';
-import DuvLiveModal from 'components/custom/Modal';
 import {
   moneyFormat,
   twoDigitNumber,
@@ -241,64 +240,6 @@ const BidsApplicationsTableRow = ({ application, number }) => {
   if (!application && !application.user && !application.user.profile) {
     return null;
   }
-
-  const approveApplication = () => {
-    axios
-      .post(
-        `/api/v1/pay`,
-        {
-          amount: application.askingPrice,
-          applicationId: application.id,
-        },
-        {
-          headers: {
-            'x-access-token': getTokenFromStore(),
-          },
-        }
-      )
-      .then(function (response) {
-        const { status, data } = response;
-        // handle success
-        if (status === 200) {
-          window.location.href = data.payment.authorization_url;
-        }
-      })
-      .catch(function (error) {
-        console.log(error.response.data.message);
-        // TODO: ADD ERROR ALERT HERE
-      });
-  };
-
-  const approveBidModalBody = () => (
-    <>
-      <div className="text-center">
-        <Image
-          className="avatar--large"
-          name={application.user.profile.stageName || 'No name'}
-          responsiveImage={false}
-          src={application.user.profileImageURL || ProfileAvatar}
-        />
-        <h4 className="font-weight-normal mt-3">
-          {application.user.profile.stageName}
-        </h4>
-        <h5 className="text-yellow mt-3 mb-4">
-          &#8358; {moneyFormat(application.askingPrice)}
-        </h5>
-      </div>
-      <div className="small--2">
-        <h6 className="text-white">Note</h6>
-        Approving this bid will <strong>only notify</strong> the entertainer
-        that they have been selected to perform at this event. To{' '}
-        <strong>enlist</strong> their services, the full amount shown above{' '}
-        <strong>must be paid</strong>{' '}
-        <span className="text-red">
-          after the entertainer accepts to perform
-        </span>
-        ,<strong>at least 48hrs before the event date</strong> to make the
-        contract with the performer valid.
-      </div>
-    </>
-  );
 
   const avgRating = getAverageRatings(application.user.profile.ratings);
   return (

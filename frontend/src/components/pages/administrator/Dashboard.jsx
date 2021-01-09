@@ -10,6 +10,7 @@ import LoadingScreen from 'components/common/layout/LoadingScreen';
 import Events from 'components/pages/entertainer/UpcomingEvents';
 import {
   getItems,
+  getNairaSymbol,
   moneyFormatInNaira,
   priceCalculatorHelper,
 } from 'utils/helpers';
@@ -17,10 +18,12 @@ import NoContent from 'components/common/utils/NoContent';
 import LoadItems from 'components/common/utils/LoadItems';
 import Humanize from 'humanize-plus';
 import { Link } from '@reach/router';
+import { buildKudiSMSActionUrl } from 'utils/sms';
 
 const Dashboard = () => {
   const { userState } = React.useContext(UserContext);
   const [loading, setLoading] = React.useState(true);
+  const [balance, setBalance] = React.useState(null);
   const [results, setResults] = React.useState({
     auctions: null,
     bids: null,
@@ -51,6 +54,21 @@ const Dashboard = () => {
         setLoading(false);
       });
   }, []);
+  React.useEffect(() => {
+    console.log('SMS_USER', process.env.REACT_APP_SMS_USERNAME);
+    axios
+      .post(buildKudiSMSActionUrl('balance'))
+      .then(function (response) {
+        const { status, data } = response;
+        // handle success
+        if (status === 200) {
+          setBalance(data.balance);
+        }
+      })
+      .catch(function (error) {
+        setBalance(0);
+      });
+  }, []);
 
   return (
     <BackEndPage title="Dashboard">
@@ -59,7 +77,7 @@ const Dashboard = () => {
         {loading ? (
           <LoadingScreen text="Refreshing your Dashboard" />
         ) : (
-          <Dashboard.Items {...results} />
+          <Dashboard.Items {...results} balance={balance} />
         )}
       </div>
     </BackEndPage>
@@ -67,6 +85,7 @@ const Dashboard = () => {
 };
 
 Dashboard.Items = ({
+  balance,
   eventsOverview,
   paymentsOverview,
   pendingPayments,
@@ -186,6 +205,7 @@ Dashboard.Items = ({
             />
           </div>
           <div className="col-sm-4">
+            <Dashboard.SmsBalance balance={balance} />
             <Dashboard.PendingPayments pendingPayments={pendingPayments} />
           </div>
         </div>
@@ -195,6 +215,7 @@ Dashboard.Items = ({
 };
 
 Dashboard.Items.propTypes = {
+  balance: PropTypes.any.isRequired,
   eventsOverview: PropTypes.object.isRequired,
   paymentsOverview: PropTypes.object.isRequired,
   pendingPayments: PropTypes.array.isRequired,
@@ -290,6 +311,25 @@ Dashboard.PendingPayments.propTypes = {
 
 Dashboard.PendingPayments.defaultProps = {
   pendingPayments: [],
+};
+
+Dashboard.SmsBalance = ({ balance }) => (
+  <div className="card card-custom">
+    <div className="card-body">
+      <h6 className="font-weight-normal text-yellow">SMS BALANCE</h6>
+      <h2>
+        {getNairaSymbol()} {balance}
+      </h2>
+    </div>
+  </div>
+);
+
+Dashboard.SmsBalance.propTypes = {
+  balance: PropTypes.any,
+};
+
+Dashboard.PendingPayments.defaultProps = {
+  balance: null,
 };
 
 Dashboard.PendingPaymentRow = ({ event, id, payment }) => (
