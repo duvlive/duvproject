@@ -783,7 +783,7 @@ const ApplicationController = {
             applicationId,
           });
 
-          // send SMS
+          // Response to User Request SMS
           await sendSMS({
             message: smsMessage,
             phone: application.eventEntertainerInfo.event.owner.phoneNumber,
