@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import axios from 'axios';
 export const KUDI_SMS_API = 'https://account.kudisms.net/api/';
-export const SENDER = 'DUVLIVE';
+export const SENDER = 'DUV LIVE';
 
 export const convertToValidSMSPhoneNumber = (phone) => {
   // remove all spaces

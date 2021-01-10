@@ -898,7 +898,7 @@ const EventController = {
 
             // USER CANCELLED EVENT SMS
             await sendSMS({
-              message: `We regret to inform you that ${event.owner.firstName} has cancelled ${event.eventType}.  Check your DUVLive Account for more info.`,
+              message: `We regret to inform you that ${event.owner.firstName} has cancelled ${event.eventType}.  Check your DUV Live account for more info.`,
               phone: eventEntertainer.entertainer.personalDetails.phoneNumber,
             });
           });

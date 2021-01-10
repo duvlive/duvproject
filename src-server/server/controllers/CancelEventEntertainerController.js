@@ -319,7 +319,7 @@ const CancelEventEntertainerController = {
 
           // REFUND USER SMS
           await sendSMS({
-            message: `You have been refunded with ${emailContent.amountRefunded}. Check your DUVLive Account for more info`,
+            message: `You have been refunded with ${emailContent.amountRefunded}. Check your DUV Live account for more info`,
             phone: eventFound.eventEntertainer.event.owner.phoneNumber,
           });
           return res
@@ -435,7 +435,7 @@ const CancelEventEntertainerController = {
 
           // REFUND ENTERTAINER SMS
           await sendSMS({
-            message: `You have been compensated with ${emailContent.amountCompensated}. Check your DUVLive Account for more info`,
+            message: `You have been compensated with ${emailContent.amountCompensated}. Check your DUV Live account for more info`,
             phone: eventFound.eventApplication.user.phoneNumber,
           });
           return res
