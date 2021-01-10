@@ -1,7 +1,8 @@
+/* eslint-disable no-console */
 'use strict';
 import nodemailer from 'nodemailer';
 import ejs from 'ejs';
-import sgMail from '@sendgrid/mail';
+// import sgMail from '@sendgrid/mail';
 import textEmailTemplate from './email-template/duv-text-email-template';
 const DUV_LIVE_NO_REPLY_EMAIL = 'DUV LIVE <donotreply@duvlive.com>';
 const DUV_LIVE_INFO_EMAIL = 'DUV LIVE <info@duvlive.com>';

@@ -9,6 +9,7 @@ import {
   EntertainerProfile,
   BankDetail,
 } from '../models';
+import { sendSMS } from '../SMSSender';
 import {
   encodeAccountNumber,
   getAll,
@@ -265,7 +266,7 @@ const CancelEventEntertainerController = {
               id,
             },
           }
-        ).then(() => {
+        ).then(async () => {
           const emailContent = {
             title: `You have been refunded ₦${moneyFormat(
               eventFound.refundEventOwner
@@ -315,6 +316,12 @@ const CancelEventEntertainerController = {
             `,
             }
           );
+
+          // REFUND USER SMS
+          await sendSMS({
+            message: `You have been refunded with ${emailContent.amountRefunded}. Check your DUV Live account for more info`,
+            phone: eventFound.eventEntertainer.event.owner.phoneNumber,
+          });
           return res
             .status(200)
             .json({ message: 'Event has been successfully resolved' });
@@ -378,7 +385,7 @@ const CancelEventEntertainerController = {
               id,
             },
           }
-        ).then(() => {
+        ).then(async () => {
           const emailContent = {
             title: `You have been compensated with ₦${moneyFormat(
               eventFound.payEntertainerDiscount
@@ -425,6 +432,12 @@ const CancelEventEntertainerController = {
             `,
             }
           );
+
+          // REFUND ENTERTAINER SMS
+          await sendSMS({
+            message: `You have been compensated with ${emailContent.amountCompensated}. Check your DUV Live account for more info`,
+            phone: eventFound.eventApplication.user.phoneNumber,
+          });
           return res
             .status(200)
             .json({ message: 'Event has been successfully resolved' });

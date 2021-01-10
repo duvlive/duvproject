@@ -21,6 +21,7 @@ import { NOTIFICATIONS, NOTIFICATION_TYPE } from '../constant';
 import sendMail from '../MailSender';
 import EMAIL_CONTENT from '../email-template/content';
 import { Op } from 'sequelize';
+import { sendSMS } from '../SMSSender';
 
 const PaymentController = {
   async initializeTransaction(req, res) {
@@ -387,6 +388,7 @@ const PaymentController = {
                 'lastName',
                 'email',
                 'profileImageURL',
+                'phoneNumber',
               ],
               include: [{ model: BankDetail, as: 'bankDetail' }],
             },
@@ -457,6 +459,12 @@ const PaymentController = {
             contentTop,
           }
         );
+
+        // ENTERTAINER PAYMENT SMS
+        await sendSMS({
+          message: `You have been paid ${amount} for the ${eventDetails.event.eventType} event. Check your DUV Live account for more info.`,
+          phone: eventDetails.entertainer.personalDetails.phoneNumber,
+        });
 
         // Notification
         await Notification.create({

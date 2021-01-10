@@ -4,7 +4,7 @@
 // const eventEntertainerFactory = require('./factories/eventEntertainerFactory');
 // const bankDetailsFactory = require('./factories/bankDetailsFactory');
 // const identificationFactory = require('./factories/identificationFactory');
-const contactFactory = require('./factories/contactFactory');
+// const contactFactory = require('./factories/contactFactory');
 
 // var user = userFactory.buildList(2);
 // var entertainer = userFactory.buildList(18, {}, { type: 2, offset: 2 });
@@ -27,9 +27,9 @@ const contactFactory = require('./factories/contactFactory');
 // });
 // var identification = identificationFactory.build({
 //   userId: 22,
+// // });
+// var contact = contactFactory.build({
+//   userId: 22,
 // });
-var contact = contactFactory.build({
-  userId: 22,
-});
 
-console.log(contact);
+// console.log(contact);
