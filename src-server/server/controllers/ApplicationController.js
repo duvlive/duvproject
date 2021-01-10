@@ -722,7 +722,7 @@ const ApplicationController = {
               title: NOTIFICATIONS.REQUEST_ACCEPTED,
               type: NOTIFICATION_TYPE.SUCCESS,
             };
-            smsMessage = `YIPEE!!! ${EMAIL_PARAMS.entertainerName} ACCEPTED your request to perform at  ${EMAIL_PARAMS.eventType}. Check your DUV Live account for more info.`;
+            smsMessage = `YIPEE!!! ${EMAIL_PARAMS.entertainerName} ACCEPTED your request to perform at '${EMAIL_PARAMS.eventType}'. Check your DUV Live account for more info.`;
             break;
 
           case REQUEST_ACTION.INCREMENT:
@@ -737,7 +737,7 @@ const ApplicationController = {
               title: NOTIFICATIONS.REQUEST_INCREMENT,
               type: NOTIFICATION_TYPE.INFO,
             };
-            smsMessage = `${EMAIL_PARAMS.entertainerName} wants an increment to perform at ${EMAIL_PARAMS.eventType}. Check your DUV Live account for more info.`;
+            smsMessage = `${EMAIL_PARAMS.entertainerName} wants an increment to perform at '${EMAIL_PARAMS.eventType}'. Check your DUV Live account for more info.`;
             break;
 
           case REQUEST_ACTION.REJECTED:
@@ -752,7 +752,7 @@ const ApplicationController = {
               title: NOTIFICATIONS.REQUEST_REJECTED,
               type: NOTIFICATION_TYPE.DANGER,
             };
-            smsMessage = `${EMAIL_PARAMS.entertainerName} declined your request to perform at ${EMAIL_PARAMS.eventType}. Check your DUV Live account for more info.`;
+            smsMessage = `${EMAIL_PARAMS.entertainerName} declined your request to perform at '${EMAIL_PARAMS.eventType}'. Check your DUV Live account for more info.`;
             break;
 
           default:
@@ -1018,7 +1018,7 @@ const ApplicationController = {
 
                 // PAID REQUEST SMS
                 await sendSMS({
-                  message: `Congratulations!!! Your performance for ${EMAIL_PARAMS.eventType} has been fully paid for.  Check your DUV Live account for more info.`,
+                  message: `Congratulations!!! Your performance for '${EMAIL_PARAMS.eventType}' has been fully paid for.  Check your DUV Live account for more info.`,
                   phone: application.user.phoneNumber,
                 });
               } else {
@@ -1033,7 +1033,7 @@ const ApplicationController = {
 
                 // APPROVED BID SMS
                 await sendSMS({
-                  message: `Your fee for performance at the ${EMAIL_PARAMS.eventType} event with details below has been fully paid. Check your DUV Live account for more info`,
+                  message: `Your fee for performance at the '${EMAIL_PARAMS.eventType}' event with details below has been fully paid. Check your DUV Live account for more info`,
                   phone: application.user.phoneNumber,
                 });
               }

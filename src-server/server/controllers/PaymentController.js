@@ -462,7 +462,7 @@ const PaymentController = {
 
         // ENTERTAINER PAYMENT SMS
         await sendSMS({
-          message: `You have been paid ${amount} for the ${eventDetails.event.eventType} event. Check your DUV Live account for more info.`,
+          message: `You have been paid NGN ${amount} for the '${eventDetails.event.eventType}' event. Check your DUV Live account for more info.`,
           phone: eventDetails.entertainer.personalDetails.phoneNumber,
         });
 

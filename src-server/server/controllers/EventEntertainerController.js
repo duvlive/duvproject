@@ -246,7 +246,7 @@ const EventEntertainerController = {
 
               // ENTERTAINER REQUEST SMS
               await sendSMS({
-                message: `YIPEE!!! You have a request to perform at ${event.eventType} event. Check your DUV Live account for more info`,
+                message: `YIPEE!!! You have a request to perform at '${event.eventType}' event. Check your DUV Live account for more info`,
                 phone: entertainerDetails.phoneNumber,
               });
             }
@@ -545,7 +545,7 @@ const EventEntertainerController = {
 
           // USER CANCELLED EVENT SMS
           await sendSMS({
-            message: `We regret to inform you that ${stageName} has cancelled his service for the ${eventEntertainerInfo.event.eventType} event. Check your DUV Live account for more info`,
+            message: `We regret to inform you that ${stageName} has cancelled his service for the '${eventEntertainerInfo.event.eventType}' event. Check your DUV Live account for more info`,
             phone: eventEntertainerInfo.event.owner.phoneNumber,
           });
 
@@ -748,7 +748,7 @@ const EventEntertainerController = {
 
           // USER CANCELLED EVENT SMS
           await sendSMS({
-            message: `We regret to inform you that ${event.owner.firstName} has cancelled ${event.eventType}. Check your DUV Live account for more info.`,
+            message: `We regret to inform you that ${event.owner.firstName} has cancelled '${event.eventType}'. Check your DUV Live account for more info.`,
             phone: entertainer.personalDetails.phoneNumber,
           });
 
