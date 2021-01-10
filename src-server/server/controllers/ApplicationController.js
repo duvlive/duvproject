@@ -22,6 +22,7 @@ import EMAIL_CONTENT from '../email-template/content';
 import { addDays } from 'date-fns';
 import { DEFAULT_COMMISSION } from './CommissionController';
 import { priceCalculatorHelper } from '../utils/priceCalculator';
+import { sendSMS } from '../SMSSender';
 
 const ApplicationController = {
   /**
@@ -632,7 +633,13 @@ const ApplicationController = {
               {
                 model: User,
                 as: 'owner',
-                attributes: ['id', 'firstName', 'lastName', 'email'],
+                attributes: [
+                  'id',
+                  'firstName',
+                  'lastName',
+                  'email',
+                  'phoneNumber',
+                ],
               },
             ],
           },
@@ -694,6 +701,7 @@ const ApplicationController = {
         let notificationCondition;
         let description;
         let contentTop;
+        let smsMessage;
 
         switch (action) {
           /*
@@ -708,13 +716,13 @@ const ApplicationController = {
               status: REQUEST_ACTION.APPROVED,
               approvedDate: currentDate,
             };
-            contentTop =
-              'We are happy to inform you that World Best has accepted your request to perform/provide entertainment services at the event with details stated below.';
+            contentTop = `We are happy to inform you that ${EMAIL_PARAMS.entertainerName} has accepted your request to perform/provide entertainment services at the event with details stated below.`;
             description = ` YIPEE!!! ${EMAIL_PARAMS.entertainerName} ACCEPTED Your Request`;
             notificationCondition = {
               title: NOTIFICATIONS.REQUEST_ACCEPTED,
               type: NOTIFICATION_TYPE.SUCCESS,
             };
+            smsMessage = `YIPEE!!! ${EMAIL_PARAMS.entertainerName} ACCEPTED your request to perform at  ${EMAIL_PARAMS.eventType}. Check your DUVLive Account for more info.`;
             break;
 
           case REQUEST_ACTION.INCREMENT:
@@ -723,13 +731,13 @@ const ApplicationController = {
               approvedDate: currentDate,
               proposedPrice,
             };
-            contentTop =
-              'This is to inform you that Tantelke has responded to your request to perform/provide entertainment services at the event with details stated below.';
+            contentTop = `This is to inform you that  ${EMAIL_PARAMS.entertainerName} has responded to your request to perform/provide entertainment services at the event with details stated below.`;
             description = `${EMAIL_PARAMS.entertainerName} Wants An Increment For ${EMAIL_PARAMS.eventType}`;
             notificationCondition = {
               title: NOTIFICATIONS.REQUEST_INCREMENT,
               type: NOTIFICATION_TYPE.INFO,
             };
+            smsMessage = `${EMAIL_PARAMS.entertainerName} wants an increment to perform at ${EMAIL_PARAMS.eventType}. Check your DUVLive Account for more info.`;
             break;
 
           case REQUEST_ACTION.REJECTED:
@@ -738,13 +746,13 @@ const ApplicationController = {
               rejectionReason,
               rejectionDate: currentDate,
             };
-            contentTop =
-              'We regret to inform you that World Best declined your request to perform/provide entertainment services at the event with details stated below.';
+            contentTop = `We regret to inform you that ${EMAIL_PARAMS.entertainerName} declined your request to perform/provide entertainment services at the event with details stated below.`;
             description = `${EMAIL_PARAMS.entertainerName} Declined Your Request For ${EMAIL_PARAMS.eventType}`;
             notificationCondition = {
               title: NOTIFICATIONS.REQUEST_REJECTED,
               type: NOTIFICATION_TYPE.DANGER,
             };
+            smsMessage = `${EMAIL_PARAMS.entertainerName} declined your request to perform at ${EMAIL_PARAMS.eventType}. Check your DUVLive Account for more info.`;
             break;
 
           default:
@@ -773,6 +781,12 @@ const ApplicationController = {
             description,
             contentTop,
             applicationId,
+          });
+
+          // send SMS
+          await sendSMS({
+            message: smsMessage,
+            phone: application.eventEntertainerInfo.event.owner.phoneNumber,
           });
 
           // response
@@ -895,7 +909,7 @@ const ApplicationController = {
         {
           model: User,
           as: 'user',
-          attributes: ['email'],
+          attributes: ['email', 'phoneNumber'],
           include: [
             {
               model: EntertainerProfile,
@@ -1001,6 +1015,12 @@ const ApplicationController = {
                   type: NOTIFICATION_TYPE.SUCCESS,
                   actionId: id, //application id
                 });
+
+                // PAID REQUEST SMS
+                await sendSMS({
+                  message: `Congratulations!!! Your performance for ${EMAIL_PARAMS.eventType} has been fully paid for.  Check your DUVLive Account for more info.`,
+                  phone: application.user.phoneNumber,
+                });
               } else {
                 sendApprovedBidMail(EMAIL_PARAMS);
                 await Notification.create({
@@ -1009,6 +1029,12 @@ const ApplicationController = {
                   description: `Your bid for ${EMAIL_PARAMS.eventType} has been approved`,
                   type: NOTIFICATION_TYPE.SUCCESS,
                   actionId: id, //application id
+                });
+
+                // APPROVED BID SMS
+                await sendSMS({
+                  message: `Your fee for performance at the ${EMAIL_PARAMS.eventType} event with details below has been fully paid. Check your DUVLive Account for more info`,
+                  phone: application.user.phoneNumber,
                 });
               }
 

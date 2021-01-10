@@ -37,6 +37,9 @@ const EMAIL_CONTENT = {
     subject: 'CONTACT US',
     title: 'CONTACT US',
   },
+  ENTERTAINER_CANCELLED_EVENT: {
+    subject: 'Cancelled Event',
+  },
   ENTERTAINER_REQUEST: {
     subject: 'YIPPEE!!! You have a new event request',
     buttonText: 'Accept Request',

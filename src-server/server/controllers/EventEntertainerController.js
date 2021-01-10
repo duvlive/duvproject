@@ -22,6 +22,7 @@ import {
 import sendMail from '../MailSender';
 import { addDays } from 'date-fns';
 import { differenceInHours, parse } from 'date-fns';
+import { sendSMS } from '../SMSSender';
 
 const sendRequestMail = ({
   askingPrice,
@@ -144,7 +145,7 @@ const EventEntertainerController = {
         // check if entertainer id is valid -::- who knows
         // use opportunity to get entertainer details at once
         entertainerDetails = await User.findOne({
-          attributes: ['email', 'commissionId'],
+          attributes: ['email', 'phoneNumber', 'commissionId'],
           where: { id: entertainerId },
           include: [
             {
@@ -220,7 +221,6 @@ const EventEntertainerController = {
               hireType
             );
 
-            // jsdla
             const savedApplication = await Application.create({
               userId: entertainerId,
               askingPrice,
@@ -242,6 +242,12 @@ const EventEntertainerController = {
                 placeOfEvent,
                 stageName: entertainerDetails.profile.stageName,
                 event,
+              });
+
+              // ENTERTAINER REQUEST SMS
+              await sendSMS({
+                message: `YIPEE!!! You have a request to perform at ${event.eventType} event. Check your DUVLive Account for more info`,
+                phone: entertainerDetails.phoneNumber,
               });
             }
           }
@@ -408,6 +414,7 @@ const EventEntertainerController = {
                 'firstName',
                 'lastName',
                 'email',
+                'phoneNumber',
                 'profileImageURL',
               ],
             },
@@ -536,6 +543,12 @@ const EventEntertainerController = {
             }
           );
 
+          // USER CANCELLED EVENT SMS
+          await sendSMS({
+            message: `We regret to inform you that ${stageName} has cancelled his service for the ${eventEntertainerInfo.event.eventType} event. Check your DUVLive Account for more info`,
+            phone: eventEntertainerInfo.event.owner.phoneNumber,
+          });
+
           return res.json({ eventEntertainerInfo });
         });
       })
@@ -607,6 +620,7 @@ const EventEntertainerController = {
                 'firstName',
                 'lastName',
                 'email',
+                'phoneNumber',
                 'profileImageURL',
               ],
             },
@@ -718,7 +732,7 @@ const EventEntertainerController = {
             {
               title,
               subject: title,
-              contentTop: `We regret to inform you that ${event.owner.firstName} has cancelled corporate event and therefore, no longer requires your performance/entertainment services to be provided at the event with details stated below.`,
+              contentTop: `We regret to inform you that ${event.owner.firstName} has cancelled ${event.eventType} and therefore, no longer requires your performance/entertainment services to be provided at the event with details stated below.`,
               contentBottom: `
               <strong>Event:</strong> ${event.eventType} <br>
               <strong>Place:</strong> ${eventEntertainerInfo.placeOfEvent} <br>
@@ -731,6 +745,12 @@ const EventEntertainerController = {
               `,
             }
           );
+
+          // USER CANCELLED EVENT SMS
+          await sendSMS({
+            message: `We regret to inform you that ${event.owner.firstName} has cancelled ${event.eventType}. Check your DUVLive Account for more info.`,
+            phone: entertainer.personalDetails.phoneNumber,
+          });
 
           return res.json({ eventEntertainerInfo });
         });

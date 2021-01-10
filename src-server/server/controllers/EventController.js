@@ -24,6 +24,7 @@ import {
 import { isPast, isValid } from 'date-fns';
 import { differenceInHours, parse } from 'date-fns';
 import { DEFAULT_COMMISSION } from './CommissionController';
+import { sendSMS } from '../SMSSender';
 
 export const reviewsInclude = [
   {
@@ -751,6 +752,7 @@ const EventController = {
                     'firstName',
                     'lastName',
                     'email',
+                    'phoneNumber',
                     'profileImageURL',
                   ],
                 },
@@ -880,7 +882,7 @@ const EventController = {
               {
                 title,
                 subject: title,
-                contentTop: `We regret to inform you that ${event.owner.firstName} has cancelled corporate event and therefore, no longer requires your performance/entertainment services to be provided at the event with details stated below.`,
+                contentTop: `We regret to inform you that ${event.owner.firstName} has cancelled ${event.eventType} and therefore, no longer requires your performance/entertainment services to be provided at the event with details stated below.`,
                 contentBottom: `
                 <strong>Event:</strong> ${event.eventType} <br>
                 <strong>Place:</strong> ${eventEntertainer.placeOfEvent} <br>
@@ -893,6 +895,12 @@ const EventController = {
                 `,
               }
             );
+
+            // USER CANCELLED EVENT SMS
+            await sendSMS({
+              message: `We regret to inform you that ${event.owner.firstName} has cancelled ${event.eventType}.  Check your DUVLive Account for more info.`,
+              phone: eventEntertainer.entertainer.personalDetails.phoneNumber,
+            });
           });
         });
 
