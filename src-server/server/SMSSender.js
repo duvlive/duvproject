@@ -18,18 +18,10 @@ export const convertToValidSMSPhoneNumber = (phone) => {
 
 export const sendSMS = async ({ message, phone }) => {
   const phoneNumber = convertToValidSMSPhoneNumber(phone);
-  if (process.env.NODE_ENV === 'development') {
-    console.log('---------------------------');
-    console.log('PHONE NUMBER => ', phone);
-    console.log();
-    console.log('message => ', message);
-    console.log('---------------------------');
-    console.log(' ');
-  } else {
-    await axios.post(
-      `${KUDI_SMS_API}?username=${process.env.REACT_APP_SMS_USERNAME}&password=${process.env.REACT_APP_SMS_PASSWORD}&message=${message}&sender=${SENDER}&mobiles=${phoneNumber}`
-    );
-  }
+
+  await axios.post(
+    `${KUDI_SMS_API}?username=${process.env.REACT_APP_SMS_USERNAME}&password=${process.env.REACT_APP_SMS_PASSWORD}&message=${message}&sender=${SENDER}&mobiles=${phoneNumber}`
+  );
 };
 
 // SMS CONTENT CAN BE FOUND HERE

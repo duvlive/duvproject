@@ -4,7 +4,7 @@ import axios from 'axios';
 import TopMessage from 'components/common/layout/TopMessage';
 import BackEndPage from 'components/common/layout/BackEndPage';
 import NoContent from 'components/common/utils/NoContent';
-import { getLongDate } from 'utils/date-helpers';
+import { getDateTime } from 'utils/date-helpers';
 import LoadItems from 'components/common/utils/LoadItems';
 import { buildKudiSMSActionUrl } from 'utils/sms';
 import { getNairaSymbol } from 'utils/helpers';
@@ -18,7 +18,6 @@ const Reports = () => {
       .post(buildKudiSMSActionUrl('reports'))
       .then(function (response) {
         const { status, data } = response;
-        console.log('status,data', status, data);
         // handle success
         if (status === 200) {
           setReports(data);
@@ -91,18 +90,19 @@ const ReportsRow = ({ report }) => (
         className={`circle ${report.status === 'DELIVERED' ? 'green' : 'gray'}`}
       ></span>
     </td>
-    <td width="25%">
+    <td width="15%">
       <span className="text-white">{report.status}</span>
     </td>
     <td width="50%">
-      <span className="text-muted-light-2">{report.message}</span>
+      <span className="text-muted-light-2 small--2">{report.message}</span>
     </td>
+
     <td width="15%">
       <span className="text-white">{report.mobile}</span>
     </td>
     <td className="text-right" width="15%">
       <span>
-        <i className="icon icon-clock" /> {getLongDate(report.date)}
+        <i className="icon icon-clock" /> {getDateTime(report.date)}
       </span>
     </td>
   </tr>

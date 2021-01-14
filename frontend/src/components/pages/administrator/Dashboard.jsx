@@ -214,13 +214,17 @@ Dashboard.Items = ({
 };
 
 Dashboard.Items.propTypes = {
-  balance: PropTypes.any.isRequired,
+  balance: PropTypes.any,
   eventsOverview: PropTypes.object.isRequired,
   paymentsOverview: PropTypes.object.isRequired,
   pendingPayments: PropTypes.array.isRequired,
   unresolvedEvents: PropTypes.number.isRequired,
   upcomingEvents: PropTypes.array.isRequired,
   usersOverview: PropTypes.object.isRequired,
+};
+
+Dashboard.Items.defaultProps = {
+  balance: null,
 };
 
 Dashboard.UpcomingEvents = ({ events }) => (

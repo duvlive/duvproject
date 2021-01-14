@@ -18,7 +18,7 @@ import { entertainerTopMenu } from 'data/menu/entertainer';
 import { bandMemberTopMenu } from 'data/menu/band-member';
 import { administratorTopMenu } from 'data/menu/administrator';
 import LiveYourBestLife from '../utils/LiveYourBestLife';
-import { USER_TYPES, DASHBOARD_PAGE } from 'utils/constants';
+import { USER_TYPES } from 'utils/constants';
 import { UserContext } from 'context/UserContext';
 import ProfileAvatar from 'assets/img/avatar/profile.png';
 import { getUserTypeFromStore } from 'utils/localStorage';
@@ -62,14 +62,24 @@ const TopBar = ({ showSidebar }) => {
           </span>
           <Nav className="ml-auto" navbar>
             <NavItem>
-              <NavLink
-                className="topbar__notification d-block"
-                tag={Link}
-                to={`/${DASHBOARD_PAGE[userState.type]}/notifications`}
-              >
-                <i className="icon icon-notification" />
-                {userHasPendingNotifications && <span className="dot" />}
-              </NavLink>
+              {Object.keys(USER_TYPES).map((page) => (
+                <Match key={page} path={`/${page}/*`}>
+                  {({ match }) =>
+                    match && (
+                      <NavLink
+                        className="topbar__notification d-block"
+                        tag={Link}
+                        to={`/${page}/notifications`}
+                      >
+                        <i className="icon icon-notification" />
+                        {userHasPendingNotifications && (
+                          <span className="dot" />
+                        )}
+                      </NavLink>
+                    )
+                  }
+                </Match>
+              ))}
             </NavItem>
 
             <Match path="/user/*">
