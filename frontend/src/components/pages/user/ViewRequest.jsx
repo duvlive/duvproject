@@ -164,14 +164,20 @@ const ViewRequest = ({ applicationId }) => {
                       {application.status === REQUEST_ACTION.APPROVED && (
                         <>
                           Your offer of NGN {getNairaSymbol()}
-                          {commaNumber(application.askingPrice)} was accepted.
+                          {commaNumber(
+                            application.proposedPrice || application.askingPrice
+                          )}{' '}
+                          was accepted.
                         </>
                       )}
                       {application.status === REQUEST_ACTION.INCREMENT && (
                         <>
                           {application.user.profile.stageName} wants you to
                           increase your offer to {getNairaSymbol()}
-                          {commaNumber(application.askingPrice)}.
+                          {commaNumber(
+                            application.proposedPrice || application.askingPrice
+                          )}
+                          .
                         </>
                       )}
                       {application.status === REQUEST_ACTION.REJECTED && (
