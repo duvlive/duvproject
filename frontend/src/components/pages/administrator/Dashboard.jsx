@@ -122,19 +122,19 @@ Dashboard.Items = ({
             <DashboardOverviewCard.List
               color="yellow"
               icon="user-circle"
-              number={usersOverview && usersOverview[1]}
+              number={usersOverview && (usersOverview[1] || '0')}
               title="Users"
             />
             <DashboardOverviewCard.List
               color="yellow"
               icon="entertainers"
-              number={usersOverview && usersOverview[2]}
+              number={usersOverview && (usersOverview[2] || '0')}
               title="Entertainers"
             />
             <DashboardOverviewCard.List
               color="yellow"
               icon="band-members"
-              number={usersOverview && usersOverview[3]}
+              number={usersOverview && (usersOverview[3] || '0')}
               title="Band Members"
             />
           </DashboardOverviewCard>
@@ -147,7 +147,7 @@ Dashboard.Items = ({
             <DashboardOverviewCard.List
               color="green"
               icon="auction"
-              number={(eventsOverview && eventsOverview['Auction']) || '0'}
+              number={eventsOverview && (eventsOverview['Auction'] || '0')}
               title="Auctions"
             />
             <DashboardOverviewCard.List
@@ -174,19 +174,26 @@ Dashboard.Items = ({
             <DashboardOverviewCard.List
               color="blue"
               icon="money"
-              number={paymentsOverview && paymentsOverview['userPayments']}
+              number={
+                paymentsOverview && (paymentsOverview['userPayments'] || '0')
+              }
               title="User Payments"
             />
             <DashboardOverviewCard.List
               color="blue"
               icon="credit-card"
-              number={paymentsOverview && paymentsOverview['paidEntertainers']}
+              number={
+                paymentsOverview &&
+                (paymentsOverview['paidEntertainers'] || '0')
+              }
               title="Paid Entertainers"
             />
             <DashboardOverviewCard.List
               color="blue"
               icon="help"
-              number={paymentsOverview && paymentsOverview['pendingPayments']}
+              number={
+                paymentsOverview && (paymentsOverview['pendingPayments'] || '0')
+              }
               title="Pending Payments"
               to="/admin/events"
             />
