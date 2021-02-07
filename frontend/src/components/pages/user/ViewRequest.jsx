@@ -64,7 +64,8 @@ const ViewRequest = ({ applicationId }) => {
           {application.user.profile.stageName}
         </h4>
         <h5 className="text-yellow mt-3 mb-4">
-          &#8358; {moneyFormat(application.askingPrice)}
+          &#8358;{' '}
+          {moneyFormat(application.proposedPrice || application.askingPrice)}
         </h5>
       </div>
       <div className="small--2">
@@ -204,7 +205,10 @@ const ViewRequest = ({ applicationId }) => {
                             &nbsp;&nbsp;&nbsp;&nbsp;
                             <DuvLiveModal
                               actionFn={() =>
-                                approveApplication(application.askingPrice)
+                                approveApplication(
+                                  application.proposedPrice ||
+                                    application.askingPrice
+                                )
                               }
                               actionText="Pay Now"
                               body={approveRequestModalBody()}
