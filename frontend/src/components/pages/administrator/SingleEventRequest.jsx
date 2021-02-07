@@ -204,7 +204,10 @@ const ViewRequest = ({ applicationId }) => {
                             &nbsp;&nbsp;&nbsp;&nbsp;
                             <DuvLiveModal
                               actionFn={() =>
-                                approveApplication(application.askingPrice)
+                                approveApplication(
+                                  application.proposedPrice ||
+                                    application.askingPrice
+                                )
                               }
                               actionText="Pay Now"
                               body={approveRequestModalBody()}
