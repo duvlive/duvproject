@@ -5,7 +5,7 @@ import { UserProfileForm } from '../user/EditProfile';
 import { ChangePasswordForm } from 'components/pages/user/ChangePassword';
 import { Link } from '@reach/router';
 
-const RegisterAsEntertainer = () => {
+const EditProfile = () => {
   return (
     <BackEndPage title="Edit Profile">
       <div className="main-app">
@@ -27,4 +27,4 @@ const RegisterAsEntertainer = () => {
   );
 };
 
-export default RegisterAsEntertainer;
+export default EditProfile;
