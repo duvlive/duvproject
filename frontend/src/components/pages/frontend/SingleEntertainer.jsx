@@ -225,7 +225,7 @@ export const EntertainerSectionInfo = ({ entertainer, showContentOnly }) => {
           {commaNumber(entertainer.profile.preferredCharges)}
         </InfoList>
         <InfoList title="Willing to Travel for Shows">
-          {entertainer.profile.willing_to_travel ? 'YES' : 'NO'}
+          {entertainer.profile.willingToTravel ? 'YES' : 'NO'}
         </InfoList>
       </Col>
       <Col sm="4">
