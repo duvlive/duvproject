@@ -22,7 +22,6 @@ const EditProfile = () => {
     <BackEndPage title="Edit Profile">
       <div className="main-app">
         <TopMessage message="Edit Profile" />
-
         <section className="app-content">
           <UserProfileForm />
           <BankDetailsForm />
