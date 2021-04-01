@@ -1329,6 +1329,8 @@ const EventController = {
       where: {
         applicationType: 'Request',
       },
+      order: [['expiryDate', 'DESC']],
+      limit: 100,
       include: [
         {
           model: Event,
@@ -1337,9 +1339,9 @@ const EventController = {
         {
           model: EventEntertainer,
           as: 'eventEntertainerInfo',
-          where: {
-            hiredEntertainer: null, // shown requests with no hired Entertainer
-          },
+          // where: {
+          //   hiredEntertainer: null, // shown requests with no hired Entertainer
+          // },
         },
         {
           model: User,
