@@ -512,9 +512,9 @@ const AdminController = {
         where: {
           cancelled: false,
           [Op.and]: Sequelize.literal('"eventPayment"."id" is null'),
-          [Op.and]: Sequelize.literal(
-            '"EventEntertainer"."hiredEntertainer" is NOT null'
-          ),
+          hiredEntertainer: {
+            [Op.ne]: null,
+          },
         },
         include: [
           {
@@ -611,9 +611,9 @@ const AdminController = {
       where: {
         cancelled: false,
         [Op.and]: Sequelize.literal('"eventPayment"."id" is null'),
-        [Op.and]: Sequelize.literal(
-          '"EventEntertainer"."hiredEntertainer" is NOT null'
-        ),
+        hiredEntertainer: {
+          [Op.ne]: null,
+        },
       },
       include: [
         {
