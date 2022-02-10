@@ -12,7 +12,7 @@
     "eslint-plugin-react": "^7.13.0",
     "formik": "^1.5.8",
     "humanize-plus": "^1.8.2",
-    "node-sass": "^4.12.0",
+    "node-sass": "^7.0.0",
     "prop-types": "^15.7.2",
     "rc-slider": "^8.6.13",
     "rc-switch": "^1.9.0",
