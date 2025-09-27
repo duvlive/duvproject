@@ -3,7 +3,7 @@ $section-height: 50rem;
 .landing {
   .card {
     height: $section-height;
-    background: url('../img/bg/top-video.jpg') center center no-repeat;
+    background: url('/assets/img/bg/top-video.jpg') center center no-repeat;
     background-size: cover;
     z-index: 1;
   }
@@ -47,7 +47,7 @@ $section-height: 50rem;
 
   .card__menu {
     height: 36rem;
-    background: url('../img/bg/menu-section.png') center center no-repeat;
+    background: url('/assets/img/bg/menu-section.png') center center no-repeat;
     background-size: cover;
 
     .card-img-overlay {
@@ -72,7 +72,7 @@ $section-height: 50rem;
   }
   .card__dashboard {
     height: 24.75rem;
-    background: url('../img/bg/dashboard-section.png') center center no-repeat;
+    background: url('/assets/img/bg/dashboard-section.png') center center no-repeat;
     background-size: cover;
 
     .card-img-overlay {
@@ -105,7 +105,7 @@ $section-height: 50rem;
 .content-page {
   .landing {
     &.entertainer.DJ .card {
-      background: url('../img/bg/entertainer-dj.jpg') center center no-repeat;
+      background: url('/assets/img/bg/entertainer-dj.jpg') center center no-repeat;
 
       .card-img-overlay {
         background: rgba($black, 0.85);
@@ -113,7 +113,7 @@ $section-height: 50rem;
     }
 
     &.entertainer.MC .card {
-      background: url('../img/bg/entertainers-counter.jpg') center center
+      background: url('/assets/img/bg/entertainers-counter.jpg') center center
         no-repeat;
 
       .card-img-overlay {
@@ -122,7 +122,7 @@ $section-height: 50rem;
     }
 
     &.entertainer.LIVE .card {
-      background: url('../img/bg/felebration.jpg') center bottom no-repeat;
+      background: url('/assets/img/bg/felebration.jpg') center bottom no-repeat;
 
       .card-img-overlay {
         background: rgba($black, 0.4);
@@ -133,7 +133,7 @@ $section-height: 50rem;
 
 .intro {
   background: $black;
-  background: url('../img/bg/felebration.jpg') center center no-repeat;
+  background: url('/assets/img/bg/felebration.jpg') center center no-repeat;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -169,7 +169,7 @@ $section-height: 50rem;
     }
   }
   &__content--1 {
-    background: url('../img/bg/live-your-life.jpg') center center no-repeat;
+    background: url('/assets/img/bg/live-your-life.jpg') center center no-repeat;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
