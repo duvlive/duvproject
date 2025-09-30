@@ -58,6 +58,9 @@ app.get('*', function (req, res) {
   res.sendFile(path.join(__dirname, `build`, 'index.html'));
 });
 
+
+
+
 app.listen(port, () => {
   console.info(`Started up the server at port ${port}`);
 });
