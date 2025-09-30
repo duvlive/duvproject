@@ -43,7 +43,7 @@ router(app);
 app.set('view engine', 'ejs');
 
 // Serve any static files
-app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(path.join(__dirname, "../src-server/build")));
 
 // Logo displayed in sent emails
 app.get('/email-logo.png', function (req, res) {
@@ -54,8 +54,9 @@ app.get('/view-our-work', function (req, res) {
   res.redirect('/');
 });
 
-app.get('*', function (req, res) {
-  res.sendFile(path.join(__dirname, `build`, 'index.html'));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../src-server/build/index.html"));
 });
 
 
