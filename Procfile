@@ -1,1 +1,1 @@
-web: npx sequelize db:migrate && npm start
+web: npx sequelize-cli db:migrate --config src-server/server/config/config.js && npm start
