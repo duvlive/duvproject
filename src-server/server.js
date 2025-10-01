@@ -47,7 +47,7 @@ const buildPath = path.join(__dirname, "../src-server/build");
 const staticDir = fs.existsSync(distPath) ? distPath : buildPath;
 
 // Serve any static files
-app.use(express.static(staticDir));
+app.use(express.static(buildPath));
 
 // Logo displayed in sent emails
 app.get('/email-logo.png', function (req, res) {
@@ -60,7 +60,7 @@ app.get('/view-our-work', function (req, res) {
 
 
 app.get("*", (req, res) => {
-  res.sendFile(path.join(staticDir, "index.html"));
+  res.sendFile(path.join(buildPath, "index.html"));
 });
 
 
