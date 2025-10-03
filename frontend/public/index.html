@@ -64,7 +64,23 @@
       }
     })(document, "script");
   </script> -->
-  <script async data-id="65593" src="https://cdn.widgetwhats.com/script.min.js"></script>
+  <!-- <script async data-id="65593" src="https://cdn.widgetwhats.com/script.min.js"></script> -->
+   <!-- WhatsApp Widget -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/whatsapp-widget/dist/css/whatsapp-widget.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/whatsapp-widget/dist/js/whatsapp-widget.min.js"></script>
+  <script>
+    new WhatsAppWidget({
+      phone: "2349124093982", 
+      position: "right",
+      popupMessage: "Hello 👋 How can we help you?",
+      message: "Hi, I’d like to know more about your services.",
+      showPopup: true,
+      headerTitle: "Chat with us on WhatsApp!",
+      headerColor: "#25D366",
+      backgroundColor: "#25D366",
+      zIndex: 999999
+    });
+  </script>
 </body>
 
 </html>

@@ -87,7 +87,7 @@
 .entertainer-info {
   background: $black;
   background: linear-gradient(rgba($body-bg, 0.2), rgba($body-bg, 0.7)),
-    url('../img/bg/felebration.jpg');
+    url('/assets/img/bg/felebration.jpg');
   background-position: center bottom;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -101,12 +101,12 @@
 
   &.dj {
     background: linear-gradient(rgba($body-bg, 0.85), rgba($body-bg, 0.95)),
-      url('../img/bg/entertainer-dj.jpg');
+      url('/assets/img/bg/entertainer-dj.jpg');
   }
 
   &.mc {
     background: linear-gradient(rgba($body-bg, 0.85), rgba($body-bg, 0.95)),
-      url('../img/bg/entertainers-counter.jpg');
+      url('/assets/img/bg/entertainers-counter.jpg');
   }
 
   &__list {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import * as queryString from 'query-string';
+import queryString from 'query-string';
 import Header from 'components/common/layout/Header';
 import Footer from 'components/common/layout/Footer';
 import { Formik, Form } from 'formik';

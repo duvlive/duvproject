@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import * as queryString from 'query-string';
+import queryString from 'query-string';
 import { getTokenFromStore } from 'utils/localStorage';
 import LoadingScreen from 'components/common/layout/LoadingScreen';
 import AlertMessage from 'components/common/utils/AlertMessage';

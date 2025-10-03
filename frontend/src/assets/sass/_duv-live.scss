@@ -97,7 +97,7 @@ a:hover {
 
 .entertainers-counter {
   height: 54rem;
-  background: url('../img/bg/entertainers-counter.jpg') center center no-repeat;
+  background: url('/assets/img/bg/entertainers-counter.jpg') center center no-repeat;
   background-size: cover;
   clip-path: polygon(0 10%, 100% 0%, 100% 90%, 0% 100%);
   z-index: -100;
@@ -195,7 +195,7 @@ a:hover {
     }
   }
   &__content--1 {
-    background: url('../img/bg/help.jpg') center center no-repeat;
+    background: url('/assets/img/bg/help.jpg') center center no-repeat;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -259,7 +259,7 @@ a:hover {
 .auth {
   background: $black;
   background: linear-gradient(rgba($body-bg, 0.02), rgba($body-bg, 0.2)),
-    url('../img/bg/felebration_auth.png');
+    url('/assets/img/bg/felebration_auth.png');
   background-position: center bottom;
   -webkit-background-size: cover;
   -moz-background-size: cover;

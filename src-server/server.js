@@ -42,8 +42,12 @@ router(app);
 // set the view engine to ejs
 app.set('view engine', 'ejs');
 
+const distPath = path.join(__dirname, "../dist");
+const buildPath = path.join(__dirname, "../src-server/build");
+const staticDir = fs.existsSync(distPath) ? distPath : buildPath;
+
 // Serve any static files
-app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(buildPath));
 
 // Logo displayed in sent emails
 app.get('/email-logo.png', function (req, res) {
@@ -54,9 +58,13 @@ app.get('/view-our-work', function (req, res) {
   res.redirect('/');
 });
 
-app.get('*', function (req, res) {
-  res.sendFile(path.join(__dirname, `build`, 'index.html'));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(buildPath, "index.html"));
 });
+
+
+
 
 app.listen(port, () => {
   console.info(`Started up the server at port ${port}`);
