@@ -1,12 +1,19 @@
 /* eslint-disable no-console */
-'use strict';
+"use strict";
 import nodemailer from 'nodemailer';
 import ejs from 'ejs';
 // import sgMail from '@sendgrid/mail';
+import formData from 'form-data';
+import Mailgun from 'mailgun.js';
 import textEmailTemplate from './email-template/duv-text-email-template';
 const DUV_LIVE_NO_REPLY_EMAIL = 'DUV LIVE <donotreply@duvlive.com>';
 const DUV_LIVE_INFO_EMAIL = 'DUV LIVE <info@duvlive.com>';
 const emailLogo = `https://duvlive.com/email-logo.png`;
+
+
+const mgClient = new Mailgun(formData);
+const mg = mgClient.client({ username: 'api', key: process.env.MAILGUN_API_KEY });
+
 
 export function generateEmailTemplate(options) {
   return new Promise((resolve, reject) => {
@@ -43,46 +50,66 @@ export default async function sendMail(content, user, additionalOptions = {}) {
     subject: `${options.subject}`, // Subject line
     text,
     html,
-    replyTo: options.userEmail || DUV_LIVE_INFO_EMAIL,
+    'h:Reply-To': options.userEmail || DUV_LIVE_INFO_EMAIL,
   };
 
-  // if (process.env.NODE_ENV === 'production') {
-  // sgMail.setApiKey(process.env.DUV_LIVE_EMAIL_KEY);
+  try {
+    const result = await mg.messages.create(process.env.MAILGUN_DOMAIN, message);
+    return result;
+  }
 
-  // async () => {
+  catch (error) {
+    console.error('Mailgun send error:', error && error.toString ? error.toString() : error);
+  }
+
+
+  return result;
+
+
+
+  // Prefer SendGrid API when available (Railway often blocks SMTP ports)
+  // if (process.env.SENDGRID_API_KEY) {
   //   try {
-  //     await sgMail.send(message);
-  //   } catch (error) {
-  //     console.error(error);
+  //     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-  //     if (error.response) {
-  //       console.error(error.response.body);
+  //     const sgMessage = {
+  //       to: message.to,
+  //       from: message.from,
+  //       subject: message.subject,
+  //       text: message.text,
+  //       html: message.html,
+  //       replyTo: message.replyTo,
+  //     };
+
+  //     const [response] = await sgMail.send(sgMessage);
+  //     // SendGrid returns an array of responses for each recipient
+  //     console.log('SendGrid response statusCode:', response && response.statusCode);
+  //     return result;
+  //   } catch (err) {
+  //     console.error('SendGrid send error:', err && err.toString ? err.toString() : err);
+  //     if (err && err.response && err.response.body) {
+  //       console.error('SendGrid error body:', err.response.body);
   //     }
+  //     // fallthrough to SMTP fallback if configured
   //   }
-  // };
-  // } else {
-  //   // using smtp
-  let transporter = nodemailer.createTransport({
-    host: process.env.EMAIL_SERVER || 'smtp.mailtrap.io',
-    port: process.env.EMAIL_PORT || 2525,
-    secure: !!process.env.EMAIL_SECURE || false,
-    auth: {
-      user: process.env.EMAIL_USER || process.env.MAIL_TRAP_USER,
-      pass: process.env.EMAIL_PASS || process.env.MAIL_TRAP_PASS,
-    },
-  });
-  // ensure userEmail is always present
-
-  // send mail with defined transport object
-  let info = await transporter.sendMail(message);
-
-  console.log('Message sent: %s', info.messageId);
-  // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-
-  // Preview only available when sending through an Ethereal account
-  console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-  // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
-
-  // html: ejs.render( fs.readFileSync('e-mail.ejs', 'utf-8') , {mensagem: 'olá, funciona'})
   // }
+
+  // // Fallback to SMTP using nodemailer (useful for local/dev or when SMTP isn't blocked)
+  // let transporter = nodemailer.createTransport({
+  //   host: process.env.EMAIL_SERVER || 'smtp.mailtrap.io',
+  //   port: process.env.EMAIL_PORT || 2525,
+  //   secure: !!process.env.EMAIL_SECURE || false,
+  //   auth: {
+  //     user: process.env.EMAIL_USER || process.env.MAIL_TRAP_USER,
+  //     pass: process.env.EMAIL_PASS || process.env.MAIL_TRAP_PASS,
+  //   },
+  // });
+
+  // // send mail with defined transport object
+  // let info = await transporter.sendMail(message);
+
+  // console.log('Message sent: %s', info.messageId);
+  // // Preview only available when sending through an Ethereal account
+  // console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+  // return info;
 }
