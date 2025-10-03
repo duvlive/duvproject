@@ -55,6 +55,7 @@ export default async function sendMail(content, user, additionalOptions = {}) {
 
   try {
     const result = await mg.messages.create(process.env.MAILGUN_DOMAIN, message);
+    console.log(result);
     return result;
   }
 
