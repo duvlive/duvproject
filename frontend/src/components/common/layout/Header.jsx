@@ -16,6 +16,9 @@ import RedLogo from 'assets/img/logo/red-white.svg';
 import classNames from 'classnames';
 import { UserContext } from 'context/UserContext';
 import ProfileAvatar from 'assets/img/avatar/profile.png';
+import masterCardIcon from 'assets/img/avatar/mastercard.svg';
+import paystackIcon from 'assets/img/avatar/paystack.svg';
+import visa from 'assets/img/avatar/visa.svg';
 import { getProfileName } from 'utils/helpers';
 import { OUR_PHONE_NUMBER, DASHBOARD_PAGE } from 'utils/constants';
 import { getUserTypeFromStore } from 'utils/localStorage';
@@ -86,18 +89,29 @@ const HeaderTopNav = () => {
           <div className="top-header__left col-6">
             <ul className="list-inline">
               <li className="list-inline-item">
-                <a href={`tel:${OUR_PHONE_NUMBER.split(' ').join('')}`}>
-                  <img
+                 <img
                     alt="phone icon"
-                    className="top-header__icon"
-                    src={IconPhone}
-                  />{' '}
-                  {OUR_PHONE_NUMBER}
-                </a>
+                    className="top-header-icon_left  "
+                    src={masterCardIcon}
+                  />
               </li>
-              <li className="list-inline-item d-none d-sm-inline">
+              <li className="list-inline-item d-none d-sm-inline ">
+               <img
+                    alt="paystack icon"
+                    className="top-header-icon_left  "
+                    src={paystackIcon}
+                  />
+              </li>
+              <li className="list-inline-item">
+                <img
+                    alt="visa icon"
+                    className="top-header-icon_left  "
+                    src={visa}
+                  />
+              </li>
+              {/* <li className="list-inline-item d-none d-sm-inline">
                 <a href="mailto:info@duvlive.com">info@duvlive.com</a>
-              </li>
+              </li> */}
             </ul>
           </div>
           {userState.isLoggedIn ? (
