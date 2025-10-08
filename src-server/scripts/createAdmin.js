@@ -20,6 +20,7 @@ async function main() {
       lastName,
       email,
       password,
+      phoneNumber: '08100000003',
       type: USER_TYPES.ADMINISTRATOR,
       isActive: true,
       activatedAt: new Date(),
