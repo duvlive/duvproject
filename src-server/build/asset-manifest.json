@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.a41b555c.css",
-    "main.js": "/static/js/main.2a6d2c17.js",
+    "main.css": "/static/css/main.02b8ff9b.css",
+    "main.js": "/static/js/main.6a090479.js",
     "static/media/menu-section.png": "/static/media/menu-section.fa260ed17535946871c1.png",
     "static/media/felebration_auth.png": "/static/media/felebration_auth.a88b4e58e08dbc14c038.png",
     "static/media/felebration.jpg": "/static/media/felebration.6c131427a14b47494b8c.jpg",
@@ -40,11 +40,11 @@
     "index.html": "/index.html",
     "static/media/visa.svg": "/static/media/visa.a832f682ed43e496bcbeebb6f2aa31e1.svg",
     "static/media/phone.svg": "/static/media/phone.1dd8e4c354973306f32edcf9d5e889a4.svg",
-    "main.a41b555c.css.map": "/static/css/main.a41b555c.css.map",
-    "main.2a6d2c17.js.map": "/static/js/main.2a6d2c17.js.map"
+    "main.02b8ff9b.css.map": "/static/css/main.02b8ff9b.css.map",
+    "main.6a090479.js.map": "/static/js/main.6a090479.js.map"
   },
   "entrypoints": [
-    "static/css/main.a41b555c.css",
-    "static/js/main.2a6d2c17.js"
+    "static/css/main.02b8ff9b.css",
+    "static/js/main.6a090479.js"
   ]
 }

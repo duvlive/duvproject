@@ -98,7 +98,7 @@ const HeaderTopNav = () => {
               <li className="list-inline-item d-none d-sm-inline ">
                <img
                     alt="paystack icon"
-                    className="top-header-icon_left  "
+                    className="top-header-icon_paystack "
                     src={paystackIcon}
                   />
               </li>
