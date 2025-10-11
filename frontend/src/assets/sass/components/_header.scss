@@ -31,6 +31,10 @@ $top-header-list-spacing: 1rem;
   &__icon {
     opacity: 0.6;
   }
+
+  @media (min-width: 576px) {
+    padding: 0;
+  }
 }
 
 
@@ -39,10 +43,11 @@ $top-header-list-spacing: 1rem;
   width: 40px;
 }
 
+
+
 .top-header-icon_paystack{
-  width: 45px !important ;
-  height: 35px !important ;
-  object-fit: contain;
+  width:70px;
+  height: 70px;
 }
 
 // Navbars

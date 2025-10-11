@@ -18,6 +18,8 @@ import { UserContext } from 'context/UserContext';
 import ProfileAvatar from 'assets/img/avatar/profile.png';
 import masterCardIcon from 'assets/img/avatar/mastercard.svg';
 import paystackIcon from 'assets/img/avatar/paystack.svg';
+import paystacklogo from 'assets/img/avatar/paystacklogo.svg'
+import paystackLogo from 'assets/img/avatar/Paystack-Logo.png';
 import visa from 'assets/img/avatar/visa.svg';
 import { getProfileName } from 'utils/helpers';
 import { OUR_PHONE_NUMBER, DASHBOARD_PAGE } from 'utils/constants';
@@ -85,7 +87,7 @@ const HeaderTopNav = () => {
   return (
     <section className="top-header">
       <div className="container-fluid">
-        <div className="row">
+        <div className="row align-items-center ">
           <div className="top-header__left col-6">
             <ul className="list-inline">
               <li className="list-inline-item">
@@ -99,7 +101,7 @@ const HeaderTopNav = () => {
                <img
                     alt="paystack icon"
                     className="top-header-icon_paystack "
-                    src={paystackIcon}
+                    src={paystacklogo}
                   />
               </li>
               <li className="list-inline-item">

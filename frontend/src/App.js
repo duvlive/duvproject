@@ -22,7 +22,7 @@ const App = () => {
   return (
     <UserContextProvider>
       <Helmet>
-        <title>D.U.V LIVE | HOME OF LIVE ENTERTAINMENT</title>
+        <title>DUV LIVE || DJ Bookings, New Parties</title>
       </Helmet>
       <Router primary={false}>
         <HomeKeeping path="/">
