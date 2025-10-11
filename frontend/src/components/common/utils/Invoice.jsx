@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import DUVLiveLogo from 'assets/img/logo/red-black.svg';
-import DuvLiveLogo from 'assets/img/logo/red-blacktwo.svg'
+// import DUVLiveLogo from 'assets/img/logo/red-black.svg';
+// import DuvLiveLogo from 'assets/img/logo/red-blacktwo.svg'
+import Duvlivelogo from 'assets/img/logo/red-blacckthree.svg'
 import { getTinyDate } from 'utils/date-helpers';
 import { moneyFormat } from 'utils/helpers';
 
@@ -12,7 +13,7 @@ const Invoice = ({ application, paymentInfo }) => (
         <div className="card-body d-flex flex-column">
           {/* Logo */}
           <div className="d-flex align-self-center text-center">
-            <img alt="Logo" className="invoice__logo" src={DuvLiveLogo} />
+            <img alt="Logo" className="invoice__logo" src={Duvlivelogo} />
           </div>
 
           {/* Header Details */}
