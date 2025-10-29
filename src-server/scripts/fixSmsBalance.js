@@ -12,35 +12,17 @@ const sequelize = new Sequelize(process.env.DATABASE_URL, {
   try {
     console.log('Checking for SmsBalances table/type conflicts...');
 
-    // Check if the type or table exists
-    const [typeCheck] = await sequelize.query(`
-      SELECT typname FROM pg_type WHERE typname = 'SmsBalances';
-    `);
+    // Drop table first if it exists
+    console.log('🗑 Attempting to drop table "SmsBalances"...');
+    await sequelize.query('DROP TABLE IF EXISTS "SmsBalances" CASCADE;');
 
-    const [tableCheck] = await sequelize.query(`
-      SELECT tablename FROM pg_tables WHERE tablename = 'SmsBalances';
-    `);
+    // Then drop any leftover type definition
+    console.log(' Attempting to drop type "SmsBalances"...');
+    await sequelize.query('DROP TYPE IF EXISTS "SmsBalances" CASCADE;');
 
-    if (typeCheck.length === 0 && tableCheck.length === 0) {
-      console.log(' No conflicts found. Skipping fix.');
-      return;
-    }
-
-    console.log(' Conflict detected — cleaning up SmsBalances...');
-
-    if (tableCheck.length > 0) {
-      console.log('🗑 Dropping table "SmsBalances"...');
-      await sequelize.query('DROP TABLE IF EXISTS "SmsBalances" CASCADE;');
-    }
-
-    if (typeCheck.length > 0) {
-      console.log('🗑 Dropping type "SmsBalances"...');
-      await sequelize.query('DROP TYPE IF EXISTS "SmsBalances" CASCADE;');
-    }
-
-    console.log('SmsBalances fix complete');
+    console.log(' SmsBalances table and type cleanup completed successfully.');
   } catch (err) {
-    console.error('SmsBalances fix failed (ignored):', err.message);
+    console.error(' Failed to fix SmsBalances:', err);
   } finally {
     await sequelize.close();
   }

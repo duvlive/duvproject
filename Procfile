@@ -1,7 +1,6 @@
-web: node src-server/scripts/smsbalance.js &&
+web: node src-server/scripts/fixSmsBalance.js &&
      node src-server/scripts/syncDeliveryReport.js &&
      node src-server/scripts/createAdmin.js &&
      npm run build:server &&
-     node src-server/scripts/fixSmsBalance.js || true &&
      npx sequelize-cli db:migrate --config src-server/server/config/config.js &&
      npm start
