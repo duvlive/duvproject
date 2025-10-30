@@ -24,6 +24,7 @@ import AdminController from './AdminController';
 import PublicEventController from './PublicEventController';
 import CancelEventEntertainerController from './CancelEventEntertainerController';
 import KudiSmsController from './kudiController';
+import GmailController from './oauthController';
 
 export {
   AdminController,
@@ -51,5 +52,6 @@ export {
   ReviewController,
   UserController,
   VideoController,
-  KudiSmsController
+  KudiSmsController,
+  GmailController
 };
