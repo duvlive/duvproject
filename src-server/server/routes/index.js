@@ -25,6 +25,7 @@ import adminRoute from './adminRoute';
 import cronRoutes from './cronRoute';
 import cancelEventEntertainerRoutes from './cancelEventEntertainerRoute';
 import KudiRoutes from './kudismsCallback';
+import gmailRoute from './gmailRoute';
 
 const routes = (app) => {
   adminRoute(app);
@@ -54,6 +55,7 @@ const routes = (app) => {
   videoRoutes(app);
   welcomeRoute(app);
   KudiRoutes(app);
+  gmailRoute(app);
 };
 
 export default routes;
