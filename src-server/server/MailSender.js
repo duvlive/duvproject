@@ -4,7 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const ejs = require("ejs");
 const { google } = require("googleapis");
-const db = require("../models"); // Sequelize models
+const db = require("./models"); 
 const textEmailTemplate = require("./email-template/duv-text-email-template");
 
 const DUV_LIVE_NO_REPLY_EMAIL = { email: "donotreply@duvlive.com", name: "DUV LIVE" };
