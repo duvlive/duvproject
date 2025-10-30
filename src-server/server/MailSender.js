@@ -4,7 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const ejs = require("ejs");
 const { google } = require("googleapis");
-const db = require("./models"); 
+// const db = require("./models"); 
 const textEmailTemplate = require("./email-template/duv-text-email-template");
 
 const DUV_LIVE_NO_REPLY_EMAIL = { email: "donotreply@duvlive.com", name: "DUV LIVE" };
@@ -44,6 +44,7 @@ async function sendMail(content = {}, user = {}, additionalOptions = {}) {
   console.log(" [sendMail] called with content:", content);
   console.log("[sendMail] user:", user);
   console.log(" [sendMail] additionalOptions:", additionalOptions);
+  const db = require("./models");
 
   const options = {
     ...content,
