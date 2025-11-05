@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'formik';
 import { connect } from 'formik';
 import classNames from 'classnames';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import {
   getValidityClass,
   FeedbackMessage,
@@ -30,10 +31,13 @@ const Input = ({
   type,
   ...props
 }) => {
+  const [showPassword, setShowPassword] = useState(false);
+
+  // Determine field type dynamically
+  const inputType = type === 'password' && showPassword ? 'text' : type;
+
   return (
-    <div
-      className={classNames('form-group', formGroupClassName, { row: inline })}
-    >
+    <div className={classNames('form-group', formGroupClassName, { row: inline })}>
       <Label
         className={labelClassName}
         labelLink={labelLink}
@@ -43,7 +47,8 @@ const Input = ({
         tooltipPosition={tooltipPosition}
         tooltipText={tooltipText}
       />
-      <div className={inputSizeClassName}>
+
+      <div className={classNames(inputSizeClassName, 'position-relative')}>
         <Field
           aria-describedby={name}
           autoComplete={autoComplete}
@@ -54,10 +59,31 @@ const Input = ({
           )}
           id={name}
           name={name}
-          type={type}
+          type={inputType}
           {...props}
         />
+
+        {/* Password toggle button */}
+        {type === 'password' && (
+          <button
+            type="button"
+            onClick={() => setShowPassword(prev => !prev)}
+            className="position-absolute"
+            style={{
+              right: '10px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              background: 'transparent',
+              border: 'none',
+              cursor: 'pointer'
+            }}
+            tabIndex={-1}
+          >
+            {showPassword ? <FaEyeSlash /> : <FaEye />}
+          </button>
+        )}
       </div>
+
       <FeedbackMessage
         formik={formik}
         helpText={helpText}
@@ -68,6 +94,7 @@ const Input = ({
     </div>
   );
 };
+
 
 // NB: Wrap multiple fields in .form-row and give formGroupClassname the size e.g form-group col-md-6
 
@@ -86,7 +113,7 @@ Input.defaultProps = {
   showFeedback: feedback.ALL,
   tooltipText: null,
   tooltipPosition: 'right',
-  type: null
+  type: 'text'
 };
 
 Input.propTypes = {
