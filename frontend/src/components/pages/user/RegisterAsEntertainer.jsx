@@ -13,7 +13,7 @@ import ListeningMusic from 'assets/img/background/register-as-entertainer.svg';
 
 const RegisterAsEntertainer = () => {
   const [message, setMessage] = React.useState(null);
-
+   
   const { userDispatch } = React.useContext(UserContext);
 
   const becomeAnEntertainer = () => {

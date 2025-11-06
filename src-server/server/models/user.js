@@ -1,13 +1,7 @@
-// import bcrypt from 'bcrypt';
 const bcrypt = require('bcrypt')
-// import jwt from 'jsonwebtoken';
 const jwt= require('jsonwebtoken');
-// import sendMail from '../MailSender';
 const sendMail = require('../MailSender');
-// import EMAIL_CONTENT from '../email-template/content';
-const EMAIL_CONTENT = require('../email-template/content');
-// import { USER_TYPES, ACCOUNT_STATUS } from '../constant';
-
+const EMAIL_CONTENT = require('../email-template/content').default;
 const {USER_TYPES,ACCOUNT_STATUS} = require('../constant');
 
 const encryptPassword = (password) =>

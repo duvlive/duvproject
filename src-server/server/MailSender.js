@@ -9,7 +9,7 @@ const textEmailTemplate = require("./email-template/duv-text-email-template");
 
 const DUV_LIVE_NO_REPLY_EMAIL = { email: "donotreply@duvlive.com", name: "DUV LIVE" };
 const DUV_LIVE_INFO_EMAIL = "duvlive@gmail.com";
-const logoPath = path.resolve(__dirname, "email-template/assets/red-white.svg");
+const logoPath = path.resolve(__dirname, "email-template/assets/red-white.png");
 
 const oauth2Client = new google.auth.OAuth2(
   process.env.GOOGLE_EMAIL_CLIENT_ID,
@@ -90,10 +90,10 @@ async function sendMail(content = {}, user = {}, additionalOptions = {}) {
     const logoContent = fs.readFileSync(logoPath).toString("base64");
     messageParts.push(
       "--boundary123",
-      "Content-Type: image/svg+xml",
+      "Content-Type: image/png",
       "Content-Transfer-Encoding: base64",
       "Content-ID: <duv_logo>",
-      "Content-Disposition: inline; filename=duv-logo.svg",
+      "Content-Disposition: inline; filename=duv-logo.png",
       "",
       logoContent
     );
