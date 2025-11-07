@@ -25,7 +25,6 @@ const articleStorage = cloudinaryStorage({
   cloudinary: cloudinary,
   folder: 'public-event',
   allowedFormats: ['jpg', 'jpeg', 'png', 'webp'],
-  transformation: [{ width: 256, height: 256, crop: 'limit', format: 'jpg' }],
 });
 
 const ARTICLE_MAX_IMG_SIZE = 1000000; // 1MB
